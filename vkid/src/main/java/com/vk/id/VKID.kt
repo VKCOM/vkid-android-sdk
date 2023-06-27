@@ -86,7 +86,7 @@ public class VKID {
             return
         }
 
-        startActualAuth(activity, authCallback)
+        //startActualAuth(activity, authCallback)
     }
 
     private fun startActualAuth(
@@ -154,16 +154,22 @@ public class VKID {
     private var lifecycleCallback: Application.ActivityLifecycleCallbacks? = null
     private fun registerLifeCycleCallback(app: Application, activity: Activity) {
         lifecycleCallback = object: Application.ActivityLifecycleCallbacks {
-            private val activityRef = WeakReference(activity)
-            override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {}
+            private var activityRef = WeakReference(activity)
+            override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
+                // we can loose reference on activity recreation on screen rotate
+                if (savedInstanceState?.getBoolean(REGISTERED_ACTIVITY_FLAG) == true) {
+                    activityRef = WeakReference(activity)
+                }
+            }
             override fun onActivityStarted(activity: Activity) {}
             override fun onActivityResumed(activity: Activity) {}
             override fun onActivityPaused(activity: Activity) {}
             override fun onActivityStopped(activity: Activity) {}
-            override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {}
-
+            override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
+                outState.putBoolean(REGISTERED_ACTIVITY_FLAG, true)
+            }
             override fun onActivityDestroyed(activity: Activity) {
-                if (activityRef.get() == activity && activity.isFinishing) {
+                if (activityRef.get() === activity && activity.isFinishing) {
                     activeCalls.forEach { it.get()?.cancel() }
                     executorService.shutdown()
                     app.unregisterActivityLifecycleCallbacks(this)
@@ -173,6 +179,9 @@ public class VKID {
         lifecycleCallback?.let {
             app.registerActivityLifecycleCallbacks(it)
         }
+    }
+    private companion object {
+        const val REGISTERED_ACTIVITY_FLAG = "VKID_CALLBACK_REGISTERED_ACTIVITY_FLAG"
     }
 
     public interface AuthCallback {
