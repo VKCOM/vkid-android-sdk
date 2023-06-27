@@ -70,9 +70,8 @@ public class VKID {
         activity: Activity,
         authCallback: AuthCallback,
     ) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            activity.registerActivityLifecycleCallbacks(lifecycleCallback)
-        }
+
+        registerLifeCycleCallback(activity.application, activity)
 
         this.authCallback = authCallback
 
@@ -152,17 +151,27 @@ public class VKID {
         return apiCall.execute()
     }
 
-    private val lifecycleCallback = object: Application.ActivityLifecycleCallbacks {
-        override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {}
-        override fun onActivityStarted(activity: Activity) {}
-        override fun onActivityResumed(activity: Activity) {}
-        override fun onActivityPaused(activity: Activity) {}
-        override fun onActivityStopped(activity: Activity) {}
-        override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {}
+    private var lifecycleCallback: Application.ActivityLifecycleCallbacks? = null
+    private fun registerLifeCycleCallback(app: Application, activity: Activity) {
+        lifecycleCallback = object: Application.ActivityLifecycleCallbacks {
+            private val activityRef = WeakReference(activity)
+            override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {}
+            override fun onActivityStarted(activity: Activity) {}
+            override fun onActivityResumed(activity: Activity) {}
+            override fun onActivityPaused(activity: Activity) {}
+            override fun onActivityStopped(activity: Activity) {}
+            override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {}
 
-        override fun onActivityDestroyed(activity: Activity) {
-            activeCalls.forEach { it.get()?.cancel() }
-            executorService.shutdown()
+            override fun onActivityDestroyed(activity: Activity) {
+                if (activityRef.get() == activity && activity.isFinishing) {
+                    activeCalls.forEach { it.get()?.cancel() }
+                    executorService.shutdown()
+                    app.unregisterActivityLifecycleCallbacks(this)
+                }
+            }
+        }
+        lifecycleCallback?.let {
+            app.registerActivityLifecycleCallbacks(it)
         }
     }
 
