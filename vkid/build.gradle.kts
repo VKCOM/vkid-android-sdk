@@ -29,9 +29,15 @@ android {
         // Make all methods private by default
         freeCompilerArgs = freeCompilerArgs + "-Xexplicit-api=strict"
     }
+
+    resourcePrefix("vkid_")
 }
 
 dependencies {
     implementation(libs.androidx.annotation)
+    implementation(libs.androidx.browser)
+    implementation(libs.androidx.preference)
+    implementation(libs.androidx.preference.ktx)
+    implementation(libs.okhttp3.okhttp)
     testImplementation(libs.mockk)
 }

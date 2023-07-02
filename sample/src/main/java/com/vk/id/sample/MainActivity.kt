@@ -17,11 +17,11 @@ import androidx.compose.ui.Modifier
 import com.vk.id.UserSession
 import com.vk.id.VKID
 
-class MainActivity : ComponentActivity()  {
+class MainActivity : ComponentActivity() {
 
     private lateinit var vkid: VKID
 
-    private val vkAuthCallback = object: VKID.AuthCallback {
+    private val vkAuthCallback = object : VKID.AuthCallback {
         override fun success(session: UserSession) {
             val token = session.accessToken
             Handler(Looper.getMainLooper()).post {
@@ -29,12 +29,13 @@ class MainActivity : ComponentActivity()  {
             }
         }
 
-        override fun error(t: Throwable) {
+        override fun error(errorMessage: String, error: Throwable?) {
+            Handler(Looper.getMainLooper()).post {
+                Toast.makeText(this@MainActivity, "Something wrong: $errorMessage", Toast.LENGTH_LONG).show()
+            }
         }
 
-        override fun canceled() {
-        }
-
+        override fun canceled() {}
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +48,9 @@ class MainActivity : ComponentActivity()  {
         }
         setContent {
             Column(
-                modifier = Modifier.fillMaxWidth().fillMaxHeight(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {

@@ -25,22 +25,34 @@
  * UNDER NO CIRCUMSTANCES LLC “V KONTAKTE” BEAR LIABILITY TO THE LICENSEE OR ANY
  * THIRD PARTIES FOR ANY DAMAGE IN CONNECTION WITH USE OF THE SOFTWARE.
 */
-package com.vk.id.internal.auth
+package com.vk.id.internal.util
 
-internal sealed class ExternalOauthResult {
-    object Invalid : ExternalOauthResult()
-    data class Success(
-        val token: String,
-        val uuid: String,
-        val expireTime: Long,
-        val userId: Long,
-        val firstName: String,
-        val lastName: String,
-        val avatar: String?,
-        val phone: String?,
-        val oauth: OAuth?
-    ) : ExternalOauthResult()
-    data class Fail(val errorMessage: String, val error: Throwable?) : ExternalOauthResult()
+import kotlin.reflect.KProperty
 
-    data class OAuth(val code: String, val state: String, val codeVerifier: String)
+/**
+ * Provides operator function for declaring ThreadLocal var through kotlin delegate syntax.
+ */
+internal interface ThreadLocalDelegate<T> {
+    /**
+     * returns nonnull value.
+     */
+    fun get(): T
+
+    operator fun getValue(any: Any?, property: KProperty<*>): T = this.get()
+}
+
+internal fun <T> threadLocal(factory: () -> T): ThreadLocalDelegate<T> {
+    return ThreadLocalDelegateImpl(factory)
+}
+
+internal class ThreadLocalDelegateImpl<T>(val factory: () -> T) : ThreadLocalDelegate<T> {
+    private val value: ThreadLocal<T> = object : ThreadLocal<T>() {
+        override fun initialValue(): T {
+            return factory.invoke()
+        }
+    }
+
+    override fun get(): T {
+        return value.get()!!
+    }
 }
