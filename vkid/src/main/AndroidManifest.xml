@@ -22,4 +22,34 @@
 # SOFTWARE.
 # ****************************************************************************** -->
 
-<manifest />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!--To get list of installed browsers-->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https" />
+        </intent>
+    </queries>
+    <application>
+        <activity
+            android:name=".internal.auth.browser.OAuthActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:theme="@style/VKID.Light.Transparent">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="${VKIDRedirectHost}"
+                    android:scheme="${VKIDRedirectScheme}" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

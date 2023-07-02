@@ -12,13 +12,13 @@ internal object OAuthEventBridge {
         listener?.canceled()
     }
 
-    internal fun error(e: Throwable) {
-        listener?.error(e)
+    internal fun error(message: String, e: Throwable?) {
+        listener?.error(message, e)
     }
 
     internal interface Listener {
         fun success(oauth: ExternalOauthResult)
-        fun error(e: Throwable)
+        fun error(message: String, e: Throwable?)
         fun canceled()
     }
 }
