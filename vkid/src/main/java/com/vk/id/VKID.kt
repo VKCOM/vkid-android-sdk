@@ -7,12 +7,13 @@ import android.os.Bundle
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import com.vk.id.internal.api.VKIDApiService
+import com.vk.id.internal.auth.AuthEventBridge
 import com.vk.id.internal.auth.AuthOptions
 import com.vk.id.internal.auth.AuthProvidersChooser
-import com.vk.id.internal.auth.ExternalOauthResult
-import com.vk.id.internal.auth.OAuthEventBridge
+import com.vk.id.internal.auth.ExternalAuthResult
 import com.vk.id.internal.auth.device.DeviceIdProvider
 import com.vk.id.internal.auth.pkce.PkceGeneratorSHA256
+import com.vk.id.internal.auth.toExpireTime
 import com.vk.id.internal.di.VKIDDeps
 import com.vk.id.internal.di.VKIDDepsProd
 import com.vk.id.internal.store.PrefsStore
@@ -29,7 +30,7 @@ public class VKID {
         clientId,
         clientSecret,
         redirectUri,
-        VKIDDepsProd(context)
+        VKIDDepsProd(context, clientId, clientSecret)
     )
 
     /**
@@ -46,6 +47,8 @@ public class VKID {
         this.prefsStore = deps.prefsStore.value
         this.deviceIdProvider = deps.deviceIdProvider.value
         this.pkceGenerator = deps.pkceGenerator.value
+
+        deps.trustedProvidersCache.prefetchSilentAuthProviders()
     }
 
     public class Builder {
@@ -70,7 +73,7 @@ public class VKID {
     private val pkceGenerator: PkceGeneratorSHA256
 
     private val activeCalls: MutableList<WeakReference<VKIDCall<*>>> = mutableListOf()
-    private val executorService = Executors.newSingleThreadExecutor()
+    private val executorService = Executors.newCachedThreadPool()
 
     private var authCallback: AuthCallback? = null
 
@@ -82,7 +85,6 @@ public class VKID {
         activity: Activity,
         authCallback: AuthCallback,
     ) {
-
         registerLifeCycleCallback(activity.application, activity)
 
         this.authCallback = authCallback
@@ -92,9 +94,9 @@ public class VKID {
             authCallback.success(alreadyExistingSession)
             return
         }
-        val alreadyReceivedOauth = OAuthEventBridge.oauthResult
-        if (alreadyReceivedOauth != null) {
-            handleExternalOauthResult(alreadyReceivedOauth)
+        val alreadyReceivedAuth = AuthEventBridge.authResult
+        if (alreadyReceivedAuth != null) {
+            handleExternalAuthResult(alreadyReceivedAuth)
             return
         }
 
@@ -105,9 +107,9 @@ public class VKID {
         activity: Activity,
         authCallback: AuthCallback,
     ) {
-        OAuthEventBridge.listener = object : OAuthEventBridge.Listener {
-            override fun success(oauth: ExternalOauthResult) {
-                handleExternalOauthResult(oauth)
+        AuthEventBridge.listener = object : AuthEventBridge.Listener {
+            override fun success(oauth: ExternalAuthResult) {
+                handleExternalAuthResult(oauth)
             }
 
             override fun error(message: String, e: Throwable?) {
@@ -119,9 +121,11 @@ public class VKID {
             }
         }
 
-        val fullAuthOptions = createInternalAuthOptions()
-        val bestAuthProvider = authProvidersChooser.chooseBest()
-        bestAuthProvider.auth(activity, fullAuthOptions)
+        executorService.execute {
+            val fullAuthOptions = createInternalAuthOptions()
+            val bestAuthProvider = authProvidersChooser.chooseBest()
+            bestAuthProvider.auth(activity, fullAuthOptions)
+        }
     }
 
     private fun createInternalAuthOptions(): AuthOptions {
@@ -142,32 +146,44 @@ public class VKID {
         )
     }
 
-    private fun handleExternalOauthResult(oauth: ExternalOauthResult) {
-        when(oauth) {
-            is ExternalOauthResult.Fail -> {
-                authCallback?.error(oauth.errorMessage, oauth.error)
+    private fun handleExternalAuthResult(authResult: ExternalAuthResult) {
+        when (authResult) {
+            is ExternalAuthResult.Fail -> {
+                authCallback?.error(authResult.errorMessage, authResult.error)
                 return
             }
-            is ExternalOauthResult.Invalid -> {
+            is ExternalAuthResult.Invalid -> {
                 authCallback?.canceled()
                 return
             }
-            is ExternalOauthResult.Success -> {} // ok
+            is ExternalAuthResult.Success -> {} // ok
         }
 
+        if (authResult.oauth != null) {
+            handleOauth(authResult)
+        } else {
+            val session = UserSession(AccessToken(authResult.token, authResult.userId, authResult.expireTime))
+            userSession = session
+            authCallback?.success(session)
+        }
+    }
+
+    private fun handleOauth(oauth: ExternalAuthResult.Success) {
         // validate
-        val realState = prefsStore.state
         val realUuid = deviceIdProvider.getDeviceId(appContext)
+        if (realUuid != oauth.uuid) {
+            authCallback?.error("invalid_uuid", null)
+            return
+        }
+
+        val realState = prefsStore.state
         val codeVerifier = prefsStore.codeVerifier
 
         if (realState != oauth.oauth?.state) {
-            // "invalid_state"
+            authCallback?.error("invalid_state", null)
             return
         }
-        if (realUuid != oauth.uuid) {
-            // "invalid_uuid"
-            return
-        }
+
         val code = oauth.oauth.code
         // execute token request
         executorService.execute {
@@ -184,7 +200,8 @@ public class VKID {
                 authCallback?.error("Failed api request", it)
             }
             callResult.onSuccess { payload ->
-                val session = UserSession(AccessToken(payload.accessToken, payload.userId, payload.expiresIn))
+                val session =
+                    UserSession(AccessToken(payload.accessToken, payload.userId, payload.expiresIn.toExpireTime))
                 userSession = session
                 authCallback?.success(session)
             }

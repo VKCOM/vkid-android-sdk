@@ -4,6 +4,7 @@ import android.content.Context
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.AuthProvidersChooser
 import com.vk.id.internal.auth.device.DeviceIdProvider
+import com.vk.id.internal.auth.external.TrustedProvidersCache
 import com.vk.id.internal.store.PrefsStore
 import com.vk.id.internal.auth.pkce.PkceGeneratorSHA256
 
@@ -14,4 +15,5 @@ internal interface VKIDDeps {
     val prefsStore: Lazy<PrefsStore>
     val deviceIdProvider: Lazy<DeviceIdProvider>
     val pkceGenerator: Lazy<PkceGeneratorSHA256>
+    val trustedProvidersCache: TrustedProvidersCache
 }

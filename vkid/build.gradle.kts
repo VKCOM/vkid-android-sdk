@@ -28,6 +28,7 @@ android {
     kotlinOptions {
         // Make all methods private by default
         freeCompilerArgs = freeCompilerArgs + "-Xexplicit-api=strict"
+        jvmTarget = JavaVersion.VERSION_11.toString()
     }
 
     resourcePrefix("vkid_")

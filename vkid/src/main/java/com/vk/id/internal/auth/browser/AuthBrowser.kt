@@ -6,7 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.browser.customtabs.CustomTabsIntent
 import com.vk.id.internal.auth.AuthOptions
-import com.vk.id.internal.auth.OAuthEventBridge
+import com.vk.id.internal.auth.AuthEventBridge
 import com.vk.id.internal.auth.VKIDAuthProvider
 import com.vk.id.internal.auth.browser.ContextUtils.addNewTaskFlag
 
@@ -53,7 +53,7 @@ internal class AuthBrowser : VKIDAuthProvider {
     }
 
     private fun sendNoBrowserAuthEvent(throwable: Throwable?) {
-        OAuthEventBridge.error("Error. Make sure you have a browser installed.", throwable)
+        AuthEventBridge.error("Error. Make sure you have a browser installed.", throwable)
     }
 
     private fun AuthOptions.toAuthUri(): Uri = Uri.Builder()

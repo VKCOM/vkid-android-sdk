@@ -25,22 +25,47 @@
  * UNDER NO CIRCUMSTANCES LLC “V KONTAKTE” BEAR LIABILITY TO THE LICENSEE OR ANY
  * THIRD PARTIES FOR ANY DAMAGE IN CONNECTION WITH USE OF THE SOFTWARE.
 */
-package com.vk.id.internal.auth
+package com.vk.id.internal.auth.external
 
-internal sealed class ExternalOauthResult {
-    object Invalid : ExternalOauthResult()
-    data class Success(
-        val token: String,
-        val uuid: String,
-        val expireTime: Long,
-        val userId: Long,
-        val firstName: String,
-        val lastName: String,
-        val avatar: String?,
-        val phone: String?,
-        val oauth: OAuth?
-    ) : ExternalOauthResult()
-    data class Fail(val errorMessage: String, val error: Throwable?) : ExternalOauthResult()
+import android.net.Uri
 
-    data class OAuth(val code: String, val state: String, val codeVerifier: String)
+internal class VkExternalAuthUriBuilder {
+    private lateinit var uuid: String
+    private lateinit var redirectUrl: String
+
+    fun uuid(uuid: String) = apply {
+        this.uuid = uuid
+    }
+
+    fun redirectUrl(redirectUrl: String) = apply {
+        this.redirectUrl = redirectUrl
+    }
+
+    fun buildForApp(appPackage: String): Uri {
+        return buildUri(buildAppBaseUri(appPackage).buildUpon())
+    }
+
+    private fun buildUri(uriBuilder: Uri.Builder): Uri {
+        uriBuilder
+            .appendQueryParameter(KEY_REDIRECT_URI, redirectUrl)
+            .appendQueryParameter(KEY_UUID, uuid)
+            .appendQueryParameter(KEY_RESPONSE_TYPE, "silent_token")
+
+        return uriBuilder.build()
+    }
+
+    companion object {
+        private const val KEY_RESPONSE_TYPE = "response_type"
+        private const val KEY_REDIRECT_URI = "redirect_uri"
+        private const val KEY_UUID = "uuid"
+
+        private const val APP_AUTHORITY = "vkcexternalauth-codeflow"
+
+        fun buildAppBaseUri(appPackage: String): Uri {
+            return Uri.Builder()
+                .scheme(appPackage)
+                .authority(APP_AUTHORITY)
+                .build()
+        }
+    }
 }

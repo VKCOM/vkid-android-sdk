@@ -32,6 +32,9 @@
             <category android:name="android.intent.category.BROWSABLE" />
             <data android:scheme="https" />
         </intent>
+        <intent>
+            <action android:name="com.vk.silentauth.action.GET_INFO" />
+        </intent>
     </queries>
     <application>
         <activity

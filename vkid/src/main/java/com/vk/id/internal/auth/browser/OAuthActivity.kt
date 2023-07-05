@@ -7,11 +7,11 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import androidx.core.app.ActivityOptionsCompat
-import com.vk.id.internal.auth.ExternalOauthResult
-import com.vk.id.internal.auth.OAuthEventBridge
+import com.vk.id.internal.auth.ExternalAuthResult
+import com.vk.id.internal.auth.AuthEventBridge
+import com.vk.id.internal.auth.toExpireTime
 import org.json.JSONException
 import org.json.JSONObject
-import java.util.concurrent.TimeUnit
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 
@@ -56,7 +56,7 @@ internal class OAuthActivity : Activity() {
         super.onResume()
         if (isWaitingForAuthResult && !authWasStarted) {
             // We're waiting for auth result but user returns to activity. Okay. Just finish it.
-            OAuthEventBridge.canceled()
+            AuthEventBridge.canceled()
             finish()
         }
     }
@@ -81,35 +81,30 @@ internal class OAuthActivity : Activity() {
             return
         }
         val authResult = parseOAuthResult(uri = data.data)
-        OAuthEventBridge.oauthResult = authResult
+        AuthEventBridge.authResult = authResult
     }
 
-    private fun parseOAuthResult(uri: Uri?): ExternalOauthResult {
+    private fun parseOAuthResult(uri: Uri?): ExternalAuthResult {
         if (uri == null) {
-            return ExternalOauthResult.Invalid
+            return ExternalAuthResult.Invalid
         }
         val payload = uri.getQueryParameter("payload") ?: ""
-        val payloadJson = try { JSONObject(payload) } catch (ignore: JSONException) { return ExternalOauthResult.Invalid }
+        val payloadJson = try { JSONObject(payload) } catch (ignore: JSONException) { return ExternalAuthResult.Invalid }
         return handlePayloadJson(payloadJson)
     }
 
     private fun handlePayloadJson(
         payloadJson: JSONObject
-    ): ExternalOauthResult {
+    ): ExternalAuthResult {
         val uuid = payloadJson.optString("uuid")
-        val ttl = payloadJson.optLong("ttl", 0)
+        val expireTime = payloadJson.optLong("ttl", 0).toExpireTime
         val token = payloadJson.optString("token")
         val user = payloadJson.optJSONObject("user")
         val oauth = payloadJson.optJSONObject("oauth")
         val code = oauth?.optString("code") ?: ""
         val state = oauth?.optString("state") ?: ""
-        val expireTime = if (ttl > 0) {
-            System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(ttl)
-        } else {
-            -1
-        }
 
-        return  ExternalOauthResult.Success(
+        return  ExternalAuthResult.Success(
             token = token,
             uuid = uuid,
             expireTime = expireTime,
@@ -118,7 +113,7 @@ internal class OAuthActivity : Activity() {
             lastName = user?.optString("last_name") ?: "",
             avatar = user?.optString("avatar"),
             phone = user?.optString("phone"),
-            oauth = oauth?.let { ExternalOauthResult.OAuth(code, state, "") }
+            oauth = oauth?.let { ExternalAuthResult.OAuth(code, state, "") }
         )
     }
 
