@@ -2,12 +2,17 @@ package com.vk.id.internal.api
 
 import com.vk.id.VKIDCall
 import com.vk.id.internal.auth.VKIDTokenPayload
+import com.vk.id.internal.auth.external.VkAuthSilentAuthProvider
 import okhttp3.Call
 import okhttp3.Response
+import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException
 
-internal class VKIDApiService(private val api: VKIDApi) {
+internal class VKIDApiService(
+    private val api: VKIDApi,
+    private val authApi: VKIDAuthApi
+) {
 
     fun getToken(
         code: String,
@@ -20,6 +25,27 @@ internal class VKIDApiService(private val api: VKIDApi) {
         return api.getToken(code, codeVerifier, clientId, clientSecret, deviceId, redirectUri).wrapTokenToVKIDCall()
     }
 
+    fun getSilentAuthProviders(
+        clientId: String,
+        clientSecret: String,
+    ): VKIDCall<List<VkAuthSilentAuthProvider>> {
+        return authApi.getSilentAuthProviders(
+            clientId = clientId,
+            clientSecret = clientSecret
+        ).wrapToVKIDCall {
+            JSONObject(requireNotNull(it.body).string())
+                .getJSONArray("response")
+                .parseList(VkAuthSilentAuthProvider.Companion::parse)
+                ?: emptyList()
+        }
+    }
+
+    private inline fun <T> JSONArray?.parseList(parser: (JSONObject) -> T) = this?.let {
+        val list = ArrayList<T>(length())
+        for (i in 0 until length()) optJSONObject(i)?.let { list.add(parser.invoke(it)) }
+        list
+    }
+
     private fun Call.wrapTokenToVKIDCall(): VKIDCall<VKIDTokenPayload> {
         return wrapToVKIDCall {
             if (it.body == null) throw IOException("Empty body $it")
@@ -28,7 +54,7 @@ internal class VKIDApiService(private val api: VKIDApi) {
                 accessToken = jsonObject.getString("access_token"),
                 userId = jsonObject.getLong("user_id"),
                 expiresIn = jsonObject.optLong("expires_in"),
-                email =  jsonObject.optString("email"),
+                email = jsonObject.optString("email"),
                 phone = jsonObject.optString("phone"),
                 phoneAccessKey = jsonObject.optString("phone_access_key"),
             )

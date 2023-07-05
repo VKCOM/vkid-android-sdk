@@ -1,11 +1,15 @@
 package com.vk.id.internal.auth
 
-import android.content.Context
 import com.vk.id.internal.auth.browser.AuthBrowser
+import com.vk.id.internal.auth.external.SilentAuthServicesProvider
+import com.vk.id.internal.auth.external.VkExternalAuthProvider
 
-internal class AuthProvidersChooserDefault(private val context: Context) : AuthProvidersChooser {
+internal class AuthProvidersChooserDefault(
+    private val silentAuthServicesProvider: SilentAuthServicesProvider
+) : AuthProvidersChooser {
     override fun chooseBest(): VKIDAuthProvider {
-        // todo actually choose
-        return AuthBrowser()
+        return silentAuthServicesProvider.getSilentAuthServices().firstOrNull()?.packageName
+            ?.let { VkExternalAuthProvider(it) }
+            ?: AuthBrowser()
     }
 }
