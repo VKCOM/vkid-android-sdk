@@ -28,7 +28,7 @@
 package com.vk.id.internal.auth.external
 
 import com.vk.id.internal.api.VKIDApiService
-import java.util.concurrent.Executors
+import com.vk.id.internal.concurrent.LifecycleAwareExecutor
 import java.util.concurrent.Future
 
 /**
@@ -37,20 +37,19 @@ import java.util.concurrent.Future
 internal class TrustedProvidersCache(
     private val api: Lazy<VKIDApiService>,
     private val clientId: String,
-    private val clientSecret: String
+    private val clientSecret: String,
+    private val executor: LifecycleAwareExecutor
 ) {
-
-    private val executor = Executors.newSingleThreadExecutor()
-
 
     private var cachedTrustedProviders: List<VkAuthSilentAuthProvider>? = null
     private var prefetchFuture: Future<*>? = null
 
+    // todo use in vkid.warmUp method
     fun prefetchSilentAuthProviders() {
         prefetchFuture = executor.submit { fetchSilentAuthProvidersSync() }
     }
 
-    internal fun getSilentAuthProviders(): List<VkAuthSilentAuthProvider> {
+    fun getSilentAuthProviders(): List<VkAuthSilentAuthProvider> {
         try {
             prefetchFuture?.get()
         } catch (_: Throwable) {
@@ -59,8 +58,9 @@ internal class TrustedProvidersCache(
     }
 
     private fun fetchSilentAuthProvidersSync(): List<VkAuthSilentAuthProvider> {
-        return api.value.getSilentAuthProviders(clientId = clientId, clientSecret = clientSecret)
-            .execute()
+        return executor.executeCall(
+            api.value.getSilentAuthProviders(clientId = clientId, clientSecret = clientSecret)
+        )
             .getOrNull()
             .orEmpty()
             .plus(DEFAULT_TRUSTED_PROVIDERS)

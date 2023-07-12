@@ -3,7 +3,6 @@ package com.vk.id.internal.di
 import android.content.Context
 import com.vk.id.internal.api.VKIDApi
 import com.vk.id.internal.api.VKIDApiService
-import com.vk.id.internal.api.VKIDAuthApi
 import com.vk.id.internal.auth.AuthProvidersChooser
 import com.vk.id.internal.auth.AuthProvidersChooserDefault
 import com.vk.id.internal.auth.device.DeviceIdPrefs
@@ -12,8 +11,9 @@ import com.vk.id.internal.auth.external.SilentAuthServicesProvider
 import com.vk.id.internal.auth.external.TrustedProvidersCache
 import com.vk.id.internal.store.PrefsStore
 import com.vk.id.internal.auth.pkce.PkceGeneratorSHA256
-import com.vk.id.internal.util.lazyUnsafe
+import com.vk.id.internal.concurrent.LifecycleAwareExecutor
 import okhttp3.OkHttpClient
+import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
 internal class VKIDDepsProd(
@@ -22,7 +22,7 @@ internal class VKIDDepsProd(
     clientSecret: String
 ) : VKIDDeps {
 
-    override val api: Lazy<VKIDApiService> = lazyUnsafe {
+    override val api: Lazy<VKIDApiService> = lazy {
         // certs? ssl pinning?
         val client = OkHttpClient.Builder()
             .readTimeout(OKHTTP_TIMEOUT_SECONDS, TimeUnit.SECONDS)
@@ -30,25 +30,31 @@ internal class VKIDDepsProd(
             .connectTimeout(OKHTTP_TIMEOUT_SECONDS, TimeUnit.SECONDS)
             .build()
         val api = VKIDApi(client)
-        val authApi = VKIDAuthApi(client)
-        VKIDApiService(api, authApi)
-    }
-    override val trustedProvidersCache = TrustedProvidersCache(api, clientId, clientSecret)
-
-    override val authProvidersChooser: Lazy<AuthProvidersChooser> = lazyUnsafe {
-        AuthProvidersChooserDefault(SilentAuthServicesProvider(appContext, trustedProvidersCache))
+        VKIDApiService(api)
     }
 
-    override val prefsStore: Lazy<PrefsStore> = lazyUnsafe {
+    override val trustedProvidersCache = lazy {
+        TrustedProvidersCache(api, clientId, clientSecret, lifeCycleAwareExecutor.value)
+    }
+
+    override val authProvidersChooser: Lazy<AuthProvidersChooser> = lazy {
+        AuthProvidersChooserDefault(SilentAuthServicesProvider(appContext, trustedProvidersCache.value))
+    }
+
+    override val prefsStore: Lazy<PrefsStore> = lazy {
         PrefsStore(appContext)
     }
 
-    override val deviceIdProvider: Lazy<DeviceIdProvider> = lazyUnsafe {
+    override val deviceIdProvider: Lazy<DeviceIdProvider> = lazy {
         DeviceIdProvider(DeviceIdPrefs(appContext))
     }
 
-    override val pkceGenerator: Lazy<PkceGeneratorSHA256> = lazyUnsafe {
+    override val pkceGenerator: Lazy<PkceGeneratorSHA256> = lazy {
         PkceGeneratorSHA256()
+    }
+
+    override val lifeCycleAwareExecutor: Lazy<LifecycleAwareExecutor> = lazy {
+        LifecycleAwareExecutor(Executors.newCachedThreadPool())
     }
 
     private companion object {

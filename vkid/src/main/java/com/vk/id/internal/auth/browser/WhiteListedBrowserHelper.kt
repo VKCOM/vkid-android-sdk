@@ -2,10 +2,9 @@ package com.vk.id.internal.auth.browser
 
 import android.content.Context
 import android.util.Log
-import java.util.*
 
 internal object WhiteListedBrowserHelper {
-    private val WHITE_LIST = Arrays.asList(
+    private val WHITE_LIST = listOf(
         VersionedBrowserMatcher.CHROME_BROWSER,
         VersionedBrowserMatcher.CHROME_CUSTOM_TAB,
         VersionedBrowserMatcher.FIREFOX_CUSTOM_TAB,

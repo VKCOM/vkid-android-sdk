@@ -131,6 +131,7 @@ internal class OAuthActivity : Activity() {
 
     override fun finish() {
         super.finish()
+        setResult(RESULT_OK)
         overridePendingTransition(0, 0)
     }
 
@@ -138,6 +139,7 @@ internal class OAuthActivity : Activity() {
         private const val KEY_AUTH_INTENT = "KEY_AUTH_INTENT"
         private const val KEY_START_AUTH = "KEY_START_AUTH"
         private const val KEY_WAITING_FOR_AUTH_RESULT = "KEY_WAITING_FOR_AUTH_RESULT"
+        private const val AUTH_REQUEST_CODE = 11041987
 
         /**
         * @throws android.content.ActivityNotFoundException
@@ -149,7 +151,7 @@ internal class OAuthActivity : Activity() {
             val intent = Intent(activity, OAuthActivity::class.java)
                 .putExtra(KEY_AUTH_INTENT, authIntent)
                 .putExtra(KEY_START_AUTH, true)
-            activity.startActivity(intent)
+            activity.startActivityForResult(intent, AUTH_REQUEST_CODE)
         }
     }
 

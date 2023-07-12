@@ -4,6 +4,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo
+import com.vk.id.internal.auth.basicCodeFlowUri
 
 internal class SilentAuthServicesProvider(
     private val context: Context,
@@ -29,7 +30,7 @@ internal class SilentAuthServicesProvider(
      * external service (it has oauth-vk-host-impl dependency).
      */
     private fun VkExternalAuthProviderInfo.isAllowedToOpenWebAuth(): Boolean {
-        val appUri = VkExternalAuthUriBuilder.buildAppBaseUri(componentName.packageName)
+        val appUri = basicCodeFlowUri(componentName.packageName)
         val appIntent = Intent(Intent.ACTION_VIEW, appUri)
         val resolveInfo = context.packageManager.resolveActivity(appIntent, 0)?.activityInfo
         return resolveInfo != null && resolveInfo.packageName == componentName.packageName

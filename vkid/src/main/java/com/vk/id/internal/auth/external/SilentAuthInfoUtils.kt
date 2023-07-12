@@ -33,7 +33,7 @@ import android.content.pm.PackageManager
 import android.content.pm.Signature
 import java.math.BigInteger
 import java.security.MessageDigest
-import java.util.*
+import java.util.Locale
 
 internal object SilentAuthInfoUtils {
 

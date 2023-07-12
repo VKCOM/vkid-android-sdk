@@ -11,7 +11,6 @@ import java.io.IOException
 
 internal class VKIDApiService(
     private val api: VKIDApi,
-    private val authApi: VKIDAuthApi
 ) {
 
     fun getToken(
@@ -29,7 +28,7 @@ internal class VKIDApiService(
         clientId: String,
         clientSecret: String,
     ): VKIDCall<List<VkAuthSilentAuthProvider>> {
-        return authApi.getSilentAuthProviders(
+        return api.getSilentAuthProviders(
             clientId = clientId,
             clientSecret = clientSecret
         ).wrapToVKIDCall {
