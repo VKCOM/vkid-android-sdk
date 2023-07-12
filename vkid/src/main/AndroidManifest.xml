@@ -25,13 +25,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <!--To get list of installed browsers-->
     <queries>
+        <!-- For available browsers request -->
         <intent>
             <action android:name="android.intent.action.VIEW" />
             <category android:name="android.intent.category.BROWSABLE" />
             <data android:scheme="https" />
         </intent>
+        <!-- For auth with vk client -->
         <intent>
             <action android:name="com.vk.silentauth.action.GET_INFO" />
         </intent>

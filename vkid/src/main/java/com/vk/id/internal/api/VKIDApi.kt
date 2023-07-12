@@ -11,7 +11,6 @@ import okio.ByteString.Companion.encodeUtf8
 
 internal class VKIDApi(
     private val client: OkHttpClient,
-    private val host: HttpUrl = HOST.toHttpUrl()
 ) {
 
     fun getToken(
@@ -31,7 +30,20 @@ internal class VKIDApi(
             .add(FIELD_REDIRECT_URI, redirectUri)
             .build()
 
-        return createRequest(PATH_ACCESS_TOKEN, formBody, clientId)
+        return createRequest(HOST_OAUTH, PATH_ACCESS_TOKEN, formBody)
+    }
+
+    fun getSilentAuthProviders(
+        clientId: String,
+        clientSecret: String
+    ): Call {
+        val formBody = FormBody.Builder()
+            .add(FIELD_API_VERSION, API_VERSION_VALUE)
+            .add(FIELD_CLIENT_ID, clientId)
+            .add(FIELD_CLIENT_SECRET, clientSecret)
+            .build()
+
+        return createRequest(HOST_API, PATH_SILENT_AUTH_PROVIDERS, formBody)
     }
 
     fun refreshToken(refreshToken: String, clientId: String): Call {
@@ -42,8 +54,8 @@ internal class VKIDApi(
         TODO()
     }
 
-    private fun createRequest(path: String, requestBody: RequestBody, clientId: String): Call {
-        val url = host.newBuilder()
+    private fun createRequest(host: String, path: String, requestBody: RequestBody): Call {
+        val url = host.toHttpUrl().newBuilder()
             .addPathSegments(path)
             .build()
         val request = Request.Builder()
@@ -62,7 +74,10 @@ internal class VKIDApi(
     }
 
     companion object {
-        private const val HOST = "https://oauth.vk.com"
+        private const val HOST_API = "https://api.vk.com"
+        private const val HOST_OAUTH = "https://oauth.vk.com"
+
+        private const val PATH_SILENT_AUTH_PROVIDERS = "method/auth.getSilentAuthProviders"
         private const val PATH_ACCESS_TOKEN = "access_token"
 
         private const val HEADER_AUTHORIZATION = "Authorization"
@@ -75,5 +90,8 @@ internal class VKIDApi(
         private const val FIELD_CODE_VERIFIER = "code_verifier"
         private const val FIELD_DEVICE_ID = "device_id"
         private const val FIELD_REDIRECT_URI = "redirect_uri"
+
+        private const val FIELD_API_VERSION = "v"
+        private const val API_VERSION_VALUE = "5.220"
     }
 }

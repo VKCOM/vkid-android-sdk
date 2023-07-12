@@ -1,9 +1,7 @@
 package com.vk.id
 
 import android.app.Activity
-import android.app.Application
 import android.content.Context
-import android.os.Bundle
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import com.vk.id.internal.api.VKIDApiService
@@ -14,12 +12,11 @@ import com.vk.id.internal.auth.ExternalAuthResult
 import com.vk.id.internal.auth.device.DeviceIdProvider
 import com.vk.id.internal.auth.pkce.PkceGeneratorSHA256
 import com.vk.id.internal.auth.toExpireTime
+import com.vk.id.internal.concurrent.LifecycleAwareExecutor
 import com.vk.id.internal.di.VKIDDeps
 import com.vk.id.internal.di.VKIDDepsProd
 import com.vk.id.internal.store.PrefsStore
-import java.lang.ref.WeakReference
 import java.security.SecureRandom
-import java.util.concurrent.Executors
 
 public inline fun VKID (initializer: VKID.Builder.() -> Unit): VKID {
     return VKID.Builder().apply(initializer).build()
@@ -38,17 +35,16 @@ public class VKID {
      */
     @VisibleForTesting
     internal constructor(clientId: String, clientSecret: String, redirectUri: String, deps: VKIDDeps) {
-        this.appContext = deps.appContext
         this.api = deps.api
+        this.appContext = deps.appContext
         this.clientId = clientId
         this.clientSecret = clientSecret
         this.redirectUri = redirectUri
-        this.authProvidersChooser = deps.authProvidersChooser.value
-        this.prefsStore = deps.prefsStore.value
-        this.deviceIdProvider = deps.deviceIdProvider.value
-        this.pkceGenerator = deps.pkceGenerator.value
-
-        deps.trustedProvidersCache.prefetchSilentAuthProviders()
+        this.authProvidersChooser = deps.authProvidersChooser
+        this.prefsStore = deps.prefsStore
+        this.deviceIdProvider = deps.deviceIdProvider
+        this.pkceGenerator = deps.pkceGenerator
+        this.executor = deps.lifeCycleAwareExecutor
     }
 
     public class Builder {
@@ -67,13 +63,11 @@ public class VKID {
 
     private val api: Lazy<VKIDApiService>
     private val appContext: Context
-    private val authProvidersChooser: AuthProvidersChooser
-    private val prefsStore: PrefsStore
-    private val deviceIdProvider: DeviceIdProvider
-    private val pkceGenerator: PkceGeneratorSHA256
-
-    private val activeCalls: MutableList<WeakReference<VKIDCall<*>>> = mutableListOf()
-    private val executorService = Executors.newCachedThreadPool()
+    private val authProvidersChooser: Lazy<AuthProvidersChooser>
+    private val prefsStore: Lazy<PrefsStore>
+    private val deviceIdProvider: Lazy<DeviceIdProvider>
+    private val pkceGenerator: Lazy<PkceGeneratorSHA256>
+    private val executor: Lazy<LifecycleAwareExecutor>
 
     private var authCallback: AuthCallback? = null
 
@@ -85,8 +79,6 @@ public class VKID {
         activity: Activity,
         authCallback: AuthCallback,
     ) {
-        registerLifeCycleCallback(activity.application, activity)
-
         this.authCallback = authCallback
 
         val alreadyExistingSession = userSession
@@ -121,26 +113,27 @@ public class VKID {
             }
         }
 
-        executorService.execute {
+        executor.value.attachActivity(activity)
+        executor.value.execute {
             val fullAuthOptions = createInternalAuthOptions()
-            val bestAuthProvider = authProvidersChooser.chooseBest()
+            val bestAuthProvider = authProvidersChooser.value.chooseBest()
             bestAuthProvider.auth(activity, fullAuthOptions)
         }
     }
 
     private fun createInternalAuthOptions(): AuthOptions {
-        val codeVerifier = pkceGenerator.generateRandomCodeVerifier(SecureRandom())
-        val codeChallenge = pkceGenerator.deriveCodeVerifierChallenge(codeVerifier)
-        prefsStore.codeVerifier = codeVerifier
+        val codeVerifier = pkceGenerator.value.generateRandomCodeVerifier(SecureRandom())
+        val codeChallenge = pkceGenerator.value.deriveCodeVerifierChallenge(codeVerifier)
+        prefsStore.value.codeVerifier = codeVerifier
         val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
         val state = (1..32).map { allowedChars.random() }.joinToString("")
-        prefsStore.state = state
+        prefsStore.value.state = state
         return AuthOptions(
             appId = clientId,
             clientSecret = clientSecret,
             codeChallenge = codeChallenge,
             codeChallengeMethod = "sha256",
-            deviceId = deviceIdProvider.getDeviceId(appContext),
+            deviceId = deviceIdProvider.value.getDeviceId(appContext),
             redirectUri = redirectUri,
             state = state,
         )
@@ -170,14 +163,14 @@ public class VKID {
 
     private fun handleOauth(oauth: ExternalAuthResult.Success) {
         // validate
-        val realUuid = deviceIdProvider.getDeviceId(appContext)
+        val realUuid = deviceIdProvider.value.getDeviceId(appContext)
         if (realUuid != oauth.uuid) {
             authCallback?.error("invalid_uuid", null)
             return
         }
 
-        val realState = prefsStore.state
-        val codeVerifier = prefsStore.codeVerifier
+        val realState = prefsStore.value.state
+        val codeVerifier = prefsStore.value.codeVerifier
 
         if (realState != oauth.oauth?.state) {
             authCallback?.error("invalid_state", null)
@@ -186,7 +179,7 @@ public class VKID {
 
         val code = oauth.oauth.code
         // execute token request
-        executorService.execute {
+        executor.value.execute {
             val apiCall = api.value.getToken(
                 code,
                 codeVerifier,
@@ -195,7 +188,7 @@ public class VKID {
                 deviceId = realUuid,
                 redirectUri
             )
-            val callResult = executeCall(apiCall)
+            val callResult = executor.value.executeCall(apiCall)
             callResult.onFailure {
                 authCallback?.error("Failed api request", it)
             }
@@ -206,44 +199,6 @@ public class VKID {
                 authCallback?.success(session)
             }
         }
-    }
-
-    private fun <T>executeCall(apiCall: VKIDCall<T>): Result<T>  {
-        activeCalls.add(WeakReference(apiCall))
-        return apiCall.execute()
-    }
-
-    private var lifecycleCallback: Application.ActivityLifecycleCallbacks? = null
-    private fun registerLifeCycleCallback(app: Application, activity: Activity) {
-        lifecycleCallback = object: Application.ActivityLifecycleCallbacks {
-            private var activityRef = WeakReference(activity)
-            override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-                // we can loose reference on activity recreation on screen rotate
-                if (savedInstanceState?.getBoolean(REGISTERED_ACTIVITY_FLAG) == true) {
-                    activityRef = WeakReference(activity)
-                }
-            }
-            override fun onActivityStarted(activity: Activity) {}
-            override fun onActivityResumed(activity: Activity) {}
-            override fun onActivityPaused(activity: Activity) {}
-            override fun onActivityStopped(activity: Activity) {}
-            override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
-                outState.putBoolean(REGISTERED_ACTIVITY_FLAG, true)
-            }
-            override fun onActivityDestroyed(activity: Activity) {
-                if (activityRef.get() === activity && activity.isFinishing) {
-                    activeCalls.forEach { it.get()?.cancel() }
-                    executorService.shutdown()
-                    app.unregisterActivityLifecycleCallbacks(this)
-                }
-            }
-        }
-        lifecycleCallback?.let {
-            app.registerActivityLifecycleCallbacks(it)
-        }
-    }
-    private companion object {
-        const val REGISTERED_ACTIVITY_FLAG = "VKID_CALLBACK_REGISTERED_ACTIVITY_FLAG"
     }
 
     public interface AuthCallback {

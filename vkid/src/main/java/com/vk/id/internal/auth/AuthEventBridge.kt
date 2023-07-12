@@ -4,7 +4,9 @@ internal object AuthEventBridge {
     internal var listener: Listener? = null
     internal var authResult: ExternalAuthResult? = null
         set(value) {
-            listener?.success(value!!)
+            if (value != null) {
+                listener?.success(value)
+            }
             field = value
         }
 
