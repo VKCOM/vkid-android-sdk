@@ -49,12 +49,14 @@ public class VKID {
 
     public class Builder {
         public var context: Context? = null
-        public var clientId: String? = null
-        public var clientSecret: String? = null
-        public var redirectUri: String? = null
 
         // todo check context not set and throw error
-        public fun build(): VKID = VKID(context!!.applicationContext, clientId!!, clientSecret!!, redirectUri!!)
+        public fun build(): VKID {
+            val clientId: String = BuildConfig.VKIDSDK_CLIENT_ID
+            val clientSecret: String = BuildConfig.VKIDSDK_CLIENT_SECRET
+            val redirectUri: String = BuildConfig.VKIDSDK_REDIRECT_URL
+            return VKID(context!!.applicationContext, clientId, clientSecret, redirectUri)
+        }
     }
 
     private val clientId: String
