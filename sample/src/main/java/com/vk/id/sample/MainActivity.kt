@@ -42,6 +42,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         vkid = VKID {
             context = this@MainActivity
+            clientId = "7915193"
+            clientSecret = "8viIJBplIqqBP2X4rrd5"
+            redirectUri = "vk7915193://vk.com"
         }
         setContent {
             Column(

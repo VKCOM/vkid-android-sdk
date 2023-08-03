@@ -15,6 +15,11 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        addManifestPlaceholders(mapOf(
+            "VKIDRedirectHost" to "vk.com",
+            "VKIDRedirectScheme" to "vk7915193",
+        ))
     }
 
     buildFeatures {
