@@ -1,16 +1,12 @@
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.parcelize)
+    id("vkid.android.library")
+    id("org.jetbrains.kotlin.plugin.parcelize")
 }
 
 android {
     namespace = "com.vk.id"
-    compileSdk = 33
 
     defaultConfig {
-        minSdk = 21
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
@@ -21,17 +17,6 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-    kotlinOptions {
-        // Make all methods private by default
-        freeCompilerArgs = freeCompilerArgs + "-Xexplicit-api=strict"
-        jvmTarget = JavaVersion.VERSION_11.toString()
-    }
-
-    resourcePrefix("vkid_")
 }
 
 dependencies {
