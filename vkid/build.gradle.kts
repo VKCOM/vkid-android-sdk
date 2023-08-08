@@ -1,5 +1,6 @@
 plugins {
     id("vkid.android.library")
+    id("vkid.android.library.publish")
     id("org.jetbrains.kotlin.plugin.parcelize")
 }
 

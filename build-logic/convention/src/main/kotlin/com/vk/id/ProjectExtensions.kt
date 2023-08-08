@@ -23,3 +23,11 @@ import org.gradle.kotlin.dsl.getByType
 
 val Project.libs
     get(): VersionCatalog = extensions.getByType<VersionCatalogsExtension>().named("libs")
+
+fun Project.stringProperty(key: String, default: String = ""): String {
+    var prop = (properties[key] as? String).takeIf { it is String && it.isNotEmpty() }
+    if (prop == null) {
+        prop = (rootProject.properties[key] as? String).takeIf { it is String && it.isNotEmpty() }
+    }
+    return prop ?: default
+}
