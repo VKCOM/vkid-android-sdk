@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
 
     private val vkAuthCallback = object : VKID.AuthCallback {
         override fun success(session: UserSession) {
-            val token = session.accessToken
+            val token = session.accessToken.token.hideLastCharacters(10)
             Handler(Looper.getMainLooper()).post {
                 Toast.makeText(this@MainActivity, "There is token: $token", Toast.LENGTH_LONG).show()
             }
@@ -61,6 +61,14 @@ class MainActivity : ComponentActivity() {
                     Text("Login")
                 }
             }
+        }
+    }
+
+    private fun String.hideLastCharacters(firstCharactersToKeepVisible: Int): String {
+        return if (this.length <= firstCharactersToKeepVisible) {
+            this
+        } else {
+            this.substring(0, firstCharactersToKeepVisible) + "..."
         }
     }
 }

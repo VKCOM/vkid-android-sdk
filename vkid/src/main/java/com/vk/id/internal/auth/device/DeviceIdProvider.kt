@@ -31,9 +31,11 @@ import android.content.Context
 import android.os.Build
 import android.provider.Settings
 import android.text.TextUtils
+import com.vk.id.internal.log.createLoggerForClass
 import com.vk.id.internal.util.MD5
 
 internal class DeviceIdProvider (private val deviceIdStorage: DeviceIdStorage) {
+    private val logger = createLoggerForClass()
     private var nextDeviceId = String()
 
     interface DeviceIdStorage {
@@ -42,9 +44,6 @@ internal class DeviceIdProvider (private val deviceIdStorage: DeviceIdStorage) {
 
         fun getSystemDeviceId(): String
         fun setSystemDeviceId(systemDeviceId: String)
-
-        fun setForceDeviceId(force: Boolean) {}
-        fun getForceDeviceId(): Boolean = false
 
         fun getDeviceToken(memberId: Long): String
         fun setDeviceToken(memberId: Long, deviceToken: String)
@@ -55,7 +54,7 @@ internal class DeviceIdProvider (private val deviceIdStorage: DeviceIdStorage) {
         if (nextDeviceId.isNotEmpty()) {
             return nextDeviceId
         }
-        // todo Log.d("next_device_id is null or empty: $deviceId")
+        logger.debug("nextDeviceId is null or empty: $nextDeviceId")
         nextDeviceId = deviceIdStorage.getDeviceId()
         if (TextUtils.isEmpty(nextDeviceId)) {
             val androidId = findDeviceIdByAndroidId(context)
@@ -75,19 +74,9 @@ internal class DeviceIdProvider (private val deviceIdStorage: DeviceIdStorage) {
             nextDeviceId = sb.toString()
             deviceIdStorage.setDeviceId(nextDeviceId)
         }
-        // todo Log.d("new next_device_id: $nextDeviceId")
+        logger.debug("new nextDeviceId: $nextDeviceId")
         return nextDeviceId
     }
-
-    fun getDeviceToken(memberId: Long): String =
-        deviceIdStorage.getDeviceToken(memberId)
-
-    fun setDeviceToken(memberId: Long, deviceToken: String) =
-        deviceIdStorage.setDeviceToken(memberId, deviceToken)
-
-    fun clearDeviceToken(memberId: Long) =
-        deviceIdStorage.clearDeviceToken(memberId)
-
 
     companion object {
         private fun findDeviceIdByAndroidId(context: Context): String? {
