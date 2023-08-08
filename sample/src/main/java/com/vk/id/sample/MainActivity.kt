@@ -40,6 +40,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        VKID.logsEnabled = true
         vkid = VKID {
             context = this@MainActivity
             clientId = "7915193"

@@ -15,6 +15,9 @@ import com.vk.id.internal.auth.toExpireTime
 import com.vk.id.internal.concurrent.LifecycleAwareExecutor
 import com.vk.id.internal.di.VKIDDeps
 import com.vk.id.internal.di.VKIDDepsProd
+import com.vk.id.internal.log.AndroidLogcatLogEngine
+import com.vk.id.internal.log.FakeLogEngine
+import com.vk.id.internal.log.VKIDLog
 import com.vk.id.internal.store.PrefsStore
 import java.security.SecureRandom
 
@@ -29,6 +32,18 @@ public class VKID {
         redirectUri,
         VKIDDepsProd(context, clientId, clientSecret)
     )
+
+    public companion object {
+        public var logsEnabled: Boolean = false
+            set(value) {
+                field = value
+                if (value) {
+                    VKIDLog.setLogEngine(AndroidLogcatLogEngine())
+                } else {
+                    VKIDLog.setLogEngine(FakeLogEngine())
+                }
+            }
+    }
 
     /**
      * Only for tests, to provide mocked dependencies
