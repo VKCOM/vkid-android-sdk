@@ -26,5 +26,6 @@ dependencies {
     implementation(libs.androidx.preference)
     implementation(libs.androidx.preference.ktx)
     implementation(libs.okhttp3.okhttp)
+    implementation(libs.okhttp3.logging)
     testImplementation(libs.mockk)
 }

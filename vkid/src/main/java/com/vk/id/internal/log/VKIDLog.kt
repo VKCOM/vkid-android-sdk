@@ -24,3 +24,7 @@ internal object VKIDLog : LogEngine {
         logEngine.log(logLevel, tag, message, throwable)
     }
 }
+
+internal inline fun <reified T> T.createLoggerForClass(): Logger {
+    return VKIDLog.createLoggerForTag(T::class.java.simpleName)
+}
