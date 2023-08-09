@@ -8,14 +8,19 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.vk.id.UserSession
 import com.vk.id.VKID
+import kotlinx.coroutines.flow.MutableStateFlow
 
 class MainActivity : ComponentActivity() {
 
@@ -23,6 +28,7 @@ class MainActivity : ComponentActivity() {
 
     private val vkAuthCallback = object : VKID.AuthCallback {
         override fun success(session: UserSession) {
+            setUiStateVkAuthComplete()
             val token = session.accessToken.token.hideLastCharacters(10)
             Handler(Looper.getMainLooper()).post {
                 Toast.makeText(this@MainActivity, "There is token: $token", Toast.LENGTH_LONG).show()
@@ -30,12 +36,15 @@ class MainActivity : ComponentActivity() {
         }
 
         override fun error(errorMessage: String, error: Throwable?) {
+            setUiStateVkAuthComplete()
             Handler(Looper.getMainLooper()).post {
                 Toast.makeText(this@MainActivity, "Something wrong: $errorMessage", Toast.LENGTH_LONG).show()
             }
         }
 
-        override fun canceled() {}
+        override fun canceled() {
+            setUiStateVkAuthComplete()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,13 +64,26 @@ class MainActivity : ComponentActivity() {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Button(onClick = {
-                    vkid.authorize(this@MainActivity, vkAuthCallback)
-                }) {
-                    Text("Login")
-                }
+                val vkInProgress by vkAuthInProgress.collectAsState()
+                VKIDButton(
+                    inProgress = vkInProgress,
+                    enabled = vkInProgress.not(),
+                    onClick = ::startAuth,
+                    modifier = Modifier.width(335.dp)
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+                VKIDButtonSmall(
+                    inProgress = vkInProgress,
+                    enabled = vkInProgress.not(),
+                    onClick = ::startAuth
+                )
             }
         }
+    }
+
+    private fun startAuth() {
+        setUiStateVkAuthInProgress()
+        vkid.authorize(this@MainActivity, vkAuthCallback)
     }
 
     private fun String.hideLastCharacters(firstCharactersToKeepVisible: Int): String {
@@ -71,4 +93,14 @@ class MainActivity : ComponentActivity() {
             this.substring(0, firstCharactersToKeepVisible) + "..."
         }
     }
+
+    private fun setUiStateVkAuthComplete() {
+        vkAuthInProgress.tryEmit(false)
+    }
+
+    private fun setUiStateVkAuthInProgress() {
+        vkAuthInProgress.tryEmit(true)
+    }
+
+    private val vkAuthInProgress: MutableStateFlow<Boolean> = MutableStateFlow(false)
 }

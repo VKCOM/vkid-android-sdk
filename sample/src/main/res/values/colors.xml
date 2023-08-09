@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="vkid_azure_A100">#0077FF</color>
+    <color name="vkid_gray900">#19191A</color>
+    <color name="vkid_gray900_alpha50">#8019191A</color>
+    <color name="vkid_white">#FFFFFF</color>
+    <color name="vkid_white_alpha70">#B3FFFFFF</color>
 </resources>
