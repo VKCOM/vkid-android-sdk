@@ -36,7 +36,7 @@ internal fun AuthOptions.toAuthUriBrowser(): Uri = toAuthUriBuilder()
     .path(PATH_BROWSER)
     .build()
 
-internal fun AuthOptions.toAuthUriExternalCodeFlow(appPackage: String): Uri = toAuthUriBuilder()
+internal fun AuthOptions.toAuthUriCodeFlow(appPackage: String): Uri = toAuthUriBuilder()
     .scheme(appPackage)
     .authority(AUTHORITY_CODE_FLOW)
     .build()
