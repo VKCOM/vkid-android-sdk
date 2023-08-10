@@ -7,7 +7,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import androidx.core.app.ActivityOptionsCompat
-import com.vk.id.internal.auth.ExternalAuthResult
+import com.vk.id.internal.auth.AuthResult
 import com.vk.id.internal.auth.AuthEventBridge
 import com.vk.id.internal.auth.toExpireTime
 import org.json.JSONException
@@ -81,21 +81,21 @@ internal class OAuthActivity : Activity() {
             return
         }
         val authResult = parseOAuthResult(uri = data.data)
-        AuthEventBridge.authResult = authResult
+        AuthEventBridge.onAuthResult(authResult)
     }
 
-    private fun parseOAuthResult(uri: Uri?): ExternalAuthResult {
+    private fun parseOAuthResult(uri: Uri?): AuthResult {
         if (uri == null) {
-            return ExternalAuthResult.Invalid
+            return AuthResult.Invalid
         }
         val payload = uri.getQueryParameter("payload") ?: ""
-        val payloadJson = try { JSONObject(payload) } catch (ignore: JSONException) { return ExternalAuthResult.Invalid }
+        val payloadJson = try { JSONObject(payload) } catch (ignore: JSONException) { return AuthResult.Invalid }
         return handlePayloadJson(payloadJson)
     }
 
     private fun handlePayloadJson(
         payloadJson: JSONObject
-    ): ExternalAuthResult {
+    ): AuthResult {
         val uuid = payloadJson.optString("uuid")
         val expireTime = payloadJson.optLong("ttl", 0).toExpireTime
         val token = payloadJson.optString("token")
@@ -104,7 +104,7 @@ internal class OAuthActivity : Activity() {
         val code = oauth?.optString("code") ?: ""
         val state = oauth?.optString("state") ?: ""
 
-        return  ExternalAuthResult.Success(
+        return  AuthResult.Success(
             token = token,
             uuid = uuid,
             expireTime = expireTime,
@@ -113,7 +113,7 @@ internal class OAuthActivity : Activity() {
             lastName = user?.optString("last_name") ?: "",
             avatar = user?.optString("avatar"),
             phone = user?.optString("phone"),
-            oauth = oauth?.let { ExternalAuthResult.OAuth(code, state, "") }
+            oauth = oauth?.let { AuthResult.OAuth(code, state, "") }
         )
     }
 

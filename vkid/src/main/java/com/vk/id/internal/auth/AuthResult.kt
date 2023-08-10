@@ -27,8 +27,8 @@
 */
 package com.vk.id.internal.auth
 
-internal sealed class ExternalAuthResult {
-    object Invalid : ExternalAuthResult()
+internal sealed class AuthResult {
+    object Invalid : AuthResult()
     data class Success(
         val token: String,
         val uuid: String,
@@ -39,8 +39,8 @@ internal sealed class ExternalAuthResult {
         val avatar: String?,
         val phone: String?,
         val oauth: OAuth?
-    ) : ExternalAuthResult()
-    data class Fail(val errorMessage: String, val error: Throwable?) : ExternalAuthResult()
+    ) : AuthResult()
+    data class Fail(val errorMessage: String, val error: Throwable?) : AuthResult()
 
     data class OAuth(val code: String, val state: String, val codeVerifier: String)
 }

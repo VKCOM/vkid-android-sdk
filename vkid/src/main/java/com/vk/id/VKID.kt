@@ -2,13 +2,15 @@ package com.vk.id
 
 import android.app.Activity
 import android.content.Context
+import android.os.Build
+import android.os.SystemClock
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.AuthEventBridge
 import com.vk.id.internal.auth.AuthOptions
 import com.vk.id.internal.auth.AuthProvidersChooser
-import com.vk.id.internal.auth.ExternalAuthResult
+import com.vk.id.internal.auth.AuthResult
 import com.vk.id.internal.auth.device.DeviceIdProvider
 import com.vk.id.internal.auth.pkce.PkceGeneratorSHA256
 import com.vk.id.internal.auth.toExpireTime
@@ -18,6 +20,7 @@ import com.vk.id.internal.di.VKIDDepsProd
 import com.vk.id.internal.log.AndroidLogcatLogEngine
 import com.vk.id.internal.log.FakeLogEngine
 import com.vk.id.internal.log.VKIDLog
+import com.vk.id.internal.log.createLoggerForClass
 import com.vk.id.internal.store.PrefsStore
 import java.security.SecureRandom
 
@@ -72,6 +75,8 @@ public class VKID {
         public fun build(): VKID = VKID(context!!.applicationContext, clientId!!, clientSecret!!, redirectUri!!)
     }
 
+    private val logger = createLoggerForClass()
+
     private val clientId: String
     private val clientSecret: String
     private val redirectUri: String
@@ -101,11 +106,6 @@ public class VKID {
             authCallback.success(alreadyExistingSession)
             return
         }
-        val alreadyReceivedAuth = AuthEventBridge.authResult
-        if (alreadyReceivedAuth != null) {
-            handleExternalAuthResult(alreadyReceivedAuth)
-            return
-        }
 
         startActualAuth(activity, authCallback)
     }
@@ -115,8 +115,8 @@ public class VKID {
         authCallback: AuthCallback,
     ) {
         AuthEventBridge.listener = object : AuthEventBridge.Listener {
-            override fun success(oauth: ExternalAuthResult) {
-                handleExternalAuthResult(oauth)
+            override fun success(oauth: AuthResult) {
+                handleAuthResult(oauth)
             }
 
             override fun error(message: String, e: Throwable?) {
@@ -154,17 +154,23 @@ public class VKID {
         )
     }
 
-    private fun handleExternalAuthResult(authResult: ExternalAuthResult) {
+    private fun handleAuthResult(authResult: AuthResult) {
         when (authResult) {
-            is ExternalAuthResult.Fail -> {
+            is AuthResult.Fail -> {
                 authCallback?.error(authResult.errorMessage, authResult.error)
                 return
             }
-            is ExternalAuthResult.Invalid -> {
+            is AuthResult.Invalid -> {
                 authCallback?.canceled()
                 return
             }
-            is ExternalAuthResult.Success -> {} // ok
+            is AuthResult.Success -> {
+                // We do not stop auth here in hope that it still be success,
+                // but if not there will be error response from backend
+                if (authResult.expireTime < currentTime()) {
+                    logger.error("OAuth code is old, there is a big chance auth will fail", null)
+                }
+            }
         }
 
         if (authResult.oauth != null) {
@@ -176,7 +182,7 @@ public class VKID {
         }
     }
 
-    private fun handleOauth(oauth: ExternalAuthResult.Success) {
+    private fun handleOauth(oauth: AuthResult.Success) {
         // validate
         val realUuid = deviceIdProvider.value.getDeviceId(appContext)
         if (realUuid != oauth.uuid) {
@@ -213,6 +219,14 @@ public class VKID {
                 userSession = session
                 authCallback?.success(session)
             }
+        }
+    }
+
+    private fun currentTime(): Long {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            SystemClock.currentNetworkTimeClock().millis()
+        } else {
+            System.currentTimeMillis()
         }
     }
 

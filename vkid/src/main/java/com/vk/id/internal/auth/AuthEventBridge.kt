@@ -2,13 +2,10 @@ package com.vk.id.internal.auth
 
 internal object AuthEventBridge {
     internal var listener: Listener? = null
-    internal var authResult: ExternalAuthResult? = null
-        set(value) {
-            if (value != null) {
-                listener?.success(value)
-            }
-            field = value
-        }
+
+    internal fun onAuthResult(authResult: AuthResult) {
+        listener?.success(authResult)
+    }
 
     internal fun canceled() {
         listener?.canceled()
@@ -19,7 +16,7 @@ internal object AuthEventBridge {
     }
 
     internal interface Listener {
-        fun success(oauth: ExternalAuthResult)
+        fun success(oauth: AuthResult)
         fun error(message: String, e: Throwable?)
         fun canceled()
     }
