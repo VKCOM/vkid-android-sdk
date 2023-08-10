@@ -26,7 +26,6 @@ internal class VKIDDepsProd(
 ) : VKIDDeps {
 
     override val api: Lazy<VKIDApiService> = lazy {
-        // certs? ssl pinning?
         val client = OkHttpClient.Builder()
             .readTimeout(OKHTTP_TIMEOUT_SECONDS, TimeUnit.SECONDS)
             .writeTimeout(OKHTTP_TIMEOUT_SECONDS, TimeUnit.SECONDS)
