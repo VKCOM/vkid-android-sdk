@@ -3,7 +3,7 @@ package com.vk.id.internal.concurrent
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
-import com.vk.id.VKIDCall
+import com.vk.id.internal.api.VKIDCall
 import java.lang.ref.WeakReference
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Future

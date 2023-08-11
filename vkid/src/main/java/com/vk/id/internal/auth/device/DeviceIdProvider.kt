@@ -27,6 +27,7 @@
 */
 package com.vk.id.internal.auth.device
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.provider.Settings
@@ -61,8 +62,8 @@ internal class DeviceIdProvider (private val deviceIdStorage: DeviceIdStorage) {
             val deviceId = getDeviceId()
 
             val ids = ArrayList<String?>()
-            ids.add(if (!TextUtils.isEmpty(androidId)) androidId else Companion.DEFAULT_ID)
-            ids.add(if (!TextUtils.isEmpty(deviceId)) deviceId else Companion.DEFAULT_ID)
+            ids.add(if (!TextUtils.isEmpty(androidId)) androidId else DEFAULT_ID)
+            ids.add(if (!TextUtils.isEmpty(deviceId)) deviceId else DEFAULT_ID)
 
             val sb = StringBuilder()
             for (i in ids.indices) {
@@ -79,6 +80,7 @@ internal class DeviceIdProvider (private val deviceIdStorage: DeviceIdStorage) {
     }
 
     companion object {
+        @SuppressLint("HardwareIds")
         private fun findDeviceIdByAndroidId(context: Context): String? {
             return Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
         }

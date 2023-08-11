@@ -24,19 +24,10 @@ internal class AuthBrowser : VKIDAuthProvider {
         }
         logger.debug("Auth with browser ${bestBrowser.packageName}")
         val authIntent = if (bestBrowser.useCustomTab) {
-            // todo ui
-            //val icon = BitmapUtils.createIconForCustomTabs(
-                //context,
-                //R.drawable.vk_icon_arrow_left_outline_28,
-                //styledContext.resolveColor(R.attr.vk_header_tint)
-            //)
             CustomTabsIntent.Builder()
                 .setShowTitle(true)
-                //.setToolbarColor(styledContext.resolveColor(R.attr.vk_header_background))
-                //.setStartAnimations(styledContext, android.R.anim.fade_in, android.R.anim.fade_out)
                 .addDefaultShareMenuItem()
                 .enableUrlBarHiding()
-                //.apply { icon?.let(::setCloseButtonIcon) }
                 .build()
                 .intent
         } else {

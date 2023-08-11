@@ -1,6 +1,5 @@
 package com.vk.id.internal.api
 
-import com.vk.id.VKIDCall
 import com.vk.id.internal.auth.VKIDTokenPayload
 import com.vk.id.internal.auth.external.VkAuthSilentAuthProvider
 import okhttp3.Call

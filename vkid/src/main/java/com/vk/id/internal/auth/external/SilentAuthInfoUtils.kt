@@ -44,7 +44,7 @@ internal object SilentAuthInfoUtils {
     private fun calculateDigestHex(signature: Signature): String {
         return calculateDigest(signature) { bytes ->
             val bi = BigInteger(1, bytes)
-            String.format("%0" + (bytes.size shl 1) + "X", bi).toLowerCase(Locale.ENGLISH)
+            String.format("%0" + (bytes.size shl 1) + "X", bi).lowercase(Locale.ENGLISH)
         }
     }
 

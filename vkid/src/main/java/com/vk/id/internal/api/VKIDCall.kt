@@ -1,13 +1,13 @@
-package com.vk.id
+package com.vk.id.internal.api
 
 import androidx.annotation.WorkerThread
 
-public interface VKIDCall<out T> {
+internal interface VKIDCall<out T> {
     @WorkerThread
-    public fun execute(): Result<T>
+    fun execute(): Result<T>
 
     /**
      * Function to cancel [VKIDCall]
      */
-    public fun cancel()
+    fun cancel()
 }
