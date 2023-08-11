@@ -106,7 +106,6 @@ class MainActivity : ComponentActivity() {
         toastOnScreen?.cancel()
         toastOnScreen = Toast.makeText(this@MainActivity, text, Toast.LENGTH_LONG)
         toastOnScreen?.show()
-
     }
 
     private var toastOnScreen: Toast? = null
