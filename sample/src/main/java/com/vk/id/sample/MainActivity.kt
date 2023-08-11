@@ -27,7 +27,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var vkid: VKID
 
     private val vkAuthCallback = object : VKID.AuthCallback {
-        override fun success(session: UserSession) {
+        override fun onSuccess(session: UserSession) {
             setUiStateVkAuthComplete()
             val token = session.accessToken.token.hideLastCharacters(10)
             Handler(Looper.getMainLooper()).post {
@@ -35,14 +35,14 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        override fun error(errorMessage: String, error: Throwable?) {
+        override fun onError(errorMessage: String, error: Throwable?) {
             setUiStateVkAuthComplete()
             Handler(Looper.getMainLooper()).post {
                 showToast("Something wrong: $errorMessage")
             }
         }
 
-        override fun canceled() {
+        override fun onCanceled() {
             setUiStateVkAuthComplete()
         }
     }
