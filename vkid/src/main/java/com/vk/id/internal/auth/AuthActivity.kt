@@ -1,4 +1,4 @@
-package com.vk.id.internal.auth.browser
+package com.vk.id.internal.auth
 
 import android.app.Activity
 import android.content.ActivityNotFoundException
@@ -7,15 +7,12 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import androidx.core.app.ActivityOptionsCompat
-import com.vk.id.internal.auth.AuthResult
-import com.vk.id.internal.auth.AuthEventBridge
-import com.vk.id.internal.auth.toExpireTime
 import org.json.JSONException
 import org.json.JSONObject
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 
-internal class OAuthActivity : Activity() {
+internal class AuthActivity : Activity() {
     /**
      * Flag indicating that auth process was started before onResume (cleared in onPause)
      * It isn't saved in onSaveInstanceState because of this flag is just session flag.
@@ -148,7 +145,7 @@ internal class OAuthActivity : Activity() {
             activity: Activity,
             authIntent: Intent,
         ) {
-            val intent = Intent(activity, OAuthActivity::class.java)
+            val intent = Intent(activity, AuthActivity::class.java)
                 .putExtra(KEY_AUTH_INTENT, authIntent)
                 .putExtra(KEY_START_AUTH, true)
             activity.startActivityForResult(intent, AUTH_REQUEST_CODE)

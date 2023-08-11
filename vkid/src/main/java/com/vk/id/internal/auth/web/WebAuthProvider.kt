@@ -1,17 +1,18 @@
-package com.vk.id.internal.auth.browser
+package com.vk.id.internal.auth.web
 
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import androidx.browser.customtabs.CustomTabsIntent
+import com.vk.id.internal.auth.AuthActivity
 import com.vk.id.internal.auth.AuthEventBridge
 import com.vk.id.internal.auth.AuthOptions
 import com.vk.id.internal.auth.VKIDAuthProvider
-import com.vk.id.internal.auth.browser.ContextUtils.addNewTaskFlag
+import com.vk.id.internal.auth.web.ContextUtils.addNewTaskFlag
 import com.vk.id.internal.auth.toAuthUriBrowser
 import com.vk.id.internal.log.createLoggerForClass
 
-internal class AuthBrowser : VKIDAuthProvider {
+internal class WebAuthProvider : VKIDAuthProvider {
     private val logger = createLoggerForClass()
 
     override fun auth(activity: Activity, authOptions: AuthOptions) {
@@ -40,7 +41,7 @@ internal class AuthBrowser : VKIDAuthProvider {
         authIntent.addNewTaskFlag(activity)
 
         try {
-            OAuthActivity.startForAuth(activity, authIntent)
+            AuthActivity.startForAuth(activity, authIntent)
         } catch(e: ActivityNotFoundException) {
             sendNoBrowserAuthEvent(e)
         }

@@ -1,4 +1,4 @@
-package com.vk.id.internal.auth.browser
+package com.vk.id.internal.auth.web
 
 import android.content.Context
 import android.util.Log

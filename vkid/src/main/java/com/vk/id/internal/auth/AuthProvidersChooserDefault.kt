@@ -1,8 +1,8 @@
 package com.vk.id.internal.auth
 
-import com.vk.id.internal.auth.browser.AuthBrowser
-import com.vk.id.internal.auth.external.SilentAuthServicesProvider
-import com.vk.id.internal.auth.external.VkExternalAuthProvider
+import com.vk.id.internal.auth.web.WebAuthProvider
+import com.vk.id.internal.auth.app.SilentAuthServicesProvider
+import com.vk.id.internal.auth.app.AppAuthProvider
 import com.vk.id.internal.log.createLoggerForClass
 
 internal class AuthProvidersChooserDefault(
@@ -13,7 +13,7 @@ internal class AuthProvidersChooserDefault(
         return silentAuthServicesProvider.getSilentAuthServices().firstOrNull()?.packageName
             ?.let {
                 logger.debug("Silent auth provider found: $it")
-                VkExternalAuthProvider(it)
-            } ?: AuthBrowser()
+                AppAuthProvider(it)
+            } ?: WebAuthProvider()
     }
 }

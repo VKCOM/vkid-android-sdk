@@ -25,7 +25,7 @@
  * UNDER NO CIRCUMSTANCES LLC “V KONTAKTE” BEAR LIABILITY TO THE LICENSEE OR ANY
  * THIRD PARTIES FOR ANY DAMAGE IN CONNECTION WITH USE OF THE SOFTWARE.
  */
-package com.vk.id.internal.auth.external
+package com.vk.id.internal.auth.app
 
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.concurrent.LifecycleAwareExecutor

@@ -39,7 +39,7 @@
     </queries>
     <application>
         <activity
-            android:name=".internal.auth.browser.OAuthActivity"
+            android:name=".internal.auth.AuthActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:theme="@style/VKID.Light.Transparent">
