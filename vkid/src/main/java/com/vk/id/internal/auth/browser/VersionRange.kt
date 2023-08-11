@@ -25,8 +25,8 @@ internal class VersionRange
  * Creates a version range with the specified bounds. A null bound is treated as "no bound"
  * on that end.
  */(
-    private val mLowerBound: DelimitedVersion?,
-    private val mUpperBound: DelimitedVersion?
+    private val lowerBound: DelimitedVersion?,
+    private val upperBound: DelimitedVersion?
 ) {
     /**
      * Determines whether the specified version (parsed as an [DelimitedVersion] falls within
@@ -40,21 +40,21 @@ internal class VersionRange
      * Determines whether the specified version falls within the version range.
      */
     fun matches(version: DelimitedVersion): Boolean {
-        if (mLowerBound != null && mLowerBound > version) {
+        if (lowerBound != null && lowerBound > version) {
             return false
         }
-        return !(mUpperBound != null && mUpperBound < version)
+        return !(upperBound != null && upperBound < version)
     }
 
     override fun toString(): String {
-        if (mLowerBound == null) {
-            return if (mUpperBound == null) {
+        if (lowerBound == null) {
+            return if (upperBound == null) {
                 "any version"
-            } else "$mUpperBound or lower"
+            } else "$upperBound or lower"
         }
-        return if (mUpperBound != null) {
-            "between $mLowerBound and $mUpperBound"
-        } else "$mLowerBound or higher"
+        return if (upperBound != null) {
+            "between $lowerBound and $upperBound"
+        } else "$lowerBound or higher"
     }
 
     companion object {
