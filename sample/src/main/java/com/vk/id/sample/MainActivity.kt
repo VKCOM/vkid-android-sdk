@@ -52,9 +52,9 @@ class MainActivity : ComponentActivity() {
         VKID.logsEnabled = true
         vkid = VKID {
             context = this@MainActivity
-            clientId = "7915193"
-            clientSecret = "8viIJBplIqqBP2X4rrd5"
-            redirectUri = "vk7915193://vk.com"
+            clientId = "51726321"
+            clientSecret = "6Tn9Z5bht6GL08cBaETv"
+            redirectUri = "vk51726321://vk.com"
         }
         setContent {
             Column(

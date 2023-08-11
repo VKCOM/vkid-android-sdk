@@ -15,7 +15,7 @@ android {
 
         addManifestPlaceholders(mapOf(
             "VKIDRedirectHost" to "vk.com",
-            "VKIDRedirectScheme" to "vk7915193",
+            "VKIDRedirectScheme" to "vk51726321",
         ))
     }
 
