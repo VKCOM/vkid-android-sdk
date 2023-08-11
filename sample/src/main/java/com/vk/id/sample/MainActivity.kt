@@ -31,14 +31,14 @@ class MainActivity : ComponentActivity() {
             setUiStateVkAuthComplete()
             val token = session.accessToken.token.hideLastCharacters(10)
             Handler(Looper.getMainLooper()).post {
-                Toast.makeText(this@MainActivity, "There is token: $token", Toast.LENGTH_LONG).show()
+                showToast("There is token: $token")
             }
         }
 
         override fun error(errorMessage: String, error: Throwable?) {
             setUiStateVkAuthComplete()
             Handler(Looper.getMainLooper()).post {
-                Toast.makeText(this@MainActivity, "Something wrong: $errorMessage", Toast.LENGTH_LONG).show()
+                showToast("Something wrong: $errorMessage")
             }
         }
 
@@ -102,5 +102,12 @@ class MainActivity : ComponentActivity() {
         vkAuthInProgress.tryEmit(true)
     }
 
+    private fun showToast(text: String) {
+        toastOnScreen?.cancel()
+        toastOnScreen = Toast.makeText(this@MainActivity, text, Toast.LENGTH_LONG)
+        toastOnScreen?.show()
+    }
+
+    private var toastOnScreen: Toast? = null
     private val vkAuthInProgress: MutableStateFlow<Boolean> = MutableStateFlow(false)
 }
