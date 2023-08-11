@@ -91,22 +91,11 @@ public class VKID {
 
     private var authCallback: AuthCallback? = null
 
-    // todo get session from repo
-    public var userSession: UserSession? = null
-        private set
-
     public fun authorize(
         activity: Activity,
         authCallback: AuthCallback,
     ) {
         this.authCallback = authCallback
-
-        val alreadyExistingSession = userSession
-        if (alreadyExistingSession != null) {
-            authCallback.success(alreadyExistingSession)
-            return
-        }
-
         startActualAuth(activity, authCallback)
     }
 
@@ -177,7 +166,6 @@ public class VKID {
             handleOauth(authResult)
         } else {
             val session = UserSession(AccessToken(authResult.token, authResult.userId, authResult.expireTime))
-            userSession = session
             authCallback?.success(session)
         }
     }
@@ -216,7 +204,6 @@ public class VKID {
             callResult.onSuccess { payload ->
                 val session =
                     UserSession(AccessToken(payload.accessToken, payload.userId, payload.expiresIn.toExpireTime))
-                userSession = session
                 authCallback?.success(session)
             }
         }
