@@ -25,28 +25,11 @@
  * UNDER NO CIRCUMSTANCES LLC “V KONTAKTE” BEAR LIABILITY TO THE LICENSEE OR ANY
  * THIRD PARTIES FOR ANY DAMAGE IN CONNECTION WITH USE OF THE SOFTWARE.
 */
-package com.vk.id.internal.auth.external
+package com.vk.id.internal.auth.app
 
-import org.json.JSONException
-import org.json.JSONObject
+import android.content.ComponentName
 
-internal data class VkAuthSilentAuthProvider(
-    val appPackage: String,
-    val appSha: String?,
-    val weight: Int = 0
-) {
-    companion object {
-        fun parse(json: JSONObject): VkAuthSilentAuthProvider {
-            return VkAuthSilentAuthProvider(
-                json.getString("pkg"),
-                json.getString("sha256"),
-                json.getInt("weight", 0)
-            )
-        }
-    }
-}
-
-@Throws(JSONException::class)
-private fun JSONObject.getInt(name: String, defValue: Int): Int {
-    return if (has(name)) getInt(name) else defValue
-}
+internal data class VkAuthProviderInfo(
+    val componentName: ComponentName,
+    val weight: Int
+)

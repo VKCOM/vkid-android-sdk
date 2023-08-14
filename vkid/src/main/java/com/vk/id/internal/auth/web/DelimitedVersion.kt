@@ -11,7 +11,7 @@
  * express or implied. See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.vk.id.internal.auth.browser
+package com.vk.id.internal.auth.web
 
 /**
  * Represents a delimited version number for an application. This can parse common version number

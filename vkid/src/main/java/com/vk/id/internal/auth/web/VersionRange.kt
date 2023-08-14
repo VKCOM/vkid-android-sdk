@@ -11,9 +11,9 @@
  * express or implied. See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.vk.id.internal.auth.browser
+package com.vk.id.internal.auth.web
 
-import com.vk.id.internal.auth.browser.DelimitedVersion.Companion.parse
+import com.vk.id.internal.auth.web.DelimitedVersion.Companion.parse
 
 /**
  * A browser filter which matches when a browser falls into a version range. Versions are

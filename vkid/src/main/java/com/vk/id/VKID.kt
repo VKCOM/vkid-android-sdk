@@ -109,11 +109,11 @@ public class VKID {
             }
 
             override fun error(message: String, e: Throwable?) {
-                authCallback.error(message, e)
+                authCallback.onError(message, e)
             }
 
             override fun canceled() {
-                authCallback.canceled()
+                authCallback.onCanceled()
             }
         }
 
@@ -146,11 +146,11 @@ public class VKID {
     private fun handleAuthResult(authResult: AuthResult) {
         when (authResult) {
             is AuthResult.Fail -> {
-                authCallback?.error(authResult.errorMessage, authResult.error)
+                authCallback?.onError(authResult.errorMessage, authResult.error)
                 return
             }
             is AuthResult.Invalid -> {
-                authCallback?.canceled()
+                authCallback?.onCanceled()
                 return
             }
             is AuthResult.Success -> {
@@ -166,7 +166,7 @@ public class VKID {
             handleOauth(authResult)
         } else {
             val session = UserSession(AccessToken(authResult.token, authResult.userId, authResult.expireTime))
-            authCallback?.success(session)
+            authCallback?.onSuccess(session)
         }
     }
 
@@ -174,7 +174,7 @@ public class VKID {
         // validate
         val realUuid = deviceIdProvider.value.getDeviceId(appContext)
         if (realUuid != oauth.uuid) {
-            authCallback?.error("invalid_uuid", null)
+            authCallback?.onError("invalid_uuid", null)
             return
         }
 
@@ -182,7 +182,7 @@ public class VKID {
         val codeVerifier = prefsStore.value.codeVerifier
 
         if (realState != oauth.oauth?.state) {
-            authCallback?.error("invalid_state", null)
+            authCallback?.onError("invalid_state", null)
             return
         }
 
@@ -199,12 +199,12 @@ public class VKID {
             )
             val callResult = executor.value.executeCall(apiCall)
             callResult.onFailure {
-                authCallback?.error("Failed api request", it)
+                authCallback?.onError("Failed api request", it)
             }
             callResult.onSuccess { payload ->
                 val session =
                     UserSession(AccessToken(payload.accessToken, payload.userId, payload.expiresIn.toExpireTime))
-                authCallback?.success(session)
+                authCallback?.onSuccess(session)
             }
         }
     }
@@ -219,11 +219,11 @@ public class VKID {
 
     public interface AuthCallback {
         @WorkerThread
-        public fun success(session: UserSession)
+        public fun onSuccess(session: UserSession)
         @WorkerThread
         // todo VKIDError instead of Throwable?
-        public fun error(errorMessage: String, error: Throwable?)
+        public fun onError(errorMessage: String, error: Throwable?)
         @WorkerThread
-        public fun canceled()
+        public fun onCanceled()
     }
 }

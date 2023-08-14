@@ -1,4 +1,4 @@
-package com.vk.id.internal.auth.external
+package com.vk.id.internal.auth.app
 
 import android.content.ComponentName
 import android.content.Context
@@ -23,13 +23,13 @@ internal class SilentAuthServicesProvider(
             .toList()
     }
 
-    private fun Sequence<VkExternalAuthProviderInfo>.excludeCurrentApp() = filter { it.componentName.packageName != context.packageName }
+    private fun Sequence<VkAuthProviderInfo>.excludeCurrentApp() = filter { it.componentName.packageName != context.packageName }
 
     /**
      * Method that checks if provider with specific package name is allowed to open the web auth from
      * external service (it has oauth-vk-host-impl dependency).
      */
-    private fun VkExternalAuthProviderInfo.isAllowedToOpenWebAuth(): Boolean {
+    private fun VkAuthProviderInfo.isAllowedToOpenWebAuth(): Boolean {
         val appUri = basicCodeFlowUri(componentName.packageName)
         val appIntent = Intent(Intent.ACTION_VIEW, appUri)
         val resolveInfo = context.packageManager.resolveActivity(appIntent, 0)?.activityInfo
@@ -38,11 +38,11 @@ internal class SilentAuthServicesProvider(
 
     private fun ServiceInfo.mapToProviderInfo(
         trustedProviders: List<VkAuthSilentAuthProvider>
-    ): VkExternalAuthProviderInfo? {
+    ): VkAuthProviderInfo? {
         val sha = SilentAuthInfoUtils.calculateDigestHex(context, packageName)
         return trustedProviders
             .firstOrNull { packageName == it.appPackage && sha == it.appSha }
-            ?.let { VkExternalAuthProviderInfo(ComponentName(packageName, name), it.weight) }
+            ?.let { VkAuthProviderInfo(ComponentName(packageName, name), it.weight) }
     }
 
     private fun getAppsWithSilentAuthServices() = context.applicationContext.packageManager.queryIntentServices(Intent(ACTION_GET_INFO), 0)

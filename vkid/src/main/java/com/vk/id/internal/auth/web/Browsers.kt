@@ -1,6 +1,6 @@
-package com.vk.id.internal.auth.browser
+package com.vk.id.internal.auth.web
 
-import com.vk.id.internal.auth.browser.DelimitedVersion.Companion.parse
+import com.vk.id.internal.auth.web.DelimitedVersion.Companion.parse
 
 /*
  * Copyright 2016 The AppAuth for Android Authors. All Rights Reserved.

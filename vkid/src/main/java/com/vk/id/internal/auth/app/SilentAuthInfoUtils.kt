@@ -26,7 +26,7 @@
  * THIRD PARTIES FOR ANY DAMAGE IN CONNECTION WITH USE OF THE SOFTWARE.
 */
 
-package com.vk.id.internal.auth.external
+package com.vk.id.internal.auth.app
 
 import android.content.Context
 import android.content.pm.PackageManager
