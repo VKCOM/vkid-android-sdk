@@ -19,6 +19,7 @@ import com.vk.id.internal.di.VKIDDeps
 import com.vk.id.internal.di.VKIDDepsProd
 import com.vk.id.internal.log.AndroidLogcatLogEngine
 import com.vk.id.internal.log.FakeLogEngine
+import com.vk.id.internal.log.LogEngine
 import com.vk.id.internal.log.VKIDLog
 import com.vk.id.internal.log.createLoggerForClass
 import com.vk.id.internal.store.PrefsStore
@@ -37,11 +38,17 @@ public class VKID {
     )
 
     public companion object {
+        @Suppress("MemberVisibilityCanBePrivate")
+        public var logEngine: LogEngine = AndroidLogcatLogEngine()
+            set(value) {
+                field = value
+                VKIDLog.setLogEngine(value)
+            }
         public var logsEnabled: Boolean = false
             set(value) {
                 field = value
                 if (value) {
-                    VKIDLog.setLogEngine(AndroidLogcatLogEngine())
+                    VKIDLog.setLogEngine(logEngine)
                 } else {
                     VKIDLog.setLogEngine(FakeLogEngine())
                 }
