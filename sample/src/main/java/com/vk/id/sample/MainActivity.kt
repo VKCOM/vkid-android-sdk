@@ -18,8 +18,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vk.id.UserSession
+import com.vk.id.AccessToken
 import com.vk.id.VKID
+import com.vk.id.VKIDAuthFail
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class MainActivity : ComponentActivity() {
@@ -27,23 +28,23 @@ class MainActivity : ComponentActivity() {
     private lateinit var vkid: VKID
 
     private val vkAuthCallback = object : VKID.AuthCallback {
-        override fun onSuccess(session: UserSession) {
+        override fun onSuccess(accessToken: AccessToken) {
             setUiStateVkAuthComplete()
-            val token = session.accessToken.token.hideLastCharacters(10)
-            Handler(Looper.getMainLooper()).post {
-                showToast("There is token: $token")
-            }
+            val token = accessToken.token.hideLastCharacters(10)
+            showToast("There is token: $token")
         }
 
-        override fun onError(errorMessage: String, error: Throwable?) {
+        override fun onFail(fail: VKIDAuthFail) {
             setUiStateVkAuthComplete()
-            Handler(Looper.getMainLooper()).post {
-                showToast("Something wrong: $errorMessage")
-            }
-        }
+            when (fail) {
+                is VKIDAuthFail.Canceled -> {
+                    showToast("Auth canceled")
+                }
 
-        override fun onCanceled() {
-            setUiStateVkAuthComplete()
+                else -> {
+                    showToast("Something wrong: ${fail.description}")
+                }
+            }
         }
     }
 
@@ -73,9 +74,7 @@ class MainActivity : ComponentActivity() {
                 )
                 Spacer(modifier = Modifier.height(24.dp))
                 VKIDButtonSmall(
-                    inProgress = vkInProgress,
-                    enabled = vkInProgress.not(),
-                    onClick = ::startAuth
+                    inProgress = vkInProgress, enabled = vkInProgress.not(), onClick = ::startAuth
                 )
             }
         }
@@ -103,9 +102,11 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun showToast(text: String) {
-        toastOnScreen?.cancel()
-        toastOnScreen = Toast.makeText(this@MainActivity, text, Toast.LENGTH_LONG)
-        toastOnScreen?.show()
+        Handler(Looper.getMainLooper()).post {
+            toastOnScreen?.cancel()
+            toastOnScreen = Toast.makeText(this@MainActivity, text, Toast.LENGTH_LONG)
+            toastOnScreen?.show()
+        }
     }
 
     private var toastOnScreen: Toast? = null

@@ -4,20 +4,10 @@ internal object AuthEventBridge {
     internal var listener: Listener? = null
 
     internal fun onAuthResult(authResult: AuthResult) {
-        listener?.success(authResult)
-    }
-
-    internal fun canceled() {
-        listener?.canceled()
-    }
-
-    internal fun error(message: String, e: Throwable?) {
-        listener?.error(message, e)
+        listener?.onAuthResult(authResult)
     }
 
     internal interface Listener {
-        fun success(oauth: AuthResult)
-        fun error(message: String, e: Throwable?)
-        fun canceled()
+        fun onAuthResult(authResult: AuthResult)
     }
 }
