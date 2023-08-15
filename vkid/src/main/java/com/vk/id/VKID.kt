@@ -96,24 +96,10 @@ public class VKID {
         authCallback: AuthCallback,
     ) {
         this.authCallback = authCallback
-        startActualAuth(activity, authCallback)
-    }
 
-    private fun startActualAuth(
-        activity: Activity,
-        authCallback: AuthCallback,
-    ) {
         AuthEventBridge.listener = object : AuthEventBridge.Listener {
-            override fun success(oauth: AuthResult) {
-                handleAuthResult(oauth)
-            }
-
-            override fun error(message: String, e: Throwable?) {
-                authCallback.onError(message, e)
-            }
-
-            override fun canceled() {
-                authCallback.onCanceled()
+            override fun onAuthResult(authResult: AuthResult) {
+                handleAuthResult(authResult)
             }
         }
 
@@ -145,12 +131,18 @@ public class VKID {
 
     private fun handleAuthResult(authResult: AuthResult) {
         when (authResult) {
-            is AuthResult.Fail -> {
-                authCallback?.onError(authResult.errorMessage, authResult.error)
+            is AuthResult.Canceled -> {
+                authCallback?.onFail(VKIDAuthFail.Canceled(authResult.message))
                 return
             }
-            is AuthResult.Invalid -> {
-                authCallback?.onCanceled()
+
+            is AuthResult.NoBrowserAvailable -> {
+                authCallback?.onFail(VKIDAuthFail.NoBrowserAvailable(authResult.message, authResult.error))
+                return
+            }
+
+            is AuthResult.AuthActiviyResultFailed -> {
+                authCallback?.onFail(VKIDAuthFail.FailedRedirectActivity(authResult.message, authResult.error))
                 return
             }
             is AuthResult.Success -> {
@@ -165,8 +157,7 @@ public class VKID {
         if (authResult.oauth != null) {
             handleOauth(authResult)
         } else {
-            val session = UserSession(AccessToken(authResult.token, authResult.userId, authResult.expireTime))
-            authCallback?.onSuccess(session)
+            authCallback?.onSuccess(AccessToken(authResult.token, authResult.userId, authResult.expireTime))
         }
     }
 
@@ -174,7 +165,8 @@ public class VKID {
         // validate
         val realUuid = deviceIdProvider.value.getDeviceId(appContext)
         if (realUuid != oauth.uuid) {
-            authCallback?.onError("invalid_uuid", null)
+            logger.error("Invalid oauth UUID, want $realUuid but received ${oauth.uuid}", null)
+            authCallback?.onFail(VKIDAuthFail.FailedOAuthState("Invalid uuid"))
             return
         }
 
@@ -182,7 +174,8 @@ public class VKID {
         val codeVerifier = prefsStore.value.codeVerifier
 
         if (realState != oauth.oauth?.state) {
-            authCallback?.onError("invalid_state", null)
+            logger.error("Invalid oauth state, want $realState but received ${oauth.oauth?.state}", null)
+            authCallback?.onFail(VKIDAuthFail.FailedOAuthState("Invalid state"))
             return
         }
 
@@ -199,12 +192,10 @@ public class VKID {
             )
             val callResult = executor.value.executeCall(apiCall)
             callResult.onFailure {
-                authCallback?.onError("Failed api request", it)
+                authCallback?.onFail(VKIDAuthFail.FailedApiCall("Failed code to token exchange api call", it))
             }
             callResult.onSuccess { payload ->
-                val session =
-                    UserSession(AccessToken(payload.accessToken, payload.userId, payload.expiresIn.toExpireTime))
-                authCallback?.onSuccess(session)
+                authCallback?.onSuccess(AccessToken(payload.accessToken, payload.userId, payload.expiresIn.toExpireTime))
             }
         }
     }
@@ -219,11 +210,8 @@ public class VKID {
 
     public interface AuthCallback {
         @WorkerThread
-        public fun onSuccess(session: UserSession)
+        public fun onSuccess(accessToken: AccessToken)
         @WorkerThread
-        // todo VKIDError instead of Throwable?
-        public fun onError(errorMessage: String, error: Throwable?)
-        @WorkerThread
-        public fun onCanceled()
+        public fun onFail(fail: VKIDAuthFail)
     }
 }

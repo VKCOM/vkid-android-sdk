@@ -53,7 +53,7 @@ internal class AuthActivity : Activity() {
         super.onResume()
         if (isWaitingForAuthResult && !authWasStarted) {
             // We're waiting for auth result but user returns to activity. Okay. Just finish it.
-            AuthEventBridge.canceled()
+            AuthEventBridge.onAuthResult(AuthResult.Canceled("User returns to auth activity without auth"))
             finish()
         }
     }
@@ -83,10 +83,14 @@ internal class AuthActivity : Activity() {
 
     private fun parseOAuthResult(uri: Uri?): AuthResult {
         if (uri == null) {
-            return AuthResult.Invalid
+            return AuthResult.AuthActiviyResultFailed("AuthActivity opened with null uri", null)
         }
         val payload = uri.getQueryParameter("payload") ?: ""
-        val payloadJson = try { JSONObject(payload) } catch (ignore: JSONException) { return AuthResult.Invalid }
+        val payloadJson = try {
+            JSONObject(payload)
+        } catch (e: JSONException) {
+            return AuthResult.AuthActiviyResultFailed("AuthActivity opened with invalid payload json", e)
+        }
         return handlePayloadJson(payloadJson)
     }
 

@@ -7,6 +7,7 @@ import androidx.browser.customtabs.CustomTabsIntent
 import com.vk.id.internal.auth.AuthActivity
 import com.vk.id.internal.auth.AuthEventBridge
 import com.vk.id.internal.auth.AuthOptions
+import com.vk.id.internal.auth.AuthResult
 import com.vk.id.internal.auth.VKIDAuthProvider
 import com.vk.id.internal.auth.web.ContextUtils.addNewTaskFlag
 import com.vk.id.internal.auth.toAuthUriBrowser
@@ -42,13 +43,18 @@ internal class WebAuthProvider : VKIDAuthProvider {
 
         try {
             AuthActivity.startForAuth(activity, authIntent)
-        } catch(e: ActivityNotFoundException) {
+        } catch (e: ActivityNotFoundException) {
             sendNoBrowserAuthEvent(e)
         }
     }
 
     private fun sendNoBrowserAuthEvent(throwable: Throwable?) {
         logger.error("Can't start browser to auth", throwable)
-        AuthEventBridge.error("Error. Make sure you have a browser installed.", throwable)
+        AuthEventBridge.onAuthResult(
+            AuthResult.NoBrowserAvailable(
+                "Error. Make sure you have a browser installed.",
+                throwable
+            )
+        )
     }
 }

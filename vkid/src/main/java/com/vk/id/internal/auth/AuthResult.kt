@@ -24,11 +24,10 @@
  * SPECIFIC RESULTS OF USE OF THE SOFTWARE.
  * UNDER NO CIRCUMSTANCES LLC “V KONTAKTE” BEAR LIABILITY TO THE LICENSEE OR ANY
  * THIRD PARTIES FOR ANY DAMAGE IN CONNECTION WITH USE OF THE SOFTWARE.
-*/
+ */
 package com.vk.id.internal.auth
 
 internal sealed class AuthResult {
-    object Invalid : AuthResult()
     data class Success(
         val token: String,
         val uuid: String,
@@ -40,7 +39,12 @@ internal sealed class AuthResult {
         val phone: String?,
         val oauth: OAuth?
     ) : AuthResult()
-    data class Fail(val errorMessage: String, val error: Throwable?) : AuthResult()
+
+    data class Canceled(val message: String) : AuthResult()
+
+    data class NoBrowserAvailable(val message: String, val error: Throwable?) : AuthResult()
+
+    data class AuthActiviyResultFailed(val message: String, val error: Throwable?)  : AuthResult()
 
     data class OAuth(val code: String, val state: String, val codeVerifier: String)
 }
