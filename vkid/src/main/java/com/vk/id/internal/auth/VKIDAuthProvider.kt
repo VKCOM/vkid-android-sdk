@@ -1,7 +1,7 @@
 package com.vk.id.internal.auth
 
-import android.app.Activity
+import android.content.Context
 
 internal fun interface VKIDAuthProvider {
-    fun auth(activity: Activity, authOptions: AuthOptions)
+    fun auth(context: Context, authOptions: AuthOptions)
 }

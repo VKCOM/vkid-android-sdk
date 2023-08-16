@@ -25,6 +25,8 @@ dependencies {
     implementation(libs.androidx.browser)
     implementation(libs.androidx.preference)
     implementation(libs.androidx.preference.ktx)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.coroutines.core)
     implementation(libs.okhttp3.okhttp)
     implementation(libs.okhttp3.logging)
     testImplementation(libs.mockk)

@@ -28,8 +28,8 @@
 package com.vk.id.internal.auth.app
 
 import com.vk.id.internal.api.VKIDApiService
-import com.vk.id.internal.concurrent.LifecycleAwareExecutor
-import java.util.concurrent.Future
+import com.vk.id.internal.concurrent.CoroutinesDispatchers
+import kotlinx.coroutines.withContext
 
 /**
  * Class for cache providers for silent authorisation
@@ -38,29 +38,19 @@ internal class TrustedProvidersCache(
     private val api: Lazy<VKIDApiService>,
     private val clientId: String,
     private val clientSecret: String,
-    private val executor: LifecycleAwareExecutor
+    private val dispatchers: CoroutinesDispatchers
 ) {
 
     private var cachedTrustedProviders: List<VkAuthSilentAuthProvider>? = null
-    private var prefetchFuture: Future<*>? = null
 
-    // todo use in vkid.warmUp method
-    fun prefetchSilentAuthProviders() {
-        prefetchFuture = executor.submit { fetchSilentAuthProvidersSync() }
-    }
-
-    fun getSilentAuthProviders(): List<VkAuthSilentAuthProvider> {
-        try {
-            prefetchFuture?.get()
-        } catch (_: Throwable) {
-        }
+    suspend fun getSilentAuthProviders(): List<VkAuthSilentAuthProvider> {
         return cachedTrustedProviders ?: fetchSilentAuthProvidersSync()
     }
 
-    private fun fetchSilentAuthProvidersSync(): List<VkAuthSilentAuthProvider> {
-        return executor.executeCall(
-            api.value.getSilentAuthProviders(clientId = clientId, clientSecret = clientSecret)
-        )
+    private suspend fun fetchSilentAuthProvidersSync(): List<VkAuthSilentAuthProvider> {
+        return withContext(dispatchers.IO) {
+            api.value.getSilentAuthProviders(clientId = clientId, clientSecret = clientSecret).execute()
+        }
             .getOrNull()
             .orEmpty()
             .plus(DEFAULT_TRUSTED_PROVIDERS)

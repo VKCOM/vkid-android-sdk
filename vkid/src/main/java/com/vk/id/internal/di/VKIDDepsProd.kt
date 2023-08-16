@@ -6,17 +6,17 @@ import com.vk.id.internal.api.VKIDApi
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.AuthProvidersChooser
 import com.vk.id.internal.auth.AuthProvidersChooserDefault
-import com.vk.id.internal.auth.device.DeviceIdPrefs
-import com.vk.id.internal.auth.device.DeviceIdProvider
 import com.vk.id.internal.auth.app.SilentAuthServicesProvider
 import com.vk.id.internal.auth.app.TrustedProvidersCache
-import com.vk.id.internal.store.PrefsStore
+import com.vk.id.internal.auth.device.DeviceIdPrefs
+import com.vk.id.internal.auth.device.DeviceIdProvider
 import com.vk.id.internal.auth.pkce.PkceGeneratorSHA256
-import com.vk.id.internal.concurrent.LifecycleAwareExecutor
+import com.vk.id.internal.concurrent.CoroutinesDispatchers
+import com.vk.id.internal.concurrent.CoroutinesDispatchersProd
 import com.vk.id.internal.log.createLoggerForClass
+import com.vk.id.internal.store.PrefsStore
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
 internal class VKIDDepsProd(
@@ -37,7 +37,7 @@ internal class VKIDDepsProd(
     }
 
     override val trustedProvidersCache = lazy {
-        TrustedProvidersCache(api, clientId, clientSecret, lifeCycleAwareExecutor.value)
+        TrustedProvidersCache(api, clientId, clientSecret, dispatchers)
     }
 
     override val authProvidersChooser: Lazy<AuthProvidersChooser> = lazy {
@@ -56,9 +56,8 @@ internal class VKIDDepsProd(
         PkceGeneratorSHA256()
     }
 
-    override val lifeCycleAwareExecutor: Lazy<LifecycleAwareExecutor> = lazy {
-        LifecycleAwareExecutor(Executors.newCachedThreadPool())
-    }
+    override val dispatchers: CoroutinesDispatchers
+        get() = CoroutinesDispatchersProd()
 
     private fun loggingInterceptor(): HttpLoggingInterceptor {
         val logging = HttpLoggingInterceptor(object: HttpLoggingInterceptor.Logger {
