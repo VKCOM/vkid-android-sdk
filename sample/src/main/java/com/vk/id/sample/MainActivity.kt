@@ -1,8 +1,6 @@
 package com.vk.id.sample
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -102,11 +100,9 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun showToast(text: String) {
-        Handler(Looper.getMainLooper()).post {
-            toastOnScreen?.cancel()
-            toastOnScreen = Toast.makeText(this@MainActivity, text, Toast.LENGTH_LONG)
-            toastOnScreen?.show()
-        }
+        toastOnScreen?.cancel()
+        toastOnScreen = Toast.makeText(this@MainActivity, text, Toast.LENGTH_LONG)
+        toastOnScreen?.show()
     }
 
     private var toastOnScreen: Toast? = null

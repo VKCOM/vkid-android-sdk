@@ -11,7 +11,7 @@ internal class SilentAuthServicesProvider(
     private val cache: TrustedProvidersCache
 ) {
 
-    fun getSilentAuthServices(): List<ComponentName> {
+    suspend fun getSilentAuthServices(): List<ComponentName> {
         val trustedProviders = cache.getSilentAuthProviders()
         return getAppsWithSilentAuthServices()
             .asSequence()

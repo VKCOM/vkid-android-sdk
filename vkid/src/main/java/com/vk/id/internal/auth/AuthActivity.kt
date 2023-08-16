@@ -2,11 +2,13 @@ package com.vk.id.internal.auth
 
 import android.app.Activity
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import androidx.core.app.ActivityOptionsCompat
+import com.vk.id.internal.auth.web.ContextUtils.addNewTaskFlag
 import org.json.JSONException
 import org.json.JSONObject
 import kotlin.contracts.ExperimentalContracts
@@ -140,19 +142,20 @@ internal class AuthActivity : Activity() {
         private const val KEY_AUTH_INTENT = "KEY_AUTH_INTENT"
         private const val KEY_START_AUTH = "KEY_START_AUTH"
         private const val KEY_WAITING_FOR_AUTH_RESULT = "KEY_WAITING_FOR_AUTH_RESULT"
-        private const val AUTH_REQUEST_CODE = 11041987
 
         /**
         * @throws android.content.ActivityNotFoundException
         */
         internal fun startForAuth(
-            activity: Activity,
+            context: Context,
             authIntent: Intent,
         ) {
-            val intent = Intent(activity, AuthActivity::class.java)
+            val intent = Intent(context, AuthActivity::class.java)
                 .putExtra(KEY_AUTH_INTENT, authIntent)
                 .putExtra(KEY_START_AUTH, true)
-            activity.startActivityForResult(intent, AUTH_REQUEST_CODE)
+            intent.addNewTaskFlag(context)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            context.startActivity(intent)
         }
     }
 
