@@ -42,6 +42,7 @@
             android:name=".internal.auth.AuthActivity"
             android:exported="true"
             android:launchMode="singleTask"
+            android:configChanges="locale|orientation|screenSize|screenLayout|keyboardHidden|fontScale|fontWeightAdjustment|density"
             android:theme="@style/VKID.Light.Transparent">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
