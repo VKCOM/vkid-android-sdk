@@ -6,6 +6,7 @@ import android.os.SystemClock
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.AuthEventBridge
 import com.vk.id.internal.auth.AuthOptions
@@ -14,6 +15,7 @@ import com.vk.id.internal.auth.AuthResult
 import com.vk.id.internal.auth.device.DeviceIdProvider
 import com.vk.id.internal.auth.pkce.PkceGeneratorSHA256
 import com.vk.id.internal.auth.toExpireTime
+import com.vk.id.internal.auth.toQueryParam
 import com.vk.id.internal.concurrent.CoroutinesDispatchers
 import com.vk.id.internal.di.VKIDDeps
 import com.vk.id.internal.di.VKIDDepsProd
@@ -103,13 +105,18 @@ public class VKID {
 
     private var authCallback: AuthCallback? = null
 
-    public fun authorize(lifecycleOwner: LifecycleOwner, authCallback: AuthCallback) {
+    public fun authorize(
+        lifecycleOwner: LifecycleOwner,
+        authCallback: AuthCallback,
+        authParams: VKIDAuthParams = VKIDAuthParams {},
+    ) {
         lifecycleOwner.lifecycleScope.launch {
-            authorize(authCallback)
+            authorize(authCallback, authParams)
         }
     }
 
-    public suspend fun authorize(authCallback: AuthCallback) {
+    @Suppress("MemberVisibilityCanBePrivate")
+    public suspend fun authorize(authCallback: AuthCallback, authParams: VKIDAuthParams = VKIDAuthParams {}) {
         this.authCallback = authCallback
         val authContext = currentCoroutineContext()
 
@@ -122,19 +129,21 @@ public class VKID {
         }
 
         withContext(dispatchers.IO) {
-            val fullAuthOptions = createInternalAuthOptions()
+            val fullAuthOptions = createInternalAuthOptions(authParams)
             val bestAuthProvider = authProvidersChooser.value.chooseBest()
             bestAuthProvider.auth(appContext, fullAuthOptions)
         }
     }
 
-    private fun createInternalAuthOptions(): AuthOptions {
+    private fun createInternalAuthOptions(authParams: VKIDAuthParams): AuthOptions {
         val codeVerifier = pkceGenerator.value.generateRandomCodeVerifier(SecureRandom())
         val codeChallenge = pkceGenerator.value.deriveCodeVerifierChallenge(codeVerifier)
         prefsStore.value.codeVerifier = codeVerifier
         val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
         val state = (1..32).map { allowedChars.random() }.joinToString("")
         prefsStore.value.state = state
+        val locale = authParams.locale ?: VKIDAuthParams.Locale.systemLocale(appContext)
+        val theme = authParams.theme ?: VKIDAuthParams.Theme.systemTheme(appContext)
         return AuthOptions(
             appId = clientId,
             clientSecret = clientSecret,
@@ -143,6 +152,8 @@ public class VKID {
             deviceId = deviceIdProvider.value.getDeviceId(appContext),
             redirectUri = redirectUri,
             state = state,
+            locale = locale?.toQueryParam(),
+            theme = theme?.toQueryParam(),
         )
     }
 

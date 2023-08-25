@@ -1,6 +1,7 @@
 package com.vk.id.internal.auth
 
 import android.net.Uri
+import com.vk.id.auth.VKIDAuthParams
 
 internal data class AuthOptions(
     val appId: String,
@@ -10,6 +11,8 @@ internal data class AuthOptions(
     val deviceId: String,
     val redirectUri: String,
     val state: String,
+    val locale: String?,
+    val theme: String?,
 )
 
 private const val APP_ID = "app_id"
@@ -24,6 +27,8 @@ private const val RESPONSE_TYPE_CODE = "code"
 private const val SCHEME_BROWSER = "https"
 private const val STATE = "state"
 private const val UUID = "uuid"
+private const val LOCALE = "lang_id"
+private const val THEME = "scheme"
 
 internal fun basicCodeFlowUri(appPackage: String) = Uri.Builder()
     .scheme(appPackage)
@@ -41,11 +46,37 @@ internal fun AuthOptions.toAuthUriCodeFlow(appPackage: String): Uri = toAuthUriB
     .authority(AUTHORITY_CODE_FLOW)
     .build()
 
-private fun AuthOptions.toAuthUriBuilder() = Uri.Builder()
-    .appendQueryParameter(APP_ID, appId)
-    .appendQueryParameter(RESPONSE_TYPE, RESPONSE_TYPE_CODE)
-    .appendQueryParameter(REDIRECT_URI, redirectUri)
-    .appendQueryParameter(CODE_CHALLENGE_METHOD, codeChallengeMethod)
-    .appendQueryParameter(CODE_CHALLENGE, codeChallenge)
-    .appendQueryParameter(STATE, state)
-    .appendQueryParameter(UUID, deviceId)
+private fun AuthOptions.toAuthUriBuilder(): Uri.Builder {
+    val builder = Uri.Builder()
+        .appendQueryParameter(APP_ID, appId)
+        .appendQueryParameter(RESPONSE_TYPE, RESPONSE_TYPE_CODE)
+        .appendQueryParameter(REDIRECT_URI, redirectUri)
+        .appendQueryParameter(CODE_CHALLENGE_METHOD, codeChallengeMethod)
+        .appendQueryParameter(CODE_CHALLENGE, codeChallenge)
+        .appendQueryParameter(STATE, state)
+        .appendQueryParameter(UUID, deviceId)
+
+    if (locale != null) {
+        builder.appendQueryParameter(LOCALE, locale)
+    }
+    if (theme != null) {
+        builder.appendQueryParameter(THEME, theme)
+    }
+    return builder
+}
+
+internal fun VKIDAuthParams.Locale.toQueryParam(): String = when (this) {
+    VKIDAuthParams.Locale.RUS -> 0
+    VKIDAuthParams.Locale.UKR -> 1
+    VKIDAuthParams.Locale.ENG -> 3
+    VKIDAuthParams.Locale.SPA -> 4
+    VKIDAuthParams.Locale.GERMAN -> 6
+    VKIDAuthParams.Locale.POL -> 15
+    VKIDAuthParams.Locale.FRA -> 16
+    VKIDAuthParams.Locale.TURKEY -> 82
+}.toString()
+
+internal fun VKIDAuthParams.Theme.toQueryParam(): String = when (this) {
+    VKIDAuthParams.Theme.Light -> "bright_light"
+    VKIDAuthParams.Theme.Dark -> "space_gray"
+}
