@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
     private val vkAuthCallback = object : VKID.AuthCallback {
         override fun onSuccess(accessToken: AccessToken) {
             setUiStateVkAuthComplete()
-            val token = accessToken.token.hideLastCharacters(10)
+            val token = accessToken.token.hideLastCharacters(TOKEN_VISIBLE_CHARACTERS)
             showToast("There is token: $token")
         }
 
@@ -107,4 +107,8 @@ class MainActivity : ComponentActivity() {
 
     private var toastOnScreen: Toast? = null
     private val vkAuthInProgress: MutableStateFlow<Boolean> = MutableStateFlow(false)
+
+    private companion object {
+        const val TOKEN_VISIBLE_CHARACTERS = 10
+    }
 }
