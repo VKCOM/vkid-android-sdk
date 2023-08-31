@@ -42,5 +42,12 @@ gradlePlugin {
             id = "vkid.android.library.publish"
             implementationClass = "VKIDLibraryPublishConventionPlugin"
         }
+        register("vkidDependencyLock") {
+            id = "vkid.android.dependency.lock"
+            implementationClass = "DependencyLockPlugin"
+            description = """Helper to create lockfiles for all modules with one command. 
+                |Usage: `./gradlew allDependencies --write-locks`""".trimMargin()
+        }
     }
 }
+

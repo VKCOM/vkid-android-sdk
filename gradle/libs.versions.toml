@@ -13,6 +13,7 @@ kotlinxCoroutines = "1.7.1"
 ksp = "1.8.20-1.0.11"
 mockk = "1.13.5"
 okHttpVersion = "4.11.0"
+okioVersion = "3.4.0"
 preference = "1.2.0"
 
 [libraries]
@@ -33,6 +34,7 @@ kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-cor
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 okhttp3-okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okHttpVersion" }
 okhttp3-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okHttpVersion" }
+okio = { group = "com.squareup.okio", name = "okio", version = { require = "3.4.0" } }
 
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
