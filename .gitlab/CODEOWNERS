@@ -1,1 +1,3 @@
 # ===== CODE OWNERS =====
+*gradle.lockfile @co-is @co-is-required
+*settings.gradle.kts  @co-is @co-is-required

@@ -11,6 +11,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven {
+            url = uri("https://artifactory.mvk.com/artifactory/maven")
+        }
     }
 }
 rootProject.name = "VKID"

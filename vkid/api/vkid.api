@@ -27,8 +27,10 @@ public final class com/vk/id/AccessToken$Creator : android/os/Parcelable$Creator
 public final class com/vk/id/VKID {
 	public static final field Companion Lcom/vk/id/VKID$Companion;
 	public synthetic fun <init> (Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun authorize (Landroidx/lifecycle/LifecycleOwner;Lcom/vk/id/VKID$AuthCallback;)V
-	public final fun authorize (Lcom/vk/id/VKID$AuthCallback;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun authorize (Landroidx/lifecycle/LifecycleOwner;Lcom/vk/id/VKID$AuthCallback;Lcom/vk/id/auth/VKIDAuthParams;)V
+	public final fun authorize (Lcom/vk/id/VKID$AuthCallback;Lcom/vk/id/auth/VKIDAuthParams;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun authorize$default (Lcom/vk/id/VKID;Landroidx/lifecycle/LifecycleOwner;Lcom/vk/id/VKID$AuthCallback;Lcom/vk/id/auth/VKIDAuthParams;ILjava/lang/Object;)V
+	public static synthetic fun authorize$default (Lcom/vk/id/VKID;Lcom/vk/id/VKID$AuthCallback;Lcom/vk/id/auth/VKIDAuthParams;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 }
 
 public abstract interface class com/vk/id/VKID$AuthCallback {
@@ -86,6 +88,45 @@ public final class com/vk/id/VKIDAuthFail$NoBrowserAvailable : com/vk/id/VKIDAut
 
 public final class com/vk/id/VKIDKt {
 	public static final fun VKID (Lkotlin/jvm/functions/Function1;)Lcom/vk/id/VKID;
+}
+
+public final class com/vk/id/auth/VKIDAuthParams {
+	public synthetic fun <init> (Lcom/vk/id/auth/VKIDAuthParams$Locale;Lcom/vk/id/auth/VKIDAuthParams$Theme;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getLocale ()Lcom/vk/id/auth/VKIDAuthParams$Locale;
+	public final fun getTheme ()Lcom/vk/id/auth/VKIDAuthParams$Theme;
+}
+
+public final class com/vk/id/auth/VKIDAuthParams$Builder {
+	public fun <init> ()V
+	public final fun build ()Lcom/vk/id/auth/VKIDAuthParams;
+	public final fun getLocale ()Lcom/vk/id/auth/VKIDAuthParams$Locale;
+	public final fun getTheme ()Lcom/vk/id/auth/VKIDAuthParams$Theme;
+	public final fun setLocale (Lcom/vk/id/auth/VKIDAuthParams$Locale;)V
+	public final fun setTheme (Lcom/vk/id/auth/VKIDAuthParams$Theme;)V
+}
+
+public final class com/vk/id/auth/VKIDAuthParams$Locale : java/lang/Enum {
+	public static final field ENG Lcom/vk/id/auth/VKIDAuthParams$Locale;
+	public static final field FRA Lcom/vk/id/auth/VKIDAuthParams$Locale;
+	public static final field GERMAN Lcom/vk/id/auth/VKIDAuthParams$Locale;
+	public static final field POL Lcom/vk/id/auth/VKIDAuthParams$Locale;
+	public static final field RUS Lcom/vk/id/auth/VKIDAuthParams$Locale;
+	public static final field SPA Lcom/vk/id/auth/VKIDAuthParams$Locale;
+	public static final field TURKEY Lcom/vk/id/auth/VKIDAuthParams$Locale;
+	public static final field UKR Lcom/vk/id/auth/VKIDAuthParams$Locale;
+	public static fun valueOf (Ljava/lang/String;)Lcom/vk/id/auth/VKIDAuthParams$Locale;
+	public static fun values ()[Lcom/vk/id/auth/VKIDAuthParams$Locale;
+}
+
+public final class com/vk/id/auth/VKIDAuthParams$Theme : java/lang/Enum {
+	public static final field Dark Lcom/vk/id/auth/VKIDAuthParams$Theme;
+	public static final field Light Lcom/vk/id/auth/VKIDAuthParams$Theme;
+	public static fun valueOf (Ljava/lang/String;)Lcom/vk/id/auth/VKIDAuthParams$Theme;
+	public static fun values ()[Lcom/vk/id/auth/VKIDAuthParams$Theme;
+}
+
+public final class com/vk/id/auth/VKIDAuthParamsKt {
+	public static final fun VKIDAuthParams (Lkotlin/jvm/functions/Function1;)Lcom/vk/id/auth/VKIDAuthParams;
 }
 
 public abstract interface class com/vk/id/internal/log/LogEngine {
