@@ -4,5 +4,6 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.kotlin.binary.compatibility.validator) apply false
     alias(libs.plugins.kotlin.parcelize) apply false
+    alias(libs.plugins.detekt) apply false
     id("vkid.android.dependency.lock") apply true
 }

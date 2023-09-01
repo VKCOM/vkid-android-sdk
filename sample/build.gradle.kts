@@ -1,5 +1,4 @@
 plugins {
-    id("vkid.android.application")
     id("vkid.android.application.compose")
 }
 

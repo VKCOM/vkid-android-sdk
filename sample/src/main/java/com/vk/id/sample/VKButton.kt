@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.material.ripple.rememberRipple
@@ -76,16 +77,10 @@ fun VKIDButton(
             contentAlignment = Alignment.CenterStart
         ) {
             if (showIcon) {
-                Image(
-                    painter = painterResource(id = R.drawable.vkid_icon),
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(colorResource(id = R.color.vkid_white)),
-                    modifier = Modifier
-                        .size(28.dp)
-                        .padding(1.dp)
-                )
+                VKIcon()
             }
         }
+        @Suppress("MagicNumber")
         Box(
             modifier = Modifier.weight(4f),
             contentAlignment = Alignment.Center
@@ -151,6 +146,18 @@ fun VKIDButtonSmall(
             }
         }
     }
+}
+
+@Composable
+private fun VKIcon() {
+    Image(
+        painter = painterResource(id = R.drawable.vkid_icon),
+        contentDescription = null,
+        colorFilter = ColorFilter.tint(colorResource(id = R.color.vkid_white)),
+        modifier = Modifier
+            .size(28.dp)
+            .padding(1.dp)
+    )
 }
 
 @Composable

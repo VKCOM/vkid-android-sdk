@@ -1,6 +1,6 @@
 import com.android.build.gradle.LibraryExtension
-import com.android.build.gradle.internal.dsl.decorator.androidPluginDslDecorator
 import com.vk.id.Versions
+import com.vk.id.configureDetekt
 import com.vk.id.configureKotlinAndroid
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -31,6 +31,7 @@ class VKIDLibraryConventionPlugin : Plugin<Project> {
 
                 resourcePrefix("vkid_")
             }
+            configureDetekt(isCompose = false)
             dependencies {
                 add("androidTestImplementation", kotlin("test"))
                 add("testImplementation", kotlin("test"))
