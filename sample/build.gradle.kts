@@ -27,7 +27,6 @@ android {
 }
 
 dependencies {
-
     implementation(project(":vkid"))
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))

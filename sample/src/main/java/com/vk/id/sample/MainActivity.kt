@@ -49,11 +49,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         VKID.logsEnabled = true
+        val clientIdRes = resources.getString(R.string.client_id)
         vkid = VKID {
             context = this@MainActivity
-            clientId = "51726321"
-            clientSecret = "6Tn9Z5bht6GL08cBaETv"
-            redirectUri = "vk51726321://vk.com"
+            clientId = clientIdRes
+            clientSecret = resources.getString(R.string.client_secret)
+            redirectUri = "vk$clientIdRes://vk.com"
         }
         setContent {
             Column(
