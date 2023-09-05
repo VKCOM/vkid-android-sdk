@@ -84,7 +84,17 @@ vkid.authorize(this@MainActivity, vkAuthCallback) // первый парамет
 ## Демонстрация
 
 SDK поставляется с примером приложения, где можно посмотреть работу авторизации.
-В папке [sample](sample) содержится тестовое приложение.
+В папке [sample](sample) содержится тестовое приложение. Для того, чтобы sample смог получить токен, нужно прописать свои client_id и client_secret в ресурсах:
+
+Файл `res/values/secrets.xml`:
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="client_secret" translatable="false">Ваш защищённый ключ</string>
+    <string name="client_id" translatable="false">Ваш ID приложения</string>
+</resources>
+```
+Файл можно назвать как угодно, но тогда не забудьте добавить его в `.gitignore`.
 
 ## Документация
 
