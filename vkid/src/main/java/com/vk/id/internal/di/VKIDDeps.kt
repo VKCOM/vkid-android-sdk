@@ -3,6 +3,7 @@ package com.vk.id.internal.di
 import android.content.Context
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.AuthProvidersChooser
+import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.auth.device.DeviceIdProvider
 import com.vk.id.internal.auth.app.TrustedProvidersCache
 import com.vk.id.internal.store.PrefsStore
@@ -17,5 +18,6 @@ internal interface VKIDDeps {
     val dispatchers: CoroutinesDispatchers
     val prefsStore: Lazy<PrefsStore>
     val pkceGenerator: Lazy<PkceGeneratorSHA256>
+    val serviceCredentials: Lazy<ServiceCredentials>
     val trustedProvidersCache: Lazy<TrustedProvidersCache>
 }

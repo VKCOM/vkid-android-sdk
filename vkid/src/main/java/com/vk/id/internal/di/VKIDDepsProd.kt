@@ -1,11 +1,18 @@
 package com.vk.id.internal.di
 
+import android.content.ComponentName
 import android.content.Context
+import android.content.pm.ActivityInfo
+import android.content.pm.PackageManager
+import android.os.Build
+import android.os.Bundle
 import com.vk.id.VKID
 import com.vk.id.internal.api.VKIDApi
 import com.vk.id.internal.api.VKIDApiService
+import com.vk.id.internal.auth.AuthActivity
 import com.vk.id.internal.auth.AuthProvidersChooser
 import com.vk.id.internal.auth.AuthProvidersChooserDefault
+import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.auth.app.SilentAuthServicesProvider
 import com.vk.id.internal.auth.app.TrustedProvidersCache
 import com.vk.id.internal.auth.device.DeviceIdPrefs
@@ -20,10 +27,32 @@ import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.TimeUnit
 
 internal class VKIDDepsProd(
-    override val appContext: Context,
-    clientId: String,
-    clientSecret: String
+    override val appContext: Context
 ) : VKIDDeps {
+
+    override val serviceCredentials: Lazy<ServiceCredentials> = lazy {
+        val componentName = ComponentName(appContext, AuthActivity::class.java)
+        val flags = PackageManager.GET_META_DATA or PackageManager.GET_ACTIVITIES
+        val ai: ActivityInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            appContext.packageManager.getActivityInfo(
+                componentName,
+                PackageManager.ComponentInfoFlags.of(flags.toLong())
+            )
+        } else {
+            @Suppress("DEPRECATION")
+            appContext.packageManager.getActivityInfo(
+                componentName,
+                flags
+            )
+        }
+        val clientID = ai.metaData.getIntOrThrow("VKIDClientID").toString()
+        val clientSecret = ai.metaData.getStringOrThrow("VKIDClientSecret")
+        val redirectScheme = ai.metaData.getStringOrThrow("VKIDRedirectScheme")
+        val redirectHost = ai.metaData.getStringOrThrow("VKIDRedirectHost")
+        val redirectUri = "$redirectScheme://$redirectHost"
+
+        ServiceCredentials(clientID, clientSecret, redirectUri)
+    }
 
     override val api: Lazy<VKIDApiService> = lazy {
         val client = OkHttpClient.Builder()
@@ -37,7 +66,8 @@ internal class VKIDDepsProd(
     }
 
     override val trustedProvidersCache = lazy {
-        TrustedProvidersCache(api, clientId, clientSecret, dispatchers)
+        val creds = serviceCredentials.value
+        TrustedProvidersCache(api, creds.clientID, creds.clientSecret, dispatchers)
     }
 
     override val authProvidersChooser: Lazy<AuthProvidersChooser> = lazy {
@@ -75,4 +105,19 @@ internal class VKIDDepsProd(
     private companion object {
         private const val OKHTTP_TIMEOUT_SECONDS = 60L
     }
+}
+
+private const val MISSED_PLACEHOLDER_ERROR_MESSAGE = "VKID initialization error. Missing %s parameter in manifest placeholders"
+
+private fun Bundle.getIntOrThrow(key: String): Int {
+    val value = getInt(key, -1)
+    if (value == -1) {
+        throw IllegalStateException(MISSED_PLACEHOLDER_ERROR_MESSAGE.format(key))
+    }
+    return value
+}
+
+private fun Bundle.getStringOrThrow(key: String): String {
+    return getString(key)
+        ?: throw IllegalStateException(MISSED_PLACEHOLDER_ERROR_MESSAGE.format(key))
 }
