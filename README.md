@@ -34,6 +34,8 @@ implementation("com.vk.id:vkid:${sdkVersion}")
 android {
     //...
     addManifestPlaceholders(mapOf(
+        "VKIDClientID" to "1233445", // ID вашего приложения (app_id)
+        "VKIDClientSecret" to "000000000000", // ваш защищенный ключ (client_secret)
         "VKIDRedirectHost" to "vk.com", // обычно vk.com
         "VKIDRedirectScheme" to "vk1233445", // обычно vk{ID приложения}
     ))
@@ -44,12 +46,7 @@ android {
 ### Инициализация VK ID SDK
 Вся работа происходит через объект `VKID`.
 ```kotlin
-val vkid = VKID {
-    context = this
-    clientId = "1233445" // ID вашего приложения (app_id)
-    clientSecret = "000000000000" // ваш защищенный ключ (client_secret)
-    redirectUri = "vk1233445://vk.com" // ваш redirect URI, должно совпадать с тем что указано в VKIDRedirectScheme и VKIDRedirectHost в плейсхолдерах манифеста
-}
+val vkid = VKID(context)
 ```
 ### Авторизация
 Результат авторизации передается в колбэк `VKID.AuthCallback`, поэтому нужно его объявить:
@@ -84,17 +81,13 @@ vkid.authorize(this@MainActivity, vkAuthCallback) // первый парамет
 ## Демонстрация
 
 SDK поставляется с примером приложения, где можно посмотреть работу авторизации.
-В папке [sample](sample) содержится тестовое приложение. Для того, чтобы sample смог получить токен, нужно прописать свои client_id и client_secret в ресурсах:
+В папке [sample](sample) содержится тестовое приложение. Для того, чтобы sample смог получить токен, нужно создать файл secrets.properties и прописать в нем свои client_id и client_secret :
 
-Файл `res/values/secrets.xml`:
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="client_secret" translatable="false">Ваш защищённый ключ</string>
-    <string name="client_id" translatable="false">Ваш ID приложения</string>
-</resources>
+Файл `secrets.properties`:
 ```
-Файл можно назвать как угодно, но тогда не забудьте добавить его в `.gitignore`.
+VKIDClientSecret=Ваш защищённый ключ
+VKIDClientID=Ваш ID приложения
+```
 
 ## Документация
 

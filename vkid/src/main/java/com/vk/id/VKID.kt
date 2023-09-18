@@ -12,6 +12,7 @@ import com.vk.id.internal.auth.AuthEventBridge
 import com.vk.id.internal.auth.AuthOptions
 import com.vk.id.internal.auth.AuthProvidersChooser
 import com.vk.id.internal.auth.AuthResult
+import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.auth.device.DeviceIdProvider
 import com.vk.id.internal.auth.pkce.PkceGeneratorSHA256
 import com.vk.id.internal.auth.toExpireTime
@@ -32,17 +33,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.security.SecureRandom
 
-public inline fun VKID(initializer: VKID.Builder.() -> Unit): VKID {
-    return VKID.Builder().apply(initializer).build()
-}
 
 public class VKID {
-    private constructor(context: Context, clientId: String, clientSecret: String, redirectUri: String) : this(
-        clientId,
-        clientSecret,
-        redirectUri,
-        VKIDDepsProd(context, clientId, clientSecret)
-    )
+    public constructor(context: Context) : this(VKIDDepsProd(context))
 
     public companion object {
         @Suppress("MemberVisibilityCanBePrivate")
@@ -66,42 +59,27 @@ public class VKID {
      * Only for tests, to provide mocked dependencies
      */
     @VisibleForTesting
-    internal constructor(clientId: String, clientSecret: String, redirectUri: String, deps: VKIDDeps) {
+    internal constructor(deps: VKIDDeps) {
         this.api = deps.api
         this.appContext = deps.appContext
-        this.clientId = clientId
-        this.clientSecret = clientSecret
-        this.redirectUri = redirectUri
         this.authProvidersChooser = deps.authProvidersChooser
-        this.prefsStore = deps.prefsStore
         this.deviceIdProvider = deps.deviceIdProvider
-        this.pkceGenerator = deps.pkceGenerator
         this.dispatchers = deps.dispatchers
-    }
-
-    public class Builder {
-        public var context: Context? = null
-        public var clientId: String? = null
-        public var clientSecret: String? = null
-        public var redirectUri: String? = null
-
-        // todo check context not set and throw error
-        public fun build(): VKID = VKID(context!!.applicationContext, clientId!!, clientSecret!!, redirectUri!!)
+        this.prefsStore = deps.prefsStore
+        this.pkceGenerator = deps.pkceGenerator
+        this.serviceCredentials = deps.serviceCredentials
     }
 
     private val logger = createLoggerForClass()
 
-    private val clientId: String
-    private val clientSecret: String
-    private val redirectUri: String
-
     private val api: Lazy<VKIDApiService>
     private val appContext: Context
     private val authProvidersChooser: Lazy<AuthProvidersChooser>
-    private val prefsStore: Lazy<PrefsStore>
     private val deviceIdProvider: Lazy<DeviceIdProvider>
     private val pkceGenerator: Lazy<PkceGeneratorSHA256>
     private val dispatchers: CoroutinesDispatchers
+    private val prefsStore: Lazy<PrefsStore>
+    private val serviceCredentials: Lazy<ServiceCredentials>
 
     private var authCallback: AuthCallback? = null
 
@@ -144,13 +122,14 @@ public class VKID {
         prefsStore.value.state = state
         val locale = authParams.locale ?: VKIDAuthParams.Locale.systemLocale(appContext)
         val theme = authParams.theme ?: VKIDAuthParams.Theme.systemTheme(appContext)
+        val credentials = serviceCredentials.value
         return AuthOptions(
-            appId = clientId,
-            clientSecret = clientSecret,
+            appId = credentials.clientID,
+            clientSecret = credentials.clientSecret,
             codeChallenge = codeChallenge,
             codeChallengeMethod = "sha256",
             deviceId = deviceIdProvider.value.getDeviceId(appContext),
-            redirectUri = redirectUri,
+            redirectUri = credentials.redirectUri,
             state = state,
             locale = locale?.toQueryParam(),
             theme = theme?.toQueryParam(),
@@ -212,16 +191,17 @@ public class VKID {
             return
         }
 
+        val creds = serviceCredentials.value
         val code = oauth.oauth.code
         // execute token request
         val callResult = withContext(dispatchers.IO) {
             api.value.getToken(
                 code,
                 codeVerifier,
-                clientId,
-                clientSecret,
+                creds.clientID,
+                creds.clientSecret,
                 deviceId = realUuid,
-                redirectUri
+                creds.redirectUri,
             ).execute()
         }
         callResult.onFailure {

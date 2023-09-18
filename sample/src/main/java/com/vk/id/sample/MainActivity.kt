@@ -23,7 +23,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 class MainActivity : ComponentActivity() {
 
-    private lateinit var vkid: VKID
+    // todo move to viewmodel
+    private val vkid = VKID(this)
 
     private val vkAuthCallback = object : VKID.AuthCallback {
         override fun onSuccess(accessToken: AccessToken) {
@@ -49,13 +50,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         VKID.logsEnabled = true
-        val clientIdRes = resources.getString(R.string.client_id)
-        vkid = VKID {
-            context = this@MainActivity
-            clientId = clientIdRes
-            clientSecret = resources.getString(R.string.client_secret)
-            redirectUri = "vk$clientIdRes://vk.com"
-        }
         setContent {
             Column(
                 modifier = Modifier

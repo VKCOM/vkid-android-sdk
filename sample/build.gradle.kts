@@ -1,3 +1,7 @@
+import com.android.build.api.dsl.ApplicationDefaultConfig
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     id("vkid.android.application.compose")
 }
@@ -12,10 +16,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        addManifestPlaceholders(mapOf(
-            "VKIDRedirectHost" to "vk.com",
-            "VKIDRedirectScheme" to "vk51726321",
-        ))
+        initVKID()
     }
 
     buildTypes {
@@ -35,4 +36,17 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.kotlinx.coroutines.android)
     debugImplementation(libs.androidx.compose.ui.tooling)
+}
+
+fun ApplicationDefaultConfig.initVKID() {
+    val secrets = Properties()
+    secrets.load(FileInputStream(file("secrets.properties")))
+    val clientId = secrets["VKIDClientID"] ?: throw IllegalStateException("Add VKIDClientID to file secrets.properties")
+    val clientSecret = secrets["VKIDClientSecret"] ?: throw IllegalStateException("Add VKIDClientSecret to file secrets.properties")
+    addManifestPlaceholders(mapOf(
+        "VKIDRedirectHost" to "vk.com",
+        "VKIDRedirectScheme" to "vk$clientId",
+        "VKIDClientID" to clientId,
+        "VKIDClientSecret" to clientSecret
+    ))
 }
