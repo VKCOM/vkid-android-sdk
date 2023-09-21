@@ -26,7 +26,7 @@ public final class com/vk/id/AccessToken$Creator : android/os/Parcelable$Creator
 
 public final class com/vk/id/VKID {
 	public static final field Companion Lcom/vk/id/VKID$Companion;
-	public synthetic fun <init> (Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Landroid/content/Context;)V
 	public final fun authorize (Landroidx/lifecycle/LifecycleOwner;Lcom/vk/id/VKID$AuthCallback;Lcom/vk/id/auth/VKIDAuthParams;)V
 	public final fun authorize (Lcom/vk/id/VKID$AuthCallback;Lcom/vk/id/auth/VKIDAuthParams;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun authorize$default (Lcom/vk/id/VKID;Landroidx/lifecycle/LifecycleOwner;Lcom/vk/id/VKID$AuthCallback;Lcom/vk/id/auth/VKIDAuthParams;ILjava/lang/Object;)V
@@ -36,19 +36,6 @@ public final class com/vk/id/VKID {
 public abstract interface class com/vk/id/VKID$AuthCallback {
 	public abstract fun onFail (Lcom/vk/id/VKIDAuthFail;)V
 	public abstract fun onSuccess (Lcom/vk/id/AccessToken;)V
-}
-
-public final class com/vk/id/VKID$Builder {
-	public fun <init> ()V
-	public final fun build ()Lcom/vk/id/VKID;
-	public final fun getClientId ()Ljava/lang/String;
-	public final fun getClientSecret ()Ljava/lang/String;
-	public final fun getContext ()Landroid/content/Context;
-	public final fun getRedirectUri ()Ljava/lang/String;
-	public final fun setClientId (Ljava/lang/String;)V
-	public final fun setClientSecret (Ljava/lang/String;)V
-	public final fun setContext (Landroid/content/Context;)V
-	public final fun setRedirectUri (Ljava/lang/String;)V
 }
 
 public final class com/vk/id/VKID$Companion {
@@ -84,10 +71,6 @@ public final class com/vk/id/VKIDAuthFail$FailedRedirectActivity : com/vk/id/VKI
 public final class com/vk/id/VKIDAuthFail$NoBrowserAvailable : com/vk/id/VKIDAuthFail {
 	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
 	public final fun getThrowable ()Ljava/lang/Throwable;
-}
-
-public final class com/vk/id/VKIDKt {
-	public static final fun VKID (Lkotlin/jvm/functions/Function1;)Lcom/vk/id/VKID;
 }
 
 public final class com/vk/id/auth/VKIDAuthParams {
