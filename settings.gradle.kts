@@ -19,3 +19,4 @@ dependencyResolutionManagement {
 rootProject.name = "VKID"
 include(":sample")
 include(":vkid")
+include(":onetap-compose")

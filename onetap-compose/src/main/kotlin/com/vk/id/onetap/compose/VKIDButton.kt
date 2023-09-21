@@ -1,4 +1,4 @@
-package com.vk.id.sample
+package com.vk.id.onetap.compose
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -43,7 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun VKIDButton(
+public fun VKIDButton(
     modifier: Modifier = Modifier,
     radius: Dp = 8.dp,
     showIcon: Boolean = true,
@@ -108,7 +108,7 @@ fun VKIDButton(
 }
 
 @Composable
-fun VKIDButtonSmall(
+public fun VKIDButtonSmall(
     onClick: () -> Unit,
     inProgress: Boolean = false,
     enabled: Boolean = true,

@@ -19,6 +19,8 @@ import androidx.compose.ui.unit.dp
 import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
+import com.vk.id.onetap.compose.VKIDButton
+import com.vk.id.onetap.compose.VKIDButtonSmall
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class MainActivity : ComponentActivity() {
