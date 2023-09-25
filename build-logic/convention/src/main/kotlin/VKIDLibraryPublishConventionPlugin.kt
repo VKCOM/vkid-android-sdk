@@ -8,6 +8,7 @@ import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.get
+import org.gradle.plugins.signing.SigningExtension
 import java.net.URI
 
 class VKIDLibraryPublishConventionPlugin : Plugin<Project> {
@@ -56,6 +57,9 @@ class VKIDLibraryPublishConventionPlugin : Plugin<Project> {
                             applyPom(this)
                         }
                     }
+                }
+                extensions.configure(SigningExtension::class.java) {
+                    sign(publications["vkid"])
                 }
             }
         }
