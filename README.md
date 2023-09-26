@@ -3,24 +3,23 @@
     <img src="logo.svg" width="150" alt="VK ID SDK Logo">
   </h1>
   <p align="center">
-    VK ID SDK — библиотека для авторизации пользователей Android приложений с помощью аккаунта VK ID.
+    VK ID SDK — библиотека для авторизации пользователей Android-приложений с помощью аккаунта VK ID.
   </p>
 </div>
 
 ## Предварительно
 
-Общий план интеграции и в целом что такое VK ID можно прочитать здесь https://platform.vk.com/docs/vkid/1.35.0/plan
+Что такое VK ID и как интегрировать его в приложение читайте здесь https://id.vk.com/business/go/docs/vkid/latest/start-page.
 
-Для подключения VK ID SDK сначала необходимо получить ID приложения (app_id) и защищенный ключ (client_secret). Для их получения нужно создать приложение на [платформе для разработчиков](https://platform.vk.com/docs/vkid/1.35.0/create-application).
+Чтобы подключить VK ID SDK, сначала получите ID приложения (app_id) и защищенный ключ (client_secret). Для этого создайте приложение в [кабинете подключения VK ID](https://id.vk.com/business/go/docs/vkid/latest/create-application).
 
 
 ## Установка
 
 Для начала работы добавьте репозиторий:
 ```kotlin
-// todo настоящий репозиторий, пока его нет
 maven {
-    url("https://vkid-maven-public/")
+    url("https://artifactory-external.vkpartner.ru/artifactory/vkid-sdk-andorid/")
 }
 ```
 
@@ -34,22 +33,22 @@ implementation("com.vk.id:vkid:${sdkVersion}")
 android {
     //...
     addManifestPlaceholders(mapOf(
-        "VKIDClientID" to "1233445", // ID вашего приложения (app_id)
-        "VKIDClientSecret" to "000000000000", // ваш защищенный ключ (client_secret)
-        "VKIDRedirectHost" to "vk.com", // обычно vk.com
-        "VKIDRedirectScheme" to "vk1233445", // обычно vk{ID приложения}
+        "VKIDClientID" to "1233445", // ID вашего приложения (app_id).
+        "VKIDClientSecret" to "000000000000", // Ваш защищенный ключ (client_secret).
+        "VKIDRedirectHost" to "vk.com", // Обычно используется vk.com.
+        "VKIDRedirectScheme" to "vk1233445", // Обычно используется vk{ID приложения}.
     ))
 }
 ```
 
 ## Интеграция
 ### Инициализация VK ID SDK
-Вся работа происходит через объект `VKID`.
+Инициализируйте работу VK ID SDK через объект `VKID`.
 ```kotlin
 val vkid = VKID(context)
 ```
 ### Авторизация
-Результат авторизации передается в колбэк `VKID.AuthCallback`, поэтому нужно его объявить:
+Результат авторизации передается в коллбэк `VKID.AuthCallback`, поэтому его нужно объявить:
 ```kotlin
 private val vkAuthCallback = object : VKID.AuthCallback {
     override fun onSuccess(accessToken: AccessToken) {     
@@ -67,21 +66,22 @@ private val vkAuthCallback = object : VKID.AuthCallback {
     }
 }
 ```
-Сама авторизация запускается методом authorize, у которого есть два варианта вызова, suspend:
+Авторизация запускается с помощью метода authorize(), у которого есть два варианта вызова:
 ```kotlin
 viewModelScope.launch {
     vkid.authorize(vkAuthCallback)
 }
 ```
-либо с передачей LifecycleOwner:
+или с передачей LifecycleOwner:
 ```kotlin
-vkid.authorize(this@MainActivity, vkAuthCallback) // первый параметр LifecycleOwner, например активити
+vkid.authorize(this@MainActivity, vkAuthCallback) // Первый параметр LifecycleOwner, например активити.
 ```
 
 ## Демонстрация
 
-SDK поставляется с примером приложения, где можно посмотреть работу авторизации.
-В папке [sample](sample) содержится тестовое приложение. Для того, чтобы sample смог получить токен, нужно создать файл secrets.properties и прописать в нем свои client_id и client_secret :
+SDK поставляется с [тестовым примером приложения](sample), где можно посмотреть работу авторизации.
+Чтобы получить токен, создайте файл secrets.properties и пропишите в нем client_id и client_secret вашего приложения VK ID:
+
 
 Файл `secrets.properties`:
 ```
@@ -91,15 +91,16 @@ VKIDClientID=Ваш ID приложения
 
 ## Документация
 
-- [Что такое VK ID](https://platform.vk.com/docs/vkid/1.35.0/start-page)
-- [Создание приложения](https://platform.vk.com/docs/vkid/1.35.0/create-application)
-- [Требования к дизайну](https://platform.vk.com/docs/vkid/1.35.0/guidelines/design-rules)
+- [Что такое VK ID](https://id.vk.com/business/go/docs/vkid/latest/start-page)
+- [Создание приложения](https://platform.vk.com/docs/vkid/latest/create-application)
+- [Требования к дизайну](https://platform.vk.com/docs/vkid/latest/guidelines/design-rules)
 
 ## Contributing
-Разработка VK ID SDK происходит в открытом доступе на GitHub, и мы благодарны пользователям за внесение исправлений ошибок и улучшений. Читайте ниже, чтобы узнать, как вы можете принять участие в улучшении VK ID SDK.
+Проект VK ID SDK имеет открытый исходный код на GitHub, и вы можете присоединиться к его доработке — мы будем благодарны за внесение улучшений и исправление возможных ошибок.
 
 ### Code of Conduct
-Пожалуйста, прочтите [нормы поведения](CODE_OF_CONDUCT.md), которые мы ожидаем от участников проекта. Он поможет понять, какие действия необходимы и какие недопустимы.
+Если вы собираетесь вносить изменения в проект VK ID SDK, следуйте [правилам разработки](CODE_OF_CONDUCT.md). Они помогут понять, какие действия возможны, а какие недопустимы.
 
 ### Contributing Guide
-Прочтите наше [руководство](CONTRIBUTING.md) чтобы узнать о нашем процессе разработки, как предлагать исправления и улучшения, и как добавлять и тестировать свои изменения в VK ID SDK. Так же рекомендуем ознакомится с [code style](CODE_STYLE.md) проекта.
+В [руководстве](CONTRIBUTING.md) вы можете подробно ознакомиться с процессом разработки и узнать, как предлагать улучшения и исправления, а ещё — как добавлять и тестировать свои изменения в VK ID SDK.
+Также рекомендуем ознакомиться с общими [правилами оформления кода](CODE_STYLE.md) в проекте.
