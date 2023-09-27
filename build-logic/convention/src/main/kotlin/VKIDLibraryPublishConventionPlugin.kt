@@ -10,6 +10,7 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.get
 import org.gradle.plugins.signing.SigningExtension
 import java.net.URI
+import java.util.Base64
 
 class VKIDLibraryPublishConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -59,6 +60,11 @@ class VKIDLibraryPublishConventionPlugin : Plugin<Project> {
                     }
                 }
                 extensions.configure(SigningExtension::class.java) {
+                    val keyId = stringProperty(SIGNING_KEY_ID)
+                    val password = stringProperty(SIGNING_PASSWORD)
+                    val secretKey = String(Base64.getDecoder().decode(stringProperty(SECRET_KEY_RING_BASE64)))
+                    println("Sign key id: $keyId")
+                    useInMemoryPgpKeys(keyId, secretKey, password)
                     sign(publications["vkid"])
                 }
             }
@@ -103,6 +109,9 @@ class VKIDLibraryPublishConventionPlugin : Plugin<Project> {
         const val RELEASE_REPOSITORY_URL = "RELEASE_REPOSITORY_URL"
         const val REPOSITORY_USERNAME = "REPOSITORY_USERNAME"
         const val REPOSITORY_PASSWORD = "REPOSITORY_PASSWORD"
+        const val SIGNING_KEY_ID = "SIGNING_KEY_ID"
+        const val SECRET_KEY_RING_BASE64 = "SECRET_KEY_RING_BASE64"
+        const val SIGNING_PASSWORD = "SIGNING_PASSWORD"
 
         const val POM_URL = "POM_URL"
         const val POM_NAME = "POM_NAME"
