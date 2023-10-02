@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.material.ripple.rememberRipple
@@ -120,7 +119,10 @@ fun VKIDButtonSmall(
         modifier = Modifier
             .width(44.dp)
             .height(44.dp)
-            .background(color = colorResource(R.color.vkid_azure_A100), shape = RoundedCornerShape(size = 10.dp))
+            .background(
+                color = colorResource(R.color.vkid_azure_A100),
+                shape = RoundedCornerShape(size = 10.dp)
+            )
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberRipple(
@@ -169,7 +171,8 @@ private fun CircleProgress() {
         animationSpec = infiniteRepeatable(
             animation = tween(durationMillis = 1000, easing = LinearEasing),
             repeatMode = RepeatMode.Restart
-        ), label = "vkid_spinner"
+        ),
+        label = "vkid_spinner"
     )
     Image(
         modifier = Modifier

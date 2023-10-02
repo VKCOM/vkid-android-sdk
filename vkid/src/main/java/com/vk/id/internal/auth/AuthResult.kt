@@ -44,7 +44,7 @@ internal sealed class AuthResult {
 
     data class NoBrowserAvailable(val message: String, val error: Throwable?) : AuthResult()
 
-    data class AuthActiviyResultFailed(val message: String, val error: Throwable?)  : AuthResult()
+    data class AuthActiviyResultFailed(val message: String, val error: Throwable?) : AuthResult()
 
     data class OAuth(val code: String, val state: String, val codeVerifier: String)
 }

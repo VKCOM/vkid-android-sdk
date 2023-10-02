@@ -9,7 +9,6 @@ import com.vk.id.internal.auth.AuthEventBridge
 import com.vk.id.internal.auth.AuthOptions
 import com.vk.id.internal.auth.AuthResult
 import com.vk.id.internal.auth.VKIDAuthProvider
-import com.vk.id.internal.auth.web.ContextUtils.addNewTaskFlag
 import com.vk.id.internal.auth.toAuthUriBrowser
 import com.vk.id.internal.log.createLoggerForClass
 

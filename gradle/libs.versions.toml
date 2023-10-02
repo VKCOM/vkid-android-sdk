@@ -7,7 +7,7 @@ androidxBrowser = "1.5.0"
 androidxComposeBom = "2023.04.01"
 androidxComposeCompiler = "1.4.6"
 androidxCore = "1.9.0"
-detekt = "1.23.1"
+detekt = "1.22.0"
 binary-compatibility-validator = "0.13.2"
 kotlin = "1.8.20"
 kotlinxCoroutines = "1.7.1"
@@ -41,7 +41,8 @@ okio = { group = "com.squareup.okio", name = "okio", version = { require = "3.4.
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
-detekt-gradlePlugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
+detekt-formatting = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "detekt" }
+detekt-gradlePlugin = { group = "io.gitlab.arturbosch.detekt", name = "detekt-gradle-plugin", version.ref = "detekt" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }

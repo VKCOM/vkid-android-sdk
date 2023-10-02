@@ -52,7 +52,7 @@ internal class PkceGeneratorSHA256 {
         } catch (nsae: NoSuchAlgorithmException) {
             codeVerifier
         } catch (uee: UnsupportedEncodingException) {
-            throw IllegalStateException("${CHARSET_NAME} encoding not supported", uee)
+            throw IllegalStateException("$CHARSET_NAME encoding not supported", uee)
         }
     }
 

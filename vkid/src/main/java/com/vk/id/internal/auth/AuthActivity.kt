@@ -107,7 +107,7 @@ internal class AuthActivity : Activity() {
         val code = oauth?.optString("code") ?: ""
         val state = oauth?.optString("state") ?: ""
 
-        return  AuthResult.Success(
+        return AuthResult.Success(
             token = token,
             uuid = uuid,
             expireTime = expireTime,
@@ -119,7 +119,6 @@ internal class AuthActivity : Activity() {
             oauth = oauth?.let { AuthResult.OAuth(code, state, "") }
         )
     }
-
 
     override fun onPause() {
         super.onPause()
@@ -144,8 +143,8 @@ internal class AuthActivity : Activity() {
         private const val KEY_WAITING_FOR_AUTH_RESULT = "KEY_WAITING_FOR_AUTH_RESULT"
 
         /**
-        * @throws android.content.ActivityNotFoundException
-        */
+         * @throws android.content.ActivityNotFoundException
+         */
         internal fun startForAuth(
             context: Context,
             authIntent: Intent,
@@ -193,8 +192,11 @@ internal class AuthActivity : Activity() {
         }
         return try {
             startActivity(
-                authIntent, ActivityOptionsCompat.makeCustomAnimation(
-                    this, android.R.anim.fade_in, android.R.anim.fade_out
+                authIntent,
+                ActivityOptionsCompat.makeCustomAnimation(
+                    this,
+                    android.R.anim.fade_in,
+                    android.R.anim.fade_out
                 ).toBundle()
             )
             true

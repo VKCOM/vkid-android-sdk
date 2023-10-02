@@ -2,9 +2,9 @@ package com.vk.id.internal.auth.app
 
 import android.content.Context
 import android.content.Intent
+import com.vk.id.internal.auth.AuthActivity
 import com.vk.id.internal.auth.AuthOptions
 import com.vk.id.internal.auth.VKIDAuthProvider
-import com.vk.id.internal.auth.AuthActivity
 import com.vk.id.internal.auth.toAuthUriCodeFlow
 
 internal class AppAuthProvider(

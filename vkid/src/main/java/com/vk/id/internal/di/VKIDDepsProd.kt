@@ -90,7 +90,7 @@ internal class VKIDDepsProd(
         get() = CoroutinesDispatchersProd()
 
     private fun loggingInterceptor(): HttpLoggingInterceptor {
-        val logging = HttpLoggingInterceptor(object: HttpLoggingInterceptor.Logger {
+        val logging = HttpLoggingInterceptor(object : HttpLoggingInterceptor.Logger {
             private val logger = createLoggerForClass()
             override fun log(message: String) {
                 if (VKID.logsEnabled) {

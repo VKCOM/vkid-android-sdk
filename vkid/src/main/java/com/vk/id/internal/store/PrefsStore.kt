@@ -16,7 +16,6 @@ internal class PrefsStore(private val context: Context) {
         get() = requireNotNull(prefs.getString(STATE, ""))
         set(value) = prefs.edit().putString(STATE, value).apply()
 
-
     companion object {
         private const val CODE_VERIFIER = "pkce_code_verifier"
         private const val STATE = "state"

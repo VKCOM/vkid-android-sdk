@@ -6,7 +6,6 @@ import io.mockk.verify
 import org.junit.Before
 import org.junit.Test
 
-
 public class VKIDLogTest {
     private lateinit var mockEngine: LogEngine
 

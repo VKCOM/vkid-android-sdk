@@ -39,11 +39,11 @@ internal class VersionedBrowserMatcher
         usingCustomTab: Boolean,
         versionRange: VersionRange
     ) : this(
-        packageName, setOf<String>(signatureHash),
+        packageName,
+        setOf<String>(signatureHash),
         usingCustomTab,
         versionRange
-    ) {
-    }
+    )
 
     override fun matches(descriptor: BrowserDescriptor): Boolean {
         return mPackageName == descriptor.packageName && mUsingCustomTab == descriptor.useCustomTab && mVersionRange.matches(

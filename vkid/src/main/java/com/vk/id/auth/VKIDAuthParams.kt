@@ -63,7 +63,8 @@ public class VKIDAuthParams private constructor(
         public var locale: Locale? = null
         public var theme: Theme? = null
         public fun build(): VKIDAuthParams = VKIDAuthParams(
-            locale, theme
+            locale,
+            theme
         )
     }
 }
