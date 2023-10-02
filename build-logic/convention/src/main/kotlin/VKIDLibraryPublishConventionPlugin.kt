@@ -63,7 +63,9 @@ class VKIDLibraryPublishConventionPlugin : Plugin<Project> {
                     val keyId = stringProperty(SIGNING_KEY_ID)
                     val password = stringProperty(SIGNING_PASSWORD)
                     val secretKey = String(Base64.getDecoder().decode(stringProperty(SECRET_KEY_RING_BASE64)))
-                    println("Sign key id: $keyId")
+                    if (keyId.isNotEmpty()) {
+                        println("Sign key id: $keyId")
+                    }
                     useInMemoryPgpKeys(keyId, secretKey, password)
                     sign(publications["vkid"])
                 }
