@@ -1,6 +1,6 @@
 [versions]
 androidDesugarJdkLibs = "2.0.3"
-androidGradlePlugin = "8.1.0"
+androidGradlePlugin = "8.1.1"
 androidxActivity = "1.7.0"
 androidxAnnotation = "1.6.0"
 androidxBrowser = "1.5.0"
