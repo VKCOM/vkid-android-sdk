@@ -67,7 +67,9 @@ class MainActivity : ComponentActivity() {
                 )
                 Spacer(modifier = Modifier.height(24.dp))
                 VKIDButtonSmall(
-                    inProgress = vkInProgress, enabled = vkInProgress.not(), onClick = ::startAuth
+                    inProgress = vkInProgress,
+                    enabled = vkInProgress.not(),
+                    onClick = ::startAuth
                 )
             }
         }

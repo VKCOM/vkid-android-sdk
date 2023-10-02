@@ -45,7 +45,9 @@ internal class DelimitedVersion
         }
         return if (other == null || other !is DelimitedVersion) {
             false
-        } else this.compareTo((other as DelimitedVersion?)!!) == 0
+        } else {
+            this.compareTo((other as DelimitedVersion?)!!) == 0
+        }
     }
 
     override fun hashCode(): Int {

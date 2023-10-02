@@ -33,7 +33,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.security.SecureRandom
 
-
 public class VKID {
     public constructor(context: Context) : this(VKIDDepsProd(context))
 

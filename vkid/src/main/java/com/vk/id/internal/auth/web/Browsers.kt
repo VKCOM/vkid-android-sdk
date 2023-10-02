@@ -30,8 +30,10 @@ internal class Browsers private constructor() {
         /**
          * The SHA-512 hash (Base64 url-safe encoded) of the public key for Chrome.
          */
-        const val SIGNATURE = ("7fmduHKTdHHrlMvldlEqAIlSfii1tl35bxj1OXN5Ve8c4lU6URVu4xtSHc3BVZxS"
-            + "6WWJnxMDhIfQN0N0K2NDJg==")
+        const val SIGNATURE = (
+            "7fmduHKTdHHrlMvldlEqAIlSfii1tl35bxj1OXN5Ve8c4lU6URVu4xtSHc3BVZxS" +
+                "6WWJnxMDhIfQN0N0K2NDJg=="
+            )
 
         /**
          * The set of signature hashes for Chrome.
@@ -74,8 +76,10 @@ internal class Browsers private constructor() {
         /**
          * The SHA-512 hash (Base64 url-safe encoded) of the public key for Firefox.
          */
-        const val SIGNATURE_HASH = ("2gCe6pR_AO_Q2Vu8Iep-4AsiKNnUHQxu0FaDHO_qa178GByKybdT_BuE8_dYk99G"
-            + "5Uvx_gdONXAOO2EaXidpVQ==")
+        const val SIGNATURE_HASH = (
+            "2gCe6pR_AO_Q2Vu8Iep-4AsiKNnUHQxu0FaDHO_qa178GByKybdT_BuE8_dYk99G" +
+                "5Uvx_gdONXAOO2EaXidpVQ=="
+            )
 
         /**
          * The set of signature hashes for Firefox.
@@ -120,8 +124,10 @@ internal class Browsers private constructor() {
         /**
          * The SHA-512 hash (Base64 url-safe encoded) of the public key for SBrowser.
          */
-        const val SIGNATURE_HASH = ("ABi2fbt8vkzj7SJ8aD5jc4xJFTDFntdkMrYXL3itsvqY1QIw-dZozdop5rgKNxjb"
-            + "rQAd5nntAGpgh9w84O1Xgg==")
+        const val SIGNATURE_HASH = (
+            "ABi2fbt8vkzj7SJ8aD5jc4xJFTDFntdkMrYXL3itsvqY1QIw-dZozdop5rgKNxjb" +
+                "rQAd5nntAGpgh9w84O1Xgg=="
+            )
 
         /**
          * The set of signature hashes for SBrowser.
