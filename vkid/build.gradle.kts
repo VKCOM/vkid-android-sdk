@@ -1,6 +1,6 @@
 plugins {
     id("vkid.android.library")
-    id("vkid.android.library.publish")
+    id("vkid.android.publish")
     id("org.jetbrains.kotlin.plugin.parcelize")
     id("org.jetbrains.kotlinx.binary-compatibility-validator")
 }

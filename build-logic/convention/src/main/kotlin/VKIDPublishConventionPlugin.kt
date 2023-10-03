@@ -12,22 +12,19 @@ import org.gradle.plugins.signing.SigningExtension
 import java.net.URI
 import java.util.Base64
 
-class VKIDLibraryPublishConventionPlugin : Plugin<Project> {
+class VKIDPublishConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             apply(plugin = MAVEN_PUBLISH_PLUGIN_ID)
             apply(plugin = SIGNING_PLUGIN_ID)
-
-            with(pluginManager) {
-                apply("com.android.library")
-                apply("org.jetbrains.kotlin.android")
-            }
 
             configurePublishSingleVariant()
         }
     }
 
     private fun Project.configurePublishSingleVariant() {
+        val projectName = name
+
         extensions.configure<LibraryExtension> {
             publishing {
                 singleVariant("release") {
@@ -48,7 +45,7 @@ class VKIDLibraryPublishConventionPlugin : Plugin<Project> {
                     }
                 }
                 publications {
-                    register("vkid", MavenPublication::class.java) {
+                    register(projectName, MavenPublication::class.java) {
                         groupId = stringProperty(GROUP)
                         artifactId = stringProperty(POM_ARTIFACT_ID)
                         version = stringProperty(VERSION_NAME)
@@ -67,7 +64,7 @@ class VKIDLibraryPublishConventionPlugin : Plugin<Project> {
                         println("Sign key id: $keyId")
                     }
                     useInMemoryPgpKeys(keyId, secretKey, password)
-                    sign(publications["vkid"])
+                    sign(publications[projectName])
                 }
             }
         }
