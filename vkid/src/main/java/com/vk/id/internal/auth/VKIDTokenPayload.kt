@@ -15,9 +15,10 @@ internal data class VKIDTokenPayload(
  * Converts "expiresIn" type of time to actual expire time
  * returns -1 if this <= 0
  */
-internal inline val Long.toExpireTime get() =
-    if (this > 0) {
-        System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(this)
-    } else {
-        -1
-    }
+internal inline val Long.toExpireTime
+    get() =
+        if (this > 0) {
+            System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(this)
+        } else {
+            -1
+        }

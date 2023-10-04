@@ -83,7 +83,9 @@ internal class DelimitedVersion
             if (versionString == null) {
                 return DelimitedVersion(LongArray(0))
             }
-            val stringParts = versionString.split("[^0-9]+".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+            val stringParts =
+                versionString.split("[^0-9]+".toRegex()).dropLastWhile { it.isEmpty() }
+                    .toTypedArray()
             val parsedParts = LongArray(stringParts.size)
             var index = 0
             for (numericPart in stringParts) {

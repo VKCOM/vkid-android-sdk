@@ -65,6 +65,7 @@ private fun AuthOptions.toAuthUriBuilder(): Uri.Builder {
     return builder
 }
 
+@Suppress("MagicNumber")
 internal fun VKIDAuthParams.Locale.toQueryParam(): String = when (this) {
     VKIDAuthParams.Locale.RUS -> 0
     VKIDAuthParams.Locale.UKR -> 1

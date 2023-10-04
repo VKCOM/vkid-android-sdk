@@ -93,7 +93,10 @@ public class VKID {
     }
 
     @Suppress("MemberVisibilityCanBePrivate")
-    public suspend fun authorize(authCallback: AuthCallback, authParams: VKIDAuthParams = VKIDAuthParams {}) {
+    public suspend fun authorize(
+        authCallback: AuthCallback,
+        authParams: VKIDAuthParams = VKIDAuthParams {}
+    ) {
         this.authCallback = authCallback
         val authContext = currentCoroutineContext()
 
@@ -105,13 +108,14 @@ public class VKID {
             }
         }
 
-        withContext(dispatchers.IO) {
+        withContext(dispatchers.io) {
             val fullAuthOptions = createInternalAuthOptions(authParams)
             val bestAuthProvider = authProvidersChooser.value.chooseBest()
             bestAuthProvider.auth(appContext, fullAuthOptions)
         }
     }
 
+    @Suppress("MagicNumber")
     private fun createInternalAuthOptions(authParams: VKIDAuthParams): AuthOptions {
         val codeVerifier = pkceGenerator.value.generateRandomCodeVerifier(SecureRandom())
         val codeChallenge = pkceGenerator.value.deriveCodeVerifierChallenge(codeVerifier)
@@ -136,35 +140,26 @@ public class VKID {
     }
 
     private suspend fun handleAuthResult(authResult: AuthResult) {
-        when (authResult) {
-            is AuthResult.Canceled -> {
-                authCallback?.onFail(VKIDAuthFail.Canceled(authResult.message))
-                return
-            }
-
-            is AuthResult.NoBrowserAvailable -> {
-                authCallback?.onFail(VKIDAuthFail.NoBrowserAvailable(authResult.message, authResult.error))
-                return
-            }
-
-            is AuthResult.AuthActiviyResultFailed -> {
-                authCallback?.onFail(VKIDAuthFail.FailedRedirectActivity(authResult.message, authResult.error))
-                return
-            }
-
-            is AuthResult.Success -> {
-                // We do not stop auth here in hope that it still be success,
-                // but if not there will be error response from backend
-                if (authResult.expireTime < currentTime()) {
-                    logger.error("OAuth code is old, there is a big chance auth will fail", null)
-                }
-            }
+        if (authResult !is AuthResult.Success) {
+            tellCallbackAboutFail(authResult)
+            return
+        }
+        // We do not stop auth here in hope that it still be success,
+        // but if not there will be error response from backend
+        if (authResult.expireTime < currentTime()) {
+            logger.error("OAuth code is old, there is a big chance auth will fail", null)
         }
 
         if (authResult.oauth != null) {
             handleOauth(authResult)
         } else {
-            authCallback?.onSuccess(AccessToken(authResult.token, authResult.userId, authResult.expireTime))
+            authCallback?.onSuccess(
+                AccessToken(
+                    authResult.token,
+                    authResult.userId,
+                    authResult.expireTime
+                )
+            )
         }
     }
 
@@ -172,7 +167,7 @@ public class VKID {
         lateinit var realUuid: String
         lateinit var realState: String
         lateinit var codeVerifier: String
-        withContext(dispatchers.IO) {
+        withContext(dispatchers.io) {
             realUuid = deviceIdProvider.value.getDeviceId(appContext)
             realState = prefsStore.value.state
             codeVerifier = prefsStore.value.codeVerifier
@@ -185,7 +180,10 @@ public class VKID {
         }
 
         if (realState != oauth.oauth?.state) {
-            logger.error("Invalid oauth state, want $realState but received ${oauth.oauth?.state}", null)
+            logger.error(
+                "Invalid oauth state, want $realState but received ${oauth.oauth?.state}",
+                null
+            )
             authCallback?.onFail(VKIDAuthFail.FailedOAuthState("Invalid state"))
             return
         }
@@ -193,7 +191,7 @@ public class VKID {
         val creds = serviceCredentials.value
         val code = oauth.oauth.code
         // execute token request
-        val callResult = withContext(dispatchers.IO) {
+        val callResult = withContext(dispatchers.io) {
             api.value.getToken(
                 code,
                 codeVerifier,
@@ -204,10 +202,49 @@ public class VKID {
             ).execute()
         }
         callResult.onFailure {
-            authCallback?.onFail(VKIDAuthFail.FailedApiCall("Failed code to token exchange api call", it))
+            authCallback?.onFail(
+                VKIDAuthFail.FailedApiCall(
+                    "Failed code to token exchange api call",
+                    it
+                )
+            )
         }
         callResult.onSuccess { payload ->
-            authCallback?.onSuccess(AccessToken(payload.accessToken, payload.userId, payload.expiresIn.toExpireTime))
+            authCallback?.onSuccess(
+                AccessToken(
+                    payload.accessToken,
+                    payload.userId,
+                    payload.expiresIn.toExpireTime
+                )
+            )
+        }
+    }
+
+    private fun tellCallbackAboutFail(authResult: AuthResult) {
+        when (authResult) {
+            is AuthResult.Canceled -> {
+                authCallback?.onFail(VKIDAuthFail.Canceled(authResult.message))
+            }
+
+            is AuthResult.NoBrowserAvailable -> {
+                authCallback?.onFail(
+                    VKIDAuthFail.NoBrowserAvailable(
+                        authResult.message,
+                        authResult.error
+                    )
+                )
+            }
+
+            is AuthResult.AuthActiviyResultFailed -> {
+                authCallback?.onFail(
+                    VKIDAuthFail.FailedRedirectActivity(
+                        authResult.message,
+                        authResult.error
+                    )
+                )
+            }
+
+            is AuthResult.Success -> {} // never
         }
     }
 

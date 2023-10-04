@@ -7,6 +7,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
 
+@Suppress("LongParameterList")
 internal class VKIDApi(
     private val client: OkHttpClient,
 ) {

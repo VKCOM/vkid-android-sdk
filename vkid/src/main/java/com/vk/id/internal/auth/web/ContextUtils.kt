@@ -16,6 +16,6 @@ internal object ContextUtils {
     private fun Context.toActivitySafe(): Activity? {
         var context = this
         while (context !is Activity && context is ContextWrapper) context = context.baseContext
-        return if (context is Activity) context else null
+        return context as? Activity
     }
 }

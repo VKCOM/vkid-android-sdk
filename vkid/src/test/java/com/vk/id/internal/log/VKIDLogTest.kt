@@ -25,7 +25,14 @@ public class VKIDLogTest {
         verify { anotherMockEngine.log(LogEngine.LogLevel.DEBUG, "TestTag", "TestMessage", null) }
         confirmVerified(anotherMockEngine)
 
-        verify(exactly = 0) { mockEngine.log(any(), any(), any(), any()) } // Ensure the old engine is not used
+        verify(exactly = 0) {
+            mockEngine.log(
+                any(),
+                any(),
+                any(),
+                any()
+            )
+        } // Ensure the old engine is not used
     }
 
     @Test
@@ -39,6 +46,13 @@ public class VKIDLogTest {
 
         verify { mockEngine.log(LogEngine.LogLevel.INFO, "TestTag", "TestInfoMessage", null) }
         verify { mockEngine.log(LogEngine.LogLevel.DEBUG, "TestTag", "TestDebugMessage", null) }
-        verify { mockEngine.log(LogEngine.LogLevel.ERROR, "TestTag", "TestErrorMessage", throwable) }
+        verify {
+            mockEngine.log(
+                LogEngine.LogLevel.ERROR,
+                "TestTag",
+                "TestErrorMessage",
+                throwable
+            )
+        }
     }
 }

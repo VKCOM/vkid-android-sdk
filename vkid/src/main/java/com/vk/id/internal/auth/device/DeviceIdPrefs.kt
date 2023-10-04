@@ -24,7 +24,7 @@
  * SPECIFIC RESULTS OF USE OF THE SOFTWARE.
  * UNDER NO CIRCUMSTANCES LLC “V KONTAKTE” BEAR LIABILITY TO THE LICENSEE OR ANY
  * THIRD PARTIES FOR ANY DAMAGE IN CONNECTION WITH USE OF THE SOFTWARE.
-*/
+ */
 package com.vk.id.internal.auth.device
 
 import android.content.Context
@@ -38,7 +38,8 @@ internal class DeviceIdPrefs(private val context: Context) : DeviceIdProvider.De
         getPrefs(context).edit().putString(DEVICE_ID, deviceId).apply()
     }
 
-    override fun getSystemDeviceId(): String = getPrefs(context).getString(SYSTEM_DEVICE_ID, "") ?: ""
+    override fun getSystemDeviceId(): String =
+        getPrefs(context).getString(SYSTEM_DEVICE_ID, "") ?: ""
 
     override fun setSystemDeviceId(systemDeviceId: String) {
         getPrefs(context).edit().putString(SYSTEM_DEVICE_ID, systemDeviceId).apply()

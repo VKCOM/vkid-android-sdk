@@ -23,7 +23,8 @@ internal class SilentAuthServicesProvider(
             .toList()
     }
 
-    private fun Sequence<VkAuthProviderInfo>.excludeCurrentApp() = filter { it.componentName.packageName != context.packageName }
+    private fun Sequence<VkAuthProviderInfo>.excludeCurrentApp() =
+        filter { it.componentName.packageName != context.packageName }
 
     /**
      * Method that checks if provider with specific package name is allowed to open the web auth from
@@ -45,10 +46,11 @@ internal class SilentAuthServicesProvider(
             ?.let { VkAuthProviderInfo(ComponentName(packageName, name), it.weight) }
     }
 
-    private fun getAppsWithSilentAuthServices() = context.applicationContext.packageManager.queryIntentServices(
-        Intent(ACTION_GET_INFO),
-        0
-    )
+    private fun getAppsWithSilentAuthServices() =
+        context.applicationContext.packageManager.queryIntentServices(
+            Intent(ACTION_GET_INFO),
+            0
+        )
 
     companion object {
         private const val ACTION_GET_INFO = "com.vk.silentauth.action.GET_INFO"
