@@ -5,9 +5,11 @@ import com.vk.id.internal.auth.app.VkAuthSilentAuthProvider
 import okhttp3.Call
 import okhttp3.Response
 import org.json.JSONArray
+import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
 
+@Suppress("LongParameterList")
 internal class VKIDApiService(
     private val api: VKIDApi,
 ) {
@@ -20,7 +22,8 @@ internal class VKIDApiService(
         deviceId: String,
         redirectUri: String
     ): VKIDCall<VKIDTokenPayload> {
-        return api.getToken(code, codeVerifier, clientId, clientSecret, deviceId, redirectUri).wrapTokenToVKIDCall()
+        return api.getToken(code, codeVerifier, clientId, clientSecret, deviceId, redirectUri)
+            .wrapTokenToVKIDCall()
     }
 
     fun getSilentAuthProviders(
@@ -67,8 +70,10 @@ internal class VKIDApiService(
                 return try {
                     val response = this@wrapToVKIDCall.execute()
                     Result.success(responseMapping(response))
-                } catch (e: Exception) {
-                    Result.failure(e)
+                } catch (ioe: IOException) {
+                    Result.failure(ioe)
+                } catch (je: JSONException) {
+                    Result.failure(je)
                 }
             }
 

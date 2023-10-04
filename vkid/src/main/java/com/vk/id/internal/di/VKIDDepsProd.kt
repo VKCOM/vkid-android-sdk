@@ -71,7 +71,12 @@ internal class VKIDDepsProd(
     }
 
     override val authProvidersChooser: Lazy<AuthProvidersChooser> = lazy {
-        AuthProvidersChooserDefault(SilentAuthServicesProvider(appContext, trustedProvidersCache.value))
+        AuthProvidersChooserDefault(
+            SilentAuthServicesProvider(
+                appContext,
+                trustedProvidersCache.value
+            )
+        )
     }
 
     override val prefsStore: Lazy<PrefsStore> = lazy {
@@ -107,7 +112,8 @@ internal class VKIDDepsProd(
     }
 }
 
-private const val MISSED_PLACEHOLDER_ERROR_MESSAGE = "VKID initialization error. Missing %s parameter in manifest placeholders"
+private const val MISSED_PLACEHOLDER_ERROR_MESSAGE =
+    "VKID initialization error. Missing %s parameter in manifest placeholders"
 
 private fun Bundle.getIntOrThrow(key: String): Int {
     val value = getInt(key, -1)

@@ -1,3 +1,7 @@
 package com.vk.id.internal.auth
 
-internal data class ServiceCredentials(val clientID: String, val clientSecret: String, val redirectUri: String)
+internal data class ServiceCredentials(
+    val clientID: String,
+    val clientSecret: String,
+    val redirectUri: String
+)

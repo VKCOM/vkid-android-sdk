@@ -22,6 +22,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Build.VERSION_CODES
 import androidx.annotation.VisibleForTesting
+import com.vk.id.internal.log.createLoggerForClass
 
 /**
  * Utility class to obtain the browser package name to be used for
@@ -35,11 +36,13 @@ internal object BrowserSelector {
     private const val SCHEME_HTTP = "http"
     private const val SCHEME_HTTPS = "https"
 
+    private val logger = createLoggerForClass()
+
     /**
      * The service we expect to find on a web browser that indicates it supports custom tabs.
      */
-    @VisibleForTesting // HACK: Using a StringBuilder prevents Jetifier from tempering with our constants.
-
+    @VisibleForTesting
+    // HACK: Using a StringBuilder prevents Jetifier from tempering with our constants.
     private val ACTION_CUSTOM_TABS_CONNECTION = StringBuilder("android")
         .append(".support.customtabs.action.CustomTabsService").toString()
 
@@ -109,7 +112,7 @@ internal object BrowserSelector {
                     browsers.add(fullBrowserDescriptor)
                 }
             } catch (e: PackageManager.NameNotFoundException) {
-                // a descriptor cannot be generated without the package info
+                logger.error("Can't generate browser descriptor without the package info", e)
             }
         }
         return browsers
@@ -152,6 +155,7 @@ internal object BrowserSelector {
         return pm.resolveService(serviceIntent, 0) != null
     }
 
+    @Suppress("ReturnCount")
     private fun isFullBrowser(resolveInfo: ResolveInfo): Boolean {
         // The filter must match ACTION_VIEW, CATEGORY_BROWSEABLE, and at least one scheme,
         if ((

@@ -19,7 +19,12 @@ public class FakeLogEngineTest {
     @Test
     public fun `test FakeLogEngine does not log`() {
         val fakeLogEngine = FakeLogEngine()
-        fakeLogEngine.log(LogEngine.LogLevel.DEBUG, "TestTag", "TestMessage", Throwable("Throwable"))
+        fakeLogEngine.log(
+            LogEngine.LogLevel.DEBUG,
+            "TestTag",
+            "TestMessage",
+            Throwable("Throwable")
+        )
 
         verify(exactly = 0) {
             Log.d(any(), any())

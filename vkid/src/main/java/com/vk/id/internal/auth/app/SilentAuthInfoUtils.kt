@@ -24,7 +24,7 @@
  * SPECIFIC RESULTS OF USE OF THE SOFTWARE.
  * UNDER NO CIRCUMSTANCES LLC “V KONTAKTE” BEAR LIABILITY TO THE LICENSEE OR ANY
  * THIRD PARTIES FOR ANY DAMAGE IN CONNECTION WITH USE OF THE SOFTWARE.
-*/
+ */
 
 package com.vk.id.internal.auth.app
 
@@ -48,7 +48,12 @@ internal object SilentAuthInfoUtils {
         }
     }
 
-    private fun calculateDigest(context: Context, pkg: String, transform: (Signature) -> String): String? {
+    @Suppress("TooGenericExceptionCaught", "SwallowedException")
+    private fun calculateDigest(
+        context: Context,
+        pkg: String,
+        transform: (Signature) -> String
+    ): String? {
         return try {
             context.packageManager
                 .getPackageInfo(pkg, PackageManager.GET_SIGNATURES)

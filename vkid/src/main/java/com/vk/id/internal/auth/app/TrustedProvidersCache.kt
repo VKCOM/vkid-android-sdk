@@ -48,8 +48,9 @@ internal class TrustedProvidersCache(
     }
 
     private suspend fun fetchSilentAuthProvidersSync(): List<VkAuthSilentAuthProvider> {
-        return withContext(dispatchers.IO) {
-            api.value.getSilentAuthProviders(clientId = clientId, clientSecret = clientSecret).execute()
+        return withContext(dispatchers.io) {
+            api.value.getSilentAuthProviders(clientId = clientId, clientSecret = clientSecret)
+                .execute()
         }
             .getOrNull()
             .orEmpty()
@@ -67,7 +68,10 @@ internal class TrustedProvidersCache(
             createBaseProviders(appPackage = "com.vk.calls", weight = 1)
         ).flatten()
 
-        private fun createBaseProviders(appPackage: String, weight: Int): List<VkAuthSilentAuthProvider> {
+        private fun createBaseProviders(
+            appPackage: String,
+            weight: Int
+        ): List<VkAuthSilentAuthProvider> {
             return listOf(
                 VkAuthSilentAuthProvider(appPackage, RELEASE_APP_SHA, weight),
                 VkAuthSilentAuthProvider(appPackage, DEBUG_APP_SHA, weight),

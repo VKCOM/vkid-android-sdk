@@ -16,6 +16,7 @@ package com.vk.id.internal.auth.web
 import android.content.pm.PackageInfo
 import android.content.pm.Signature
 import android.util.Base64
+import com.vk.id.internal.log.createLoggerForClass
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 
@@ -65,8 +66,7 @@ internal class BrowserDescriptor
         generateSignatureHashes(packageInfo.signatures),
         packageInfo.versionName,
         useCustomTab
-    ) {
-    }
+    )
 
     /**
      * Creates a copy of this browser descriptor, changing the intention to use it as a custom
@@ -88,7 +88,10 @@ internal class BrowserDescriptor
         if (other == null || other !is BrowserDescriptor) {
             return false
         }
-        return packageName == other.packageName && version == other.version && useCustomTab == other.useCustomTab && signatureHashes == other.signatureHashes
+        return packageName == other.packageName &&
+            version == other.version &&
+            useCustomTab == other.useCustomTab &&
+            signatureHashes == other.signatureHashes
     }
 
     override fun hashCode(): Int {
@@ -106,18 +109,20 @@ internal class BrowserDescriptor
         private const val PRIME_HASH_FACTOR = 92821
         private const val DIGEST_SHA_512 = "SHA-512"
 
+        private val logger = createLoggerForClass()
+
         /**
          * Generates a SHA-512 hash, Base64 url-safe encoded, from a [Signature].
          */
+        @Suppress("SwallowedException")
         fun generateSignatureHash(signature: Signature): String {
             return try {
                 val digest = MessageDigest.getInstance(DIGEST_SHA_512)
                 val hashBytes = digest.digest(signature.toByteArray())
                 Base64.encodeToString(hashBytes, Base64.URL_SAFE or Base64.NO_WRAP)
             } catch (e: NoSuchAlgorithmException) {
-                throw IllegalStateException(
-                    "Platform does not support" + DIGEST_SHA_512 + " hashing"
-                )
+                logger.error("Can't generate signature hash", e)
+                error("Platform does not support$DIGEST_SHA_512 hashing")
             }
         }
 
