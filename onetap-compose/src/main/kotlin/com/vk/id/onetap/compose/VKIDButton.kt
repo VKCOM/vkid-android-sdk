@@ -23,6 +23,7 @@ import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,6 +31,7 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -41,16 +43,24 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.vk.id.AccessToken
+import com.vk.id.VKID
+import com.vk.id.VKIDAuthFail
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
 public fun VKIDButton(
     modifier: Modifier = Modifier,
     radius: Dp = 8.dp,
     showIcon: Boolean = true,
-    inProgress: Boolean = false,
-    enabled: Boolean = true,
-    onClick: () -> Unit,
+    onAuth: (AccessToken) -> Unit,
+    onFail: (VKIDAuthFail) -> Unit = {},
+    state: VKIDButtonState = rememberVKIDButtonState()
 ) {
+    val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val vkid: VKID = remember { VKID(context) }
     Row(
         modifier = modifier
             .clickable(
@@ -58,9 +68,9 @@ public fun VKIDButton(
                 indication = rememberRipple(
                     color = Color.White
                 ),
-                enabled = enabled,
+                enabled = state.inProgress.not(),
                 role = Role.Button,
-                onClick = onClick
+                onClick = { startAuth(coroutineScope, state, vkid, onAuth, onFail) }
             )
             .height(44.dp)
             .clipToBounds()
@@ -100,7 +110,7 @@ public fun VKIDButton(
                 .padding(8.dp),
             contentAlignment = Alignment.CenterEnd
         ) {
-            if (inProgress) {
+            if (state.inProgress) {
                 CircleProgress()
             }
         }
@@ -109,10 +119,15 @@ public fun VKIDButton(
 
 @Composable
 public fun VKIDButtonSmall(
-    onClick: () -> Unit,
-    inProgress: Boolean = false,
-    enabled: Boolean = true,
+    onAuth: (AccessToken) -> Unit,
+    onFail: (VKIDAuthFail) -> Unit = {},
+    state: VKIDButtonState = rememberVKIDButtonState()
 ) {
+    val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val vkid: VKID = remember {
+        VKID(context)
+    }
     Row(
         horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.CenterHorizontally),
         verticalAlignment = Alignment.CenterVertically,
@@ -128,13 +143,15 @@ public fun VKIDButtonSmall(
                 indication = rememberRipple(
                     color = Color.White
                 ),
-                enabled = enabled,
+                enabled = state.inProgress.not(),
                 role = Role.Button,
-                onClick = onClick
+                onClick = {
+                    startAuth(coroutineScope, state, vkid, onAuth, onFail)
+                }
             )
     ) {
         Box(modifier = Modifier.padding(8.dp)) {
-            if (inProgress) {
+            if (state.inProgress) {
                 CircleProgress()
             } else {
                 Image(
@@ -184,32 +201,55 @@ private fun CircleProgress() {
     )
 }
 
+private fun startAuth(
+    coroutineScope: CoroutineScope,
+    state: VKIDButtonState,
+    vkid: VKID,
+    onAuth: (AccessToken) -> Unit,
+    onFail: (VKIDAuthFail) -> Unit
+) {
+    coroutineScope.launch {
+        state.inProgress = true
+        vkid.authorize(object : VKID.AuthCallback {
+            override fun onSuccess(accessToken: AccessToken) {
+                state.inProgress = false
+                onAuth(accessToken)
+            }
+
+            override fun onFail(fail: VKIDAuthFail) {
+                state.inProgress = false
+                onFail(fail)
+            }
+        })
+    }
+}
+
 @Preview
 @Composable
 private fun PreviewVKIDButtonSmall() {
-    VKIDButtonSmall(onClick = {})
+    VKIDButtonSmall(onAuth = {})
 }
 
 @Preview
 @Composable
 private fun PreviewVKIDButtonSmallProgress() {
-    VKIDButtonSmall(onClick = {}, inProgress = true)
+    VKIDButtonSmall(onAuth = {}, state = VKIDButtonState(true))
 }
 
 @Preview
 @Composable
 private fun PreviewVKIDButton() {
-    VKIDButton(onClick = {})
+    VKIDButton(onAuth = {})
 }
 
 @Preview
 @Composable
 private fun PreviewVKIDButtonNoIcon() {
-    VKIDButton(onClick = {}, showIcon = false)
+    VKIDButton(onAuth = {}, showIcon = false)
 }
 
 @Preview
 @Composable
 private fun PreviewVKIDButtonProgress() {
-    VKIDButton(onClick = {}, inProgress = true)
+    VKIDButton(onAuth = {}, state = VKIDButtonState(true))
 }
