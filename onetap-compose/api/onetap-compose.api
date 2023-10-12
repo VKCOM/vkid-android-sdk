@@ -1,0 +1,14 @@
+public final class com/vk/id/onetap/compose/VKIDButtonKt {
+	public static final fun VKIDButton-RfXq3Jk (Landroidx/compose/ui/Modifier;FZLkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lcom/vk/id/onetap/compose/VKIDButtonState;Landroidx/compose/runtime/Composer;II)V
+	public static final fun VKIDButtonSmall (Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lcom/vk/id/onetap/compose/VKIDButtonState;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class com/vk/id/onetap/compose/VKIDButtonState {
+	public static final field $stable I
+	public fun <init> (Z)V
+}
+
+public final class com/vk/id/onetap/compose/VKIDButtonStateKt {
+	public static final fun rememberVKIDButtonState (ZLandroidx/compose/runtime/Composer;II)Lcom/vk/id/onetap/compose/VKIDButtonState;
+}
+
