@@ -80,7 +80,8 @@ public class VKID {
     private val prefsStore: Lazy<PrefsStore>
     private val serviceCredentials: Lazy<ServiceCredentials>
 
-    private var authCallback: AuthCallback? = null
+    private var authCallbacks = mutableSetOf<AuthCallback>()
+    private var userDataCallbacks = mutableSetOf<UserDataCallback>()
 
     public fun authorize(
         lifecycleOwner: LifecycleOwner,
@@ -97,7 +98,7 @@ public class VKID {
         authCallback: AuthCallback,
         authParams: VKIDAuthParams = VKIDAuthParams {}
     ) {
-        this.authCallback = authCallback
+        this.authCallbacks.add(authCallback)
         val authContext = currentCoroutineContext()
 
         AuthEventBridge.listener = object : AuthEventBridge.Listener {
@@ -113,6 +114,11 @@ public class VKID {
             val bestAuthProvider = authProvidersChooser.value.chooseBest()
             bestAuthProvider.auth(appContext, fullAuthOptions)
         }
+    }
+
+    public suspend fun fetchUserData(userDataCallback: UserDataCallback) {
+        userDataCallbacks.add(userDataCallback)
+        // todo fetch
     }
 
     @Suppress("MagicNumber")
@@ -141,7 +147,7 @@ public class VKID {
 
     private suspend fun handleAuthResult(authResult: AuthResult) {
         if (authResult !is AuthResult.Success) {
-            tellCallbackAboutFail(authResult)
+            emitAuthFail(authResult.toVKIDAuthFail())
             return
         }
         // We do not stop auth here in hope that it still be success,
@@ -153,7 +159,7 @@ public class VKID {
         if (authResult.oauth != null) {
             handleOauth(authResult)
         } else {
-            authCallback?.onSuccess(
+            emitAuthSuccess(
                 AccessToken(
                     authResult.token,
                     authResult.userId,
@@ -175,7 +181,7 @@ public class VKID {
 
         if (realUuid != oauth.uuid) {
             logger.error("Invalid oauth UUID, want $realUuid but received ${oauth.uuid}", null)
-            authCallback?.onFail(VKIDAuthFail.FailedOAuthState("Invalid uuid"))
+            emitAuthFail(VKIDAuthFail.FailedOAuthState("Invalid uuid"))
             return
         }
 
@@ -184,7 +190,7 @@ public class VKID {
                 "Invalid oauth state, want $realState but received ${oauth.oauth?.state}",
                 null
             )
-            authCallback?.onFail(VKIDAuthFail.FailedOAuthState("Invalid state"))
+            emitAuthFail(VKIDAuthFail.FailedOAuthState("Invalid state"))
             return
         }
 
@@ -202,7 +208,7 @@ public class VKID {
             ).execute()
         }
         callResult.onFailure {
-            authCallback?.onFail(
+            emitAuthFail(
                 VKIDAuthFail.FailedApiCall(
                     "Failed code to token exchange api call",
                     it
@@ -210,7 +216,7 @@ public class VKID {
             )
         }
         callResult.onSuccess { payload ->
-            authCallback?.onSuccess(
+            emitAuthSuccess(
                 AccessToken(
                     payload.accessToken,
                     payload.userId,
@@ -220,31 +226,28 @@ public class VKID {
         }
     }
 
-    private fun tellCallbackAboutFail(authResult: AuthResult) {
-        when (authResult) {
-            is AuthResult.Canceled -> {
-                authCallback?.onFail(VKIDAuthFail.Canceled(authResult.message))
-            }
+    private fun AuthResult.toVKIDAuthFail() = when (this) {
+        is AuthResult.Canceled -> VKIDAuthFail.Canceled(message)
+        is AuthResult.NoBrowserAvailable -> VKIDAuthFail.NoBrowserAvailable(
+            message,
+            error
+        )
+        is AuthResult.AuthActiviyResultFailed -> VKIDAuthFail.FailedRedirectActivity(
+            message,
+            error
+        )
+        is AuthResult.Success -> error("AuthResult is Success and cannot be converted to fail!")
+    }
 
-            is AuthResult.NoBrowserAvailable -> {
-                authCallback?.onFail(
-                    VKIDAuthFail.NoBrowserAvailable(
-                        authResult.message,
-                        authResult.error
-                    )
-                )
-            }
+    private fun emitAuthSuccess(token: AccessToken) {
+        authCallbacks.forEach {
+            it.onSuccess(token)
+        }
+    }
 
-            is AuthResult.AuthActiviyResultFailed -> {
-                authCallback?.onFail(
-                    VKIDAuthFail.FailedRedirectActivity(
-                        authResult.message,
-                        authResult.error
-                    )
-                )
-            }
-
-            is AuthResult.Success -> {} // never
+    private fun emitAuthFail(fail: VKIDAuthFail) {
+        authCallbacks.forEach {
+            it.onFail(fail)
         }
     }
 
@@ -259,5 +262,10 @@ public class VKID {
     public interface AuthCallback {
         public fun onSuccess(accessToken: AccessToken)
         public fun onFail(fail: VKIDAuthFail)
+    }
+
+    public interface UserDataCallback {
+        public fun onSuccess(accessToken: VKIDUser)
+        public fun onFail(fail: VKIDFetchUserFail)
     }
 }
