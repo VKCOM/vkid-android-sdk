@@ -16,6 +16,7 @@ mockk = "1.13.5"
 okHttpVersion = "4.11.0"
 okioVersion = "3.4.0"
 preference = "1.2.0"
+vkSdkVersion = "4.0.0"
 
 [libraries]
 android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
@@ -38,6 +39,7 @@ mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 okhttp3-okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okHttpVersion" }
 okhttp3-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okHttpVersion" }
 okio = { group = "com.squareup.okio", name = "okio", version = { require = "3.4.0" } }
+vk-userid = { group = "com.vk", name = "android-sdk-id", version.ref = "vkSdkVersion" }
 
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }

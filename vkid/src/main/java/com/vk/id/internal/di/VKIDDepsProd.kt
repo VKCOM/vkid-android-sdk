@@ -20,6 +20,7 @@ import com.vk.id.internal.auth.device.DeviceIdProvider
 import com.vk.id.internal.auth.pkce.PkceGeneratorSHA256
 import com.vk.id.internal.concurrent.CoroutinesDispatchers
 import com.vk.id.internal.concurrent.CoroutinesDispatchersProd
+import com.vk.id.internal.ipc.VkSilentAuthInfoProvider
 import com.vk.id.internal.log.createLoggerForClass
 import com.vk.id.internal.store.PrefsStore
 import okhttp3.OkHttpClient
@@ -54,6 +55,13 @@ internal class VKIDDepsProd(
         ServiceCredentials(clientID, clientSecret, redirectUri)
     }
 
+    override val silentAuthServicesProvider: Lazy<SilentAuthServicesProvider> = lazy {
+        SilentAuthServicesProvider(
+            appContext,
+            trustedProvidersCache.value
+        )
+    }
+
     override val api: Lazy<VKIDApiService> = lazy {
         val client = OkHttpClient.Builder()
             .readTimeout(OKHTTP_TIMEOUT_SECONDS, TimeUnit.SECONDS)
@@ -72,10 +80,7 @@ internal class VKIDDepsProd(
 
     override val authProvidersChooser: Lazy<AuthProvidersChooser> = lazy {
         AuthProvidersChooserDefault(
-            SilentAuthServicesProvider(
-                appContext,
-                trustedProvidersCache.value
-            )
+            silentAuthServicesProvider.value
         )
     }
 
@@ -93,6 +98,14 @@ internal class VKIDDepsProd(
 
     override val dispatchers: CoroutinesDispatchers
         get() = CoroutinesDispatchersProd()
+
+    override val vkSilentAuthInfoProvider: Lazy<VkSilentAuthInfoProvider> = lazy {
+        VkSilentAuthInfoProvider(
+            context = appContext,
+            servicesProvider = silentAuthServicesProvider.value,
+            deviceIdProvider = deviceIdProvider.value,
+        )
+    }
 
     private fun loggingInterceptor(): HttpLoggingInterceptor {
         val logging = HttpLoggingInterceptor(object : HttpLoggingInterceptor.Logger {

@@ -20,6 +20,7 @@ import com.vk.id.internal.auth.toQueryParam
 import com.vk.id.internal.concurrent.CoroutinesDispatchers
 import com.vk.id.internal.di.VKIDDeps
 import com.vk.id.internal.di.VKIDDepsProd
+import com.vk.id.internal.ipc.VkSilentAuthInfoProvider
 import com.vk.id.internal.log.AndroidLogcatLogEngine
 import com.vk.id.internal.log.FakeLogEngine
 import com.vk.id.internal.log.LogEngine
@@ -67,6 +68,7 @@ public class VKID {
         this.prefsStore = deps.prefsStore
         this.pkceGenerator = deps.pkceGenerator
         this.serviceCredentials = deps.serviceCredentials
+        this.vkSilentAuthInfoProvider = deps.vkSilentAuthInfoProvider
     }
 
     private val logger = createLoggerForClass()
@@ -79,9 +81,9 @@ public class VKID {
     private val dispatchers: CoroutinesDispatchers
     private val prefsStore: Lazy<PrefsStore>
     private val serviceCredentials: Lazy<ServiceCredentials>
+    private val vkSilentAuthInfoProvider: Lazy<VkSilentAuthInfoProvider>
 
     private var authCallbacks = mutableSetOf<AuthCallback>()
-    private var userDataCallbacks = mutableSetOf<UserDataCallback>()
 
     public fun authorize(
         lifecycleOwner: LifecycleOwner,
@@ -116,9 +118,12 @@ public class VKID {
         }
     }
 
-    public suspend fun fetchUserData(userDataCallback: UserDataCallback) {
-        userDataCallbacks.add(userDataCallback)
-        // todo fetch
+    public suspend fun fetchUserData(): Result<VKIDUser?> {
+        val info = withContext(dispatchers.io) {
+            vkSilentAuthInfoProvider.value.setAppId(serviceCredentials.value.clientID.toInt())
+            vkSilentAuthInfoProvider.value.getSilentAuthInfos().firstOrNull()
+        }
+        return Result.success(info?.toVKIDUser())
     }
 
     @Suppress("MagicNumber")
@@ -262,10 +267,5 @@ public class VKID {
     public interface AuthCallback {
         public fun onSuccess(accessToken: AccessToken)
         public fun onFail(fail: VKIDAuthFail)
-    }
-
-    public interface UserDataCallback {
-        public fun onSuccess(accessToken: VKIDUser)
-        public fun onFail(fail: VKIDFetchUserFail)
     }
 }

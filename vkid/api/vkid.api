@@ -31,7 +31,7 @@ public final class com/vk/id/VKID {
 	public final fun authorize (Lcom/vk/id/VKID$AuthCallback;Lcom/vk/id/auth/VKIDAuthParams;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun authorize$default (Lcom/vk/id/VKID;Landroidx/lifecycle/LifecycleOwner;Lcom/vk/id/VKID$AuthCallback;Lcom/vk/id/auth/VKIDAuthParams;ILjava/lang/Object;)V
 	public static synthetic fun authorize$default (Lcom/vk/id/VKID;Lcom/vk/id/VKID$AuthCallback;Lcom/vk/id/auth/VKIDAuthParams;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
-	public final fun fetchUserData (Lcom/vk/id/VKID$UserDataCallback;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun fetchUserData-IoAF18A (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public abstract interface class com/vk/id/VKID$AuthCallback {
@@ -44,11 +44,6 @@ public final class com/vk/id/VKID$Companion {
 	public final fun getLogsEnabled ()Z
 	public final fun setLogEngine (Lcom/vk/id/internal/log/LogEngine;)V
 	public final fun setLogsEnabled (Z)V
-}
-
-public abstract interface class com/vk/id/VKID$UserDataCallback {
-	public abstract fun onFail (Lcom/vk/id/VKIDFetchUserFail;)V
-	public abstract fun onSuccess (Lcom/vk/id/VKIDUser;)V
 }
 
 public abstract class com/vk/id/VKIDAuthFail {
@@ -85,12 +80,23 @@ public abstract class com/vk/id/VKIDFetchUserFail {
 }
 
 public final class com/vk/id/VKIDUser {
-	public fun <init> (Ljava/lang/String;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/String;)Lcom/vk/id/VKIDUser;
-	public static synthetic fun copy$default (Lcom/vk/id/VKIDUser;Ljava/lang/String;ILjava/lang/Object;)Lcom/vk/id/VKIDUser;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/vk/id/VKIDUser;
+	public static synthetic fun copy$default (Lcom/vk/id/VKIDUser;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/vk/id/VKIDUser;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getName ()Ljava/lang/String;
+	public final fun getFirstName ()Ljava/lang/String;
+	public final fun getLastName ()Ljava/lang/String;
+	public final fun getPhone ()Ljava/lang/String;
+	public final fun getPhoto100 ()Ljava/lang/String;
+	public final fun getPhoto200 ()Ljava/lang/String;
+	public final fun getPhoto50 ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
@@ -144,5 +150,29 @@ public final class com/vk/id/internal/log/LogEngine$LogLevel : java/lang/Enum {
 	public static final field INFO Lcom/vk/id/internal/log/LogEngine$LogLevel;
 	public static fun valueOf (Ljava/lang/String;)Lcom/vk/id/internal/log/LogEngine$LogLevel;
 	public static fun values ()[Lcom/vk/id/internal/log/LogEngine$LogLevel;
+}
+
+public abstract interface class com/vk/silentauth/ISilentAuthInfoProvider : android/os/IInterface {
+	public static final field DESCRIPTOR Ljava/lang/String;
+	public abstract fun getSilentAuthInfos (ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/util/List;
+	public abstract fun updateTokenByExtendedHash (Landroid/os/Bundle;)V
+}
+
+public class com/vk/silentauth/ISilentAuthInfoProvider$Default : com/vk/silentauth/ISilentAuthInfoProvider {
+	public fun <init> ()V
+	public fun asBinder ()Landroid/os/IBinder;
+	public fun getSilentAuthInfos (ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/util/List;
+	public fun updateTokenByExtendedHash (Landroid/os/Bundle;)V
+}
+
+public abstract class com/vk/silentauth/ISilentAuthInfoProvider$Stub : android/os/Binder, com/vk/silentauth/ISilentAuthInfoProvider {
+	public fun <init> ()V
+	public fun asBinder ()Landroid/os/IBinder;
+	public static fun asInterface (Landroid/os/IBinder;)Lcom/vk/silentauth/ISilentAuthInfoProvider;
+	public fun onTransact (ILandroid/os/Parcel;Landroid/os/Parcel;I)Z
+}
+
+public class com/vk/silentauth/ISilentAuthInfoProvider$_Parcel {
+	public fun <init> ()V
 }
 
