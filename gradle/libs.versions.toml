@@ -7,6 +7,7 @@ androidxBrowser = "1.5.0"
 androidxComposeBom = "2023.04.01"
 androidxComposeCompiler = "1.4.6"
 androidxCore = "1.9.0"
+coil = "2.4.0"
 detekt = "1.22.0"
 binary-compatibility-validator = "0.13.2"
 kotlin = "1.8.20"
@@ -33,6 +34,8 @@ androidx-compose-ui-util = { group = "androidx.compose.ui", name = "ui-util" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
 androidx-preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }
 androidx-preference-ktx = { group = "androidx.preference", name = "preference-ktx", version.ref = "preference" }
+coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
+coil-compose = { group = "io.coil-kt", name="coil-compose", version.ref = "coil" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
