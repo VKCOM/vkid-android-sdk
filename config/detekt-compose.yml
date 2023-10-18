@@ -1,0 +1,20 @@
+complexity:
+  active: true
+  LongParameterList:
+    active: true
+    ignoreDefaultParameters: true
+
+naming:
+  FunctionNaming:
+    active: true
+    ignoreAnnotated: ['Composable']
+
+style:
+  active: true
+  MagicNumber:
+    active: true
+    ignorePropertyDeclaration: true
+    ignoreCompanionObjectPropertyDeclaration: true
+  UnusedPrivateMember:
+    active: true
+    ignoreAnnotated: ["Preview"]

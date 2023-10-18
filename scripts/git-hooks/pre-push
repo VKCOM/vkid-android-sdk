@@ -1,0 +1,26 @@
+#!/bin/sh
+
+set -e
+
+echo "*********************************************************"
+echo "Running git pre-push hook. Running detekt... "
+echo "*********************************************************"
+
+PROJECT_PATH="$(git rev-parse --show-toplevel)"
+cd "$PROJECT_PATH"
+./gradlew detekt
+
+status=$?
+if [ "$status" = 0 ] ; then
+    echo "Static analysis found no problems."
+    #Exit
+    exit 0
+else
+    echo "*********************************************************"
+    echo "       ********************************************      "
+    echo 1>&2 "Detekt found violations please review them."
+    echo "       ********************************************      "
+    echo "*********************************************************"
+    #Exit
+    exit 1
+fi
