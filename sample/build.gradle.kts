@@ -17,6 +17,15 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         initVKID()
+
+        signingConfigs {
+            getByName("debug") {
+                keyAlias = "androiddebugkey"
+                keyPassword = "android"
+                storeFile = file("config/debug.keystore")
+                storePassword = "android"
+            }
+        }
     }
 
     buildTypes {
