@@ -19,9 +19,14 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
+
+    buildFeatures {
+        aidl = true
+    }
 }
 
 dependencies {
+    implementation(libs.vk.userid)
     implementation(libs.androidx.annotation)
     implementation(libs.androidx.browser)
     implementation(libs.androidx.preference)

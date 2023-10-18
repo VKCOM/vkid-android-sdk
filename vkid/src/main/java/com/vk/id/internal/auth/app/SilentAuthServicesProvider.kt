@@ -53,6 +53,6 @@ internal class SilentAuthServicesProvider(
         )
 
     companion object {
-        private const val ACTION_GET_INFO = "com.vk.silentauth.action.GET_INFO"
+        internal const val ACTION_GET_INFO = "com.vk.silentauth.action.GET_INFO"
     }
 }
