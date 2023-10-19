@@ -1,0 +1,317 @@
+package com.vk.id.sample.button
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.vk.id.AccessToken
+import com.vk.id.VKIDAuthFail
+import com.vk.id.onetap.compose.button.VKIDButton
+import com.vk.id.onetap.compose.button.VKIDButtonCornersStyle
+import com.vk.id.onetap.compose.button.VKIDButtonElevationStyle
+import com.vk.id.onetap.compose.button.VKIDButtonSizeStyle
+import com.vk.id.onetap.compose.button.VKIDButtonSmall
+import com.vk.id.onetap.compose.button.VKIDButtonStyle
+import com.vk.id.sample.R
+
+@Composable
+fun CreateButtonsSample(
+    onSuccess: (AccessToken) -> Unit,
+    onFail: (VKIDAuthFail) -> Unit = {},
+) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        items(buttonsData) {
+            when (it) {
+                is ListItem.Spacer -> Spacer(
+                    modifier = Modifier
+                        .darkBackground(it.isDarkBackground)
+                        .height(24.dp)
+                        .fillMaxWidth(),
+                )
+                is ListItem.HalfSpacer -> Spacer(
+                    modifier = Modifier
+                        .darkBackground(it.isDarkBackground)
+                        .height(12.dp)
+                        .fillMaxWidth(),
+                )
+                is ListItem.Title -> Row(
+                    horizontalArrangement = Arrangement.Start,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text(
+                        modifier = Modifier.padding(all = 8.dp),
+                        text = it.text,
+                        fontSize = 24.sp,
+                        lineHeight = 28.sp,
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                }
+                is ListItem.Button -> Row(
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .darkBackground(it.isDarkBackground)
+                        .fillMaxWidth()
+                ) {
+                    VKIDButton(
+                        modifier = it.modifier,
+                        style = it.style,
+                        onAuth = onSuccess,
+                        onFail = onFail
+                    )
+                }
+                is ListItem.SmallButton -> VKIDButtonSmall(
+                    style = it.style,
+                    onAuth = onSuccess,
+                    onFail = onFail
+                )
+            }
+        }
+    }
+}
+
+private fun Modifier.darkBackground(isDarkBackground: Boolean) = composed {
+    if (isDarkBackground) {
+        background(color = colorResource(id = R.color.vkid_gray900))
+    } else {
+        this
+    }
+}
+
+private val buttonsData = listOf(
+    ListItem.Title("Primary"),
+    ListItem.HalfSpacer(),
+    ListItem.Button(
+        style = VKIDButtonStyle.Blue(
+            cornersStyle = VKIDButtonCornersStyle.None,
+        )
+    ),
+    ListItem.Spacer(),
+    ListItem.Button(
+        style = VKIDButtonStyle.Blue(
+            cornersStyle = VKIDButtonCornersStyle.Rounded,
+        ),
+    ),
+    ListItem.Spacer(),
+    ListItem.Button(
+        style = VKIDButtonStyle.Blue(
+            cornersStyle = VKIDButtonCornersStyle.Round,
+        ),
+    ),
+    ListItem.HalfSpacer(),
+    ListItem.Title("Secondary light"),
+    ListItem.HalfSpacer(isDarkBackground = true),
+    ListItem.Button(
+        style = VKIDButtonStyle.TransparentLight(
+            cornersStyle = VKIDButtonCornersStyle.None,
+        ),
+        isDarkBackground = true,
+    ),
+    ListItem.Spacer(isDarkBackground = true),
+    ListItem.Button(
+        style = VKIDButtonStyle.TransparentLight(
+            cornersStyle = VKIDButtonCornersStyle.Rounded,
+        ),
+        isDarkBackground = true,
+    ),
+    ListItem.Spacer(isDarkBackground = true),
+    ListItem.Button(
+        style = VKIDButtonStyle.TransparentLight(
+            cornersStyle = VKIDButtonCornersStyle.Round,
+        ),
+        isDarkBackground = true,
+    ),
+    ListItem.HalfSpacer(isDarkBackground = true),
+    ListItem.Title("Secondary dark"),
+    ListItem.HalfSpacer(),
+    ListItem.Button(
+        style = VKIDButtonStyle.TransparentDark(
+            cornersStyle = VKIDButtonCornersStyle.None,
+        ),
+    ),
+    ListItem.Spacer(),
+    ListItem.Button(
+        style = VKIDButtonStyle.TransparentDark(
+            cornersStyle = VKIDButtonCornersStyle.Rounded,
+        ),
+    ),
+    ListItem.Spacer(),
+    ListItem.Button(
+        style = VKIDButtonStyle.TransparentDark(
+            cornersStyle = VKIDButtonCornersStyle.Round,
+        ),
+    ),
+    ListItem.HalfSpacer(),
+    ListItem.Title("Elevation"),
+    ListItem.HalfSpacer(),
+    ListItem.Button(
+        style = VKIDButtonStyle.Blue(
+            cornersStyle = VKIDButtonCornersStyle.Rounded,
+            elevationStyle = VKIDButtonElevationStyle.Default
+        )
+    ),
+    ListItem.Spacer(),
+    ListItem.Button(
+        style = VKIDButtonStyle.Blue(
+            cornersStyle = VKIDButtonCornersStyle.Rounded,
+            elevationStyle = VKIDButtonElevationStyle.Custom(4)
+        ),
+    ),
+    ListItem.Spacer(),
+    ListItem.Button(
+        style = VKIDButtonStyle.Blue(
+            cornersStyle = VKIDButtonCornersStyle.Rounded,
+            elevationStyle = VKIDButtonElevationStyle.Custom(8)
+        ),
+    ),
+    ListItem.HalfSpacer(),
+    ListItem.Title("Sizes"),
+    ListItem.HalfSpacer(),
+    ListItem.Button(
+        style = VKIDButtonStyle.Blue(
+            cornersStyle = VKIDButtonCornersStyle.Rounded,
+            sizeStyle = VKIDButtonSizeStyle.SMALL_32
+        )
+    ),
+    ListItem.Spacer(),
+    ListItem.Button(
+        style = VKIDButtonStyle.Blue(
+            cornersStyle = VKIDButtonCornersStyle.Rounded,
+            sizeStyle = VKIDButtonSizeStyle.SMALL_34
+        ),
+    ),
+    ListItem.Spacer(),
+    ListItem.Button(
+        style = VKIDButtonStyle.Blue(
+            cornersStyle = VKIDButtonCornersStyle.Rounded,
+            sizeStyle = VKIDButtonSizeStyle.SMALL_36
+        ),
+    ),
+    ListItem.Spacer(),
+    ListItem.Button(
+        style = VKIDButtonStyle.Blue(
+            cornersStyle = VKIDButtonCornersStyle.Rounded,
+            sizeStyle = VKIDButtonSizeStyle.SMALL_38
+        ),
+    ),
+    ListItem.Spacer(),
+    ListItem.Button(
+        style = VKIDButtonStyle.Blue(
+            cornersStyle = VKIDButtonCornersStyle.Rounded,
+            sizeStyle = VKIDButtonSizeStyle.MEDIUM_40
+        ),
+    ),
+    ListItem.Spacer(),
+    ListItem.Button(
+        style = VKIDButtonStyle.Blue(
+            cornersStyle = VKIDButtonCornersStyle.Rounded,
+            sizeStyle = VKIDButtonSizeStyle.MEDIUM_42
+        ),
+    ),
+    ListItem.Spacer(),
+    ListItem.Button(
+        style = VKIDButtonStyle.Blue(
+            cornersStyle = VKIDButtonCornersStyle.Rounded,
+            sizeStyle = VKIDButtonSizeStyle.MEDIUM_44
+        ),
+    ),
+    ListItem.Spacer(),
+    ListItem.Button(
+        style = VKIDButtonStyle.Blue(
+            cornersStyle = VKIDButtonCornersStyle.Rounded,
+            sizeStyle = VKIDButtonSizeStyle.MEDIUM_46
+        ),
+    ),
+    ListItem.Spacer(),
+    ListItem.Button(
+        style = VKIDButtonStyle.Blue(
+            cornersStyle = VKIDButtonCornersStyle.Rounded,
+            sizeStyle = VKIDButtonSizeStyle.LARGE_48
+        ),
+    ),
+    ListItem.Spacer(),
+    ListItem.Button(
+        style = VKIDButtonStyle.Blue(
+            cornersStyle = VKIDButtonCornersStyle.Rounded,
+            sizeStyle = VKIDButtonSizeStyle.LARGE_50
+        ),
+    ),
+    ListItem.Spacer(),
+    ListItem.Button(
+        style = VKIDButtonStyle.Blue(
+            cornersStyle = VKIDButtonCornersStyle.Rounded,
+            sizeStyle = VKIDButtonSizeStyle.LARGE_52
+        ),
+    ),
+    ListItem.Spacer(),
+    ListItem.Button(
+        style = VKIDButtonStyle.Blue(
+            cornersStyle = VKIDButtonCornersStyle.Rounded,
+            sizeStyle = VKIDButtonSizeStyle.LARGE_54
+        ),
+    ),
+    ListItem.Spacer(),
+    ListItem.Button(
+        style = VKIDButtonStyle.Blue(
+            cornersStyle = VKIDButtonCornersStyle.Rounded,
+            sizeStyle = VKIDButtonSizeStyle.LARGE_56
+        ),
+    ),
+    ListItem.HalfSpacer(),
+    ListItem.Title("Small button"),
+    ListItem.HalfSpacer(),
+    ListItem.SmallButton(
+        style = VKIDButtonStyle.Blue(
+            cornersStyle = VKIDButtonCornersStyle.Default,
+            sizeStyle = VKIDButtonSizeStyle.MEDIUM_44,
+            elevationStyle = VKIDButtonElevationStyle.Default
+        ),
+    ),
+    ListItem.HalfSpacer(),
+)
+
+private sealed class ListItem {
+
+    data class HalfSpacer(
+        val isDarkBackground: Boolean = false
+    ) : ListItem()
+
+    data class Spacer(
+        val isDarkBackground: Boolean = false
+    ) : ListItem()
+
+    data class Title(
+        val text: String
+    ) : ListItem()
+
+    data class Button(
+        val style: VKIDButtonStyle,
+        val modifier: Modifier = Modifier.width(335.dp),
+        val isDarkBackground: Boolean = false,
+    ) : ListItem()
+
+    data class SmallButton(
+        val style: VKIDButtonStyle
+    ) : ListItem()
+}

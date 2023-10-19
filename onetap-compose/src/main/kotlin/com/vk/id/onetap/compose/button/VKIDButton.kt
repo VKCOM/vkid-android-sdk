@@ -1,108 +1,91 @@
-package com.vk.id.onetap.compose
+package com.vk.id.onetap.compose.button
 
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
+import com.vk.id.onetap.compose.R
+import com.vk.id.onetap.compose.icon.VKIcon
+import com.vk.id.onetap.compose.progress.CircleProgress
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
 public fun VKIDButton(
     modifier: Modifier = Modifier,
-    radius: Dp = 8.dp,
+    style: VKIDButtonStyle = VKIDButtonStyle.Blue(),
     onAuth: (AccessToken) -> Unit,
     onFail: (VKIDAuthFail) -> Unit = {},
     state: VKIDButtonState = rememberVKIDButtonState()
 ) {
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
-    val vkid: VKID = remember { VKID(context) }
+    val vkid = remember { VKID(context) }
     FetchUserData(state, coroutineScope, vkid)
     Row(
         modifier = modifier
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = rememberRipple(
-                    color = Color.White
-                ),
-                enabled = state.inProgress.not(),
-                role = Role.Button,
-                onClick = { startAuth(coroutineScope, state, vkid, onAuth, onFail) }
-            )
-            .height(44.dp)
+            .shadow(style.elevationStyle, style.cornersStyle)
+            .height(style.sizeStyle)
+            .border(style.borderStyle, style.cornersStyle)
+            .clip(style.cornersStyle)
             .clipToBounds()
-            .clip(RoundedCornerShape(radius))
-            .background(colorResource(R.color.vkid_azure_A100)),
+            .background(style.backgroundStyle)
+            .clickable(state, coroutineScope, vkid, style, onAuth, onFail),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        LeftIconBox()
-        TextBox(state)
-        RightIconBox(state)
+        LeftIconBox(style)
+        TextBox(state, style)
+        RightIconBox(state, style)
     }
 }
 
 @Composable
-private fun RowScope.LeftIconBox() {
+private fun RowScope.LeftIconBox(
+    style: VKIDButtonStyle
+) {
     Box(
         modifier = Modifier
-            .padding(8.dp)
+            .iconPadding(style.sizeStyle)
             .weight(1f),
         contentAlignment = Alignment.CenterStart
     ) {
-        VKIcon()
+        VKIcon(style.iconStyle)
     }
 }
 
 @Composable
-private fun RowScope.TextBox(state: VKIDButtonState) {
+private fun RowScope.TextBox(
+    state: VKIDButtonState,
+    style: VKIDButtonStyle
+) {
     @Suppress("MagicNumber")
     Box(
         modifier = Modifier.weight(4f),
@@ -111,9 +94,10 @@ private fun RowScope.TextBox(state: VKIDButtonState) {
         BasicText(
             text = state.text,
             style = TextStyle(
-                color = colorResource(id = R.color.vkid_white),
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
+                color = style.textStyle.asColorResource(),
+                fontSize = style.sizeStyle.asFontSize(),
+                lineHeight = style.sizeStyle.asLineHeight(),
+                fontWeight = FontWeight.Medium,
                 textAlign = TextAlign.Center
             )
         )
@@ -121,15 +105,18 @@ private fun RowScope.TextBox(state: VKIDButtonState) {
 }
 
 @Composable
-private fun RowScope.RightIconBox(state: VKIDButtonState) {
+private fun RowScope.RightIconBox(
+    state: VKIDButtonState,
+    style: VKIDButtonStyle
+) {
     Box(
         modifier = Modifier
             .weight(1f)
-            .padding(8.dp),
+            .iconPadding(style.sizeStyle),
         contentAlignment = Alignment.CenterEnd
     ) {
         if (state.inProgress) {
-            CircleProgress()
+            CircleProgress(style.progressStyle)
         } else if (state.userIconUrl != null) {
             AsyncImage(
                 model = state.userIconUrl,
@@ -139,40 +126,6 @@ private fun RowScope.RightIconBox(state: VKIDButtonState) {
             )
         }
     }
-}
-
-@Composable
-internal fun VKIcon() {
-    Image(
-        painter = painterResource(id = R.drawable.vkid_icon),
-        contentDescription = null,
-        colorFilter = ColorFilter.tint(colorResource(id = R.color.vkid_white)),
-        modifier = Modifier
-            .size(28.dp)
-            .padding(1.dp)
-    )
-}
-
-@Composable
-internal fun CircleProgress() {
-    val infiniteTransition = rememberInfiniteTransition(label = "vkid_spinner")
-    val angle by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 360f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 1000, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = "vkid_spinner"
-    )
-    Image(
-        modifier = Modifier
-            .graphicsLayer {
-                rotationZ = angle
-            },
-        painter = painterResource(id = R.drawable.vkid_spinner),
-        contentDescription = null,
-    )
 }
 
 internal fun startAuth(
@@ -198,8 +151,33 @@ internal fun startAuth(
     }
 }
 
+@Suppress("LongParameterList")
+internal fun Modifier.clickable(
+    state: VKIDButtonState,
+    coroutineScope: CoroutineScope,
+    vkid: VKID,
+    style: VKIDButtonStyle,
+    onAuth: (AccessToken) -> Unit,
+    onFail: (VKIDAuthFail) -> Unit
+): Modifier = composed {
+    clickable(
+        interactionSource = remember { MutableInteractionSource() },
+        indication = rememberRipple(
+            color = style.rippleStyle.asColor(),
+            radius = style.cornersStyle.radiusDp.dp
+        ),
+        enabled = state.inProgress.not(),
+        role = Role.Button,
+        onClick = { startAuth(coroutineScope, state, vkid, onAuth, onFail) }
+    )
+}
+
 @Composable
-internal fun FetchUserData(state: VKIDButtonState, coroutineScope: CoroutineScope, vkid: VKID) {
+internal fun FetchUserData(
+    state: VKIDButtonState,
+    coroutineScope: CoroutineScope,
+    vkid: VKID,
+) {
     val resources = LocalContext.current.resources
     LaunchedEffect(state) {
         coroutineScope.launch {

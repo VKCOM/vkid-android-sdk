@@ -4,21 +4,10 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
-import com.vk.id.onetap.compose.VKIDButton
-import com.vk.id.onetap.compose.VKIDButtonSmall
+import com.vk.id.sample.button.CreateButtonsSample
 
 class MainActivity : ComponentActivity() {
 
@@ -26,24 +15,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         VKID.logsEnabled = true
         setContent {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                VKIDButton(
-                    modifier = Modifier.width(335.dp),
-                    onAuth = ::onVKIDAuthSuccess,
-                    onFail = ::onVKIDAuthFail
-                )
-                Spacer(modifier = Modifier.height(24.dp))
-                VKIDButtonSmall(
-                    onAuth = ::onVKIDAuthSuccess,
-                    onFail = ::onVKIDAuthFail
-                )
-            }
+            CreateButtonsSample(
+                onSuccess = ::onVKIDAuthSuccess,
+                onFail = ::onVKIDAuthFail
+            )
         }
     }
 
