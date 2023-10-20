@@ -1,6 +1,7 @@
-import com.android.build.api.dsl.ApplicationDefaultConfig
+import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import java.io.FileInputStream
 import java.util.Properties
+import java.io.FileNotFoundException
 
 plugins {
     id("vkid.android.application.compose")
@@ -15,8 +16,6 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        initVKID()
     }
 
     buildTypes {
@@ -25,6 +24,8 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
+
+    initVKID()
 }
 
 dependencies {
@@ -38,15 +39,36 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
 }
 
-fun ApplicationDefaultConfig.initVKID() {
-    val secrets = Properties()
-    secrets.load(FileInputStream(file("secrets.properties")))
-    val clientId = secrets["VKIDClientID"] ?: throw IllegalStateException("Add VKIDClientID to file secrets.properties")
-    val clientSecret = secrets["VKIDClientSecret"] ?: throw IllegalStateException("Add VKIDClientSecret to file secrets.properties")
-    addManifestPlaceholders(mapOf(
-        "VKIDRedirectHost" to "vk.com",
-        "VKIDRedirectScheme" to "vk$clientId",
-        "VKIDClientID" to clientId,
-        "VKIDClientSecret" to clientSecret
-    ))
+fun BaseAppModuleExtension.initVKID() {
+    defaultConfig {
+        tasks.register("initVKID") {
+            val secrets = Properties()
+            try {
+                secrets.load(FileInputStream(file("secrets.properties")))
+
+                val clientId = secrets["VKIDClientID"] ?: throw IllegalStateException("Add VKIDClientID to file secrets.properties")
+                val clientSecret = secrets["VKIDClientSecret"] ?: throw IllegalStateException("Add VKIDClientSecret to file secrets.properties")
+                addManifestPlaceholders(
+                    mapOf(
+                        "VKIDRedirectHost" to "vk.com",
+                        "VKIDRedirectScheme" to "vk$clientId",
+                        "VKIDClientID" to clientId,
+                        "VKIDClientSecret" to clientSecret
+                    )
+                )
+            } catch (e: FileNotFoundException) {
+                logger.error(
+                    "Create a 'secrets.properties' file in the 'sample' folder and add your 'VKIDClientID' and 'VKIDClientSecret' to it." +
+                            "\nFor more information, refer to the 'README.md' file."
+                )
+                throw e
+            }
+        }
+
+        tasks.whenTaskAdded {
+            if (name.startsWith("processDebugManifest") || (name.startsWith("processReleaseManifest"))) {
+                dependsOn("initVKID")
+            }
+        }
+    }
 }
