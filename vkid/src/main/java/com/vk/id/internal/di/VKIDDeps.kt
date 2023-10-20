@@ -11,6 +11,7 @@ import com.vk.id.internal.auth.pkce.PkceGeneratorSHA256
 import com.vk.id.internal.concurrent.CoroutinesDispatchers
 import com.vk.id.internal.ipc.VkSilentAuthInfoProvider
 import com.vk.id.internal.store.PrefsStore
+import com.vk.id.internal.user.UserDataFetcher
 
 internal interface VKIDDeps {
     val api: Lazy<VKIDApiService>
@@ -24,4 +25,5 @@ internal interface VKIDDeps {
     val silentAuthServicesProvider: Lazy<SilentAuthServicesProvider>
     val trustedProvidersCache: Lazy<TrustedProvidersCache>
     val vkSilentAuthInfoProvider: Lazy<VkSilentAuthInfoProvider>
+    val userDataFetcher: Lazy<UserDataFetcher>
 }

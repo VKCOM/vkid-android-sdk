@@ -1,8 +1,6 @@
 package com.vk.id
 
 import android.content.Context
-import android.os.Build
-import android.os.SystemClock
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
@@ -27,6 +25,8 @@ import com.vk.id.internal.log.LogEngine
 import com.vk.id.internal.log.VKIDLog
 import com.vk.id.internal.log.createLoggerForClass
 import com.vk.id.internal.store.PrefsStore
+import com.vk.id.internal.user.UserDataFetcher
+import com.vk.id.internal.util.currentTime
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.currentCoroutineContext
@@ -69,6 +69,7 @@ public class VKID {
         this.pkceGenerator = deps.pkceGenerator
         this.serviceCredentials = deps.serviceCredentials
         this.vkSilentAuthInfoProvider = deps.vkSilentAuthInfoProvider
+        this.userDataFetcher = deps.userDataFetcher
     }
 
     private val logger = createLoggerForClass()
@@ -82,6 +83,7 @@ public class VKID {
     private val prefsStore: Lazy<PrefsStore>
     private val serviceCredentials: Lazy<ServiceCredentials>
     private val vkSilentAuthInfoProvider: Lazy<VkSilentAuthInfoProvider>
+    private val userDataFetcher: Lazy<UserDataFetcher>
 
     private var authCallbacks = mutableSetOf<AuthCallback>()
 
@@ -119,11 +121,7 @@ public class VKID {
     }
 
     public suspend fun fetchUserData(): Result<VKIDUser?> {
-        val info = withContext(dispatchers.io) {
-            vkSilentAuthInfoProvider.value.setAppId(serviceCredentials.value.clientID.toInt())
-            vkSilentAuthInfoProvider.value.getSilentAuthInfos().firstOrNull()
-        }
-        return Result.success(info?.toVKIDUser())
+        return Result.success(userDataFetcher.value.fetchUserData())
     }
 
     @Suppress("MagicNumber")
@@ -253,14 +251,6 @@ public class VKID {
     private fun emitAuthFail(fail: VKIDAuthFail) {
         authCallbacks.forEach {
             it.onFail(fail)
-        }
-    }
-
-    private fun currentTime(): Long {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            SystemClock.currentNetworkTimeClock().millis()
-        } else {
-            System.currentTimeMillis()
         }
     }
 
