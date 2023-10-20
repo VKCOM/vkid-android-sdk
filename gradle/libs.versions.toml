@@ -6,6 +6,7 @@ androidxAnnotation = "1.6.0"
 androidxBrowser = "1.5.0"
 androidxComposeBom = "2023.04.01"
 androidxComposeCompiler = "1.4.6"
+androidxConstraintLayout = "2.1.4"
 androidxCore = "1.9.0"
 coil = "2.4.0"
 detekt = "1.22.0"
@@ -32,6 +33,7 @@ androidx-compose-material3 = { group = "androidx.compose.material3", name = "mat
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-compose-ui-util = { group = "androidx.compose.ui", name = "ui-util" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidxConstraintLayout" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
 androidx-lifecycle-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycle-runtime-compose" }
 androidx-preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }
