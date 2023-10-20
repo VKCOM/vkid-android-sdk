@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.colorResource
 import com.vk.id.onetap.common.icon.VKIconColorStyle
-import com.vk.id.onetap.compose.R
+import com.vk.id.onetap.common.R
 
 @Composable
 internal fun VKIconColorStyle.asColorFilter(): ColorFilter {

@@ -8,7 +8,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import com.vk.id.onetap.common.button.VKIDButtonBorderStyle
 import com.vk.id.onetap.common.button.VKIDButtonCornersStyle
-import com.vk.id.onetap.compose.R
+import com.vk.id.onetap.common.R
 
 internal fun Modifier.border(
     style: VKIDButtonBorderStyle,

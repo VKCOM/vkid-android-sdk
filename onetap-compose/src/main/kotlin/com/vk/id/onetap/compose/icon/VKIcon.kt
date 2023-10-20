@@ -10,7 +10,7 @@ import androidx.compose.ui.unit.dp
 import com.vk.id.onetap.common.icon.VKIconColorStyle
 import com.vk.id.onetap.common.icon.VKIconSizeStyle
 import com.vk.id.onetap.common.icon.VKIconStyle
-import com.vk.id.onetap.compose.R
+import com.vk.id.onetap.common.R
 
 @Composable
 internal fun VKIcon(

@@ -4,5 +4,5 @@ plugins {
 }
 
 android {
-    namespace = "com.vk.id.onetap.xml"
+    namespace = "com.vk.id.onetap.common"
 }
