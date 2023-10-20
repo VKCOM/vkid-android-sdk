@@ -1,21 +1,21 @@
-package com.vk.id.onetap.compose.button
+package com.vk.id.onetap.common.button
 
-import com.vk.id.onetap.compose.icon.VKIconColorStyle
-import com.vk.id.onetap.compose.icon.VKIconStyle
-import com.vk.id.onetap.compose.icon.asIconSizeStyle
-import com.vk.id.onetap.compose.progress.CircleProgressStyle
+import com.vk.id.onetap.common.icon.VKIconColorStyle
+import com.vk.id.onetap.common.icon.VKIconStyle
+import com.vk.id.onetap.common.icon.asIconSizeStyle
+import com.vk.id.onetap.common.progress.CircleProgressStyle
 
 @Suppress("LongParameterList")
 public sealed class VKIDButtonStyle(
-    internal val backgroundStyle: VKIDButtonBackgroundStyle,
-    internal val rippleStyle: VKIDButtonRippleStyle,
-    internal val borderStyle: VKIDButtonBorderStyle,
-    internal val iconStyle: VKIconStyle,
-    internal val textStyle: VKIDButtonTextStyle,
-    internal val progressStyle: CircleProgressStyle,
-    internal val cornersStyle: VKIDButtonCornersStyle,
-    internal val sizeStyle: VKIDButtonSizeStyle,
-    internal val elevationStyle: VKIDButtonElevationStyle,
+    public val backgroundStyle: VKIDButtonBackgroundStyle,
+    public val rippleStyle: VKIDButtonRippleStyle,
+    public val borderStyle: VKIDButtonBorderStyle,
+    public val iconStyle: VKIconStyle,
+    public val textStyle: VKIDButtonTextStyle,
+    public val progressStyle: CircleProgressStyle,
+    public val cornersStyle: VKIDButtonCornersStyle,
+    public val sizeStyle: VKIDButtonSizeStyle,
+    public val elevationStyle: VKIDButtonElevationStyle,
 ) {
     public class Blue(
         cornersStyle: VKIDButtonCornersStyle = VKIDButtonCornersStyle.Default,
