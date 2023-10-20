@@ -20,6 +20,7 @@ import coil.compose.AsyncImage
 import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
+import com.vk.id.onetap.common.button.VKIDButtonStyle
 import com.vk.id.onetap.compose.R
 import com.vk.id.onetap.compose.icon.VKIcon
 import com.vk.id.onetap.compose.progress.CircleProgress

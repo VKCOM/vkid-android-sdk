@@ -9,6 +9,7 @@ android {
 }
 
 dependencies {
+    api(project(":onetap-common"))
     api(project(":vkid"))
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.foundation)

@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import com.vk.id.onetap.common.progress.CircleProgressStyle
 import com.vk.id.onetap.compose.R
 
 @Composable

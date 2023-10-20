@@ -1,9 +1,6 @@
-package com.vk.id.onetap.compose.icon
+package com.vk.id.onetap.common.icon
 
-import androidx.compose.foundation.layout.size
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import com.vk.id.onetap.compose.button.VKIDButtonSizeStyle
+import com.vk.id.onetap.common.button.VKIDButtonSizeStyle
 
 public enum class VKIconSizeStyle {
     SMALL,
@@ -13,12 +10,10 @@ public enum class VKIconSizeStyle {
 private const val VK_ICON_SMALL_SIZE_DP = 24
 private const val VK_ICON_NORMAL_SIZE_DP = 28
 
-internal fun Modifier.size(style: VKIconSizeStyle) = size(
-    when (style) {
-        VKIconSizeStyle.SMALL -> VK_ICON_SMALL_SIZE_DP
-        VKIconSizeStyle.NORMAL -> VK_ICON_NORMAL_SIZE_DP
-    }.dp
-)
+public fun VKIconSizeStyle.asIconSize(): Int = when (this) {
+    VKIconSizeStyle.SMALL -> VK_ICON_SMALL_SIZE_DP
+    VKIconSizeStyle.NORMAL -> VK_ICON_NORMAL_SIZE_DP
+}
 
 internal fun VKIDButtonSizeStyle.asIconSizeStyle() = when (this) {
     VKIDButtonSizeStyle.DEFAULT -> VKIconSizeStyle.NORMAL
