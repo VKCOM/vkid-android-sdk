@@ -10,7 +10,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -20,6 +23,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
@@ -27,6 +31,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import coil.compose.AsyncImage
 import com.vk.id.AccessToken
 import com.vk.id.VKID
@@ -36,6 +42,7 @@ import com.vk.id.onetap.compose.R
 import com.vk.id.onetap.compose.icon.VKIcon
 import com.vk.id.onetap.compose.progress.CircleProgress
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 @Composable
@@ -180,15 +187,43 @@ internal fun FetchUserData(
     vkid: VKID,
 ) {
     val resources = LocalContext.current.resources
-    LaunchedEffect(state) {
-        coroutineScope.launch {
-            val user = vkid.fetchUserData().getOrNull()
-            if (user != null) {
-                state.text = resources.getString(R.string.vkid_log_in_as, user.firstName)
-                state.userIconUrl = user.photo200
+    val lifecycleState by LocalLifecycleOwner.current.lifecycle.observeAsState()
+    DisposableEffect(lifecycleState) {
+        var fetchUserJob: Job? = null
+        when (lifecycleState) {
+            Lifecycle.Event.ON_RESUME -> {
+                fetchUserJob = coroutineScope.launch {
+                    val user = vkid.fetchUserData().getOrNull()
+                    if (user != null) {
+                        state.text = resources.getString(R.string.vkid_log_in_as, user.firstName)
+                        state.userIconUrl = user.photo200
+                    } else {
+                        state.text = resources.getString(R.string.vkid_log_in_with_vkid)
+                        state.userIconUrl = null
+                    }
+                }
             }
+            else -> {}
+        }
+        onDispose {
+            fetchUserJob?.cancel()
         }
     }
+}
+
+@Composable
+private fun Lifecycle.observeAsState(): State<Lifecycle.Event> {
+    val state = remember { mutableStateOf(Lifecycle.Event.ON_ANY) }
+    DisposableEffect(this) {
+        val observer = LifecycleEventObserver { _, event ->
+            state.value = event
+        }
+        this@observeAsState.addObserver(observer)
+        onDispose {
+            this@observeAsState.removeObserver(observer)
+        }
+    }
+    return state
 }
 
 @Preview
