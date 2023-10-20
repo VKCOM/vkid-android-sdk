@@ -128,11 +128,28 @@ public final class com/vk/id/onetap/compose/button/VKIDButtonTextStyle : java/la
 	public static fun values ()[Lcom/vk/id/onetap/compose/button/VKIDButtonTextStyle;
 }
 
-public final class com/vk/id/onetap/compose/icon/VKIconStyle : java/lang/Enum {
-	public static final field BLUE Lcom/vk/id/onetap/compose/icon/VKIconStyle;
-	public static final field WHITE Lcom/vk/id/onetap/compose/icon/VKIconStyle;
-	public static fun valueOf (Ljava/lang/String;)Lcom/vk/id/onetap/compose/icon/VKIconStyle;
-	public static fun values ()[Lcom/vk/id/onetap/compose/icon/VKIconStyle;
+public final class com/vk/id/onetap/compose/icon/VKIconColorStyle : java/lang/Enum {
+	public static final field BLUE Lcom/vk/id/onetap/compose/icon/VKIconColorStyle;
+	public static final field WHITE Lcom/vk/id/onetap/compose/icon/VKIconColorStyle;
+	public static fun valueOf (Ljava/lang/String;)Lcom/vk/id/onetap/compose/icon/VKIconColorStyle;
+	public static fun values ()[Lcom/vk/id/onetap/compose/icon/VKIconColorStyle;
+}
+
+public final class com/vk/id/onetap/compose/icon/VKIconSizeStyle : java/lang/Enum {
+	public static final field NORMAL Lcom/vk/id/onetap/compose/icon/VKIconSizeStyle;
+	public static final field SMALL Lcom/vk/id/onetap/compose/icon/VKIconSizeStyle;
+	public static fun valueOf (Ljava/lang/String;)Lcom/vk/id/onetap/compose/icon/VKIconSizeStyle;
+	public static fun values ()[Lcom/vk/id/onetap/compose/icon/VKIconSizeStyle;
+}
+
+public final class com/vk/id/onetap/compose/icon/VKIconStyle {
+	public static final field $stable I
+	public fun <init> (Lcom/vk/id/onetap/compose/icon/VKIconColorStyle;Lcom/vk/id/onetap/compose/icon/VKIconSizeStyle;)V
+	public final fun copy (Lcom/vk/id/onetap/compose/icon/VKIconColorStyle;Lcom/vk/id/onetap/compose/icon/VKIconSizeStyle;)Lcom/vk/id/onetap/compose/icon/VKIconStyle;
+	public static synthetic fun copy$default (Lcom/vk/id/onetap/compose/icon/VKIconStyle;Lcom/vk/id/onetap/compose/icon/VKIconColorStyle;Lcom/vk/id/onetap/compose/icon/VKIconSizeStyle;ILjava/lang/Object;)Lcom/vk/id/onetap/compose/icon/VKIconStyle;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class com/vk/id/onetap/compose/progress/CircleProgressStyle : java/lang/Enum {

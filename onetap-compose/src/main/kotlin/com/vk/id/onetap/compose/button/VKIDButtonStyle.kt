@@ -1,6 +1,8 @@
 package com.vk.id.onetap.compose.button
 
+import com.vk.id.onetap.compose.icon.VKIconColorStyle
 import com.vk.id.onetap.compose.icon.VKIconStyle
+import com.vk.id.onetap.compose.icon.asIconSizeStyle
 import com.vk.id.onetap.compose.progress.CircleProgressStyle
 
 @Suppress("LongParameterList")
@@ -23,7 +25,10 @@ public sealed class VKIDButtonStyle(
         backgroundStyle = VKIDButtonBackgroundStyle.BLUE,
         rippleStyle = VKIDButtonRippleStyle.LIGHT,
         borderStyle = VKIDButtonBorderStyle.NONE,
-        iconStyle = VKIconStyle.WHITE,
+        iconStyle = VKIconStyle(
+            colorStyle = VKIconColorStyle.WHITE,
+            sizeStyle = sizeStyle.asIconSizeStyle(),
+        ),
         textStyle = VKIDButtonTextStyle.LIGHT,
         progressStyle = CircleProgressStyle.LIGHT,
         cornersStyle = cornersStyle,
@@ -39,7 +44,10 @@ public sealed class VKIDButtonStyle(
         backgroundStyle = VKIDButtonBackgroundStyle.TRANSPARENT,
         rippleStyle = VKIDButtonRippleStyle.DARK,
         borderStyle = VKIDButtonBorderStyle.DARK,
-        iconStyle = VKIconStyle.BLUE,
+        iconStyle = VKIconStyle(
+            colorStyle = VKIconColorStyle.BLUE,
+            sizeStyle = sizeStyle.asIconSizeStyle(),
+        ),
         textStyle = VKIDButtonTextStyle.DARK,
         progressStyle = CircleProgressStyle.DARK,
         cornersStyle = cornersStyle,
@@ -49,17 +57,20 @@ public sealed class VKIDButtonStyle(
 
     public class TransparentLight(
         cornersStyle: VKIDButtonCornersStyle = VKIDButtonCornersStyle.Default,
-        height: VKIDButtonSizeStyle = VKIDButtonSizeStyle.MEDIUM_44,
+        sizeStyle: VKIDButtonSizeStyle = VKIDButtonSizeStyle.MEDIUM_44,
         elevationStyle: VKIDButtonElevationStyle = VKIDButtonElevationStyle.Default,
     ) : VKIDButtonStyle(
         backgroundStyle = VKIDButtonBackgroundStyle.TRANSPARENT,
         rippleStyle = VKIDButtonRippleStyle.LIGHT,
         borderStyle = VKIDButtonBorderStyle.LIGHT,
-        iconStyle = VKIconStyle.BLUE,
+        iconStyle = VKIconStyle(
+            colorStyle = VKIconColorStyle.BLUE,
+            sizeStyle = sizeStyle.asIconSizeStyle(),
+        ),
         textStyle = VKIDButtonTextStyle.LIGHT,
         progressStyle = CircleProgressStyle.LIGHT,
         cornersStyle = cornersStyle,
-        sizeStyle = height,
+        sizeStyle = sizeStyle,
         elevationStyle = elevationStyle,
     )
 }
