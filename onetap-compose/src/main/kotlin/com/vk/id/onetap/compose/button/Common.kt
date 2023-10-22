@@ -14,7 +14,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
@@ -23,8 +22,8 @@ import androidx.lifecycle.LifecycleEventObserver
 import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
+import com.vk.id.VKIDUser
 import com.vk.id.onetap.common.button.VKIDButtonStyle
-import com.vk.id.onetap.compose.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -79,7 +78,6 @@ internal fun FetchUserData(
     vkid: VKID,
     onFetchingProgress: OnFetchingProgress,
 ) {
-    val resources = LocalContext.current.resources
     val lifecycleState by LocalLifecycleOwner.current.lifecycle.observeAsState()
     DisposableEffect(lifecycleState) {
         var fetchUserJob: Job? = null
@@ -88,16 +86,7 @@ internal fun FetchUserData(
                 fetchUserJob = coroutineScope.launch {
                     onFetchingProgress.onPreFetch()
                     val user = vkid.fetchUserData().getOrNull()
-                    val newText: String
-                    val newIconUrl: String?
-                    if (user != null) {
-                        newText = resources.getString(R.string.vkid_log_in_as, user.firstName)
-                        newIconUrl = user.photo200
-                    } else {
-                        newText = resources.getString(R.string.vkid_log_in_with_vkid)
-                        newIconUrl = null
-                    }
-                    onFetchingProgress.onFetched(newText, newIconUrl)
+                    onFetchingProgress.onFetched(user)
                 }
             }
             else -> {}
@@ -126,14 +115,15 @@ private fun Lifecycle.observeAsState(): State<Lifecycle.Event> {
 
 internal interface OnFetchingProgress {
     suspend fun onPreFetch()
-    suspend fun onFetched(newText: String, newIconUrl: String?)
+    suspend fun onFetched(user: VKIDUser?)
     fun onDispose()
 }
 
-internal const val DURATION_OF_ANIMATION = 300
+internal const val DURATION_OF_ANIMATION = 300L
 
-// common delay is duration of fade out animation + 100 delay between fade out and fade in
-internal const val DURATION_OF_DELAY_BETWEEN_FADE_ANIMATIONS = DURATION_OF_ANIMATION + 100L
+internal const val DURATION_OF_DELAY_BETWEEN_FADE_ANIMATIONS = 100L
 
 internal val easeInOutAnimation: AnimationSpec<Float> =
-    tween(durationMillis = DURATION_OF_ANIMATION, easing = CubicBezierEasing(0.42f, 0.0f, 0.58f, 1.0f))
+    tween(durationMillis = DURATION_OF_ANIMATION.toInt(), easing = CubicBezierEasing(0.42f, 0.0f, 0.58f, 1.0f))
+
+internal const val SIZE_OF_VK_ICON = 28f
