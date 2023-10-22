@@ -16,11 +16,16 @@ public fun rememberVKIDButtonState(
     VKIDButtonState(inProgress, text)
 }
 
-public class VKIDButtonState(inProgress: Boolean, text: String, userIconUrl: String? = null) {
-
+public open class VKIDButtonState(
+    inProgress: Boolean,
+    text: String,
+    userIconUrl: String? = null,
+    buttonDataVisible: Boolean = true
+) {
     private var _inProgress: Boolean by mutableStateOf(inProgress)
     private var _text: String by mutableStateOf(text)
     private var _userIconUrl: String? by mutableStateOf(userIconUrl)
+    private var _buttonDataVisible: Boolean by mutableStateOf(buttonDataVisible)
 
     internal var inProgress: Boolean
         get() = _inProgress
@@ -33,7 +38,7 @@ public class VKIDButtonState(inProgress: Boolean, text: String, userIconUrl: Str
     internal var text: String
         get() = _text
         internal set(value) {
-            if (value !== _text) {
+            if (value != _text) {
                 _text = value
             }
         }
@@ -41,8 +46,37 @@ public class VKIDButtonState(inProgress: Boolean, text: String, userIconUrl: Str
     internal var userIconUrl: String?
         get() = _userIconUrl
         internal set(value) {
-            if (value !== _userIconUrl) {
+            if (value != _userIconUrl) {
                 _userIconUrl = value
+            }
+        }
+
+    internal var buttonDataVisible: Boolean
+        get() = _buttonDataVisible
+        internal set(value) {
+            if (value != _buttonDataVisible) {
+                _buttonDataVisible = value
+            }
+        }
+}
+
+public class VKIDSmallButtonState(inProgress: Boolean, userIconLoaded: Boolean) : VKIDButtonState(inProgress, text = "") {
+    private var _userIconLoaded: Boolean by mutableStateOf(userIconLoaded)
+    private var _userIconLoading: Boolean by mutableStateOf(false)
+
+    internal var userIconLoaded: Boolean
+        get() = _userIconLoaded
+        internal set(value) {
+            if (value != _userIconLoaded) {
+                _userIconLoaded = value
+            }
+        }
+
+    internal var userIconLoading: Boolean
+        get() = _userIconLoading
+        internal set(value) {
+            if (value != _userIconLoading) {
+                _userIconLoading = value
             }
         }
 }
