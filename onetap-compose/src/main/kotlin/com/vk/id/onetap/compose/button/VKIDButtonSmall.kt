@@ -28,6 +28,7 @@ import coil.decode.DataSource
 import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
+import com.vk.id.VKIDUser
 import com.vk.id.onetap.common.button.VKIDButtonStyle
 import com.vk.id.onetap.compose.icon.VKIcon
 import com.vk.id.onetap.compose.progress.CircleProgress
@@ -53,7 +54,8 @@ public fun VKIDButtonSmall(
             override fun onDispose() { /*nothing*/
             }
 
-            override suspend fun onFetched(newText: String, newIconUrl: String?) {
+            override suspend fun onFetched(user: VKIDUser?) {
+                val newIconUrl = user?.photo200
                 if (newIconUrl != null) {
                     state.userIconUrl = newIconUrl
                 } else {

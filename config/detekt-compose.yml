@@ -3,6 +3,9 @@ complexity:
   LongParameterList:
     active: true
     ignoreDefaultParameters: true
+  TooManyFunctions:
+    active: true
+    thresholdInFiles: 20
 
 naming:
   FunctionNaming:

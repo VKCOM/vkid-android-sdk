@@ -1,10 +1,14 @@
 package com.vk.id.onetap.compose.button
 
+import android.content.res.Resources
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
@@ -23,14 +27,17 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
+import com.vk.id.VKIDUser
 import com.vk.id.onetap.common.button.VKIDButtonStyle
 import com.vk.id.onetap.compose.R
 import com.vk.id.onetap.compose.icon.VKIcon
 import com.vk.id.onetap.compose.progress.CircleProgress
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 
 @Composable
@@ -44,33 +51,7 @@ public fun VKIDButton(
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
     val vkid = remember { VKID(context) }
-    FetchUserData(
-        coroutineScope,
-        vkid,
-        object : OnFetchingProgress {
-            override suspend fun onPreFetch() {
-                if (state.userIconUrl == null) {
-                    state.inProgress = true
-                }
-            }
-            override suspend fun onFetched(newText: String, newIconUrl: String?) {
-                if (state.text != newText || state.userIconUrl != newIconUrl) {
-                    state.buttonDataVisible = false
-                    delay(DURATION_OF_DELAY_BETWEEN_FADE_ANIMATIONS)
-                    state.inProgress = false
-                    state.text = newText
-                    state.userIconUrl = newIconUrl
-                    state.buttonDataVisible = true
-                } else {
-                    state.inProgress = false
-                }
-            }
-
-            override fun onDispose() {
-                state.inProgress = false
-            }
-        }
-    )
+    FetchUserDataWithAnimation(coroutineScope, state, vkid)
     Row(
         modifier = modifier
             .shadow(style.elevationStyle, style.cornersStyle)
@@ -80,36 +61,140 @@ public fun VKIDButton(
             .clipToBounds()
             .background(style.backgroundStyle)
             .clickable(state, coroutineScope, vkid, style, onAuth, onFail),
-        horizontalArrangement = Arrangement.SpaceBetween,
+        horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
     ) {
+        // 0.001 and 0.999 because weight can't be null
+        @Suppress("MagicNumber")
+        val animatedSpaceWeight by animateFloatAsState(
+            targetValue = if (state.userLoadFailed) 0.001f else 0.999f,
+            label = "iconWeight",
+            animationSpec = easeInOutAnimation
+        )
+        val leftIconWidth: Float = SIZE_OF_VK_ICON + (style.sizeStyle.iconPadding().value * 2)
+        val animatedRightIconWidthCompensation by animateFloatAsState(
+            targetValue = if (state.userLoadFailed) leftIconWidth / 2 else leftIconWidth,
+            label = "rightIconCompensation",
+            animationSpec = easeInOutAnimation
+        )
+
+        Spacer(modifier = Modifier.weight(1f - animatedSpaceWeight))
         LeftIconBox(style)
+        Spacer(modifier = Modifier.weight(animatedSpaceWeight))
         TextBox(state, style)
-        RightIconBox(state, style)
+        Spacer(modifier = Modifier.width(animatedRightIconWidthCompensation.dp))
+        RightIconBox(state, style, animatedSpaceWeight)
+        Spacer(modifier = Modifier.weight(1f - animatedSpaceWeight))
     }
 }
 
 @Composable
-private fun RowScope.LeftIconBox(
-    style: VKIDButtonStyle,
+private fun FetchUserDataWithAnimation(coroutineScope: CoroutineScope, state: VKIDButtonState, vkid: VKID) {
+    val resources = LocalContext.current.resources
+    FetchUserData(
+        coroutineScope,
+        vkid,
+        object : OnFetchingProgress {
+            override suspend fun onPreFetch() {
+                if (state.userIconUrl == null) {
+                    state.rightIconVisible = true
+                    state.inProgress = true
+                }
+            }
+
+            override suspend fun onFetched(user: VKIDUser?) {
+                // For testing comment all other stuff and uncomment this function
+                // foreverAnimationTest(user!!, state, resources)
+                if (user != null) {
+                    val newText = resources.getString(R.string.vkid_log_in_as, user.firstName)
+                    val newIconUrl = user.photo200
+                    animateFetchedUserIfNeeded(state, newText, newIconUrl)
+                } else {
+                    val newText = resources.getString(R.string.vkid_log_in_with_vkid)
+                    animateFailedUser(state, newText)
+                }
+            }
+
+            override fun onDispose() {
+                state.inProgress = false
+            }
+        }
+    )
+}
+
+// for testing
+@Suppress("unused", "MagicNumber")
+private suspend fun foreverAnimationTest(user: VKIDUser, state: VKIDButtonState, resources: Resources) {
+    val newText = resources.getString(R.string.vkid_log_in_as, user.firstName)
+    val text = resources.getString(R.string.vkid_log_in_with_vkid)
+    val newIconUrl = user.photo200
+    fun resetState() {
+        state.inProgress = false
+        state.userIconUrl = null
+        state.text = text
+        state.userLoadFailed = false
+        state.textVisible = true
+        state.rightIconVisible = false
+    }
+    while (true) {
+        animateFetchedUserIfNeeded(state, newText, newIconUrl)
+        delay(2000)
+        animateFailedUser(state, text)
+        delay(2000)
+        resetState()
+        delay(2000)
+        animateFetchedUserIfNeeded(state, newText, newIconUrl)
+        delay(2000)
+        resetState()
+        delay(2000)
+    }
+}
+
+private suspend fun animateFetchedUserIfNeeded(state: VKIDButtonState, newText: String, newIconUrl: String?) {
+    if (state.text != newText || state.userIconUrl != newIconUrl) {
+        state.textVisible = false
+        state.rightIconVisible = false
+        delay(DURATION_OF_ANIMATION)
+        // trying to give some time to load image
+        state.inProgress = false
+        state.userIconUrl = newIconUrl
+        delay(DURATION_OF_DELAY_BETWEEN_FADE_ANIMATIONS)
+        state.text = newText
+        state.userLoadFailed = false
+        state.textVisible = true
+        state.rightIconVisible = true
+    }
+}
+
+private suspend fun animateFailedUser(state: VKIDButtonState, newText: String) {
+    state.text = newText
+    state.rightIconVisible = false
+    delay(DURATION_OF_ANIMATION)
+    delay(DURATION_OF_DELAY_BETWEEN_FADE_ANIMATIONS)
+    state.inProgress = false
+    state.userLoadFailed = true
+}
+
+@Composable
+private fun LeftIconBox(
+    style: VKIDButtonStyle
 ) {
     Box(
         modifier = Modifier
-            .iconPadding(style.sizeStyle)
-            .weight(1f),
-        contentAlignment = Alignment.CenterStart
+            .iconPadding(style.sizeStyle),
+        contentAlignment = Alignment.CenterStart,
     ) {
         VKIcon(style = style.iconStyle)
     }
 }
 
 @Composable
-private fun RowScope.TextBox(
+private fun TextBox(
     state: VKIDButtonState,
-    style: VKIDButtonStyle
+    style: VKIDButtonStyle,
 ) {
     val animatedAlpha by animateFloatAsState(
-        targetValue = if (state.buttonDataVisible) 1.0f else 0f,
+        targetValue = if (state.textVisible) 1.0f else 0f,
         label = "textAlpha",
         animationSpec = easeInOutAnimation
     )
@@ -117,7 +202,7 @@ private fun RowScope.TextBox(
     @Suppress("MagicNumber")
     Box(
         modifier = Modifier
-            .weight(4f)
+            .fillMaxHeight()
             .graphicsLayer { this.alpha = animatedAlpha },
         contentAlignment = Alignment.Center
     ) {
@@ -137,28 +222,30 @@ private fun RowScope.TextBox(
 @Composable
 private fun RowScope.RightIconBox(
     state: VKIDButtonState,
-    style: VKIDButtonStyle
+    style: VKIDButtonStyle,
+    weight: Float,
 ) {
     val animatedAlpha by animateFloatAsState(
-        targetValue = if (state.buttonDataVisible) 1.0f else 0f,
+        targetValue = if (state.rightIconVisible) 1.0f else 0f,
         animationSpec = easeInOutAnimation,
         label = "rightIconAlpha"
     )
     Box(
         modifier = Modifier
-            .weight(1f)
+            .weight(weight)
             .iconPadding(style.sizeStyle)
             .graphicsLayer { this.alpha = animatedAlpha },
         contentAlignment = Alignment.CenterEnd
     ) {
         if (state.inProgress) {
             CircleProgress(style.progressStyle)
-        } else if (state.userIconUrl != null) {
+        }
+        if (state.userIconUrl != null) {
             AsyncImage(
                 model = state.userIconUrl,
                 contentDescription = null,
                 modifier = Modifier.clip(CircleShape),
-                contentScale = ContentScale.Fit
+                contentScale = ContentScale.FillHeight,
             )
         }
     }
@@ -175,6 +262,23 @@ private fun PreviewVKIDButton() {
 private fun PreviewVKIDButtonProgress() {
     VKIDButton(
         onAuth = {},
-        state = VKIDButtonState(inProgress = true, text = stringResource(R.string.vkid_log_in_with_vkid))
+        state = VKIDButtonState(
+            inProgress = true,
+            text = stringResource(R.string.vkid_log_in_with_vkid),
+            rightIconVisible = true,
+        )
+    )
+}
+
+@Preview
+@Composable
+private fun PreviewVKIDButtonUserFailed() {
+    VKIDButton(
+        onAuth = {},
+        state = VKIDButtonState(
+            inProgress = false,
+            text = stringResource(R.string.vkid_log_in_with_vkid),
+            userLoadFailed = true
+        )
     )
 }

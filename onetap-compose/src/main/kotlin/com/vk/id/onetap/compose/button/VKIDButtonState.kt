@@ -20,12 +20,16 @@ public open class VKIDButtonState(
     inProgress: Boolean,
     text: String,
     userIconUrl: String? = null,
-    buttonDataVisible: Boolean = true
+    textVisible: Boolean = true,
+    rightIconVisible: Boolean = false,
+    userLoadFailed: Boolean = false
 ) {
     private var _inProgress: Boolean by mutableStateOf(inProgress)
     private var _text: String by mutableStateOf(text)
     private var _userIconUrl: String? by mutableStateOf(userIconUrl)
-    private var _buttonDataVisible: Boolean by mutableStateOf(buttonDataVisible)
+    private var _textVisible: Boolean by mutableStateOf(textVisible)
+    private var _rightIconVisible: Boolean by mutableStateOf(rightIconVisible)
+    private var _userLoadFailed: Boolean by mutableStateOf(userLoadFailed)
 
     internal var inProgress: Boolean
         get() = _inProgress
@@ -51,11 +55,27 @@ public open class VKIDButtonState(
             }
         }
 
-    internal var buttonDataVisible: Boolean
-        get() = _buttonDataVisible
+    internal var textVisible: Boolean
+        get() = _textVisible
         internal set(value) {
-            if (value != _buttonDataVisible) {
-                _buttonDataVisible = value
+            if (value != _textVisible) {
+                _textVisible = value
+            }
+        }
+
+    internal var rightIconVisible: Boolean
+        get() = _rightIconVisible
+        internal set(value) {
+            if (value != _rightIconVisible) {
+                _rightIconVisible = value
+            }
+        }
+
+    internal var userLoadFailed: Boolean
+        get() = _userLoadFailed
+        internal set(value) {
+            if (value != _userLoadFailed) {
+                _userLoadFailed = value
             }
         }
 }

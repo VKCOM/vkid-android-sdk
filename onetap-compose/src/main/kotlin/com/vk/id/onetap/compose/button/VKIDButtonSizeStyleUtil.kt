@@ -11,23 +11,27 @@ import com.vk.id.onetap.common.button.VKIDButtonSizeStyle
 internal fun Modifier.iconPadding(
     style: VKIDButtonSizeStyle
 ) = padding(
-    when (style) {
-        VKIDButtonSizeStyle.DEFAULT -> 8
-        VKIDButtonSizeStyle.SMALL_32 -> 4
-        VKIDButtonSizeStyle.SMALL_34 -> 5
-        VKIDButtonSizeStyle.SMALL_36 -> 6
-        VKIDButtonSizeStyle.SMALL_38 -> 7
-        VKIDButtonSizeStyle.MEDIUM_40 -> 6
-        VKIDButtonSizeStyle.MEDIUM_42 -> 7
-        VKIDButtonSizeStyle.MEDIUM_44 -> 8
-        VKIDButtonSizeStyle.MEDIUM_46 -> 9
-        VKIDButtonSizeStyle.LARGE_48 -> 10
-        VKIDButtonSizeStyle.LARGE_50 -> 11
-        VKIDButtonSizeStyle.LARGE_52 -> 12
-        VKIDButtonSizeStyle.LARGE_54 -> 13
-        VKIDButtonSizeStyle.LARGE_56 -> 14
-    }.dp
+    style.iconPadding()
+
 )
+
+@Suppress("CyclomaticComplexMethod", "MagicNumber")
+internal fun VKIDButtonSizeStyle.iconPadding() = when (this) {
+    VKIDButtonSizeStyle.DEFAULT -> 8
+    VKIDButtonSizeStyle.SMALL_32 -> 4
+    VKIDButtonSizeStyle.SMALL_34 -> 5
+    VKIDButtonSizeStyle.SMALL_36 -> 6
+    VKIDButtonSizeStyle.SMALL_38 -> 7
+    VKIDButtonSizeStyle.MEDIUM_40 -> 6
+    VKIDButtonSizeStyle.MEDIUM_42 -> 7
+    VKIDButtonSizeStyle.MEDIUM_44 -> 8
+    VKIDButtonSizeStyle.MEDIUM_46 -> 9
+    VKIDButtonSizeStyle.LARGE_48 -> 10
+    VKIDButtonSizeStyle.LARGE_50 -> 11
+    VKIDButtonSizeStyle.LARGE_52 -> 12
+    VKIDButtonSizeStyle.LARGE_54 -> 13
+    VKIDButtonSizeStyle.LARGE_56 -> 14
+}.dp
 
 internal fun Modifier.height(style: VKIDButtonSizeStyle): Modifier {
     return height(style.heightDp().dp)
