@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.lifecycle.lifecycleScope
 import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
@@ -14,12 +15,13 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         VKID.logsEnabled = true
-        setContent {
-            CreateButtonsSample(
-                onSuccess = ::onVKIDAuthSuccess,
-                onFail = ::onVKIDAuthFail
-            )
-        }
+        setContentView(R.layout.activity_main)
+//        setContent {
+//            CreateButtonsSample(
+//                onSuccess = ::onVKIDAuthSuccess,
+//                onFail = ::onVKIDAuthFail
+//            )
+//        }
     }
 
     private fun onVKIDAuthSuccess(accessToken: AccessToken) {

@@ -3,16 +3,21 @@ public final class com/vk/id/onetap/compose/button/VKIDButtonKt {
 }
 
 public final class com/vk/id/onetap/compose/button/VKIDButtonSmallKt {
-	public static final fun VKIDButtonSmall (Lkotlin/jvm/functions/Function1;Lcom/vk/id/onetap/common/button/VKIDButtonStyle;Lkotlin/jvm/functions/Function1;Lcom/vk/id/onetap/compose/button/VKIDButtonState;Landroidx/compose/runtime/Composer;II)V
+	public static final fun VKIDButtonSmall (Lcom/vk/id/onetap/compose/button/VKIDSmallButtonState;Lcom/vk/id/onetap/common/button/VKIDButtonStyle;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;II)V
 }
 
-public final class com/vk/id/onetap/compose/button/VKIDButtonState {
+public class com/vk/id/onetap/compose/button/VKIDButtonState {
 	public static final field $stable I
-	public fun <init> (ZLjava/lang/String;Ljava/lang/String;)V
-	public synthetic fun <init> (ZLjava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (ZLjava/lang/String;Ljava/lang/String;Z)V
+	public synthetic fun <init> (ZLjava/lang/String;Ljava/lang/String;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
 }
 
 public final class com/vk/id/onetap/compose/button/VKIDButtonStateKt {
 	public static final fun rememberVKIDButtonState (Ljava/lang/String;ZLandroidx/compose/runtime/Composer;II)Lcom/vk/id/onetap/compose/button/VKIDButtonState;
+}
+
+public final class com/vk/id/onetap/compose/button/VKIDSmallButtonState : com/vk/id/onetap/compose/button/VKIDButtonState {
+	public static final field $stable I
+	public fun <init> (ZZ)V
 }
 
