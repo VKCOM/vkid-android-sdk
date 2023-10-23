@@ -14,20 +14,21 @@ import com.vk.id.onetap.compose.R
 
 @Composable
 internal fun VKIcon(
-    style: VKIconStyle
+    modifier: Modifier = Modifier,
+    style: VKIconStyle,
 ) {
     Image(
         painter = painterResource(id = R.drawable.vkid_icon),
         contentDescription = null,
         colorFilter = style.colorStyle.asColorFilter(),
-        modifier = Modifier.size(style.sizeStyle).padding(3.dp)
+        modifier = modifier.size(style.sizeStyle).padding(3.dp)
     )
 }
 
 @Preview
 @Composable
 private fun VKIconBlue() = VKIcon(
-    VKIconStyle(
+    style = VKIconStyle(
         colorStyle = VKIconColorStyle.BLUE,
         sizeStyle = VKIconSizeStyle.NORMAL,
     )
@@ -36,7 +37,7 @@ private fun VKIconBlue() = VKIcon(
 @Preview
 @Composable
 private fun VKIconWhite() = VKIcon(
-    VKIconStyle(
+    style = VKIconStyle(
         colorStyle = VKIconColorStyle.WHITE,
         sizeStyle = VKIconSizeStyle.SMALL,
     )
