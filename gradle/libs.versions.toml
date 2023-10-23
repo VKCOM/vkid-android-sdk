@@ -13,6 +13,7 @@ binary-compatibility-validator = "0.13.2"
 kotlin = "1.8.20"
 kotlinxCoroutines = "1.7.1"
 ksp = "1.8.20-1.0.11"
+lifecycle-runtime-compose = "2.6.2"
 mockk = "1.13.5"
 okHttpVersion = "4.11.0"
 okioVersion = "3.4.0"
@@ -32,6 +33,7 @@ androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-compose-ui-util = { group = "androidx.compose.ui", name = "ui-util" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
+androidx-lifecycle-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycle-runtime-compose" }
 androidx-preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }
 androidx-preference-ktx = { group = "androidx.preference", name = "preference-ktx", version.ref = "preference" }
 coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
