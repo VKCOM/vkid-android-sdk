@@ -1,62 +1,31 @@
 package com.vk.id.sample
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.vk.id.AccessToken
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.vk.id.VKID
-import com.vk.id.VKIDAuthFail
-import com.vk.id.sample.button.CreateButtonsSample
+import com.vk.id.sample.button.OnetapComposeStylingScreen
+import com.vk.id.sample.button.OnetapXmlScreen
+import com.vk.id.sample.home.HomeScreen
 
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         VKID.logsEnabled = true
-//        setContentView(R.layout.activity_main)
         setContent {
-            CreateButtonsSample(
-                onSuccess = ::onVKIDAuthSuccess,
-                onFail = ::onVKIDAuthFail
-            )
-        }
-    }
-
-    private fun onVKIDAuthSuccess(accessToken: AccessToken) {
-        val token = accessToken.token.hideLastCharacters(TOKEN_VISIBLE_CHARACTERS)
-        showToast("There is token: $token")
-    }
-
-    private fun onVKIDAuthFail(fail: VKIDAuthFail) {
-        when (fail) {
-            is VKIDAuthFail.Canceled -> {
-                showToast("Auth canceled")
-            }
-
-            else -> {
-                showToast("Something wrong: ${fail.description}")
+            val navController = rememberNavController()
+            NavHost(
+                navController = navController,
+                startDestination = "home"
+            ) {
+                composable("home") { HomeScreen(navController) }
+                composable("onetap-compose-styling") { OnetapComposeStylingScreen() }
+                composable("onetap-xml") { OnetapXmlScreen() }
             }
         }
-    }
-
-    private fun String.hideLastCharacters(firstCharactersToKeepVisible: Int): String {
-        return if (this.length <= firstCharactersToKeepVisible) {
-            this
-        } else {
-            this.substring(0, firstCharactersToKeepVisible) + "..."
-        }
-    }
-
-    private fun showToast(text: String) {
-        toastOnScreen?.cancel()
-        toastOnScreen = Toast.makeText(this@MainActivity, text, Toast.LENGTH_LONG)
-        toastOnScreen?.show()
-    }
-
-    private var toastOnScreen: Toast? = null
-
-    private companion object {
-        const val TOKEN_VISIBLE_CHARACTERS = 10
     }
 }
