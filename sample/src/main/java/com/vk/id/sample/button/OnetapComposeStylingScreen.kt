@@ -95,7 +95,7 @@ fun OnetapComposeStylingScreen() {
     }
 }
 
-private fun onVKIDAuthSuccess(context: Context, accessToken: AccessToken) {
+internal fun onVKIDAuthSuccess(context: Context, accessToken: AccessToken) {
     val token = accessToken.token.hideLastCharacters(TOKEN_VISIBLE_CHARACTERS)
     showToast(context, "There is token: $token")
 }
@@ -104,7 +104,7 @@ private fun showToast(context: Context, text: String) {
     Toast.makeText(context, text, Toast.LENGTH_LONG).show()
 }
 
-private fun onVKIDAuthFail(context: Context, fail: VKIDAuthFail) {
+internal fun onVKIDAuthFail(context: Context, fail: VKIDAuthFail) {
     when (fail) {
         is VKIDAuthFail.Canceled -> {
             showToast(context, "Auth canceled")
