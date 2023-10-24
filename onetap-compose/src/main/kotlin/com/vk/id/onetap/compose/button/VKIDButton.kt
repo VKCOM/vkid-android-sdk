@@ -5,9 +5,9 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicText
@@ -52,7 +52,7 @@ public fun VKIDButton(
     val context = LocalContext.current
     val vkid = remember { VKID(context) }
     FetchUserDataWithAnimation(coroutineScope, state, vkid)
-    Row(
+    Box(
         modifier = modifier
             .shadow(style.elevationStyle, style.cornersStyle)
             .height(style.sizeStyle)
@@ -61,8 +61,6 @@ public fun VKIDButton(
             .clipToBounds()
             .background(style.backgroundStyle)
             .clickable(state, coroutineScope, vkid, style, onAuth, onFail),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically,
     ) {
         // 0.001 and 0.999 because weight can't be null
         @Suppress("MagicNumber")
@@ -78,13 +76,20 @@ public fun VKIDButton(
             animationSpec = easeInOutAnimation
         )
 
-        Spacer(modifier = Modifier.weight(1f - animatedSpaceWeight))
-        LeftIconBox(style)
-        Spacer(modifier = Modifier.weight(animatedSpaceWeight))
-        TextBox(state, style)
-        Spacer(modifier = Modifier.width(animatedRightIconWidthCompensation.dp))
-        RightIconBox(state, style, animatedSpaceWeight)
-        Spacer(modifier = Modifier.weight(1f - animatedSpaceWeight))
+        Row(
+            Modifier.fillMaxSize(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Spacer(modifier = Modifier.weight(1f - animatedSpaceWeight))
+            LeftIconBox(style)
+            Spacer(modifier = Modifier.weight(animatedSpaceWeight))
+            TextBox(state, style)
+            Spacer(modifier = Modifier.weight(animatedSpaceWeight))
+            Spacer(modifier = Modifier.width(animatedRightIconWidthCompensation.dp))
+            Spacer(modifier = Modifier.weight(1f - animatedSpaceWeight))
+        }
+        RightIconBox(state, style, Modifier.align(Alignment.CenterEnd))
     }
 }
 
@@ -220,10 +225,10 @@ private fun TextBox(
 }
 
 @Composable
-private fun RowScope.RightIconBox(
+private fun RightIconBox(
     state: VKIDButtonState,
     style: VKIDButtonStyle,
-    weight: Float,
+    modifier: Modifier,
 ) {
     val animatedAlpha by animateFloatAsState(
         targetValue = if (state.rightIconVisible) 1.0f else 0f,
@@ -231,8 +236,7 @@ private fun RowScope.RightIconBox(
         label = "rightIconAlpha"
     )
     Box(
-        modifier = Modifier
-            .weight(weight)
+        modifier = modifier
             .iconPadding(style.sizeStyle)
             .graphicsLayer { this.alpha = animatedAlpha },
         contentAlignment = Alignment.CenterEnd
