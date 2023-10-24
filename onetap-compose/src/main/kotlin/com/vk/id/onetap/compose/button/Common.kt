@@ -16,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.vk.id.AccessToken
@@ -41,7 +40,6 @@ internal fun Modifier.clickable(
         interactionSource = remember { MutableInteractionSource() },
         indication = rememberRipple(
             color = style.rippleStyle.asColor(),
-            radius = style.cornersStyle.radiusDp.dp
         ),
         enabled = state.inProgress.not(),
         role = Role.Button,
