@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
+import com.vk.id.onetap.compose.button.VKIDButtonStyle
 import com.vk.id.onetap.xml.VKIDButton
 import com.vk.id.onetap.xml.VKIDButtonSmall
 
@@ -28,12 +29,12 @@ fun OnetapXmlScreen() {
         }
     )
 }
-
 private fun createVKIDButton(context: Context) = VKIDButton(context).apply {
     val layoutParams = LayoutParams(context.dpToPixels(VK_ID_BUTTON_WIDTH), LayoutParams.WRAP_CONTENT)
     layoutParams.gravity = Gravity.CENTER
     layoutParams.topMargin = context.dpToPixels(VK_ID_BUTTON_MARGIN)
     layoutParams.bottomMargin = context.dpToPixels(VK_ID_BUTTON_MARGIN)
+    style = VKIDButtonStyle.TransparentDark()
     this.layoutParams = layoutParams
 }
 
@@ -42,6 +43,7 @@ private fun createVKIDButtonSmall(context: Context) = VKIDButtonSmall(context).a
     layoutParams.gravity = Gravity.CENTER
     layoutParams.topMargin = context.dpToPixels(VK_ID_BUTTON_MARGIN)
     layoutParams.bottomMargin = context.dpToPixels(VK_ID_BUTTON_MARGIN)
+    style = VKIDButtonStyle.TransparentDark()
     this.layoutParams = layoutParams
 }
 

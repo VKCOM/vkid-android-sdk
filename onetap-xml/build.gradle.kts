@@ -1,5 +1,5 @@
 plugins {
-    id("vkid.android.library")
+    id("vkid.android.library.compose")
     id("vkid.android.publish")
     id("org.jetbrains.kotlinx.binary-compatibility-validator")
 }
@@ -14,7 +14,8 @@ android {
 
 dependencies {
     api(project(":vkid"))
-    api(project(":onetap-common"))
+    implementation(project(":onetap-compose"))
+    implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.core.ktx)
     implementation(libs.coil)

@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
-import com.vk.id.onetap.common.R
+import com.vk.id.onetap.compose.R
 
 @Composable
 public fun rememberVKIDButtonState(
