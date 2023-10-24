@@ -13,11 +13,11 @@ import coil.transform.CircleCropTransformation
 import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
-import com.vk.id.onetap.xml.databinding.VkidButtonLayoutBinding
-import kotlin.properties.Delegates.observable
-import com.vk.id.onetap.common.R as commonR
+import com.vk.id.onetap.common.R
+import com.vk.id.onetap.xml.databinding.VkidButtonSmallLayoutBinding
+import kotlin.properties.Delegates
 
-public class VKIDButton @JvmOverloads constructor(
+public class VKIDButtonSmall @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
@@ -26,14 +26,14 @@ public class VKIDButton @JvmOverloads constructor(
     private val vkId = VKID(context)
     private var onAuth: (AccessToken) -> Unit = {}
     private var onFail: (VKIDAuthFail) -> Unit = {}
-    private var state by observable(
+    private var state by Delegates.observable(
         VKIDButtonState(
             inProgress = false,
-            text = context.getString(commonR.string.vkid_log_in_with_vkid)
+            text = context.getString(R.string.vkid_log_in_with_vkid)
         )
     ) { _, _, newState -> render(newState) }
 
-    private val binding = VkidButtonLayoutBinding.inflate(LayoutInflater.from(context), this)
+    private val binding = VkidButtonSmallLayoutBinding.inflate(LayoutInflater.from(context), this)
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
@@ -49,14 +49,13 @@ public class VKIDButton @JvmOverloads constructor(
         this.onAuth = onAuth
         this.onFail = onFail
     }
-
     private fun render(state: VKIDButtonState) {
         binding.progress.isVisible = state.inProgress
-        binding.userImage.isVisible = state.userIconUrl != null
+        binding.vkidIcon.isVisible = state.userIconUrl == null && !state.inProgress
+        binding.userImage.isVisible = state.userIconUrl != null && !state.inProgress
         binding.userImage.load(state.userIconUrl) {
             scale(Scale.FIT)
             transformations(CircleCropTransformation())
         }
-        binding.vkidButtonText.text = state.text
     }
 }

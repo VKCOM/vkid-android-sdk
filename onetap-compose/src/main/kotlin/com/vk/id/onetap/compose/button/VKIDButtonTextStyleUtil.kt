@@ -2,8 +2,8 @@ package com.vk.id.onetap.compose.button
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.colorResource
-import com.vk.id.onetap.common.button.VKIDButtonTextStyle
 import com.vk.id.onetap.common.R
+import com.vk.id.onetap.common.button.VKIDButtonTextStyle
 
 @Composable
 internal fun VKIDButtonTextStyle.asColorResource() = when (this) {
