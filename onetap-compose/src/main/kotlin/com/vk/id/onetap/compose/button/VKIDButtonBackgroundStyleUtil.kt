@@ -4,8 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.res.colorResource
+import com.vk.id.onetap.common.R
 import com.vk.id.onetap.common.button.VKIDButtonBackgroundStyle
-import com.vk.id.onetap.compose.R
 
 internal fun Modifier.background(style: VKIDButtonBackgroundStyle) = composed {
     val backgroundResource = when (style) {

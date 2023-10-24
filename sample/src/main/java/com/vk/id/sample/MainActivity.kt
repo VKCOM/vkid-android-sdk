@@ -14,6 +14,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         VKID.logsEnabled = true
+//        setContentView(R.layout.activity_main)
         setContent {
             CreateButtonsSample(
                 onSuccess = ::onVKIDAuthSuccess,

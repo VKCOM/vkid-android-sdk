@@ -3,8 +3,8 @@ package com.vk.id.onetap.compose.icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.colorResource
+import com.vk.id.onetap.common.R
 import com.vk.id.onetap.common.icon.VKIconColorStyle
-import com.vk.id.onetap.compose.R
 
 @Composable
 internal fun VKIconColorStyle.asColorFilter(): ColorFilter {
