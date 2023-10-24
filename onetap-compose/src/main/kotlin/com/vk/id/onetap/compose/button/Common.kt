@@ -45,27 +45,23 @@ internal fun Modifier.clickable(
         ),
         enabled = state.inProgress.not(),
         role = Role.Button,
-        onClick = { startAuth(coroutineScope, state, vkid, onAuth, onFail) }
+        onClick = { startAuth(coroutineScope, vkid, onAuth, onFail) }
     )
 }
 
-internal fun startAuth(
+private fun startAuth(
     coroutineScope: CoroutineScope,
-    state: VKIDButtonState,
     vkid: VKID,
     onAuth: (AccessToken) -> Unit,
     onFail: (VKIDAuthFail) -> Unit
 ) {
     coroutineScope.launch {
-        state.inProgress = true
         vkid.authorize(object : VKID.AuthCallback {
             override fun onSuccess(accessToken: AccessToken) {
-                state.inProgress = false
                 onAuth(accessToken)
             }
 
             override fun onFail(fail: VKIDAuthFail) {
-                state.inProgress = false
                 onFail(fail)
             }
         })
