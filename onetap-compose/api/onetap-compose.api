@@ -8,8 +8,8 @@ public final class com/vk/id/onetap/compose/button/VKIDButtonSmallKt {
 
 public class com/vk/id/onetap/compose/button/VKIDButtonState {
 	public static final field $stable I
-	public fun <init> (ZLjava/lang/String;Ljava/lang/String;Z)V
-	public synthetic fun <init> (ZLjava/lang/String;Ljava/lang/String;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (ZLjava/lang/String;Ljava/lang/String;ZZZ)V
+	public synthetic fun <init> (ZLjava/lang/String;Ljava/lang/String;ZZZILkotlin/jvm/internal/DefaultConstructorMarker;)V
 }
 
 public final class com/vk/id/onetap/compose/button/VKIDButtonStateKt {

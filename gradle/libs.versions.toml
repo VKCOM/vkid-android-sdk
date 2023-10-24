@@ -7,7 +7,9 @@ androidxBrowser = "1.5.0"
 androidxComposeBom = "2023.04.01"
 androidxComposeCompiler = "1.4.6"
 androidxConstraintLayout = "2.1.4"
+androidxComposeUi = "1.6.0-alpha08"
 androidxCore = "1.9.0"
+androidxNavigationCompose = "2.7.4"
 coil = "2.4.0"
 detekt = "1.22.0"
 binary-compatibility-validator = "0.13.2"
@@ -30,12 +32,14 @@ androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", versi
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
 androidx-compose-material-ripple = { group = "androidx.compose.material", name = "material-ripple" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-compose-ui = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "androidxComposeUi" }
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-compose-ui-util = { group = "androidx.compose.ui", name = "ui-util" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidxConstraintLayout" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
 androidx-lifecycle-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycle-runtime-compose" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigationCompose"}
 androidx-preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }
 androidx-preference-ktx = { group = "androidx.preference", name = "preference-ktx", version.ref = "preference" }
 coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }

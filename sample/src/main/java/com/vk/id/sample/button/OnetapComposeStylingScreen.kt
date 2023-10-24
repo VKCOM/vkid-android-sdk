@@ -1,11 +1,13 @@
 package com.vk.id.sample.button
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -17,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -31,16 +34,15 @@ import com.vk.id.onetap.compose.button.VKIDButton
 import com.vk.id.onetap.compose.button.VKIDButtonSmall
 import com.vk.id.sample.R
 
+private const val TOKEN_VISIBLE_CHARACTERS = 10
+
 @Composable
-fun CreateButtonsSample(
-    onSuccess: (AccessToken) -> Unit,
-    onFail: (VKIDAuthFail) -> Unit = {},
-) {
+fun OnetapComposeStylingScreen() {
+    val context = LocalContext.current
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .verticalScroll(rememberScrollState())
-            .fillMaxHeight(),
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -79,17 +81,46 @@ fun CreateButtonsSample(
                     VKIDButton(
                         modifier = it.modifier,
                         style = it.style,
-                        onAuth = onSuccess,
-                        onFail = onFail
+                        onAuth = { onVKIDAuthSuccess(context, it) },
+                        onFail = { onVKIDAuthFail(context, it) }
                     )
                 }
                 is ListItem.SmallButton -> VKIDButtonSmall(
                     style = it.style,
-                    onAuth = onSuccess,
-                    onFail = onFail
+                    onAuth = { onVKIDAuthSuccess(context, it) },
+                    onFail = { onVKIDAuthFail(context, it) }
                 )
             }
         }
+    }
+}
+
+internal fun onVKIDAuthSuccess(context: Context, accessToken: AccessToken) {
+    val token = accessToken.token.hideLastCharacters(TOKEN_VISIBLE_CHARACTERS)
+    showToast(context, "There is token: $token")
+}
+
+private fun showToast(context: Context, text: String) {
+    Toast.makeText(context, text, Toast.LENGTH_LONG).show()
+}
+
+internal fun onVKIDAuthFail(context: Context, fail: VKIDAuthFail) {
+    when (fail) {
+        is VKIDAuthFail.Canceled -> {
+            showToast(context, "Auth canceled")
+        }
+
+        else -> {
+            showToast(context, "Something wrong: ${fail.description}")
+        }
+    }
+}
+
+private fun String.hideLastCharacters(firstCharactersToKeepVisible: Int): String {
+    return if (this.length <= firstCharactersToKeepVisible) {
+        this
+    } else {
+        this.substring(0, firstCharactersToKeepVisible) + "..."
     }
 }
 
