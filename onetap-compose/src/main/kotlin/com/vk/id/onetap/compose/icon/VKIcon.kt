@@ -1,13 +1,11 @@
 package com.vk.id.onetap.compose.icon
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import com.vk.id.onetap.compose.R
 
 @Composable
 internal fun VKIcon(
@@ -15,10 +13,10 @@ internal fun VKIcon(
     style: VKIconStyle,
 ) {
     Image(
-        painter = painterResource(id = R.drawable.vkid_icon),
+        painter = painterResource(style.colorStyle.asPainterResource()),
         contentDescription = null,
-        colorFilter = style.colorStyle.asColorFilter(),
-        modifier = modifier.size(style.sizeStyle).padding(3.dp)
+        contentScale = ContentScale.Fit,
+        modifier = modifier.size(style.sizeStyle)
     )
 }
 
