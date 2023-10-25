@@ -7,9 +7,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.vk.id.VKID
-import com.vk.id.sample.button.OnetapComposeStylingScreen
-import com.vk.id.sample.button.OnetapXmlScreen
 import com.vk.id.sample.home.HomeScreen
+import com.vk.id.sample.styling.OnetapComposeStylingScreen
+import com.vk.id.sample.styling.OnetapXmlScreen
 
 class MainActivity : ComponentActivity() {
 
