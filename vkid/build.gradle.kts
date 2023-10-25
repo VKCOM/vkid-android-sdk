@@ -26,7 +26,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.vk.userid)
     implementation(libs.androidx.annotation)
     implementation(libs.androidx.browser)
     implementation(libs.androidx.preference)
