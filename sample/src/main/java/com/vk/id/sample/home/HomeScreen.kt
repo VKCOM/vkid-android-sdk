@@ -26,8 +26,8 @@ import com.vk.id.onetap.compose.button.VKIDButton
 import com.vk.id.onetap.compose.button.VKIDButtonCornersStyle
 import com.vk.id.onetap.compose.button.VKIDButtonStyle
 import com.vk.id.sample.R
-import com.vk.id.sample.button.onVKIDAuthFail
-import com.vk.id.sample.button.onVKIDAuthSuccess
+import com.vk.id.sample.styling.onVKIDAuthFail
+import com.vk.id.sample.styling.onVKIDAuthSuccess
 
 @Composable
 fun HomeScreen(
