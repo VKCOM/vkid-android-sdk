@@ -18,7 +18,7 @@ public class VKIDButton @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : AbstractComposeView(context, attrs, defStyleAttr) {
 
-    public var style: VKIDButtonStyle = VKIDButtonStyle.Blue()
+    public var style: VKIDButtonStyle = parseAttrs(context, attrs)
         set(value) {
             field = value
             onStyleChange(value)

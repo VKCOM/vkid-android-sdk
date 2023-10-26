@@ -1,8 +1,7 @@
 package com.vk.id.onetap.compose.icon
 
+import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.res.colorResource
 import com.vk.id.onetap.compose.R
 
 public enum class VKIconColorStyle {
@@ -11,10 +10,8 @@ public enum class VKIconColorStyle {
 }
 
 @Composable
-internal fun VKIconColorStyle.asColorFilter(): ColorFilter {
-    val colorResource = when (this) {
-        VKIconColorStyle.WHITE -> R.color.vkid_white
-        VKIconColorStyle.BLUE -> R.color.vkid_azure_A100
-    }
-    return ColorFilter.tint(colorResource(id = colorResource))
+@DrawableRes
+internal fun VKIconColorStyle.asPainterResource() = when (this) {
+    VKIconColorStyle.WHITE -> R.drawable.vkid_icon_white
+    VKIconColorStyle.BLUE -> R.drawable.vkid_icon_blue
 }

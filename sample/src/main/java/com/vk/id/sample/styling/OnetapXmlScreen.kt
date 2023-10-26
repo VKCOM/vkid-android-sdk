@@ -3,7 +3,6 @@ package com.vk.id.sample.styling
 import android.content.Context
 import android.util.TypedValue
 import android.view.Gravity
-import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.LinearLayout.LayoutParams
@@ -19,7 +18,7 @@ import com.vk.id.onetap.xml.VKIDButton
 import com.vk.id.onetap.xml.VKIDButtonSmall
 import com.vk.id.sample.R
 
-private const val SPACER_HEIGHT = 24
+private const val BUTTON_PADDING = 12
 private const val TEXT_PADDING = 8
 
 @Composable
@@ -32,29 +31,19 @@ fun OnetapXmlScreen() {
                     LinearLayout(context).apply {
                         orientation = LinearLayout.VERTICAL
                         buttonStylingData.forEach {
-                            val view = when (it) {
-                                is ListItem.Spacer -> createSpacer(context, SPACER_HEIGHT, it.isDarkBackground)
-                                is ListItem.HalfSpacer -> createSpacer(context, SPACER_HEIGHT / 2, it.isDarkBackground)
+                            when (it) {
+                                is ListItem.Spacer -> null
+                                is ListItem.HalfSpacer -> null
                                 is ListItem.Title -> createText(context, it.text)
                                 is ListItem.Button -> createVKIDButton(context, it.style, it.width, it.isDarkBackground)
                                 is ListItem.SmallButton -> createVKIDButtonSmall(context, it.style)
-                            }
-                            addView(view)
+                            }?.let(::addView)
                         }
                     }
                 )
             }
         }
     )
-}
-
-private fun createSpacer(
-    context: Context,
-    height: Int,
-    isDarkBackground: Boolean,
-) = View(context).apply {
-    layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, context.dpToPixels(height))
-    if (isDarkBackground) setBackgroundResource(R.color.vkid_gray900)
 }
 
 private fun createText(
@@ -82,6 +71,7 @@ private fun createVKIDButton(
                 FrameLayout.LayoutParams.WRAP_CONTENT,
             )
             layoutParams.gravity = Gravity.CENTER
+            setPadding(context.dpToPixels(BUTTON_PADDING))
             this.style = style
             this.layoutParams = layoutParams
         }
@@ -94,6 +84,7 @@ private fun createVKIDButtonSmall(
 ) = VKIDButtonSmall(context).apply {
     val layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
     layoutParams.gravity = Gravity.CENTER
+    setPadding(context.dpToPixels(BUTTON_PADDING))
     this.style = style
     this.layoutParams = layoutParams
 }
