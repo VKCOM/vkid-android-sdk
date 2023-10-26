@@ -22,9 +22,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.vk.id.onetap.common.button.VKIDButtonCornersStyle
-import com.vk.id.onetap.common.button.VKIDButtonStyle
 import com.vk.id.onetap.compose.button.VKIDButton
+import com.vk.id.onetap.compose.button.VKIDButtonCornersStyle
+import com.vk.id.onetap.compose.button.VKIDButtonStyle
 import com.vk.id.sample.R
 import com.vk.id.sample.button.onVKIDAuthFail
 import com.vk.id.sample.button.onVKIDAuthSuccess

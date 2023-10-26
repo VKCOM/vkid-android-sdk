@@ -10,13 +10,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import com.vk.id.onetap.common.progress.CircleProgressStyle
 import com.vk.id.onetap.compose.R
-import com.vk.id.onetap.common.R as commonR
 
 @Composable
 internal fun CircleProgress(
@@ -41,13 +37,4 @@ internal fun CircleProgress(
         contentDescription = null,
         colorFilter = style.asColorFilter(),
     )
-}
-
-@Composable
-private fun CircleProgressStyle.asColorFilter(): ColorFilter {
-    val colorResource = when (this) {
-        CircleProgressStyle.LIGHT -> commonR.color.vkid_white
-        CircleProgressStyle.DARK -> commonR.color.vkid_black
-    }
-    return ColorFilter.tint(colorResource(id = colorResource))
 }

@@ -26,12 +26,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vk.id.AccessToken
 import com.vk.id.VKIDAuthFail
-import com.vk.id.onetap.common.button.VKIDButtonCornersStyle
-import com.vk.id.onetap.common.button.VKIDButtonElevationStyle
-import com.vk.id.onetap.common.button.VKIDButtonSizeStyle
-import com.vk.id.onetap.common.button.VKIDButtonStyle
 import com.vk.id.onetap.compose.button.VKIDButton
+import com.vk.id.onetap.compose.button.VKIDButtonCornersStyle
+import com.vk.id.onetap.compose.button.VKIDButtonElevationStyle
+import com.vk.id.onetap.compose.button.VKIDButtonSizeStyle
 import com.vk.id.onetap.compose.button.VKIDButtonSmall
+import com.vk.id.onetap.compose.button.VKIDButtonStyle
 import com.vk.id.sample.R
 
 private const val TOKEN_VISIBLE_CHARACTERS = 10

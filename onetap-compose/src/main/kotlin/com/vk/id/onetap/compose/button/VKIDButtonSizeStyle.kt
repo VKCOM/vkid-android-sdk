@@ -5,7 +5,26 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.vk.id.onetap.common.button.VKIDButtonSizeStyle
+
+public enum class VKIDButtonSizeStyle {
+    DEFAULT,
+
+    SMALL_32,
+    SMALL_34,
+    SMALL_36,
+    SMALL_38,
+
+    MEDIUM_40,
+    MEDIUM_42,
+    MEDIUM_44,
+    MEDIUM_46,
+
+    LARGE_48,
+    LARGE_50,
+    LARGE_52,
+    LARGE_54,
+    LARGE_56,
+}
 
 @Suppress("CyclomaticComplexMethod", "MagicNumber")
 internal fun Modifier.iconPadding(

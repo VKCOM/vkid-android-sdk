@@ -1,9 +1,9 @@
-package com.vk.id.onetap.common.button
+package com.vk.id.onetap.compose.button
 
-import com.vk.id.onetap.common.icon.VKIconColorStyle
-import com.vk.id.onetap.common.icon.VKIconStyle
-import com.vk.id.onetap.common.icon.asIconSizeStyle
-import com.vk.id.onetap.common.progress.CircleProgressStyle
+import com.vk.id.onetap.compose.icon.VKIconColorStyle
+import com.vk.id.onetap.compose.icon.VKIconStyle
+import com.vk.id.onetap.compose.icon.asIconSizeStyle
+import com.vk.id.onetap.compose.progress.CircleProgressStyle
 
 @Suppress("LongParameterList")
 public sealed class VKIDButtonStyle(
