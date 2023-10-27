@@ -74,6 +74,10 @@ private fun createVKIDButton(
             setPadding(context.dpToPixels(BUTTON_PADDING))
             this.style = style
             this.layoutParams = layoutParams
+            setCallbacks(
+                onAuth = { onVKIDAuthSuccess(context, it) },
+                onFail = { onVKIDAuthFail(context, it) },
+            )
         }
     )
 }
@@ -87,6 +91,10 @@ private fun createVKIDButtonSmall(
     setPadding(context.dpToPixels(BUTTON_PADDING))
     this.style = style
     this.layoutParams = layoutParams
+    setCallbacks(
+        onAuth = { onVKIDAuthSuccess(context, it) },
+        onFail = { onVKIDAuthFail(context, it) },
+    )
 }
 
 private fun Context.dpToPixels(dp: Int): Int {
