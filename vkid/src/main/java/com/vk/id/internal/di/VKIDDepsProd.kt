@@ -3,6 +3,7 @@ package com.vk.id.internal.di
 import android.content.ComponentName
 import android.content.Context
 import android.content.pm.ActivityInfo
+import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -22,6 +23,7 @@ import com.vk.id.internal.concurrent.CoroutinesDispatchers
 import com.vk.id.internal.concurrent.CoroutinesDispatchersProd
 import com.vk.id.internal.log.createLoggerForClass
 import com.vk.id.internal.store.PrefsStore
+import okhttp3.CertificatePinner
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.TimeUnit
@@ -60,6 +62,7 @@ internal class VKIDDepsProd(
             .writeTimeout(OKHTTP_TIMEOUT_SECONDS, TimeUnit.SECONDS)
             .connectTimeout(OKHTTP_TIMEOUT_SECONDS, TimeUnit.SECONDS)
             .addInterceptor(loggingInterceptor())
+            .addCertificatePinnerIfNecessary()
             .build()
         val api = VKIDApi(client)
         VKIDApiService(api)
@@ -107,7 +110,26 @@ internal class VKIDDepsProd(
         return logging
     }
 
+    private fun OkHttpClient.Builder.addCertificatePinnerIfNecessary(): OkHttpClient.Builder {
+        if (!isDebuggable()) {
+            certificatePinner(
+                CertificatePinner.Builder()
+                    .add(HOST_NAME, HOST_CERTIFICATE_HASH_1)
+                    .add(HOST_NAME, HOST_CERTIFICATE_HASH_2)
+                    .add(HOST_NAME, HOST_CERTIFICATE_HASH_3)
+                    .build()
+            )
+        }
+        return this
+    }
+
+    private fun isDebuggable() = appContext.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0
+
     private companion object {
+        private const val HOST_NAME = "api.vk.com"
+        private const val HOST_CERTIFICATE_HASH_1 = "sha256/p+lqTZ1LH3x8myQuyq7TpS5Acm5DkluDFCFB1Xnqc/4="
+        private const val HOST_CERTIFICATE_HASH_2 = "sha256/IQBnNBEiFuhj+8x6X8XLgh01V9Ic5/V3IRQLNFFc7v4="
+        private const val HOST_CERTIFICATE_HASH_3 = "sha256/K87oWBWM9UZfyddvDfoxL+8lpNyoUB2ptGtn0fv6G2Q="
         private const val OKHTTP_TIMEOUT_SECONDS = 60L
     }
 }
