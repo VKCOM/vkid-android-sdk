@@ -27,6 +27,6 @@
   ~ THIRD PARTIES FOR ANY DAMAGE IN CONNECTION WITH USE OF THE SOFTWARE.
 -->
 <resources>
-    <string name="vkid_log_in_with_vkid">Entrar pelo VK ID</string>
+    <string name="vkid_log_in_with_vkid">Entrar pelo VK ID</string>
     <string name="vkid_log_in_as">Continuar como %1$s</string>
 </resources>
