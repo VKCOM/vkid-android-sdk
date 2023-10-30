@@ -23,6 +23,9 @@ import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 /**
  * Configure base Kotlin with Android options
@@ -35,6 +38,11 @@ internal fun Project.configureKotlinAndroid(
 
         defaultConfig {
             minSdk = Versions.minSdk
+
+            buildFeatures.buildConfig = true
+            buildConfigField("Integer", "CI_BUILD_NUMBER", stringProperty("build.number", "-1"))
+            buildConfigField("String", "VKID_VERSION_NAME", "\"${stringProperty("VERSION_NAME", "NO_VERSION")}\"")
+            buildConfigField("Long", "VKID_BUILD_TIME", "${System.currentTimeMillis()}L")
         }
 
         compileOptions {

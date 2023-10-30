@@ -11,8 +11,10 @@ android {
 
     defaultConfig {
         applicationId = "com.vk.id.sample"
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = generateVersionCode()
+        versionName = properties["VERSION_NAME"] as? String ?: "NO_VERSION"
+
+        setProperty("archivesBaseName", "vkid-$versionName-$versionCode")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -63,4 +65,8 @@ fun ApplicationDefaultConfig.initVKID() {
         "VKIDClientID" to clientId,
         "VKIDClientSecret" to clientSecret
     ))
+}
+
+fun generateVersionCode(): Int {
+    return TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()).toInt()
 }
