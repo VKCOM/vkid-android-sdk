@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="vkid_log_in_with_vkid">Войти через VK ID</string>
+    <string name="vkid_log_in_with_vkid">Войти с VK ID</string>
     <string name="vkid_log_in_as">Продолжить как %1$s</string>
 </resources>
