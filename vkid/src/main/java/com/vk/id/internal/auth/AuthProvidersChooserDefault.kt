@@ -10,7 +10,10 @@ internal class AuthProvidersChooserDefault(
 ) : AuthProvidersChooser {
     private val logger = createLoggerForClass()
     override suspend fun chooseBest(): VKIDAuthProvider {
-        return silentAuthServicesProvider.getSilentAuthServices().firstOrNull()?.packageName
+        return silentAuthServicesProvider.getSilentAuthServices()
+            .maxByOrNull { it.weight }
+            ?.componentName
+            ?.packageName
             ?.let {
                 logger.debug("Silent auth provider found: $it")
                 AppAuthProvider(it)

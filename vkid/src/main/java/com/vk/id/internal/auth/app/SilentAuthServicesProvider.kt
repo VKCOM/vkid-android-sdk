@@ -11,7 +11,7 @@ internal class SilentAuthServicesProvider(
     private val cache: TrustedProvidersCache
 ) {
 
-    suspend fun getSilentAuthServices(): List<ComponentName> {
+    suspend fun getSilentAuthServices(): List<SilentAuthProviderData> {
         val trustedProviders = cache.getSilentAuthProviders()
         return getAppsWithSilentAuthServices()
             .asSequence()
@@ -19,7 +19,7 @@ internal class SilentAuthServicesProvider(
             .excludeCurrentApp()
             .filter { it.isAllowedToOpenWebAuth() }
             .sortedByDescending { it.weight }
-            .map { it.componentName }
+            .map { SilentAuthProviderData(it.componentName, it.weight) }
             .toList()
     }
 
