@@ -70,6 +70,10 @@ public class VKID {
         this.serviceCredentials = deps.serviceCredentials
         this.vkSilentAuthInfoProvider = deps.vkSilentAuthInfoProvider
         this.userDataFetcher = deps.userDataFetcher
+
+        logger.info(
+            "VKID initialized\nVersion name: ${BuildConfig.VKID_VERSION_NAME}\nCI build number: ${BuildConfig.CI_BUILD_NUMBER}"
+        )
     }
 
     private val logger = createLoggerForClass()

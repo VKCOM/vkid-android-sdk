@@ -1,3 +1,13 @@
+public final class com/vk/id/onetap/xml/BuildConfig {
+	public static final field BUILD_TYPE Ljava/lang/String;
+	public static final field CI_BUILD_NUMBER Ljava/lang/Integer;
+	public static final field DEBUG Z
+	public static final field LIBRARY_PACKAGE_NAME Ljava/lang/String;
+	public static final field VKID_BUILD_TIME Ljava/lang/Long;
+	public static final field VKID_VERSION_NAME Ljava/lang/String;
+	public fun <init> ()V
+}
+
 public final class com/vk/id/onetap/xml/VKIDButton : androidx/compose/ui/platform/AbstractComposeView {
 	public static final field $stable I
 	public fun <init> (Landroid/content/Context;)V
@@ -22,29 +32,5 @@ public final class com/vk/id/onetap/xml/VKIDButtonSmall : androidx/compose/ui/pl
 	public final fun setCallbacks (Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)V
 	public static synthetic fun setCallbacks$default (Lcom/vk/id/onetap/xml/VKIDButtonSmall;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
 	public final fun setStyle (Lcom/vk/id/onetap/compose/button/VKIDButtonStyle;)V
-}
-
-public final class com/vk/id/onetap/xml/databinding/VkidButtonLayoutBinding : androidx/viewbinding/ViewBinding {
-	public final field buttonBackground Landroid/view/View;
-	public final field buttonClickableBackground Landroid/view/View;
-	public final field progress Landroid/widget/ProgressBar;
-	public final field userImage Landroid/widget/ImageView;
-	public final field vkidButtonRightBox Landroidx/constraintlayout/widget/Barrier;
-	public final field vkidButtonText Landroid/widget/TextView;
-	public final field vkidIcon Landroid/widget/ImageView;
-	public static fun bind (Landroid/view/View;)Lcom/vk/id/onetap/xml/databinding/VkidButtonLayoutBinding;
-	public fun getRoot ()Landroid/view/View;
-	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;)Lcom/vk/id/onetap/xml/databinding/VkidButtonLayoutBinding;
-}
-
-public final class com/vk/id/onetap/xml/databinding/VkidButtonSmallLayoutBinding : androidx/viewbinding/ViewBinding {
-	public final field buttonBackground Landroid/view/View;
-	public final field buttonClickableBackground Landroid/view/View;
-	public final field progress Landroid/widget/ProgressBar;
-	public final field userImage Landroid/widget/ImageView;
-	public final field vkidIcon Landroid/widget/ImageView;
-	public static fun bind (Landroid/view/View;)Lcom/vk/id/onetap/xml/databinding/VkidButtonSmallLayoutBinding;
-	public fun getRoot ()Landroid/view/View;
-	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;)Lcom/vk/id/onetap/xml/databinding/VkidButtonSmallLayoutBinding;
 }
 
