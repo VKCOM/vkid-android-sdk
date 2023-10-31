@@ -1,5 +1,6 @@
 package com.vk.id.sample
 
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import org.junit.Rule
@@ -14,6 +15,6 @@ class MainActivityTest {
     fun launchActivity_checkButton() {
         val loginTitleString = composeTestRule.activity.getString(R.string.vkid_log_in_with_vkid)
 
-        composeTestRule.onAllNodesWithText(loginTitleString)[0].assertExists()
+        composeTestRule.onAllNodesWithText(loginTitleString)[0].assertIsDisplayed()
     }
 }
