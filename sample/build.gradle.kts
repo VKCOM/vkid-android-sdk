@@ -36,7 +36,6 @@ dependencies {
     implementation(libs.androidx.compose.ui.util)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.androidx.core.ktx)
     androidTestImplementation(libs.tests.ui.junit)
     debugImplementation(libs.tests.ui.manifest)
 
