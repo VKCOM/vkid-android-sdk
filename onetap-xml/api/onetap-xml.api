@@ -1,6 +1,7 @@
 public final class com/vk/id/onetap/xml/BuildConfig {
 	public static final field BUILD_TYPE Ljava/lang/String;
 	public static final field CI_BUILD_NUMBER Ljava/lang/Integer;
+	public static final field CI_BUILD_TYPE Ljava/lang/String;
 	public static final field DEBUG Z
 	public static final field LIBRARY_PACKAGE_NAME Ljava/lang/String;
 	public static final field VKID_BUILD_TIME Ljava/lang/Long;

@@ -72,7 +72,7 @@ public class VKID {
         this.userDataFetcher = deps.userDataFetcher
 
         logger.info(
-            "VKID initialized\nVersion name: ${BuildConfig.VKID_VERSION_NAME}\nCI build number: ${BuildConfig.CI_BUILD_NUMBER}"
+            "VKID initialized\nVersion name: ${BuildConfig.VKID_VERSION_NAME}\nCI build: ${BuildConfig.CI_BUILD_NUMBER} ${BuildConfig.CI_BUILD_TYPE}"
         )
     }
 
