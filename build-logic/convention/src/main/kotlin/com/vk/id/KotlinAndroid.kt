@@ -41,6 +41,7 @@ internal fun Project.configureKotlinAndroid(
 
             buildFeatures.buildConfig = true
             buildConfigField("Integer", "CI_BUILD_NUMBER", stringProperty("build.number", "-1"))
+            buildConfigField("String", "CI_BUILD_TYPE", "\"${stringProperty("build.type")}\"")
             buildConfigField("String", "VKID_VERSION_NAME", "\"${stringProperty("VERSION_NAME", "NO_VERSION")}\"")
             buildConfigField("Long", "VKID_BUILD_TIME", "${System.currentTimeMillis()}L")
         }

@@ -14,7 +14,7 @@ android {
         versionCode = generateVersionCode()
         versionName = properties["VERSION_NAME"] as? String ?: "NO_VERSION"
 
-        setProperty("archivesBaseName", "vkid-$versionName-$versionCode")
+        setProperty("archivesBaseName", "vkid-${stringProperty("build.type")}-${stringProperty("build.number")}")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -59,14 +59,24 @@ fun ApplicationDefaultConfig.initVKID() {
     secrets.load(FileInputStream(file("secrets.properties")))
     val clientId = secrets["VKIDClientID"] ?: throw IllegalStateException("Add VKIDClientID to file secrets.properties")
     val clientSecret = secrets["VKIDClientSecret"] ?: throw IllegalStateException("Add VKIDClientSecret to file secrets.properties")
-    addManifestPlaceholders(mapOf(
-        "VKIDRedirectHost" to "vk.com",
-        "VKIDRedirectScheme" to "vk$clientId",
-        "VKIDClientID" to clientId,
-        "VKIDClientSecret" to clientSecret
-    ))
+    addManifestPlaceholders(
+        mapOf(
+            "VKIDRedirectHost" to "vk.com",
+            "VKIDRedirectScheme" to "vk$clientId",
+            "VKIDClientID" to clientId,
+            "VKIDClientSecret" to clientSecret
+        )
+    )
 }
 
 fun generateVersionCode(): Int {
     return TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()).toInt()
+}
+
+fun Project.stringProperty(key: String, default: String = ""): String {
+    var prop = (properties[key] as? String)?.takeIf { it.isNotEmpty() }
+    if (prop == null) {
+        prop = (rootProject.properties[key] as? String)?.takeIf { it.isNotEmpty() }
+    }
+    return prop ?: default
 }

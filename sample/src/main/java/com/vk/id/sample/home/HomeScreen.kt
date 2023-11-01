@@ -109,7 +109,7 @@ private fun BuildInfo(modifier: Modifier) {
     val text = "VKID sample app ${BuildConfig.VERSION_NAME}\n" +
         "${utcToDate(BuildConfig.VKID_BUILD_TIME)}\n" +
         "${BuildConfig.VERSION_CODE}\n" +
-        "CI build ${BuildConfig.CI_BUILD_NUMBER}"
+        "CI build ${BuildConfig.CI_BUILD_NUMBER} ${BuildConfig.CI_BUILD_TYPE}"
     ClickableText(
         text = AnnotatedString(text),
         modifier = modifier,
