@@ -47,8 +47,9 @@ internal object VkSilentInfoItemsGrouper {
             infoItemsWithoutUserHash?.let { addAll(it) }
 
             mutableMap.entries.forEach { (_, infoItems) ->
+                val maxProviderWeight = infoItems.maxByOrNull { it.providerWeight }?.providerWeight
                 val providerInfoItems = infoItems.map { SilentTokenProviderInfo.fromSilentAuthInfo(it.info) }
-                val prioritySilentInfo = infoItems.maxByOrNull { it.info.weight }
+                val prioritySilentInfo = infoItems.filter { it.providerWeight == maxProviderWeight }.maxByOrNull { it.info.weight }
                 prioritySilentInfo?.copy(info = prioritySilentInfo.info.copy(providerInfoItems = providerInfoItems))
                     ?.let { add(it) }
             }
