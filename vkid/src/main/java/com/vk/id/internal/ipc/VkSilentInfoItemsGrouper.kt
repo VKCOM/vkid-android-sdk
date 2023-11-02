@@ -28,27 +28,28 @@
 package com.vk.id.internal.ipc
 
 import com.vk.silentauth.SilentAuthInfo
+import com.vk.silentauth.SilentAuthInfoWithProviderWeight
 import com.vk.silentauth.SilentTokenProviderInfo
 
 internal object VkSilentInfoItemsGrouper {
 
-    fun List<SilentAuthInfo>.groupByWeightAndUserHash(): List<SilentAuthInfo> {
+    fun List<SilentAuthInfoWithProviderWeight>.groupByWeightAndUserHash(): List<SilentAuthInfoWithProviderWeight> {
         return this.groupByUserHash()
             .sortedWith(SilentAuthInfoPriorityComparator())
             .reversed()
-            .distinctBy { it.getDistinctId() }
+            .distinctBy { it.info.getDistinctId() }
     }
 
-    private fun List<SilentAuthInfo>.groupByUserHash(): List<SilentAuthInfo> {
-        val mutableMap = this.groupBy { it.userHash }.toMutableMap()
-        return mutableListOf<SilentAuthInfo>().apply {
+    private fun List<SilentAuthInfoWithProviderWeight>.groupByUserHash(): List<SilentAuthInfoWithProviderWeight> {
+        val mutableMap = this.groupBy { it.info.userHash }.toMutableMap()
+        return mutableListOf<SilentAuthInfoWithProviderWeight>().apply {
             val infoItemsWithoutUserHash = mutableMap.remove(SilentAuthInfo.EMPTY_USER_HASH)
             infoItemsWithoutUserHash?.let { addAll(it) }
 
             mutableMap.entries.forEach { (_, infoItems) ->
-                val providerInfoItems = infoItems.map { SilentTokenProviderInfo.fromSilentAuthInfo(it) }
-                val prioritySilentInfo = infoItems.maxByOrNull { it.weight }
-                prioritySilentInfo?.copy(providerInfoItems = providerInfoItems)
+                val providerInfoItems = infoItems.map { SilentTokenProviderInfo.fromSilentAuthInfo(it.info) }
+                val prioritySilentInfo = infoItems.maxByOrNull { it.info.weight }
+                prioritySilentInfo?.copy(info = prioritySilentInfo.info.copy(providerInfoItems = providerInfoItems))
                     ?.let { add(it) }
             }
         }
@@ -59,9 +60,14 @@ internal object VkSilentInfoItemsGrouper {
      * if the priority of the first information is greater than the priority of the second information,
      * then the first information will be greater than the second information
      */
-    private class SilentAuthInfoPriorityComparator : Comparator<SilentAuthInfo> {
-        override fun compare(first: SilentAuthInfo, second: SilentAuthInfo): Int {
-            val compareWeightResult = first.weight.compareTo(second.weight)
+    private class SilentAuthInfoPriorityComparator : Comparator<SilentAuthInfoWithProviderWeight> {
+        @Suppress("ReturnCount") // expected
+        override fun compare(first: SilentAuthInfoWithProviderWeight, second: SilentAuthInfoWithProviderWeight): Int {
+            val compareProviderWeightResult = first.providerWeight.compareTo(second.providerWeight)
+            if (compareProviderWeightResult != 0) {
+                return compareProviderWeightResult
+            }
+            val compareWeightResult = first.info.weight.compareTo(second.info.weight)
             if (compareWeightResult != 0) {
                 return compareWeightResult
             }
@@ -69,8 +75,8 @@ internal object VkSilentInfoItemsGrouper {
             // If the weight is identical, then we give priority to authInfo with a valid userHash.
             // It will allow extend access token for providers after extending silent token
             // {@see VkExtendTokenManager.setHashesForProvider}.
-            val firstHashAvailable = first.userHash != SilentAuthInfo.EMPTY_USER_HASH
-            val secondHashAvailable = second.userHash != SilentAuthInfo.EMPTY_USER_HASH
+            val firstHashAvailable = first.info.userHash != SilentAuthInfo.EMPTY_USER_HASH
+            val secondHashAvailable = second.info.userHash != SilentAuthInfo.EMPTY_USER_HASH
             return firstHashAvailable.compareTo(secondHashAvailable)
         }
     }

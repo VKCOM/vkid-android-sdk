@@ -24,20 +24,21 @@
  * SPECIFIC RESULTS OF USE OF THE SOFTWARE.
  * UNDER NO CIRCUMSTANCES LLC “V KONTAKTE” BEAR LIABILITY TO THE LICENSEE OR ANY
  * THIRD PARTIES FOR ANY DAMAGE IN CONNECTION WITH USE OF THE SOFTWARE.
-*/
+ */
 
 package com.vk.id.internal.ipc
 
-import android.content.ComponentName
 import android.content.Context
 import android.os.IBinder
 import com.vk.id.internal.auth.app.SilentAuthInfoUtils
+import com.vk.id.internal.auth.app.SilentAuthProviderData
 import com.vk.id.internal.auth.app.SilentAuthServicesProvider
 import com.vk.id.internal.auth.device.DeviceIdProvider
 import com.vk.id.internal.ipc.VkSilentInfoItemsGrouper.groupByWeightAndUserHash
 import com.vk.id.internal.log.createLoggerForClass
 import com.vk.silentauth.ISilentAuthInfoProvider
 import com.vk.silentauth.SilentAuthInfo
+import com.vk.silentauth.SilentAuthInfoWithProviderWeight
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 
@@ -83,12 +84,9 @@ internal class VkSilentAuthInfoProvider(
 
         val startTime = System.currentTimeMillis()
 
-        val services = servicesProvider.getSilentAuthServices().onEach { prepareSpecificApp(it) }
+        val services = servicesProvider.getSilentAuthServices().onEach { prepareSpecificApp(it.componentName) }
 
-        val resultItems = services
-            .map {
-                getSpecificAppSilentAuthInfos(it, startTime, timeout)
-            }
+        val resultItems = services.map { getSpecificAppSilentAuthInfos(it, startTime, timeout) }
         return resultItems.map {
             if (it.exception != null) {
                 logger.error("Exception while fetching silent auth info: ${it.exception.message}", it.exception)
@@ -97,6 +95,7 @@ internal class VkSilentAuthInfoProvider(
         }
             .flatten()
             .groupByWeightAndUserHash()
+            .map { it.info }
     }
 
     override fun setAppId(appId: Int) {
@@ -108,18 +107,18 @@ internal class VkSilentAuthInfoProvider(
     }
 
     private fun getSpecificAppSilentAuthInfos(
-        component: ComponentName,
+        component: SilentAuthProviderData,
         startTime: Long,
         timeout: Long
     ): SilentAuthResult {
-        val provider = getProvider(component, startTime, timeout)
+        val provider = getProvider(component.componentName, startTime, timeout)
         return getInfosFromAidl(provider, component)
     }
 
     @Suppress("TooGenericExceptionCaught")
     private fun getInfosFromAidl(
         provider: ISilentAuthInfoProvider?,
-        component: ComponentName
+        component: SilentAuthProviderData
     ): SilentAuthResult {
         provider ?: return SilentAuthResult(NullPointerException("Provider is null"))
 
@@ -135,7 +134,12 @@ internal class VkSilentAuthInfoProvider(
                     deviceIdProvider.getDeviceId(appContext),
                     null
                 )
-                    .map { infoItem -> infoItem.copy(applicationProviderPackage = component.packageName) }
+                    .map { infoItem ->
+                        SilentAuthInfoWithProviderWeight(
+                            info = infoItem.copy(applicationProviderPackage = component.componentName.packageName),
+                            providerWeight = component.weight,
+                        )
+                    }
                 SilentAuthResult(infoItems)
             } catch (exception: Exception) {
                 SilentAuthResult(exception)
@@ -146,10 +150,10 @@ internal class VkSilentAuthInfoProvider(
     }
 
     internal data class SilentAuthResult(
-        val infoItems: List<SilentAuthInfo>,
+        val infoItems: List<SilentAuthInfoWithProviderWeight>,
         val exception: Exception?
     ) {
-        constructor(infoItems: List<SilentAuthInfo>) : this(infoItems, null)
+        constructor(infoItems: List<SilentAuthInfoWithProviderWeight>) : this(infoItems, null)
         constructor(exception: Exception) : this(emptyList(), exception)
     }
 
