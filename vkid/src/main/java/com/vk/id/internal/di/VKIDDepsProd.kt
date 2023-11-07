@@ -24,8 +24,8 @@ import com.vk.id.internal.concurrent.CoroutinesDispatchersProd
 import com.vk.id.internal.ipc.VkSilentAuthInfoProvider
 import com.vk.id.internal.log.createLoggerForClass
 import com.vk.id.internal.store.PrefsStore
-import okhttp3.CertificatePinner
 import com.vk.id.internal.user.UserDataFetcher
+import okhttp3.CertificatePinner
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.TimeUnit
@@ -43,7 +43,6 @@ internal class VKIDDepsProd(
                 PackageManager.ComponentInfoFlags.of(flags.toLong())
             )
         } else {
-            @Suppress("DEPRECATION")
             appContext.packageManager.getActivityInfo(
                 componentName,
                 flags
@@ -80,6 +79,22 @@ internal class VKIDDepsProd(
     override val trustedProvidersCache = lazy {
         val creds = serviceCredentials.value
         TrustedProvidersCache(api, creds.clientID, creds.clientSecret, dispatchers)
+    }
+
+    override val vkSilentAuthInfoProvider: Lazy<VkSilentAuthInfoProvider> = lazy {
+        VkSilentAuthInfoProvider(
+            context = appContext,
+            servicesProvider = silentAuthServicesProvider.value,
+            deviceIdProvider = deviceIdProvider.value,
+        )
+    }
+
+    override val userDataFetcher: Lazy<UserDataFetcher> = lazy {
+        UserDataFetcher(
+            dispatchers = dispatchers,
+            serviceCredentials = serviceCredentials.value,
+            vkSilentAuthInfoProvider = vkSilentAuthInfoProvider.value,
+        )
     }
 
     override val authProvidersChooser: Lazy<AuthProvidersChooser> = lazy {
