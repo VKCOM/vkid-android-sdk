@@ -114,9 +114,12 @@ internal class VKIDDepsProd(
         if (!isDebuggable()) {
             certificatePinner(
                 CertificatePinner.Builder()
-                    .add(HOST_NAME, HOST_CERTIFICATE_HASH_1)
-                    .add(HOST_NAME, HOST_CERTIFICATE_HASH_2)
-                    .add(HOST_NAME, HOST_CERTIFICATE_HASH_3)
+                    .add(HOST_NAME_API, HOST_CERTIFICATE_HASH_1)
+                    .add(HOST_NAME_API, HOST_CERTIFICATE_HASH_2)
+                    .add(HOST_NAME_API, HOST_CERTIFICATE_HASH_3)
+                    .add(HOST_NAME_OAUTH, HOST_CERTIFICATE_HASH_1)
+                    .add(HOST_NAME_OAUTH, HOST_CERTIFICATE_HASH_2)
+                    .add(HOST_NAME_OAUTH, HOST_CERTIFICATE_HASH_3)
                     .build()
             )
         }
@@ -126,7 +129,8 @@ internal class VKIDDepsProd(
     private fun isDebuggable() = appContext.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0
 
     private companion object {
-        private const val HOST_NAME = "api.vk.com"
+        private const val HOST_NAME_API = "api.vk.com"
+        private const val HOST_NAME_OAUTH = "oauth.vk.com"
         private const val HOST_CERTIFICATE_HASH_1 = "sha256/p+lqTZ1LH3x8myQuyq7TpS5Acm5DkluDFCFB1Xnqc/4="
         private const val HOST_CERTIFICATE_HASH_2 = "sha256/IQBnNBEiFuhj+8x6X8XLgh01V9Ic5/V3IRQLNFFc7v4="
         private const val HOST_CERTIFICATE_HASH_3 = "sha256/K87oWBWM9UZfyddvDfoxL+8lpNyoUB2ptGtn0fv6G2Q="
