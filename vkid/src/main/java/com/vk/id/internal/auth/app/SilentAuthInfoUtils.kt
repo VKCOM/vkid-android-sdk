@@ -31,6 +31,7 @@ package com.vk.id.internal.auth.app
 import android.content.Context
 import android.content.pm.PackageManager
 import android.content.pm.Signature
+import android.util.Base64
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.util.Locale
@@ -39,6 +40,12 @@ internal object SilentAuthInfoUtils {
 
     fun calculateDigestHex(context: Context, pkg: String): String? {
         return calculateDigest(context, pkg, SilentAuthInfoUtils::calculateDigestHex)
+    }
+
+    fun calculateDigestBase64(signature: Signature): String {
+        return calculateDigest(signature) { bytes ->
+            Base64.encodeToString(bytes, Base64.DEFAULT)
+        }
     }
 
     private fun calculateDigestHex(signature: Signature): String {
