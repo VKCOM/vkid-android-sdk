@@ -49,6 +49,8 @@ mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 okhttp3-okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okHttpVersion" }
 okhttp3-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okHttpVersion" }
 okio = { group = "com.squareup.okio", name = "okio", version = { require = "3.4.0" } }
+tests-ui-junit = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+tests-ui-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
