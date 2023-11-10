@@ -1,8 +1,6 @@
 package com.vk.id
 
 import android.content.Context
-import android.os.Build
-import android.os.SystemClock
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
@@ -20,12 +18,15 @@ import com.vk.id.internal.auth.toQueryParam
 import com.vk.id.internal.concurrent.CoroutinesDispatchers
 import com.vk.id.internal.di.VKIDDeps
 import com.vk.id.internal.di.VKIDDepsProd
+import com.vk.id.internal.ipc.VkSilentAuthInfoProvider
 import com.vk.id.internal.log.AndroidLogcatLogEngine
 import com.vk.id.internal.log.FakeLogEngine
 import com.vk.id.internal.log.LogEngine
 import com.vk.id.internal.log.VKIDLog
 import com.vk.id.internal.log.createLoggerForClass
 import com.vk.id.internal.store.PrefsStore
+import com.vk.id.internal.user.UserDataFetcher
+import com.vk.id.internal.util.currentTime
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.currentCoroutineContext
@@ -67,6 +68,12 @@ public class VKID {
         this.prefsStore = deps.prefsStore
         this.pkceGenerator = deps.pkceGenerator
         this.serviceCredentials = deps.serviceCredentials
+        this.vkSilentAuthInfoProvider = deps.vkSilentAuthInfoProvider
+        this.userDataFetcher = deps.userDataFetcher
+
+        logger.info(
+            "VKID initialized\nVersion name: ${BuildConfig.VKID_VERSION_NAME}\nCI build: ${BuildConfig.CI_BUILD_NUMBER} ${BuildConfig.CI_BUILD_TYPE}"
+        )
     }
 
     private val logger = createLoggerForClass()
@@ -79,8 +86,10 @@ public class VKID {
     private val dispatchers: CoroutinesDispatchers
     private val prefsStore: Lazy<PrefsStore>
     private val serviceCredentials: Lazy<ServiceCredentials>
+    private val vkSilentAuthInfoProvider: Lazy<VkSilentAuthInfoProvider>
+    private val userDataFetcher: Lazy<UserDataFetcher>
 
-    private var authCallback: AuthCallback? = null
+    private var authCallbacks = mutableSetOf<AuthCallback>()
 
     public fun authorize(
         lifecycleOwner: LifecycleOwner,
@@ -97,7 +106,7 @@ public class VKID {
         authCallback: AuthCallback,
         authParams: VKIDAuthParams = VKIDAuthParams {}
     ) {
-        this.authCallback = authCallback
+        this.authCallbacks.add(authCallback)
         val authContext = currentCoroutineContext()
 
         AuthEventBridge.listener = object : AuthEventBridge.Listener {
@@ -113,6 +122,10 @@ public class VKID {
             val bestAuthProvider = authProvidersChooser.value.chooseBest()
             bestAuthProvider.auth(appContext, fullAuthOptions)
         }
+    }
+
+    public suspend fun fetchUserData(): Result<VKIDUser?> {
+        return Result.success(userDataFetcher.value.fetchUserData())
     }
 
     @Suppress("MagicNumber")
@@ -141,7 +154,7 @@ public class VKID {
 
     private suspend fun handleAuthResult(authResult: AuthResult) {
         if (authResult !is AuthResult.Success) {
-            tellCallbackAboutFail(authResult)
+            emitAuthFail(authResult.toVKIDAuthFail())
             return
         }
         // We do not stop auth here in hope that it still be success,
@@ -153,7 +166,7 @@ public class VKID {
         if (authResult.oauth != null) {
             handleOauth(authResult)
         } else {
-            authCallback?.onSuccess(
+            emitAuthSuccess(
                 AccessToken(
                     authResult.token,
                     authResult.userId,
@@ -175,7 +188,7 @@ public class VKID {
 
         if (realUuid != oauth.uuid) {
             logger.error("Invalid oauth UUID, want $realUuid but received ${oauth.uuid}", null)
-            authCallback?.onFail(VKIDAuthFail.FailedOAuthState("Invalid uuid"))
+            emitAuthFail(VKIDAuthFail.FailedOAuthState("Invalid uuid"))
             return
         }
 
@@ -184,7 +197,7 @@ public class VKID {
                 "Invalid oauth state, want $realState but received ${oauth.oauth?.state}",
                 null
             )
-            authCallback?.onFail(VKIDAuthFail.FailedOAuthState("Invalid state"))
+            emitAuthFail(VKIDAuthFail.FailedOAuthState("Invalid state"))
             return
         }
 
@@ -202,7 +215,7 @@ public class VKID {
             ).execute()
         }
         callResult.onFailure {
-            authCallback?.onFail(
+            emitAuthFail(
                 VKIDAuthFail.FailedApiCall(
                     "Failed code to token exchange api call",
                     it
@@ -210,7 +223,7 @@ public class VKID {
             )
         }
         callResult.onSuccess { payload ->
-            authCallback?.onSuccess(
+            emitAuthSuccess(
                 AccessToken(
                     payload.accessToken,
                     payload.userId,
@@ -220,39 +233,28 @@ public class VKID {
         }
     }
 
-    private fun tellCallbackAboutFail(authResult: AuthResult) {
-        when (authResult) {
-            is AuthResult.Canceled -> {
-                authCallback?.onFail(VKIDAuthFail.Canceled(authResult.message))
-            }
+    private fun AuthResult.toVKIDAuthFail() = when (this) {
+        is AuthResult.Canceled -> VKIDAuthFail.Canceled(message)
+        is AuthResult.NoBrowserAvailable -> VKIDAuthFail.NoBrowserAvailable(
+            message,
+            error
+        )
+        is AuthResult.AuthActiviyResultFailed -> VKIDAuthFail.FailedRedirectActivity(
+            message,
+            error
+        )
+        is AuthResult.Success -> error("AuthResult is Success and cannot be converted to fail!")
+    }
 
-            is AuthResult.NoBrowserAvailable -> {
-                authCallback?.onFail(
-                    VKIDAuthFail.NoBrowserAvailable(
-                        authResult.message,
-                        authResult.error
-                    )
-                )
-            }
-
-            is AuthResult.AuthActiviyResultFailed -> {
-                authCallback?.onFail(
-                    VKIDAuthFail.FailedRedirectActivity(
-                        authResult.message,
-                        authResult.error
-                    )
-                )
-            }
-
-            is AuthResult.Success -> {} // never
+    private fun emitAuthSuccess(token: AccessToken) {
+        authCallbacks.forEach {
+            it.onSuccess(token)
         }
     }
 
-    private fun currentTime(): Long {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            SystemClock.currentNetworkTimeClock().millis()
-        } else {
-            System.currentTimeMillis()
+    private fun emitAuthFail(fail: VKIDAuthFail) {
+        authCallbacks.forEach {
+            it.onFail(fail)
         }
     }
 
