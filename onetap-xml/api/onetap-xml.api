@@ -1,0 +1,37 @@
+public final class com/vk/id/onetap/xml/BuildConfig {
+	public static final field BUILD_TYPE Ljava/lang/String;
+	public static final field CI_BUILD_NUMBER Ljava/lang/Integer;
+	public static final field CI_BUILD_TYPE Ljava/lang/String;
+	public static final field DEBUG Z
+	public static final field LIBRARY_PACKAGE_NAME Ljava/lang/String;
+	public static final field VKID_BUILD_TIME Ljava/lang/Long;
+	public static final field VKID_VERSION_NAME Ljava/lang/String;
+	public fun <init> ()V
+}
+
+public final class com/vk/id/onetap/xml/VKIDButton : androidx/compose/ui/platform/AbstractComposeView {
+	public static final field $stable I
+	public fun <init> (Landroid/content/Context;)V
+	public fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;)V
+	public fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;I)V
+	public synthetic fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun Content (Landroidx/compose/runtime/Composer;I)V
+	public final fun getStyle ()Lcom/vk/id/onetap/compose/button/VKIDButtonStyle;
+	public final fun setCallbacks (Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun setCallbacks$default (Lcom/vk/id/onetap/xml/VKIDButton;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public final fun setStyle (Lcom/vk/id/onetap/compose/button/VKIDButtonStyle;)V
+}
+
+public final class com/vk/id/onetap/xml/VKIDButtonSmall : androidx/compose/ui/platform/AbstractComposeView {
+	public static final field $stable I
+	public fun <init> (Landroid/content/Context;)V
+	public fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;)V
+	public fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;I)V
+	public synthetic fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun Content (Landroidx/compose/runtime/Composer;I)V
+	public final fun getStyle ()Lcom/vk/id/onetap/compose/button/VKIDButtonStyle;
+	public final fun setCallbacks (Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun setCallbacks$default (Lcom/vk/id/onetap/xml/VKIDButtonSmall;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public final fun setStyle (Lcom/vk/id/onetap/compose/button/VKIDButtonStyle;)V
+}
+

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="vkid_azure_A100">#0077FF</color>
+    <color name="vkid_gray900">#19191A</color>
+    <color name="vkid_gray900_alpha50">#8019191A</color>
+    <color name="vkid_white">#FFFFFF</color>
+    <color name="vkid_white_alpha12">#1FFFFFFF</color>
+    <color name="vkid_white_alpha70">#B3FFFFFF</color>
+    <color name="vkid_black">#000000</color>
+    <color name="vkid_black_alpha12">#1F000000</color>
+    <color name="vkid_transparent">#00FFFFFF</color>
+</resources>

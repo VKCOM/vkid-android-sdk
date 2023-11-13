@@ -56,15 +56,17 @@ class VKIDPublishConventionPlugin : Plugin<Project> {
                         }
                     }
                 }
-                extensions.configure(SigningExtension::class.java) {
-                    val keyId = stringProperty(SIGNING_KEY_ID)
-                    val password = stringProperty(SIGNING_PASSWORD)
-                    val secretKey = String(Base64.getDecoder().decode(stringProperty(SECRET_KEY_RING_BASE64)))
-                    if (keyId.isNotEmpty()) {
-                        println("Sign key id: $keyId")
+                if (!stringProperty(VERSION_NAME).endsWith("SNAPSHOT")) {
+                    extensions.configure(SigningExtension::class.java) {
+                        val keyId = stringProperty(SIGNING_KEY_ID)
+                        val password = stringProperty(SIGNING_PASSWORD)
+                        val secretKey = String(Base64.getDecoder().decode(stringProperty(SECRET_KEY_RING_BASE64)))
+                        if (keyId.isNotEmpty()) {
+                            println("Sign key id: $keyId")
+                        }
+                        useInMemoryPgpKeys(keyId, secretKey, password)
+                        sign(publications[projectName])
                     }
-                    useInMemoryPgpKeys(keyId, secretKey, password)
-                    sign(publications[projectName])
                 }
             }
         }
