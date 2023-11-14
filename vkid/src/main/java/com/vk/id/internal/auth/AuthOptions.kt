@@ -13,6 +13,7 @@ internal data class AuthOptions(
     val state: String,
     val locale: String?,
     val theme: String?,
+    val webAuthPhoneScreen: Boolean
 )
 
 private const val APP_ID = "app_id"
@@ -29,6 +30,8 @@ private const val STATE = "state"
 private const val UUID = "uuid"
 private const val LOCALE = "lang_id"
 private const val THEME = "scheme"
+private const val SCREEN_PARAM = "screen"
+private const val SCREEN_PHONE = "phone"
 
 internal fun basicCodeFlowUri(appPackage: String) = Uri.Builder()
     .scheme(appPackage)
@@ -61,6 +64,9 @@ private fun AuthOptions.toAuthUriBuilder(): Uri.Builder {
     }
     if (theme != null) {
         builder.appendQueryParameter(THEME, theme)
+    }
+    if (webAuthPhoneScreen) {
+        builder.appendQueryParameter(SCREEN_PARAM, SCREEN_PHONE)
     }
     return builder
 }
