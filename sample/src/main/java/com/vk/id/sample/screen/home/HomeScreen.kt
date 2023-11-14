@@ -30,7 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.vk.id.onetap.compose.button.VKIDButton
+import com.vk.id.onetap.compose.OneTap
 import com.vk.id.onetap.compose.button.VKIDButtonCornersStyle
 import com.vk.id.onetap.compose.button.VKIDButtonStyle
 import com.vk.id.sample.BuildConfig
@@ -53,11 +53,12 @@ fun HomeScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(32.dp))
-        VKIDButton(
+        OneTap(
             modifier = Modifier.width(355.dp),
             style = VKIDButtonStyle.Blue(cornersStyle = VKIDButtonCornersStyle.Rounded),
             onAuth = { onVKIDAuthSuccess(context, it) },
-            onFail = { onVKIDAuthFail(context, it) }
+            onFail = { onVKIDAuthFail(context, it) },
+            signInAnotherAccountButtonEnabled = true
         )
         Spacer(modifier = Modifier.height(32.dp))
         Divider(thickness = 1.dp, color = colorResource(id = R.color.vkid_gray900_alpha50))
