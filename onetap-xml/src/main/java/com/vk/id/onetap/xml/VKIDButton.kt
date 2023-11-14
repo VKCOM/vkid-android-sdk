@@ -24,7 +24,9 @@ public class VKIDButton @JvmOverloads constructor(
             onStyleChange(value)
         }
     private var onStyleChange: (VKIDButtonStyle) -> Unit = {}
-    private var onAuth: (AccessToken) -> Unit = {}
+    private var onAuth: (AccessToken) -> Unit = {
+        throw IllegalStateException("No onAuth callback for VKID OneTap Button. Set it with setCallbacks method.")
+    }
     private var onFail: (VKIDAuthFail) -> Unit = {}
 
     @Composable
@@ -40,7 +42,7 @@ public class VKIDButton @JvmOverloads constructor(
     }
 
     public fun setCallbacks(
-        onAuth: (AccessToken) -> Unit = {},
+        onAuth: (AccessToken) -> Unit,
         onFail: (VKIDAuthFail) -> Unit = {},
     ) {
         this.onAuth = onAuth
