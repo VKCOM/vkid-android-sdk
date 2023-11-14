@@ -113,9 +113,10 @@ public final class com/vk/id/VKIDUser {
 }
 
 public final class com/vk/id/auth/VKIDAuthParams {
-	public synthetic fun <init> (Lcom/vk/id/auth/VKIDAuthParams$Locale;Lcom/vk/id/auth/VKIDAuthParams$Theme;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Lcom/vk/id/auth/VKIDAuthParams$Locale;Lcom/vk/id/auth/VKIDAuthParams$Theme;ZLkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getLocale ()Lcom/vk/id/auth/VKIDAuthParams$Locale;
 	public final fun getTheme ()Lcom/vk/id/auth/VKIDAuthParams$Theme;
+	public final fun getUseExistingUserIfPossible ()Z
 }
 
 public final class com/vk/id/auth/VKIDAuthParams$Builder {
@@ -123,8 +124,10 @@ public final class com/vk/id/auth/VKIDAuthParams$Builder {
 	public final fun build ()Lcom/vk/id/auth/VKIDAuthParams;
 	public final fun getLocale ()Lcom/vk/id/auth/VKIDAuthParams$Locale;
 	public final fun getTheme ()Lcom/vk/id/auth/VKIDAuthParams$Theme;
+	public final fun getUseOAuthProviderIfPossible ()Z
 	public final fun setLocale (Lcom/vk/id/auth/VKIDAuthParams$Locale;)V
 	public final fun setTheme (Lcom/vk/id/auth/VKIDAuthParams$Theme;)V
+	public final fun setUseOAuthProviderIfPossible (Z)V
 }
 
 public final class com/vk/id/auth/VKIDAuthParams$Locale : java/lang/Enum {
