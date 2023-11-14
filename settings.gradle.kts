@@ -19,5 +19,6 @@ dependencyResolutionManagement {
 rootProject.name = "VKID"
 include(":sample")
 include(":vkid")
+include(":multibranding-compose")
 include(":onetap-compose")
 include(":onetap-xml")

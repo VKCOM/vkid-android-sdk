@@ -41,6 +41,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":multibranding-compose"))
     implementation(project(":onetap-compose"))
     implementation(project(":onetap-xml"))
     implementation(libs.androidx.activity.compose)
