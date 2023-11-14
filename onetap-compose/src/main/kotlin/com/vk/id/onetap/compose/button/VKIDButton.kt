@@ -45,12 +45,15 @@ public fun VKIDButton(
     style: VKIDButtonStyle = VKIDButtonStyle.Blue(),
     onAuth: (AccessToken) -> Unit,
     onFail: (VKIDAuthFail) -> Unit = {},
-    state: VKIDButtonState = rememberVKIDButtonState()
+    state: VKIDButtonState = rememberVKIDButtonState(),
+    vkid: VKID? = null
 ) {
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
-    val vkid = remember { VKID(context) }
-    FetchUserDataWithAnimation(coroutineScope, state, vkid)
+    val useVKID = vkid ?: remember {
+        VKID(context)
+    }
+    FetchUserDataWithAnimation(coroutineScope, state, useVKID)
     Box(
         modifier = modifier
             .shadow(style.elevationStyle, style.cornersStyle)
@@ -59,7 +62,7 @@ public fun VKIDButton(
             .clip(style.cornersStyle)
             .clipToBounds()
             .background(style.backgroundStyle)
-            .clickable(state, coroutineScope, vkid, style, onAuth, onFail),
+            .clickable(state, coroutineScope, useVKID, style, onAuth, onFail),
     ) {
         // 0.001 and 0.999 because weight can't be null
         @Suppress("MagicNumber")
