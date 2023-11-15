@@ -237,6 +237,18 @@ public final class com/vk/id/onetap/compose/icon/VKIconStyle {
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class com/vk/id/onetap/compose/onetap/sheet/OneTapBottomSheetKt {
+	public static final fun OneTapBottomSheet (Landroidx/compose/ui/Modifier;Lcom/vk/id/onetap/compose/onetap/sheet/OneTapBottomSheetState;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lcom/vk/id/VKID;Landroidx/compose/runtime/Composer;II)V
+	public static final fun rememberOneTapBottomSheetState (Landroidx/compose/runtime/Composer;I)Lcom/vk/id/onetap/compose/onetap/sheet/OneTapBottomSheetState;
+}
+
+public final class com/vk/id/onetap/compose/onetap/sheet/OneTapBottomSheetState {
+	public static final field $stable I
+	public final fun hide ()V
+	public final fun isVisible ()Z
+	public final fun show ()V
+}
+
 public final class com/vk/id/onetap/compose/progress/CircleProgressStyle : java/lang/Enum {
 	public static final field DARK Lcom/vk/id/onetap/compose/progress/CircleProgressStyle;
 	public static final field LIGHT Lcom/vk/id/onetap/compose/progress/CircleProgressStyle;
