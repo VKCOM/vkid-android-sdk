@@ -1,5 +1,6 @@
 package com.vk.id.multibranding
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
@@ -26,6 +28,21 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+
+private val sourceItems = listOf(
+    OAuthItemData(
+        name = OAuth.VK,
+        title = "VK ID",
+    ),
+    OAuthItemData(
+        name = OAuth.MAIL,
+        title = "Mail",
+    ),
+    OAuthItemData(
+        name = OAuth.OK,
+        title = "OK",
+    ),
+)
 
 @Composable
 public fun OAuthListWidget(
@@ -35,27 +52,15 @@ public fun OAuthListWidget(
     onError: () -> Unit = {},
     isOAuthAllowed: (oAuth: OAuth) -> Boolean = { true }
 ) {
-    val sourceItems = listOf(
-        OAuthItemData(
-            name = OAuth.VK,
-            title = "Войти через VK", // TODO: Localization
-        ),
-        OAuthItemData(
-            name = OAuth.MAIL,
-            title = "Войти через Mail",
-        ),
-        OAuthItemData(
-            name = OAuth.OK,
-            title = "Войти через OK",
-        ),
-    )
-    val items = sourceItems.filter { isOAuthAllowed(it.name) }
+    val context = LocalContext.current
+    val items = remember { sourceItems.filter { isOAuthAllowed(it.name) } }
     Row(
         modifier = modifier
     ) {
         items.forEachIndexed { index, item ->
             OAuthButton(
                 modifier = Modifier.weight(1f),
+                context = context,
                 style = style,
                 item = item,
                 showText = items.size == 1,
@@ -71,6 +76,7 @@ public fun OAuthListWidget(
 @Composable
 private fun OAuthButton(
     modifier: Modifier,
+    context: Context,
     style: OAuthListWidgetStyle,
     item: OAuthItemData,
     showText: Boolean,
@@ -113,7 +119,7 @@ private fun OAuthButton(
             ) {
                 Text(
                     modifier = Modifier,
-                    text = item.title,
+                    text = context.getString(R.string.vkid_oauth_list_widget_title, item.title),
                     textAlign = TextAlign.Center,
                     color = style.textStyle.asColorResource(),
                     fontSize = 16.sp,
@@ -160,7 +166,7 @@ private fun OAuthListWidgetDark() {
     OAuthListWidget(
         modifier = Modifier.background(Color.White),
         style = OAuthListWidgetStyle.Dark(),
-        isOAuthAllowed = { it == OAuth.OK },
+        isOAuthAllowed = { it == OAuth.VK },
     )
 }
 

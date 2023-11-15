@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="vkid_oauth_list_widget_title">Увійти з Поштою %1$s</string>
+</resources>
