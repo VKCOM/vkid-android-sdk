@@ -10,7 +10,8 @@ public inline fun VKIDAuthParams(initializer: VKIDAuthParams.Builder.() -> Unit)
 
 public class VKIDAuthParams private constructor(
     public val locale: Locale? = null,
-    public val theme: Theme? = null
+    public val theme: Theme? = null,
+    public val useExistingUserIfPossible: Boolean = true
 ) {
     public enum class Locale {
         RUS,
@@ -62,9 +63,11 @@ public class VKIDAuthParams private constructor(
     public class Builder {
         public var locale: Locale? = null
         public var theme: Theme? = null
+        public var useOAuthProviderIfPossible: Boolean = true
         public fun build(): VKIDAuthParams = VKIDAuthParams(
             locale,
-            theme
+            theme,
+            useOAuthProviderIfPossible
         )
     }
 }
