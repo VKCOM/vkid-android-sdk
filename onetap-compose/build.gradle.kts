@@ -10,7 +10,7 @@ android {
 
 dependencies {
     api(project(":vkid"))
-    implementation(project(":multibranding-compose"))
+    api(project(":multibranding-compose"))
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.material.ripple)
