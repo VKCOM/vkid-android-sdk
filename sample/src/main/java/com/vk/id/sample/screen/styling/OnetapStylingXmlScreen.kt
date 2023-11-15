@@ -1,4 +1,4 @@
-package com.vk.id.sample.styling
+package com.vk.id.sample.screen.styling
 
 import android.content.Context
 import android.util.TypedValue
@@ -17,12 +17,18 @@ import com.vk.id.onetap.compose.button.VKIDButtonStyle
 import com.vk.id.onetap.xml.VKIDButton
 import com.vk.id.onetap.xml.VKIDButtonSmall
 import com.vk.id.sample.R
+import com.vk.id.sample.screen.styling.data.buttonStylingData
+import com.vk.id.sample.screen.styling.item.ButtonItem
+import com.vk.id.sample.screen.styling.item.SmallButtonItem
+import com.vk.id.sample.screen.styling.util.onVKIDAuthFail
+import com.vk.id.sample.screen.styling.util.onVKIDAuthSuccess
+import com.vk.id.sample.uikit.spacer.TitleItem
 
 private const val BUTTON_PADDING = 12
 private const val TEXT_PADDING = 8
 
 @Composable
-fun OnetapXmlScreen() {
+fun OnetapStylingXmlScreen() {
     AndroidView(
         modifier = Modifier.fillMaxSize(),
         factory = { context ->
@@ -31,13 +37,14 @@ fun OnetapXmlScreen() {
                     LinearLayout(context).apply {
                         orientation = LinearLayout.VERTICAL
                         buttonStylingData.forEach {
-                            when (it) {
-                                is ListItem.Spacer -> null
-                                is ListItem.HalfSpacer -> null
-                                is ListItem.Title -> createText(context, it.text)
-                                is ListItem.Button -> createVKIDButton(context, it.style, it.width, it.isDarkBackground)
-                                is ListItem.SmallButton -> createVKIDButtonSmall(context, it.style)
-                            }?.let(::addView)
+                            (
+                                when (it) {
+                                    is TitleItem -> createText(context, it.text)
+                                    is ButtonItem -> createVKIDButton(context, it.style, it.width, it.isDarkBackground)
+                                    is SmallButtonItem -> createVKIDButtonSmall(context, it.style)
+                                    else -> null
+                                }
+                                )?.let(::addView)
                         }
                     }
                 )

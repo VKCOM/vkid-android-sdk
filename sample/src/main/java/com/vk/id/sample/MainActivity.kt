@@ -7,9 +7,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.vk.id.VKID
-import com.vk.id.sample.home.HomeScreen
-import com.vk.id.sample.styling.OnetapComposeStylingScreen
-import com.vk.id.sample.styling.OnetapXmlScreen
+import com.vk.id.sample.screen.home.HomeScreen
+import com.vk.id.sample.screen.multibranding.MultibrandingComposeScreen
+import com.vk.id.sample.screen.styling.OnetapStylingComposeScreen
+import com.vk.id.sample.screen.styling.OnetapStylingXmlScreen
 
 class MainActivity : ComponentActivity() {
 
@@ -23,8 +24,9 @@ class MainActivity : ComponentActivity() {
                 startDestination = "home"
             ) {
                 composable("home") { HomeScreen(navController) }
-                composable("onetap-compose-styling") { OnetapComposeStylingScreen() }
-                composable("onetap-xml") { OnetapXmlScreen() }
+                composable("onetap-styling-compose") { OnetapStylingComposeScreen() }
+                composable("onetap-styling-xml") { OnetapStylingXmlScreen() }
+                composable("multibranding-compose") { MultibrandingComposeScreen() }
             }
         }
     }
