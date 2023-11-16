@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vk.id.multibranding.OAuth
 import com.vk.id.multibranding.OAuthListWidget
+import com.vk.id.multibranding.OAuthListWidgetAuthCallback
 import com.vk.id.multibranding.OAuthListWidgetStyle
 import com.vk.id.sample.screen.styling.util.formatToken
 import com.vk.id.sample.screen.styling.util.showToast
@@ -36,7 +37,7 @@ fun HandleOAuthListWidgetItem(
         OAuthListWidget(
             modifier = Modifier.width(355.dp),
             style = item.style,
-            onAuth = { oAuth, token ->
+            onAuth = OAuthListWidgetAuthCallback.WithOAuth { oAuth, token ->
                 showToast(
                     context,
                     "Auth from $oAuth with token ${formatToken(token)}"
