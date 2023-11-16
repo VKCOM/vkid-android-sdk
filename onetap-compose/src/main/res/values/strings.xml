@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="vkid_log_in_with_vkid">Sign in with VK ID</string>
+    <string name="vkid_auth_use_another_account">Sign in to another account</string>
     <string name="vkid_log_in_as">Continue as %1$s</string>
 </resources>

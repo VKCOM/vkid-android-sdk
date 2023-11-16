@@ -28,5 +28,6 @@
 -->
 <resources>
     <string name="vkid_log_in_with_vkid">Entrar pelo VK ID</string>
+    <string name="vkid_auth_use_another_account">Entrar com outra conta</string>
     <string name="vkid_log_in_as">Continuar como %1$s</string>
 </resources>

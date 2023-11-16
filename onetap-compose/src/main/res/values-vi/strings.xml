@@ -28,5 +28,6 @@
 -->
 <resources>
     <string name="vkid_log_in_with_vkid">Đăng nhập qua VK ID</string>
+    <string name="vkid_auth_use_another_account">Đăng nhập vào tài khoản khác</string>
     <string name="vkid_log_in_as">Tiếp tục như %1$s</string>
 </resources>

@@ -22,6 +22,7 @@ import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.VKIDUser
+import com.vk.id.auth.VKIDAuthParams
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -46,22 +47,26 @@ internal fun Modifier.clickable(
     )
 }
 
-private fun startAuth(
+internal fun startAuth(
     coroutineScope: CoroutineScope,
     vkid: VKID,
     onAuth: (AccessToken) -> Unit,
-    onFail: (VKIDAuthFail) -> Unit
+    onFail: (VKIDAuthFail) -> Unit,
+    params: VKIDAuthParams = VKIDAuthParams {}
 ) {
     coroutineScope.launch {
-        vkid.authorize(object : VKID.AuthCallback {
-            override fun onSuccess(accessToken: AccessToken) {
-                onAuth(accessToken)
-            }
+        vkid.authorize(
+            object : VKID.AuthCallback {
+                override fun onSuccess(accessToken: AccessToken) {
+                    onAuth(accessToken)
+                }
 
-            override fun onFail(fail: VKIDAuthFail) {
-                onFail(fail)
-            }
-        })
+                override fun onFail(fail: VKIDAuthFail) {
+                    onFail(fail)
+                }
+            },
+            params
+        )
     }
 }
 

@@ -37,15 +37,18 @@ import kotlinx.coroutines.launch
 public fun VKIDButtonSmall(
     state: VKIDSmallButtonState = remember { VKIDSmallButtonState(inProgress = false, userIconLoaded = false) },
     style: VKIDButtonStyle = VKIDButtonStyle.Blue(),
+    vkid: VKID? = null,
     onAuth: (AccessToken) -> Unit,
     onFail: (VKIDAuthFail) -> Unit = {},
 ) {
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
-    val vkid = remember { VKID(context) }
+    val useVKID = vkid ?: remember {
+        VKID(context)
+    }
     FetchUserData(
         coroutineScope,
-        vkid,
+        useVKID,
         object : OnFetchingProgress {
             override suspend fun onPreFetch() { /*nothing*/
             }
@@ -74,7 +77,7 @@ public fun VKIDButtonSmall(
             .border(style.borderStyle, style.cornersStyle)
             .clip(style.cornersStyle)
             .background(style.backgroundStyle)
-            .clickable(state, coroutineScope, vkid, style, onAuth, onFail)
+            .clickable(state, coroutineScope, useVKID, style, onAuth, onFail)
             .onSizeChanged {
                 size = it
             },

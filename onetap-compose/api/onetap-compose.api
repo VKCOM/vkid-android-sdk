@@ -72,7 +72,7 @@ public final class com/vk/id/onetap/compose/button/VKIDButtonElevationStyle$Defa
 }
 
 public final class com/vk/id/onetap/compose/button/VKIDButtonKt {
-	public static final fun VKIDButton (Landroidx/compose/ui/Modifier;Lcom/vk/id/onetap/compose/button/VKIDButtonStyle;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lcom/vk/id/onetap/compose/button/VKIDButtonState;Landroidx/compose/runtime/Composer;II)V
+	public static final fun VKIDButton (Landroidx/compose/ui/Modifier;Lcom/vk/id/onetap/compose/button/VKIDButtonStyle;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lcom/vk/id/onetap/compose/button/VKIDButtonState;Lcom/vk/id/VKID;Landroidx/compose/runtime/Composer;II)V
 }
 
 public final class com/vk/id/onetap/compose/button/VKIDButtonRippleStyle : java/lang/Enum {
@@ -102,7 +102,7 @@ public final class com/vk/id/onetap/compose/button/VKIDButtonSizeStyle : java/la
 }
 
 public final class com/vk/id/onetap/compose/button/VKIDButtonSmallKt {
-	public static final fun VKIDButtonSmall (Lcom/vk/id/onetap/compose/button/VKIDSmallButtonState;Lcom/vk/id/onetap/compose/button/VKIDButtonStyle;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;II)V
+	public static final fun VKIDButtonSmall (Lcom/vk/id/onetap/compose/button/VKIDSmallButtonState;Lcom/vk/id/onetap/compose/button/VKIDButtonStyle;Lcom/vk/id/VKID;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;II)V
 }
 
 public class com/vk/id/onetap/compose/button/VKIDButtonState {
@@ -160,6 +160,49 @@ public final class com/vk/id/onetap/compose/button/VKIDButtonTextStyle : java/la
 public final class com/vk/id/onetap/compose/button/VKIDSmallButtonState : com/vk/id/onetap/compose/button/VKIDButtonState {
 	public static final field $stable I
 	public fun <init> (ZZ)V
+}
+
+public final class com/vk/id/onetap/compose/button/alternate/AlternateAccountButtonKt {
+	public static final fun AlternateAccountButton (Landroidx/compose/ui/Modifier;Lcom/vk/id/onetap/compose/button/alternate/style/AlternateAccountButtonStyle;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lcom/vk/id/VKID;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class com/vk/id/onetap/compose/button/alternate/style/AlternateAccountButtonBackgroundStyle : java/lang/Enum {
+	public static final field DARK Lcom/vk/id/onetap/compose/button/alternate/style/AlternateAccountButtonBackgroundStyle;
+	public static final field LIGHT Lcom/vk/id/onetap/compose/button/alternate/style/AlternateAccountButtonBackgroundStyle;
+	public static fun valueOf (Ljava/lang/String;)Lcom/vk/id/onetap/compose/button/alternate/style/AlternateAccountButtonBackgroundStyle;
+	public static fun values ()[Lcom/vk/id/onetap/compose/button/alternate/style/AlternateAccountButtonBackgroundStyle;
+}
+
+public abstract class com/vk/id/onetap/compose/button/alternate/style/AlternateAccountButtonStyle {
+	public static final field $stable I
+	public synthetic fun <init> (Lcom/vk/id/onetap/compose/button/alternate/style/AlternateAccountButtonBackgroundStyle;Lcom/vk/id/onetap/compose/button/VKIDButtonRippleStyle;Lcom/vk/id/onetap/compose/button/alternate/style/AlternateAccountButtonTextStyle;Lcom/vk/id/onetap/compose/button/VKIDButtonCornersStyle;Lcom/vk/id/onetap/compose/button/VKIDButtonSizeStyle;Lcom/vk/id/onetap/compose/button/VKIDButtonElevationStyle;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getBackgroundStyle ()Lcom/vk/id/onetap/compose/button/alternate/style/AlternateAccountButtonBackgroundStyle;
+	public final fun getCornersStyle ()Lcom/vk/id/onetap/compose/button/VKIDButtonCornersStyle;
+	public final fun getElevationStyle ()Lcom/vk/id/onetap/compose/button/VKIDButtonElevationStyle;
+	public final fun getRippleStyle ()Lcom/vk/id/onetap/compose/button/VKIDButtonRippleStyle;
+	public final fun getSizeStyle ()Lcom/vk/id/onetap/compose/button/VKIDButtonSizeStyle;
+	public final fun getTextStyle ()Lcom/vk/id/onetap/compose/button/alternate/style/AlternateAccountButtonTextStyle;
+}
+
+public final class com/vk/id/onetap/compose/button/alternate/style/AlternateAccountButtonStyle$Dark : com/vk/id/onetap/compose/button/alternate/style/AlternateAccountButtonStyle {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (Lcom/vk/id/onetap/compose/button/VKIDButtonCornersStyle;Lcom/vk/id/onetap/compose/button/VKIDButtonSizeStyle;Lcom/vk/id/onetap/compose/button/VKIDButtonElevationStyle;)V
+	public synthetic fun <init> (Lcom/vk/id/onetap/compose/button/VKIDButtonCornersStyle;Lcom/vk/id/onetap/compose/button/VKIDButtonSizeStyle;Lcom/vk/id/onetap/compose/button/VKIDButtonElevationStyle;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public final class com/vk/id/onetap/compose/button/alternate/style/AlternateAccountButtonStyle$Light : com/vk/id/onetap/compose/button/alternate/style/AlternateAccountButtonStyle {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (Lcom/vk/id/onetap/compose/button/VKIDButtonCornersStyle;Lcom/vk/id/onetap/compose/button/VKIDButtonSizeStyle;Lcom/vk/id/onetap/compose/button/VKIDButtonElevationStyle;)V
+	public synthetic fun <init> (Lcom/vk/id/onetap/compose/button/VKIDButtonCornersStyle;Lcom/vk/id/onetap/compose/button/VKIDButtonSizeStyle;Lcom/vk/id/onetap/compose/button/VKIDButtonElevationStyle;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public final class com/vk/id/onetap/compose/button/alternate/style/AlternateAccountButtonTextStyle : java/lang/Enum {
+	public static final field DARK Lcom/vk/id/onetap/compose/button/alternate/style/AlternateAccountButtonTextStyle;
+	public static final field LIGHT Lcom/vk/id/onetap/compose/button/alternate/style/AlternateAccountButtonTextStyle;
+	public static fun valueOf (Ljava/lang/String;)Lcom/vk/id/onetap/compose/button/alternate/style/AlternateAccountButtonTextStyle;
+	public static fun values ()[Lcom/vk/id/onetap/compose/button/alternate/style/AlternateAccountButtonTextStyle;
 }
 
 public final class com/vk/id/onetap/compose/icon/VKIconColorStyle : java/lang/Enum {
