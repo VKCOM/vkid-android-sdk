@@ -1,13 +1,11 @@
 package com.vk.id.sample.screen.styling
 
 import android.content.Context
-import android.util.TypedValue
 import android.view.Gravity
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.LinearLayout.LayoutParams
 import android.widget.ScrollView
-import android.widget.TextView
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -22,10 +20,11 @@ import com.vk.id.sample.screen.styling.item.ButtonItem
 import com.vk.id.sample.screen.styling.item.SmallButtonItem
 import com.vk.id.sample.screen.styling.util.onVKIDAuthFail
 import com.vk.id.sample.screen.styling.util.onVKIDAuthSuccess
-import com.vk.id.sample.uikit.spacer.TitleItem
+import com.vk.id.sample.uikit.common.dpToPixels
+import com.vk.id.sample.uikit.item.TitleItem
+import com.vk.id.sample.uikit.item.createTitleItem
 
 private const val BUTTON_PADDING = 12
-private const val TEXT_PADDING = 8
 
 @Composable
 fun OnetapStylingXmlScreen() {
@@ -39,7 +38,7 @@ fun OnetapStylingXmlScreen() {
                         buttonStylingData.forEach {
                             (
                                 when (it) {
-                                    is TitleItem -> createText(context, it.text)
+                                    is TitleItem -> createTitleItem(context, it.text)
                                     is ButtonItem -> createVKIDButton(context, it.style, it.width, it.isDarkBackground)
                                     is SmallButtonItem -> createVKIDButtonSmall(context, it.style)
                                     else -> null
@@ -51,16 +50,6 @@ fun OnetapStylingXmlScreen() {
             }
         }
     )
-}
-
-private fun createText(
-    context: Context,
-    text: String,
-) = TextView(context).apply {
-    layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
-    this.text = text
-    setPadding(context.dpToPixels(TEXT_PADDING))
-    setTextAppearance(context, R.style.onetapSampleTilteStyle)
 }
 
 private fun createVKIDButton(
@@ -102,8 +91,4 @@ private fun createVKIDButtonSmall(
         onAuth = { onVKIDAuthSuccess(context, it) },
         onFail = { onVKIDAuthFail(context, it) },
     )
-}
-
-private fun Context.dpToPixels(dp: Int): Int {
-    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp.toFloat(), resources.displayMetrics).toInt()
 }

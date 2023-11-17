@@ -10,9 +10,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.vk.id.sample.screen.multibranding.data.multibrandingSampleData
 import com.vk.id.sample.screen.multibranding.item.HandleOAuthListWidgetItem
-import com.vk.id.sample.uikit.spacer.HandleHalfSpacerItem
-import com.vk.id.sample.uikit.spacer.HandleSpacerItem
-import com.vk.id.sample.uikit.spacer.HandleTitleItem
+import com.vk.id.sample.uikit.item.HandleHalfSpacerItem
+import com.vk.id.sample.uikit.item.HandleSpacerItem
+import com.vk.id.sample.uikit.item.HandleTitleItem
 
 @Preview
 @Composable

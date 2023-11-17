@@ -5,9 +5,9 @@ import com.vk.id.multibranding.OAuthListWidgetCornersStyle
 import com.vk.id.multibranding.OAuthListWidgetSizeStyle
 import com.vk.id.multibranding.OAuthListWidgetStyle
 import com.vk.id.sample.screen.multibranding.item.OAuthListWidgetItem
-import com.vk.id.sample.uikit.spacer.HalfSpacerItem
-import com.vk.id.sample.uikit.spacer.SpacerItem
-import com.vk.id.sample.uikit.spacer.TitleItem
+import com.vk.id.sample.uikit.item.HalfSpacerItem
+import com.vk.id.sample.uikit.item.SpacerItem
+import com.vk.id.sample.uikit.item.TitleItem
 
 internal val multibrandingSampleData = listOf(
     TitleItem("Multibranding widget"),
