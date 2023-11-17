@@ -1,4 +1,4 @@
-package com.vk.id.sample.home
+package com.vk.id.sample.screen.home
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -35,8 +35,8 @@ import com.vk.id.onetap.compose.button.VKIDButtonCornersStyle
 import com.vk.id.onetap.compose.button.VKIDButtonStyle
 import com.vk.id.sample.BuildConfig
 import com.vk.id.sample.R
-import com.vk.id.sample.styling.onVKIDAuthFail
-import com.vk.id.sample.styling.onVKIDAuthSuccess
+import com.vk.id.sample.screen.styling.util.onVKIDAuthFail
+import com.vk.id.sample.screen.styling.util.onVKIDAuthSuccess
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -61,11 +61,14 @@ fun HomeScreen(
         )
         Spacer(modifier = Modifier.height(32.dp))
         Divider(thickness = 1.dp, color = colorResource(id = R.color.vkid_gray900_alpha50))
-        Button("Onetap compose styling") {
-            navController.navigate("onetap-compose-styling")
+        Button("Onetap styling (compose)") {
+            navController.navigate("onetap-styling-compose")
         }
-        Button("Onetap xml") {
-            navController.navigate("onetap-xml")
+        Button("Onetap styling (xml)") {
+            navController.navigate("onetap-styling-xml")
+        }
+        Button("Multibranding (compose)") {
+            navController.navigate("multibranding-compose")
         }
     }
     Box(modifier = Modifier.fillMaxSize()) {
