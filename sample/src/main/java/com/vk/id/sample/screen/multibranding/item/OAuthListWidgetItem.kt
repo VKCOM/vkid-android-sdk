@@ -26,7 +26,7 @@ private const val WIDGET_WIDTH = 355
 
 data class OAuthListWidgetItem(
     val style: OAuthListWidgetStyle,
-    val filter: (OAuth) -> Boolean = { true },
+    val allowedOAuths: Set<OAuth> = OAuth.values().toSet(),
     val width: Int = WIDGET_WIDTH,
     val isDarkBackground: Boolean = false,
 )
@@ -47,7 +47,7 @@ fun HandleOAuthListWidgetItem(
             modifier = Modifier.width(item.width.dp),
             style = item.style,
             onAuth = getOAuthListCallback(context),
-            isOAuthAllowed = item.filter
+            allowedOAuths = item.allowedOAuths
         )
     }
 }
@@ -75,7 +75,7 @@ internal fun createOAuthListWidgetItem(
                 onAuth = getOAuthListCallback(context),
                 onFail = { },
             )
-            setAllowedAuths(item.filter)
+            allowedOAuths = item.allowedOAuths
         }
     )
 }

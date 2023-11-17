@@ -27,7 +27,12 @@ public class OAuthListWidget @JvmOverloads constructor(
             onStyleChange(value)
         }
     private var onStyleChange: (OAuthListWidgetStyle) -> Unit = {}
-    private var isOAuthAllowed: (oAuth: OAuth) -> Boolean = { true }
+    public var allowedOAuths: Set<OAuth> = emptySet()
+        set(value) {
+            field = value
+            onAllowedOAuthsChange(value)
+        }
+    private var onAllowedOAuthsChange: (Set<OAuth>) -> Unit = {}
     private var onAuth: OAuthListWidgetAuthCallback = OAuthListWidgetAuthCallback.JustToken {}
     private var onFail: () -> Unit = {}
 
@@ -35,6 +40,8 @@ public class OAuthListWidget @JvmOverloads constructor(
     override fun Content() {
         val style = remember { mutableStateOf(style) }
         onStyleChange = { style.value = it }
+        val allowedOAuths = remember { mutableStateOf(allowedOAuths) }
+        onAllowedOAuthsChange = { allowedOAuths.value = it }
         OAuthListWidget(
             modifier = Modifier,
             style = style.value,
@@ -44,7 +51,7 @@ public class OAuthListWidget @JvmOverloads constructor(
                     is OAuthListWidgetAuthCallback.JustToken -> callback(token)
                 }
             },
-            isOAuthAllowed = { isOAuthAllowed(it) }
+            allowedOAuths = allowedOAuths.value
         )
     }
 
@@ -54,12 +61,6 @@ public class OAuthListWidget @JvmOverloads constructor(
     ) {
         this.onAuth = onAuth
         this.onFail = onFail
-    }
-
-    public fun setAllowedAuths(
-        filter: (oAuth: OAuth) -> Boolean
-    ) {
-        this.isOAuthAllowed = filter
     }
 }
 

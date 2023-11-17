@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="vkid_oauth_list_widget_title">Մտնել %1$s Փոստով</string>
+    <string name="vkid_oauth_list_widget_title_ok">Մտնել՝ օգտագործելով OK</string>
+    <string name="vkid_oauth_list_widget_title_mail">Մտնել Mail.ru Փոստով</string>
+    <string name="vkid_oauth_list_widget_title_vk">Մուտք VK ID֊ով</string>
 </resources>

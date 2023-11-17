@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="vkid_oauth_list_widget_title">Увайсці з Поштай %1$s</string>
+    <string name="vkid_oauth_list_widget_title_ok">Увайсці праз OK</string>
+    <string name="vkid_oauth_list_widget_title_mail">Увайсці з Поштай Mail.ru</string>
+    <string name="vkid_oauth_list_widget_title_vk">Увайсці праз VK ID</string>
 </resources>
