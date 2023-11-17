@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.vk.id.onetap.compose.OneTap
-import com.vk.id.onetap.compose.button.VKIDButtonCornersStyle
+import com.vk.id.multibranding.CornersStyle
 import com.vk.id.onetap.compose.button.VKIDButtonStyle
 import com.vk.id.sample.BuildConfig
 import com.vk.id.sample.R
@@ -55,7 +55,7 @@ fun HomeScreen(
         Spacer(modifier = Modifier.height(32.dp))
         OneTap(
             modifier = Modifier.width(355.dp),
-            style = VKIDButtonStyle.Blue(cornersStyle = VKIDButtonCornersStyle.Rounded),
+            style = VKIDButtonStyle.Blue(cornersStyle = CornersStyle.Rounded),
             onAuth = { onVKIDAuthSuccess(context, it) },
             onFail = { onVKIDAuthFail(context, it) },
             signInAnotherAccountButtonEnabled = true

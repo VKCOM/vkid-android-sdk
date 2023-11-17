@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.vk.id.multibranding"
+    namespace = "com.vk.id.multibranding.compose"
 }
 
 dependencies {

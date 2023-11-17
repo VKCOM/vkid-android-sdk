@@ -1,26 +1,26 @@
 package com.vk.id.multibranding
 
 public sealed class OAuthListWidgetStyle(
-    public val cornersStyle: OAuthListWidgetCornersStyle,
-    public val rippleStyle: OAuthListWidgetRippleStyle,
-    public val borderStyle: OAuthListWidgetBorderStyle,
-    public val textStyle: OAuthListWidgetTextStyle,
+    public val cornersStyle: CornersStyle,
+    public val rippleStyle: RippleStyle,
+    public val borderStyle: BorderStyle,
+    public val textStyle: TextStyle,
 ) {
     public class Light(
-        cornersStyle: OAuthListWidgetCornersStyle = OAuthListWidgetCornersStyle.Default
+        cornersStyle: CornersStyle = CornersStyle.Default
     ) : OAuthListWidgetStyle(
         cornersStyle = cornersStyle,
-        rippleStyle = OAuthListWidgetRippleStyle.LIGHT,
-        borderStyle = OAuthListWidgetBorderStyle.LIGHT,
-        textStyle = OAuthListWidgetTextStyle.LIGHT,
+        rippleStyle = RippleStyle.LIGHT,
+        borderStyle = BorderStyle.LIGHT,
+        textStyle = TextStyle.LIGHT,
     )
 
     public class Dark(
-        cornersStyle: OAuthListWidgetCornersStyle = OAuthListWidgetCornersStyle.Default
+        cornersStyle: CornersStyle = CornersStyle.Default
     ) : OAuthListWidgetStyle(
         cornersStyle = cornersStyle,
-        rippleStyle = OAuthListWidgetRippleStyle.DARK,
-        borderStyle = OAuthListWidgetBorderStyle.DARK,
-        textStyle = OAuthListWidgetTextStyle.DARK,
+        rippleStyle = RippleStyle.DARK,
+        borderStyle = BorderStyle.DARK,
+        textStyle = TextStyle.DARK,
     )
 }

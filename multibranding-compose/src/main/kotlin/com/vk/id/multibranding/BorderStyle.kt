@@ -6,23 +6,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
+import com.vk.id.multibranding.compose.R
 
-public enum class OAuthListWidgetBorderStyle {
+public enum class BorderStyle {
+    NONE,
     DARK,
     LIGHT,
 }
 
-internal fun Modifier.border(
-    style: OAuthListWidgetBorderStyle,
-    cornersStyle: OAuthListWidgetCornersStyle,
-) = composed {
+public fun Modifier.border(
+    style: BorderStyle,
+    cornersStyle: CornersStyle,
+): Modifier = composed {
     when (style) {
-        OAuthListWidgetBorderStyle.DARK -> border(
+        BorderStyle.NONE -> this@border
+        BorderStyle.DARK -> border(
             width = 1.dp,
             color = colorResource(id = R.color.vkid_black_alpha12),
             shape = RoundedCornerShape(size = cornersStyle.radiusDp.dp)
         )
-        OAuthListWidgetBorderStyle.LIGHT -> border(
+        BorderStyle.LIGHT -> border(
             width = 1.dp,
             color = colorResource(id = R.color.vkid_white_alpha12),
             shape = RoundedCornerShape(size = cornersStyle.radiusDp.dp)

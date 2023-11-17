@@ -3,7 +3,7 @@ package com.vk.id.onetap.xml
 import android.content.Context
 import android.content.res.TypedArray
 import android.util.AttributeSet
-import com.vk.id.onetap.compose.button.VKIDButtonCornersStyle
+import com.vk.id.multibranding.CornersStyle
 import com.vk.id.onetap.compose.button.VKIDButtonElevationStyle
 import com.vk.id.onetap.compose.button.VKIDButtonSizeStyle
 import com.vk.id.onetap.compose.button.VKIDButtonStyle
@@ -20,7 +20,7 @@ internal fun parseAttrs(
     ).apply {
         try {
             return getStyleConstructor()(
-                VKIDButtonCornersStyle.Custom(getCornerRadius().toInt()),
+                CornersStyle.Custom(getCornerRadius().toInt()),
                 getSize(),
                 VKIDButtonElevationStyle.Custom(getElevation().toInt())
             )
@@ -32,7 +32,7 @@ internal fun parseAttrs(
 
 private fun TypedArray.getCornerRadius() = getDimension(
     R.styleable.VKIDButton_vkid_cornerRadius,
-    VKIDButtonCornersStyle.Default.radiusDp.toFloat()
+    CornersStyle.Default.radiusDp.toFloat()
 )
 
 private fun TypedArray.getElevation() = getDimension(
