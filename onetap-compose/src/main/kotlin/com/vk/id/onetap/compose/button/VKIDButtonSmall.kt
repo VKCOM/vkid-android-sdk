@@ -31,6 +31,9 @@ import com.vk.id.VKIDAuthFail
 import com.vk.id.VKIDUser
 import com.vk.id.multibranding.border
 import com.vk.id.multibranding.clip
+import com.vk.id.multibranding.height
+import com.vk.id.multibranding.heightDp
+import com.vk.id.multibranding.iconPadding
 import com.vk.id.onetap.compose.icon.VKIcon
 import com.vk.id.onetap.compose.progress.CircleProgress
 import kotlinx.coroutines.launch

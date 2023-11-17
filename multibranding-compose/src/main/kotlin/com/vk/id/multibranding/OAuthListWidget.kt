@@ -27,7 +27,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.vk.id.multibranding.compose.R
 
 private val sourceItems = listOf(
@@ -90,7 +89,7 @@ private fun OAuthButton(
 ) {
     Row(
         modifier = modifier
-            .height(52.dp)
+            .height(style.sizeStyle)
             .border(style.borderStyle, style.cornersStyle)
             .clip(style.cornersStyle)
             .clickable(
@@ -109,7 +108,10 @@ private fun OAuthButton(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        OAuthListImage(item = item)
+        OAuthListImage(
+            item = item,
+            style = style,
+        )
         if (showText) {
             Box(
                 modifier = Modifier
@@ -123,23 +125,27 @@ private fun OAuthButton(
                     style = TextStyle(
                         textAlign = TextAlign.Center,
                         color = style.textStyle.asColorResource(),
-                        fontSize = 16.sp,
-                        lineHeight = 20.sp,
+                        fontSize = style.sizeStyle.asFontSize(),
+                        lineHeight = style.sizeStyle.asLineHeight(),
                         fontWeight = FontWeight.Medium,
                     )
                 )
             }
             Spacer(
                 modifier = Modifier
-                    .width(28.dp)
-                    .height(28.dp)
+                    .iconPadding(style.sizeStyle)
+                    .width(style.sizeStyle.iconSize())
+                    .height(style.sizeStyle.iconSize())
             )
         }
     }
 }
 
 @Composable
-private fun OAuthListImage(item: OAuthItemData) = Image(
+private fun OAuthListImage(
+    item: OAuthItemData,
+    style: OAuthListWidgetStyle,
+) = Image(
     painter = painterResource(
         id = when (item.name) {
             OAuth.VK -> R.drawable.vk_icon_blue
@@ -149,8 +155,9 @@ private fun OAuthListImage(item: OAuthItemData) = Image(
     ),
     contentDescription = null,
     modifier = Modifier
-        .width(28.dp)
-        .height(28.dp)
+        .iconPadding(style.sizeStyle)
+        .width(style.sizeStyle.iconSize())
+        .height(style.sizeStyle.iconSize()),
 )
 
 @Preview

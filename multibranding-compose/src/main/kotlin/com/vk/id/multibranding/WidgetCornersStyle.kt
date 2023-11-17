@@ -5,14 +5,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 
-public sealed class CornersStyle(
+public sealed class WidgetCornersStyle(
     public val radiusDp: Int
 ) {
-    public object Default : CornersStyle(ROUNDED_RADIUS_DP)
-    public object None : CornersStyle(NONE_RADIUS_DP)
-    public object Rounded : CornersStyle(ROUNDED_RADIUS_DP)
-    public object Round : CornersStyle(ROUND_RADIUS_DP)
-    public class Custom(radiusDp: Int) : CornersStyle(radiusDp)
+    public object Default : WidgetCornersStyle(ROUNDED_RADIUS_DP)
+    public object None : WidgetCornersStyle(NONE_RADIUS_DP)
+    public object Rounded : WidgetCornersStyle(ROUNDED_RADIUS_DP)
+    public object Round : WidgetCornersStyle(ROUND_RADIUS_DP)
+    public class Custom(radiusDp: Int) : WidgetCornersStyle(radiusDp)
 
     private companion object {
         private const val ROUNDED_RADIUS_DP = 8
@@ -21,6 +21,6 @@ public sealed class CornersStyle(
     }
 }
 
-public fun Modifier.clip(style: CornersStyle): Modifier {
+public fun Modifier.clip(style: WidgetCornersStyle): Modifier {
     return clip(RoundedCornerShape(style.radiusDp.dp))
 }
