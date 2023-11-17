@@ -25,11 +25,7 @@ fun MultibrandingXmlScreen() {
                             (
                                 when (it) {
                                     is TitleItem -> createTitleItem(context, it.text)
-                                    is OAuthListWidgetItem -> createOAuthListWidgetItem(
-                                        context,
-                                        it.style,
-                                        it.isDarkBackground
-                                    )
+                                    is OAuthListWidgetItem -> createOAuthListWidgetItem(context, it)
                                     else -> null
                                 }
                                 )?.let(::addView)
