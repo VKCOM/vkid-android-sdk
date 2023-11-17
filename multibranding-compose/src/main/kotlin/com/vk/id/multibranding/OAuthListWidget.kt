@@ -44,11 +44,16 @@ private val sourceItems = listOf(
     ),
 )
 
+public sealed interface OAuthListWidgetAuthCallback {
+    public fun interface WithOAuth : (OAuth, String) -> Unit, OAuthListWidgetAuthCallback
+    public fun interface JustToken : (String) -> Unit, OAuthListWidgetAuthCallback
+}
+
 @Composable
 public fun OAuthListWidget(
     modifier: Modifier = Modifier,
     style: OAuthListWidgetStyle = OAuthListWidgetStyle.Light(),
-    onAuth: (oAuth: OAuth, token: String) -> Unit,
+    onAuth: OAuthListWidgetAuthCallback,
     isOAuthAllowed: (oAuth: OAuth) -> Boolean = { true }
 ) {
     val context = LocalContext.current
@@ -80,7 +85,7 @@ private fun OAuthButton(
     style: OAuthListWidgetStyle,
     item: OAuthItemData,
     showText: Boolean,
-    onAuth: (oAuth: OAuth, token: String) -> Unit,
+    onAuth: OAuthListWidgetAuthCallback,
 ) {
     Row(
         modifier = modifier
@@ -93,24 +98,17 @@ private fun OAuthButton(
                     color = style.rippleStyle.asColor(),
                 ),
                 role = Role.Button,
-                onClick = { onAuth(item.name, "FAKE_TOKEN") }
+                onClick = {
+                    when (onAuth) {
+                        is OAuthListWidgetAuthCallback.WithOAuth -> onAuth(item.name, "FAKE_TOKEN")
+                        is OAuthListWidgetAuthCallback.JustToken -> onAuth("FAKE_TOKEN")
+                    }
+                }
             ),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
-            painter = painterResource(
-                id = when (item.name) {
-                    OAuth.VK -> R.drawable.vk_icon_blue
-                    OAuth.MAIL -> R.drawable.mail_icon_blue
-                    OAuth.OK -> R.drawable.ok_icon_yellow
-                }
-            ),
-            contentDescription = null,
-            modifier = Modifier
-                .width(28.dp)
-                .height(28.dp)
-        )
+        OAuthListImage(item = item)
         if (showText) {
             Box(
                 modifier = Modifier
@@ -139,12 +137,27 @@ private fun OAuthButton(
     }
 }
 
+@Composable
+private fun OAuthListImage(item: OAuthItemData) = Image(
+    painter = painterResource(
+        id = when (item.name) {
+            OAuth.VK -> R.drawable.vk_icon_blue
+            OAuth.MAIL -> R.drawable.mail_icon_blue
+            OAuth.OK -> R.drawable.ok_icon_yellow
+        }
+    ),
+    contentDescription = null,
+    modifier = Modifier
+        .width(28.dp)
+        .height(28.dp)
+)
+
 @Preview
 @Composable
 private fun OAuthListWidgetWithOneItem() {
     OAuthListWidget(
         isOAuthAllowed = { it == OAuth.OK },
-        onAuth = { _, _ -> }
+        onAuth = OAuthListWidgetAuthCallback.WithOAuth { _, _ -> }
     )
 }
 
@@ -153,7 +166,7 @@ private fun OAuthListWidgetWithOneItem() {
 private fun OAuthListWidgetWithTwoItems() {
     OAuthListWidget(
         isOAuthAllowed = { it in setOf(OAuth.VK, OAuth.OK) },
-        onAuth = { _, _ -> }
+        onAuth = OAuthListWidgetAuthCallback.WithOAuth { _, _ -> }
     )
 }
 
@@ -162,7 +175,7 @@ private fun OAuthListWidgetWithTwoItems() {
 private fun OAuthListWidgetLight() {
     OAuthListWidget(
         style = OAuthListWidgetStyle.Light(),
-        onAuth = { _, _ -> }
+        onAuth = OAuthListWidgetAuthCallback.WithOAuth { _, _ -> }
     )
 }
 
@@ -173,7 +186,7 @@ private fun OAuthListWidgetDark() {
         modifier = Modifier.background(Color.White),
         style = OAuthListWidgetStyle.Dark(),
         isOAuthAllowed = { it == OAuth.VK },
-        onAuth = { _, _ -> }
+        onAuth = OAuthListWidgetAuthCallback.WithOAuth { _, _ -> }
     )
 }
 
