@@ -12,7 +12,7 @@ import com.vk.id.onetap.compose.progress.CircleProgressStyle
 
 @Suppress("LongParameterList")
 public sealed class VKIDButtonStyle(
-    public val backgroundStyle: VKIDButtonBackgroundStyle,
+    public val backgroundStyle: BackgroundStyle,
     public val rippleStyle: WidgetRippleStyle,
     public val borderStyle: WidgetBorderStyle,
     public val iconStyle: VKIconStyle,
@@ -20,14 +20,14 @@ public sealed class VKIDButtonStyle(
     public val progressStyle: CircleProgressStyle,
     public val cornersStyle: WidgetCornersStyle,
     public val sizeStyle: WidgetSizeStyle,
-    public val elevationStyle: VKIDButtonElevationStyle,
+    public val elevationStyle: ElevationStyle,
 ) {
     public class Blue(
         cornersStyle: WidgetCornersStyle = WidgetCornersStyle.Default,
         sizeStyle: WidgetSizeStyle = WidgetSizeStyle.MEDIUM_44,
-        elevationStyle: VKIDButtonElevationStyle = VKIDButtonElevationStyle.Default,
+        elevationStyle: ElevationStyle = ElevationStyle.Default,
     ) : VKIDButtonStyle(
-        backgroundStyle = VKIDButtonBackgroundStyle.BLUE,
+        backgroundStyle = BackgroundStyle.BLUE,
         rippleStyle = WidgetRippleStyle.LIGHT,
         borderStyle = WidgetBorderStyle.NONE,
         iconStyle = VKIconStyle(
@@ -44,9 +44,9 @@ public sealed class VKIDButtonStyle(
     public class TransparentDark(
         cornersStyle: WidgetCornersStyle = WidgetCornersStyle.Default,
         sizeStyle: WidgetSizeStyle = WidgetSizeStyle.MEDIUM_44,
-        elevationStyle: VKIDButtonElevationStyle = VKIDButtonElevationStyle.Default,
+        elevationStyle: ElevationStyle = ElevationStyle.Default,
     ) : VKIDButtonStyle(
-        backgroundStyle = VKIDButtonBackgroundStyle.TRANSPARENT,
+        backgroundStyle = BackgroundStyle.TRANSPARENT,
         rippleStyle = WidgetRippleStyle.DARK,
         borderStyle = WidgetBorderStyle.DARK,
         iconStyle = VKIconStyle(
@@ -63,9 +63,9 @@ public sealed class VKIDButtonStyle(
     public class TransparentLight(
         cornersStyle: WidgetCornersStyle = WidgetCornersStyle.Default,
         sizeStyle: WidgetSizeStyle = WidgetSizeStyle.MEDIUM_44,
-        elevationStyle: VKIDButtonElevationStyle = VKIDButtonElevationStyle.Default,
+        elevationStyle: ElevationStyle = ElevationStyle.Default,
     ) : VKIDButtonStyle(
-        backgroundStyle = VKIDButtonBackgroundStyle.TRANSPARENT,
+        backgroundStyle = BackgroundStyle.TRANSPARENT,
         rippleStyle = WidgetRippleStyle.LIGHT,
         borderStyle = WidgetBorderStyle.LIGHT,
         iconStyle = VKIconStyle(

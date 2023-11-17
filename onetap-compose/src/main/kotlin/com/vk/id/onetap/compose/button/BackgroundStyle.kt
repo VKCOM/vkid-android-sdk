@@ -6,15 +6,15 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.res.colorResource
 import com.vk.id.onetap.compose.R
 
-public enum class VKIDButtonBackgroundStyle {
+public enum class BackgroundStyle {
     BLUE,
     TRANSPARENT
 }
 
-internal fun Modifier.background(style: VKIDButtonBackgroundStyle) = composed {
+internal fun Modifier.background(style: BackgroundStyle) = composed {
     val backgroundResource = when (style) {
-        VKIDButtonBackgroundStyle.BLUE -> R.color.vkid_azure_A100
-        VKIDButtonBackgroundStyle.TRANSPARENT -> R.color.vkid_transparent
+        BackgroundStyle.BLUE -> R.color.vkid_azure_A100
+        BackgroundStyle.TRANSPARENT -> R.color.vkid_transparent
     }
     background(colorResource(backgroundResource))
 }

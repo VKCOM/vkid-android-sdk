@@ -6,15 +6,15 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import com.vk.id.multibranding.WidgetCornersStyle
 
-public sealed class VKIDButtonElevationStyle(
+public sealed class ElevationStyle(
     public val elevation: Int
 ) {
-    public object Default : VKIDButtonElevationStyle(0)
-    public class Custom(elevation: Int) : VKIDButtonElevationStyle(elevation)
+    public object Default : ElevationStyle(0)
+    public class Custom(elevation: Int) : ElevationStyle(elevation)
 }
 
 internal fun Modifier.shadow(
-    style: VKIDButtonElevationStyle,
+    style: ElevationStyle,
     cornersStyle: WidgetCornersStyle
 ) = shadow(
     elevation = style.elevation.dp,

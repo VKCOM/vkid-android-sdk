@@ -2,7 +2,7 @@ package com.vk.id.sample.screen.styling.data
 
 import com.vk.id.multibranding.WidgetCornersStyle
 import com.vk.id.multibranding.WidgetSizeStyle
-import com.vk.id.onetap.compose.button.VKIDButtonElevationStyle
+import com.vk.id.onetap.compose.button.ElevationStyle
 import com.vk.id.onetap.compose.button.VKIDButtonStyle
 import com.vk.id.sample.screen.styling.item.ButtonItem
 import com.vk.id.sample.screen.styling.item.SmallButtonItem
@@ -79,21 +79,21 @@ internal val buttonStylingData = listOf(
     ButtonItem(
         style = VKIDButtonStyle.Blue(
             cornersStyle = WidgetCornersStyle.Rounded,
-            elevationStyle = VKIDButtonElevationStyle.Default
+            elevationStyle = ElevationStyle.Default
         )
     ),
     SpacerItem(),
     ButtonItem(
         style = VKIDButtonStyle.Blue(
             cornersStyle = WidgetCornersStyle.Rounded,
-            elevationStyle = VKIDButtonElevationStyle.Custom(4)
+            elevationStyle = ElevationStyle.Custom(4)
         ),
     ),
     SpacerItem(),
     ButtonItem(
         style = VKIDButtonStyle.Blue(
             cornersStyle = WidgetCornersStyle.Rounded,
-            elevationStyle = VKIDButtonElevationStyle.Custom(8)
+            elevationStyle = ElevationStyle.Custom(8)
         ),
     ),
     HalfSpacerItem(),
@@ -196,7 +196,7 @@ internal val buttonStylingData = listOf(
         style = VKIDButtonStyle.Blue(
             cornersStyle = WidgetCornersStyle.Default,
             sizeStyle = WidgetSizeStyle.MEDIUM_44,
-            elevationStyle = VKIDButtonElevationStyle.Default
+            elevationStyle = ElevationStyle.Default
         ),
     ),
     HalfSpacerItem(),
