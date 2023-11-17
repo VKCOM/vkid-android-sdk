@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vk.id.onetap.compose.button.VKIDButton
+import com.vk.id.onetap.compose.OneTap
 import com.vk.id.onetap.compose.button.VKIDButtonStyle
 import com.vk.id.sample.screen.styling.util.onVKIDAuthFail
 import com.vk.id.sample.screen.styling.util.onVKIDAuthSuccess
@@ -32,11 +32,12 @@ fun HandleButtonItem(
             .darkBackground(item.isDarkBackground)
             .fillMaxWidth()
     ) {
-        VKIDButton(
+        OneTap(
             modifier = Modifier.width(item.width.dp),
             style = item.style,
             onAuth = { onVKIDAuthSuccess(context, it) },
-            onFail = { onVKIDAuthFail(context, it) }
+            onFail = { onVKIDAuthFail(context, it) },
+            signInAnotherAccountButtonEnabled = true
         )
     }
 }

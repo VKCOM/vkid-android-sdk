@@ -21,6 +21,7 @@ import com.vk.id.onetap.compose.button.rememberVKIDButtonState
 @Composable
 public fun OneTap(
     modifier: Modifier = Modifier,
+    // todo OneTapStyle
     style: VKIDButtonStyle = VKIDButtonStyle.Blue(),
     onAuth: (AccessToken) -> Unit,
     onFail: (VKIDAuthFail) -> Unit = {},
@@ -57,9 +58,17 @@ public fun OneTap(
 }
 
 private fun VKIDButtonStyle.toAlternate(): AlternateAccountButtonStyle = when (this) {
-    is VKIDButtonStyle.Blue -> AlternateAccountButtonStyle.Light()
-    is VKIDButtonStyle.TransparentDark -> AlternateAccountButtonStyle.Dark()
-    is VKIDButtonStyle.TransparentLight -> AlternateAccountButtonStyle.Light()
+    is VKIDButtonStyle.TransparentLight -> AlternateAccountButtonStyle.Dark(
+        borderStyle = this.borderStyle,
+        cornersStyle = this.cornersStyle,
+        sizeStyle = this.sizeStyle,
+    )
+    is VKIDButtonStyle.Blue,
+    is VKIDButtonStyle.TransparentDark -> AlternateAccountButtonStyle.Light(
+        borderStyle = this.borderStyle,
+        cornersStyle = this.cornersStyle,
+        sizeStyle = this.sizeStyle,
+    )
 }
 
 @Preview

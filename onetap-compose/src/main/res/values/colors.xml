@@ -9,4 +9,5 @@
     <color name="vkid_black">#000000</color>
     <color name="vkid_transparent">#00FFFFFF</color>
     <color name="vkid_ui_background_secondary_alpha">#0a000000</color>
+    <color name="vkid_ui_dark_background_secondary_alpha">#1AFFFFFF</color>
 </resources>

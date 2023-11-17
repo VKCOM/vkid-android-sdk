@@ -14,7 +14,7 @@ public enum class AlternateAccountButtonBackgroundStyle {
 internal fun Modifier.background(style: AlternateAccountButtonBackgroundStyle) = composed {
     val backgroundResource = when (style) {
         AlternateAccountButtonBackgroundStyle.LIGHT -> R.color.vkid_ui_background_secondary_alpha
-        AlternateAccountButtonBackgroundStyle.DARK -> R.color.vkid_ui_background_secondary_alpha
+        AlternateAccountButtonBackgroundStyle.DARK -> R.color.vkid_ui_dark_background_secondary_alpha
     }
     background(colorResource(backgroundResource))
 }
