@@ -1,9 +1,9 @@
 package com.vk.id.sample.screen.multibranding.data
 
 import com.vk.id.multibranding.OAuth
+import com.vk.id.multibranding.OAuthListWidgetCornersStyle
+import com.vk.id.multibranding.OAuthListWidgetSizeStyle
 import com.vk.id.multibranding.OAuthListWidgetStyle
-import com.vk.id.multibranding.WidgetCornersStyle
-import com.vk.id.multibranding.WidgetSizeStyle
 import com.vk.id.sample.screen.multibranding.item.OAuthListWidgetItem
 import com.vk.id.sample.uikit.spacer.HalfSpacerItem
 import com.vk.id.sample.uikit.spacer.SpacerItem
@@ -37,19 +37,19 @@ internal val multibrandingSampleData = listOf(
     HalfSpacerItem(),
     OAuthListWidgetItem(
         style = OAuthListWidgetStyle.Dark(
-            cornersStyle = WidgetCornersStyle.None
+            cornersStyle = OAuthListWidgetCornersStyle.None
         ),
     ),
     SpacerItem(),
     OAuthListWidgetItem(
         style = OAuthListWidgetStyle.Dark(
-            cornersStyle = WidgetCornersStyle.Rounded
+            cornersStyle = OAuthListWidgetCornersStyle.Rounded
         ),
     ),
     SpacerItem(),
     OAuthListWidgetItem(
         style = OAuthListWidgetStyle.Dark(
-            cornersStyle = WidgetCornersStyle.Round
+            cornersStyle = OAuthListWidgetCornersStyle.Round
         ),
     ),
     HalfSpacerItem(),
@@ -57,79 +57,79 @@ internal val multibrandingSampleData = listOf(
     HalfSpacerItem(),
     OAuthListWidgetItem(
         style = OAuthListWidgetStyle.Dark(
-            sizeStyle = WidgetSizeStyle.SMALL_32
+            sizeStyle = OAuthListWidgetSizeStyle.SMALL_32
         ),
     ),
     SpacerItem(),
     OAuthListWidgetItem(
         style = OAuthListWidgetStyle.Dark(
-            sizeStyle = WidgetSizeStyle.SMALL_34
+            sizeStyle = OAuthListWidgetSizeStyle.SMALL_34
         ),
     ),
     SpacerItem(),
     OAuthListWidgetItem(
         style = OAuthListWidgetStyle.Dark(
-            sizeStyle = WidgetSizeStyle.SMALL_36
+            sizeStyle = OAuthListWidgetSizeStyle.SMALL_36
         ),
     ),
     SpacerItem(),
     OAuthListWidgetItem(
         style = OAuthListWidgetStyle.Dark(
-            sizeStyle = WidgetSizeStyle.SMALL_38
+            sizeStyle = OAuthListWidgetSizeStyle.SMALL_38
         ),
     ),
     SpacerItem(),
     OAuthListWidgetItem(
         style = OAuthListWidgetStyle.Dark(
-            sizeStyle = WidgetSizeStyle.MEDIUM_40
+            sizeStyle = OAuthListWidgetSizeStyle.MEDIUM_40
         ),
     ),
     SpacerItem(),
     OAuthListWidgetItem(
         style = OAuthListWidgetStyle.Dark(
-            sizeStyle = WidgetSizeStyle.MEDIUM_42
+            sizeStyle = OAuthListWidgetSizeStyle.MEDIUM_42
         ),
     ),
     SpacerItem(),
     OAuthListWidgetItem(
         style = OAuthListWidgetStyle.Dark(
-            sizeStyle = WidgetSizeStyle.MEDIUM_44
+            sizeStyle = OAuthListWidgetSizeStyle.MEDIUM_44
         ),
     ),
     SpacerItem(),
     OAuthListWidgetItem(
         style = OAuthListWidgetStyle.Dark(
-            sizeStyle = WidgetSizeStyle.MEDIUM_46
+            sizeStyle = OAuthListWidgetSizeStyle.MEDIUM_46
         ),
     ),
     SpacerItem(),
     OAuthListWidgetItem(
         style = OAuthListWidgetStyle.Dark(
-            sizeStyle = WidgetSizeStyle.LARGE_48
+            sizeStyle = OAuthListWidgetSizeStyle.LARGE_48
         ),
     ),
     SpacerItem(),
     OAuthListWidgetItem(
         style = OAuthListWidgetStyle.Dark(
-            sizeStyle = WidgetSizeStyle.LARGE_50
+            sizeStyle = OAuthListWidgetSizeStyle.LARGE_50
         ),
     ),
     SpacerItem(),
     OAuthListWidgetItem(
         style = OAuthListWidgetStyle.Dark(
-            sizeStyle = WidgetSizeStyle.LARGE_52
+            sizeStyle = OAuthListWidgetSizeStyle.LARGE_52
         ),
     ),
     SpacerItem(),
     OAuthListWidgetItem(
         style = OAuthListWidgetStyle.Dark(
-            sizeStyle = WidgetSizeStyle.LARGE_54
+            sizeStyle = OAuthListWidgetSizeStyle.LARGE_54
         ),
     ),
     SpacerItem(),
     OAuthListWidgetItem(
         style = OAuthListWidgetStyle.Dark(
-            sizeStyle = WidgetSizeStyle.LARGE_56
+            sizeStyle = OAuthListWidgetSizeStyle.LARGE_56
         ),
     ),
     HalfSpacerItem(),

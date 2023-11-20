@@ -22,16 +22,17 @@ import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.VKIDAuthParams
-import com.vk.id.multibranding.asColor
-import com.vk.id.multibranding.asFontSize
-import com.vk.id.multibranding.asLineHeight
-import com.vk.id.multibranding.border
-import com.vk.id.multibranding.clip
-import com.vk.id.multibranding.height
 import com.vk.id.onetap.compose.R
 import com.vk.id.onetap.compose.button.alternate.style.AlternateAccountButtonStyle
 import com.vk.id.onetap.compose.button.alternate.style.asColorResource
 import com.vk.id.onetap.compose.button.alternate.style.background
+import com.vk.id.onetap.compose.button.asColor
+import com.vk.id.onetap.compose.button.asColorResource
+import com.vk.id.onetap.compose.button.asFontSize
+import com.vk.id.onetap.compose.button.asLineHeight
+import com.vk.id.onetap.compose.button.border
+import com.vk.id.onetap.compose.button.clip
+import com.vk.id.onetap.compose.button.height
 import com.vk.id.onetap.compose.button.startAuth
 
 @Composable

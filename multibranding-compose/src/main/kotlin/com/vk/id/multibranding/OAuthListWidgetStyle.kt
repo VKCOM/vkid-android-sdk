@@ -1,31 +1,31 @@
 package com.vk.id.multibranding
 
 public sealed class OAuthListWidgetStyle(
-    public val cornersStyle: WidgetCornersStyle,
-    public val rippleStyle: WidgetRippleStyle,
-    public val borderStyle: WidgetBorderStyle,
-    public val textStyle: WidgetTextStyle,
-    public val sizeStyle: WidgetSizeStyle,
+    public val cornersStyle: OAuthListWidgetCornersStyle,
+    public val rippleStyle: OAuthListWidgetRippleStyle,
+    public val borderStyle: OAuthListWidgetBorderStyle,
+    public val textStyle: OAuthListWidgetTextStyle,
+    public val sizeStyle: OAuthListWidgetSizeStyle,
 ) {
     public class Light(
-        cornersStyle: WidgetCornersStyle = WidgetCornersStyle.Default,
-        sizeStyle: WidgetSizeStyle = WidgetSizeStyle.DEFAULT,
+        cornersStyle: OAuthListWidgetCornersStyle = OAuthListWidgetCornersStyle.Default,
+        sizeStyle: OAuthListWidgetSizeStyle = OAuthListWidgetSizeStyle.DEFAULT,
     ) : OAuthListWidgetStyle(
         cornersStyle = cornersStyle,
-        rippleStyle = WidgetRippleStyle.LIGHT,
-        borderStyle = WidgetBorderStyle.LIGHT,
-        textStyle = WidgetTextStyle.LIGHT,
+        rippleStyle = OAuthListWidgetRippleStyle.LIGHT,
+        borderStyle = OAuthListWidgetBorderStyle.LIGHT,
+        textStyle = OAuthListWidgetTextStyle.LIGHT,
         sizeStyle = sizeStyle,
     )
 
     public class Dark(
-        cornersStyle: WidgetCornersStyle = WidgetCornersStyle.Default,
-        sizeStyle: WidgetSizeStyle = WidgetSizeStyle.DEFAULT,
+        cornersStyle: OAuthListWidgetCornersStyle = OAuthListWidgetCornersStyle.Default,
+        sizeStyle: OAuthListWidgetSizeStyle = OAuthListWidgetSizeStyle.DEFAULT,
     ) : OAuthListWidgetStyle(
         cornersStyle = cornersStyle,
-        rippleStyle = WidgetRippleStyle.DARK,
-        borderStyle = WidgetBorderStyle.DARK,
-        textStyle = WidgetTextStyle.DARK,
+        rippleStyle = OAuthListWidgetRippleStyle.DARK,
+        borderStyle = OAuthListWidgetBorderStyle.DARK,
+        textStyle = OAuthListWidgetTextStyle.DARK,
         sizeStyle = sizeStyle,
     )
 }

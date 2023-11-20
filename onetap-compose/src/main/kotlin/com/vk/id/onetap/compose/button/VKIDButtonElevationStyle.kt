@@ -4,18 +4,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
-import com.vk.id.multibranding.WidgetCornersStyle
 
-public sealed class WigetElevationStyle(
+public sealed class VKIDButtonElevationStyle(
     public val elevation: Int
 ) {
-    public object Default : WigetElevationStyle(0)
-    public class Custom(elevation: Int) : WigetElevationStyle(elevation)
+    public object Default : VKIDButtonElevationStyle(0)
+    public class Custom(elevation: Int) : VKIDButtonElevationStyle(elevation)
 }
 
 internal fun Modifier.shadow(
-    style: WigetElevationStyle,
-    cornersStyle: WidgetCornersStyle
+    style: VKIDButtonElevationStyle,
+    cornersStyle: VKIDButtonCornersStyle
 ) = shadow(
     elevation = style.elevation.dp,
     shape = RoundedCornerShape(cornersStyle.radiusDp.dp),

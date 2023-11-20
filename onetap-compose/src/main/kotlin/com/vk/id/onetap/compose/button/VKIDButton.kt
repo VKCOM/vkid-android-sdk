@@ -33,13 +33,6 @@ import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.VKIDUser
-import com.vk.id.multibranding.asColorResource
-import com.vk.id.multibranding.asFontSize
-import com.vk.id.multibranding.asLineHeight
-import com.vk.id.multibranding.border
-import com.vk.id.multibranding.clip
-import com.vk.id.multibranding.height
-import com.vk.id.multibranding.iconPadding
 import com.vk.id.onetap.compose.R
 import com.vk.id.onetap.compose.icon.VKIcon
 import com.vk.id.onetap.compose.progress.CircleProgress

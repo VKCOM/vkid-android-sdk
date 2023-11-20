@@ -3,10 +3,10 @@ package com.vk.id.onetap.xml
 import android.content.Context
 import android.content.res.TypedArray
 import android.util.AttributeSet
-import com.vk.id.multibranding.WidgetCornersStyle
-import com.vk.id.multibranding.WidgetSizeStyle
+import com.vk.id.onetap.compose.button.VKIDButtonCornersStyle
+import com.vk.id.onetap.compose.button.VKIDButtonElevationStyle
+import com.vk.id.onetap.compose.button.VKIDButtonSizeStyle
 import com.vk.id.onetap.compose.button.VKIDButtonStyle
-import com.vk.id.onetap.compose.button.WigetElevationStyle
 
 internal fun parseAttrs(
     context: Context,
@@ -20,9 +20,9 @@ internal fun parseAttrs(
     ).apply {
         try {
             return getStyleConstructor()(
-                WidgetCornersStyle.Custom(getCornerRadius().toInt()),
+                VKIDButtonCornersStyle.Custom(getCornerRadius().toInt()),
                 getSize(),
-                WigetElevationStyle.Custom(getElevation().toInt())
+                VKIDButtonElevationStyle.Custom(getElevation().toInt())
             )
         } finally {
             recycle()
@@ -32,12 +32,12 @@ internal fun parseAttrs(
 
 private fun TypedArray.getCornerRadius() = getDimension(
     R.styleable.VKIDButton_vkid_cornerRadius,
-    WidgetCornersStyle.Default.radiusDp.toFloat()
+    VKIDButtonCornersStyle.Default.radiusDp.toFloat()
 )
 
 private fun TypedArray.getElevation() = getDimension(
     R.styleable.VKIDButton_vkid_elevation,
-    WigetElevationStyle.Default.elevation.toFloat()
+    VKIDButtonElevationStyle.Default.elevation.toFloat()
 )
 
 private fun TypedArray.getStyleConstructor() = when (getInt(R.styleable.VKIDButton_vkid_style, 0)) {
@@ -48,18 +48,18 @@ private fun TypedArray.getStyleConstructor() = when (getInt(R.styleable.VKIDButt
 
 @Suppress("MagicNumber", "CyclomaticComplexMethod")
 private fun TypedArray.getSize() = when (getInt(R.styleable.VKIDButton_vkid_size, 0)) {
-    1 -> WidgetSizeStyle.SMALL_32
-    2 -> WidgetSizeStyle.SMALL_34
-    3 -> WidgetSizeStyle.SMALL_36
-    4 -> WidgetSizeStyle.SMALL_38
-    5 -> WidgetSizeStyle.MEDIUM_40
-    6 -> WidgetSizeStyle.MEDIUM_42
-    7 -> WidgetSizeStyle.MEDIUM_44
-    8 -> WidgetSizeStyle.MEDIUM_46
-    9 -> WidgetSizeStyle.LARGE_48
-    10 -> WidgetSizeStyle.LARGE_50
-    11 -> WidgetSizeStyle.LARGE_52
-    12 -> WidgetSizeStyle.LARGE_54
-    13 -> WidgetSizeStyle.LARGE_56
-    else -> WidgetSizeStyle.DEFAULT
+    1 -> VKIDButtonSizeStyle.SMALL_32
+    2 -> VKIDButtonSizeStyle.SMALL_34
+    3 -> VKIDButtonSizeStyle.SMALL_36
+    4 -> VKIDButtonSizeStyle.SMALL_38
+    5 -> VKIDButtonSizeStyle.MEDIUM_40
+    6 -> VKIDButtonSizeStyle.MEDIUM_42
+    7 -> VKIDButtonSizeStyle.MEDIUM_44
+    8 -> VKIDButtonSizeStyle.MEDIUM_46
+    9 -> VKIDButtonSizeStyle.LARGE_48
+    10 -> VKIDButtonSizeStyle.LARGE_50
+    11 -> VKIDButtonSizeStyle.LARGE_52
+    12 -> VKIDButtonSizeStyle.LARGE_54
+    13 -> VKIDButtonSizeStyle.LARGE_56
+    else -> VKIDButtonSizeStyle.DEFAULT
 }

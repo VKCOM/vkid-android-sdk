@@ -20,6 +20,5 @@ rootProject.name = "VKID"
 include(":sample")
 include(":vkid")
 include(":multibranding-compose")
-include(":multibranding-xml")
 include(":onetap-compose")
 include(":onetap-xml")

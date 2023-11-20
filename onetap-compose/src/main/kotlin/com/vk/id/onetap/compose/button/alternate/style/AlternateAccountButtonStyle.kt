@@ -1,40 +1,41 @@
 package com.vk.id.onetap.compose.button.alternate.style
 
-import com.vk.id.multibranding.WidgetBorderStyle
-import com.vk.id.multibranding.WidgetCornersStyle
-import com.vk.id.multibranding.WidgetRippleStyle
-import com.vk.id.multibranding.WidgetSizeStyle
+import com.vk.id.onetap.compose.button.VKIDButtonBorderStyle
+import com.vk.id.onetap.compose.button.VKIDButtonCornersStyle
+import com.vk.id.onetap.compose.button.VKIDButtonRippleStyle
+import com.vk.id.onetap.compose.button.VKIDButtonSizeStyle
+import com.vk.id.onetap.compose.button.VKIDButtonTextStyle
 
 public sealed class AlternateAccountButtonStyle(
     public val backgroundStyle: AlternateAccountButtonBackgroundStyle,
-    public val borderStyle: WidgetBorderStyle,
-    public val rippleStyle: WidgetRippleStyle,
-    public val textStyle: AlternateAccountButtonTextStyle,
-    public val cornersStyle: WidgetCornersStyle,
-    public val sizeStyle: WidgetSizeStyle,
+    public val borderStyle: VKIDButtonBorderStyle,
+    public val rippleStyle: VKIDButtonRippleStyle,
+    public val textStyle: VKIDButtonTextStyle,
+    public val cornersStyle: VKIDButtonCornersStyle,
+    public val sizeStyle: VKIDButtonSizeStyle,
 ) {
     public class Light(
-        borderStyle: WidgetBorderStyle = WidgetBorderStyle.NONE,
-        cornersStyle: WidgetCornersStyle = WidgetCornersStyle.Default,
-        sizeStyle: WidgetSizeStyle = WidgetSizeStyle.MEDIUM_44,
+        borderStyle: VKIDButtonBorderStyle = VKIDButtonBorderStyle.NONE,
+        cornersStyle: VKIDButtonCornersStyle = VKIDButtonCornersStyle.Default,
+        sizeStyle: VKIDButtonSizeStyle = VKIDButtonSizeStyle.MEDIUM_44,
     ) : AlternateAccountButtonStyle(
         backgroundStyle = AlternateAccountButtonBackgroundStyle.LIGHT,
         borderStyle = borderStyle,
-        rippleStyle = WidgetRippleStyle.LIGHT,
-        textStyle = AlternateAccountButtonTextStyle.LIGHT,
+        rippleStyle = VKIDButtonRippleStyle.LIGHT,
+        textStyle = VKIDButtonTextStyle.LIGHT,
         cornersStyle = cornersStyle,
         sizeStyle = sizeStyle,
     )
 
     public class Dark(
-        borderStyle: WidgetBorderStyle = WidgetBorderStyle.NONE,
-        cornersStyle: WidgetCornersStyle = WidgetCornersStyle.Default,
-        sizeStyle: WidgetSizeStyle = WidgetSizeStyle.MEDIUM_44,
+        borderStyle: VKIDButtonBorderStyle = VKIDButtonBorderStyle.NONE,
+        cornersStyle: VKIDButtonCornersStyle = VKIDButtonCornersStyle.Default,
+        sizeStyle: VKIDButtonSizeStyle = VKIDButtonSizeStyle.MEDIUM_44,
     ) : AlternateAccountButtonStyle(
         backgroundStyle = AlternateAccountButtonBackgroundStyle.DARK,
         borderStyle = borderStyle,
-        rippleStyle = WidgetRippleStyle.DARK,
-        textStyle = AlternateAccountButtonTextStyle.DARK,
+        rippleStyle = VKIDButtonRippleStyle.DARK,
+        textStyle = VKIDButtonTextStyle.DARK,
         cornersStyle = cornersStyle,
         sizeStyle = sizeStyle,
     )
