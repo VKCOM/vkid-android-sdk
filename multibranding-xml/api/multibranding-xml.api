@@ -16,8 +16,9 @@ public final class com/vk/id/multibranding/xml/OAuthListWidget : androidx/compos
 	public fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;I)V
 	public synthetic fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun Content (Landroidx/compose/runtime/Composer;I)V
+	public final fun getAllowedOAuths ()Ljava/util/Set;
 	public final fun getStyle ()Lcom/vk/id/multibranding/OAuthListWidgetStyle;
-	public final fun setAllowedAuths (Lkotlin/jvm/functions/Function1;)V
+	public final fun setAllowedOAuths (Ljava/util/Set;)V
 	public final fun setCallbacks (Lcom/vk/id/multibranding/OAuthListWidgetAuthCallback;Lkotlin/jvm/functions/Function0;)V
 	public static synthetic fun setCallbacks$default (Lcom/vk/id/multibranding/xml/OAuthListWidget;Lcom/vk/id/multibranding/OAuthListWidgetAuthCallback;Lkotlin/jvm/functions/Function0;ILjava/lang/Object;)V
 	public final fun setStyle (Lcom/vk/id/multibranding/OAuthListWidgetStyle;)V
