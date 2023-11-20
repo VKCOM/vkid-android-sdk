@@ -8,7 +8,7 @@ import com.vk.id.onetap.compose.R
 
 public enum class VKIDButtonBackgroundStyle {
     BLUE,
-    TRANSPARENT
+    TRANSPARENT,
 }
 
 internal fun Modifier.background(style: VKIDButtonBackgroundStyle) = composed {

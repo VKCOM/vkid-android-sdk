@@ -31,7 +31,6 @@ internal fun Modifier.iconPadding(
     style: VKIDButtonSizeStyle
 ) = padding(
     style.iconPadding()
-
 )
 
 @Suppress("CyclomaticComplexMethod", "MagicNumber")

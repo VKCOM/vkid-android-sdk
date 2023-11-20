@@ -13,7 +13,7 @@ public enum class VKIconSizeStyle {
 private const val VK_ICON_SMALL_SIZE_DP = 24
 private const val VK_ICON_NORMAL_SIZE_DP = 28
 
-public fun VKIconSizeStyle.asIconSize(): Int = when (this) {
+internal fun VKIconSizeStyle.asIconSize(): Int = when (this) {
     VKIconSizeStyle.SMALL -> VK_ICON_SMALL_SIZE_DP
     VKIconSizeStyle.NORMAL -> VK_ICON_NORMAL_SIZE_DP
 }

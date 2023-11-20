@@ -7,7 +7,7 @@ public enum class OAuthListWidgetRippleStyle {
     LIGHT,
 }
 
-internal fun OAuthListWidgetRippleStyle.asColor() = when (this) {
+internal fun OAuthListWidgetRippleStyle.asColor(): Color = when (this) {
     OAuthListWidgetRippleStyle.DARK -> Color.Black
     OAuthListWidgetRippleStyle.LIGHT -> Color.White
 }

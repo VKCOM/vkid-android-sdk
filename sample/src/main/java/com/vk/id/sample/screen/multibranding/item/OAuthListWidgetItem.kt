@@ -18,7 +18,7 @@ import com.vk.id.sample.uikit.common.darkBackground
 
 data class OAuthListWidgetItem(
     val style: OAuthListWidgetStyle,
-    val filter: (OAuth) -> Boolean,
+    val filter: (OAuth) -> Boolean = { true },
     val isDarkBackground: Boolean = false,
 )
 
