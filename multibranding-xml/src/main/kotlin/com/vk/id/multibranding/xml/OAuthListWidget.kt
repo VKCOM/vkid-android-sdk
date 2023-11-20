@@ -11,9 +11,9 @@ import androidx.compose.ui.platform.AbstractComposeView
 import com.vk.id.multibranding.OAuth
 import com.vk.id.multibranding.OAuthListWidget
 import com.vk.id.multibranding.OAuthListWidgetAuthCallback
+import com.vk.id.multibranding.OAuthListWidgetCornersStyle
+import com.vk.id.multibranding.OAuthListWidgetSizeStyle
 import com.vk.id.multibranding.OAuthListWidgetStyle
-import com.vk.id.multibranding.WidgetCornersStyle
-import com.vk.id.multibranding.WidgetSizeStyle
 
 public class OAuthListWidget @JvmOverloads constructor(
     context: Context,
@@ -67,7 +67,7 @@ private fun parseAttrs(
     ).apply {
         try {
             return getStyleConstructor()(
-                WidgetCornersStyle.Custom(getCornerRadius().toInt()),
+                OAuthListWidgetCornersStyle.Custom(getCornerRadius().toInt()),
                 getSize(),
             )
         } finally {
@@ -78,7 +78,7 @@ private fun parseAttrs(
 
 private fun TypedArray.getCornerRadius() = getDimension(
     R.styleable.OAuthListWidget_vkid_oauth_list__cornerRadius,
-    WidgetCornersStyle.Default.radiusDp.toFloat()
+    OAuthListWidgetCornersStyle.Default.radiusDp.toFloat()
 )
 
 private fun TypedArray.getStyleConstructor() = when (getInt(R.styleable.OAuthListWidget_vkid_oauth_list_style, 0)) {
@@ -88,18 +88,18 @@ private fun TypedArray.getStyleConstructor() = when (getInt(R.styleable.OAuthLis
 
 @Suppress("MagicNumber", "CyclomaticComplexMethod")
 private fun TypedArray.getSize() = when (getInt(R.styleable.OAuthListWidget_vkid_oauth_list__size, 0)) {
-    1 -> WidgetSizeStyle.SMALL_32
-    2 -> WidgetSizeStyle.SMALL_34
-    3 -> WidgetSizeStyle.SMALL_36
-    4 -> WidgetSizeStyle.SMALL_38
-    5 -> WidgetSizeStyle.MEDIUM_40
-    6 -> WidgetSizeStyle.MEDIUM_42
-    7 -> WidgetSizeStyle.MEDIUM_44
-    8 -> WidgetSizeStyle.MEDIUM_46
-    9 -> WidgetSizeStyle.LARGE_48
-    10 -> WidgetSizeStyle.LARGE_50
-    11 -> WidgetSizeStyle.LARGE_52
-    12 -> WidgetSizeStyle.LARGE_54
-    13 -> WidgetSizeStyle.LARGE_56
-    else -> WidgetSizeStyle.DEFAULT
+    1 -> OAuthListWidgetSizeStyle.SMALL_32
+    2 -> OAuthListWidgetSizeStyle.SMALL_34
+    3 -> OAuthListWidgetSizeStyle.SMALL_36
+    4 -> OAuthListWidgetSizeStyle.SMALL_38
+    5 -> OAuthListWidgetSizeStyle.MEDIUM_40
+    6 -> OAuthListWidgetSizeStyle.MEDIUM_42
+    7 -> OAuthListWidgetSizeStyle.MEDIUM_44
+    8 -> OAuthListWidgetSizeStyle.MEDIUM_46
+    9 -> OAuthListWidgetSizeStyle.LARGE_48
+    10 -> OAuthListWidgetSizeStyle.LARGE_50
+    11 -> OAuthListWidgetSizeStyle.LARGE_52
+    12 -> OAuthListWidgetSizeStyle.LARGE_54
+    13 -> OAuthListWidgetSizeStyle.LARGE_56
+    else -> OAuthListWidgetSizeStyle.DEFAULT
 }
