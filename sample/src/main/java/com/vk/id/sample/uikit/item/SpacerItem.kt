@@ -1,4 +1,4 @@
-package com.vk.id.sample.uikit.spacer
+package com.vk.id.sample.uikit.item
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth

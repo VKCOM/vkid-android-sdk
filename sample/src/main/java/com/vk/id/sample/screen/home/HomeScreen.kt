@@ -71,6 +71,9 @@ fun HomeScreen(
         Button("Multibranding (compose)") {
             navController.navigate("multibranding-compose")
         }
+        Button("Multibranding (xml)") {
+            navController.navigate("multibranding-xml")
+        }
     }
     Box(modifier = Modifier.fillMaxSize()) {
         BuildInfo(

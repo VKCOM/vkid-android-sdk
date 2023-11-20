@@ -1,5 +1,8 @@
-package com.vk.id.sample.uikit.spacer
+package com.vk.id.sample.uikit.item
 
+import android.content.Context
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,6 +13,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.view.setPadding
+import com.vk.id.sample.R
+import com.vk.id.sample.uikit.common.dpToPixels
+
+private const val TEXT_PADDING = 8
 
 data class TitleItem(
     val text: String
@@ -30,4 +38,17 @@ fun HandleTitleItem(item: Any) {
             fontWeight = FontWeight.SemiBold,
         )
     }
+}
+
+fun createTitleItem(
+    context: Context,
+    text: String,
+) = TextView(context).apply {
+    layoutParams = LinearLayout.LayoutParams(
+        LinearLayout.LayoutParams.MATCH_PARENT,
+        LinearLayout.LayoutParams.WRAP_CONTENT
+    )
+    this.text = text
+    setPadding(context.dpToPixels(TEXT_PADDING))
+    setTextAppearance(context, R.style.onetapSampleTilteStyle)
 }
