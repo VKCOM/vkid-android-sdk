@@ -29,9 +29,9 @@ import com.vk.id.onetap.compose.button.alternate.style.background
 import com.vk.id.onetap.compose.button.asColor
 import com.vk.id.onetap.compose.button.asFontSize
 import com.vk.id.onetap.compose.button.asLineHeight
+import com.vk.id.onetap.compose.button.border
 import com.vk.id.onetap.compose.button.clip
 import com.vk.id.onetap.compose.button.height
-import com.vk.id.onetap.compose.button.shadow
 import com.vk.id.onetap.compose.button.startAuth
 
 @Composable
@@ -51,7 +51,7 @@ public fun AlternateAccountButton(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .shadow(style.elevationStyle, style.cornersStyle)
+            .border(style.borderStyle, style.cornersStyle)
             .height(style.sizeStyle)
             .clip(style.cornersStyle)
             .clipToBounds()
@@ -90,6 +90,6 @@ public fun AlternateAccountButton(
 @Composable
 private fun AlternateAccountButtonPreview() {
     AlternateAccountButton(
-        onAuth = {}
+        onAuth = {},
     )
 }
