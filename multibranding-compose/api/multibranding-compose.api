@@ -1,0 +1,154 @@
+public final class com/vk/id/multibranding/OAuth : java/lang/Enum {
+	public static final field MAIL Lcom/vk/id/multibranding/OAuth;
+	public static final field OK Lcom/vk/id/multibranding/OAuth;
+	public static final field VK Lcom/vk/id/multibranding/OAuth;
+	public static fun valueOf (Ljava/lang/String;)Lcom/vk/id/multibranding/OAuth;
+	public static fun values ()[Lcom/vk/id/multibranding/OAuth;
+}
+
+public abstract interface class com/vk/id/multibranding/OAuthListWidgetAuthCallback {
+}
+
+public abstract interface class com/vk/id/multibranding/OAuthListWidgetAuthCallback$JustToken : com/vk/id/multibranding/OAuthListWidgetAuthCallback, kotlin/jvm/functions/Function1 {
+}
+
+public abstract interface class com/vk/id/multibranding/OAuthListWidgetAuthCallback$WithOAuth : com/vk/id/multibranding/OAuthListWidgetAuthCallback, kotlin/jvm/functions/Function2 {
+}
+
+public final class com/vk/id/multibranding/OAuthListWidgetKt {
+	public static final fun OAuthListWidget (Landroidx/compose/ui/Modifier;Lcom/vk/id/multibranding/OAuthListWidgetStyle;Lcom/vk/id/multibranding/OAuthListWidgetAuthCallback;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;II)V
+}
+
+public abstract class com/vk/id/multibranding/OAuthListWidgetStyle {
+	public static final field $stable I
+	public synthetic fun <init> (Lcom/vk/id/multibranding/WidgetCornersStyle;Lcom/vk/id/multibranding/WidgetRippleStyle;Lcom/vk/id/multibranding/WidgetBorderStyle;Lcom/vk/id/multibranding/WidgetTextStyle;Lcom/vk/id/multibranding/WidgetSizeStyle;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getBorderStyle ()Lcom/vk/id/multibranding/WidgetBorderStyle;
+	public final fun getCornersStyle ()Lcom/vk/id/multibranding/WidgetCornersStyle;
+	public final fun getRippleStyle ()Lcom/vk/id/multibranding/WidgetRippleStyle;
+	public final fun getSizeStyle ()Lcom/vk/id/multibranding/WidgetSizeStyle;
+	public final fun getTextStyle ()Lcom/vk/id/multibranding/WidgetTextStyle;
+}
+
+public final class com/vk/id/multibranding/OAuthListWidgetStyle$Dark : com/vk/id/multibranding/OAuthListWidgetStyle {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (Lcom/vk/id/multibranding/WidgetCornersStyle;Lcom/vk/id/multibranding/WidgetSizeStyle;)V
+	public synthetic fun <init> (Lcom/vk/id/multibranding/WidgetCornersStyle;Lcom/vk/id/multibranding/WidgetSizeStyle;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public final class com/vk/id/multibranding/OAuthListWidgetStyle$Light : com/vk/id/multibranding/OAuthListWidgetStyle {
+	public static final field $stable I
+	public fun <init> ()V
+	public fun <init> (Lcom/vk/id/multibranding/WidgetCornersStyle;Lcom/vk/id/multibranding/WidgetSizeStyle;)V
+	public synthetic fun <init> (Lcom/vk/id/multibranding/WidgetCornersStyle;Lcom/vk/id/multibranding/WidgetSizeStyle;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public final class com/vk/id/multibranding/WidgetBorderStyle : java/lang/Enum {
+	public static final field DARK Lcom/vk/id/multibranding/WidgetBorderStyle;
+	public static final field LIGHT Lcom/vk/id/multibranding/WidgetBorderStyle;
+	public static final field NONE Lcom/vk/id/multibranding/WidgetBorderStyle;
+	public static fun valueOf (Ljava/lang/String;)Lcom/vk/id/multibranding/WidgetBorderStyle;
+	public static fun values ()[Lcom/vk/id/multibranding/WidgetBorderStyle;
+}
+
+public final class com/vk/id/multibranding/WidgetBorderStyleKt {
+	public static final fun border (Landroidx/compose/ui/Modifier;Lcom/vk/id/multibranding/WidgetBorderStyle;Lcom/vk/id/multibranding/WidgetCornersStyle;)Landroidx/compose/ui/Modifier;
+}
+
+public abstract class com/vk/id/multibranding/WidgetCornersStyle {
+	public static final field $stable I
+	public synthetic fun <init> (ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getRadiusDp ()I
+}
+
+public final class com/vk/id/multibranding/WidgetCornersStyle$Custom : com/vk/id/multibranding/WidgetCornersStyle {
+	public static final field $stable I
+	public fun <init> (I)V
+}
+
+public final class com/vk/id/multibranding/WidgetCornersStyle$Default : com/vk/id/multibranding/WidgetCornersStyle {
+	public static final field $stable I
+	public static final field INSTANCE Lcom/vk/id/multibranding/WidgetCornersStyle$Default;
+}
+
+public final class com/vk/id/multibranding/WidgetCornersStyle$None : com/vk/id/multibranding/WidgetCornersStyle {
+	public static final field $stable I
+	public static final field INSTANCE Lcom/vk/id/multibranding/WidgetCornersStyle$None;
+}
+
+public final class com/vk/id/multibranding/WidgetCornersStyle$Round : com/vk/id/multibranding/WidgetCornersStyle {
+	public static final field $stable I
+	public static final field INSTANCE Lcom/vk/id/multibranding/WidgetCornersStyle$Round;
+}
+
+public final class com/vk/id/multibranding/WidgetCornersStyle$Rounded : com/vk/id/multibranding/WidgetCornersStyle {
+	public static final field $stable I
+	public static final field INSTANCE Lcom/vk/id/multibranding/WidgetCornersStyle$Rounded;
+}
+
+public final class com/vk/id/multibranding/WidgetCornersStyleKt {
+	public static final fun clip (Landroidx/compose/ui/Modifier;Lcom/vk/id/multibranding/WidgetCornersStyle;)Landroidx/compose/ui/Modifier;
+}
+
+public final class com/vk/id/multibranding/WidgetRippleStyle : java/lang/Enum {
+	public static final field DARK Lcom/vk/id/multibranding/WidgetRippleStyle;
+	public static final field LIGHT Lcom/vk/id/multibranding/WidgetRippleStyle;
+	public static fun valueOf (Ljava/lang/String;)Lcom/vk/id/multibranding/WidgetRippleStyle;
+	public static fun values ()[Lcom/vk/id/multibranding/WidgetRippleStyle;
+}
+
+public final class com/vk/id/multibranding/WidgetRippleStyleKt {
+	public static final fun asColor (Lcom/vk/id/multibranding/WidgetRippleStyle;)J
+}
+
+public final class com/vk/id/multibranding/WidgetSizeStyle : java/lang/Enum {
+	public static final field DEFAULT Lcom/vk/id/multibranding/WidgetSizeStyle;
+	public static final field LARGE_48 Lcom/vk/id/multibranding/WidgetSizeStyle;
+	public static final field LARGE_50 Lcom/vk/id/multibranding/WidgetSizeStyle;
+	public static final field LARGE_52 Lcom/vk/id/multibranding/WidgetSizeStyle;
+	public static final field LARGE_54 Lcom/vk/id/multibranding/WidgetSizeStyle;
+	public static final field LARGE_56 Lcom/vk/id/multibranding/WidgetSizeStyle;
+	public static final field MEDIUM_40 Lcom/vk/id/multibranding/WidgetSizeStyle;
+	public static final field MEDIUM_42 Lcom/vk/id/multibranding/WidgetSizeStyle;
+	public static final field MEDIUM_44 Lcom/vk/id/multibranding/WidgetSizeStyle;
+	public static final field MEDIUM_46 Lcom/vk/id/multibranding/WidgetSizeStyle;
+	public static final field SMALL_32 Lcom/vk/id/multibranding/WidgetSizeStyle;
+	public static final field SMALL_34 Lcom/vk/id/multibranding/WidgetSizeStyle;
+	public static final field SMALL_36 Lcom/vk/id/multibranding/WidgetSizeStyle;
+	public static final field SMALL_38 Lcom/vk/id/multibranding/WidgetSizeStyle;
+	public static fun valueOf (Ljava/lang/String;)Lcom/vk/id/multibranding/WidgetSizeStyle;
+	public static fun values ()[Lcom/vk/id/multibranding/WidgetSizeStyle;
+}
+
+public final class com/vk/id/multibranding/WidgetSizeStyleKt {
+	public static final fun asFontSize (Lcom/vk/id/multibranding/WidgetSizeStyle;)J
+	public static final fun asLineHeight (Lcom/vk/id/multibranding/WidgetSizeStyle;)J
+	public static final fun height (Landroidx/compose/ui/Modifier;Lcom/vk/id/multibranding/WidgetSizeStyle;)Landroidx/compose/ui/Modifier;
+	public static final fun heightDp (Lcom/vk/id/multibranding/WidgetSizeStyle;)I
+	public static final fun iconPadding (Landroidx/compose/ui/Modifier;Lcom/vk/id/multibranding/WidgetSizeStyle;)Landroidx/compose/ui/Modifier;
+	public static final fun iconPadding (Lcom/vk/id/multibranding/WidgetSizeStyle;)F
+	public static final fun iconSize (Lcom/vk/id/multibranding/WidgetSizeStyle;)F
+}
+
+public final class com/vk/id/multibranding/WidgetTextStyle : java/lang/Enum {
+	public static final field DARK Lcom/vk/id/multibranding/WidgetTextStyle;
+	public static final field LIGHT Lcom/vk/id/multibranding/WidgetTextStyle;
+	public static fun valueOf (Ljava/lang/String;)Lcom/vk/id/multibranding/WidgetTextStyle;
+	public static fun values ()[Lcom/vk/id/multibranding/WidgetTextStyle;
+}
+
+public final class com/vk/id/multibranding/WidgetTextStyleKt {
+	public static final fun asColorResource (Lcom/vk/id/multibranding/WidgetTextStyle;Landroidx/compose/runtime/Composer;I)J
+}
+
+public final class com/vk/id/multibranding/compose/BuildConfig {
+	public static final field BUILD_TYPE Ljava/lang/String;
+	public static final field CI_BUILD_NUMBER Ljava/lang/Integer;
+	public static final field CI_BUILD_TYPE Ljava/lang/String;
+	public static final field DEBUG Z
+	public static final field LIBRARY_PACKAGE_NAME Ljava/lang/String;
+	public static final field VKID_BUILD_TIME Ljava/lang/Long;
+	public static final field VKID_VERSION_NAME Ljava/lang/String;
+	public fun <init> ()V
+}
+
