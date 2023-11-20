@@ -133,4 +133,30 @@ internal val multibrandingSampleData = listOf(
         ),
     ),
     HalfSpacerItem(),
+    TitleItem("Small widget"),
+    HalfSpacerItem(),
+    OAuthListWidgetItem(
+        style = OAuthListWidgetStyle.Dark(),
+        filter = { it == OAuth.VK },
+        width = 100,
+    ),
+    SpacerItem(),
+    OAuthListWidgetItem(
+        style = OAuthListWidgetStyle.Dark(),
+        filter = { it == OAuth.VK },
+        width = 200,
+    ),
+    SpacerItem(),
+    OAuthListWidgetItem(
+        style = OAuthListWidgetStyle.Dark(),
+        filter = { it == OAuth.VK },
+        width = 240,
+    ),
+    SpacerItem(),
+    OAuthListWidgetItem(
+        style = OAuthListWidgetStyle.Dark(),
+        filter = { it == OAuth.VK },
+        width = 280,
+    ),
+    HalfSpacerItem(),
 )

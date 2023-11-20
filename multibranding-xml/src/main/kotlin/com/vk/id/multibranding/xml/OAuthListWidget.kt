@@ -27,6 +27,7 @@ public class OAuthListWidget @JvmOverloads constructor(
             onStyleChange(value)
         }
     private var onStyleChange: (OAuthListWidgetStyle) -> Unit = {}
+    private var isOAuthAllowed: (oAuth: OAuth) -> Boolean = { true }
     private var onAuth: OAuthListWidgetAuthCallback = OAuthListWidgetAuthCallback.JustToken {}
     private var onFail: () -> Unit = {}
 
@@ -43,6 +44,7 @@ public class OAuthListWidget @JvmOverloads constructor(
                     is OAuthListWidgetAuthCallback.JustToken -> callback(token)
                 }
             },
+            isOAuthAllowed = { isOAuthAllowed(it) }
         )
     }
 
@@ -52,6 +54,12 @@ public class OAuthListWidget @JvmOverloads constructor(
     ) {
         this.onAuth = onAuth
         this.onFail = onFail
+    }
+
+    public fun setAllowedAuths(
+        filter: (oAuth: OAuth) -> Boolean
+    ) {
+        this.isOAuthAllowed = filter
     }
 }
 

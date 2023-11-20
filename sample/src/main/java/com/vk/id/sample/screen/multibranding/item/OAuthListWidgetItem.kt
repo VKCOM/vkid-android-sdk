@@ -27,6 +27,7 @@ private const val WIDGET_WIDTH = 355
 data class OAuthListWidgetItem(
     val style: OAuthListWidgetStyle,
     val filter: (OAuth) -> Boolean = { true },
+    val width: Int = WIDGET_WIDTH,
     val isDarkBackground: Boolean = false,
 )
 
@@ -43,7 +44,7 @@ fun HandleOAuthListWidgetItem(
             .fillMaxWidth()
     ) {
         OAuthListWidget(
-            modifier = Modifier.width(355.dp),
+            modifier = Modifier.width(item.width.dp),
             style = item.style,
             onAuth = getOAuthListCallback(context),
             isOAuthAllowed = item.filter
@@ -53,28 +54,28 @@ fun HandleOAuthListWidgetItem(
 
 internal fun createOAuthListWidgetItem(
     context: Context,
-    style: OAuthListWidgetStyle,
-    isDarkBackground: Boolean,
+    item: OAuthListWidgetItem,
 ) = FrameLayout(context).apply {
     layoutParams = LinearLayout.LayoutParams(
         LinearLayout.LayoutParams.MATCH_PARENT,
         LinearLayout.LayoutParams.WRAP_CONTENT
     )
-    if (isDarkBackground) setBackgroundResource(R.color.vkid_gray900)
+    if (item.isDarkBackground) setBackgroundResource(R.color.vkid_gray900)
     addView(
         OAuthListWidget(context).apply {
             val layoutParams = FrameLayout.LayoutParams(
-                context.dpToPixels(WIDGET_WIDTH),
+                context.dpToPixels(item.width),
                 FrameLayout.LayoutParams.WRAP_CONTENT,
             )
             layoutParams.gravity = Gravity.CENTER
             setPadding(context.dpToPixels(WIDGET_PADDING))
-            this.style = style
+            this.style = item.style
             this.layoutParams = layoutParams
             setCallbacks(
                 onAuth = getOAuthListCallback(context),
                 onFail = { },
             )
+            setAllowedAuths(item.filter)
         }
     )
 }
