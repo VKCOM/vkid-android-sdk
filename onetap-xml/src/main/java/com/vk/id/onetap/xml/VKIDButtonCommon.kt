@@ -5,8 +5,8 @@ import android.content.res.TypedArray
 import android.util.AttributeSet
 import com.vk.id.multibranding.WidgetCornersStyle
 import com.vk.id.multibranding.WidgetSizeStyle
-import com.vk.id.onetap.compose.button.ElevationStyle
 import com.vk.id.onetap.compose.button.VKIDButtonStyle
+import com.vk.id.onetap.compose.button.WigetElevationStyle
 
 internal fun parseAttrs(
     context: Context,
@@ -22,7 +22,7 @@ internal fun parseAttrs(
             return getStyleConstructor()(
                 WidgetCornersStyle.Custom(getCornerRadius().toInt()),
                 getSize(),
-                ElevationStyle.Custom(getElevation().toInt())
+                WigetElevationStyle.Custom(getElevation().toInt())
             )
         } finally {
             recycle()
@@ -37,7 +37,7 @@ private fun TypedArray.getCornerRadius() = getDimension(
 
 private fun TypedArray.getElevation() = getDimension(
     R.styleable.VKIDButton_vkid_elevation,
-    ElevationStyle.Default.elevation.toFloat()
+    WigetElevationStyle.Default.elevation.toFloat()
 )
 
 private fun TypedArray.getStyleConstructor() = when (getInt(R.styleable.VKIDButton_vkid_style, 0)) {

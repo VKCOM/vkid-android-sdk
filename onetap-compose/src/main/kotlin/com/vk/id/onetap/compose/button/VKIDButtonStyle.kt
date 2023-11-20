@@ -20,12 +20,12 @@ public sealed class VKIDButtonStyle(
     public val progressStyle: CircleProgressStyle,
     public val cornersStyle: WidgetCornersStyle,
     public val sizeStyle: WidgetSizeStyle,
-    public val elevationStyle: ElevationStyle,
+    public val elevationStyle: WigetElevationStyle,
 ) {
     public class Blue(
         cornersStyle: WidgetCornersStyle = WidgetCornersStyle.Default,
         sizeStyle: WidgetSizeStyle = WidgetSizeStyle.MEDIUM_44,
-        elevationStyle: ElevationStyle = ElevationStyle.Default,
+        elevationStyle: WigetElevationStyle = WigetElevationStyle.Default,
     ) : VKIDButtonStyle(
         backgroundStyle = BackgroundStyle.BLUE,
         rippleStyle = WidgetRippleStyle.LIGHT,
@@ -44,7 +44,7 @@ public sealed class VKIDButtonStyle(
     public class TransparentDark(
         cornersStyle: WidgetCornersStyle = WidgetCornersStyle.Default,
         sizeStyle: WidgetSizeStyle = WidgetSizeStyle.MEDIUM_44,
-        elevationStyle: ElevationStyle = ElevationStyle.Default,
+        elevationStyle: WigetElevationStyle = WigetElevationStyle.Default,
     ) : VKIDButtonStyle(
         backgroundStyle = BackgroundStyle.TRANSPARENT,
         rippleStyle = WidgetRippleStyle.DARK,
@@ -63,7 +63,7 @@ public sealed class VKIDButtonStyle(
     public class TransparentLight(
         cornersStyle: WidgetCornersStyle = WidgetCornersStyle.Default,
         sizeStyle: WidgetSizeStyle = WidgetSizeStyle.MEDIUM_44,
-        elevationStyle: ElevationStyle = ElevationStyle.Default,
+        elevationStyle: WigetElevationStyle = WigetElevationStyle.Default,
     ) : VKIDButtonStyle(
         backgroundStyle = BackgroundStyle.TRANSPARENT,
         rippleStyle = WidgetRippleStyle.LIGHT,

@@ -2,8 +2,8 @@ package com.vk.id.sample.screen.styling.data
 
 import com.vk.id.multibranding.WidgetCornersStyle
 import com.vk.id.multibranding.WidgetSizeStyle
-import com.vk.id.onetap.compose.button.ElevationStyle
 import com.vk.id.onetap.compose.button.VKIDButtonStyle
+import com.vk.id.onetap.compose.button.WigetElevationStyle
 import com.vk.id.sample.screen.styling.item.ButtonItem
 import com.vk.id.sample.screen.styling.item.SmallButtonItem
 import com.vk.id.sample.uikit.spacer.HalfSpacerItem
@@ -79,21 +79,21 @@ internal val buttonStylingData = listOf(
     ButtonItem(
         style = VKIDButtonStyle.Blue(
             cornersStyle = WidgetCornersStyle.Rounded,
-            elevationStyle = ElevationStyle.Default
+            elevationStyle = WigetElevationStyle.Default
         )
     ),
     SpacerItem(),
     ButtonItem(
         style = VKIDButtonStyle.Blue(
             cornersStyle = WidgetCornersStyle.Rounded,
-            elevationStyle = ElevationStyle.Custom(4)
+            elevationStyle = WigetElevationStyle.Custom(4)
         ),
     ),
     SpacerItem(),
     ButtonItem(
         style = VKIDButtonStyle.Blue(
             cornersStyle = WidgetCornersStyle.Rounded,
-            elevationStyle = ElevationStyle.Custom(8)
+            elevationStyle = WigetElevationStyle.Custom(8)
         ),
     ),
     HalfSpacerItem(),
@@ -196,7 +196,7 @@ internal val buttonStylingData = listOf(
         style = VKIDButtonStyle.Blue(
             cornersStyle = WidgetCornersStyle.Default,
             sizeStyle = WidgetSizeStyle.MEDIUM_44,
-            elevationStyle = ElevationStyle.Default
+            elevationStyle = WigetElevationStyle.Default
         ),
     ),
     HalfSpacerItem(),
