@@ -25,10 +25,6 @@ android {
     }
 }
 
-tasks.withType<Test>().configureEach {
-    useJUnitPlatform()
-}
-
 dependencies {
     implementation(libs.androidx.annotation)
     implementation(libs.androidx.browser)

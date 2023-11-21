@@ -9,11 +9,6 @@ import org.gradle.kotlin.dsl.withType
 fun Project.configureKotest(
     android: CommonExtension<*, *, *, *, *>,
 ) {
-    android.testOptions {
-        unitTests.all {
-            it.useJUnitPlatform()
-        }
-    }
     tasks.withType<Test>().configureEach {
         useJUnitPlatform()
     }

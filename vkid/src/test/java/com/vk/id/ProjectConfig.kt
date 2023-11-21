@@ -5,9 +5,9 @@ import io.kotest.core.config.ProjectConfiguration
 
 internal object ProjectConfig : AbstractProjectConfig() {
 
-   override val parallelism = 10
+    override val parallelism = 10
 
-   override val concurrentTests: Int = ProjectConfiguration.MaxConcurrency
+    override val concurrentTests: Int = ProjectConfiguration.MaxConcurrency
 
-   override var dispatcherAffinity: Boolean? = false
+    override var dispatcherAffinity: Boolean? = false
 }
