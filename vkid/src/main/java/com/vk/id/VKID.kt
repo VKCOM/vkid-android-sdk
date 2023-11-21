@@ -15,7 +15,6 @@ import com.vk.id.internal.auth.device.DeviceIdProvider
 import com.vk.id.internal.auth.pkce.PkceGeneratorSHA256
 import com.vk.id.internal.auth.toExpireTime
 import com.vk.id.internal.auth.toQueryParam
-import com.vk.id.internal.auth.web.WebAuthProvider
 import com.vk.id.internal.concurrent.CoroutinesDispatchers
 import com.vk.id.internal.di.VKIDDeps
 import com.vk.id.internal.di.VKIDDepsProd
@@ -119,13 +118,9 @@ public class VKID {
         }
 
         withContext(dispatchers.io) {
+            val bestAuthProvider = authProvidersChooser.value.chooseBest(authParams)
             val fullAuthOptions = createInternalAuthOptions(authParams)
-            val authProvider = if (authParams.useExistingUserIfPossible) {
-                authProvidersChooser.value.chooseBest()
-            } else {
-                WebAuthProvider()
-            }
-            authProvider.auth(appContext, fullAuthOptions)
+            bestAuthProvider.auth(appContext, fullAuthOptions)
         }
     }
 
@@ -156,6 +151,7 @@ public class VKID {
             theme = theme?.toQueryParam(),
             // To not show "Log in as..." screen in web view
             webAuthPhoneScreen = !authParams.useExistingUserIfPossible,
+            oAuth = authParams.oAuth,
         )
     }
 

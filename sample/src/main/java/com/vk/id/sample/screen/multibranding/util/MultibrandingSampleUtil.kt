@@ -7,9 +7,9 @@ import com.vk.id.sample.screen.styling.util.showToast
 
 internal fun getOAuthListCallback(
     context: Context
-) = OAuthListWidgetAuthCallback.WithOAuth { oAuth, token ->
+) = OAuthListWidgetAuthCallback.WithOAuth { oAuth, accessToken ->
     showToast(
         context,
-        "Auth from $oAuth with token ${formatToken(token)}"
+        "Auth from $oAuth with token ${formatToken(accessToken.token)}"
     )
 }

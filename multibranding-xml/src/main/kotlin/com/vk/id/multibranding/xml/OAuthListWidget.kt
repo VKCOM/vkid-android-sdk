@@ -8,7 +8,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.AbstractComposeView
-import com.vk.id.multibranding.OAuth
+import com.vk.id.AccessToken
+import com.vk.id.VKIDAuthFail
+import com.vk.id.internal.auth.OAuth
 import com.vk.id.multibranding.OAuthListWidget
 import com.vk.id.multibranding.OAuthListWidgetAuthCallback
 import com.vk.id.multibranding.OAuthListWidgetCornersStyle
@@ -34,7 +36,7 @@ public class OAuthListWidget @JvmOverloads constructor(
         }
     private var onAllowedOAuthsChange: (Set<OAuth>) -> Unit = {}
     private var onAuth: OAuthListWidgetAuthCallback = OAuthListWidgetAuthCallback.JustToken {}
-    private var onFail: () -> Unit = {}
+    private var onFail: (VKIDAuthFail) -> Unit = {}
 
     @Composable
     override fun Content() {
@@ -45,19 +47,20 @@ public class OAuthListWidget @JvmOverloads constructor(
         OAuthListWidget(
             modifier = Modifier,
             style = style.value,
-            onAuth = OAuthListWidgetAuthCallback.WithOAuth { oAuth: OAuth, token: String ->
+            onAuth = OAuthListWidgetAuthCallback.WithOAuth { oAuth: OAuth, token: AccessToken ->
                 when (val callback = onAuth) {
                     is OAuthListWidgetAuthCallback.WithOAuth -> callback(oAuth, token)
                     is OAuthListWidgetAuthCallback.JustToken -> callback(token)
                 }
             },
+            onFail = onFail,
             allowedOAuths = allowedOAuths.value
         )
     }
 
     public fun setCallbacks(
         onAuth: OAuthListWidgetAuthCallback,
-        onFail: () -> Unit = {},
+        onFail: (VKIDAuthFail) -> Unit = {},
     ) {
         this.onAuth = onAuth
         this.onFail = onFail

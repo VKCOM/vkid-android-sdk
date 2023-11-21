@@ -18,6 +18,7 @@ import androidx.compose.foundation.text.BasicText
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,6 +33,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.vk.id.AccessToken
+import com.vk.id.VKID
+import com.vk.id.VKIDAuthFail
+import com.vk.id.auth.VKIDAuthParams
+import com.vk.id.internal.auth.OAuth
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 private val sourceItems = listOf(
     OAuth.VK,
@@ -40,8 +48,8 @@ private val sourceItems = listOf(
 )
 
 public sealed interface OAuthListWidgetAuthCallback {
-    public fun interface WithOAuth : (OAuth, String) -> Unit, OAuthListWidgetAuthCallback
-    public fun interface JustToken : (String) -> Unit, OAuthListWidgetAuthCallback
+    public fun interface WithOAuth : (OAuth, AccessToken) -> Unit, OAuthListWidgetAuthCallback
+    public fun interface JustToken : (AccessToken) -> Unit, OAuthListWidgetAuthCallback
 }
 
 @Composable
@@ -49,9 +57,12 @@ public fun OAuthListWidget(
     modifier: Modifier = Modifier,
     style: OAuthListWidgetStyle = OAuthListWidgetStyle.Light(),
     onAuth: OAuthListWidgetAuthCallback,
+    onFail: (VKIDAuthFail) -> Unit,
     allowedOAuths: Set<OAuth> = OAuth.values().toSet()
 ) {
     val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+    val vkid = remember { VKID(context) }
     val items = remember { sourceItems.filter { it in allowedOAuths } }
     Row(
         modifier = modifier
@@ -63,7 +74,10 @@ public fun OAuthListWidget(
                 style = style,
                 item = item,
                 showText = items.size == 1,
+                coroutineScope = coroutineScope,
+                vkid = vkid,
                 onAuth = onAuth,
+                onFail = onFail,
             )
             if (index != items.lastIndex) {
                 Spacer(modifier = Modifier.width(12.dp))
@@ -80,7 +94,10 @@ private fun OAuthButton(
     style: OAuthListWidgetStyle,
     item: OAuth,
     showText: Boolean,
+    coroutineScope: CoroutineScope,
+    vkid: VKID,
     onAuth: OAuthListWidgetAuthCallback,
+    onFail: (VKIDAuthFail) -> Unit
 ) {
     Row(
         modifier = modifier
@@ -94,9 +111,22 @@ private fun OAuthButton(
                 ),
                 role = Role.Button,
                 onClick = {
-                    when (onAuth) {
-                        is OAuthListWidgetAuthCallback.WithOAuth -> onAuth(item, "FAKE_TOKEN")
-                        is OAuthListWidgetAuthCallback.JustToken -> onAuth("FAKE_TOKEN")
+                    coroutineScope.launch {
+                        vkid.authorize(
+                            object : VKID.AuthCallback {
+                                override fun onSuccess(accessToken: AccessToken) {
+                                    when (onAuth) {
+                                        is OAuthListWidgetAuthCallback.WithOAuth -> onAuth(item, accessToken)
+                                        is OAuthListWidgetAuthCallback.JustToken -> onAuth(accessToken)
+                                    }
+                                }
+
+                                override fun onFail(fail: VKIDAuthFail) {
+                                    onFail(fail)
+                                }
+                            },
+                            VKIDAuthParams { oAuth = item }
+                        )
                     }
                 }
             ),
@@ -243,7 +273,8 @@ private fun getWidgetTitle(
 private fun OAuthListWidgetWithOneItem() {
     OAuthListWidget(
         allowedOAuths = setOf(OAuth.OK),
-        onAuth = OAuthListWidgetAuthCallback.WithOAuth { _, _ -> }
+        onAuth = OAuthListWidgetAuthCallback.WithOAuth { _, _ -> },
+        onFail = {},
     )
 }
 
@@ -252,7 +283,8 @@ private fun OAuthListWidgetWithOneItem() {
 private fun OAuthListWidgetWithTwoItems() {
     OAuthListWidget(
         allowedOAuths = setOf(OAuth.VK, OAuth.OK),
-        onAuth = OAuthListWidgetAuthCallback.WithOAuth { _, _ -> }
+        onAuth = OAuthListWidgetAuthCallback.WithOAuth { _, _ -> },
+        onFail = {},
     )
 }
 
@@ -261,7 +293,8 @@ private fun OAuthListWidgetWithTwoItems() {
 private fun OAuthListWidgetLight() {
     OAuthListWidget(
         style = OAuthListWidgetStyle.Light(),
-        onAuth = OAuthListWidgetAuthCallback.WithOAuth { _, _ -> }
+        onAuth = OAuthListWidgetAuthCallback.WithOAuth { _, _ -> },
+        onFail = {},
     )
 }
 
@@ -272,6 +305,7 @@ private fun OAuthListWidgetDark() {
         modifier = Modifier.background(Color.White),
         style = OAuthListWidgetStyle.Dark(),
         allowedOAuths = setOf(OAuth.VK),
-        onAuth = OAuthListWidgetAuthCallback.WithOAuth { _, _ -> }
+        onAuth = OAuthListWidgetAuthCallback.WithOAuth { _, _ -> },
+        onFail = {},
     )
 }
