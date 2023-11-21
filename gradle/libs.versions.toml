@@ -15,6 +15,7 @@ detekt = "1.22.0"
 binary-compatibility-validator = "0.13.2"
 kotlin = "1.8.20"
 kotlinxCoroutines = "1.7.1"
+kotest = "5.8.0"
 ksp = "1.8.20-1.0.11"
 lifecycle-runtime-compose = "2.6.2"
 mockk = "1.13.5"
@@ -45,6 +46,8 @@ coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 coil-compose = { group = "io.coil-kt", name="coil-compose", version.ref = "coil" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
+kotest-core = { group = "io.kotest", name = "kotest-runner-junit5", version.ref = "kotest" }
+kotest-assertions = { group = "io.kotest", name = "kotest-assertions-core", version.ref = "kotest" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 okhttp3-okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okHttpVersion" }
 okhttp3-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okHttpVersion" }

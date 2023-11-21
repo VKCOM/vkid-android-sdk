@@ -4,11 +4,14 @@ import android.util.Log
 import io.mockk.every
 import io.mockk.mockkStatic
 import io.mockk.verify
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 
+@TestInstance(PER_CLASS)
 public class AndroidLogcatLogEngineTest {
-    @Before
+    @BeforeEach
     public fun setUp() {
         mockkStatic(Log::class)
         every { Log.i(any(), any()) } returns 0
