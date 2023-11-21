@@ -1,6 +1,8 @@
 package com.vk.id.internal.auth
 
 import android.net.Uri
+import android.util.Base64
+import com.vk.id.OAuth
 import com.vk.id.auth.VKIDAuthParams
 
 internal data class AuthOptions(
@@ -13,7 +15,8 @@ internal data class AuthOptions(
     val state: String,
     val locale: String?,
     val theme: String?,
-    val webAuthPhoneScreen: Boolean
+    val webAuthPhoneScreen: Boolean,
+    val oAuth: OAuth?,
 )
 
 private const val APP_ID = "app_id"
@@ -28,6 +31,7 @@ private const val RESPONSE_TYPE_CODE = "code"
 private const val SCHEME_BROWSER = "https"
 private const val STATE = "state"
 private const val UUID = "uuid"
+private const val ACTION = "action"
 private const val LOCALE = "lang_id"
 private const val THEME = "scheme"
 private const val SCREEN_PARAM = "screen"
@@ -59,6 +63,9 @@ private fun AuthOptions.toAuthUriBuilder(): Uri.Builder {
         .appendQueryParameter(STATE, state)
         .appendQueryParameter(UUID, deviceId)
 
+    if (oAuth != null) {
+        builder.appendQueryParameter(ACTION, oAuth.toQueryParam())
+    }
     if (locale != null) {
         builder.appendQueryParameter(LOCALE, locale)
     }
@@ -87,3 +94,7 @@ internal fun VKIDAuthParams.Theme.toQueryParam(): String = when (this) {
     VKIDAuthParams.Theme.Light -> "bright_light"
     VKIDAuthParams.Theme.Dark -> "space_gray"
 }
+
+private fun OAuth.toQueryParam() = Base64
+    .encodeToString("""{"name":"sdk_oauth","params":{"oauth":"$serverName"}}""".encodeToByteArray(), Base64.DEFAULT)
+    .filter { it != '\n' }

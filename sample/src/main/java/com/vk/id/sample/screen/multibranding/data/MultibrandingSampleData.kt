@@ -1,6 +1,6 @@
 package com.vk.id.sample.screen.multibranding.data
 
-import com.vk.id.multibranding.OAuth
+import com.vk.id.OAuth
 import com.vk.id.multibranding.OAuthListWidgetCornersStyle
 import com.vk.id.multibranding.OAuthListWidgetSizeStyle
 import com.vk.id.multibranding.OAuthListWidgetStyle
