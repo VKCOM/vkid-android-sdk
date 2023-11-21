@@ -33,6 +33,8 @@ import androidx.navigation.NavController
 import com.vk.id.onetap.compose.OneTap
 import com.vk.id.onetap.compose.button.VKIDButtonCornersStyle
 import com.vk.id.onetap.compose.button.VKIDButtonStyle
+import com.vk.id.onetap.compose.onetap.sheet.OneTapBottomSheet
+import com.vk.id.onetap.compose.onetap.sheet.rememberOneTapBottomSheetState
 import com.vk.id.sample.BuildConfig
 import com.vk.id.sample.R
 import com.vk.id.sample.screen.styling.util.onVKIDAuthFail
@@ -74,6 +76,19 @@ fun HomeScreen(
         Button("Multibranding (xml)") {
             navController.navigate("multibranding-xml")
         }
+        val bottomSheetState = rememberOneTapBottomSheetState()
+        OneTapBottomSheet(
+            onAuth = { onVKIDAuthSuccess(context, it) },
+            state = bottomSheetState
+        )
+        Spacer(modifier = Modifier.height(32.dp))
+        Button(text = "OneTapModalBottomSheet", onClick = {
+            if (bottomSheetState.isVisible) {
+                bottomSheetState.hide()
+            } else {
+                bottomSheetState.show()
+            }
+        })
     }
     Box(modifier = Modifier.fillMaxSize()) {
         BuildInfo(
