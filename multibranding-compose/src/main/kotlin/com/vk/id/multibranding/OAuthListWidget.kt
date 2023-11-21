@@ -34,10 +34,10 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.vk.id.AccessToken
+import com.vk.id.OAuth
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.VKIDAuthParams
-import com.vk.id.OAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
