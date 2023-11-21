@@ -2,6 +2,7 @@ package com.vk.id.internal.auth
 
 import android.net.Uri
 import android.util.Base64
+import com.vk.id.OAuth
 import com.vk.id.auth.VKIDAuthParams
 
 internal data class AuthOptions(

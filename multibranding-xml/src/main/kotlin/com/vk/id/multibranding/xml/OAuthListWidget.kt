@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.AbstractComposeView
 import com.vk.id.AccessToken
 import com.vk.id.VKIDAuthFail
-import com.vk.id.internal.auth.OAuth
+import com.vk.id.OAuth
 import com.vk.id.multibranding.OAuthListWidget
 import com.vk.id.multibranding.OAuthListWidgetAuthCallback
 import com.vk.id.multibranding.OAuthListWidgetCornersStyle

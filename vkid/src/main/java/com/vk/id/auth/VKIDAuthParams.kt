@@ -3,7 +3,7 @@ package com.vk.id.auth
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
-import com.vk.id.internal.auth.OAuth
+import com.vk.id.OAuth
 
 public inline fun VKIDAuthParams(initializer: VKIDAuthParams.Builder.() -> Unit): VKIDAuthParams {
     return VKIDAuthParams.Builder().apply(initializer).build()

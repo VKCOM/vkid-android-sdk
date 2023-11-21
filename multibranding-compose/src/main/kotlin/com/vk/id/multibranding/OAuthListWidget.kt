@@ -37,7 +37,7 @@ import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.VKIDAuthParams
-import com.vk.id.internal.auth.OAuth
+import com.vk.id.OAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 

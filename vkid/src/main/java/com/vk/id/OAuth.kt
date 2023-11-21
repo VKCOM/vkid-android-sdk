@@ -1,4 +1,4 @@
-package com.vk.id.internal.auth
+package com.vk.id
 
 public enum class OAuth(
     internal val serverName: String
