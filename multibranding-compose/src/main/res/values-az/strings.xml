@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="vkid_oauth_list_widget_title">Email %1$s ilə girmək</string>
+    <string name="vkid_oauth_list_widget_title_ok">OK ilə girmək</string>
+    <string name="vkid_oauth_list_widget_title_mail">Email Mail.ru ilə girmək</string>
+    <string name="vkid_oauth_list_widget_title_vk">VK ID ilə giriş</string>
 </resources>

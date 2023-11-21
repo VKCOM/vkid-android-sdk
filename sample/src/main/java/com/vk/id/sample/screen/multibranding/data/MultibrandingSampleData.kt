@@ -18,12 +18,22 @@ internal val multibrandingSampleData = listOf(
     SpacerItem(),
     OAuthListWidgetItem(
         style = OAuthListWidgetStyle.Dark(),
-        filter = { it in setOf(OAuth.MAIL, OAuth.OK) }
+        allowedOAuths = setOf(OAuth.MAIL, OAuth.OK)
     ),
     SpacerItem(),
     OAuthListWidgetItem(
         style = OAuthListWidgetStyle.Dark(),
-        filter = { it == OAuth.VK }
+        allowedOAuths = setOf(OAuth.VK)
+    ),
+    SpacerItem(),
+    OAuthListWidgetItem(
+        style = OAuthListWidgetStyle.Dark(),
+        allowedOAuths = setOf(OAuth.MAIL)
+    ),
+    SpacerItem(),
+    OAuthListWidgetItem(
+        style = OAuthListWidgetStyle.Dark(),
+        allowedOAuths = setOf(OAuth.OK)
     ),
     HalfSpacerItem(),
     TitleItem("Light widget"),
@@ -137,25 +147,25 @@ internal val multibrandingSampleData = listOf(
     HalfSpacerItem(),
     OAuthListWidgetItem(
         style = OAuthListWidgetStyle.Dark(),
-        filter = { it == OAuth.VK },
+        allowedOAuths = setOf(OAuth.VK),
         width = 100,
     ),
     SpacerItem(),
     OAuthListWidgetItem(
         style = OAuthListWidgetStyle.Dark(),
-        filter = { it == OAuth.VK },
+        allowedOAuths = setOf(OAuth.VK),
         width = 200,
     ),
     SpacerItem(),
     OAuthListWidgetItem(
         style = OAuthListWidgetStyle.Dark(),
-        filter = { it == OAuth.VK },
+        allowedOAuths = setOf(OAuth.VK),
         width = 240,
     ),
     SpacerItem(),
     OAuthListWidgetItem(
         style = OAuthListWidgetStyle.Dark(),
-        filter = { it == OAuth.VK },
+        allowedOAuths = setOf(OAuth.VK),
         width = 280,
     ),
     HalfSpacerItem(),

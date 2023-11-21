@@ -34,18 +34,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 private val sourceItems = listOf(
-    OAuthItemData(
-        name = OAuth.VK,
-        title = "VK ID",
-    ),
-    OAuthItemData(
-        name = OAuth.MAIL,
-        title = "Mail",
-    ),
-    OAuthItemData(
-        name = OAuth.OK,
-        title = "OK",
-    ),
+    OAuth.VK,
+    OAuth.MAIL,
+    OAuth.OK,
 )
 
 public sealed interface OAuthListWidgetAuthCallback {
@@ -58,10 +49,10 @@ public fun OAuthListWidget(
     modifier: Modifier = Modifier,
     style: OAuthListWidgetStyle = OAuthListWidgetStyle.Light(),
     onAuth: OAuthListWidgetAuthCallback,
-    isOAuthAllowed: (oAuth: OAuth) -> Boolean = { true }
+    allowedOAuths: Set<OAuth> = OAuth.values().toSet()
 ) {
     val context = LocalContext.current
-    val items = remember { sourceItems.filter { isOAuthAllowed(it.name) } }
+    val items = remember { sourceItems.filter { it in allowedOAuths } }
     Row(
         modifier = modifier
     ) {
@@ -87,7 +78,7 @@ private fun OAuthButton(
     modifier: Modifier,
     context: Context,
     style: OAuthListWidgetStyle,
-    item: OAuthItemData,
+    item: OAuth,
     showText: Boolean,
     onAuth: OAuthListWidgetAuthCallback,
 ) {
@@ -104,7 +95,7 @@ private fun OAuthButton(
                 role = Role.Button,
                 onClick = {
                     when (onAuth) {
-                        is OAuthListWidgetAuthCallback.WithOAuth -> onAuth(item.name, "FAKE_TOKEN")
+                        is OAuthListWidgetAuthCallback.WithOAuth -> onAuth(item, "FAKE_TOKEN")
                         is OAuthListWidgetAuthCallback.JustToken -> onAuth("FAKE_TOKEN")
                     }
                 }
@@ -145,7 +136,7 @@ private fun MeasureUnconstrainedViewWidth(
 
 @Composable
 private fun OAuthListWithTextEnding(
-    item: OAuthItemData,
+    item: OAuth,
     style: OAuthListWidgetStyle,
     context: Context,
 ) {
@@ -177,7 +168,7 @@ private fun OAuthListWithTextEnding(
 @Composable
 private fun OAuthListWithTextEndingContent(
     textModifier: Modifier,
-    item: OAuthItemData,
+    item: OAuth,
     style: OAuthListWidgetStyle,
     context: Context,
 ) {
@@ -197,11 +188,11 @@ private fun OAuthListWithTextEndingContent(
 
 @Composable
 private fun OAuthListImage(
-    item: OAuthItemData,
+    item: OAuth,
     style: OAuthListWidgetStyle,
 ) = Image(
     painter = painterResource(
-        id = when (item.name) {
+        id = when (item) {
             OAuth.VK -> R.drawable.vk_icon_blue
             OAuth.MAIL -> R.drawable.mail_icon_blue
             OAuth.OK -> R.drawable.ok_icon_yellow
@@ -217,7 +208,7 @@ private fun OAuthListImage(
 @Composable
 private fun OAuthListText(
     modifier: Modifier,
-    item: OAuthItemData,
+    item: OAuth,
     style: OAuthListWidgetStyle,
     context: Context,
 ) = Box(
@@ -225,7 +216,7 @@ private fun OAuthListText(
     contentAlignment = Alignment.Center,
 ) {
     BasicText(
-        text = context.getString(R.string.vkid_oauth_list_widget_title, item.title),
+        text = getWidgetTitle(context, item),
         modifier = Modifier,
         style = TextStyle(
             textAlign = TextAlign.Center,
@@ -238,11 +229,20 @@ private fun OAuthListText(
     )
 }
 
+private fun getWidgetTitle(
+    context: Context,
+    oAuth: OAuth
+) = when (oAuth) {
+    OAuth.VK -> context.getString(R.string.vkid_oauth_list_widget_title_vk)
+    OAuth.MAIL -> context.getString(R.string.vkid_oauth_list_widget_title_mail)
+    OAuth.OK -> context.getString(R.string.vkid_oauth_list_widget_title_ok)
+}
+
 @Preview
 @Composable
 private fun OAuthListWidgetWithOneItem() {
     OAuthListWidget(
-        isOAuthAllowed = { it == OAuth.OK },
+        allowedOAuths = setOf(OAuth.OK),
         onAuth = OAuthListWidgetAuthCallback.WithOAuth { _, _ -> }
     )
 }
@@ -251,7 +251,7 @@ private fun OAuthListWidgetWithOneItem() {
 @Composable
 private fun OAuthListWidgetWithTwoItems() {
     OAuthListWidget(
-        isOAuthAllowed = { it in setOf(OAuth.VK, OAuth.OK) },
+        allowedOAuths = setOf(OAuth.VK, OAuth.OK),
         onAuth = OAuthListWidgetAuthCallback.WithOAuth { _, _ -> }
     )
 }
@@ -271,12 +271,7 @@ private fun OAuthListWidgetDark() {
     OAuthListWidget(
         modifier = Modifier.background(Color.White),
         style = OAuthListWidgetStyle.Dark(),
-        isOAuthAllowed = { it == OAuth.VK },
+        allowedOAuths = setOf(OAuth.VK),
         onAuth = OAuthListWidgetAuthCallback.WithOAuth { _, _ -> }
     )
 }
-
-private data class OAuthItemData(
-    val name: OAuth,
-    val title: String,
-)
