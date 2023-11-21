@@ -16,7 +16,5 @@ dependencies {
     api(project(":vkid"))
     implementation(project(":onetap-compose"))
     implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.core.ktx)
     implementation(libs.coil)
 }
