@@ -1,4 +1,4 @@
-package com.vk.id.onetap.compose
+package com.vk.id.onetap.compose.onetap
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
