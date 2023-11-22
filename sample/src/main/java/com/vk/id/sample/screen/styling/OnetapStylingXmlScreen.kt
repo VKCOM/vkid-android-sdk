@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.setPadding
 import com.vk.id.onetap.compose.button.VKIDButtonStyle
+import com.vk.id.onetap.compose.onetap.buttonStyle
 import com.vk.id.onetap.xml.VKIDButton
 import com.vk.id.onetap.xml.VKIDButtonSmall
 import com.vk.id.sample.R
@@ -39,7 +40,12 @@ fun OnetapStylingXmlScreen() {
                             (
                                 when (it) {
                                     is TitleItem -> createTitleItem(context, it.text)
-                                    is ButtonItem -> createVKIDButton(context, it.style, it.width, it.isDarkBackground)
+                                    is ButtonItem -> createVKIDButton(
+                                        context,
+                                        it.style.buttonStyle(),
+                                        it.width,
+                                        it.isDarkBackground
+                                    )
                                     is SmallButtonItem -> createVKIDButtonSmall(context, it.style)
                                     else -> null
                                 }
