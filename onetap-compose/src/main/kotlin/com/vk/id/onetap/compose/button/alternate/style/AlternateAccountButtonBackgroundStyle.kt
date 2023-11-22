@@ -6,7 +6,7 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.res.colorResource
 import com.vk.id.onetap.compose.R
 
-public enum class AlternateAccountButtonBackgroundStyle {
+internal enum class AlternateAccountButtonBackgroundStyle {
     LIGHT,
     DARK
 }

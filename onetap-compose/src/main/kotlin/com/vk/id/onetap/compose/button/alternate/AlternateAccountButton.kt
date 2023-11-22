@@ -27,7 +27,6 @@ import com.vk.id.onetap.compose.button.alternate.style.AlternateAccountButtonSty
 import com.vk.id.onetap.compose.button.alternate.style.asColorResource
 import com.vk.id.onetap.compose.button.alternate.style.background
 import com.vk.id.onetap.compose.button.asColor
-import com.vk.id.onetap.compose.button.asColorResource
 import com.vk.id.onetap.compose.button.asFontSize
 import com.vk.id.onetap.compose.button.asLineHeight
 import com.vk.id.onetap.compose.button.border
@@ -36,7 +35,7 @@ import com.vk.id.onetap.compose.button.height
 import com.vk.id.onetap.compose.button.startAuth
 
 @Composable
-public fun AlternateAccountButton(
+internal fun AlternateAccountButton(
     modifier: Modifier = Modifier,
     style: AlternateAccountButtonStyle = AlternateAccountButtonStyle.Light(),
     onAuth: (AccessToken) -> Unit,

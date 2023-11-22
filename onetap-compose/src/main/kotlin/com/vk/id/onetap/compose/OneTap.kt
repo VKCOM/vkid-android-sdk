@@ -14,6 +14,7 @@ import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.onetap.compose.button.VKIDButton
 import com.vk.id.onetap.compose.button.VKIDButtonStyle
+import com.vk.id.onetap.compose.button.VKIDButtonTextProvider
 import com.vk.id.onetap.compose.button.alternate.AlternateAccountButton
 import com.vk.id.onetap.compose.button.alternate.style.AlternateAccountButtonStyle
 import com.vk.id.onetap.compose.button.rememberVKIDButtonState
@@ -28,6 +29,20 @@ public fun OneTap(
     vkid: VKID? = null,
     signInAnotherAccountButtonEnabled: Boolean = false
 ) {
+    OneTap(modifier, style, onAuth, onFail, vkid, signInAnotherAccountButtonEnabled, null)
+}
+
+@Composable
+internal fun OneTap(
+    modifier: Modifier = Modifier,
+    // todo OneTapStyle
+    style: VKIDButtonStyle = VKIDButtonStyle.Blue(),
+    onAuth: (AccessToken) -> Unit,
+    onFail: (VKIDAuthFail) -> Unit = {},
+    vkid: VKID? = null,
+    signInAnotherAccountButtonEnabled: Boolean = false,
+    vkidButtonTextProvider: VKIDButtonTextProvider?
+) {
     val context = LocalContext.current
     val useVKID = vkid ?: remember {
         VKID(context)
@@ -39,7 +54,8 @@ public fun OneTap(
             onAuth = onAuth,
             onFail = onFail,
             state = vkidButtonState,
-            vkid = useVKID
+            vkid = useVKID,
+            textProvider = vkidButtonTextProvider
         )
         if (signInAnotherAccountButtonEnabled) {
             AnimatedVisibility(
