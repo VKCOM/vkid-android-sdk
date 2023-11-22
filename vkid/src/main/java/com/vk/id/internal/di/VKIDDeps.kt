@@ -1,6 +1,7 @@
 package com.vk.id.internal.di
 
 import android.content.Context
+import com.vk.id.AuthOptionsCreator
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.AuthProvidersChooser
 import com.vk.id.internal.auth.ServiceCredentials
@@ -17,6 +18,7 @@ internal interface VKIDDeps {
     val api: Lazy<VKIDApiService>
     val appContext: Context
     val authProvidersChooser: Lazy<AuthProvidersChooser>
+    val authOptionsCreator: AuthOptionsCreator
     val deviceIdProvider: Lazy<DeviceIdProvider>
     val dispatchers: CoroutinesDispatchers
     val prefsStore: Lazy<PrefsStore>

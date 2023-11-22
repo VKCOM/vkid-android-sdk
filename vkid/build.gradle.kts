@@ -37,4 +37,5 @@ dependencies {
     // force safe okio version, not from okhttp3
     implementation(libs.okio)
     testImplementation(libs.mockk)
+    testImplementation("io.kotest:kotest-runner-junit5:5.8.0")
 }

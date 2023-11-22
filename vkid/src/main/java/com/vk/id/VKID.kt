@@ -7,14 +7,11 @@ import androidx.lifecycle.lifecycleScope
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.AuthEventBridge
-import com.vk.id.internal.auth.AuthOptions
 import com.vk.id.internal.auth.AuthProvidersChooser
 import com.vk.id.internal.auth.AuthResult
 import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.auth.device.DeviceIdProvider
-import com.vk.id.internal.auth.pkce.PkceGeneratorSHA256
 import com.vk.id.internal.auth.toExpireTime
-import com.vk.id.internal.auth.toQueryParam
 import com.vk.id.internal.concurrent.CoroutinesDispatchers
 import com.vk.id.internal.di.VKIDDeps
 import com.vk.id.internal.di.VKIDDepsProd
@@ -32,7 +29,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.security.SecureRandom
 
 public class VKID {
     public constructor(context: Context) : this(VKIDDepsProd(context))
@@ -63,10 +59,10 @@ public class VKID {
         this.api = deps.api
         this.appContext = deps.appContext
         this.authProvidersChooser = deps.authProvidersChooser
+        this.authOptionsCreator = deps.authOptionsCreator
         this.deviceIdProvider = deps.deviceIdProvider
         this.dispatchers = deps.dispatchers
         this.prefsStore = deps.prefsStore
-        this.pkceGenerator = deps.pkceGenerator
         this.serviceCredentials = deps.serviceCredentials
         this.vkSilentAuthInfoProvider = deps.vkSilentAuthInfoProvider
         this.userDataFetcher = deps.userDataFetcher
@@ -81,8 +77,8 @@ public class VKID {
     private val api: Lazy<VKIDApiService>
     private val appContext: Context
     private val authProvidersChooser: Lazy<AuthProvidersChooser>
+    private val authOptionsCreator: AuthOptionsCreator
     private val deviceIdProvider: Lazy<DeviceIdProvider>
-    private val pkceGenerator: Lazy<PkceGeneratorSHA256>
     private val dispatchers: CoroutinesDispatchers
     private val prefsStore: Lazy<PrefsStore>
     private val serviceCredentials: Lazy<ServiceCredentials>
@@ -119,40 +115,13 @@ public class VKID {
 
         withContext(dispatchers.io) {
             val bestAuthProvider = authProvidersChooser.value.chooseBest(authParams)
-            val fullAuthOptions = createInternalAuthOptions(authParams)
+            val fullAuthOptions = authOptionsCreator.create(authParams)
             bestAuthProvider.auth(appContext, fullAuthOptions)
         }
     }
 
     public suspend fun fetchUserData(): Result<VKIDUser?> {
         return Result.success(userDataFetcher.value.fetchUserData())
-    }
-
-    @Suppress("MagicNumber")
-    private fun createInternalAuthOptions(authParams: VKIDAuthParams): AuthOptions {
-        val codeVerifier = pkceGenerator.value.generateRandomCodeVerifier(SecureRandom())
-        val codeChallenge = pkceGenerator.value.deriveCodeVerifierChallenge(codeVerifier)
-        prefsStore.value.codeVerifier = codeVerifier
-        val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
-        val state = (1..32).map { allowedChars.random() }.joinToString("")
-        prefsStore.value.state = state
-        val locale = authParams.locale ?: VKIDAuthParams.Locale.systemLocale(appContext)
-        val theme = authParams.theme ?: VKIDAuthParams.Theme.systemTheme(appContext)
-        val credentials = serviceCredentials.value
-        return AuthOptions(
-            appId = credentials.clientID,
-            clientSecret = credentials.clientSecret,
-            codeChallenge = codeChallenge,
-            codeChallengeMethod = "sha256",
-            deviceId = deviceIdProvider.value.getDeviceId(appContext),
-            redirectUri = credentials.redirectUri,
-            state = state,
-            locale = locale?.toQueryParam(),
-            theme = theme?.toQueryParam(),
-            // To not show "Log in as..." screen in web view
-            webAuthPhoneScreen = !authParams.useExistingUserIfPossible,
-            oAuth = authParams.oAuth,
-        )
     }
 
     private suspend fun handleAuthResult(authResult: AuthResult) {

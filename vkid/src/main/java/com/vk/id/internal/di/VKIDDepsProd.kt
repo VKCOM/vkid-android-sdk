@@ -7,6 +7,7 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import com.vk.id.AuthOptionsCreator
 import com.vk.id.VKID
 import com.vk.id.internal.api.VKIDApi
 import com.vk.id.internal.api.VKIDApiService
@@ -103,6 +104,15 @@ internal class VKIDDepsProd(
                 appContext,
                 trustedProvidersCache.value
             )
+        )
+    }
+    override val authOptionsCreator: AuthOptionsCreator by lazy {
+        AuthOptionsCreator(
+            appContext = appContext,
+            pkceGenerator = pkceGenerator,
+            prefsStore = prefsStore,
+            serviceCredentials = serviceCredentials,
+            deviceIdProvider = deviceIdProvider,
         )
     }
 
