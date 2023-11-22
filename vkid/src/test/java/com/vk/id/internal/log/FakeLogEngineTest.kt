@@ -1,11 +1,13 @@
 package com.vk.id.internal.log
 
 import android.util.Log
+import io.kotest.core.spec.DoNotParallelize
 import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.every
 import io.mockk.mockkStatic
 import io.mockk.verify
 
+@DoNotParallelize
 public class FakeLogEngineTest : BehaviorSpec({
 
     beforeSpec {
