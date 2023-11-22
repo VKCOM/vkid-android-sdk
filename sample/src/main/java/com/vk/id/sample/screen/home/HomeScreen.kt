@@ -30,12 +30,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.vk.id.onetap.compose.button.VKIDButtonCornersStyle
 import com.vk.id.onetap.compose.onetap.OneTap
 import com.vk.id.onetap.compose.onetap.OneTapStyle
 import com.vk.id.onetap.compose.onetap.sheet.OneTapBottomSheet
 import com.vk.id.onetap.compose.onetap.sheet.OneTapScenario
 import com.vk.id.onetap.compose.onetap.sheet.rememberOneTapBottomSheetState
+import com.vk.id.onetap.compose.onetap.style.OneTapButtonCornersStyle
 import com.vk.id.sample.BuildConfig
 import com.vk.id.sample.R
 import com.vk.id.sample.screen.styling.util.onVKIDAuthFail
@@ -58,7 +58,7 @@ fun HomeScreen(
         Spacer(modifier = Modifier.height(32.dp))
         OneTap(
             modifier = Modifier.width(355.dp),
-            style = OneTapStyle.Light(cornersStyle = VKIDButtonCornersStyle.Rounded),
+            style = OneTapStyle.Light(cornersStyle = OneTapButtonCornersStyle.Rounded),
             onAuth = { onVKIDAuthSuccess(context, it) },
             onFail = { onVKIDAuthFail(context, it) },
             signInAnotherAccountButtonEnabled = true

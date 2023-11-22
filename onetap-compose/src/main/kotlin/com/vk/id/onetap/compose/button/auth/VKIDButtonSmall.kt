@@ -1,4 +1,4 @@
-package com.vk.id.onetap.compose.button
+package com.vk.id.onetap.compose.button.auth
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
@@ -29,12 +29,24 @@ import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.VKIDUser
+import com.vk.id.onetap.compose.button.FetchUserData
+import com.vk.id.onetap.compose.button.OnFetchingProgress
+import com.vk.id.onetap.compose.button.auth.style.VKIDButtonStyle
+import com.vk.id.onetap.compose.button.auth.style.background
+import com.vk.id.onetap.compose.button.auth.style.border
+import com.vk.id.onetap.compose.button.clickable
+import com.vk.id.onetap.compose.button.easeInOutAnimation
 import com.vk.id.onetap.compose.icon.VKIcon
+import com.vk.id.onetap.compose.onetap.style.clip
+import com.vk.id.onetap.compose.onetap.style.height
+import com.vk.id.onetap.compose.onetap.style.heightDp
+import com.vk.id.onetap.compose.onetap.style.iconPadding
+import com.vk.id.onetap.compose.onetap.style.shadow
 import com.vk.id.onetap.compose.progress.CircleProgress
 import kotlinx.coroutines.launch
 
 @Composable
-public fun VKIDButtonSmall(
+internal fun VKIDButtonSmall(
     state: VKIDSmallButtonState = remember { VKIDSmallButtonState(inProgress = false, userIconLoaded = false) },
     style: VKIDButtonStyle = VKIDButtonStyle.Blue(),
     vkid: VKID? = null,

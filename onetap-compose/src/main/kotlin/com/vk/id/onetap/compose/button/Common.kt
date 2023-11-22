@@ -23,6 +23,9 @@ import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.VKIDUser
 import com.vk.id.auth.VKIDAuthParams
+import com.vk.id.onetap.compose.button.auth.VKIDButtonState
+import com.vk.id.onetap.compose.button.auth.style.VKIDButtonStyle
+import com.vk.id.onetap.compose.button.auth.style.asColor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch

@@ -1,4 +1,4 @@
-package com.vk.id.onetap.compose.button
+package com.vk.id.onetap.compose.button.auth
 
 import android.content.res.Resources
 import androidx.compose.animation.core.animateFloatAsState
@@ -34,13 +34,30 @@ import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.VKIDUser
 import com.vk.id.onetap.compose.R
+import com.vk.id.onetap.compose.button.DURATION_OF_ANIMATION
+import com.vk.id.onetap.compose.button.DURATION_OF_DELAY_BETWEEN_FADE_ANIMATIONS
+import com.vk.id.onetap.compose.button.FetchUserData
+import com.vk.id.onetap.compose.button.OnFetchingProgress
+import com.vk.id.onetap.compose.button.SIZE_OF_VK_ICON
+import com.vk.id.onetap.compose.button.auth.style.VKIDButtonStyle
+import com.vk.id.onetap.compose.button.auth.style.asColorResource
+import com.vk.id.onetap.compose.button.auth.style.background
+import com.vk.id.onetap.compose.button.auth.style.border
+import com.vk.id.onetap.compose.button.clickable
+import com.vk.id.onetap.compose.button.easeInOutAnimation
 import com.vk.id.onetap.compose.icon.VKIcon
+import com.vk.id.onetap.compose.onetap.style.asFontSize
+import com.vk.id.onetap.compose.onetap.style.asLineHeight
+import com.vk.id.onetap.compose.onetap.style.clip
+import com.vk.id.onetap.compose.onetap.style.height
+import com.vk.id.onetap.compose.onetap.style.iconPadding
+import com.vk.id.onetap.compose.onetap.style.shadow
 import com.vk.id.onetap.compose.progress.CircleProgress
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 
 @Composable
-public fun VKIDButton(
+internal fun VKIDButton(
     modifier: Modifier = Modifier,
     style: VKIDButtonStyle = VKIDButtonStyle.Blue(),
     onAuth: (AccessToken) -> Unit,

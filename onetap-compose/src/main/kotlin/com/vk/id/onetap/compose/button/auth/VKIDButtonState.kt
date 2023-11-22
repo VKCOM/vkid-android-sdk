@@ -1,4 +1,4 @@
-package com.vk.id.onetap.compose.button
+package com.vk.id.onetap.compose.button.auth
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -7,13 +7,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 
 @Composable
-public fun rememberVKIDButtonState(
+internal fun rememberVKIDButtonState(
     inProgress: Boolean = false,
 ): VKIDButtonState = remember {
     VKIDButtonState(inProgress)
 }
 
-public open class VKIDButtonState(
+internal open class VKIDButtonState(
     inProgress: Boolean,
     text: String = "",
     userIconUrl: String? = null,
@@ -77,7 +77,7 @@ public open class VKIDButtonState(
         }
 }
 
-public class VKIDSmallButtonState(inProgress: Boolean, userIconLoaded: Boolean) : VKIDButtonState(inProgress) {
+internal class VKIDSmallButtonState(inProgress: Boolean, userIconLoaded: Boolean) : VKIDButtonState(inProgress) {
     private var _userIconLoaded: Boolean by mutableStateOf(userIconLoaded)
     private var _userIconLoading: Boolean by mutableStateOf(false)
 

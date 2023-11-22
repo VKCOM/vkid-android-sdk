@@ -12,11 +12,11 @@ import androidx.compose.ui.unit.dp
 import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
-import com.vk.id.onetap.compose.button.VKIDButton
-import com.vk.id.onetap.compose.button.VKIDButtonSmall
-import com.vk.id.onetap.compose.button.VKIDButtonTextProvider
 import com.vk.id.onetap.compose.button.alternate.AlternateAccountButton
-import com.vk.id.onetap.compose.button.rememberVKIDButtonState
+import com.vk.id.onetap.compose.button.auth.VKIDButton
+import com.vk.id.onetap.compose.button.auth.VKIDButtonSmall
+import com.vk.id.onetap.compose.button.auth.VKIDButtonTextProvider
+import com.vk.id.onetap.compose.button.auth.rememberVKIDButtonState
 
 @Composable
 public fun OneTap(

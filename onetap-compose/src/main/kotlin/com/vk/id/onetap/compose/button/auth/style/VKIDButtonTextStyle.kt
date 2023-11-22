@@ -1,10 +1,10 @@
-package com.vk.id.onetap.compose.button
+package com.vk.id.onetap.compose.button.auth.style
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.colorResource
 import com.vk.id.onetap.compose.R
 
-public enum class VKIDButtonTextStyle {
+internal enum class VKIDButtonTextStyle {
     LIGHT,
     DARK
 }
