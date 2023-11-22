@@ -11,7 +11,6 @@ import com.vk.id.sample.screen.home.HomeScreen
 import com.vk.id.sample.screen.multibranding.MultibrandingComposeScreen
 import com.vk.id.sample.screen.multibranding.MultibrandingXmlScreen
 import com.vk.id.sample.screen.styling.OnetapStylingComposeScreen
-import com.vk.id.sample.screen.styling.OnetapStylingXmlScreen
 
 class MainActivity : ComponentActivity() {
 
@@ -26,7 +25,6 @@ class MainActivity : ComponentActivity() {
             ) {
                 composable("home") { HomeScreen(navController) }
                 composable("onetap-styling-compose") { OnetapStylingComposeScreen() }
-                composable("onetap-styling-xml") { OnetapStylingXmlScreen() }
                 composable("multibranding-compose") { MultibrandingComposeScreen() }
                 composable("multibranding-xml") { MultibrandingXmlScreen() }
             }
