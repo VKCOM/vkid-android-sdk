@@ -27,7 +27,31 @@
   ~ THIRD PARTIES FOR ANY DAMAGE IN CONNECTION WITH USE OF THE SOFTWARE.
 -->
 <resources>
-    <string name="vkid_log_in_with_vkid">Inicia sesión con VK ID</string>
-    <string name="vkid_auth_use_another_account">Iniciar sesión con otra cuenta</string>
-    <string name="vkid_log_in_as">Continuar como %1$s</string>
+    <string name="vkid_log_in_with_vkid">Iniciar sesión con VK ID</string>
+    <string name="vkid_auth_use_another_account">Iniciar sesión con otra cuenta</string>
+    <string name="vkid_log_in_as">Continuar como %1$s</string>
+
+    <string name="vkid_schenario_enter_service_title">Acceder al servicio o registrarse</string>
+    <string name="vkid_schenario_enter_service_vkid_button_text_user_found">Inicia sesión como %1$s</string>
+    <string name="vkid_schenario_enter_service_vkid_button_text_no_user">Iniciar sesión con VK ID</string>
+
+    <string name="vkid_schenario_registration_for_the_event_title">Registrarse en el evento</string>
+    <string name="vkid_schenario_registration_for_the_event_vkid_button_text_user_found">Continuar como %1$s</string>
+    <string name="vkid_schenario_registration_for_the_event_vkid_button_text_no_user">Continuar con VK ID</string>
+
+    <string name="vkid_schenario_application_title">Solicitar con VK ID</string>
+    <string name="vkid_schenario_application_vkid_button_text_user_found">Continuar como %1$s</string>
+    <string name="vkid_schenario_application_vkid_button_text_no_user">Continuar con VK ID</string>
+
+    <string name="vkid_schenario_order_in_service_title">Realizar pedido en %1$s con VK ID</string>
+    <string name="vkid_schenario_order_in_service_vkid_button_text_user_found">Pedir como %1$s</string>
+    <string name="vkid_schenario_order_in_service_vkid_button_text_no_user">Pedir con VK ID</string>
+
+    <string name="vkid_schenario_order_title">Realizar pedido con VK ID</string>
+    <string name="vkid_schenario_order_vkid_button_text_user_found">Pedir como %1$s</string>
+    <string name="vkid_schenario_order_vkid_button_text_no_user">Pedir con VK ID</string>
+
+    <string name="vkid_schenario_enter_to_account_title">Acceder a la cuenta %1$s</string>
+    <string name="vkid_schenario_enter_to_account_vkid_button_text_user_found">Inicia sesión como %1$s</string>
+    <string name="vkid_schenario_enter_to_account_vkid_button_text_no_user">Iniciar sesión con VK ID</string>
 </resources>

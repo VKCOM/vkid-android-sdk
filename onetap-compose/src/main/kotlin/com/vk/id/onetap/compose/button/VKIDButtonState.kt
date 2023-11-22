@@ -5,20 +5,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.res.stringResource
-import com.vk.id.onetap.compose.R
 
 @Composable
 public fun rememberVKIDButtonState(
-    text: String = stringResource(R.string.vkid_log_in_with_vkid),
     inProgress: Boolean = false,
 ): VKIDButtonState = remember {
-    VKIDButtonState(inProgress, text)
+    VKIDButtonState(inProgress)
 }
 
 public open class VKIDButtonState(
     inProgress: Boolean,
-    text: String,
+    text: String = "",
     userIconUrl: String? = null,
     textVisible: Boolean = true,
     rightIconVisible: Boolean = false,
@@ -80,7 +77,7 @@ public open class VKIDButtonState(
         }
 }
 
-public class VKIDSmallButtonState(inProgress: Boolean, userIconLoaded: Boolean) : VKIDButtonState(inProgress, text = "") {
+public class VKIDSmallButtonState(inProgress: Boolean, userIconLoaded: Boolean) : VKIDButtonState(inProgress) {
     private var _userIconLoaded: Boolean by mutableStateOf(userIconLoaded)
     private var _userIconLoading: Boolean by mutableStateOf(false)
 

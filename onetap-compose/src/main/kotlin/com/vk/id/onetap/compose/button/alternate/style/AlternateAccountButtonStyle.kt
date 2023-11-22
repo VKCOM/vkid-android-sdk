@@ -5,15 +5,15 @@ import com.vk.id.onetap.compose.button.VKIDButtonCornersStyle
 import com.vk.id.onetap.compose.button.VKIDButtonRippleStyle
 import com.vk.id.onetap.compose.button.VKIDButtonSizeStyle
 
-public sealed class AlternateAccountButtonStyle(
-    public val backgroundStyle: AlternateAccountButtonBackgroundStyle,
-    public val borderStyle: VKIDButtonBorderStyle,
-    public val rippleStyle: VKIDButtonRippleStyle,
-    public val textStyle: AlternateAccountButtonTextStyle,
-    public val cornersStyle: VKIDButtonCornersStyle,
-    public val sizeStyle: VKIDButtonSizeStyle,
+internal sealed class AlternateAccountButtonStyle(
+    val backgroundStyle: AlternateAccountButtonBackgroundStyle,
+    val borderStyle: VKIDButtonBorderStyle,
+    val rippleStyle: VKIDButtonRippleStyle,
+    val textStyle: AlternateAccountButtonTextStyle,
+    val cornersStyle: VKIDButtonCornersStyle,
+    val sizeStyle: VKIDButtonSizeStyle,
 ) {
-    public class Light(
+    class Light(
         borderStyle: VKIDButtonBorderStyle = VKIDButtonBorderStyle.NONE,
         cornersStyle: VKIDButtonCornersStyle = VKIDButtonCornersStyle.Default,
         sizeStyle: VKIDButtonSizeStyle = VKIDButtonSizeStyle.MEDIUM_44,
@@ -26,7 +26,7 @@ public sealed class AlternateAccountButtonStyle(
         sizeStyle = sizeStyle,
     )
 
-    public class Dark(
+    class Dark(
         borderStyle: VKIDButtonBorderStyle = VKIDButtonBorderStyle.NONE,
         cornersStyle: VKIDButtonCornersStyle = VKIDButtonCornersStyle.Default,
         sizeStyle: VKIDButtonSizeStyle = VKIDButtonSizeStyle.MEDIUM_44,

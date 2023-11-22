@@ -27,7 +27,31 @@
   ~ THIRD PARTIES FOR ANY DAMAGE IN CONNECTION WITH USE OF THE SOFTWARE.
 -->
 <resources>
-    <string name="vkid_log_in_with_vkid">Увійти через VK ID</string>
+    <string name="vkid_log_in_with_vkid">Увійти з VK ID</string>
     <string name="vkid_auth_use_another_account">Увійти в інший акаунт</string>
     <string name="vkid_log_in_as">Продовжити як %1$s</string>
+
+    <string name="vkid_schenario_enter_service_title">Увійдіть у сервіс або зареєструйтеся </string>
+    <string name="vkid_schenario_enter_service_vkid_button_text_user_found">Увійти як %1$s</string>
+    <string name="vkid_schenario_enter_service_vkid_button_text_no_user">Увійти з VK ID</string>
+
+    <string name="vkid_schenario_registration_for_the_event_title">Зареєструйтеся на захід</string>
+    <string name="vkid_schenario_registration_for_the_event_vkid_button_text_user_found">Продовжити як %1$s</string>
+    <string name="vkid_schenario_registration_for_the_event_vkid_button_text_no_user">Продовжити з VK ID</string>
+
+    <string name="vkid_schenario_application_title">Подайте запит з VK ID</string>
+    <string name="vkid_schenario_application_vkid_button_text_user_found">Продовжити як %1$s</string>
+    <string name="vkid_schenario_application_vkid_button_text_no_user">Продовжити з VK ID</string>
+
+    <string name="vkid_schenario_order_in_service_title">Оформіть замовлення в %1$s з VK ID</string>
+    <string name="vkid_schenario_order_in_service_vkid_button_text_user_found">Оформити як %1$s</string>
+    <string name="vkid_schenario_order_in_service_vkid_button_text_no_user">Оформити з VK ID</string>
+
+    <string name="vkid_schenario_order_title">Оформіть замовлення з VK ID</string>
+    <string name="vkid_schenario_order_vkid_button_text_user_found">Оформити як %1$s</string>
+    <string name="vkid_schenario_order_vkid_button_text_no_user">Оформити з VK ID</string>
+
+    <string name="vkid_schenario_enter_to_account_title">Увійдіть в обліковий запис %1$s</string>
+    <string name="vkid_schenario_enter_to_account_vkid_button_text_user_found">Увійти як %1$s</string>
+    <string name="vkid_schenario_enter_to_account_vkid_button_text_no_user">Увійти з VK ID</string>
 </resources>

@@ -52,23 +52,27 @@ import kotlinx.coroutines.launch
 public fun OneTapBottomSheet(
     modifier: Modifier = Modifier,
     state: OneTapBottomSheetState = rememberOneTapBottomSheetState(),
+    serviceName: String,
+    scenario: OneTapScenario = OneTapScenario.EnterService,
     onAuth: (AccessToken) -> Unit,
     onFail: (VKIDAuthFail) -> Unit = {},
     vkid: VKID? = null
-
 ) {
     val context = LocalContext.current
     val useVKID = vkid ?: remember {
         VKID(context)
     }
-    OneTapBottomSheetInternal(state, modifier, onAuth, onFail, useVKID)
+    OneTapBottomSheetInternal(modifier, state, serviceName, scenario, onAuth, onFail, useVKID)
 }
 
+@Suppress("LongParameterList")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun OneTapBottomSheetInternal(
-    state: OneTapBottomSheetState,
     modifier: Modifier = Modifier,
+    state: OneTapBottomSheetState,
+    serviceName: String,
+    scenario: OneTapScenario,
     onAuth: (AccessToken) -> Unit,
     onFail: (VKIDAuthFail) -> Unit,
     vkid: VKID
@@ -106,6 +110,8 @@ private fun OneTapBottomSheetInternal(
                 vkid,
                 onAuth,
                 onFail,
+                serviceName,
+                scenario,
                 dismissSheet = {
                     state.hide()
                 }
@@ -153,11 +159,14 @@ internal constructor(
         }
 }
 
+@Suppress("LongParameterList")
 @Composable
 internal fun OneTapBottomSheetContent(
     vkid: VKID,
     onAuth: (AccessToken) -> Unit,
     onFail: (VKIDAuthFail) -> Unit,
+    serviceName: String,
+    scenario: OneTapScenario,
     dismissSheet: () -> Unit
 ) {
     Box(
@@ -171,6 +180,7 @@ internal fun OneTapBottomSheetContent(
             .background(Color.White),
         contentAlignment = Alignment.Center,
     ) {
+        val resources = LocalContext.current.resources
         Column(
             modifier = Modifier
                 .padding(16.dp)
@@ -185,14 +195,17 @@ internal fun OneTapBottomSheetContent(
                     lineHeight = 16.sp
                 )
                 Dot(titleTextStyle)
-                ServiceTitle(titleTextStyle)
+                ServiceTitle(titleTextStyle, serviceName)
                 Spacer(Modifier.weight(1f))
                 CloseIcon(dismissSheet)
             }
             Column(
                 Modifier.padding(horizontal = 32.dp, vertical = 36.dp)
             ) {
-                ContentTitle()
+                val title = remember(scenario) {
+                    scenario.scenarioTitle(serviceName = serviceName, resources = resources)
+                }
+                ContentTitle(title)
                 Spacer(Modifier.height(8.dp))
                 ContentDescription()
             }
@@ -200,7 +213,8 @@ internal fun OneTapBottomSheetContent(
                 signInAnotherAccountButtonEnabled = true,
                 vkid = vkid,
                 onAuth = onAuth,
-                onFail = onFail
+                onFail = onFail,
+                vkidButtonTextProvider = remember(scenario) { scenario.vkidButtonTextProvider(resources) }
             )
         }
     }
@@ -216,8 +230,8 @@ private fun VkidIcon() {
 }
 
 @Composable
-private fun ServiceTitle(style: TextStyle) {
-    BasicText(text = "<Название сервиса>", style = style)
+private fun ServiceTitle(style: TextStyle, serviceName: String) {
+    BasicText(text = serviceName, style = style)
 }
 
 @Composable
@@ -250,9 +264,9 @@ private fun CloseIcon(dismissSheet: () -> Unit) {
 }
 
 @Composable
-private fun ContentTitle() {
+private fun ContentTitle(text: String) {
     BasicText(
-        text = "Войдите в сервис или зарегестрируйтесь",
+        text = text,
         style = TextStyle(
             color = colorResource(id = R.color.vkid_ui_light_text_primary),
             textAlign = TextAlign.Center,
@@ -285,5 +299,12 @@ private fun OneTapBottomSheetPreview() {
     val vkid = remember {
         VKID(context)
     }
-    OneTapBottomSheetContent(vkid, onAuth = {}, onFail = {}, dismissSheet = {})
+    OneTapBottomSheetContent(
+        vkid,
+        onAuth = {},
+        onFail = {},
+        "<Название сервиса>",
+        OneTapScenario.EnterService,
+        dismissSheet = {}
+    )
 }

@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="vkid_log_in_with_vkid">Sign in with VK ID</string>
-    <string name="vkid_auth_use_another_account">Sign in to another account</string>
+    <string name="vkid_log_in_with_vkid">Sign in with VK ID</string>
+    <string name="vkid_auth_use_another_account">Sign in to other account</string>
     <string name="vkid_log_in_as">Continue as %1$s</string>
+
+    <string name="vkid_schenario_enter_service_title">Sign in to service or sign up</string>
+    <string name="vkid_schenario_enter_service_vkid_button_text_user_found">Sign in as %1$s</string>
+    <string name="vkid_schenario_enter_service_vkid_button_text_no_user">Sign in with VK ID</string>
+
+    <string name="vkid_schenario_registration_for_the_event_title">Sign up for event</string>
+    <string name="vkid_schenario_registration_for_the_event_vkid_button_text_user_found">Continue as %1$s</string>
+    <string name="vkid_schenario_registration_for_the_event_vkid_button_text_no_user">Continue with VK ID</string>
+
+    <string name="vkid_schenario_application_title">Apply with VK ID</string>
+    <string name="vkid_schenario_application_vkid_button_text_user_found">Continue as %1$s</string>
+    <string name="vkid_schenario_application_vkid_button_text_no_user">Continue with VK ID</string>
+
+    <string name="vkid_schenario_order_in_service_title">Place order on %1$swith VK ID</string>
+    <string name="vkid_schenario_order_in_service_vkid_button_text_user_found">Order as %1$s</string>
+    <string name="vkid_schenario_order_in_service_vkid_button_text_no_user">Order with VK ID</string>
+
+    <string name="vkid_schenario_order_title">Place order with VK ID</string>
+    <string name="vkid_schenario_order_vkid_button_text_user_found">Order as %1$s</string>
+    <string name="vkid_schenario_order_vkid_button_text_no_user">Order with VK ID</string>
+
+    <string name="vkid_schenario_enter_to_account_title">Sign in to %1$s account</string>
+    <string name="vkid_schenario_enter_to_account_vkid_button_text_user_found">Sign in as %1$s</string>
+    <string name="vkid_schenario_enter_to_account_vkid_button_text_no_user">Sign in with VK ID</string>
 </resources>

@@ -34,6 +34,7 @@ import com.vk.id.onetap.compose.OneTap
 import com.vk.id.onetap.compose.button.VKIDButtonCornersStyle
 import com.vk.id.onetap.compose.button.VKIDButtonStyle
 import com.vk.id.onetap.compose.onetap.sheet.OneTapBottomSheet
+import com.vk.id.onetap.compose.onetap.sheet.OneTapScenario
 import com.vk.id.onetap.compose.onetap.sheet.rememberOneTapBottomSheetState
 import com.vk.id.sample.BuildConfig
 import com.vk.id.sample.R
@@ -79,7 +80,9 @@ fun HomeScreen(
         val bottomSheetState = rememberOneTapBottomSheetState()
         OneTapBottomSheet(
             onAuth = { onVKIDAuthSuccess(context, it) },
-            state = bottomSheetState
+            state = bottomSheetState,
+            scenario = OneTapScenario.OrderInService,
+            serviceName = "VKID Sample"
         )
         Spacer(modifier = Modifier.height(32.dp))
         Button(text = "OneTapModalBottomSheet", onClick = {

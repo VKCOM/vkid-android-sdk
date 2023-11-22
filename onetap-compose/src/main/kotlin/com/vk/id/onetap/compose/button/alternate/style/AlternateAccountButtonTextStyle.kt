@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.colorResource
 import com.vk.id.onetap.compose.R
 
-public enum class AlternateAccountButtonTextStyle {
+internal enum class AlternateAccountButtonTextStyle {
     LIGHT,
     DARK,
 }

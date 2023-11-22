@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -22,7 +23,6 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -48,12 +48,44 @@ public fun VKIDButton(
     state: VKIDButtonState = rememberVKIDButtonState(),
     vkid: VKID? = null
 ) {
+    VKIDButton(modifier, style, onAuth, onFail, state, vkid, null)
+}
+
+@Composable
+private fun defaultTextProvider(resources: Resources): VKIDButtonTextProvider =
+    remember {
+        object : VKIDButtonTextProvider {
+            override fun userFoundText(user: VKIDUser): String =
+                resources.getString(R.string.vkid_log_in_as, user.firstName)
+
+            override fun noUserText(): String =
+                resources.getString(R.string.vkid_log_in_with_vkid)
+        }
+    }
+
+@Composable
+internal fun VKIDButton(
+    modifier: Modifier = Modifier,
+    style: VKIDButtonStyle = VKIDButtonStyle.Blue(),
+    onAuth: (AccessToken) -> Unit,
+    onFail: (VKIDAuthFail) -> Unit = {},
+    state: VKIDButtonState = rememberVKIDButtonState(),
+    vkid: VKID? = null,
+    textProvider: VKIDButtonTextProvider?
+) {
+    val useTextProvider = textProvider ?: defaultTextProvider(LocalContext.current.resources)
+    // Runs only on initial composition
+    LaunchedEffect(Unit) {
+        if (state.text.isEmpty()) {
+            state.text = useTextProvider.noUserText()
+        }
+    }
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
     val useVKID = vkid ?: remember {
         VKID(context)
     }
-    FetchUserDataWithAnimation(coroutineScope, state, useVKID)
+    FetchUserDataWithAnimation(coroutineScope, state, useVKID, useTextProvider)
     Box(
         modifier = modifier
             .shadow(style.elevationStyle, style.cornersStyle)
@@ -96,8 +128,12 @@ public fun VKIDButton(
 }
 
 @Composable
-private fun FetchUserDataWithAnimation(coroutineScope: CoroutineScope, state: VKIDButtonState, vkid: VKID) {
-    val resources = LocalContext.current.resources
+private fun FetchUserDataWithAnimation(
+    coroutineScope: CoroutineScope,
+    state: VKIDButtonState,
+    vkid: VKID,
+    buttonTextProvider: VKIDButtonTextProvider
+) {
     FetchUserData(
         coroutineScope,
         vkid,
@@ -113,11 +149,11 @@ private fun FetchUserDataWithAnimation(coroutineScope: CoroutineScope, state: VK
                 // For testing comment all other stuff and uncomment this function
                 // foreverAnimationTest(user!!, state, resources)
                 if (user != null) {
-                    val newText = resources.getString(R.string.vkid_log_in_as, user.firstName)
+                    val newText = buttonTextProvider.userFoundText(user)
                     val newIconUrl = user.photo200
                     animateFetchedUserIfNeeded(state, newText, newIconUrl)
                 } else {
-                    val newText = resources.getString(R.string.vkid_log_in_with_vkid)
+                    val newText = buttonTextProvider.noUserText()
                     animateFailedUser(state, newText)
                 }
             }
@@ -270,7 +306,6 @@ private fun PreviewVKIDButtonProgress() {
         onAuth = {},
         state = VKIDButtonState(
             inProgress = true,
-            text = stringResource(R.string.vkid_log_in_with_vkid),
             rightIconVisible = true,
         )
     )
@@ -283,7 +318,6 @@ private fun PreviewVKIDButtonUserFailed() {
         onAuth = {},
         state = VKIDButtonState(
             inProgress = false,
-            text = stringResource(R.string.vkid_log_in_with_vkid),
             userLoadFailed = true
         )
     )
