@@ -35,7 +35,7 @@
         android:theme="@style/Theme.LiteSDK"
         tools:targetApi="31">
         <activity
-            android:name="com.vk.id.sample.MainActivity"
+            android:name="com.vk.id.sample.app.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

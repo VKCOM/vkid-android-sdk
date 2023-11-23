@@ -1,4 +1,4 @@
-package com.vk.id.sample.screen.multibranding.item
+package com.vk.id.sample.app.screen.multibranding.item
 
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
@@ -10,8 +10,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vk.id.multibranding.OAuthListWidget
 import com.vk.id.sample.screen.multibranding.util.getOAuthListCallback
-import com.vk.id.sample.screen.styling.util.onVKIDAuthFail
-import com.vk.id.sample.uikit.common.darkBackground
+import com.vk.id.sample.app.screen.styling.util.onVKIDAuthFail
+import com.vk.id.sample.screen.multibranding.item.OAuthListWidgetItem
+import com.vk.id.sample.app.uikit.common.darkBackground
 
 @Composable
 fun HandleOAuthListWidgetItem(

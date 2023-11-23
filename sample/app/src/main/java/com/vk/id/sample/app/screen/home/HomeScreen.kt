@@ -1,4 +1,4 @@
-package com.vk.id.sample.screen.home
+package com.vk.id.sample.app.screen.home
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -33,10 +33,10 @@ import androidx.navigation.NavController
 import com.vk.id.onetap.compose.onetap.OneTap
 import com.vk.id.onetap.compose.onetap.OneTapStyle
 import com.vk.id.onetap.compose.onetap.style.OneTapButtonCornersStyle
-import com.vk.id.sample.BuildConfig
-import com.vk.id.sample.R
-import com.vk.id.sample.screen.styling.util.onVKIDAuthFail
-import com.vk.id.sample.screen.styling.util.onVKIDAuthSuccess
+import com.vk.id.sample.app.BuildConfig
+import com.vk.id.sample.app.R
+import com.vk.id.sample.app.screen.styling.util.onVKIDAuthFail
+import com.vk.id.sample.app.screen.styling.util.onVKIDAuthSuccess
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

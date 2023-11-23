@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "com.vk.id.sample"
+    namespace = "com.vk.id.sample.app"
 
     defaultConfig {
         applicationId = "com.vk.id.sample"

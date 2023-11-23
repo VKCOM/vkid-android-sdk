@@ -1,4 +1,4 @@
-package com.vk.id.sample.screen.styling
+package com.vk.id.sample.app.screen.styling
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,12 +9,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import com.vk.id.sample.screen.styling.data.buttonStylingData
-import com.vk.id.sample.screen.styling.item.HandleButtonItem
-import com.vk.id.sample.screen.styling.item.HandleSmallButtonItem
-import com.vk.id.sample.uikit.item.HandleHalfSpacerItem
-import com.vk.id.sample.uikit.item.HandleSpacerItem
-import com.vk.id.sample.uikit.item.HandleTitleItem2
+import com.vk.id.sample.app.screen.styling.data.buttonStylingData
+import com.vk.id.sample.app.screen.styling.item.HandleButtonItem
+import com.vk.id.sample.app.screen.styling.item.HandleSmallButtonItem
+import com.vk.id.sample.app.uikit.item.HandleHalfSpacerItem
+import com.vk.id.sample.app.uikit.item.HandleSpacerItem
+import com.vk.id.sample.app.uikit.item.HandleTitleItem2
 
 @Composable
 fun OnetapStylingComposeScreen() {

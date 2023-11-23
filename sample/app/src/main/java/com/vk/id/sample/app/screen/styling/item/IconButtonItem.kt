@@ -1,11 +1,11 @@
-package com.vk.id.sample.screen.styling.item
+package com.vk.id.sample.app.screen.styling.item
 
 import android.content.Context
 import androidx.compose.runtime.Composable
 import com.vk.id.onetap.compose.onetap.OneTap
 import com.vk.id.onetap.compose.onetap.OneTapStyle
-import com.vk.id.sample.screen.styling.util.onVKIDAuthFail
-import com.vk.id.sample.screen.styling.util.onVKIDAuthSuccess
+import com.vk.id.sample.app.screen.styling.util.onVKIDAuthFail
+import com.vk.id.sample.app.screen.styling.util.onVKIDAuthSuccess
 
 data class IconButtonItem(
     val style: OneTapStyle

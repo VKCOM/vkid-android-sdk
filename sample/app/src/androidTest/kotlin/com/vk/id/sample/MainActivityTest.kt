@@ -3,6 +3,7 @@ package com.vk.id.sample
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
+import com.vk.id.sample.app.MainActivity
 import org.junit.Rule
 import org.junit.Test
 

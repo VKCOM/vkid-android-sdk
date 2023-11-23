@@ -1,4 +1,4 @@
-package com.vk.id.sample.uikit.item
+package com.vk.id.sample.app.uikit.item
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -6,7 +6,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vk.id.sample.uikit.common.darkBackground
+import com.vk.id.sample.app.uikit.common.darkBackground
+import com.vk.id.sample.uikit.item.SpacerItem
 
 @Composable
 fun HandleSpacerItem(item: Any) {

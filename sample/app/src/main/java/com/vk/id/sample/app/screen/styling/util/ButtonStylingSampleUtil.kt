@@ -1,4 +1,4 @@
-package com.vk.id.sample.screen.styling.util
+package com.vk.id.sample.app.screen.styling.util
 
 import android.content.Context
 import com.vk.id.AccessToken

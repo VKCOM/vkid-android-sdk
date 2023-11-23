@@ -1,4 +1,4 @@
-package com.vk.id.sample.screen.styling.item
+package com.vk.id.sample.app.screen.styling.item
 
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
@@ -10,9 +10,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vk.id.onetap.compose.onetap.OneTap
 import com.vk.id.onetap.compose.onetap.OneTapStyle
-import com.vk.id.sample.screen.styling.util.onVKIDAuthFail
-import com.vk.id.sample.screen.styling.util.onVKIDAuthSuccess
-import com.vk.id.sample.uikit.common.darkBackground
+import com.vk.id.sample.app.screen.styling.util.onVKIDAuthFail
+import com.vk.id.sample.app.screen.styling.util.onVKIDAuthSuccess
+import com.vk.id.sample.app.uikit.common.darkBackground
 
 data class ButtonItem(
     val style: OneTapStyle,

@@ -1,11 +1,11 @@
-package com.vk.id.sample.screen.styling.data
+package com.vk.id.sample.app.screen.styling.data
 
 import com.vk.id.onetap.compose.onetap.OneTapStyle
 import com.vk.id.onetap.compose.onetap.style.OneTapButtonCornersStyle
 import com.vk.id.onetap.compose.onetap.style.OneTapButtonElevationStyle
 import com.vk.id.onetap.compose.onetap.style.OneTapButtonSizeStyle
-import com.vk.id.sample.screen.styling.item.ButtonItem
-import com.vk.id.sample.screen.styling.item.IconButtonItem
+import com.vk.id.sample.app.screen.styling.item.ButtonItem
+import com.vk.id.sample.app.screen.styling.item.IconButtonItem
 import com.vk.id.sample.uikit.item.HalfSpacerItem
 import com.vk.id.sample.uikit.item.SpacerItem
 import com.vk.id.sample.uikit.item.TitleItem

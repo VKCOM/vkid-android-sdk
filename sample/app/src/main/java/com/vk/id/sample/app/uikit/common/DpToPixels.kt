@@ -1,4 +1,4 @@
-package com.vk.id.sample.uikit.common
+package com.vk.id.sample.app.uikit.common
 
 import android.content.Context
 import android.util.TypedValue

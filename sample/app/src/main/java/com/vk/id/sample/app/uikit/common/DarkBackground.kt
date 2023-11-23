@@ -1,4 +1,4 @@
-package com.vk.id.sample.uikit.common
+package com.vk.id.sample.app.uikit.common
 
 import androidx.compose.foundation.background
 import androidx.compose.ui.Modifier

@@ -1,4 +1,4 @@
-package com.vk.id.sample.screen.multibranding
+package com.vk.id.sample.app.screen.multibranding
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,10 +9,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.vk.id.sample.screen.multibranding.data.multibrandingSampleData
-import com.vk.id.sample.screen.multibranding.item.HandleOAuthListWidgetItem
-import com.vk.id.sample.uikit.item.HandleHalfSpacerItem
-import com.vk.id.sample.uikit.item.HandleSpacerItem
-import com.vk.id.sample.uikit.item.HandleTitleItem2
+import com.vk.id.sample.app.screen.multibranding.item.HandleOAuthListWidgetItem
+import com.vk.id.sample.app.uikit.item.HandleHalfSpacerItem
+import com.vk.id.sample.app.uikit.item.HandleSpacerItem
+import com.vk.id.sample.app.uikit.item.HandleTitleItem2
 
 @Preview
 @Composable

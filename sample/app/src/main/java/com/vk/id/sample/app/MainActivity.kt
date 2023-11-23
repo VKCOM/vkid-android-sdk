@@ -1,4 +1,4 @@
-package com.vk.id.sample
+package com.vk.id.sample.app
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -8,11 +8,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.vk.id.VKID
-import com.vk.id.sample.screen.home.HomeScreen
-import com.vk.id.sample.screen.multibranding.MultibrandingComposeScreen
+import com.vk.id.sample.app.screen.home.HomeScreen
+import com.vk.id.sample.app.screen.multibranding.MultibrandingComposeScreen
 import com.vk.id.sample.screen.multibranding.MultibrandingXmlScreen
 import com.vk.id.sample.screen.sheet.OneTapBottomSheetScreen
-import com.vk.id.sample.screen.styling.OnetapStylingComposeScreen
+import com.vk.id.sample.app.screen.styling.OnetapStylingComposeScreen
 
 class MainActivity : ComponentActivity() {
 
