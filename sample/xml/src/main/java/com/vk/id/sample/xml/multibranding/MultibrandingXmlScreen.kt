@@ -1,14 +1,14 @@
-package com.vk.id.sample.screen.multibranding
+package com.vk.id.sample.xml.multibranding
 
 import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.appcompat.app.AppCompatActivity
-import com.vk.id.sample.screen.multibranding.data.multibrandingSampleData
-import com.vk.id.sample.screen.multibranding.item.OAuthListWidgetItem
-import com.vk.id.sample.screen.multibranding.item.createOAuthListWidgetItem
-import com.vk.id.sample.uikit.item.TitleItem
-import com.vk.id.sample.uikit.item.createTitleItem
+import com.vk.id.sample.xml.multibranding.data.multibrandingSampleData
+import com.vk.id.sample.xml.multibranding.item.OAuthListWidgetItem
+import com.vk.id.sample.xml.multibranding.item.createOAuthListWidgetItem
+import com.vk.id.sample.xml.uikit.item.TitleItem
+import com.vk.id.sample.xml.uikit.item.createTitleItem
 
 //@Composable
 //fun MultibrandingXmlScreen() {

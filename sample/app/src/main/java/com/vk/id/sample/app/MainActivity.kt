@@ -12,6 +12,7 @@ import com.vk.id.sample.app.screen.home.HomeScreen
 import com.vk.id.sample.app.screen.multibranding.MultibrandingComposeScreen
 import com.vk.id.sample.screen.multibranding.MultibrandingXmlScreen
 import com.vk.id.sample.screen.sheet.OneTapBottomSheetScreen
+import com.vk.id.sample.xml.multibranding.MultibrandingXmlScreen
 import com.vk.id.sample.app.screen.styling.OnetapStylingComposeScreen
 
 class MainActivity : ComponentActivity() {

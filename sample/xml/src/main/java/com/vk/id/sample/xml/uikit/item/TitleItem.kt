@@ -1,10 +1,10 @@
-package com.vk.id.sample.uikit.item
+package com.vk.id.sample.xml.uikit.item
 
 import android.content.Context
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.view.setPadding
-import com.vk.id.sample.uikit.common.dpToPixels
+import com.vk.id.sample.xml.uikit.common.dpToPixels
 import com.vk.id.sample.xml.R
 
 private const val TEXT_PADDING = 8

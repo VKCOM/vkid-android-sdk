@@ -1,13 +1,13 @@
-package com.vk.id.sample.screen.multibranding.data
+package com.vk.id.sample.xml.multibranding.data
 
 import com.vk.id.OAuth
 import com.vk.id.multibranding.common.OAuthListWidgetCornersStyle
 import com.vk.id.multibranding.common.OAuthListWidgetSizeStyle
 import com.vk.id.multibranding.common.OAuthListWidgetStyle
-import com.vk.id.sample.screen.multibranding.item.OAuthListWidgetItem
-import com.vk.id.sample.uikit.item.HalfSpacerItem
-import com.vk.id.sample.uikit.item.SpacerItem
-import com.vk.id.sample.uikit.item.TitleItem
+import com.vk.id.sample.xml.multibranding.item.OAuthListWidgetItem
+import com.vk.id.sample.xml.uikit.item.HalfSpacerItem
+import com.vk.id.sample.xml.uikit.item.SpacerItem
+import com.vk.id.sample.xml.uikit.item.TitleItem
 
 public val multibrandingSampleData: List<Any> = listOf(
     TitleItem("Multibranding widget"),

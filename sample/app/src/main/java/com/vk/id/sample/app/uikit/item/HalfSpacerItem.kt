@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vk.id.sample.app.uikit.common.darkBackground
-import com.vk.id.sample.uikit.item.HalfSpacerItem
+import com.vk.id.sample.xml.uikit.item.HalfSpacerItem
 
 @Composable
 fun HandleHalfSpacerItem(item: Any) {

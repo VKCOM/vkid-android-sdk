@@ -6,9 +6,9 @@ import com.vk.id.onetap.compose.onetap.style.OneTapButtonElevationStyle
 import com.vk.id.onetap.compose.onetap.style.OneTapButtonSizeStyle
 import com.vk.id.sample.app.screen.styling.item.ButtonItem
 import com.vk.id.sample.app.screen.styling.item.IconButtonItem
-import com.vk.id.sample.uikit.item.HalfSpacerItem
-import com.vk.id.sample.uikit.item.SpacerItem
-import com.vk.id.sample.uikit.item.TitleItem
+import com.vk.id.sample.xml.uikit.item.HalfSpacerItem
+import com.vk.id.sample.xml.uikit.item.SpacerItem
+import com.vk.id.sample.xml.uikit.item.TitleItem
 
 internal val buttonStylingData = listOf(
     TitleItem("Primary"),

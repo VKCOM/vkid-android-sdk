@@ -1,4 +1,4 @@
-package com.vk.id.sample.screen.multibranding.item
+package com.vk.id.sample.xml.multibranding.item
 
 import android.content.Context
 import android.view.Gravity
@@ -8,8 +8,8 @@ import androidx.core.view.setPadding
 import com.vk.id.OAuth
 import com.vk.id.multibranding.common.OAuthListWidgetStyle
 import com.vk.id.multibranding.xml.OAuthListWidget
-import com.vk.id.sample.screen.multibranding.util.getOAuthListCallback
-import com.vk.id.sample.uikit.common.dpToPixels
+import com.vk.id.sample.xml.multibranding.util.getOAuthListCallback
+import com.vk.id.sample.xml.uikit.common.dpToPixels
 import com.vk.id.sample.xml.R
 
 private const val WIDGET_PADDING = 12

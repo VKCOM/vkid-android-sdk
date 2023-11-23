@@ -3,8 +3,8 @@ package com.vk.id.sample.app.screen.styling.util
 import android.content.Context
 import com.vk.id.AccessToken
 import com.vk.id.VKIDAuthFail
-import com.vk.id.sample.uikit.common.formatToken
-import com.vk.id.sample.uikit.common.showToast
+import com.vk.id.sample.xml.uikit.common.formatToken
+import com.vk.id.sample.xml.uikit.common.showToast
 
 internal fun onVKIDAuthSuccess(context: Context, accessToken: AccessToken) {
     val token = formatToken(accessToken.token)

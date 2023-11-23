@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.vk.id.sample.uikit.item.TitleItem
+import com.vk.id.sample.xml.uikit.item.TitleItem
 
 @Composable
 fun HandleTitleItem2(item: Any) {

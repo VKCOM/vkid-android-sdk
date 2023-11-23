@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import com.vk.id.sample.screen.multibranding.data.multibrandingSampleData
+import com.vk.id.sample.xml.multibranding.data.multibrandingSampleData
 import com.vk.id.sample.app.screen.multibranding.item.HandleOAuthListWidgetItem
 import com.vk.id.sample.app.uikit.item.HandleHalfSpacerItem
 import com.vk.id.sample.app.uikit.item.HandleSpacerItem
