@@ -8,17 +8,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vk.id.sample.uikit.common.darkBackground
 
-data class SpacerItem(
-    val isDarkBackground: Boolean = false
-)
-
 @Composable
-fun HandleSpacerItem(item: Any) {
-    if (item !is SpacerItem) return
+fun HandleHalfSpacerItem(item: Any) {
+    if (item !is HalfSpacerItem) return
     Spacer(
         modifier = Modifier
             .darkBackground(item.isDarkBackground)
-            .height(24.dp)
+            .height(12.dp)
             .fillMaxWidth(),
     )
 }

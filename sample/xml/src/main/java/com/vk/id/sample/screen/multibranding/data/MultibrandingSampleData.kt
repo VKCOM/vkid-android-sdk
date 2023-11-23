@@ -9,7 +9,7 @@ import com.vk.id.sample.uikit.item.HalfSpacerItem
 import com.vk.id.sample.uikit.item.SpacerItem
 import com.vk.id.sample.uikit.item.TitleItem
 
-internal val multibrandingSampleData = listOf(
+public val multibrandingSampleData: List<Any> = listOf(
     TitleItem("Multibranding widget"),
     HalfSpacerItem(),
     OAuthListWidgetItem(

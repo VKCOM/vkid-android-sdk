@@ -12,7 +12,7 @@ import com.vk.id.sample.screen.multibranding.data.multibrandingSampleData
 import com.vk.id.sample.screen.multibranding.item.HandleOAuthListWidgetItem
 import com.vk.id.sample.uikit.item.HandleHalfSpacerItem
 import com.vk.id.sample.uikit.item.HandleSpacerItem
-import com.vk.id.sample.uikit.item.HandleTitleItem
+import com.vk.id.sample.uikit.item.HandleTitleItem2
 
 @Preview
 @Composable
@@ -26,7 +26,7 @@ fun MultibrandingComposeScreen() {
         multibrandingSampleData.forEach {
             HandleSpacerItem(item = it)
             HandleHalfSpacerItem(item = it)
-            HandleTitleItem(item = it)
+            HandleTitleItem2(item = it)
             HandleOAuthListWidgetItem(context = context, item = it)
         }
     }

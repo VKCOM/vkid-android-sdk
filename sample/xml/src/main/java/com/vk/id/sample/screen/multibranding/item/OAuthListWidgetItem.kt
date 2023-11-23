@@ -4,55 +4,23 @@ import android.content.Context
 import android.view.Gravity
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.width
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.core.view.setPadding
 import com.vk.id.OAuth
-import com.vk.id.multibranding.OAuthListWidget
 import com.vk.id.multibranding.common.OAuthListWidgetStyle
 import com.vk.id.multibranding.xml.OAuthListWidget
-import com.vk.id.sample.R
 import com.vk.id.sample.screen.multibranding.util.getOAuthListCallback
-import com.vk.id.sample.screen.styling.util.onVKIDAuthFail
-import com.vk.id.sample.uikit.common.darkBackground
 import com.vk.id.sample.uikit.common.dpToPixels
+import com.vk.id.sample.xml.R
 
 private const val WIDGET_PADDING = 12
 private const val WIDGET_WIDTH = 355
 
-data class OAuthListWidgetItem(
+public data class OAuthListWidgetItem(
     val style: OAuthListWidgetStyle,
     val allowedOAuths: Set<OAuth> = OAuth.values().toSet(),
     val width: Int = WIDGET_WIDTH,
     val isDarkBackground: Boolean = false,
 )
-
-@Composable
-fun HandleOAuthListWidgetItem(
-    context: Context,
-    item: Any
-) {
-    if (item !is OAuthListWidgetItem) return
-    Row(
-        horizontalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .darkBackground(item.isDarkBackground)
-            .fillMaxWidth()
-    ) {
-        OAuthListWidget(
-            modifier = Modifier.width(item.width.dp),
-            style = item.style,
-            onAuth = getOAuthListCallback(context),
-            onFail = { onVKIDAuthFail(context, it) },
-            allowedOAuths = item.allowedOAuths
-        )
-    }
-}
 
 internal fun createOAuthListWidgetItem(
     context: Context,

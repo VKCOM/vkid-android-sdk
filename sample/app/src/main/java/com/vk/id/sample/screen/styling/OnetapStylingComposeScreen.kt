@@ -14,7 +14,7 @@ import com.vk.id.sample.screen.styling.item.HandleButtonItem
 import com.vk.id.sample.screen.styling.item.HandleSmallButtonItem
 import com.vk.id.sample.uikit.item.HandleHalfSpacerItem
 import com.vk.id.sample.uikit.item.HandleSpacerItem
-import com.vk.id.sample.uikit.item.HandleTitleItem
+import com.vk.id.sample.uikit.item.HandleTitleItem2
 
 @Composable
 fun OnetapStylingComposeScreen() {
@@ -29,7 +29,7 @@ fun OnetapStylingComposeScreen() {
         buttonStylingData.forEach {
             HandleSpacerItem(item = it)
             HandleHalfSpacerItem(item = it)
-            HandleTitleItem(item = it)
+            HandleTitleItem2(item = it)
             HandleButtonItem(context = context, item = it)
             HandleSmallButtonItem(context = context, item = it)
         }
