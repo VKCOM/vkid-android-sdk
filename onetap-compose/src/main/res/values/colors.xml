@@ -12,4 +12,6 @@
     <color name="vkid_ui_dark_background_secondary_alpha">#1AFFFFFF</color>
     <color name="vkid_ui_light_text_secondary">#818C99</color>
     <color name="vkid_ui_light_text_primary">#000000</color>
+    <color name="vkid_white_alpha12">#1FFFFFFF</color>
+    <color name="vkid_black_alpha12">#1F000000</color>
 </resources>

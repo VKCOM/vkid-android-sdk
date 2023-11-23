@@ -6,7 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
-import com.vk.id.multibranding.R as multibrandingR
+import com.vk.id.onetap.compose.R
 
 public enum class VKIDButtonBorderStyle {
     NONE,
@@ -22,12 +22,12 @@ internal fun Modifier.border(
         VKIDButtonBorderStyle.NONE -> this@border
         VKIDButtonBorderStyle.DARK -> border(
             width = 1.dp,
-            color = colorResource(id = multibrandingR.color.vkid_black_alpha12),
+            color = colorResource(id = R.color.vkid_black_alpha12),
             shape = RoundedCornerShape(size = cornersStyle.radiusDp.dp)
         )
         VKIDButtonBorderStyle.LIGHT -> border(
             width = 1.dp,
-            color = colorResource(id = multibrandingR.color.vkid_white_alpha12),
+            color = colorResource(id = R.color.vkid_white_alpha12),
             shape = RoundedCornerShape(size = cornersStyle.radiusDp.dp)
         )
     }
