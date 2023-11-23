@@ -1,16 +1,16 @@
 package com.vk.id.internal.log
 
 import android.util.Log
+import io.kotest.core.spec.DoNotParallelize
 import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.every
 import io.mockk.mockkStatic
 import io.mockk.verify
-import org.junit.jupiter.api.TestInstance
-import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 
-@TestInstance(PER_CLASS)
+@DoNotParallelize
 public class FakeLogEngineTest : BehaviorSpec({
-    beforeEach {
+
+    beforeSpec {
         mockkStatic(Log::class)
         every { Log.i(any(), any()) } returns 0
         every { Log.d(any(), any()) } returns 0
@@ -36,7 +36,7 @@ public class FakeLogEngineTest : BehaviorSpec({
                     Log.d(any(), any(), any())
                 }
             }
-            // Since the FakeLogEngine doesn't do any action, this test passes if no exception is thrown.
+            // Since the FakeLogEngine doesn't do any action, these tests passes if no exception is thrown.
         }
     }
 })
