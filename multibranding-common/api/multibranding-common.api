@@ -1,0 +1,106 @@
+public final class com/vk/id/multibranding/common/BuildConfig {
+	public static final field BUILD_TYPE Ljava/lang/String;
+	public static final field CI_BUILD_NUMBER Ljava/lang/Integer;
+	public static final field CI_BUILD_TYPE Ljava/lang/String;
+	public static final field DEBUG Z
+	public static final field LIBRARY_PACKAGE_NAME Ljava/lang/String;
+	public static final field VKID_BUILD_TIME Ljava/lang/Long;
+	public static final field VKID_VERSION_NAME Ljava/lang/String;
+	public fun <init> ()V
+}
+
+public abstract interface class com/vk/id/multibranding/common/callback/OAuthListWidgetAuthCallback {
+}
+
+public abstract interface class com/vk/id/multibranding/common/callback/OAuthListWidgetAuthCallback$JustToken : com/vk/id/multibranding/common/callback/OAuthListWidgetAuthCallback, kotlin/jvm/functions/Function1 {
+}
+
+public abstract interface class com/vk/id/multibranding/common/callback/OAuthListWidgetAuthCallback$WithOAuth : com/vk/id/multibranding/common/callback/OAuthListWidgetAuthCallback, kotlin/jvm/functions/Function2 {
+}
+
+public final class com/vk/id/multibranding/common/style/OAuthListWidgetBorderStyle : java/lang/Enum {
+	public static final field DARK Lcom/vk/id/multibranding/common/style/OAuthListWidgetBorderStyle;
+	public static final field LIGHT Lcom/vk/id/multibranding/common/style/OAuthListWidgetBorderStyle;
+	public static fun valueOf (Ljava/lang/String;)Lcom/vk/id/multibranding/common/style/OAuthListWidgetBorderStyle;
+	public static fun values ()[Lcom/vk/id/multibranding/common/style/OAuthListWidgetBorderStyle;
+}
+
+public abstract class com/vk/id/multibranding/common/style/OAuthListWidgetCornersStyle {
+	public synthetic fun <init> (ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getRadiusDp ()I
+}
+
+public final class com/vk/id/multibranding/common/style/OAuthListWidgetCornersStyle$Custom : com/vk/id/multibranding/common/style/OAuthListWidgetCornersStyle {
+	public fun <init> (I)V
+}
+
+public final class com/vk/id/multibranding/common/style/OAuthListWidgetCornersStyle$Default : com/vk/id/multibranding/common/style/OAuthListWidgetCornersStyle {
+	public static final field INSTANCE Lcom/vk/id/multibranding/common/style/OAuthListWidgetCornersStyle$Default;
+}
+
+public final class com/vk/id/multibranding/common/style/OAuthListWidgetCornersStyle$None : com/vk/id/multibranding/common/style/OAuthListWidgetCornersStyle {
+	public static final field INSTANCE Lcom/vk/id/multibranding/common/style/OAuthListWidgetCornersStyle$None;
+}
+
+public final class com/vk/id/multibranding/common/style/OAuthListWidgetCornersStyle$Round : com/vk/id/multibranding/common/style/OAuthListWidgetCornersStyle {
+	public static final field INSTANCE Lcom/vk/id/multibranding/common/style/OAuthListWidgetCornersStyle$Round;
+}
+
+public final class com/vk/id/multibranding/common/style/OAuthListWidgetCornersStyle$Rounded : com/vk/id/multibranding/common/style/OAuthListWidgetCornersStyle {
+	public static final field INSTANCE Lcom/vk/id/multibranding/common/style/OAuthListWidgetCornersStyle$Rounded;
+}
+
+public final class com/vk/id/multibranding/common/style/OAuthListWidgetRippleStyle : java/lang/Enum {
+	public static final field DARK Lcom/vk/id/multibranding/common/style/OAuthListWidgetRippleStyle;
+	public static final field LIGHT Lcom/vk/id/multibranding/common/style/OAuthListWidgetRippleStyle;
+	public static fun valueOf (Ljava/lang/String;)Lcom/vk/id/multibranding/common/style/OAuthListWidgetRippleStyle;
+	public static fun values ()[Lcom/vk/id/multibranding/common/style/OAuthListWidgetRippleStyle;
+}
+
+public final class com/vk/id/multibranding/common/style/OAuthListWidgetSizeStyle : java/lang/Enum {
+	public static final field DEFAULT Lcom/vk/id/multibranding/common/style/OAuthListWidgetSizeStyle;
+	public static final field LARGE_48 Lcom/vk/id/multibranding/common/style/OAuthListWidgetSizeStyle;
+	public static final field LARGE_50 Lcom/vk/id/multibranding/common/style/OAuthListWidgetSizeStyle;
+	public static final field LARGE_52 Lcom/vk/id/multibranding/common/style/OAuthListWidgetSizeStyle;
+	public static final field LARGE_54 Lcom/vk/id/multibranding/common/style/OAuthListWidgetSizeStyle;
+	public static final field LARGE_56 Lcom/vk/id/multibranding/common/style/OAuthListWidgetSizeStyle;
+	public static final field MEDIUM_40 Lcom/vk/id/multibranding/common/style/OAuthListWidgetSizeStyle;
+	public static final field MEDIUM_42 Lcom/vk/id/multibranding/common/style/OAuthListWidgetSizeStyle;
+	public static final field MEDIUM_44 Lcom/vk/id/multibranding/common/style/OAuthListWidgetSizeStyle;
+	public static final field MEDIUM_46 Lcom/vk/id/multibranding/common/style/OAuthListWidgetSizeStyle;
+	public static final field SMALL_32 Lcom/vk/id/multibranding/common/style/OAuthListWidgetSizeStyle;
+	public static final field SMALL_34 Lcom/vk/id/multibranding/common/style/OAuthListWidgetSizeStyle;
+	public static final field SMALL_36 Lcom/vk/id/multibranding/common/style/OAuthListWidgetSizeStyle;
+	public static final field SMALL_38 Lcom/vk/id/multibranding/common/style/OAuthListWidgetSizeStyle;
+	public static fun valueOf (Ljava/lang/String;)Lcom/vk/id/multibranding/common/style/OAuthListWidgetSizeStyle;
+	public static fun values ()[Lcom/vk/id/multibranding/common/style/OAuthListWidgetSizeStyle;
+}
+
+public abstract class com/vk/id/multibranding/common/style/OAuthListWidgetStyle {
+	public synthetic fun <init> (Lcom/vk/id/multibranding/common/style/OAuthListWidgetCornersStyle;Lcom/vk/id/multibranding/common/style/OAuthListWidgetRippleStyle;Lcom/vk/id/multibranding/common/style/OAuthListWidgetBorderStyle;Lcom/vk/id/multibranding/common/style/OAuthListWidgetTextStyle;Lcom/vk/id/multibranding/common/style/OAuthListWidgetSizeStyle;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getBorderStyle ()Lcom/vk/id/multibranding/common/style/OAuthListWidgetBorderStyle;
+	public final fun getCornersStyle ()Lcom/vk/id/multibranding/common/style/OAuthListWidgetCornersStyle;
+	public final fun getRippleStyle ()Lcom/vk/id/multibranding/common/style/OAuthListWidgetRippleStyle;
+	public final fun getSizeStyle ()Lcom/vk/id/multibranding/common/style/OAuthListWidgetSizeStyle;
+	public final fun getTextStyle ()Lcom/vk/id/multibranding/common/style/OAuthListWidgetTextStyle;
+}
+
+public final class com/vk/id/multibranding/common/style/OAuthListWidgetStyle$Dark : com/vk/id/multibranding/common/style/OAuthListWidgetStyle {
+	public fun <init> ()V
+	public fun <init> (Lcom/vk/id/multibranding/common/style/OAuthListWidgetCornersStyle;Lcom/vk/id/multibranding/common/style/OAuthListWidgetSizeStyle;)V
+	public synthetic fun <init> (Lcom/vk/id/multibranding/common/style/OAuthListWidgetCornersStyle;Lcom/vk/id/multibranding/common/style/OAuthListWidgetSizeStyle;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public final class com/vk/id/multibranding/common/style/OAuthListWidgetStyle$Light : com/vk/id/multibranding/common/style/OAuthListWidgetStyle {
+	public fun <init> ()V
+	public fun <init> (Lcom/vk/id/multibranding/common/style/OAuthListWidgetCornersStyle;Lcom/vk/id/multibranding/common/style/OAuthListWidgetSizeStyle;)V
+	public synthetic fun <init> (Lcom/vk/id/multibranding/common/style/OAuthListWidgetCornersStyle;Lcom/vk/id/multibranding/common/style/OAuthListWidgetSizeStyle;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public final class com/vk/id/multibranding/common/style/OAuthListWidgetTextStyle : java/lang/Enum {
+	public static final field DARK Lcom/vk/id/multibranding/common/style/OAuthListWidgetTextStyle;
+	public static final field LIGHT Lcom/vk/id/multibranding/common/style/OAuthListWidgetTextStyle;
+	public static fun valueOf (Ljava/lang/String;)Lcom/vk/id/multibranding/common/style/OAuthListWidgetTextStyle;
+	public static fun values ()[Lcom/vk/id/multibranding/common/style/OAuthListWidgetTextStyle;
+}
+
