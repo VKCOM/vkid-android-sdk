@@ -8,9 +8,9 @@ import androidx.core.view.setPadding
 import com.vk.id.OAuth
 import com.vk.id.multibranding.common.style.OAuthListWidgetStyle
 import com.vk.id.multibranding.xml.OAuthListWidget
+import com.vk.id.sample.xml.R
 import com.vk.id.sample.xml.multibranding.util.getOAuthListCallback
 import com.vk.id.sample.xml.uikit.common.dpToPixels
-import com.vk.id.sample.xml.R
 
 private const val WIDGET_PADDING = 12
 private const val WIDGET_WIDTH = 355

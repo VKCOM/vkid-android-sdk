@@ -10,30 +10,6 @@ import com.vk.id.sample.xml.multibranding.item.createOAuthListWidgetItem
 import com.vk.id.sample.xml.uikit.item.TitleItem
 import com.vk.id.sample.xml.uikit.item.createTitleItem
 
-//@Composable
-//fun MultibrandingXmlScreen() {
-//    AndroidView(
-//        modifier = Modifier.fillMaxSize(),
-//        factory = { context ->
-//            ScrollView(context).apply {
-//                addView(
-//                    LinearLayout(context).apply {
-//                        orientation = LinearLayout.VERTICAL
-//                        multibrandingSampleData.forEach {
-//                            (
-//                                when (it) {
-//                                    is TitleItem -> createTitleItem(context, it.text)
-//                                    is OAuthListWidgetItem -> createOAuthListWidgetItem(context, it)
-//                                    else -> null
-//                                }
-//                                )?.let(::addView)
-//                        }
-//                    }
-//                )
-//            }
-//        }
-//    )
-//}
 public class MultibrandingXmlScreen : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
