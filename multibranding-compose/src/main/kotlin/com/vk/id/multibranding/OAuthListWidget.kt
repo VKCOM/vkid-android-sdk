@@ -47,11 +47,36 @@ private val sourceItems = listOf(
     OAuth.OK,
 )
 
+/**
+ * Represents a callback that will be received after auth with one of multibranding's OAuths.
+ */
 public sealed interface OAuthListWidgetAuthCallback {
+
+    /**
+     * A callback the will be invoked upon a successful auth that provides both [OAuth] and [AccessToken].
+     *
+     * The first parameter is the [OAuth] that the used authorized with.
+     * The second parameter is the [AccessToken] that was received as a result of successful auth.
+     */
     public fun interface WithOAuth : (OAuth, AccessToken) -> Unit, OAuthListWidgetAuthCallback
+
+    /**
+     * A callback the will be invoked upon a successful auth that provides an [AccessToken].
+     *
+     * The callback's parameter is the [AccessToken] that was received as a result of successful auth.
+     */
     public fun interface JustToken : (AccessToken) -> Unit, OAuthListWidgetAuthCallback
 }
 
+/**
+ * Constructs a multibranding widget that supports auth with multiple [OAuth]s.
+ *
+ * @param modifier Layout configuration for the widget.
+ * @param style Styling widget configuration.
+ * @param onAuth A callback to be invoked upon a successful auth.
+ * @param onFail A callback to be invoked upof an error during auth.
+ * @param allowedOAuths A set of [OAuth]s the should be displayed to the user.
+ */
 @Composable
 public fun OAuthListWidget(
     modifier: Modifier = Modifier,

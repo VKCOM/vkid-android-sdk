@@ -7,8 +7,18 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 
+/**
+ * [OAuthListWidget]'s border style.
+ */
 public enum class OAuthListWidgetBorderStyle {
+    /**
+     * Dark version, should be used for the light layout.
+     */
     DARK,
+
+    /**
+     * Light version, should be used for the dark layout.
+     */
     LIGHT,
 }
 
