@@ -1,21 +1,7 @@
 package com.vk.id.multibranding
 
 import androidx.compose.ui.graphics.Color
-
-/**
- * [OAuthListWidget]'s ripple style.
- */
-public enum class OAuthListWidgetRippleStyle {
-    /**
-     * Dark version, should be used for the light layout.
-     */
-    DARK,
-
-    /**
-     * Light version, should be used for the dark layout.
-     */
-    LIGHT,
-}
+import com.vk.id.multibranding.common.OAuthListWidgetRippleStyle
 
 internal fun OAuthListWidgetRippleStyle.asColor(): Color = when (this) {
     OAuthListWidgetRippleStyle.DARK -> Color.Black

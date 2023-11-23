@@ -1,7 +1,7 @@
-package com.vk.id.multibranding
+package com.vk.id.multibranding.common
 
 /**
- * The style for [OAuthListWidget].
+ * The style for OAuthListWidget.
  *
  * @param cornersStyle corner radius style.
  * @param rippleStyle ripple effect style.

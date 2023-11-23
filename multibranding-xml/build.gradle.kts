@@ -10,6 +10,7 @@ android {
 
 dependencies {
     api(project(":vkid"))
+    api(project(":multibranding-common"))
     implementation(project(":multibranding-compose"))
     implementation(libs.androidx.compose.ui)
 }

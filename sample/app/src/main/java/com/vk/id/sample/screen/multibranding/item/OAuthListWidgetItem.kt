@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.view.setPadding
 import com.vk.id.OAuth
 import com.vk.id.multibranding.OAuthListWidget
-import com.vk.id.multibranding.OAuthListWidgetStyle
+import com.vk.id.multibranding.common.OAuthListWidgetStyle
 import com.vk.id.multibranding.xml.OAuthListWidget
 import com.vk.id.sample.R
 import com.vk.id.sample.screen.multibranding.util.getOAuthListCallback

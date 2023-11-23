@@ -13,9 +13,9 @@ import com.vk.id.OAuth
 import com.vk.id.VKIDAuthFail
 import com.vk.id.multibranding.OAuthListWidget
 import com.vk.id.multibranding.OAuthListWidgetAuthCallback
-import com.vk.id.multibranding.OAuthListWidgetCornersStyle
-import com.vk.id.multibranding.OAuthListWidgetSizeStyle
-import com.vk.id.multibranding.OAuthListWidgetStyle
+import com.vk.id.multibranding.common.OAuthListWidgetCornersStyle
+import com.vk.id.multibranding.common.OAuthListWidgetSizeStyle
+import com.vk.id.multibranding.common.OAuthListWidgetStyle
 
 public class OAuthListWidget @JvmOverloads constructor(
     context: Context,

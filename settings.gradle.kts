@@ -20,6 +20,7 @@ rootProject.name = "VKID"
 include(":sample-app")
 project(":sample-app").projectDir = File("sample/app")
 include(":vkid")
+include(":multibranding-common")
 include(":multibranding-compose")
 include(":multibranding-xml")
 include(":onetap-compose")

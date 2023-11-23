@@ -1,9 +1,9 @@
 package com.vk.id.sample.screen.multibranding.data
 
 import com.vk.id.OAuth
-import com.vk.id.multibranding.OAuthListWidgetCornersStyle
-import com.vk.id.multibranding.OAuthListWidgetSizeStyle
-import com.vk.id.multibranding.OAuthListWidgetStyle
+import com.vk.id.multibranding.common.OAuthListWidgetCornersStyle
+import com.vk.id.multibranding.common.OAuthListWidgetSizeStyle
+import com.vk.id.multibranding.common.OAuthListWidgetStyle
 import com.vk.id.sample.screen.multibranding.item.OAuthListWidgetItem
 import com.vk.id.sample.uikit.item.HalfSpacerItem
 import com.vk.id.sample.uikit.item.SpacerItem
