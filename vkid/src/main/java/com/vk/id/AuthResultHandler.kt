@@ -13,6 +13,7 @@ import com.vk.id.internal.store.PrefsStore
 import com.vk.id.internal.util.currentTime
 import kotlinx.coroutines.withContext
 
+@Suppress("LongParameterList")
 internal class AuthResultHandler(
     private val appContext: Context,
     private val dispatchers: CoroutinesDispatchers,
