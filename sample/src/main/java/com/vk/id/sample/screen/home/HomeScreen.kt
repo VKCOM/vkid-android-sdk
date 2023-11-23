@@ -30,9 +30,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.vk.id.onetap.compose.OneTap
 import com.vk.id.onetap.compose.button.VKIDButtonCornersStyle
-import com.vk.id.onetap.compose.button.VKIDButtonStyle
+import com.vk.id.onetap.compose.onetap.OneTap
+import com.vk.id.onetap.compose.onetap.OneTapStyle
 import com.vk.id.onetap.compose.onetap.sheet.OneTapBottomSheet
 import com.vk.id.onetap.compose.onetap.sheet.OneTapScenario
 import com.vk.id.onetap.compose.onetap.sheet.rememberOneTapBottomSheetState
@@ -58,7 +58,7 @@ fun HomeScreen(
         Spacer(modifier = Modifier.height(32.dp))
         OneTap(
             modifier = Modifier.width(355.dp),
-            style = VKIDButtonStyle.Blue(cornersStyle = VKIDButtonCornersStyle.Rounded),
+            style = OneTapStyle.Light(cornersStyle = VKIDButtonCornersStyle.Rounded),
             onAuth = { onVKIDAuthSuccess(context, it) },
             onFail = { onVKIDAuthFail(context, it) },
             signInAnotherAccountButtonEnabled = true
@@ -67,9 +67,6 @@ fun HomeScreen(
         Divider(thickness = 1.dp, color = colorResource(id = R.color.vkid_gray900_alpha50))
         Button("Onetap styling (compose)") {
             navController.navigate("onetap-styling-compose")
-        }
-        Button("Onetap styling (xml)") {
-            navController.navigate("onetap-styling-xml")
         }
         Button("Multibranding (compose)") {
             navController.navigate("multibranding-compose")

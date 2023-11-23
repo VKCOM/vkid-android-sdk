@@ -44,8 +44,8 @@ import androidx.compose.ui.unit.sp
 import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
-import com.vk.id.onetap.compose.OneTap
 import com.vk.id.onetap.compose.R
+import com.vk.id.onetap.compose.onetap.OneTap
 import kotlinx.coroutines.launch
 
 @Composable

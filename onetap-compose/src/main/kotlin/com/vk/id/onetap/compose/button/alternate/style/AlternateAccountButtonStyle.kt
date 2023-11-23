@@ -14,12 +14,11 @@ internal sealed class AlternateAccountButtonStyle(
     val sizeStyle: VKIDButtonSizeStyle,
 ) {
     class Light(
-        borderStyle: VKIDButtonBorderStyle = VKIDButtonBorderStyle.NONE,
         cornersStyle: VKIDButtonCornersStyle = VKIDButtonCornersStyle.Default,
         sizeStyle: VKIDButtonSizeStyle = VKIDButtonSizeStyle.MEDIUM_44,
     ) : AlternateAccountButtonStyle(
         backgroundStyle = AlternateAccountButtonBackgroundStyle.LIGHT,
-        borderStyle = borderStyle,
+        borderStyle = VKIDButtonBorderStyle.NONE,
         rippleStyle = VKIDButtonRippleStyle.LIGHT,
         textStyle = AlternateAccountButtonTextStyle.LIGHT,
         cornersStyle = cornersStyle,
@@ -27,12 +26,11 @@ internal sealed class AlternateAccountButtonStyle(
     )
 
     class Dark(
-        borderStyle: VKIDButtonBorderStyle = VKIDButtonBorderStyle.NONE,
         cornersStyle: VKIDButtonCornersStyle = VKIDButtonCornersStyle.Default,
         sizeStyle: VKIDButtonSizeStyle = VKIDButtonSizeStyle.MEDIUM_44,
     ) : AlternateAccountButtonStyle(
         backgroundStyle = AlternateAccountButtonBackgroundStyle.DARK,
-        borderStyle = borderStyle,
+        borderStyle = VKIDButtonBorderStyle.NONE,
         rippleStyle = VKIDButtonRippleStyle.DARK,
         textStyle = AlternateAccountButtonTextStyle.DARK,
         cornersStyle = cornersStyle,

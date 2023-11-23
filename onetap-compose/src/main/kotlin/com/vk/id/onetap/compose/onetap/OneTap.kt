@@ -1,4 +1,4 @@
-package com.vk.id.onetap.compose
+package com.vk.id.onetap.compose.onetap
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
@@ -13,30 +13,31 @@ import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.onetap.compose.button.VKIDButton
-import com.vk.id.onetap.compose.button.VKIDButtonStyle
+import com.vk.id.onetap.compose.button.VKIDButtonSmall
 import com.vk.id.onetap.compose.button.VKIDButtonTextProvider
 import com.vk.id.onetap.compose.button.alternate.AlternateAccountButton
-import com.vk.id.onetap.compose.button.alternate.style.AlternateAccountButtonStyle
 import com.vk.id.onetap.compose.button.rememberVKIDButtonState
 
 @Composable
 public fun OneTap(
     modifier: Modifier = Modifier,
-    // todo OneTapStyle
-    style: VKIDButtonStyle = VKIDButtonStyle.Blue(),
+    style: OneTapStyle = OneTapStyle.Light(),
     onAuth: (AccessToken) -> Unit,
     onFail: (VKIDAuthFail) -> Unit = {},
     vkid: VKID? = null,
     signInAnotherAccountButtonEnabled: Boolean = false
 ) {
-    OneTap(modifier, style, onAuth, onFail, vkid, signInAnotherAccountButtonEnabled, null)
+    if (style is OneTapStyle.Icon) {
+        VKIDButtonSmall(style = style.vkidButtonStyle, onAuth = onAuth, onFail = onFail, vkid = vkid)
+    } else {
+        OneTap(modifier, style, onAuth, onFail, vkid, signInAnotherAccountButtonEnabled, null)
+    }
 }
 
 @Composable
 internal fun OneTap(
     modifier: Modifier = Modifier,
-    // todo OneTapStyle
-    style: VKIDButtonStyle = VKIDButtonStyle.Blue(),
+    style: OneTapStyle = OneTapStyle.Light(),
     onAuth: (AccessToken) -> Unit,
     onFail: (VKIDAuthFail) -> Unit = {},
     vkid: VKID? = null,
@@ -50,7 +51,7 @@ internal fun OneTap(
     val vkidButtonState = rememberVKIDButtonState()
     Column(modifier = modifier) {
         VKIDButton(
-            style = style,
+            style = style.vkidButtonStyle,
             onAuth = onAuth,
             onFail = onFail,
             state = vkidButtonState,
@@ -63,7 +64,7 @@ internal fun OneTap(
                 visible = !vkidButtonState.userLoadFailed,
             ) {
                 AlternateAccountButton(
-                    style = style.toAlternate(),
+                    style = style.alternateAccountButtonStyle,
                     onAuth = onAuth,
                     onFail = onFail,
                     vkid = useVKID
@@ -71,20 +72,6 @@ internal fun OneTap(
             }
         }
     }
-}
-
-private fun VKIDButtonStyle.toAlternate(): AlternateAccountButtonStyle = when (this) {
-    is VKIDButtonStyle.TransparentLight -> AlternateAccountButtonStyle.Dark(
-        borderStyle = this.borderStyle,
-        cornersStyle = this.cornersStyle,
-        sizeStyle = this.sizeStyle,
-    )
-    is VKIDButtonStyle.Blue,
-    is VKIDButtonStyle.TransparentDark -> AlternateAccountButtonStyle.Light(
-        borderStyle = this.borderStyle,
-        cornersStyle = this.cornersStyle,
-        sizeStyle = this.sizeStyle,
-    )
 }
 
 @Preview
