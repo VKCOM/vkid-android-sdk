@@ -16,7 +16,7 @@
     <string name="vkid_schenario_application_vkid_button_text_user_found">Continue as %1$s</string>
     <string name="vkid_schenario_application_vkid_button_text_no_user">Continue with VK ID</string>
 
-    <string name="vkid_schenario_order_in_service_title">Place order on %1$swith VK ID</string>
+    <string name="vkid_schenario_order_in_service_title">Place order on %1$s with VK ID</string>
     <string name="vkid_schenario_order_in_service_vkid_button_text_user_found">Order as %1$s</string>
     <string name="vkid_schenario_order_in_service_vkid_button_text_no_user">Order with VK ID</string>
 
