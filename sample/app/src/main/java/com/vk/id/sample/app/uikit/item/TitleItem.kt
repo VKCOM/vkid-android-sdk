@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.sp
 import com.vk.id.sample.xml.uikit.item.TitleItem
 
 @Composable
-fun HandleTitleItem2(item: Any) {
+fun HandleTitleItem(item: Any) {
     if (item !is TitleItem) return
     Row(
         horizontalArrangement = Arrangement.Start,

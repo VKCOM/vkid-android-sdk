@@ -11,7 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.vk.id.sample.app.screen.multibranding.item.HandleOAuthListWidgetItem
 import com.vk.id.sample.app.uikit.item.HandleHalfSpacerItem
 import com.vk.id.sample.app.uikit.item.HandleSpacerItem
-import com.vk.id.sample.app.uikit.item.HandleTitleItem2
+import com.vk.id.sample.app.uikit.item.HandleTitleItem
 import com.vk.id.sample.xml.multibranding.data.multibrandingSampleData
 
 @Preview
@@ -26,7 +26,7 @@ fun MultibrandingComposeScreen() {
         multibrandingSampleData.forEach {
             HandleSpacerItem(item = it)
             HandleHalfSpacerItem(item = it)
-            HandleTitleItem2(item = it)
+            HandleTitleItem(item = it)
             HandleOAuthListWidgetItem(context = context, item = it)
         }
     }
