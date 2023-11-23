@@ -12,6 +12,7 @@ import com.vk.id.internal.di.VKIDDeps
 import com.vk.id.internal.ipc.VkSilentAuthInfoProvider
 import com.vk.id.internal.user.UserDataFetcher
 import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -30,6 +31,7 @@ internal class VKIDTest : BehaviorSpec({
     val authOptionsCreator = mockk<AuthOptionsCreator>()
     val authCallbacksHolder = mockk<AuthCallbacksHolder>()
     val testDispatcher = StandardTestDispatcher()
+    val userDataFetcher = mockk<UserDataFetcher>()
     val dispatchers = object : CoroutinesDispatchers {
         override val io: CoroutineDispatcher = testDispatcher
     }
@@ -41,7 +43,7 @@ internal class VKIDTest : BehaviorSpec({
             override val authResultHandler: Lazy<AuthResultHandler> = mockk()
             override val dispatchers: CoroutinesDispatchers = dispatchers
             override val vkSilentAuthInfoProvider: Lazy<VkSilentAuthInfoProvider> = mockk()
-            override val userDataFetcher: Lazy<UserDataFetcher> = mockk()
+            override val userDataFetcher: Lazy<UserDataFetcher> = lazy { userDataFetcher }
         }
     )
 
@@ -69,7 +71,7 @@ internal class VKIDTest : BehaviorSpec({
         launch(testDispatcher) { vkid.authorize(authCallback = mockk(), authParams = authParams) }
         testDispatcher.scheduler.advanceUntilIdle()
 
-        When("Auth is successful") {
+        When("Auth result is delivered") {
             AuthEventBridge.listener?.onAuthResult(
                 AuthResult.Success(
                     token = "TOKEN",
@@ -91,6 +93,27 @@ internal class VKIDTest : BehaviorSpec({
 
             Then("Auth provider is selected") {
                 coVerify { authProvider.auth(authOptions) }
+            }
+        }
+    }
+
+    Given("vkid") {
+        When("Fetch user data is called") {
+            val user = VKIDUser(
+                firstName = "first name",
+                lastName = "last name",
+                phone = "phone",
+                photo50 = "photo 50",
+                photo100 = "photo 100",
+                photo200 = "photo 200",
+            )
+            coEvery { userDataFetcher.fetchUserData() } returns user
+            val result = vkid.fetchUserData()
+            Then("User data fetcher is accessed") {
+                coVerify { userDataFetcher.fetchUserData() }
+            }
+            Then("User is returned") {
+                result shouldBe Result.success(user)
             }
         }
     }
