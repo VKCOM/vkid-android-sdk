@@ -28,10 +28,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.vk.id.onetap.compose.onetap.OneTapStyle
 import com.vk.id.onetap.compose.onetap.sheet.OneTapBottomSheet
 import com.vk.id.onetap.compose.onetap.sheet.OneTapScenario
 import com.vk.id.onetap.compose.onetap.sheet.rememberOneTapBottomSheetState
+import com.vk.id.onetap.compose.onetap.sheet.style.OneTapBottomSheetStyle
 import com.vk.id.sample.screen.home.Button
 import com.vk.id.sample.screen.styling.util.onVKIDAuthFail
 import com.vk.id.sample.screen.styling.util.onVKIDAuthSuccess
@@ -41,7 +41,7 @@ import com.vk.id.sample.screen.styling.util.onVKIDAuthSuccess
 fun OneTapBottomSheetScreen() {
     val context = LocalContext.current
     val selectedScenario: MutableState<OneTapScenario> = remember { mutableStateOf(OneTapScenario.EnterService) }
-    val selectedStyle: MutableState<OneTapStyle> = remember { mutableStateOf(OneTapStyle.Light()) }
+    val selectedStyle: MutableState<OneTapBottomSheetStyle> = remember { mutableStateOf(OneTapBottomSheetStyle.Light()) }
     Column(
         modifier = Modifier
             .padding(16.dp)
@@ -51,8 +51,9 @@ fun OneTapBottomSheetScreen() {
     ) {
         val bottomSheetState = rememberOneTapBottomSheetState()
         OneTapBottomSheet(
+            style = selectedStyle.value,
             onAuth = { onVKIDAuthSuccess(context, it) },
-            onFail = { onVKIDAuthFail(context, it)},
+            onFail = { onVKIDAuthFail(context, it) },
             state = bottomSheetState,
             scenario = selectedScenario.value,
             serviceName = "VKID Sample"
@@ -141,7 +142,7 @@ private fun ScenarioMenu(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun StyleMenu(
-    selectedStyle: MutableState<OneTapStyle>
+    selectedStyle: MutableState<OneTapBottomSheetStyle>
 ) {
     var expanded by remember { mutableStateOf(false) }
     ExposedDropdownMenuBox(
@@ -166,12 +167,14 @@ private fun StyleMenu(
             expanded = expanded,
             onDismissRequest = { }
         ) {
-            val styles = listOf(
-                "Light" to OneTapStyle.Light(),
-                "Dark" to OneTapStyle.Dark(),
-                "TransparentDark" to OneTapStyle.TransparentDark(),
-                "TransparentLight" to OneTapStyle.TransparentLight()
-            )
+            val styles = remember {
+                listOf(
+                    "Light" to OneTapBottomSheetStyle.Light(),
+                    "Dark" to OneTapBottomSheetStyle.Dark(),
+                    "TransparentDark" to OneTapBottomSheetStyle.TransparentDark(),
+                    "TransparentLight" to OneTapBottomSheetStyle.TransparentLight()
+                )
+            }
             styles.forEachIndexed { i, style ->
                 DropdownMenuItem(
                     text = {

@@ -36,4 +36,28 @@ internal sealed class AlternateAccountButtonStyle(
         cornersStyle = cornersStyle,
         sizeStyle = sizeStyle,
     )
+
+    class TransparentDark(
+        cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
+        sizeStyle: OneTapButtonSizeStyle = OneTapButtonSizeStyle.MEDIUM_44,
+    ) : AlternateAccountButtonStyle(
+        backgroundStyle = AlternateAccountButtonBackgroundStyle.TRANSPARENT,
+        rippleStyle = VKIDButtonRippleStyle.DARK,
+        borderStyle = VKIDButtonBorderStyle.DARK,
+        textStyle = AlternateAccountButtonTextStyle.TRANSPARENT_DARK,
+        cornersStyle = cornersStyle,
+        sizeStyle = sizeStyle,
+    )
+
+    class TransparentLight(
+        cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
+        sizeStyle: OneTapButtonSizeStyle = OneTapButtonSizeStyle.MEDIUM_44,
+    ) : AlternateAccountButtonStyle(
+        backgroundStyle = AlternateAccountButtonBackgroundStyle.TRANSPARENT,
+        rippleStyle = VKIDButtonRippleStyle.LIGHT,
+        borderStyle = VKIDButtonBorderStyle.LIGHT,
+        textStyle = AlternateAccountButtonTextStyle.DARK,
+        cornersStyle = cornersStyle,
+        sizeStyle = sizeStyle,
+    )
 }

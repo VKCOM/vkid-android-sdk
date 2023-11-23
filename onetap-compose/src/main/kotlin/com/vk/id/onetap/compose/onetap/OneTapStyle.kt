@@ -45,8 +45,8 @@ public sealed class OneTapStyle(
         cornersStyle = cornersStyle,
         sizeStyle = sizeStyle,
         elevationStyle = elevationStyle,
-        vkidButtonStyle = VKIDButtonStyle.TransparentLight(cornersStyle, sizeStyle, elevationStyle),
-        alternateAccountButtonStyle = AlternateAccountButtonStyle.Dark(cornersStyle, sizeStyle)
+        vkidButtonStyle = VKIDButtonStyle.TransparentDark(cornersStyle, sizeStyle, elevationStyle),
+        alternateAccountButtonStyle = AlternateAccountButtonStyle.TransparentDark(cornersStyle, sizeStyle)
     )
 
     public class TransparentDark(
@@ -57,8 +57,8 @@ public sealed class OneTapStyle(
         cornersStyle = cornersStyle,
         sizeStyle = sizeStyle,
         elevationStyle = elevationStyle,
-        vkidButtonStyle = VKIDButtonStyle.TransparentDark(cornersStyle, sizeStyle, elevationStyle),
-        alternateAccountButtonStyle = AlternateAccountButtonStyle.Light(cornersStyle, sizeStyle)
+        vkidButtonStyle = VKIDButtonStyle.TransparentLight(cornersStyle, sizeStyle, elevationStyle),
+        alternateAccountButtonStyle = AlternateAccountButtonStyle.TransparentLight(cornersStyle, sizeStyle)
     )
 
     public class Icon(
