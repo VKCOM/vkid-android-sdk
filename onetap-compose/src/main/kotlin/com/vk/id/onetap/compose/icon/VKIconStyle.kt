@@ -1,6 +1,6 @@
 package com.vk.id.onetap.compose.icon
 
-public data class VKIconStyle(
-    public val colorStyle: VKIconColorStyle,
-    public val sizeStyle: VKIconSizeStyle,
+internal data class VKIconStyle(
+    val colorStyle: VKIconColorStyle,
+    val sizeStyle: VKIconSizeStyle,
 )

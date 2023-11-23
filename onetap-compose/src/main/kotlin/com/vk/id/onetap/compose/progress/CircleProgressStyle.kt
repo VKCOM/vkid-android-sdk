@@ -5,7 +5,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.colorResource
 import com.vk.id.onetap.compose.R
 
-public enum class CircleProgressStyle {
+internal enum class CircleProgressStyle {
     LIGHT,
     DARK
 }

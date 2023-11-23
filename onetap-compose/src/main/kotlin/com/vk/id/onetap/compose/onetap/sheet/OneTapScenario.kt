@@ -3,7 +3,7 @@ package com.vk.id.onetap.compose.onetap.sheet
 import android.content.res.Resources
 import com.vk.id.VKIDUser
 import com.vk.id.onetap.compose.R
-import com.vk.id.onetap.compose.button.VKIDButtonTextProvider
+import com.vk.id.onetap.compose.button.auth.VKIDButtonTextProvider
 
 public enum class OneTapScenario {
     EnterService,

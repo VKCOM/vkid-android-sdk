@@ -4,7 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
 import com.vk.id.onetap.compose.R
 
-public enum class VKIconColorStyle {
+internal enum class VKIconColorStyle {
     WHITE,
     BLUE,
 }

@@ -1,8 +1,8 @@
-package com.vk.id.onetap.compose.button
+package com.vk.id.onetap.compose.button.auth.style
 
 import androidx.compose.ui.graphics.Color
 
-public enum class VKIDButtonRippleStyle {
+internal enum class VKIDButtonRippleStyle {
     DARK,
     LIGHT,
 }

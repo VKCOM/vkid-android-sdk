@@ -1,4 +1,4 @@
-package com.vk.id.onetap.compose.button
+package com.vk.id.onetap.compose.button.auth
 
 import com.vk.id.VKIDUser
 

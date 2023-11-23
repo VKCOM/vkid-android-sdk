@@ -1,4 +1,4 @@
-package com.vk.id.onetap.compose.button
+package com.vk.id.onetap.compose.button.auth.style
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -7,8 +7,9 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import com.vk.id.onetap.compose.R
+import com.vk.id.onetap.compose.onetap.style.OneTapButtonCornersStyle
 
-public enum class VKIDButtonBorderStyle {
+internal enum class VKIDButtonBorderStyle {
     NONE,
     DARK,
     LIGHT,
@@ -16,7 +17,7 @@ public enum class VKIDButtonBorderStyle {
 
 internal fun Modifier.border(
     style: VKIDButtonBorderStyle,
-    cornersStyle: VKIDButtonCornersStyle,
+    cornersStyle: OneTapButtonCornersStyle,
 ) = composed {
     when (style) {
         VKIDButtonBorderStyle.NONE -> this@border

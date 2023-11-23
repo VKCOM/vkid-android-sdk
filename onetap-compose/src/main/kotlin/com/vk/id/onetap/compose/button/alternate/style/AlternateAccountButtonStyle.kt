@@ -1,21 +1,21 @@
 package com.vk.id.onetap.compose.button.alternate.style
 
-import com.vk.id.onetap.compose.button.VKIDButtonBorderStyle
-import com.vk.id.onetap.compose.button.VKIDButtonCornersStyle
-import com.vk.id.onetap.compose.button.VKIDButtonRippleStyle
-import com.vk.id.onetap.compose.button.VKIDButtonSizeStyle
+import com.vk.id.onetap.compose.button.auth.style.VKIDButtonBorderStyle
+import com.vk.id.onetap.compose.button.auth.style.VKIDButtonRippleStyle
+import com.vk.id.onetap.compose.onetap.style.OneTapButtonCornersStyle
+import com.vk.id.onetap.compose.onetap.style.OneTapButtonSizeStyle
 
 internal sealed class AlternateAccountButtonStyle(
     val backgroundStyle: AlternateAccountButtonBackgroundStyle,
     val borderStyle: VKIDButtonBorderStyle,
     val rippleStyle: VKIDButtonRippleStyle,
     val textStyle: AlternateAccountButtonTextStyle,
-    val cornersStyle: VKIDButtonCornersStyle,
-    val sizeStyle: VKIDButtonSizeStyle,
+    val cornersStyle: OneTapButtonCornersStyle,
+    val sizeStyle: OneTapButtonSizeStyle,
 ) {
     class Light(
-        cornersStyle: VKIDButtonCornersStyle = VKIDButtonCornersStyle.Default,
-        sizeStyle: VKIDButtonSizeStyle = VKIDButtonSizeStyle.MEDIUM_44,
+        cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
+        sizeStyle: OneTapButtonSizeStyle = OneTapButtonSizeStyle.MEDIUM_44,
     ) : AlternateAccountButtonStyle(
         backgroundStyle = AlternateAccountButtonBackgroundStyle.LIGHT,
         borderStyle = VKIDButtonBorderStyle.NONE,
@@ -26,8 +26,8 @@ internal sealed class AlternateAccountButtonStyle(
     )
 
     class Dark(
-        cornersStyle: VKIDButtonCornersStyle = VKIDButtonCornersStyle.Default,
-        sizeStyle: VKIDButtonSizeStyle = VKIDButtonSizeStyle.MEDIUM_44,
+        cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
+        sizeStyle: OneTapButtonSizeStyle = OneTapButtonSizeStyle.MEDIUM_44,
     ) : AlternateAccountButtonStyle(
         backgroundStyle = AlternateAccountButtonBackgroundStyle.DARK,
         borderStyle = VKIDButtonBorderStyle.NONE,

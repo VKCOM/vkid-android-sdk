@@ -26,13 +26,13 @@ import com.vk.id.onetap.compose.R
 import com.vk.id.onetap.compose.button.alternate.style.AlternateAccountButtonStyle
 import com.vk.id.onetap.compose.button.alternate.style.asColorResource
 import com.vk.id.onetap.compose.button.alternate.style.background
-import com.vk.id.onetap.compose.button.asColor
-import com.vk.id.onetap.compose.button.asFontSize
-import com.vk.id.onetap.compose.button.asLineHeight
-import com.vk.id.onetap.compose.button.border
-import com.vk.id.onetap.compose.button.clip
-import com.vk.id.onetap.compose.button.height
+import com.vk.id.onetap.compose.button.auth.style.asColor
+import com.vk.id.onetap.compose.button.auth.style.border
 import com.vk.id.onetap.compose.button.startAuth
+import com.vk.id.onetap.compose.onetap.style.asFontSize
+import com.vk.id.onetap.compose.onetap.style.asLineHeight
+import com.vk.id.onetap.compose.onetap.style.clip
+import com.vk.id.onetap.compose.onetap.style.height
 
 @Composable
 internal fun AlternateAccountButton(

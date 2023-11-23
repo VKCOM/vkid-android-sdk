@@ -1,26 +1,29 @@
-package com.vk.id.onetap.compose.button
+package com.vk.id.onetap.compose.button.auth.style
 
 import com.vk.id.onetap.compose.icon.VKIconColorStyle
 import com.vk.id.onetap.compose.icon.VKIconStyle
 import com.vk.id.onetap.compose.icon.asIconSizeStyle
+import com.vk.id.onetap.compose.onetap.style.OneTapButtonCornersStyle
+import com.vk.id.onetap.compose.onetap.style.OneTapButtonElevationStyle
+import com.vk.id.onetap.compose.onetap.style.OneTapButtonSizeStyle
 import com.vk.id.onetap.compose.progress.CircleProgressStyle
 
 @Suppress("LongParameterList")
-public sealed class VKIDButtonStyle(
-    public val backgroundStyle: VKIDButtonBackgroundStyle,
-    public val rippleStyle: VKIDButtonRippleStyle,
-    public val borderStyle: VKIDButtonBorderStyle,
-    public val iconStyle: VKIconStyle,
-    public val textStyle: VKIDButtonTextStyle,
-    public val progressStyle: CircleProgressStyle,
-    public val cornersStyle: VKIDButtonCornersStyle,
-    public val sizeStyle: VKIDButtonSizeStyle,
-    public val elevationStyle: VKIDButtonElevationStyle,
+internal sealed class VKIDButtonStyle(
+    val backgroundStyle: VKIDButtonBackgroundStyle,
+    val rippleStyle: VKIDButtonRippleStyle,
+    val borderStyle: VKIDButtonBorderStyle,
+    val iconStyle: VKIconStyle,
+    val textStyle: VKIDButtonTextStyle,
+    val progressStyle: CircleProgressStyle,
+    val cornersStyle: OneTapButtonCornersStyle,
+    val sizeStyle: OneTapButtonSizeStyle,
+    val elevationStyle: OneTapButtonElevationStyle,
 ) {
-    public class Blue(
-        cornersStyle: VKIDButtonCornersStyle = VKIDButtonCornersStyle.Default,
-        sizeStyle: VKIDButtonSizeStyle = VKIDButtonSizeStyle.MEDIUM_44,
-        elevationStyle: VKIDButtonElevationStyle = VKIDButtonElevationStyle.Default,
+    class Blue(
+        cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
+        sizeStyle: OneTapButtonSizeStyle = OneTapButtonSizeStyle.MEDIUM_44,
+        elevationStyle: OneTapButtonElevationStyle = OneTapButtonElevationStyle.Default,
     ) : VKIDButtonStyle(
         backgroundStyle = VKIDButtonBackgroundStyle.BLUE,
         rippleStyle = VKIDButtonRippleStyle.LIGHT,
@@ -36,10 +39,10 @@ public sealed class VKIDButtonStyle(
         elevationStyle = elevationStyle,
     )
 
-    public class TransparentDark(
-        cornersStyle: VKIDButtonCornersStyle = VKIDButtonCornersStyle.Default,
-        sizeStyle: VKIDButtonSizeStyle = VKIDButtonSizeStyle.MEDIUM_44,
-        elevationStyle: VKIDButtonElevationStyle = VKIDButtonElevationStyle.Default,
+    class TransparentDark(
+        cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
+        sizeStyle: OneTapButtonSizeStyle = OneTapButtonSizeStyle.MEDIUM_44,
+        elevationStyle: OneTapButtonElevationStyle = OneTapButtonElevationStyle.Default,
     ) : VKIDButtonStyle(
         backgroundStyle = VKIDButtonBackgroundStyle.TRANSPARENT,
         rippleStyle = VKIDButtonRippleStyle.DARK,
@@ -55,10 +58,10 @@ public sealed class VKIDButtonStyle(
         elevationStyle = elevationStyle,
     )
 
-    public class TransparentLight(
-        cornersStyle: VKIDButtonCornersStyle = VKIDButtonCornersStyle.Default,
-        sizeStyle: VKIDButtonSizeStyle = VKIDButtonSizeStyle.MEDIUM_44,
-        elevationStyle: VKIDButtonElevationStyle = VKIDButtonElevationStyle.Default,
+    class TransparentLight(
+        cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
+        sizeStyle: OneTapButtonSizeStyle = OneTapButtonSizeStyle.MEDIUM_44,
+        elevationStyle: OneTapButtonElevationStyle = OneTapButtonElevationStyle.Default,
     ) : VKIDButtonStyle(
         backgroundStyle = VKIDButtonBackgroundStyle.TRANSPARENT,
         rippleStyle = VKIDButtonRippleStyle.LIGHT,
