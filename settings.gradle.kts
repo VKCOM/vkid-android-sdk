@@ -17,7 +17,8 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "VKID"
-include(":sample")
+include(":sample-app")
+project(":sample-app").projectDir = File("sample/app")
 include(":vkid")
 include(":multibranding-compose")
 include(":multibranding-xml")
