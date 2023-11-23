@@ -1,4 +1,4 @@
-package com.vk.id.multibranding.common
+package com.vk.id.multibranding.common.style
 
 /**
  * The style for OAuthListWidget.

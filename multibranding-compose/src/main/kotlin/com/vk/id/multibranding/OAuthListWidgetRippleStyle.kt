@@ -1,7 +1,7 @@
 package com.vk.id.multibranding
 
 import androidx.compose.ui.graphics.Color
-import com.vk.id.multibranding.common.OAuthListWidgetRippleStyle
+import com.vk.id.multibranding.common.style.OAuthListWidgetRippleStyle
 
 internal fun OAuthListWidgetRippleStyle.asColor(): Color = when (this) {
     OAuthListWidgetRippleStyle.DARK -> Color.Black

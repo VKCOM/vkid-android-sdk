@@ -13,10 +13,10 @@ import com.vk.id.AccessToken
 import com.vk.id.OAuth
 import com.vk.id.VKIDAuthFail
 import com.vk.id.multibranding.OAuthListWidget
-import com.vk.id.multibranding.common.OAuthListWidgetAuthCallback
-import com.vk.id.multibranding.common.OAuthListWidgetCornersStyle
-import com.vk.id.multibranding.common.OAuthListWidgetSizeStyle
-import com.vk.id.multibranding.common.OAuthListWidgetStyle
+import com.vk.id.multibranding.common.callback.OAuthListWidgetAuthCallback
+import com.vk.id.multibranding.common.style.OAuthListWidgetCornersStyle
+import com.vk.id.multibranding.common.style.OAuthListWidgetSizeStyle
+import com.vk.id.multibranding.common.style.OAuthListWidgetStyle
 
 public class OAuthListWidget @JvmOverloads constructor(
     context: Context,

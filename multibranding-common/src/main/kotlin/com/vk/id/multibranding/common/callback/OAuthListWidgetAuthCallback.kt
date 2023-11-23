@@ -1,4 +1,4 @@
-package com.vk.id.multibranding.common
+package com.vk.id.multibranding.common.callback
 
 import com.vk.id.AccessToken
 import com.vk.id.OAuth

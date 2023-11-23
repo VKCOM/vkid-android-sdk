@@ -6,7 +6,7 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.core.view.setPadding
 import com.vk.id.OAuth
-import com.vk.id.multibranding.common.OAuthListWidgetStyle
+import com.vk.id.multibranding.common.style.OAuthListWidgetStyle
 import com.vk.id.multibranding.xml.OAuthListWidget
 import com.vk.id.sample.xml.multibranding.util.getOAuthListCallback
 import com.vk.id.sample.xml.uikit.common.dpToPixels

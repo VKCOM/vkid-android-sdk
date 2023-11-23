@@ -6,8 +6,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
-import com.vk.id.multibranding.common.OAuthListWidgetBorderStyle
-import com.vk.id.multibranding.common.OAuthListWidgetCornersStyle
+import com.vk.id.multibranding.common.style.OAuthListWidgetBorderStyle
+import com.vk.id.multibranding.common.style.OAuthListWidgetCornersStyle
 
 internal fun Modifier.border(
     style: OAuthListWidgetBorderStyle,

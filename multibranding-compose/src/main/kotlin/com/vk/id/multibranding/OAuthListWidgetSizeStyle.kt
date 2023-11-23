@@ -7,7 +7,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.vk.id.multibranding.common.OAuthListWidgetSizeStyle
+import com.vk.id.multibranding.common.style.OAuthListWidgetSizeStyle
 
 @Suppress("CyclomaticComplexMethod", "MagicNumber")
 internal fun Modifier.iconPadding(
