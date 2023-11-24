@@ -26,12 +26,12 @@ public final class com/vk/id/multibranding/common/style/OAuthListWidgetBorderSty
 }
 
 public abstract class com/vk/id/multibranding/common/style/OAuthListWidgetCornersStyle {
-	public synthetic fun <init> (ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getRadiusDp ()I
+	public synthetic fun <init> (FLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getRadiusDp ()F
 }
 
 public final class com/vk/id/multibranding/common/style/OAuthListWidgetCornersStyle$Custom : com/vk/id/multibranding/common/style/OAuthListWidgetCornersStyle {
-	public fun <init> (I)V
+	public fun <init> (F)V
 }
 
 public final class com/vk/id/multibranding/common/style/OAuthListWidgetCornersStyle$Default : com/vk/id/multibranding/common/style/OAuthListWidgetCornersStyle {
