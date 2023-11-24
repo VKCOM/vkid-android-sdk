@@ -9,12 +9,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import com.vk.id.sample.app.screen.styling.data.buttonStylingData
 import com.vk.id.sample.app.screen.styling.item.HandleButtonItem
-import com.vk.id.sample.app.screen.styling.item.HandleSmallButtonItem
 import com.vk.id.sample.app.uikit.item.HandleHalfSpacerItem
 import com.vk.id.sample.app.uikit.item.HandleSpacerItem
 import com.vk.id.sample.app.uikit.item.HandleTitleItem
+import com.vk.id.sample.xml.onetap.data.buttonStylingData
 
 @Composable
 fun OnetapStylingComposeScreen() {
@@ -31,7 +30,6 @@ fun OnetapStylingComposeScreen() {
             HandleHalfSpacerItem(item = it)
             HandleTitleItem(item = it)
             HandleButtonItem(context = context, item = it)
-            HandleSmallButtonItem(context = context, item = it)
         }
     }
 }

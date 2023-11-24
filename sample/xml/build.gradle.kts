@@ -8,6 +8,7 @@ android {
 
 dependencies {
     implementation(project(":multibranding-xml"))
+    implementation(project(":onetap-xml"))
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
 }

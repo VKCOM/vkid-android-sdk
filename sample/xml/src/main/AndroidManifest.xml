@@ -26,5 +26,6 @@
     <application>
         <activity android:name=".multibranding.MultibrandingXmlCodeActivity" />
         <activity android:name=".multibranding.MultibrandingXmlLayoutActivity" />
+        <activity android:name=".onetap.OnetapStylingXmlCodeActivity" />
     </application>
 </manifest>

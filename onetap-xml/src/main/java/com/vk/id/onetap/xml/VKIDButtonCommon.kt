@@ -3,15 +3,17 @@ package com.vk.id.onetap.xml
 import android.content.Context
 import android.content.res.TypedArray
 import android.util.AttributeSet
-import com.vk.id.onetap.compose.button.VKIDButtonCornersStyle
-import com.vk.id.onetap.compose.button.VKIDButtonElevationStyle
-import com.vk.id.onetap.compose.button.VKIDButtonSizeStyle
-import com.vk.id.onetap.compose.button.VKIDButtonStyle
+import com.vk.id.onetap.common.OneTapStyle
+import com.vk.id.onetap.common.auth.style.VKIDButtonStyle
+import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
+import com.vk.id.onetap.common.button.style.OneTapButtonElevationStyle
+import com.vk.id.onetap.common.button.style.OneTapButtonSizeStyle
 
+// TODO: Rename file
 internal fun parseAttrs(
     context: Context,
     attrs: AttributeSet?,
-): VKIDButtonStyle {
+): OneTapStyle {
     context.theme.obtainStyledAttributes(
         attrs,
         R.styleable.VKIDButton,
@@ -19,10 +21,13 @@ internal fun parseAttrs(
         0
     ).apply {
         try {
-            return getStyleConstructor()(
-                VKIDButtonCornersStyle.Custom(getCornerRadius().toInt()),
-                getSize(),
-                VKIDButtonElevationStyle.Custom(getElevation().toInt())
+            return OneTapStyle.Dark(
+                // FIXME:
+//                getStyleConstructor()(
+//                    VKIDButtonCornersStyle.Custom(getCornerRadius().toInt()),
+//                    getSize(),
+//                    VKIDButtonElevationStyle.Custom(getElevation().toInt())
+//                )
             )
         } finally {
             recycle()
@@ -32,12 +37,12 @@ internal fun parseAttrs(
 
 private fun TypedArray.getCornerRadius() = getDimension(
     R.styleable.VKIDButton_vkid_cornerRadius,
-    VKIDButtonCornersStyle.Default.radiusDp.toFloat()
+    OneTapButtonCornersStyle.Default.radiusDp.toFloat()
 )
 
 private fun TypedArray.getElevation() = getDimension(
     R.styleable.VKIDButton_vkid_elevation,
-    VKIDButtonElevationStyle.Default.elevation.toFloat()
+    OneTapButtonElevationStyle.Default.elevation.toFloat()
 )
 
 private fun TypedArray.getStyleConstructor() = when (getInt(R.styleable.VKIDButton_vkid_style, 0)) {
@@ -48,18 +53,18 @@ private fun TypedArray.getStyleConstructor() = when (getInt(R.styleable.VKIDButt
 
 @Suppress("MagicNumber", "CyclomaticComplexMethod")
 private fun TypedArray.getSize() = when (getInt(R.styleable.VKIDButton_vkid_size, 0)) {
-    1 -> VKIDButtonSizeStyle.SMALL_32
-    2 -> VKIDButtonSizeStyle.SMALL_34
-    3 -> VKIDButtonSizeStyle.SMALL_36
-    4 -> VKIDButtonSizeStyle.SMALL_38
-    5 -> VKIDButtonSizeStyle.MEDIUM_40
-    6 -> VKIDButtonSizeStyle.MEDIUM_42
-    7 -> VKIDButtonSizeStyle.MEDIUM_44
-    8 -> VKIDButtonSizeStyle.MEDIUM_46
-    9 -> VKIDButtonSizeStyle.LARGE_48
-    10 -> VKIDButtonSizeStyle.LARGE_50
-    11 -> VKIDButtonSizeStyle.LARGE_52
-    12 -> VKIDButtonSizeStyle.LARGE_54
-    13 -> VKIDButtonSizeStyle.LARGE_56
-    else -> VKIDButtonSizeStyle.DEFAULT
+    1 -> OneTapButtonSizeStyle.SMALL_32
+    2 -> OneTapButtonSizeStyle.SMALL_34
+    3 -> OneTapButtonSizeStyle.SMALL_36
+    4 -> OneTapButtonSizeStyle.SMALL_38
+    5 -> OneTapButtonSizeStyle.MEDIUM_40
+    6 -> OneTapButtonSizeStyle.MEDIUM_42
+    7 -> OneTapButtonSizeStyle.MEDIUM_44
+    8 -> OneTapButtonSizeStyle.MEDIUM_46
+    9 -> OneTapButtonSizeStyle.LARGE_48
+    10 -> OneTapButtonSizeStyle.LARGE_50
+    11 -> OneTapButtonSizeStyle.LARGE_52
+    12 -> OneTapButtonSizeStyle.LARGE_54
+    13 -> OneTapButtonSizeStyle.LARGE_56
+    else -> OneTapButtonSizeStyle.DEFAULT
 }

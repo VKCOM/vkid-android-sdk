@@ -65,6 +65,9 @@ fun HomeScreen(
         Button("Onetap styling (compose)") {
             navController.navigate("onetap-styling-compose")
         }
+        Button("Onetap styling (xml)") {
+            navController.navigate("onetap-styling-xml")
+        }
         Button("Multibranding (compose)") {
             navController.navigate("multibranding-compose")
         }

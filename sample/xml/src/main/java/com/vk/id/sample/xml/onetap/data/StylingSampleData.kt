@@ -1,16 +1,15 @@
-package com.vk.id.sample.app.screen.styling.data
+package com.vk.id.sample.xml.onetap.data
 
+import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonElevationStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonSizeStyle
-import com.vk.id.onetap.common.OneTapStyle
-import com.vk.id.sample.app.screen.styling.item.ButtonItem
-import com.vk.id.sample.app.screen.styling.item.IconButtonItem
+import com.vk.id.sample.xml.onetap.item.ButtonItem
 import com.vk.id.sample.xml.uikit.item.HalfSpacerItem
 import com.vk.id.sample.xml.uikit.item.SpacerItem
 import com.vk.id.sample.xml.uikit.item.TitleItem
 
-internal val buttonStylingData = listOf(
+public val buttonStylingData: List<Any> = listOf(
     TitleItem("Primary"),
     HalfSpacerItem(),
     ButtonItem(
@@ -192,7 +191,7 @@ internal val buttonStylingData = listOf(
     HalfSpacerItem(),
     TitleItem("Small button"),
     HalfSpacerItem(),
-    IconButtonItem(
+    ButtonItem(
         style = OneTapStyle.Icon(
             cornersStyle = OneTapButtonCornersStyle.Default,
             sizeStyle = OneTapButtonSizeStyle.MEDIUM_44,
