@@ -5,8 +5,8 @@
             <enum name="transparentLight" value="1"/>
             <enum name="transparentDark" value="2"/>
         </attr>
-        <attr name="vkid_oauth_list__cornerRadius" format="dimension"/>
-        <attr name="vkid_oauth_list__size" format="enum">
+        <attr name="vkid_oauth_list_cornerRadius" format="dimension"/>
+        <attr name="vkid_oauth_list_size" format="enum">
             <enum name="standard" value="0"/>
             <enum name="small32" value="1"/>
             <enum name="small34" value="2"/>
@@ -22,5 +22,6 @@
             <enum name="large54" value="12"/>
             <enum name="large56" value="13"/>
         </attr>
+        <attr name="vkid_oauth_list_allowed_oauths" format="string"/>
     </declare-styleable>
 </resources>
