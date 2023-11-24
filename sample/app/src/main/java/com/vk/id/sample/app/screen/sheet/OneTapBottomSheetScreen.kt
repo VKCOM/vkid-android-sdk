@@ -1,4 +1,4 @@
-package com.vk.id.sample.screen.sheet
+package com.vk.id.sample.app.screen.sheet
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,9 +32,9 @@ import com.vk.id.onetap.compose.onetap.sheet.OneTapBottomSheet
 import com.vk.id.onetap.compose.onetap.sheet.OneTapScenario
 import com.vk.id.onetap.compose.onetap.sheet.rememberOneTapBottomSheetState
 import com.vk.id.onetap.compose.onetap.sheet.style.OneTapBottomSheetStyle
-import com.vk.id.sample.screen.home.Button
-import com.vk.id.sample.screen.styling.util.onVKIDAuthFail
-import com.vk.id.sample.screen.styling.util.onVKIDAuthSuccess
+import com.vk.id.sample.app.screen.home.Button
+import com.vk.id.sample.app.screen.styling.util.onVKIDAuthFail
+import com.vk.id.sample.app.screen.styling.util.onVKIDAuthSuccess
 
 @Preview
 @Composable

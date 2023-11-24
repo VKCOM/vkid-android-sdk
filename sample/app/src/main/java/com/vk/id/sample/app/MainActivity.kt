@@ -10,7 +10,7 @@ import androidx.navigation.compose.rememberNavController
 import com.vk.id.VKID
 import com.vk.id.sample.app.screen.home.HomeScreen
 import com.vk.id.sample.app.screen.multibranding.MultibrandingComposeScreen
-import com.vk.id.sample.screen.sheet.OneTapBottomSheetScreen
+import com.vk.id.sample.app.screen.sheet.OneTapBottomSheetScreen
 import com.vk.id.sample.app.screen.styling.OnetapStylingComposeScreen
 import com.vk.id.sample.xml.multibranding.MultibrandingXmlScreen
 
