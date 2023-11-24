@@ -42,7 +42,7 @@ internal class AuthOptionsCreator(
             locale = locale?.toQueryParam(),
             theme = theme?.toQueryParam(),
             // To not show "Log in as..." screen in web view
-            webAuthPhoneScreen = !authParams.useExistingUserIfPossible,
+            webAuthPhoneScreen = !authParams.useOAuthProviderIfPossible,
             oAuth = authParams.oAuth,
         )
     }

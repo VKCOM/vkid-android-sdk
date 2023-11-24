@@ -46,8 +46,25 @@ internal fun Modifier.clickable(
         ),
         enabled = state.inProgress.not(),
         role = Role.Button,
-        onClick = { startAuth(coroutineScope, vkid, onAuth, onFail) }
+        onClick = {
+            startAuth(
+                coroutineScope,
+                vkid,
+                onAuth,
+                onFail,
+                VKIDAuthParams {
+                    theme = style.toProviderTheme()
+                }
+            )
+        }
     )
+}
+
+private fun VKIDButtonStyle.toProviderTheme(): VKIDAuthParams.Theme = when (this) {
+    is VKIDButtonStyle.Dark,
+    is VKIDButtonStyle.TransparentDark -> VKIDAuthParams.Theme.Dark
+    is VKIDButtonStyle.Light,
+    is VKIDButtonStyle.TransparentLight -> VKIDAuthParams.Theme.Light
 }
 
 internal fun startAuth(
@@ -90,6 +107,7 @@ internal fun FetchUserData(
                     onFetchingProgress.onFetched(user)
                 }
             }
+
             else -> {}
         }
         onDispose {
