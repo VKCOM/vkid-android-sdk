@@ -21,6 +21,9 @@ import com.vk.id.multibranding.common.style.OAuthListWidgetCornersStyle
 import com.vk.id.multibranding.common.style.OAuthListWidgetSizeStyle
 import com.vk.id.multibranding.common.style.OAuthListWidgetStyle
 
+/**
+ * Multibranding widget that supports auth with multiple [OAuth]s.
+ */
 public class OAuthListWidget @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -28,19 +31,25 @@ public class OAuthListWidget @JvmOverloads constructor(
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
     private val composeView = ComposeView(context)
+
+    /** Styling widget configuration. */
     public var style: OAuthListWidgetStyle = OAuthListWidgetStyle.Dark()
         set(value) {
             field = value
             onStyleChange(value)
         }
     private var onStyleChange: (OAuthListWidgetStyle) -> Unit = {}
+
+    /** A set of [OAuth]s the should be displayed to the user. */
     public var oAuths: Set<OAuth> = emptySet()
         set(value) {
             field = value
             onOAuthsChange(value)
         }
     private var onOAuthsChange: (Set<OAuth>) -> Unit = {}
-    private var onAuth: OAuthListWidgetAuthCallback = OAuthListWidgetAuthCallback.JustToken {}
+    private var onAuth: OAuthListWidgetAuthCallback = OAuthListWidgetAuthCallback.JustToken {
+        error("No onAuth callback for OAuthListWidget. Set it with setCallbacks method.")
+    }
     private var onFail: (VKIDAuthFail) -> Unit = {}
 
     init {
@@ -71,6 +80,12 @@ public class OAuthListWidget @JvmOverloads constructor(
         )
     }
 
+    /**
+     * Sets callbacks for the authorization
+     *
+     * @param onAuth A callback to be invoked upon a successful auth.
+     * @param onFail A callback to be invoked upon an error during auth.
+     */
     public fun setCallbacks(
         onAuth: OAuthListWidgetAuthCallback,
         onFail: (VKIDAuthFail) -> Unit = {},
