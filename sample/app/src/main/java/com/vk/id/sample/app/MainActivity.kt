@@ -12,7 +12,8 @@ import com.vk.id.sample.app.screen.home.HomeScreen
 import com.vk.id.sample.app.screen.multibranding.MultibrandingComposeScreen
 import com.vk.id.sample.app.screen.sheet.OneTapBottomSheetScreen
 import com.vk.id.sample.app.screen.styling.OnetapStylingComposeScreen
-import com.vk.id.sample.xml.multibranding.MultibrandingXmlScreen
+import com.vk.id.sample.xml.multibranding.MultibrandingXmlCodeActivity
+import com.vk.id.sample.xml.multibranding.MultibrandingXmlLayoutActivity
 
 class MainActivity : ComponentActivity() {
 
@@ -28,7 +29,8 @@ class MainActivity : ComponentActivity() {
                 composable("home") { HomeScreen(navController) }
                 composable("onetap-styling-compose") { OnetapStylingComposeScreen() }
                 composable("multibranding-compose") { MultibrandingComposeScreen() }
-                activity("multibranding-xml") { activityClass = MultibrandingXmlScreen::class }
+                activity("multibranding-xml-code") { activityClass = MultibrandingXmlCodeActivity::class }
+                activity("multibranding-xml-layout") { activityClass = MultibrandingXmlLayoutActivity::class }
                 composable("onetap-bottom-sheet") { OneTapBottomSheetScreen() }
             }
         }
