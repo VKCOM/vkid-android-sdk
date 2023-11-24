@@ -29,9 +29,9 @@ import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.VKIDUser
+import com.vk.id.onetap.common.auth.style.VKIDButtonStyle
 import com.vk.id.onetap.compose.button.FetchUserData
 import com.vk.id.onetap.compose.button.OnFetchingProgress
-import com.vk.id.onetap.compose.button.auth.style.VKIDButtonStyle
 import com.vk.id.onetap.compose.button.auth.style.background
 import com.vk.id.onetap.compose.button.auth.style.border
 import com.vk.id.onetap.compose.button.clickable

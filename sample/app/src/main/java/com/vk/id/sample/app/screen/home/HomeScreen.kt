@@ -30,9 +30,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
 import com.vk.id.onetap.compose.onetap.OneTap
-import com.vk.id.onetap.compose.onetap.OneTapStyle
-import com.vk.id.onetap.compose.onetap.style.OneTapButtonCornersStyle
+import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.sample.app.BuildConfig
 import com.vk.id.sample.app.R
 import com.vk.id.sample.xml.uikit.common.onVKIDAuthFail

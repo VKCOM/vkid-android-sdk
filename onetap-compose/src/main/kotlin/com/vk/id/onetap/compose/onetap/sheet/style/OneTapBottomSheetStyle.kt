@@ -2,10 +2,11 @@ package com.vk.id.onetap.compose.onetap.sheet.style
 
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
+import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
+import com.vk.id.onetap.common.button.style.OneTapButtonSizeStyle
 import com.vk.id.onetap.compose.R
-import com.vk.id.onetap.compose.onetap.OneTapStyle
-import com.vk.id.onetap.compose.onetap.style.OneTapButtonCornersStyle
-import com.vk.id.onetap.compose.onetap.style.OneTapButtonSizeStyle
+import com.vk.id.onetap.common.OneTapStyle
+import com.vk.id.onetap.common.R as commonR
 
 @Suppress("LongParameterList")
 public sealed class OneTapBottomSheetStyle(
@@ -21,7 +22,7 @@ public sealed class OneTapBottomSheetStyle(
     @ColorRes
     internal val contentTitleTextColor: Int,
 
-) {
+    ) {
     public class Light(
         cornersStyle: OneTapSheetCornersStyle = OneTapSheetCornersStyle.Default,
         buttonsCornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
@@ -30,9 +31,9 @@ public sealed class OneTapBottomSheetStyle(
         cornersStyle = cornersStyle,
         oneTapStyle = OneTapStyle.Light(cornersStyle = buttonsCornersStyle, sizeStyle = buttonsSizeStyle),
         backgroundStyle = OneTapSheetBackgroundStyle.LIGHT,
-        vkidIcon = R.drawable.vkid_onetap_bottomsheet_logo_light,
-        serviceNameTextColor = R.color.vkid_steel_gray_400,
-        contentTextColor = R.color.vkid_steel_gray_400,
+        vkidIcon = commonR.drawable.vkid_onetap_bottomsheet_logo_light,
+        serviceNameTextColor = commonR.color.vkid_steel_gray_400,
+        contentTextColor = commonR.color.vkid_steel_gray_400,
         contentTitleTextColor = R.color.vkid_black,
     )
 
@@ -44,10 +45,10 @@ public sealed class OneTapBottomSheetStyle(
         cornersStyle = cornersStyle,
         oneTapStyle = OneTapStyle.Dark(cornersStyle = buttonsCornersStyle, sizeStyle = buttonsSizeStyle),
         backgroundStyle = OneTapSheetBackgroundStyle.DARK,
-        vkidIcon = R.drawable.vkid_onetap_bottomsheet_logo_dark,
-        serviceNameTextColor = R.color.vkid_steel_gray_400,
-        contentTextColor = R.color.vkid_gray_500,
-        contentTitleTextColor = R.color.vkid_gray_100,
+        vkidIcon = commonR.drawable.vkid_onetap_bottomsheet_logo_dark,
+        serviceNameTextColor = commonR.color.vkid_steel_gray_400,
+        contentTextColor = commonR.color.vkid_gray_500,
+        contentTitleTextColor = commonR.color.vkid_gray_100,
     )
 
     public class TransparentLight(
@@ -58,9 +59,9 @@ public sealed class OneTapBottomSheetStyle(
         cornersStyle = cornersStyle,
         oneTapStyle = OneTapStyle.TransparentLight(cornersStyle = buttonsCornersStyle, sizeStyle = buttonsSizeStyle),
         backgroundStyle = OneTapSheetBackgroundStyle.LIGHT,
-        vkidIcon = R.drawable.vkid_onetap_bottomsheet_logo_light,
-        serviceNameTextColor = R.color.vkid_steel_gray_400,
-        contentTextColor = R.color.vkid_steel_gray_400,
+        vkidIcon = commonR.drawable.vkid_onetap_bottomsheet_logo_light,
+        serviceNameTextColor = commonR.color.vkid_steel_gray_400,
+        contentTextColor = commonR.color.vkid_steel_gray_400,
         contentTitleTextColor = R.color.vkid_black,
     )
 
@@ -72,9 +73,9 @@ public sealed class OneTapBottomSheetStyle(
         cornersStyle = cornersStyle,
         oneTapStyle = OneTapStyle.TransparentDark(cornersStyle = buttonsCornersStyle, sizeStyle = buttonsSizeStyle),
         backgroundStyle = OneTapSheetBackgroundStyle.DARK,
-        vkidIcon = R.drawable.vkid_onetap_bottomsheet_logo_dark,
-        serviceNameTextColor = R.color.vkid_steel_gray_400,
-        contentTextColor = R.color.vkid_gray_500,
-        contentTitleTextColor = R.color.vkid_gray_100,
+        vkidIcon = commonR.drawable.vkid_onetap_bottomsheet_logo_dark,
+        serviceNameTextColor = commonR.color.vkid_steel_gray_400,
+        contentTextColor = commonR.color.vkid_gray_500,
+        contentTitleTextColor = commonR.color.vkid_gray_100,
     )
 }

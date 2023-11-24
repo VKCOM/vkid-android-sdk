@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
+import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.compose.button.alternate.AlternateAccountButton
 import com.vk.id.onetap.compose.button.auth.VKIDButton
 import com.vk.id.onetap.compose.button.auth.VKIDButtonSmall

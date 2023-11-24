@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
+import com.vk.id.onetap.common.progress.style.CircleProgressStyle
 import com.vk.id.onetap.compose.R
 
 @Composable

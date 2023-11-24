@@ -6,14 +6,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
+import com.vk.id.onetap.common.auth.style.VKIDButtonBorderStyle
+import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
 import com.vk.id.onetap.compose.R
-import com.vk.id.onetap.compose.onetap.style.OneTapButtonCornersStyle
-
-internal enum class VKIDButtonBorderStyle {
-    NONE,
-    DARK,
-    LIGHT,
-}
 
 internal fun Modifier.border(
     style: VKIDButtonBorderStyle,
