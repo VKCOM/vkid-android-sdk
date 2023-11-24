@@ -2,10 +2,10 @@ package com.vk.id.onetap.compose.onetap.sheet.style
 
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
+import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonSizeStyle
 import com.vk.id.onetap.compose.R
-import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.common.R as commonR
 
 @Suppress("LongParameterList")
@@ -21,8 +21,7 @@ public sealed class OneTapBottomSheetStyle(
     internal val contentTextColor: Int,
     @ColorRes
     internal val contentTitleTextColor: Int,
-
-    ) {
+) {
     public class Light(
         cornersStyle: OneTapSheetCornersStyle = OneTapSheetCornersStyle.Default,
         buttonsCornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,

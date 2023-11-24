@@ -1,12 +1,12 @@
 package com.vk.id.onetap.common.auth.style
 
-import com.vk.id.onetap.common.icon.style.VKIconColorStyle
-import com.vk.id.onetap.common.icon.style.VKIconStyle
-import com.vk.id.onetap.common.progress.style.CircleProgressStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonElevationStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonSizeStyle
 import com.vk.id.onetap.common.button.style.asIconSizeStyle
+import com.vk.id.onetap.common.icon.style.VKIconColorStyle
+import com.vk.id.onetap.common.icon.style.VKIconStyle
+import com.vk.id.onetap.common.progress.style.CircleProgressStyle
 
 @Suppress("LongParameterList")
 public sealed class VKIDButtonStyle(

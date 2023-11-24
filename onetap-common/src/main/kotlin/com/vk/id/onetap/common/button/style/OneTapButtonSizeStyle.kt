@@ -38,4 +38,3 @@ public fun OneTapButtonSizeStyle.asIconSizeStyle(): VKIconSizeStyle = when (this
     OneTapButtonSizeStyle.LARGE_54,
     OneTapButtonSizeStyle.LARGE_56 -> VKIconSizeStyle.NORMAL
 }
-

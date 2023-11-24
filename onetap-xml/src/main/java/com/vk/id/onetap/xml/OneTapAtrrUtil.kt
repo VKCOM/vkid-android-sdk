@@ -40,6 +40,7 @@ private fun TypedArray.getElevation() = getDimension(
     OneTapButtonElevationStyle.Default.elevation.toFloat()
 )
 
+@Suppress("MagicNumber")
 private fun TypedArray.getStyleConstructor() = when (getInt(R.styleable.VKIDButton_vkid_style, 0)) {
     1 -> OneTapStyle::Dark
     2 -> OneTapStyle::TransparentLight
