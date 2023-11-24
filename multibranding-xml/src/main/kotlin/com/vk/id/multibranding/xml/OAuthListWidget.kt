@@ -3,26 +3,28 @@ package com.vk.id.multibranding.xml
 import android.content.Context
 import android.content.res.TypedArray
 import android.util.AttributeSet
+import android.widget.FrameLayout
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.AbstractComposeView
+import androidx.compose.ui.platform.ComposeView
 import com.vk.id.AccessToken
 import com.vk.id.OAuth
 import com.vk.id.VKIDAuthFail
 import com.vk.id.multibranding.OAuthListWidget
-import com.vk.id.multibranding.OAuthListWidgetAuthCallback
-import com.vk.id.multibranding.OAuthListWidgetCornersStyle
-import com.vk.id.multibranding.OAuthListWidgetSizeStyle
-import com.vk.id.multibranding.OAuthListWidgetStyle
+import com.vk.id.multibranding.common.callback.OAuthListWidgetAuthCallback
+import com.vk.id.multibranding.common.style.OAuthListWidgetCornersStyle
+import com.vk.id.multibranding.common.style.OAuthListWidgetSizeStyle
+import com.vk.id.multibranding.common.style.OAuthListWidgetStyle
 
 public class OAuthListWidget @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : AbstractComposeView(context, attrs, defStyleAttr) {
+) : FrameLayout(context, attrs, defStyleAttr) {
 
+    private val composeView = ComposeView(context)
     public var style: OAuthListWidgetStyle = parseAttrs(context, attrs)
         set(value) {
             field = value
@@ -38,8 +40,13 @@ public class OAuthListWidget @JvmOverloads constructor(
     private var onAuth: OAuthListWidgetAuthCallback = OAuthListWidgetAuthCallback.JustToken {}
     private var onFail: (VKIDAuthFail) -> Unit = {}
 
+    init {
+        addView(composeView)
+        composeView.setContent { Content() }
+    }
+
     @Composable
-    override fun Content() {
+    private fun Content() {
         val style = remember { mutableStateOf(style) }
         onStyleChange = { style.value = it }
         val allowedOAuths = remember { mutableStateOf(allowedOAuths) }
