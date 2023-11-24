@@ -9,10 +9,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vk.id.multibranding.OAuthListWidget
-import com.vk.id.sample.app.screen.styling.util.onVKIDAuthFail
 import com.vk.id.sample.app.uikit.common.darkBackground
 import com.vk.id.sample.xml.multibranding.item.OAuthListWidgetItem
 import com.vk.id.sample.xml.multibranding.util.getOAuthListCallback
+import com.vk.id.sample.xml.uikit.common.onVKIDAuthFail
 
 @Composable
 fun HandleOAuthListWidgetItem(

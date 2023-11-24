@@ -33,8 +33,8 @@ import com.vk.id.onetap.compose.onetap.sheet.OneTapScenario
 import com.vk.id.onetap.compose.onetap.sheet.rememberOneTapBottomSheetState
 import com.vk.id.onetap.compose.onetap.sheet.style.OneTapBottomSheetStyle
 import com.vk.id.sample.app.screen.home.Button
-import com.vk.id.sample.app.screen.styling.util.onVKIDAuthFail
-import com.vk.id.sample.app.screen.styling.util.onVKIDAuthSuccess
+import com.vk.id.sample.xml.uikit.common.onVKIDAuthFail
+import com.vk.id.sample.xml.uikit.common.onVKIDAuthSuccess
 
 @Preview
 @Composable

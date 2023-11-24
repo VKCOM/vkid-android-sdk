@@ -35,8 +35,8 @@ import com.vk.id.onetap.compose.onetap.OneTapStyle
 import com.vk.id.onetap.compose.onetap.style.OneTapButtonCornersStyle
 import com.vk.id.sample.app.BuildConfig
 import com.vk.id.sample.app.R
-import com.vk.id.sample.app.screen.styling.util.onVKIDAuthFail
-import com.vk.id.sample.app.screen.styling.util.onVKIDAuthSuccess
+import com.vk.id.sample.xml.uikit.common.onVKIDAuthFail
+import com.vk.id.sample.xml.uikit.common.onVKIDAuthSuccess
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

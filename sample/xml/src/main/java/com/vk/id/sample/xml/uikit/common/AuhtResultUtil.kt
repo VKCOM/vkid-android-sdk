@@ -2,6 +2,8 @@ package com.vk.id.sample.xml.uikit.common
 
 import android.content.Context
 import android.widget.Toast
+import com.vk.id.AccessToken
+import com.vk.id.VKIDAuthFail
 
 private const val TOKEN_VISIBLE_CHARACTERS = 10
 
@@ -16,5 +18,22 @@ public fun String.hideLastCharacters(firstCharactersToKeepVisible: Int): String 
         this
     } else {
         this.substring(0, firstCharactersToKeepVisible) + "..."
+    }
+}
+
+public fun onVKIDAuthSuccess(context: Context, accessToken: AccessToken) {
+    val token = formatToken(accessToken.token)
+    showToast(context, "There is token: $token")
+}
+
+public fun onVKIDAuthFail(context: Context, fail: VKIDAuthFail) {
+    when (fail) {
+        is VKIDAuthFail.Canceled -> {
+            showToast(context, "Auth canceled")
+        }
+
+        else -> {
+            showToast(context, "Something wrong: ${fail.description}")
+        }
     }
 }

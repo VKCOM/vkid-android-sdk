@@ -63,7 +63,7 @@ public class OAuthListWidget @JvmOverloads constructor(
                     is OAuthListWidgetAuthCallback.JustToken -> callback(token)
                 }
             },
-            onFail = onFail,
+            onFail = { onFail(it) },
             allowedOAuths = allowedOAuths.value
         )
     }

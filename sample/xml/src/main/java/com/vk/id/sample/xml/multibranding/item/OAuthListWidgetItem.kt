@@ -11,6 +11,7 @@ import com.vk.id.multibranding.xml.OAuthListWidget
 import com.vk.id.sample.xml.R
 import com.vk.id.sample.xml.multibranding.util.getOAuthListCallback
 import com.vk.id.sample.xml.uikit.common.dpToPixels
+import com.vk.id.sample.xml.uikit.common.onVKIDAuthFail
 
 private const val WIDGET_PADDING = 12
 private const val WIDGET_WIDTH = 355
@@ -43,7 +44,7 @@ internal fun createOAuthListWidgetItem(
             this.layoutParams = layoutParams
             setCallbacks(
                 onAuth = getOAuthListCallback(context),
-                onFail = { },
+                onFail = { onVKIDAuthFail(context, it) },
             )
             allowedOAuths = item.allowedOAuths
         }
