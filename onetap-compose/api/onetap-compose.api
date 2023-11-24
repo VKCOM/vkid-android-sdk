@@ -82,7 +82,6 @@ public final class com/vk/id/onetap/compose/onetap/sheet/OneTapScenario : java/l
 public abstract class com/vk/id/onetap/compose/onetap/sheet/style/OneTapBottomSheetStyle {
 	public static final field $stable I
 	public synthetic fun <init> (Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetCornersStyle;Lcom/vk/id/onetap/compose/onetap/OneTapStyle;Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetBackgroundStyle;IIIILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getCornersStyle ()Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetCornersStyle;
 }
 
 public final class com/vk/id/onetap/compose/onetap/sheet/style/OneTapBottomSheetStyle$Dark : com/vk/id/onetap/compose/onetap/sheet/style/OneTapBottomSheetStyle {
@@ -111,6 +110,10 @@ public final class com/vk/id/onetap/compose/onetap/sheet/style/OneTapBottomSheet
 	public fun <init> ()V
 	public fun <init> (Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetCornersStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonSizeStyle;)V
 	public synthetic fun <init> (Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetCornersStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonSizeStyle;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public final class com/vk/id/onetap/compose/onetap/sheet/style/OneTapBottomSheetStyleKt {
+	public static final fun rememberOneTapBottomSheetStyle (Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapBottomSheetStyle;Landroidx/compose/runtime/Composer;I)Landroidx/compose/runtime/MutableState;
 }
 
 public abstract class com/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetCornersStyle {

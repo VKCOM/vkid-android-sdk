@@ -21,6 +21,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,6 +33,8 @@ import com.vk.id.onetap.compose.onetap.sheet.OneTapBottomSheet
 import com.vk.id.onetap.compose.onetap.sheet.OneTapScenario
 import com.vk.id.onetap.compose.onetap.sheet.rememberOneTapBottomSheetState
 import com.vk.id.onetap.compose.onetap.sheet.style.OneTapBottomSheetStyle
+import com.vk.id.onetap.compose.onetap.sheet.style.OneTapSheetCornersStyle
+import com.vk.id.onetap.compose.onetap.sheet.style.rememberOneTapBottomSheetStyle
 import com.vk.id.sample.app.screen.home.Button
 import com.vk.id.sample.xml.uikit.common.onVKIDAuthFail
 import com.vk.id.sample.xml.uikit.common.onVKIDAuthSuccess
@@ -40,8 +43,10 @@ import com.vk.id.sample.xml.uikit.common.onVKIDAuthSuccess
 @Composable
 fun OneTapBottomSheetScreen() {
     val context = LocalContext.current
-    val selectedScenario: MutableState<OneTapScenario> = remember { mutableStateOf(OneTapScenario.EnterService) }
-    val selectedStyle: MutableState<OneTapBottomSheetStyle> = remember { mutableStateOf(OneTapBottomSheetStyle.Light()) }
+    val selectedScenario = rememberSaveable { mutableStateOf(OneTapScenario.EnterService) }
+    val selectedStyle = rememberOneTapBottomSheetStyle(
+        OneTapBottomSheetStyle.Light(cornersStyle = OneTapSheetCornersStyle.None)
+    )
     Column(
         modifier = Modifier
             .padding(16.dp)
