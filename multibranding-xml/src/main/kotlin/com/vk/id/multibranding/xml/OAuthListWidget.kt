@@ -25,7 +25,7 @@ public class OAuthListWidget @JvmOverloads constructor(
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
     private val composeView = ComposeView(context)
-    public var style: OAuthListWidgetStyle = parseAttrs(context, attrs)
+    public var style: OAuthListWidgetStyle = OAuthListWidgetStyle.Dark()
         set(value) {
             field = value
             onStyleChange(value)
@@ -41,6 +41,9 @@ public class OAuthListWidget @JvmOverloads constructor(
     private var onFail: (VKIDAuthFail) -> Unit = {}
 
     init {
+        val (style, allowedOAuths) = parseAttrs(context, attrs)
+        this.style = style
+        this.allowedOAuths = allowedOAuths
         addView(composeView)
         composeView.setContent { Content() }
     }
@@ -77,7 +80,7 @@ public class OAuthListWidget @JvmOverloads constructor(
 private fun parseAttrs(
     context: Context,
     attrs: AttributeSet?,
-): OAuthListWidgetStyle {
+): Pair<OAuthListWidgetStyle, Set<OAuth>> {
     context.theme.obtainStyledAttributes(
         attrs,
         R.styleable.OAuthListWidget,
@@ -88,7 +91,7 @@ private fun parseAttrs(
             return getStyleConstructor()(
                 OAuthListWidgetCornersStyle.Custom(getCornerRadius().toInt()),
                 getSize(),
-            )
+            ) to getAllowedOAuths()
         } finally {
             recycle()
         }
@@ -96,7 +99,7 @@ private fun parseAttrs(
 }
 
 private fun TypedArray.getCornerRadius() = getDimension(
-    R.styleable.OAuthListWidget_vkid_oauth_list__cornerRadius,
+    R.styleable.OAuthListWidget_vkid_oauth_list_cornerRadius,
     OAuthListWidgetCornersStyle.Default.radiusDp.toFloat()
 )
 
@@ -106,7 +109,7 @@ private fun TypedArray.getStyleConstructor() = when (getInt(R.styleable.OAuthLis
 }
 
 @Suppress("MagicNumber", "CyclomaticComplexMethod")
-private fun TypedArray.getSize() = when (getInt(R.styleable.OAuthListWidget_vkid_oauth_list__size, 0)) {
+private fun TypedArray.getSize() = when (getInt(R.styleable.OAuthListWidget_vkid_oauth_list_size, 0)) {
     1 -> OAuthListWidgetSizeStyle.SMALL_32
     2 -> OAuthListWidgetSizeStyle.SMALL_34
     3 -> OAuthListWidgetSizeStyle.SMALL_36
@@ -121,4 +124,18 @@ private fun TypedArray.getSize() = when (getInt(R.styleable.OAuthListWidget_vkid
     12 -> OAuthListWidgetSizeStyle.LARGE_54
     13 -> OAuthListWidgetSizeStyle.LARGE_56
     else -> OAuthListWidgetSizeStyle.DEFAULT
+}
+
+private fun TypedArray.getAllowedOAuths(): Set<OAuth> {
+    return (getString(R.styleable.OAuthListWidget_vkid_oauth_list_allowed_oauths) ?: "vk,mail,ok")
+        .split(',')
+        .map {
+            when (it) {
+                "vk" -> OAuth.VK
+                "mail" -> OAuth.MAIL
+                "ok" -> OAuth.OK
+                else -> error("""Unexpected oauth "$it", please use one of "vk", "mail" or "ok", separated by commas""")
+            }
+        }
+        .toSet()
 }
