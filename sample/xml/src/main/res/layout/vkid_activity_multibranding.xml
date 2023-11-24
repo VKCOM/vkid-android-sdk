@@ -23,7 +23,7 @@
             android:layout_width="355dp"
             android:layout_height="wrap_content"
             app:vkid_oauth_list_allowed_oauths="vk,mail,ok"
-            app:vkid_oauth_list_cornerRadius="8px"
+            app:vkid_oauth_list_cornerRadius="8dp"
             app:vkid_oauth_list_size="standard"
             app:vkid_oauth_list_style="transparentDark" />
 
@@ -35,7 +35,7 @@
             android:layout_width="355dp"
             android:layout_height="wrap_content"
             app:vkid_oauth_list_allowed_oauths="mail,ok"
-            app:vkid_oauth_list_cornerRadius="8px"
+            app:vkid_oauth_list_cornerRadius="8dp"
             app:vkid_oauth_list_size="standard"
             app:vkid_oauth_list_style="transparentDark" />
 
@@ -47,7 +47,7 @@
             android:layout_width="355dp"
             android:layout_height="wrap_content"
             app:vkid_oauth_list_allowed_oauths="vk"
-            app:vkid_oauth_list_cornerRadius="8px"
+            app:vkid_oauth_list_cornerRadius="8dp"
             app:vkid_oauth_list_size="standard"
             app:vkid_oauth_list_style="transparentDark" />
 
@@ -59,7 +59,7 @@
             android:layout_width="355dp"
             android:layout_height="wrap_content"
             app:vkid_oauth_list_allowed_oauths="mail"
-            app:vkid_oauth_list_cornerRadius="8px"
+            app:vkid_oauth_list_cornerRadius="8dp"
             app:vkid_oauth_list_size="standard"
             app:vkid_oauth_list_style="transparentDark" />
 
@@ -71,7 +71,7 @@
             android:layout_width="355dp"
             android:layout_height="wrap_content"
             app:vkid_oauth_list_allowed_oauths="ok"
-            app:vkid_oauth_list_cornerRadius="8px"
+            app:vkid_oauth_list_cornerRadius="8dp"
             app:vkid_oauth_list_size="standard"
             app:vkid_oauth_list_style="transparentDark" />
 
@@ -103,7 +103,7 @@
                 android:layout_width="355dp"
                 android:layout_height="wrap_content"
                 app:vkid_oauth_list_allowed_oauths="vk,mail,ok"
-                app:vkid_oauth_list_cornerRadius="8px"
+                app:vkid_oauth_list_cornerRadius="8dp"
                 app:vkid_oauth_list_size="standard"
                 app:vkid_oauth_list_style="transparentLight" />
 
@@ -115,7 +115,7 @@
                 android:layout_width="355dp"
                 android:layout_height="wrap_content"
                 app:vkid_oauth_list_allowed_oauths="vk"
-                app:vkid_oauth_list_cornerRadius="8px"
+                app:vkid_oauth_list_cornerRadius="8dp"
                 app:vkid_oauth_list_size="standard"
                 app:vkid_oauth_list_style="transparentLight" />
 
@@ -137,7 +137,7 @@
         <com.vk.id.multibranding.xml.OAuthListWidget
             android:layout_width="355dp"
             android:layout_height="wrap_content"
-            app:vkid_oauth_list_cornerRadius="0px" />
+            app:vkid_oauth_list_cornerRadius="0dp" />
 
         <View
             android:layout_width="match_parent"
@@ -146,7 +146,7 @@
         <com.vk.id.multibranding.xml.OAuthListWidget
             android:layout_width="355dp"
             android:layout_height="wrap_content"
-            app:vkid_oauth_list_cornerRadius="8px" />
+            app:vkid_oauth_list_cornerRadius="8dp" />
 
         <View
             android:layout_width="match_parent"
@@ -155,7 +155,7 @@
         <com.vk.id.multibranding.xml.OAuthListWidget
             android:layout_width="355dp"
             android:layout_height="wrap_content"
-            app:vkid_oauth_list_cornerRadius="1000px" />
+            app:vkid_oauth_list_cornerRadius="1000dp" />
 
         <View
             android:layout_width="match_parent"
