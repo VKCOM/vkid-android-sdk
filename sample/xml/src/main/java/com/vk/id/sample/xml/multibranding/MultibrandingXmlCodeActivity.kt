@@ -8,9 +8,9 @@ import com.vk.id.sample.xml.multibranding.data.multibrandingSampleData
 import com.vk.id.sample.xml.multibranding.item.OAuthListWidgetItem
 import com.vk.id.sample.xml.multibranding.item.createOAuthListWidgetItem
 import com.vk.id.sample.xml.uikit.item.TitleItem
-import com.vk.id.sample.xml.uikit.item.createTitleItem
+import com.vk.id.sample.xml.uikit.item.TitleItemView
 
-public class MultibrandingXmlScreen : AppCompatActivity() {
+public class MultibrandingXmlCodeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,7 +22,7 @@ public class MultibrandingXmlScreen : AppCompatActivity() {
                         multibrandingSampleData.forEach {
                             (
                                 when (it) {
-                                    is TitleItem -> createTitleItem(context, it.text)
+                                    is TitleItem -> TitleItemView.create(context, it.text)
                                     is OAuthListWidgetItem -> createOAuthListWidgetItem(context, it)
                                     else -> null
                                 }

@@ -40,7 +40,13 @@ public val multibrandingSampleData: List<Any> = listOf(
     HalfSpacerItem(isDarkBackground = true),
     OAuthListWidgetItem(
         style = OAuthListWidgetStyle.Light(),
-        isDarkBackground = true
+        isDarkBackground = true,
+    ),
+    SpacerItem(isDarkBackground = true),
+    OAuthListWidgetItem(
+        style = OAuthListWidgetStyle.Light(),
+        isDarkBackground = true,
+        allowedOAuths = setOf(OAuth.VK),
     ),
     HalfSpacerItem(isDarkBackground = true),
     TitleItem("Corner radius"),

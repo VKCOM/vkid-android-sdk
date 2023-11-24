@@ -24,8 +24,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application>
-        <activity
-            android:name=".multibranding.MultibrandingXmlScreen"
-            android:exported="false" />
+        <activity android:name=".multibranding.MultibrandingXmlCodeActivity" />
+        <activity android:name=".multibranding.MultibrandingXmlLayoutActivity" />
     </application>
 </manifest>
