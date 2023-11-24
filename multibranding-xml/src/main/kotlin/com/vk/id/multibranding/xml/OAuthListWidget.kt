@@ -3,6 +3,9 @@ package com.vk.id.multibranding.xml
 import android.content.Context
 import android.content.res.TypedArray
 import android.util.AttributeSet
+import android.util.DisplayMetrics
+import android.util.TypedValue
+import android.util.TypedValue.COMPLEX_UNIT_DIP
 import android.widget.FrameLayout
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -89,7 +92,7 @@ private fun parseAttrs(
     ).apply {
         try {
             return getStyleConstructor()(
-                OAuthListWidgetCornersStyle.Custom(getCornerRadius().toInt()),
+                OAuthListWidgetCornersStyle.Custom(context.pixelsToDp(getCornerRadius(context))),
                 getSize(),
             ) to getAllowedOAuths()
         } finally {
@@ -98,9 +101,9 @@ private fun parseAttrs(
     }
 }
 
-private fun TypedArray.getCornerRadius() = getDimension(
+private fun TypedArray.getCornerRadius(context: Context) = getDimension(
     R.styleable.OAuthListWidget_vkid_oauth_list_cornerRadius,
-    OAuthListWidgetCornersStyle.Default.radiusDp.toFloat()
+    context.dpToPixels(OAuthListWidgetCornersStyle.Default.radiusDp)
 )
 
 private fun TypedArray.getStyleConstructor() = when (getInt(R.styleable.OAuthListWidget_vkid_oauth_list_style, 0)) {
@@ -139,3 +142,11 @@ private fun TypedArray.getAllowedOAuths(): Set<OAuth> {
         }
         .toSet()
 }
+
+private fun Context.pixelsToDp(
+    px: Float
+) = px / (resources.displayMetrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)
+
+private fun Context.dpToPixels(
+    dp: Float
+) = TypedValue.applyDimension(COMPLEX_UNIT_DIP, dp, resources.displayMetrics)

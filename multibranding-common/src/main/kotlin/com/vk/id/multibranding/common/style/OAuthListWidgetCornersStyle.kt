@@ -7,7 +7,7 @@ public sealed class OAuthListWidgetCornersStyle(
     /**
      * Corner radius in DPs.
      */
-    public val radiusDp: Int
+    public val radiusDp: Float
 ) {
     /**
      * The recommended style.
@@ -32,11 +32,11 @@ public sealed class OAuthListWidgetCornersStyle(
     /**
      * A custom style with required corner radius.
      */
-    public class Custom(radiusDp: Int) : OAuthListWidgetCornersStyle(radiusDp)
+    public class Custom(radiusDp: Float) : OAuthListWidgetCornersStyle(radiusDp)
 
     private companion object {
-        private const val ROUNDED_RADIUS_DP = 8
-        private const val NONE_RADIUS_DP = 0
-        private const val ROUND_RADIUS_DP = 1000
+        private const val ROUNDED_RADIUS_DP = 8F
+        private const val NONE_RADIUS_DP = 0F
+        private const val ROUND_RADIUS_DP = 1000F
     }
 }
