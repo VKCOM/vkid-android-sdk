@@ -34,19 +34,19 @@ public class OAuthListWidget @JvmOverloads constructor(
             onStyleChange(value)
         }
     private var onStyleChange: (OAuthListWidgetStyle) -> Unit = {}
-    public var allowedOAuths: Set<OAuth> = emptySet()
+    public var oAuths: Set<OAuth> = emptySet()
         set(value) {
             field = value
-            onAllowedOAuthsChange(value)
+            onOAuthsChange(value)
         }
-    private var onAllowedOAuthsChange: (Set<OAuth>) -> Unit = {}
+    private var onOAuthsChange: (Set<OAuth>) -> Unit = {}
     private var onAuth: OAuthListWidgetAuthCallback = OAuthListWidgetAuthCallback.JustToken {}
     private var onFail: (VKIDAuthFail) -> Unit = {}
 
     init {
-        val (style, allowedOAuths) = parseAttrs(context, attrs)
+        val (style, oAuths) = parseAttrs(context, attrs)
         this.style = style
-        this.allowedOAuths = allowedOAuths
+        this.oAuths = oAuths
         addView(composeView)
         composeView.setContent { Content() }
     }
@@ -55,8 +55,8 @@ public class OAuthListWidget @JvmOverloads constructor(
     private fun Content() {
         val style = remember { mutableStateOf(style) }
         onStyleChange = { style.value = it }
-        val allowedOAuths = remember { mutableStateOf(allowedOAuths) }
-        onAllowedOAuthsChange = { allowedOAuths.value = it }
+        val oAuths = remember { mutableStateOf(oAuths) }
+        onOAuthsChange = { oAuths.value = it }
         OAuthListWidget(
             modifier = Modifier,
             style = style.value,
@@ -67,7 +67,7 @@ public class OAuthListWidget @JvmOverloads constructor(
                 }
             },
             onFail = { onFail(it) },
-            allowedOAuths = allowedOAuths.value
+            oAuths = oAuths.value
         )
     }
 
@@ -94,7 +94,7 @@ private fun parseAttrs(
             return getStyleConstructor()(
                 OAuthListWidgetCornersStyle.Custom(context.pixelsToDp(getCornerRadius(context))),
                 getSize(),
-            ) to getAllowedOAuths()
+            ) to getOAuths()
         } finally {
             recycle()
         }
@@ -129,7 +129,7 @@ private fun TypedArray.getSize() = when (getInt(R.styleable.OAuthListWidget_vkid
     else -> OAuthListWidgetSizeStyle.DEFAULT
 }
 
-private fun TypedArray.getAllowedOAuths(): Set<OAuth> {
+private fun TypedArray.getOAuths(): Set<OAuth> {
     return (getString(R.styleable.OAuthListWidget_vkid_oauth_list_allowed_oauths) ?: "vk,mail,ok")
         .split(',')
         .map {
