@@ -111,8 +111,14 @@ private fun OneTapBottomSheetInternal(
         ) {
             OneTapBottomSheetContent(
                 vkid,
-                onAuth,
-                onFail,
+                {
+                    state.hide()
+                    onAuth(it)
+                },
+                {
+                    state.hide()
+                    onFail(it)
+                },
                 serviceName,
                 scenario,
                 style,
