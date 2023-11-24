@@ -7,10 +7,12 @@ import com.vk.id.onetap.compose.R
 internal enum class AlternateAccountButtonTextStyle {
     LIGHT,
     DARK,
+    TRANSPARENT_DARK
 }
 
 @Composable
 internal fun AlternateAccountButtonTextStyle.asColorResource() = when (this) {
     AlternateAccountButtonTextStyle.LIGHT -> colorResource(id = R.color.vkid_azure_300)
     AlternateAccountButtonTextStyle.DARK -> colorResource(id = R.color.vkid_white)
+    AlternateAccountButtonTextStyle.TRANSPARENT_DARK -> colorResource(id = R.color.vkid_black)
 }

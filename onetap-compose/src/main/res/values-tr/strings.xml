@@ -27,4 +27,6 @@
     <string name="vkid_schenario_enter_to_account_title">%1$s hesabına girin</string>
     <string name="vkid_schenario_enter_to_account_vkid_button_text_user_found">%1$s olarak gir</string>
     <string name="vkid_schenario_enter_to_account_vkid_button_text_no_user">VK ID aracılığıyla gir</string>
+
+    <string name="vkid_scenario_common_description">Bundan sonra hizmetin tüm özellikleri kullanımınıza sunulacaktır. Verileriniz güvenilir bir şekilde korunacaktır.</string>
 </resources>

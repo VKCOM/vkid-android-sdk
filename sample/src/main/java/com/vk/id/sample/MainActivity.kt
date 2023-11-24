@@ -10,6 +10,7 @@ import com.vk.id.VKID
 import com.vk.id.sample.screen.home.HomeScreen
 import com.vk.id.sample.screen.multibranding.MultibrandingComposeScreen
 import com.vk.id.sample.screen.multibranding.MultibrandingXmlScreen
+import com.vk.id.sample.screen.sheet.OneTapBottomSheetScreen
 import com.vk.id.sample.screen.styling.OnetapStylingComposeScreen
 
 class MainActivity : ComponentActivity() {
@@ -27,6 +28,7 @@ class MainActivity : ComponentActivity() {
                 composable("onetap-styling-compose") { OnetapStylingComposeScreen() }
                 composable("multibranding-compose") { MultibrandingComposeScreen() }
                 composable("multibranding-xml") { MultibrandingXmlScreen() }
+                composable("onetap-bottom-sheet") { OneTapBottomSheetScreen() }
             }
         }
     }

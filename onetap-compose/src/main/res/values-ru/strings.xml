@@ -27,4 +27,6 @@
     <string name="vkid_schenario_enter_to_account_title">Войдите в учётную запись %1$s</string>
     <string name="vkid_schenario_enter_to_account_vkid_button_text_user_found">Войти как %1$s</string>
     <string name="vkid_schenario_enter_to_account_vkid_button_text_no_user">Войти с VK ID</string>
+
+    <string name="vkid_scenario_common_description">После этого вам станут доступны все возможности сервиса. Ваши данные будут надёжно защищены.</string>
 </resources>

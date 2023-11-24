@@ -27,4 +27,6 @@
     <string name="vkid_schenario_enter_to_account_title">Connectez-vous à %1$s</string>
     <string name="vkid_schenario_enter_to_account_vkid_button_text_user_found">Se connecter en tant que %1$s</string>
     <string name="vkid_schenario_enter_to_account_vkid_button_text_no_user">Se connecter avec VK ID</string>
+
+    <string name="vkid_scenario_common_description">Cela vous permettra d\'avoir accès à toutes les fonctionnalités du service. Vos données personnelles seront soigneusement protégées.</string>
 </resources>

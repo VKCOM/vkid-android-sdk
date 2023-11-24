@@ -1,7 +1,6 @@
 package com.vk.id.onetap.compose.onetap.sheet
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -14,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
@@ -29,12 +27,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -46,6 +44,9 @@ import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.onetap.compose.R
 import com.vk.id.onetap.compose.onetap.OneTap
+import com.vk.id.onetap.compose.onetap.sheet.style.OneTapBottomSheetStyle
+import com.vk.id.onetap.compose.onetap.sheet.style.background
+import com.vk.id.onetap.compose.onetap.sheet.style.clip
 import kotlinx.coroutines.launch
 
 @Composable
@@ -56,13 +57,14 @@ public fun OneTapBottomSheet(
     scenario: OneTapScenario = OneTapScenario.EnterService,
     onAuth: (AccessToken) -> Unit,
     onFail: (VKIDAuthFail) -> Unit = {},
+    style: OneTapBottomSheetStyle = OneTapBottomSheetStyle.Light(),
     vkid: VKID? = null
 ) {
     val context = LocalContext.current
     val useVKID = vkid ?: remember {
         VKID(context)
     }
-    OneTapBottomSheetInternal(modifier, state, serviceName, scenario, onAuth, onFail, useVKID)
+    OneTapBottomSheetInternal(modifier, state, serviceName, scenario, onAuth, onFail, style, useVKID)
 }
 
 @Suppress("LongParameterList")
@@ -75,6 +77,7 @@ private fun OneTapBottomSheetInternal(
     scenario: OneTapScenario,
     onAuth: (AccessToken) -> Unit,
     onFail: (VKIDAuthFail) -> Unit,
+    style: OneTapBottomSheetStyle,
     vkid: VKID
 ) {
     var showBottomSheet: Boolean by rememberSaveable {
@@ -112,6 +115,7 @@ private fun OneTapBottomSheetInternal(
                 onFail,
                 serviceName,
                 scenario,
+                style,
                 dismissSheet = {
                     state.hide()
                 }
@@ -167,6 +171,7 @@ internal fun OneTapBottomSheetContent(
     onFail: (VKIDAuthFail) -> Unit,
     serviceName: String,
     scenario: OneTapScenario,
+    style: OneTapBottomSheetStyle,
     dismissSheet: () -> Unit
 ) {
     Box(
@@ -176,8 +181,8 @@ internal fun OneTapBottomSheetContent(
             .fillMaxWidth()
             .widthIn(min = 344.dp, max = 800.dp)
             .padding(8.dp)
-            .clip(RoundedCornerShape(12.0.dp))
-            .background(Color.White),
+            .clip(style.cornersStyle)
+            .background(style.backgroundStyle),
         contentAlignment = Alignment.Center,
     ) {
         val resources = LocalContext.current.resources
@@ -186,9 +191,9 @@ internal fun OneTapBottomSheetContent(
                 .padding(16.dp)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                VkidIcon()
+                VkidIcon(style)
                 val titleTextStyle = TextStyle(
-                    color = colorResource(R.color.vkid_ui_light_text_secondary),
+                    color = colorResource(style.serviceNameTextColor),
                     fontSize = 13.sp,
                     fontWeight = FontWeight.W400,
                     letterSpacing = 0.2.sp,
@@ -205,11 +210,12 @@ internal fun OneTapBottomSheetContent(
                 val title = remember(scenario) {
                     scenario.scenarioTitle(serviceName = serviceName, resources = resources)
                 }
-                ContentTitle(title)
+                ContentTitle(title, style)
                 Spacer(Modifier.height(8.dp))
-                ContentDescription()
+                ContentDescription(stringResource(id = R.string.vkid_scenario_common_description), style)
             }
             OneTap(
+                style = style.oneTapStyle,
                 signInAnotherAccountButtonEnabled = true,
                 vkid = vkid,
                 onAuth = onAuth,
@@ -221,9 +227,9 @@ internal fun OneTapBottomSheetContent(
 }
 
 @Composable
-private fun VkidIcon() {
+private fun VkidIcon(style: OneTapBottomSheetStyle) {
     Image(
-        painter = painterResource(R.drawable.vkid_onetap_bottomsheet_logo),
+        painter = painterResource(style.vkidIcon),
         contentDescription = null,
         contentScale = ContentScale.Fit,
     )
@@ -264,11 +270,12 @@ private fun CloseIcon(dismissSheet: () -> Unit) {
 }
 
 @Composable
-private fun ContentTitle(text: String) {
+private fun ContentTitle(text: String, style: OneTapBottomSheetStyle) {
     BasicText(
+        modifier = Modifier.fillMaxWidth(),
         text = text,
         style = TextStyle(
-            color = colorResource(id = R.color.vkid_ui_light_text_primary),
+            color = colorResource(id = style.contentTitleTextColor),
             textAlign = TextAlign.Center,
             fontSize = 20.sp,
             fontWeight = FontWeight.W500,
@@ -278,11 +285,12 @@ private fun ContentTitle(text: String) {
 }
 
 @Composable
-private fun ContentDescription() {
+private fun ContentDescription(text: String, style: OneTapBottomSheetStyle) {
     BasicText(
-        text = "После этого вам станут доступны все возможности сервиса. Ваши данные будут надёжно защищены.",
+        modifier = Modifier.fillMaxWidth(),
+        text = text,
         style = TextStyle(
-            color = colorResource(id = R.color.vkid_ui_light_text_secondary),
+            color = colorResource(id = style.contentTextColor),
             textAlign = TextAlign.Center,
             fontSize = 16.sp,
             fontWeight = FontWeight.W400,
@@ -305,6 +313,7 @@ private fun OneTapBottomSheetPreview() {
         onFail = {},
         "<Название сервиса>",
         OneTapScenario.EnterService,
+        OneTapBottomSheetStyle.TransparentDark(),
         dismissSheet = {}
     )
 }

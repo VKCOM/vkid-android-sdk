@@ -32,9 +32,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.vk.id.onetap.compose.onetap.OneTap
 import com.vk.id.onetap.compose.onetap.OneTapStyle
-import com.vk.id.onetap.compose.onetap.sheet.OneTapBottomSheet
-import com.vk.id.onetap.compose.onetap.sheet.OneTapScenario
-import com.vk.id.onetap.compose.onetap.sheet.rememberOneTapBottomSheetState
 import com.vk.id.onetap.compose.onetap.style.OneTapButtonCornersStyle
 import com.vk.id.sample.BuildConfig
 import com.vk.id.sample.R
@@ -74,21 +71,9 @@ fun HomeScreen(
         Button("Multibranding (xml)") {
             navController.navigate("multibranding-xml")
         }
-        val bottomSheetState = rememberOneTapBottomSheetState()
-        OneTapBottomSheet(
-            onAuth = { onVKIDAuthSuccess(context, it) },
-            state = bottomSheetState,
-            scenario = OneTapScenario.OrderInService,
-            serviceName = "VKID Sample"
-        )
-        Spacer(modifier = Modifier.height(32.dp))
-        Button(text = "OneTapModalBottomSheet", onClick = {
-            if (bottomSheetState.isVisible) {
-                bottomSheetState.hide()
-            } else {
-                bottomSheetState.show()
-            }
-        })
+        Button("OneTapBottomSheet") {
+            navController.navigate("onetap-bottom-sheet")
+        }
     }
     Box(modifier = Modifier.fillMaxSize()) {
         BuildInfo(
@@ -100,12 +85,13 @@ fun HomeScreen(
 }
 
 @Composable
-private fun Button(
+internal fun Button(
     text: String,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
     Button(
-        modifier = Modifier
+        modifier = modifier
             .width(355.dp)
             .padding(vertical = 8.dp)
             .height(44.dp),
