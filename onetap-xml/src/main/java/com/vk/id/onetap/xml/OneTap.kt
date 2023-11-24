@@ -13,8 +13,7 @@ import com.vk.id.VKIDAuthFail
 import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.compose.onetap.OneTap
 
-// TODO: Rename class
-public class VKIDButton @JvmOverloads constructor(
+public class OneTap @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
@@ -22,18 +21,27 @@ public class VKIDButton @JvmOverloads constructor(
 
     private val composeView = ComposeView(context)
 
-    public var style: OneTapStyle = parseAttrs(context, attrs)
+    public var style: OneTapStyle = OneTapStyle.Dark()
         set(value) {
             field = value
             onStyleChange(value)
         }
     private var onStyleChange: (OneTapStyle) -> Unit = {}
+    public var isSignInToAnotherAccountEnabled: Boolean = false
+        set(value) {
+            field = value
+            onSignInToAnotherAccountEnabled(value)
+        }
+    private var onSignInToAnotherAccountEnabled: (Boolean) -> Unit = {}
     private var onAuth: (AccessToken) -> Unit = {
         throw IllegalStateException("No onAuth callback for VKID OneTap Button. Set it with setCallbacks method.")
     }
     private var onFail: (VKIDAuthFail) -> Unit = {}
 
     init {
+        val (style, isSignInToAnotherAccountEnabled) = parseAttrs(context, attrs)
+        this.style = style
+        this.isSignInToAnotherAccountEnabled = isSignInToAnotherAccountEnabled
         addView(composeView)
         composeView.setContent { Content() }
     }
@@ -42,12 +50,14 @@ public class VKIDButton @JvmOverloads constructor(
     private fun Content() {
         val style = remember { mutableStateOf(style) }
         onStyleChange = { style.value = it }
+        val isSignInToAnotherAccountEnabled = remember { mutableStateOf(isSignInToAnotherAccountEnabled) }
+        onSignInToAnotherAccountEnabled = { isSignInToAnotherAccountEnabled.value = it }
         OneTap(
             modifier = Modifier,
             style = style.value,
             onAuth = { onAuth(it) },
             onFail = { onFail(it) },
-            // TODO: sign in another account button
+            signInAnotherAccountButtonEnabled = isSignInToAnotherAccountEnabled.value
         )
     }
 

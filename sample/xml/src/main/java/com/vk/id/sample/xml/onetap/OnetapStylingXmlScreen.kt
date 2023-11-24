@@ -10,7 +10,7 @@ import android.widget.ScrollView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.setPadding
 import com.vk.id.onetap.common.OneTapStyle
-import com.vk.id.onetap.xml.VKIDButton
+import com.vk.id.onetap.xml.OneTap
 import com.vk.id.sample.xml.R
 import com.vk.id.sample.xml.onetap.data.buttonStylingData
 import com.vk.id.sample.xml.onetap.item.ButtonItem
@@ -61,7 +61,7 @@ private fun createVKIDButton(
     layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
     if (isDarkBackground) setBackgroundResource(R.color.vkid_gray900)
     addView(
-        VKIDButton(context).apply {
+        OneTap(context).apply {
             val layoutParams = LayoutParams(
                 context.dpToPixels(width),
                 LayoutParams.WRAP_CONTENT,
@@ -70,6 +70,7 @@ private fun createVKIDButton(
             setPadding(context.dpToPixels(BUTTON_PADDING))
             this.style = style
             this.layoutParams = layoutParams
+            this.isSignInToAnotherAccountEnabled = true
             setCallbacks(
                 onAuth = { onVKIDAuthSuccess(context, it) },
                 onFail = { onVKIDAuthFail(context, it) },

@@ -4,16 +4,14 @@ import android.content.Context
 import android.content.res.TypedArray
 import android.util.AttributeSet
 import com.vk.id.onetap.common.OneTapStyle
-import com.vk.id.onetap.common.auth.style.VKIDButtonStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonElevationStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonSizeStyle
 
-// TODO: Rename file
 internal fun parseAttrs(
     context: Context,
     attrs: AttributeSet?,
-): OneTapStyle {
+): Pair<OneTapStyle, Boolean> {
     context.theme.obtainStyledAttributes(
         attrs,
         R.styleable.VKIDButton,
@@ -21,14 +19,11 @@ internal fun parseAttrs(
         0
     ).apply {
         try {
-            return OneTapStyle.Dark(
-                // FIXME:
-//                getStyleConstructor()(
-//                    VKIDButtonCornersStyle.Custom(getCornerRadius().toInt()),
-//                    getSize(),
-//                    VKIDButtonElevationStyle.Custom(getElevation().toInt())
-//                )
-            )
+            return getStyleConstructor()(
+                OneTapButtonCornersStyle.Custom(getCornerRadius().toInt()),
+                getSize(),
+                OneTapButtonElevationStyle.Custom(getElevation().toInt())
+            ) to getSignInToAnotherAccountButtonEnabled()
         } finally {
             recycle()
         }
@@ -46,9 +41,11 @@ private fun TypedArray.getElevation() = getDimension(
 )
 
 private fun TypedArray.getStyleConstructor() = when (getInt(R.styleable.VKIDButton_vkid_style, 0)) {
-    1 -> VKIDButtonStyle::TransparentLight
-    2 -> VKIDButtonStyle::TransparentDark
-    else -> VKIDButtonStyle::Blue
+    1 -> OneTapStyle::Dark
+    2 -> OneTapStyle::TransparentLight
+    3 -> OneTapStyle::TransparentDark
+    4 -> OneTapStyle::Icon
+    else -> OneTapStyle::Light
 }
 
 @Suppress("MagicNumber", "CyclomaticComplexMethod")
@@ -67,4 +64,8 @@ private fun TypedArray.getSize() = when (getInt(R.styleable.VKIDButton_vkid_size
     12 -> OneTapButtonSizeStyle.LARGE_54
     13 -> OneTapButtonSizeStyle.LARGE_56
     else -> OneTapButtonSizeStyle.DEFAULT
+}
+
+private fun TypedArray.getSignInToAnotherAccountButtonEnabled(): Boolean {
+    return getBoolean(R.styleable.VKIDButton_vkid_show_sign_in_to_another_account, false)
 }

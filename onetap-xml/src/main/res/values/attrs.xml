@@ -2,9 +2,11 @@
 <resources>
     <declare-styleable name="VKIDButton">
         <attr name="vkid_style" format="enum">
-            <enum name="blue" value="0"/>
-            <enum name="transparentLight" value="1"/>
-            <enum name="transparentDark" value="2"/>
+            <enum name="light" value="0"/>
+            <enum name="dark" value="1"/>
+            <enum name="transparentLight" value="2"/>
+            <enum name="transparentDark" value="3"/>
+            <enum name="icon" value="4"/>
         </attr>
         <attr name="vkid_cornerRadius" format="dimension"/>
         <attr name="vkid_elevation" format="dimension"/>
@@ -24,5 +26,6 @@
             <enum name="large54" value="12"/>
             <enum name="large56" value="13"/>
         </attr>
+        <attr name="vkid_show_sign_in_to_another_account" format="boolean"/>
     </declare-styleable>
 </resources>
