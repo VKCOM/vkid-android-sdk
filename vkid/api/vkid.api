@@ -125,7 +125,7 @@ public final class com/vk/id/auth/VKIDAuthParams {
 	public final fun getLocale ()Lcom/vk/id/auth/VKIDAuthParams$Locale;
 	public final fun getOAuth ()Lcom/vk/id/OAuth;
 	public final fun getTheme ()Lcom/vk/id/auth/VKIDAuthParams$Theme;
-	public final fun getUseExistingUserIfPossible ()Z
+	public final fun getUseOAuthProviderIfPossible ()Z
 }
 
 public final class com/vk/id/auth/VKIDAuthParams$Builder {

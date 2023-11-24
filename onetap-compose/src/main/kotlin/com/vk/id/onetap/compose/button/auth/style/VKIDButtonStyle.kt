@@ -20,7 +20,26 @@ internal sealed class VKIDButtonStyle(
     val sizeStyle: OneTapButtonSizeStyle,
     val elevationStyle: OneTapButtonElevationStyle,
 ) {
-    class Blue(
+    class Light(
+        cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
+        sizeStyle: OneTapButtonSizeStyle = OneTapButtonSizeStyle.MEDIUM_44,
+        elevationStyle: OneTapButtonElevationStyle = OneTapButtonElevationStyle.Default,
+    ) : VKIDButtonStyle(
+        backgroundStyle = VKIDButtonBackgroundStyle.BLUE,
+        rippleStyle = VKIDButtonRippleStyle.LIGHT,
+        borderStyle = VKIDButtonBorderStyle.NONE,
+        iconStyle = VKIconStyle(
+            colorStyle = VKIconColorStyle.WHITE,
+            sizeStyle = sizeStyle.asIconSizeStyle(),
+        ),
+        textStyle = VKIDButtonTextStyle.LIGHT,
+        progressStyle = CircleProgressStyle.LIGHT,
+        cornersStyle = cornersStyle,
+        sizeStyle = sizeStyle,
+        elevationStyle = elevationStyle,
+    )
+
+    class Dark(
         cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
         sizeStyle: OneTapButtonSizeStyle = OneTapButtonSizeStyle.MEDIUM_44,
         elevationStyle: OneTapButtonElevationStyle = OneTapButtonElevationStyle.Default,

@@ -48,7 +48,7 @@ import kotlinx.coroutines.launch
 @Composable
 internal fun VKIDButtonSmall(
     state: VKIDSmallButtonState = remember { VKIDSmallButtonState(inProgress = false, userIconLoaded = false) },
-    style: VKIDButtonStyle = VKIDButtonStyle.Blue(),
+    style: VKIDButtonStyle = VKIDButtonStyle.Light(),
     vkid: VKID? = null,
     onAuth: (AccessToken) -> Unit,
     onFail: (VKIDAuthFail) -> Unit = {},

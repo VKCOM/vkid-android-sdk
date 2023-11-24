@@ -13,7 +13,7 @@ internal class AuthProvidersChooserDefault(
 ) : AuthProvidersChooser {
     private val logger = createLoggerForClass()
     override suspend fun chooseBest(params: VKIDAuthParams): VKIDAuthProvider {
-        if (!params.useExistingUserIfPossible || params.oAuth != null) {
+        if (!params.useOAuthProviderIfPossible || params.oAuth != null) {
             return WebAuthProvider(appContext)
         }
         return silentAuthServicesProvider.getSilentAuthServices()
