@@ -62,10 +62,17 @@ private fun createVKIDButton(
     if (isDarkBackground) setBackgroundResource(R.color.vkid_gray900)
     addView(
         OneTap(context).apply {
-            val layoutParams = LayoutParams(
-                context.dpToPixels(width),
-                LayoutParams.WRAP_CONTENT,
-            )
+            val layoutParams = if (style is OneTapStyle.Icon) {
+                LayoutParams(
+                    LayoutParams.WRAP_CONTENT,
+                    LayoutParams.WRAP_CONTENT,
+                )
+            } else {
+                LayoutParams(
+                    context.dpToPixels(width),
+                    LayoutParams.WRAP_CONTENT,
+                )
+            }
             layoutParams.gravity = Gravity.CENTER
             setPadding(context.dpToPixels(BUTTON_PADDING))
             this.style = style
