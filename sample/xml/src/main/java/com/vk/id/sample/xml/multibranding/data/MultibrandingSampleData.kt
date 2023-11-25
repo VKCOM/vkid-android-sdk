@@ -18,22 +18,22 @@ public val multibrandingSampleData: List<Any> = listOf(
     SpacerItem(),
     OAuthListWidgetItem(
         style = OAuthListWidgetStyle.Dark(),
-        allowedOAuths = setOf(OAuth.MAIL, OAuth.OK)
+        oAuths = setOf(OAuth.MAIL, OAuth.OK)
     ),
     SpacerItem(),
     OAuthListWidgetItem(
         style = OAuthListWidgetStyle.Dark(),
-        allowedOAuths = setOf(OAuth.VK)
+        oAuths = setOf(OAuth.VK)
     ),
     SpacerItem(),
     OAuthListWidgetItem(
         style = OAuthListWidgetStyle.Dark(),
-        allowedOAuths = setOf(OAuth.MAIL)
+        oAuths = setOf(OAuth.MAIL)
     ),
     SpacerItem(),
     OAuthListWidgetItem(
         style = OAuthListWidgetStyle.Dark(),
-        allowedOAuths = setOf(OAuth.OK)
+        oAuths = setOf(OAuth.OK)
     ),
     HalfSpacerItem(),
     TitleItem("Light widget"),
@@ -46,7 +46,7 @@ public val multibrandingSampleData: List<Any> = listOf(
     OAuthListWidgetItem(
         style = OAuthListWidgetStyle.Light(),
         isDarkBackground = true,
-        allowedOAuths = setOf(OAuth.VK),
+        oAuths = setOf(OAuth.VK),
     ),
     HalfSpacerItem(isDarkBackground = true),
     TitleItem("Corner radius"),
@@ -153,25 +153,25 @@ public val multibrandingSampleData: List<Any> = listOf(
     HalfSpacerItem(),
     OAuthListWidgetItem(
         style = OAuthListWidgetStyle.Dark(),
-        allowedOAuths = setOf(OAuth.VK),
+        oAuths = setOf(OAuth.VK),
         width = 100,
     ),
     SpacerItem(),
     OAuthListWidgetItem(
         style = OAuthListWidgetStyle.Dark(),
-        allowedOAuths = setOf(OAuth.VK),
+        oAuths = setOf(OAuth.VK),
         width = 200,
     ),
     SpacerItem(),
     OAuthListWidgetItem(
         style = OAuthListWidgetStyle.Dark(),
-        allowedOAuths = setOf(OAuth.VK),
+        oAuths = setOf(OAuth.VK),
         width = 240,
     ),
     SpacerItem(),
     OAuthListWidgetItem(
         style = OAuthListWidgetStyle.Dark(),
-        allowedOAuths = setOf(OAuth.VK),
+        oAuths = setOf(OAuth.VK),
         width = 280,
     ),
     HalfSpacerItem(),

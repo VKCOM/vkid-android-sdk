@@ -56,7 +56,7 @@ private val sourceItems = listOf(
  * @param style Styling widget configuration.
  * @param onAuth A callback to be invoked upon a successful auth.
  * @param onFail A callback to be invoked upof an error during auth.
- * @param allowedOAuths A set of [OAuth]s the should be displayed to the user.
+ * @param oAuths A set of [OAuth]s the should be displayed to the user.
  */
 @Composable
 public fun OAuthListWidget(
@@ -64,12 +64,12 @@ public fun OAuthListWidget(
     style: OAuthListWidgetStyle = OAuthListWidgetStyle.Light(),
     onAuth: OAuthListWidgetAuthCallback,
     onFail: (VKIDAuthFail) -> Unit,
-    allowedOAuths: Set<OAuth> = OAuth.values().toSet()
+    oAuths: Set<OAuth> = OAuth.values().toSet()
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     val vkid = remember { VKID(context) }
-    val items = remember { sourceItems.filter { it in allowedOAuths } }
+    val items = remember { sourceItems.filter { it in oAuths } }
     Row(
         modifier = modifier
     ) {
@@ -278,7 +278,7 @@ private fun getWidgetTitle(
 @Composable
 private fun OAuthListWidgetWithOneItem() {
     OAuthListWidget(
-        allowedOAuths = setOf(OAuth.OK),
+        oAuths = setOf(OAuth.OK),
         onAuth = OAuthListWidgetAuthCallback.WithOAuth { _, _ -> },
         onFail = {},
     )
@@ -288,7 +288,7 @@ private fun OAuthListWidgetWithOneItem() {
 @Composable
 private fun OAuthListWidgetWithTwoItems() {
     OAuthListWidget(
-        allowedOAuths = setOf(OAuth.VK, OAuth.OK),
+        oAuths = setOf(OAuth.VK, OAuth.OK),
         onAuth = OAuthListWidgetAuthCallback.WithOAuth { _, _ -> },
         onFail = {},
     )
@@ -310,7 +310,7 @@ private fun OAuthListWidgetDark() {
     OAuthListWidget(
         modifier = Modifier.background(Color.White),
         style = OAuthListWidgetStyle.Dark(),
-        allowedOAuths = setOf(OAuth.VK),
+        oAuths = setOf(OAuth.VK),
         onAuth = OAuthListWidgetAuthCallback.WithOAuth { _, _ -> },
         onFail = {},
     )

@@ -31,7 +31,7 @@ fun HandleOAuthListWidgetItem(
             style = item.style,
             onAuth = getOAuthListCallback(context),
             onFail = { onVKIDAuthFail(context, it) },
-            allowedOAuths = item.allowedOAuths
+            oAuths = item.oAuths
         )
     }
 }
