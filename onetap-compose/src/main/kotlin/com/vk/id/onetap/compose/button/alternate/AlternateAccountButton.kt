@@ -67,7 +67,10 @@ internal fun AlternateAccountButton(
                         useVKID,
                         onAuth,
                         onFail,
-                        VKIDAuthParams { useOAuthProviderIfPossible = false }
+                        VKIDAuthParams {
+                            useOAuthProviderIfPossible = false
+                            theme = style.toProviderTheme()
+                        }
                     )
                 }
             ),
@@ -84,6 +87,13 @@ internal fun AlternateAccountButton(
             )
         )
     }
+}
+
+private fun AlternateAccountButtonStyle.toProviderTheme(): VKIDAuthParams.Theme = when (this) {
+    is AlternateAccountButtonStyle.Dark,
+    is AlternateAccountButtonStyle.TransparentDark -> VKIDAuthParams.Theme.Dark
+    is AlternateAccountButtonStyle.Light,
+    is AlternateAccountButtonStyle.TransparentLight -> VKIDAuthParams.Theme.Light
 }
 
 @Preview

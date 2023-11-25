@@ -21,7 +21,7 @@ public sealed class OneTapStyle(
         cornersStyle = cornersStyle,
         sizeStyle = sizeStyle,
         elevationStyle = elevationStyle,
-        vkidButtonStyle = VKIDButtonStyle.Blue(cornersStyle, sizeStyle, elevationStyle),
+        vkidButtonStyle = VKIDButtonStyle.Light(cornersStyle, sizeStyle, elevationStyle),
         alternateAccountButtonStyle = AlternateAccountButtonStyle.Light(cornersStyle, sizeStyle)
     )
 
@@ -33,7 +33,7 @@ public sealed class OneTapStyle(
         cornersStyle = cornersStyle,
         sizeStyle = sizeStyle,
         elevationStyle = elevationStyle,
-        vkidButtonStyle = VKIDButtonStyle.Blue(cornersStyle, sizeStyle, elevationStyle),
+        vkidButtonStyle = VKIDButtonStyle.Dark(cornersStyle, sizeStyle, elevationStyle),
         alternateAccountButtonStyle = AlternateAccountButtonStyle.Dark(cornersStyle, sizeStyle)
     )
 
@@ -69,7 +69,7 @@ public sealed class OneTapStyle(
         cornersStyle = cornersStyle,
         sizeStyle = sizeStyle,
         elevationStyle = elevationStyle,
-        vkidButtonStyle = VKIDButtonStyle.Blue(cornersStyle, sizeStyle, elevationStyle),
+        vkidButtonStyle = VKIDButtonStyle.Light(cornersStyle, sizeStyle, elevationStyle),
         alternateAccountButtonStyle = AlternateAccountButtonStyle.Light(cornersStyle, sizeStyle)
     )
 }

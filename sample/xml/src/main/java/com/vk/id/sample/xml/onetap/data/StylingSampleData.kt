@@ -34,48 +34,48 @@ public val buttonStylingData: List<Any> = listOf(
     ),
     HalfSpacerItem(),
     TitleItem("Secondary light"),
-    HalfSpacerItem(isDarkBackground = true),
+    HalfSpacerItem(),
     ButtonItem(
         style = OneTapStyle.TransparentLight(
             cornersStyle = OneTapButtonCornersStyle.None,
         ),
-        isDarkBackground = true,
     ),
-    SpacerItem(isDarkBackground = true),
+    SpacerItem(),
     ButtonItem(
         style = OneTapStyle.TransparentLight(
             cornersStyle = OneTapButtonCornersStyle.Rounded,
         ),
-        isDarkBackground = true,
     ),
-    SpacerItem(isDarkBackground = true),
+    SpacerItem(),
     ButtonItem(
         style = OneTapStyle.TransparentLight(
             cornersStyle = OneTapButtonCornersStyle.Round,
         ),
-        isDarkBackground = true,
     ),
-    HalfSpacerItem(isDarkBackground = true),
+    HalfSpacerItem(),
     TitleItem("Secondary dark"),
-    HalfSpacerItem(),
+    HalfSpacerItem(isDarkBackground = true),
     ButtonItem(
         style = OneTapStyle.TransparentDark(
             cornersStyle = OneTapButtonCornersStyle.None,
         ),
+        isDarkBackground = true
     ),
-    SpacerItem(),
+    SpacerItem(isDarkBackground = true),
     ButtonItem(
         style = OneTapStyle.TransparentDark(
             cornersStyle = OneTapButtonCornersStyle.Rounded,
         ),
+        isDarkBackground = true
     ),
-    SpacerItem(),
+    SpacerItem(isDarkBackground = true),
     ButtonItem(
         style = OneTapStyle.TransparentDark(
             cornersStyle = OneTapButtonCornersStyle.Round,
         ),
+        isDarkBackground = true
     ),
-    HalfSpacerItem(),
+    HalfSpacerItem(isDarkBackground = true),
     TitleItem("Elevation"),
     HalfSpacerItem(),
     ButtonItem(

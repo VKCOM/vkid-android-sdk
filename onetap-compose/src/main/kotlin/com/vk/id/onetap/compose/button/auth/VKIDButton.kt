@@ -59,7 +59,7 @@ import kotlinx.coroutines.delay
 @Composable
 internal fun VKIDButton(
     modifier: Modifier = Modifier,
-    style: VKIDButtonStyle = VKIDButtonStyle.Blue(),
+    style: VKIDButtonStyle = VKIDButtonStyle.Light(),
     onAuth: (AccessToken) -> Unit,
     onFail: (VKIDAuthFail) -> Unit = {},
     state: VKIDButtonState = rememberVKIDButtonState(),
@@ -83,7 +83,7 @@ private fun defaultTextProvider(resources: Resources): VKIDButtonTextProvider =
 @Composable
 internal fun VKIDButton(
     modifier: Modifier = Modifier,
-    style: VKIDButtonStyle = VKIDButtonStyle.Blue(),
+    style: VKIDButtonStyle = VKIDButtonStyle.Light(),
     onAuth: (AccessToken) -> Unit,
     onFail: (VKIDAuthFail) -> Unit = {},
     state: VKIDButtonState = rememberVKIDButtonState(),

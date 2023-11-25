@@ -12,7 +12,7 @@ public inline fun VKIDAuthParams(initializer: VKIDAuthParams.Builder.() -> Unit)
 public class VKIDAuthParams private constructor(
     public val locale: Locale? = null,
     public val theme: Theme? = null,
-    public val useExistingUserIfPossible: Boolean = true,
+    public val useOAuthProviderIfPossible: Boolean = true,
     public val oAuth: OAuth? = null,
 ) {
     public enum class Locale {
