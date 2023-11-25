@@ -8,13 +8,13 @@ import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonElevationStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonSizeStyle
 
-internal fun parseAttrs(
+internal fun parseOneTapAttrs(
     context: Context,
     attrs: AttributeSet?,
 ): Pair<OneTapStyle, Boolean> {
     context.theme.obtainStyledAttributes(
         attrs,
-        R.styleable.VKIDButton,
+        R.styleable.VkidOneTap,
         0,
         0
     ).apply {
@@ -31,17 +31,17 @@ internal fun parseAttrs(
 }
 
 private fun TypedArray.getCornerRadius() = getDimension(
-    R.styleable.VKIDButton_vkid_cornerRadius,
+    R.styleable.VkidOneTap_vkid_buttonsCornerRadius,
     OneTapButtonCornersStyle.Default.radiusDp.toFloat()
 )
 
 private fun TypedArray.getElevation() = getDimension(
-    R.styleable.VKIDButton_vkid_elevation,
+    R.styleable.VkidOneTap_vkid_buttonsElevation,
     OneTapButtonElevationStyle.Default.elevation.toFloat()
 )
 
 @Suppress("MagicNumber")
-private fun TypedArray.getStyleConstructor() = when (getInt(R.styleable.VKIDButton_vkid_style, 0)) {
+private fun TypedArray.getStyleConstructor() = when (getInt(R.styleable.VkidOneTap_vkid_onetapStyle, 0)) {
     1 -> OneTapStyle::Dark
     2 -> OneTapStyle::TransparentLight
     3 -> OneTapStyle::TransparentDark
@@ -50,7 +50,7 @@ private fun TypedArray.getStyleConstructor() = when (getInt(R.styleable.VKIDButt
 }
 
 @Suppress("MagicNumber", "CyclomaticComplexMethod")
-private fun TypedArray.getSize() = when (getInt(R.styleable.VKIDButton_vkid_size, 0)) {
+private fun TypedArray.getSize() = when (getInt(R.styleable.VkidOneTap_vkid_buttonsSize, 0)) {
     1 -> OneTapButtonSizeStyle.SMALL_32
     2 -> OneTapButtonSizeStyle.SMALL_34
     3 -> OneTapButtonSizeStyle.SMALL_36
@@ -68,5 +68,5 @@ private fun TypedArray.getSize() = when (getInt(R.styleable.VKIDButton_vkid_size
 }
 
 private fun TypedArray.getSignInToAnotherAccountButtonEnabled(): Boolean {
-    return getBoolean(R.styleable.VKIDButton_vkid_show_sign_in_to_another_account, false)
+    return getBoolean(R.styleable.VkidOneTap_vkid_onetap_show_sign_in_to_another_account, false)
 }
