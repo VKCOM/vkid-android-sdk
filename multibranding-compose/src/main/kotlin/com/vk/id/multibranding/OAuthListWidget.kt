@@ -55,7 +55,7 @@ private val sourceItems = listOf(
  * @param modifier Layout configuration for the widget.
  * @param style Styling widget configuration.
  * @param onAuth A callback to be invoked upon a successful auth.
- * @param onFail A callback to be invoked upof an error during auth.
+ * @param onFail A callback to be invoked upon an error during auth.
  * @param oAuths A set of [OAuth]s the should be displayed to the user.
  */
 @Composable
