@@ -2,22 +2,20 @@ package com.vk.id.onetap.xml
 
 import android.content.Context
 import android.util.AttributeSet
-import android.widget.FrameLayout
+import android.view.ViewGroup
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import com.vk.id.AccessToken
 import com.vk.id.VKIDAuthFail
 import com.vk.id.onetap.compose.onetap.sheet.OneTapBottomSheet
 import com.vk.id.onetap.compose.onetap.sheet.OneTapBottomSheetState
-import com.vk.id.onetap.compose.onetap.sheet.OneTapScenario
 import com.vk.id.onetap.compose.onetap.sheet.rememberOneTapBottomSheetState
-import com.vk.id.onetap.compose.onetap.sheet.style.OneTapBottomSheetStyle
 
 public class OneTapBottomSheet @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : FrameLayout(context, attrs, defStyleAttr) {
+) : ViewGroup(context, attrs, defStyleAttr) {
 
     private val composeView = ComposeView(context)
 
@@ -28,20 +26,19 @@ public class OneTapBottomSheet @JvmOverloads constructor(
 
     private lateinit var state: OneTapBottomSheetState
     init {
-        composeView.setContent {
-            Content()
-        }
+        val sheetSettings = parseOneTapBottomSheetAttrs(context, attrs)
+        composeView.setContent { Content(sheetSettings) }
         addView(composeView)
     }
 
     @Composable
-    private fun Content() {
+    private fun Content(sheetSettings: OneTapBottomSheetAttributeSettings) {
         state = rememberOneTapBottomSheetState()
         OneTapBottomSheet(
             state = state,
-            style = OneTapBottomSheetStyle.Light(),
-            serviceName = "todo",
-            scenario = OneTapScenario.OrderInService,
+            style = sheetSettings.style,
+            serviceName = sheetSettings.serviceName,
+            scenario = sheetSettings.scenario,
             onAuth = { onAuth(it) },
             onFail = { onFail(it) },
         )
@@ -64,4 +61,7 @@ public class OneTapBottomSheet @JvmOverloads constructor(
     }
 
     public fun isVisible(): Boolean = state.isVisible
+
+    @Suppress("EmptyFunctionBlock")
+    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {}
 }

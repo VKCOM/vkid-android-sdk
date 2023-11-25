@@ -34,8 +34,8 @@
             <enum name="transparentDark" value="3"/>
         </attr>
         <attr name="vkid_bottomSheetCornerRadius" format="dimension"/>
-        <attr name="vkid_bottomSheetService_name" format="string"/>
-        <attr name="vkid_bottomSheetCcenario" format="enum">
+        <attr name="vkid_bottomSheetServiceName" format="string"/>
+        <attr name="vkid_bottomSheetScenario" format="enum">
             <enum name="EnterService" value="0"/>
             <enum name="RegistrationForTheEvent" value="1"/>
             <enum name="Application" value="2"/>

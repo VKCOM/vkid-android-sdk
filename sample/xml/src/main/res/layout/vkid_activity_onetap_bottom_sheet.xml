@@ -21,7 +21,8 @@
         android:id="@+id/vkid_bottom_sheet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:vkid_bottomSheetCornerRadius="0dp"
+        app:vkid_bottomSheetServiceName="Sample xml"
+        app:vkid_bottomSheetScenario="OrderInService"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
