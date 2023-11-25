@@ -9,16 +9,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vk.id.onetap.compose.onetap.OneTap
-import com.vk.id.onetap.compose.onetap.OneTapStyle
 import com.vk.id.sample.app.uikit.common.darkBackground
+import com.vk.id.sample.xml.onetap.item.ButtonItem
 import com.vk.id.sample.xml.uikit.common.onVKIDAuthFail
 import com.vk.id.sample.xml.uikit.common.onVKIDAuthSuccess
-
-data class ButtonItem(
-    val style: OneTapStyle,
-    val width: Int = 335,
-    val isDarkBackground: Boolean = false,
-)
 
 @Composable
 fun HandleButtonItem(

@@ -22,8 +22,8 @@ import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.VKIDAuthParams
+import com.vk.id.onetap.common.alternate.style.AlternateAccountButtonStyle
 import com.vk.id.onetap.compose.R
-import com.vk.id.onetap.compose.button.alternate.style.AlternateAccountButtonStyle
 import com.vk.id.onetap.compose.button.alternate.style.asColorResource
 import com.vk.id.onetap.compose.button.alternate.style.background
 import com.vk.id.onetap.compose.button.auth.style.asColor

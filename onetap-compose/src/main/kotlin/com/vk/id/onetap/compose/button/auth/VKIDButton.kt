@@ -33,13 +33,13 @@ import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.VKIDUser
+import com.vk.id.onetap.common.auth.style.VKIDButtonStyle
 import com.vk.id.onetap.compose.R
 import com.vk.id.onetap.compose.button.DURATION_OF_ANIMATION
 import com.vk.id.onetap.compose.button.DURATION_OF_DELAY_BETWEEN_FADE_ANIMATIONS
 import com.vk.id.onetap.compose.button.FetchUserData
 import com.vk.id.onetap.compose.button.OnFetchingProgress
 import com.vk.id.onetap.compose.button.SIZE_OF_VK_ICON
-import com.vk.id.onetap.compose.button.auth.style.VKIDButtonStyle
 import com.vk.id.onetap.compose.button.auth.style.asColorResource
 import com.vk.id.onetap.compose.button.auth.style.background
 import com.vk.id.onetap.compose.button.auth.style.border

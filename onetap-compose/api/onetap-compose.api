@@ -10,50 +10,7 @@ public final class com/vk/id/onetap/compose/BuildConfig {
 }
 
 public final class com/vk/id/onetap/compose/onetap/OneTapKt {
-	public static final fun OneTap (Landroidx/compose/ui/Modifier;Lcom/vk/id/onetap/compose/onetap/OneTapStyle;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lcom/vk/id/VKID;ZLandroidx/compose/runtime/Composer;II)V
-}
-
-public abstract class com/vk/id/onetap/compose/onetap/OneTapStyle {
-	public static final field $stable I
-	public synthetic fun <init> (Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonSizeStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonElevationStyle;Lcom/vk/id/onetap/compose/button/auth/style/VKIDButtonStyle;Lcom/vk/id/onetap/compose/button/alternate/style/AlternateAccountButtonStyle;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getCornersStyle ()Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonCornersStyle;
-	public final fun getElevationStyle ()Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonElevationStyle;
-	public final fun getSizeStyle ()Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonSizeStyle;
-}
-
-public final class com/vk/id/onetap/compose/onetap/OneTapStyle$Dark : com/vk/id/onetap/compose/onetap/OneTapStyle {
-	public static final field $stable I
-	public fun <init> ()V
-	public fun <init> (Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonSizeStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonElevationStyle;)V
-	public synthetic fun <init> (Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonSizeStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonElevationStyle;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-}
-
-public final class com/vk/id/onetap/compose/onetap/OneTapStyle$Icon : com/vk/id/onetap/compose/onetap/OneTapStyle {
-	public static final field $stable I
-	public fun <init> ()V
-	public fun <init> (Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonSizeStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonElevationStyle;)V
-	public synthetic fun <init> (Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonSizeStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonElevationStyle;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-}
-
-public final class com/vk/id/onetap/compose/onetap/OneTapStyle$Light : com/vk/id/onetap/compose/onetap/OneTapStyle {
-	public static final field $stable I
-	public fun <init> ()V
-	public fun <init> (Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonSizeStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonElevationStyle;)V
-	public synthetic fun <init> (Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonSizeStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonElevationStyle;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-}
-
-public final class com/vk/id/onetap/compose/onetap/OneTapStyle$TransparentDark : com/vk/id/onetap/compose/onetap/OneTapStyle {
-	public static final field $stable I
-	public fun <init> ()V
-	public fun <init> (Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonSizeStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonElevationStyle;)V
-	public synthetic fun <init> (Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonSizeStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonElevationStyle;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-}
-
-public final class com/vk/id/onetap/compose/onetap/OneTapStyle$TransparentLight : com/vk/id/onetap/compose/onetap/OneTapStyle {
-	public static final field $stable I
-	public fun <init> ()V
-	public fun <init> (Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonSizeStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonElevationStyle;)V
-	public synthetic fun <init> (Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonSizeStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonElevationStyle;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public static final fun OneTap (Landroidx/compose/ui/Modifier;Lcom/vk/id/onetap/common/OneTapStyle;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lcom/vk/id/VKID;ZLandroidx/compose/runtime/Composer;II)V
 }
 
 public final class com/vk/id/onetap/compose/onetap/sheet/OneTapBottomSheetKt {
@@ -81,35 +38,35 @@ public final class com/vk/id/onetap/compose/onetap/sheet/OneTapScenario : java/l
 
 public abstract class com/vk/id/onetap/compose/onetap/sheet/style/OneTapBottomSheetStyle {
 	public static final field $stable I
-	public synthetic fun <init> (Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetCornersStyle;Lcom/vk/id/onetap/compose/onetap/OneTapStyle;Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetBackgroundStyle;IIIILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetCornersStyle;Lcom/vk/id/onetap/common/OneTapStyle;Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetBackgroundStyle;IIIILkotlin/jvm/internal/DefaultConstructorMarker;)V
 }
 
 public final class com/vk/id/onetap/compose/onetap/sheet/style/OneTapBottomSheetStyle$Dark : com/vk/id/onetap/compose/onetap/sheet/style/OneTapBottomSheetStyle {
 	public static final field $stable I
 	public fun <init> ()V
-	public fun <init> (Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetCornersStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonSizeStyle;)V
-	public synthetic fun <init> (Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetCornersStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonSizeStyle;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonSizeStyle;)V
+	public synthetic fun <init> (Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonSizeStyle;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 }
 
 public final class com/vk/id/onetap/compose/onetap/sheet/style/OneTapBottomSheetStyle$Light : com/vk/id/onetap/compose/onetap/sheet/style/OneTapBottomSheetStyle {
 	public static final field $stable I
 	public fun <init> ()V
-	public fun <init> (Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetCornersStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonSizeStyle;)V
-	public synthetic fun <init> (Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetCornersStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonSizeStyle;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonSizeStyle;)V
+	public synthetic fun <init> (Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonSizeStyle;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 }
 
 public final class com/vk/id/onetap/compose/onetap/sheet/style/OneTapBottomSheetStyle$TransparentDark : com/vk/id/onetap/compose/onetap/sheet/style/OneTapBottomSheetStyle {
 	public static final field $stable I
 	public fun <init> ()V
-	public fun <init> (Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetCornersStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonSizeStyle;)V
-	public synthetic fun <init> (Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetCornersStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonSizeStyle;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonSizeStyle;)V
+	public synthetic fun <init> (Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonSizeStyle;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 }
 
 public final class com/vk/id/onetap/compose/onetap/sheet/style/OneTapBottomSheetStyle$TransparentLight : com/vk/id/onetap/compose/onetap/sheet/style/OneTapBottomSheetStyle {
 	public static final field $stable I
 	public fun <init> ()V
-	public fun <init> (Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetCornersStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonSizeStyle;)V
-	public synthetic fun <init> (Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetCornersStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonSizeStyle;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonSizeStyle;)V
+	public synthetic fun <init> (Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonSizeStyle;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 }
 
 public final class com/vk/id/onetap/compose/onetap/sheet/style/OneTapBottomSheetStyleKt {
@@ -140,71 +97,5 @@ public final class com/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetCorner
 public final class com/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetCornersStyle$Rounded : com/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetCornersStyle {
 	public static final field $stable I
 	public static final field INSTANCE Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetCornersStyle$Rounded;
-}
-
-public abstract class com/vk/id/onetap/compose/onetap/style/OneTapButtonCornersStyle {
-	public static final field $stable I
-	public synthetic fun <init> (ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getRadiusDp ()I
-}
-
-public final class com/vk/id/onetap/compose/onetap/style/OneTapButtonCornersStyle$Custom : com/vk/id/onetap/compose/onetap/style/OneTapButtonCornersStyle {
-	public static final field $stable I
-	public fun <init> (I)V
-}
-
-public final class com/vk/id/onetap/compose/onetap/style/OneTapButtonCornersStyle$Default : com/vk/id/onetap/compose/onetap/style/OneTapButtonCornersStyle {
-	public static final field $stable I
-	public static final field INSTANCE Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonCornersStyle$Default;
-}
-
-public final class com/vk/id/onetap/compose/onetap/style/OneTapButtonCornersStyle$None : com/vk/id/onetap/compose/onetap/style/OneTapButtonCornersStyle {
-	public static final field $stable I
-	public static final field INSTANCE Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonCornersStyle$None;
-}
-
-public final class com/vk/id/onetap/compose/onetap/style/OneTapButtonCornersStyle$Round : com/vk/id/onetap/compose/onetap/style/OneTapButtonCornersStyle {
-	public static final field $stable I
-	public static final field INSTANCE Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonCornersStyle$Round;
-}
-
-public final class com/vk/id/onetap/compose/onetap/style/OneTapButtonCornersStyle$Rounded : com/vk/id/onetap/compose/onetap/style/OneTapButtonCornersStyle {
-	public static final field $stable I
-	public static final field INSTANCE Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonCornersStyle$Rounded;
-}
-
-public abstract class com/vk/id/onetap/compose/onetap/style/OneTapButtonElevationStyle {
-	public static final field $stable I
-	public synthetic fun <init> (ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getElevation ()I
-}
-
-public final class com/vk/id/onetap/compose/onetap/style/OneTapButtonElevationStyle$Custom : com/vk/id/onetap/compose/onetap/style/OneTapButtonElevationStyle {
-	public static final field $stable I
-	public fun <init> (I)V
-}
-
-public final class com/vk/id/onetap/compose/onetap/style/OneTapButtonElevationStyle$Default : com/vk/id/onetap/compose/onetap/style/OneTapButtonElevationStyle {
-	public static final field $stable I
-	public static final field INSTANCE Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonElevationStyle$Default;
-}
-
-public final class com/vk/id/onetap/compose/onetap/style/OneTapButtonSizeStyle : java/lang/Enum {
-	public static final field DEFAULT Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonSizeStyle;
-	public static final field LARGE_48 Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonSizeStyle;
-	public static final field LARGE_50 Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonSizeStyle;
-	public static final field LARGE_52 Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonSizeStyle;
-	public static final field LARGE_54 Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonSizeStyle;
-	public static final field LARGE_56 Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonSizeStyle;
-	public static final field MEDIUM_40 Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonSizeStyle;
-	public static final field MEDIUM_42 Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonSizeStyle;
-	public static final field MEDIUM_44 Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonSizeStyle;
-	public static final field MEDIUM_46 Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonSizeStyle;
-	public static final field SMALL_32 Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonSizeStyle;
-	public static final field SMALL_34 Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonSizeStyle;
-	public static final field SMALL_36 Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonSizeStyle;
-	public static final field SMALL_38 Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonSizeStyle;
-	public static fun valueOf (Ljava/lang/String;)Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonSizeStyle;
-	public static fun values ()[Lcom/vk/id/onetap/compose/onetap/style/OneTapButtonSizeStyle;
 }
 

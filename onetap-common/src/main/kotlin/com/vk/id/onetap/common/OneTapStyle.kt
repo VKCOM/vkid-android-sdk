@@ -1,17 +1,17 @@
-package com.vk.id.onetap.compose.onetap
+package com.vk.id.onetap.common
 
-import com.vk.id.onetap.compose.button.alternate.style.AlternateAccountButtonStyle
-import com.vk.id.onetap.compose.button.auth.style.VKIDButtonStyle
-import com.vk.id.onetap.compose.onetap.style.OneTapButtonCornersStyle
-import com.vk.id.onetap.compose.onetap.style.OneTapButtonElevationStyle
-import com.vk.id.onetap.compose.onetap.style.OneTapButtonSizeStyle
+import com.vk.id.onetap.common.alternate.style.AlternateAccountButtonStyle
+import com.vk.id.onetap.common.auth.style.VKIDButtonStyle
+import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
+import com.vk.id.onetap.common.button.style.OneTapButtonElevationStyle
+import com.vk.id.onetap.common.button.style.OneTapButtonSizeStyle
 
 public sealed class OneTapStyle(
     public val cornersStyle: OneTapButtonCornersStyle,
     public val sizeStyle: OneTapButtonSizeStyle,
     public val elevationStyle: OneTapButtonElevationStyle,
-    internal val vkidButtonStyle: VKIDButtonStyle,
-    internal val alternateAccountButtonStyle: AlternateAccountButtonStyle
+    public val vkidButtonStyle: VKIDButtonStyle,
+    public val alternateAccountButtonStyle: AlternateAccountButtonStyle
 ) {
     public class Light(
         cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,

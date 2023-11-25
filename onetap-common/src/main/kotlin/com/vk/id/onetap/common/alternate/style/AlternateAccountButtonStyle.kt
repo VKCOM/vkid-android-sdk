@@ -1,19 +1,19 @@
-package com.vk.id.onetap.compose.button.alternate.style
+package com.vk.id.onetap.common.alternate.style
 
-import com.vk.id.onetap.compose.button.auth.style.VKIDButtonBorderStyle
-import com.vk.id.onetap.compose.button.auth.style.VKIDButtonRippleStyle
-import com.vk.id.onetap.compose.onetap.style.OneTapButtonCornersStyle
-import com.vk.id.onetap.compose.onetap.style.OneTapButtonSizeStyle
+import com.vk.id.onetap.common.auth.style.VKIDButtonBorderStyle
+import com.vk.id.onetap.common.auth.style.VKIDButtonRippleStyle
+import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
+import com.vk.id.onetap.common.button.style.OneTapButtonSizeStyle
 
-internal sealed class AlternateAccountButtonStyle(
-    val backgroundStyle: AlternateAccountButtonBackgroundStyle,
-    val borderStyle: VKIDButtonBorderStyle,
-    val rippleStyle: VKIDButtonRippleStyle,
-    val textStyle: AlternateAccountButtonTextStyle,
-    val cornersStyle: OneTapButtonCornersStyle,
-    val sizeStyle: OneTapButtonSizeStyle,
+public sealed class AlternateAccountButtonStyle(
+    public val backgroundStyle: AlternateAccountButtonBackgroundStyle,
+    public val borderStyle: VKIDButtonBorderStyle,
+    public val rippleStyle: VKIDButtonRippleStyle,
+    public val textStyle: AlternateAccountButtonTextStyle,
+    public val cornersStyle: OneTapButtonCornersStyle,
+    public val sizeStyle: OneTapButtonSizeStyle,
 ) {
-    class Light(
+    public class Light(
         cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
         sizeStyle: OneTapButtonSizeStyle = OneTapButtonSizeStyle.MEDIUM_44,
     ) : AlternateAccountButtonStyle(
@@ -25,7 +25,7 @@ internal sealed class AlternateAccountButtonStyle(
         sizeStyle = sizeStyle,
     )
 
-    class Dark(
+    public class Dark(
         cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
         sizeStyle: OneTapButtonSizeStyle = OneTapButtonSizeStyle.MEDIUM_44,
     ) : AlternateAccountButtonStyle(
@@ -37,7 +37,7 @@ internal sealed class AlternateAccountButtonStyle(
         sizeStyle = sizeStyle,
     )
 
-    class TransparentDark(
+    public class TransparentDark(
         cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
         sizeStyle: OneTapButtonSizeStyle = OneTapButtonSizeStyle.MEDIUM_44,
     ) : AlternateAccountButtonStyle(
@@ -49,7 +49,7 @@ internal sealed class AlternateAccountButtonStyle(
         sizeStyle = sizeStyle,
     )
 
-    class TransparentLight(
+    public class TransparentLight(
         cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
         sizeStyle: OneTapButtonSizeStyle = OneTapButtonSizeStyle.MEDIUM_44,
     ) : AlternateAccountButtonStyle(

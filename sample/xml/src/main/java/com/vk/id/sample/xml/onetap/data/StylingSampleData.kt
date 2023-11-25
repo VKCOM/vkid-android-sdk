@@ -1,16 +1,18 @@
-package com.vk.id.sample.app.screen.styling.data
+package com.vk.id.sample.xml.onetap.data
 
-import com.vk.id.onetap.compose.onetap.OneTapStyle
-import com.vk.id.onetap.compose.onetap.style.OneTapButtonCornersStyle
-import com.vk.id.onetap.compose.onetap.style.OneTapButtonElevationStyle
-import com.vk.id.onetap.compose.onetap.style.OneTapButtonSizeStyle
-import com.vk.id.sample.app.screen.styling.item.ButtonItem
-import com.vk.id.sample.app.screen.styling.item.IconButtonItem
+import com.vk.id.onetap.common.OneTapStyle
+import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
+import com.vk.id.onetap.common.button.style.OneTapButtonElevationStyle
+import com.vk.id.onetap.common.button.style.OneTapButtonSizeStyle
+import com.vk.id.sample.xml.onetap.item.ButtonItem
 import com.vk.id.sample.xml.uikit.item.HalfSpacerItem
 import com.vk.id.sample.xml.uikit.item.SpacerItem
 import com.vk.id.sample.xml.uikit.item.TitleItem
 
-internal val buttonStylingData = listOf(
+private const val ELEVATION_4_DP = 4
+private const val ELEVATION_8_DP = 8
+
+public val buttonStylingData: List<Any> = listOf(
     TitleItem("Primary"),
     HalfSpacerItem(),
     ButtonItem(
@@ -86,14 +88,14 @@ internal val buttonStylingData = listOf(
     ButtonItem(
         style = OneTapStyle.Light(
             cornersStyle = OneTapButtonCornersStyle.Rounded,
-            elevationStyle = OneTapButtonElevationStyle.Custom(4)
+            elevationStyle = OneTapButtonElevationStyle.Custom(ELEVATION_4_DP)
         ),
     ),
     SpacerItem(),
     ButtonItem(
         style = OneTapStyle.Light(
             cornersStyle = OneTapButtonCornersStyle.Rounded,
-            elevationStyle = OneTapButtonElevationStyle.Custom(8)
+            elevationStyle = OneTapButtonElevationStyle.Custom(ELEVATION_8_DP)
         ),
     ),
     HalfSpacerItem(),
@@ -192,7 +194,7 @@ internal val buttonStylingData = listOf(
     HalfSpacerItem(),
     TitleItem("Small button"),
     HalfSpacerItem(),
-    IconButtonItem(
+    ButtonItem(
         style = OneTapStyle.Icon(
             cornersStyle = OneTapButtonCornersStyle.Default,
             sizeStyle = OneTapButtonSizeStyle.MEDIUM_44,
