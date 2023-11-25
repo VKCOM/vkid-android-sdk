@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <style name="vkidbutton">
-        <item name="android:textSize">16sp</item>
-        <item name="android:letterSpacing">0.01</item>
-        <item name="android:textColor">#FFFFFF</item>
-        <item name="android:lineSpacingExtra">1sp</item>
-    </style>
-</resources>
