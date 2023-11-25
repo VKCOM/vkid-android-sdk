@@ -5,7 +5,8 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.vk.id.onetap.xml.OneTapBottomSheet
 import com.vk.id.sample.xml.R
-import com.vk.id.sample.xml.uikit.common.showToast
+import com.vk.id.sample.xml.uikit.common.onVKIDAuthFail
+import com.vk.id.sample.xml.uikit.common.onVKIDAuthSuccess
 
 public class OnetapSheetStylingXmlActivity : AppCompatActivity() {
 
@@ -14,9 +15,9 @@ public class OnetapSheetStylingXmlActivity : AppCompatActivity() {
         setContentView(R.layout.vkid_activity_onetap_bottom_sheet)
         val vkidOneTapBottomSheet = findViewById<OneTapBottomSheet>(R.id.vkid_bottom_sheet)
         vkidOneTapBottomSheet.setCallbacks(onAuth = {
-            showToast(this, "Success auth, user ${it.userID}")
+            onVKIDAuthSuccess(this, it)
         }, onFail = {
-                showToast(this, "Failed auth, ${it.description}")
+                onVKIDAuthFail(this, it)
             })
         val button = findViewById<Button>(R.id.show_sheet_button)
         button.setOnClickListener {
