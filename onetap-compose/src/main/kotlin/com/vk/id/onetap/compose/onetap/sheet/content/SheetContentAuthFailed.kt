@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -31,7 +32,6 @@ import com.vk.id.onetap.compose.button.auth.style.border
 import com.vk.id.onetap.compose.onetap.sheet.style.OneTapBottomSheetStyle
 import com.vk.id.onetap.compose.onetap.style.asFontSize
 import com.vk.id.onetap.compose.onetap.style.clip
-import com.vk.id.onetap.compose.onetap.style.height
 
 @Composable
 internal fun SheetContentAuthFailed(
@@ -51,7 +51,7 @@ internal fun SheetContentAuthFailed(
             contentDescription = null,
         )
         BasicText(
-            text = "Не удалось авторизоваться",
+            text = stringResource(R.string.vkid_sheet_state_auth_failed),
             modifier = Modifier.padding(top = 12.dp),
             style = TextStyle(
                 color = colorResource(style.contentTextColor),
@@ -87,7 +87,7 @@ private fun RepeatButton(style: AlternateAccountButtonStyle, repeatClicked: () -
     ) {
         BasicText(
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 6.5.dp, bottom = 7.5.dp),
-            text = "Повторить попытку",
+            text = stringResource(R.string.vkid_sheet_state_auth_failed_retry),
             style = TextStyle(
                 color = style.textStyle.asColorResource(),
                 fontSize = style.sizeStyle.asFontSize(),

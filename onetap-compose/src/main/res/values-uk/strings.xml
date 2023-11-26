@@ -56,4 +56,9 @@
     <string name="vkid_schenario_enter_to_account_vkid_button_text_no_user">Увійти з VK ID</string>
 
     <string name="vkid_scenario_common_description">Після цього вам стануть доступні всі можливості сервісу. Ваші дані будуть надійно захищені.</string>
+
+    <string name="vkid_sheet_state_auth_in_progress">Авторизація…</string>
+    <string name="vkid_sheet_state_auth_success">Успішно</string>
+    <string name="vkid_sheet_state_auth_failed_retry">Повторити спробу</string>
+    <string name="vkid_sheet_state_auth_failed">Не вдалося авторизуватися</string>
 </resources>

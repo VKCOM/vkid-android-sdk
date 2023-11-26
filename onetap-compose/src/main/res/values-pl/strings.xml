@@ -29,4 +29,9 @@
     <string name="vkid_schenario_enter_to_account_vkid_button_text_no_user">Wejdź z VK ID</string>
 
     <string name="vkid_scenario_common_description">Po tym wszystkie funkcje serwisu będą dostępne. Twoje dane będą dobrze chronione.</string>
+
+    <string name="vkid_sheet_state_auth_in_progress">Autoryzacja…</string>
+    <string name="vkid_sheet_state_auth_success">Pomyślnie</string>
+    <string name="vkid_sheet_state_auth_failed_retry">Powtórz próbę</string>
+    <string name="vkid_sheet_state_auth_failed">Nieudana autoryzacja</string>
 </resources>
