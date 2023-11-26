@@ -195,16 +195,6 @@ private fun OneTapBottomSheetPreview() {
 
 @Preview
 @Composable
-private fun OneTapBottomSheetProgressPreview() {
-    SheetContentAuthInProgress(
-        "<Название сервиса>",
-        OneTapBottomSheetStyle.TransparentDark(),
-        dismissSheet = {},
-    )
-}
-
-@Preview
-@Composable
 private fun OneTapBottomSheetSuccessPreview() {
     SheetContentAuthSuccess(
         "<Название сервиса>",
