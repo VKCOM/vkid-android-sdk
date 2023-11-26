@@ -36,9 +36,16 @@ public final class com/vk/id/onetap/compose/onetap/sheet/OneTapScenario : java/l
 	public static fun values ()[Lcom/vk/id/onetap/compose/onetap/sheet/OneTapScenario;
 }
 
+public final class com/vk/id/onetap/compose/onetap/sheet/content/ComposableSingletons$SheetContentBoxKt {
+	public static final field INSTANCE Lcom/vk/id/onetap/compose/onetap/sheet/content/ComposableSingletons$SheetContentBoxKt;
+	public static field lambda-1 Lkotlin/jvm/functions/Function3;
+	public fun <init> ()V
+	public final fun getLambda-1$onetap_compose_release ()Lkotlin/jvm/functions/Function3;
+}
+
 public abstract class com/vk/id/onetap/compose/onetap/sheet/style/OneTapBottomSheetStyle {
 	public static final field $stable I
-	public synthetic fun <init> (Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetCornersStyle;Lcom/vk/id/onetap/common/OneTapStyle;Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetBackgroundStyle;IIIILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetCornersStyle;Lcom/vk/id/onetap/common/OneTapStyle;Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetBackgroundStyle;IIILkotlin/jvm/internal/DefaultConstructorMarker;)V
 }
 
 public final class com/vk/id/onetap/compose/onetap/sheet/style/OneTapBottomSheetStyle$Dark : com/vk/id/onetap/compose/onetap/sheet/style/OneTapBottomSheetStyle {
