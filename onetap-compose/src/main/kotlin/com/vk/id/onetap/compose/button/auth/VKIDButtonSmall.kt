@@ -25,9 +25,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.decode.DataSource
-import com.vk.id.AccessToken
 import com.vk.id.VKID
-import com.vk.id.VKIDAuthFail
 import com.vk.id.VKIDUser
 import com.vk.id.onetap.common.auth.style.VKIDButtonStyle
 import com.vk.id.onetap.compose.button.FetchUserData
@@ -50,8 +48,7 @@ internal fun VKIDButtonSmall(
     state: VKIDSmallButtonState = remember { VKIDSmallButtonState(inProgress = false, userIconLoaded = false) },
     style: VKIDButtonStyle = VKIDButtonStyle.Light(),
     vkid: VKID? = null,
-    onAuth: (AccessToken) -> Unit,
-    onFail: (VKIDAuthFail) -> Unit = {},
+    onClick: () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -89,7 +86,7 @@ internal fun VKIDButtonSmall(
             .border(style.borderStyle, style.cornersStyle)
             .clip(style.cornersStyle)
             .background(style.backgroundStyle)
-            .clickable(state, coroutineScope, useVKID, style, onAuth, onFail)
+            .clickable(style, onClick)
             .onSizeChanged {
                 size = it
             },
@@ -177,14 +174,14 @@ private fun SmallButtonContent(
 @Preview
 @Composable
 private fun PreviewVKIDButtonSmall() {
-    VKIDButtonSmall(onAuth = {})
+    VKIDButtonSmall(onClick = {})
 }
 
 @Preview
 @Composable
 private fun PreviewVKIDButtonSmallProgress() {
     VKIDButtonSmall(
-        onAuth = {},
+        onClick = {},
         state = VKIDSmallButtonState(inProgress = true, userIconLoaded = false)
     )
 }
@@ -193,7 +190,7 @@ private fun PreviewVKIDButtonSmallProgress() {
 @Composable
 private fun PreviewVKIDButtonSmallUser() {
     VKIDButtonSmall(
-        onAuth = {},
+        onClick = {},
         state = VKIDSmallButtonState(inProgress = false, userIconLoaded = true)
     )
 }
@@ -202,7 +199,7 @@ private fun PreviewVKIDButtonSmallUser() {
 @Composable
 private fun PreviewVKIDButtonSmallProgressAndUser() {
     VKIDButtonSmall(
-        onAuth = {},
+        onClick = {},
         state = VKIDSmallButtonState(inProgress = true, userIconLoaded = true)
     )
 }

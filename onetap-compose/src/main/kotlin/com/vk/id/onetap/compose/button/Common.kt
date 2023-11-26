@@ -24,7 +24,6 @@ import com.vk.id.VKIDAuthFail
 import com.vk.id.VKIDUser
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.onetap.common.auth.style.VKIDButtonStyle
-import com.vk.id.onetap.compose.button.auth.VKIDButtonState
 import com.vk.id.onetap.compose.button.auth.style.asColor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -32,39 +31,17 @@ import kotlinx.coroutines.launch
 
 @Suppress("LongParameterList")
 internal fun Modifier.clickable(
-    state: VKIDButtonState,
-    coroutineScope: CoroutineScope,
-    vkid: VKID,
     style: VKIDButtonStyle,
-    onAuth: (AccessToken) -> Unit,
-    onFail: (VKIDAuthFail) -> Unit
+    onClick: () -> Unit
 ): Modifier = composed {
     clickable(
         interactionSource = remember { MutableInteractionSource() },
         indication = rememberRipple(
             color = style.rippleStyle.asColor(),
         ),
-        enabled = state.inProgress.not(),
         role = Role.Button,
-        onClick = {
-            startAuth(
-                coroutineScope,
-                vkid,
-                onAuth,
-                onFail,
-                VKIDAuthParams {
-                    theme = style.toProviderTheme()
-                }
-            )
-        }
+        onClick = onClick
     )
-}
-
-private fun VKIDButtonStyle.toProviderTheme(): VKIDAuthParams.Theme = when (this) {
-    is VKIDButtonStyle.Dark,
-    is VKIDButtonStyle.TransparentDark -> VKIDAuthParams.Theme.Dark
-    is VKIDButtonStyle.Light,
-    is VKIDButtonStyle.TransparentLight -> VKIDAuthParams.Theme.Light
 }
 
 internal fun startAuth(

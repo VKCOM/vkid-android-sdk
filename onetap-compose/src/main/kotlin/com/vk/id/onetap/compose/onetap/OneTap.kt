@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -12,12 +13,14 @@ import androidx.compose.ui.unit.dp
 import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
+import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.compose.button.alternate.AlternateAccountButton
 import com.vk.id.onetap.compose.button.auth.VKIDButton
 import com.vk.id.onetap.compose.button.auth.VKIDButtonSmall
 import com.vk.id.onetap.compose.button.auth.VKIDButtonTextProvider
 import com.vk.id.onetap.compose.button.auth.rememberVKIDButtonState
+import com.vk.id.onetap.compose.button.startAuth
 
 @Composable
 public fun OneTap(
@@ -28,10 +31,22 @@ public fun OneTap(
     vkid: VKID? = null,
     signInAnotherAccountButtonEnabled: Boolean = false
 ) {
+    val context = LocalContext.current
+    val useVKID = vkid ?: remember {
+        VKID(context)
+    }
     if (style is OneTapStyle.Icon) {
-        VKIDButtonSmall(style = style.vkidButtonStyle, onAuth = onAuth, onFail = onFail, vkid = vkid)
+        val coroutineScope = rememberCoroutineScope()
+        VKIDButtonSmall(style = style.vkidButtonStyle, vkid = vkid, onClick = {
+            startAuth(
+                coroutineScope,
+                useVKID,
+                onAuth,
+                onFail
+            )
+        })
     } else {
-        OneTap(modifier, style, onAuth, onFail, vkid, signInAnotherAccountButtonEnabled, null)
+        OneTap(modifier, style, onAuth, onFail, useVKID, signInAnotherAccountButtonEnabled, null)
     }
 }
 
@@ -41,23 +56,29 @@ internal fun OneTap(
     style: OneTapStyle = OneTapStyle.Light(),
     onAuth: (AccessToken) -> Unit,
     onFail: (VKIDAuthFail) -> Unit = {},
-    vkid: VKID? = null,
+    vkid: VKID,
     signInAnotherAccountButtonEnabled: Boolean = false,
-    vkidButtonTextProvider: VKIDButtonTextProvider?
+    vkidButtonTextProvider: VKIDButtonTextProvider?,
 ) {
-    val context = LocalContext.current
-    val useVKID = vkid ?: remember {
-        VKID(context)
-    }
+    val coroutineScope = rememberCoroutineScope()
     val vkidButtonState = rememberVKIDButtonState()
     Column(modifier = modifier) {
         VKIDButton(
             style = style.vkidButtonStyle,
-            onAuth = onAuth,
-            onFail = onFail,
             state = vkidButtonState,
-            vkid = useVKID,
-            textProvider = vkidButtonTextProvider
+            vkid = vkid,
+            textProvider = vkidButtonTextProvider,
+            onClick = {
+                startAuth(
+                    coroutineScope,
+                    vkid,
+                    onAuth,
+                    onFail,
+                    VKIDAuthParams {
+                        theme = style.toProviderTheme()
+                    }
+                )
+            }
         )
         if (signInAnotherAccountButtonEnabled) {
             AnimatedVisibility(
@@ -66,13 +87,30 @@ internal fun OneTap(
             ) {
                 AlternateAccountButton(
                     style = style.alternateAccountButtonStyle,
-                    onAuth = onAuth,
-                    onFail = onFail,
-                    vkid = useVKID
+                    onClick = {
+                        startAuth(
+                            coroutineScope,
+                            vkid,
+                            onAuth,
+                            onFail,
+                            VKIDAuthParams {
+                                useOAuthProviderIfPossible = false
+                                theme = style.toProviderTheme()
+                            }
+                        )
+                    }
                 )
             }
         }
     }
+}
+
+private fun OneTapStyle.toProviderTheme(): VKIDAuthParams.Theme = when (this) {
+    is OneTapStyle.Dark,
+    is OneTapStyle.TransparentDark -> VKIDAuthParams.Theme.Dark
+    is OneTapStyle.Light,
+    is OneTapStyle.TransparentLight,
+    is OneTapStyle.Icon -> VKIDAuthParams.Theme.Light
 }
 
 @Preview
