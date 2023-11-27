@@ -7,8 +7,12 @@ import com.vk.id.VKIDAuthFail
 
 private const val TOKEN_VISIBLE_CHARACTERS = 10
 
+private var currentToast: Toast? = null
+
 public fun showToast(context: Context, text: String) {
-    Toast.makeText(context, text, Toast.LENGTH_LONG).show()
+    currentToast?.cancel()
+    currentToast = Toast.makeText(context, text, Toast.LENGTH_SHORT)
+    currentToast?.show()
 }
 
 public fun formatToken(token: String): String = token.hideLastCharacters(TOKEN_VISIBLE_CHARACTERS)

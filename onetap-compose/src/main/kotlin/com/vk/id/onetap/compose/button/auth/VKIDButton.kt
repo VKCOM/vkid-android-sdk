@@ -29,9 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.vk.id.AccessToken
 import com.vk.id.VKID
-import com.vk.id.VKIDAuthFail
 import com.vk.id.VKIDUser
 import com.vk.id.onetap.common.auth.style.VKIDButtonStyle
 import com.vk.id.onetap.compose.R
@@ -60,35 +58,10 @@ import kotlinx.coroutines.delay
 internal fun VKIDButton(
     modifier: Modifier = Modifier,
     style: VKIDButtonStyle = VKIDButtonStyle.Light(),
-    onAuth: (AccessToken) -> Unit,
-    onFail: (VKIDAuthFail) -> Unit = {},
-    state: VKIDButtonState = rememberVKIDButtonState(),
-    vkid: VKID? = null
-) {
-    VKIDButton(modifier, style, onAuth, onFail, state, vkid, null)
-}
-
-@Composable
-private fun defaultTextProvider(resources: Resources): VKIDButtonTextProvider =
-    remember {
-        object : VKIDButtonTextProvider {
-            override fun userFoundText(user: VKIDUser): String =
-                resources.getString(R.string.vkid_log_in_as, user.firstName)
-
-            override fun noUserText(): String =
-                resources.getString(R.string.vkid_log_in_with_vkid)
-        }
-    }
-
-@Composable
-internal fun VKIDButton(
-    modifier: Modifier = Modifier,
-    style: VKIDButtonStyle = VKIDButtonStyle.Light(),
-    onAuth: (AccessToken) -> Unit,
-    onFail: (VKIDAuthFail) -> Unit = {},
     state: VKIDButtonState = rememberVKIDButtonState(),
     vkid: VKID? = null,
-    textProvider: VKIDButtonTextProvider?
+    textProvider: VKIDButtonTextProvider? = null,
+    onClick: () -> Unit
 ) {
     val useTextProvider = textProvider ?: defaultTextProvider(LocalContext.current.resources)
     // Runs only on initial composition
@@ -111,7 +84,7 @@ internal fun VKIDButton(
             .clip(style.cornersStyle)
             .clipToBounds()
             .background(style.backgroundStyle)
-            .clickable(state, coroutineScope, useVKID, style, onAuth, onFail),
+            .clickable(style, onClick),
     ) {
         // 0.001 and 0.999 because weight can't be null
         @Suppress("MagicNumber")
@@ -143,6 +116,18 @@ internal fun VKIDButton(
         RightIconBox(state, style, Modifier.align(Alignment.CenterEnd))
     }
 }
+
+@Composable
+private fun defaultTextProvider(resources: Resources): VKIDButtonTextProvider =
+    remember {
+        object : VKIDButtonTextProvider {
+            override fun userFoundText(user: VKIDUser): String =
+                resources.getString(R.string.vkid_log_in_as, user.firstName)
+
+            override fun noUserText(): String =
+                resources.getString(R.string.vkid_log_in_with_vkid)
+        }
+    }
 
 @Composable
 private fun FetchUserDataWithAnimation(
@@ -313,14 +298,14 @@ private fun RightIconBox(
 @Preview
 @Composable
 private fun PreviewVKIDButton() {
-    VKIDButton(onAuth = {})
+    VKIDButton(onClick = {})
 }
 
 @Preview
 @Composable
 private fun PreviewVKIDButtonProgress() {
     VKIDButton(
-        onAuth = {},
+        onClick = {},
         state = VKIDButtonState(
             inProgress = true,
             rightIconVisible = true,
@@ -332,7 +317,7 @@ private fun PreviewVKIDButtonProgress() {
 @Composable
 private fun PreviewVKIDButtonUserFailed() {
     VKIDButton(
-        onAuth = {},
+        onClick = {},
         state = VKIDButtonState(
             inProgress = false,
             userLoadFailed = true

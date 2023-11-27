@@ -14,4 +14,8 @@ internal class AuthCallbacksHolder {
     fun getAll(): Set<VKID.AuthCallback> {
         return authCallbacks
     }
+
+    fun clear() {
+        authCallbacks.clear()
+    }
 }

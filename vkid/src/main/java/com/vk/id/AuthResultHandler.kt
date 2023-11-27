@@ -123,11 +123,13 @@ internal class AuthResultHandler(
         callbacksHolder.getAll().forEach {
             it.onSuccess(token)
         }
+        callbacksHolder.clear()
     }
 
     private fun emitAuthFail(fail: VKIDAuthFail) {
         callbacksHolder.getAll().forEach {
             it.onFail(fail)
         }
+        callbacksHolder.clear()
     }
 }

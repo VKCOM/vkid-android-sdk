@@ -33,7 +33,6 @@ import com.vk.id.onetap.compose.onetap.sheet.OneTapBottomSheet
 import com.vk.id.onetap.compose.onetap.sheet.OneTapScenario
 import com.vk.id.onetap.compose.onetap.sheet.rememberOneTapBottomSheetState
 import com.vk.id.onetap.compose.onetap.sheet.style.OneTapBottomSheetStyle
-import com.vk.id.onetap.compose.onetap.sheet.style.OneTapSheetCornersStyle
 import com.vk.id.onetap.compose.onetap.sheet.style.rememberOneTapBottomSheetStyle
 import com.vk.id.sample.app.screen.home.Button
 import com.vk.id.sample.xml.uikit.common.onVKIDAuthFail
@@ -45,7 +44,7 @@ fun OneTapBottomSheetScreen() {
     val context = LocalContext.current
     val selectedScenario = rememberSaveable { mutableStateOf(OneTapScenario.EnterService) }
     val selectedStyle = rememberOneTapBottomSheetStyle(
-        OneTapBottomSheetStyle.Light(cornersStyle = OneTapSheetCornersStyle.None)
+        OneTapBottomSheetStyle.Light()
     )
     Column(
         modifier = Modifier
