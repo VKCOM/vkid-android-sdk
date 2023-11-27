@@ -38,7 +38,8 @@ internal fun parseOneTapAttrs(
 internal class OneTapBottomSheetAttributeSettings(
     val style: OneTapBottomSheetStyle,
     val serviceName: String,
-    val scenario: OneTapScenario
+    val scenario: OneTapScenario,
+    val autoHideOnSuccess: Boolean
 )
 
 internal fun parseOneTapBottomSheetAttrs(
@@ -59,7 +60,8 @@ internal fun parseOneTapBottomSheetAttrs(
                     getOneTapButtonsSize(),
                 ),
                 serviceName = getSheetServiceName(),
-                scenario = getSheetScenario()
+                scenario = getSheetScenario(),
+                autoHideOnSuccess = getSheetAutoHideOnSuccess()
             )
         } finally {
             recycle()
@@ -123,6 +125,10 @@ private fun TypedArray.getSignInToAnotherAccountButtonEnabled(): Boolean {
 
 private fun TypedArray.getSheetServiceName(): String {
     return getString(R.styleable.VKIDOneTap_vkid_bottomSheetServiceName) ?: ""
+}
+
+private fun TypedArray.getSheetAutoHideOnSuccess(): Boolean {
+    return getBoolean(R.styleable.VKIDOneTap_vkid_autoHideOnSuccess, true)
 }
 
 @Suppress("MagicNumber")

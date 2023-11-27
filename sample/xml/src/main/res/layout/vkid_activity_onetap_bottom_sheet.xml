@@ -23,6 +23,7 @@
         android:layout_height="match_parent"
         app:vkid_bottomSheetServiceName="Sample xml"
         app:vkid_bottomSheetScenario="OrderInService"
+        app:vkid_autoHideOnSuccess="false"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
