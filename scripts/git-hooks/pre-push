@@ -35,11 +35,11 @@ runApiCheck() {
 
   status=$?
   if [ "$status" = 0 ]; then
-    echo "Static analysis found no problems."
+    echo "apiCheck found no problems."
   else
     echo "*********************************************************"
     echo "       ********************************************      "
-    echo 1>&2 "Detekt found violations please review them."
+    echo 1>&2 "apiCheck found violations please review them."
     echo "       ********************************************      "
     echo "*********************************************************"
     #Exit
