@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="vkid_oauth_list_widget_title_ok">OK orqali kirish</string>
-    <string name="vkid_oauth_list_widget_title_mail">Mail.ru pochtasi bilan kirish</string>
-    <string name="vkid_oauth_list_widget_title_vk">VK ID orqali kirish</string>
-</resources>
