@@ -1,8 +1,8 @@
 package com.vk.id.onetap.common.button.style
 
 public sealed class OneTapButtonElevationStyle(
-    public val elevation: Int
+    public val elevationDp: Float
 ) {
-    public object Default : OneTapButtonElevationStyle(0)
-    public class Custom(elevation: Int) : OneTapButtonElevationStyle(elevation)
+    public object Default : OneTapButtonElevationStyle(0f)
+    public class Custom(elevationDp: Float) : OneTapButtonElevationStyle(elevationDp)
 }

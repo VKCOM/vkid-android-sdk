@@ -3,6 +3,8 @@ package com.vk.id.onetap.xml
 import android.content.Context
 import android.content.res.TypedArray
 import android.util.AttributeSet
+import android.util.DisplayMetrics
+import android.util.TypedValue
 import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonElevationStyle
@@ -23,9 +25,9 @@ internal fun parseOneTapAttrs(
     ).apply {
         try {
             return getOneTapStyleConstructor()(
-                OneTapButtonCornersStyle.Custom(getButtonsCornerRadius().toInt()),
+                OneTapButtonCornersStyle.Custom(context.pixelsToDp(getButtonsCornerRadius(context))),
                 getOneTapButtonsSize(),
-                OneTapButtonElevationStyle.Custom(getOneTapButtonsElevation().toInt())
+                OneTapButtonElevationStyle.Custom(context.pixelsToDp(getOneTapButtonsElevation(context)))
             ) to getSignInToAnotherAccountButtonEnabled()
         } finally {
             recycle()
@@ -52,8 +54,8 @@ internal fun parseOneTapBottomSheetAttrs(
         try {
             return OneTapBottomSheetAttributeSettings(
                 style = getSheetStyleConstructor()(
-                    OneTapSheetCornersStyle.Custom(getSheetCornerRadius().toInt()),
-                    OneTapButtonCornersStyle.Custom(getButtonsCornerRadius().toInt()),
+                    OneTapSheetCornersStyle.Custom(context.pixelsToDp(getSheetCornerRadius(context))),
+                    OneTapButtonCornersStyle.Custom(context.pixelsToDp(getButtonsCornerRadius(context))),
                     getOneTapButtonsSize(),
                 ),
                 serviceName = getSheetServiceName(),
@@ -65,19 +67,19 @@ internal fun parseOneTapBottomSheetAttrs(
     }
 }
 
-private fun TypedArray.getSheetCornerRadius() = getDimension(
+private fun TypedArray.getSheetCornerRadius(context: Context) = getDimension(
     R.styleable.VKIDOneTap_vkid_bottomSheetCornerRadius,
-    OneTapSheetCornersStyle.Default.radiusDp.toFloat()
+    context.dpToPixels(OneTapSheetCornersStyle.Default.radiusDp)
 )
 
-private fun TypedArray.getButtonsCornerRadius() = getDimension(
+private fun TypedArray.getButtonsCornerRadius(context: Context) = getDimension(
     R.styleable.VKIDOneTap_vkid_buttonsCornerRadius,
-    OneTapButtonCornersStyle.Default.radiusDp.toFloat()
+    context.dpToPixels(OneTapButtonCornersStyle.Default.radiusDp)
 )
 
-private fun TypedArray.getOneTapButtonsElevation() = getDimension(
+private fun TypedArray.getOneTapButtonsElevation(context: Context) = getDimension(
     R.styleable.VKIDOneTap_vkid_buttonsElevation,
-    OneTapButtonElevationStyle.Default.elevation.toFloat()
+    context.dpToPixels(OneTapButtonElevationStyle.Default.elevationDp)
 )
 
 @Suppress("MagicNumber")
@@ -132,3 +134,11 @@ private fun TypedArray.getSheetScenario() = when (getInt(R.styleable.VKIDOneTap_
     5 -> OneTapScenario.EnterToAccount
     else -> OneTapScenario.EnterService
 }
+
+private fun Context.pixelsToDp(
+    px: Float
+) = px / (resources.displayMetrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)
+
+private fun Context.dpToPixels(
+    dp: Float
+) = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.displayMetrics)

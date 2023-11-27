@@ -11,6 +11,6 @@ internal fun Modifier.shadow(
     style: OneTapButtonElevationStyle,
     cornersStyle: OneTapButtonCornersStyle
 ) = shadow(
-    elevation = style.elevation.dp,
+    elevation = style.elevationDp.dp,
     shape = RoundedCornerShape(cornersStyle.radiusDp.dp),
 )

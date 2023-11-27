@@ -165,12 +165,12 @@ public final class com/vk/id/onetap/common/auth/style/VKIDButtonTextStyle : java
 }
 
 public abstract class com/vk/id/onetap/common/button/style/OneTapButtonCornersStyle {
-	public synthetic fun <init> (ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getRadiusDp ()I
+	public synthetic fun <init> (FLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getRadiusDp ()F
 }
 
 public final class com/vk/id/onetap/common/button/style/OneTapButtonCornersStyle$Custom : com/vk/id/onetap/common/button/style/OneTapButtonCornersStyle {
-	public fun <init> (I)V
+	public fun <init> (F)V
 }
 
 public final class com/vk/id/onetap/common/button/style/OneTapButtonCornersStyle$Default : com/vk/id/onetap/common/button/style/OneTapButtonCornersStyle {
@@ -190,12 +190,12 @@ public final class com/vk/id/onetap/common/button/style/OneTapButtonCornersStyle
 }
 
 public abstract class com/vk/id/onetap/common/button/style/OneTapButtonElevationStyle {
-	public synthetic fun <init> (ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getElevation ()I
+	public synthetic fun <init> (FLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getElevationDp ()F
 }
 
 public final class com/vk/id/onetap/common/button/style/OneTapButtonElevationStyle$Custom : com/vk/id/onetap/common/button/style/OneTapButtonElevationStyle {
-	public fun <init> (I)V
+	public fun <init> (F)V
 }
 
 public final class com/vk/id/onetap/common/button/style/OneTapButtonElevationStyle$Default : com/vk/id/onetap/common/button/style/OneTapButtonElevationStyle {

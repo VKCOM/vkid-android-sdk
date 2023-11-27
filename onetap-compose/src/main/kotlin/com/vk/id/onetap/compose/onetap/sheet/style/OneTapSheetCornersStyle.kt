@@ -6,16 +6,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 
 public sealed class OneTapSheetCornersStyle(
-    public val radiusDp: Int
+    public val radiusDp: Float
 ) {
     public object Default : OneTapSheetCornersStyle(ROUNDED_RADIUS_DP)
     public object None : OneTapSheetCornersStyle(NONE_RADIUS_DP)
     public object Rounded : OneTapSheetCornersStyle(ROUNDED_RADIUS_DP)
-    public class Custom(radiusDp: Int) : OneTapSheetCornersStyle(radiusDp)
+    public class Custom(radiusDp: Float) : OneTapSheetCornersStyle(radiusDp)
 
     private companion object {
-        private const val ROUNDED_RADIUS_DP = 12
-        private const val NONE_RADIUS_DP = 0
+        private const val ROUNDED_RADIUS_DP = 12f
+        private const val NONE_RADIUS_DP = 0f
     }
 }
 

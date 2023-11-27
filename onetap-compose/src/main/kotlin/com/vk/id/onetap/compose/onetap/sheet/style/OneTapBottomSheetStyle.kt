@@ -118,13 +118,13 @@ internal val BottomSheetStyleSaver: Saver<OneTapBottomSheetStyle, Any> = run {
             keysToSave
         },
         restore = {
-            val sheetCornersRadius = it[sheetCornersRadiusKey] as? Int
+            val sheetCornersRadius = it[sheetCornersRadiusKey] as? Float
             val cornersStyle = if (sheetCornersRadius != null) {
                 OneTapSheetCornersStyle.Custom(sheetCornersRadius)
             } else {
                 OneTapSheetCornersStyle.Default
             }
-            val buttonsCornersRadius = it[buttonsCornersRadiusKey] as? Int
+            val buttonsCornersRadius = it[buttonsCornersRadiusKey] as? Float
             val buttonsCornersStyle = if (buttonsCornersRadius != null) {
                 OneTapButtonCornersStyle.Custom(buttonsCornersRadius)
             } else {
