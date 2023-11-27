@@ -19,7 +19,7 @@ internal fun parseOneTapAttrs(
 ): Pair<OneTapStyle, Boolean> {
     context.theme.obtainStyledAttributes(
         attrs,
-        R.styleable.VKIDOneTap,
+        R.styleable.vkid_OneTap,
         0,
         0
     ).apply {
@@ -47,7 +47,7 @@ internal fun parseOneTapBottomSheetAttrs(
 ): OneTapBottomSheetAttributeSettings {
     context.theme.obtainStyledAttributes(
         attrs,
-        R.styleable.VKIDOneTap,
+        R.styleable.vkid_OneTap,
         0,
         0
     ).apply {
@@ -68,22 +68,22 @@ internal fun parseOneTapBottomSheetAttrs(
 }
 
 private fun TypedArray.getSheetCornerRadius(context: Context) = getDimension(
-    R.styleable.VKIDOneTap_vkid_bottomSheetCornerRadius,
+    R.styleable.vkid_OneTap_vkid_bottomSheetCornerRadius,
     context.dpToPixels(OneTapSheetCornersStyle.Default.radiusDp)
 )
 
 private fun TypedArray.getButtonsCornerRadius(context: Context) = getDimension(
-    R.styleable.VKIDOneTap_vkid_buttonsCornerRadius,
+    R.styleable.vkid_OneTap_vkid_buttonsCornerRadius,
     context.dpToPixels(OneTapButtonCornersStyle.Default.radiusDp)
 )
 
 private fun TypedArray.getOneTapButtonsElevation(context: Context) = getDimension(
-    R.styleable.VKIDOneTap_vkid_buttonsElevation,
+    R.styleable.vkid_OneTap_vkid_buttonsElevation,
     context.dpToPixels(OneTapButtonElevationStyle.Default.elevationDp)
 )
 
 @Suppress("MagicNumber")
-private fun TypedArray.getOneTapStyleConstructor() = when (getInt(R.styleable.VKIDOneTap_vkid_onetapStyle, 0)) {
+private fun TypedArray.getOneTapStyleConstructor() = when (getInt(R.styleable.vkid_OneTap_vkid_onetapStyle, 0)) {
     1 -> OneTapStyle::Dark
     2 -> OneTapStyle::TransparentLight
     3 -> OneTapStyle::TransparentDark
@@ -92,7 +92,7 @@ private fun TypedArray.getOneTapStyleConstructor() = when (getInt(R.styleable.VK
 }
 
 @Suppress("MagicNumber")
-private fun TypedArray.getSheetStyleConstructor() = when (getInt(R.styleable.VKIDOneTap_vkid_bottomSheetStyle, 0)) {
+private fun TypedArray.getSheetStyleConstructor() = when (getInt(R.styleable.vkid_OneTap_vkid_bottomSheetStyle, 0)) {
     1 -> OneTapBottomSheetStyle::Dark
     2 -> OneTapBottomSheetStyle::TransparentLight
     3 -> OneTapBottomSheetStyle::TransparentDark
@@ -100,7 +100,7 @@ private fun TypedArray.getSheetStyleConstructor() = when (getInt(R.styleable.VKI
 }
 
 @Suppress("MagicNumber", "CyclomaticComplexMethod")
-private fun TypedArray.getOneTapButtonsSize() = when (getInt(R.styleable.VKIDOneTap_vkid_buttonsSize, 0)) {
+private fun TypedArray.getOneTapButtonsSize() = when (getInt(R.styleable.vkid_OneTap_vkid_buttonsSize, 0)) {
     1 -> OneTapButtonSizeStyle.SMALL_32
     2 -> OneTapButtonSizeStyle.SMALL_34
     3 -> OneTapButtonSizeStyle.SMALL_36
@@ -118,15 +118,15 @@ private fun TypedArray.getOneTapButtonsSize() = when (getInt(R.styleable.VKIDOne
 }
 
 private fun TypedArray.getSignInToAnotherAccountButtonEnabled(): Boolean {
-    return getBoolean(R.styleable.VKIDOneTap_vkid_onetap_show_sign_in_to_another_account, false)
+    return getBoolean(R.styleable.vkid_OneTap_vkid_onetap_show_sign_in_to_another_account, false)
 }
 
 private fun TypedArray.getSheetServiceName(): String {
-    return getString(R.styleable.VKIDOneTap_vkid_bottomSheetServiceName) ?: ""
+    return getString(R.styleable.vkid_OneTap_vkid_bottomSheetServiceName) ?: ""
 }
 
 @Suppress("MagicNumber")
-private fun TypedArray.getSheetScenario() = when (getInt(R.styleable.VKIDOneTap_vkid_bottomSheetScenario, 0)) {
+private fun TypedArray.getSheetScenario() = when (getInt(R.styleable.vkid_OneTap_vkid_bottomSheetScenario, 0)) {
     1 -> OneTapScenario.RegistrationForTheEvent
     2 -> OneTapScenario.Application
     3 -> OneTapScenario.OrderInService

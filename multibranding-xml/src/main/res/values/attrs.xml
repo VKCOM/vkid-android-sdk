@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="OAuthListWidget">
+    <declare-styleable name="vkid_OAuthListWidget">
         <attr name="vkid_oauth_list_style" format="enum">
             <enum name="transparentLight" value="1"/>
             <enum name="transparentDark" value="2"/>
