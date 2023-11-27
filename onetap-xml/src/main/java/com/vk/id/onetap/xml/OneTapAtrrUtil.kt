@@ -3,6 +3,8 @@ package com.vk.id.onetap.xml
 import android.content.Context
 import android.content.res.TypedArray
 import android.util.AttributeSet
+import android.util.DisplayMetrics
+import android.util.TypedValue
 import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonElevationStyle
@@ -25,7 +27,7 @@ internal fun parseOneTapAttrs(
             return getOneTapStyleConstructor()(
                 OneTapButtonCornersStyle.Custom(getButtonsCornerRadius().toInt()),
                 getOneTapButtonsSize(),
-                OneTapButtonElevationStyle.Custom(getOneTapButtonsElevation().toInt())
+                OneTapButtonElevationStyle.Custom(context.pixelsToDp(getOneTapButtonsElevation()))
             ) to getSignInToAnotherAccountButtonEnabled()
         } finally {
             recycle()
@@ -77,7 +79,7 @@ private fun TypedArray.getButtonsCornerRadius() = getDimension(
 
 private fun TypedArray.getOneTapButtonsElevation() = getDimension(
     R.styleable.VKIDOneTap_vkid_buttonsElevation,
-    OneTapButtonElevationStyle.Default.elevation.toFloat()
+    OneTapButtonElevationStyle.Default.elevationDp.toFloat()
 )
 
 @Suppress("MagicNumber")
@@ -132,3 +134,11 @@ private fun TypedArray.getSheetScenario() = when (getInt(R.styleable.VKIDOneTap_
     5 -> OneTapScenario.EnterToAccount
     else -> OneTapScenario.EnterService
 }
+
+private fun Context.pixelsToDp(
+    px: Float
+) = px / (resources.displayMetrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)
+
+private fun Context.dpToPixels(
+    dp: Float
+) = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.displayMetrics)

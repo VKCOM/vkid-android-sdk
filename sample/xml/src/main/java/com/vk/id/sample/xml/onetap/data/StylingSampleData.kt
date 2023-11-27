@@ -9,8 +9,8 @@ import com.vk.id.sample.xml.uikit.item.HalfSpacerItem
 import com.vk.id.sample.xml.uikit.item.SpacerItem
 import com.vk.id.sample.xml.uikit.item.TitleItem
 
-private const val ELEVATION_4_DP = 4
-private const val ELEVATION_8_DP = 8
+private const val ELEVATION_4_DP = 4f
+private const val ELEVATION_8_DP = 8f
 
 public val buttonStylingData: List<Any> = listOf(
     TitleItem("Primary"),
