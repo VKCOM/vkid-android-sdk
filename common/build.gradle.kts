@@ -5,10 +5,5 @@ plugins {
 }
 
 android {
-    namespace = "com.vk.id.multibranding.common"
-}
-
-dependencies {
-    implementation(project(":vkid"))
-    implementation(project(":common"))
+    namespace = "com.vk.id.common"
 }

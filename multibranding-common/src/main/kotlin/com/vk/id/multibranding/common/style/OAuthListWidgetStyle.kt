@@ -1,5 +1,7 @@
 package com.vk.id.multibranding.common.style
 
+import com.vk.id.commn.InternalVKIDApi
+
 /**
  * The style for OAuthListWidget.
  *
@@ -9,6 +11,7 @@ package com.vk.id.multibranding.common.style
  * @param textStyle style of the text displayed of the widget.
  * @param sizeStyle denotes the size of the widget.
  */
+@OptIn(InternalVKIDApi::class)
 public sealed class OAuthListWidgetStyle(
     public val cornersStyle: OAuthListWidgetCornersStyle,
     public val rippleStyle: OAuthListWidgetRippleStyle,
@@ -22,6 +25,7 @@ public sealed class OAuthListWidgetStyle(
      * @param cornersStyle corner radius style.
      * @param sizeStyle denotes the size of the widget.
      */
+    @OptIn(InternalVKIDApi::class)
     public class Light(
         cornersStyle: OAuthListWidgetCornersStyle = OAuthListWidgetCornersStyle.Default,
         sizeStyle: OAuthListWidgetSizeStyle = OAuthListWidgetSizeStyle.DEFAULT,

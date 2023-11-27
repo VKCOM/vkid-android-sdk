@@ -38,6 +38,7 @@ import com.vk.id.OAuth
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.VKIDAuthParams
+import com.vk.id.commn.InternalVKIDApi
 import com.vk.id.multibranding.common.callback.OAuthListWidgetAuthCallback
 import com.vk.id.multibranding.common.style.OAuthListWidgetStyle
 import kotlinx.coroutines.CoroutineScope
@@ -88,6 +89,7 @@ public fun OAuthListWidget(
     }
 }
 
+@OptIn(InternalVKIDApi::class)
 @Suppress("LongParameterList")
 @Composable
 private fun OAuthButton(
@@ -237,6 +239,7 @@ private fun OAuthListImage(
         .height(style.sizeStyle.iconSize()),
 )
 
+@OptIn(InternalVKIDApi::class)
 @Composable
 private fun OAuthListText(
     modifier: Modifier,
