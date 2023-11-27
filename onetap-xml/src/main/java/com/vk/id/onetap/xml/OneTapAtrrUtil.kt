@@ -25,9 +25,9 @@ internal fun parseOneTapAttrs(
     ).apply {
         try {
             return getOneTapStyleConstructor()(
-                OneTapButtonCornersStyle.Custom(getButtonsCornerRadius().toInt()),
+                OneTapButtonCornersStyle.Custom(context.pixelsToDp(getButtonsCornerRadius(context))),
                 getOneTapButtonsSize(),
-                OneTapButtonElevationStyle.Custom(context.pixelsToDp(getOneTapButtonsElevation()))
+                OneTapButtonElevationStyle.Custom(context.pixelsToDp(getOneTapButtonsElevation(context)))
             ) to getSignInToAnotherAccountButtonEnabled()
         } finally {
             recycle()
@@ -54,8 +54,8 @@ internal fun parseOneTapBottomSheetAttrs(
         try {
             return OneTapBottomSheetAttributeSettings(
                 style = getSheetStyleConstructor()(
-                    OneTapSheetCornersStyle.Custom(getSheetCornerRadius().toInt()),
-                    OneTapButtonCornersStyle.Custom(getButtonsCornerRadius().toInt()),
+                    OneTapSheetCornersStyle.Custom(context.pixelsToDp(getSheetCornerRadius(context))),
+                    OneTapButtonCornersStyle.Custom(context.pixelsToDp(getButtonsCornerRadius(context))),
                     getOneTapButtonsSize(),
                 ),
                 serviceName = getSheetServiceName(),
@@ -67,19 +67,19 @@ internal fun parseOneTapBottomSheetAttrs(
     }
 }
 
-private fun TypedArray.getSheetCornerRadius() = getDimension(
+private fun TypedArray.getSheetCornerRadius(context: Context) = getDimension(
     R.styleable.VKIDOneTap_vkid_bottomSheetCornerRadius,
-    OneTapSheetCornersStyle.Default.radiusDp.toFloat()
+    context.dpToPixels(OneTapSheetCornersStyle.Default.radiusDp)
 )
 
-private fun TypedArray.getButtonsCornerRadius() = getDimension(
+private fun TypedArray.getButtonsCornerRadius(context: Context) = getDimension(
     R.styleable.VKIDOneTap_vkid_buttonsCornerRadius,
-    OneTapButtonCornersStyle.Default.radiusDp.toFloat()
+    context.dpToPixels(OneTapButtonCornersStyle.Default.radiusDp)
 )
 
-private fun TypedArray.getOneTapButtonsElevation() = getDimension(
+private fun TypedArray.getOneTapButtonsElevation(context: Context) = getDimension(
     R.styleable.VKIDOneTap_vkid_buttonsElevation,
-    OneTapButtonElevationStyle.Default.elevationDp.toFloat()
+    context.dpToPixels(OneTapButtonElevationStyle.Default.elevationDp)
 )
 
 @Suppress("MagicNumber")
