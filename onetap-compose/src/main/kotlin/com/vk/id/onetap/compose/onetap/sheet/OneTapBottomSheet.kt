@@ -125,7 +125,9 @@ private fun processSheetShow(
 ): (Boolean) -> Unit =
     remember {
         { show ->
-            authStatus.value = OneTapBottomSheetAuthStatus.Init
+            if (show) {
+                authStatus.value = OneTapBottomSheetAuthStatus.Init
+            }
             if (show) {
                 showBottomSheet.value = true
             } else {
