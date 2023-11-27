@@ -5,6 +5,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,7 +27,9 @@ import com.vk.id.onetap.compose.onetap.sheet.content.startAlternateAuth
 import com.vk.id.onetap.compose.onetap.sheet.content.startVKIDAuth
 import com.vk.id.onetap.compose.onetap.sheet.style.OneTapBottomSheetStyle
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
 public fun rememberOneTapBottomSheetState(): OneTapBottomSheetState {
@@ -39,6 +42,7 @@ public fun OneTapBottomSheet(
     state: OneTapBottomSheetState = rememberOneTapBottomSheetState(),
     serviceName: String,
     scenario: OneTapScenario = OneTapScenario.EnterService,
+    autoHideOnSuccess: Boolean = true,
     onAuth: (AccessToken) -> Unit,
     onFail: (VKIDAuthFail) -> Unit = {},
     style: OneTapBottomSheetStyle = OneTapBottomSheetStyle.Light(),
@@ -48,7 +52,7 @@ public fun OneTapBottomSheet(
     val useVKID = vkid ?: remember {
         VKID(context)
     }
-    OneTapBottomSheetInternal(modifier, state, serviceName, scenario, onAuth, onFail, style, useVKID)
+    OneTapBottomSheetInternal(modifier, state, serviceName, scenario, autoHideOnSuccess, onAuth, onFail, style, useVKID)
 }
 
 @Suppress("LongParameterList")
@@ -59,6 +63,7 @@ private fun OneTapBottomSheetInternal(
     state: OneTapBottomSheetState,
     serviceName: String,
     scenario: OneTapScenario,
+    autoHideOnSuccess: Boolean,
     onAuth: (AccessToken) -> Unit,
     onFail: (VKIDAuthFail) -> Unit,
     style: OneTapBottomSheetStyle,
@@ -109,7 +114,15 @@ private fun OneTapBottomSheetInternal(
                     startVKIDAuth(coroutineScope, vkid, style, onAuth, onFail, authStatus)
                 }
 
-                OneTapBottomSheetAuthStatus.AuthSuccess -> SheetContentAuthSuccess(serviceName, style, dismissSheet)
+                OneTapBottomSheetAuthStatus.AuthSuccess -> {
+                    if (autoHideOnSuccess) {
+                        LaunchedEffect(Unit) {
+                            delay(1.seconds)
+                            state.hide()
+                        }
+                    }
+                    SheetContentAuthSuccess(serviceName, style, dismissSheet)
+                }
             }
         }
     }

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -46,6 +47,7 @@ fun OneTapBottomSheetScreen() {
     val selectedStyle = rememberOneTapBottomSheetStyle(
         OneTapBottomSheetStyle.Light()
     )
+    val autoHideSheetOnSuccess = rememberSaveable { mutableStateOf(true) }
     Column(
         modifier = Modifier
             .padding(16.dp)
@@ -60,6 +62,7 @@ fun OneTapBottomSheetScreen() {
             onFail = { onVKIDAuthFail(context, it) },
             state = bottomSheetState,
             scenario = selectedScenario.value,
+            autoHideOnSuccess = autoHideSheetOnSuccess.value,
             serviceName = "VKID Sample"
         )
         Selector("Scenario") {
@@ -67,6 +70,10 @@ fun OneTapBottomSheetScreen() {
         }
         Selector("Style") {
             StyleMenu(selectedStyle)
+        }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Checkbox(checked = autoHideSheetOnSuccess.value, onCheckedChange = { autoHideSheetOnSuccess.value = it })
+            Text("Auto hide on success")
         }
         Spacer(Modifier.padding(16.dp))
         Row {
