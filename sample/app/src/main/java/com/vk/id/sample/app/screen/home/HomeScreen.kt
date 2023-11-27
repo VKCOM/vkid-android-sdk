@@ -80,6 +80,9 @@ fun HomeScreen(
         Button("OneTapBottomSheet") {
             navController.navigate("onetap-bottom-sheet")
         }
+        Button("OneTapBottomSheet (xml)") {
+            navController.navigate("onetap-bottom-sheet-xml")
+        }
     }
     Box(modifier = Modifier.fillMaxSize()) {
         BuildInfo(

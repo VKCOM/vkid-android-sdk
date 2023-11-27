@@ -39,7 +39,7 @@ public class OneTap @JvmOverloads constructor(
     private var onFail: (VKIDAuthFail) -> Unit = {}
 
     init {
-        val (style, isSignInToAnotherAccountEnabled) = parseAttrs(context, attrs)
+        val (style, isSignInToAnotherAccountEnabled) = parseOneTapAttrs(context, attrs)
         this.style = style
         this.isSignInToAnotherAccountEnabled = isSignInToAnotherAccountEnabled
         addView(composeView)
