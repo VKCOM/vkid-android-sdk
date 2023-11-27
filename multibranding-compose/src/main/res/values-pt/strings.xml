@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="vkid_oauth_list_widget_title_ok">Entrar através do OK</string>
-    <string name="vkid_oauth_list_widget_title_mail">Entrar com o Mail.ru</string>
-    <string name="vkid_oauth_list_widget_title_vk">Entrar pelo VK ID</string>
-</resources>
