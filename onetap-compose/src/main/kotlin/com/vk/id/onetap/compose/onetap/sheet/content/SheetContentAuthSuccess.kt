@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,7 +35,7 @@ internal fun SheetContentAuthSuccess(
             contentDescription = null,
         )
         BasicText(
-            text = "Успешно",
+            text = stringResource(id = R.string.vkid_sheet_state_auth_success),
             modifier = Modifier.padding(top = 12.dp),
             style = TextStyle(
                 color = colorResource(style.contentTextColor),

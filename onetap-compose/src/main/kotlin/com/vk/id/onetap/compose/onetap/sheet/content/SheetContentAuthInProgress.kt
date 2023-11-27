@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,7 +37,7 @@ internal fun SheetContentAuthInProgress(serviceName: String, style: OneTapBottom
         Spacer(modifier = Modifier.height(48.dp))
         CircleProgress(R.drawable.vkid_sheet_spinner)
         BasicText(
-            text = "Авторизация...",
+            text = stringResource(id = R.string.vkid_sheet_state_auth_in_progress),
             modifier = Modifier.padding(top = 12.dp),
             style = TextStyle(
                 color = colorResource(style.contentTextColor),
