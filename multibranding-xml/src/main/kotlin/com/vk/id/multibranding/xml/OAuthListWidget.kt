@@ -41,7 +41,7 @@ public class OAuthListWidget @JvmOverloads constructor(
     private var onStyleChange: (OAuthListWidgetStyle) -> Unit = {}
 
     /** A set of [OAuth]s the should be displayed to the user. */
-    public var oAuths: Set<OAuth> = emptySet()
+    public var oAuths: Set<OAuth> = OAuth.values().toSet()
         set(value) {
             field = value
             onOAuthsChange(value)
@@ -101,7 +101,7 @@ private fun parseAttrs(
 ): Pair<OAuthListWidgetStyle, Set<OAuth>> {
     context.theme.obtainStyledAttributes(
         attrs,
-        R.styleable.OAuthListWidget,
+        R.styleable.vkid_OAuthListWidget,
         0,
         0
     ).apply {
@@ -117,17 +117,17 @@ private fun parseAttrs(
 }
 
 private fun TypedArray.getCornerRadius(context: Context) = getDimension(
-    R.styleable.OAuthListWidget_vkid_oauth_list_cornerRadius,
+    R.styleable.vkid_OAuthListWidget_vkid_oAuthListCornerRadius,
     context.dpToPixels(OAuthListWidgetCornersStyle.Default.radiusDp)
 )
 
-private fun TypedArray.getStyleConstructor() = when (getInt(R.styleable.OAuthListWidget_vkid_oauth_list_style, 0)) {
+private fun TypedArray.getStyleConstructor() = when (getInt(R.styleable.vkid_OAuthListWidget_vkid_OAuthListStyle, 0)) {
     1 -> OAuthListWidgetStyle::Light
     else -> OAuthListWidgetStyle::Dark
 }
 
 @Suppress("MagicNumber", "CyclomaticComplexMethod")
-private fun TypedArray.getSize() = when (getInt(R.styleable.OAuthListWidget_vkid_oauth_list_size, 0)) {
+private fun TypedArray.getSize() = when (getInt(R.styleable.vkid_OAuthListWidget_vkid_oAuthListSize, 0)) {
     1 -> OAuthListWidgetSizeStyle.SMALL_32
     2 -> OAuthListWidgetSizeStyle.SMALL_34
     3 -> OAuthListWidgetSizeStyle.SMALL_36
@@ -145,7 +145,7 @@ private fun TypedArray.getSize() = when (getInt(R.styleable.OAuthListWidget_vkid
 }
 
 private fun TypedArray.getOAuths(): Set<OAuth> {
-    return (getString(R.styleable.OAuthListWidget_vkid_oauth_list_allowed_oauths) ?: "vk,mail,ok")
+    return (getString(R.styleable.vkid_OAuthListWidget_vkid_oAuthListAllowedOAuths) ?: "vk,mail,ok")
         .split(',')
         .map {
             when (it) {

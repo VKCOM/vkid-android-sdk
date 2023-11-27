@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="VKIDOneTap">
+    <declare-styleable name="vkid_OneTap">
         <attr name="vkid_onetapStyle" format="enum">
             <enum name="light" value="0"/>
             <enum name="dark" value="1"/>
@@ -26,7 +26,7 @@
             <enum name="large54" value="12"/>
             <enum name="large56" value="13"/>
         </attr>
-        <attr name="vkid_onetap_show_sign_in_to_another_account" format="boolean"/>
+        <attr name="vkid_onetapShowSignInToAnotherAccount" format="boolean"/>
         <attr name="vkid_bottomSheetStyle" format="enum">
             <enum name="light" value="0"/>
             <enum name="dark" value="1"/>

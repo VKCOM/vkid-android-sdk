@@ -43,12 +43,6 @@ import com.vk.id.multibranding.common.style.OAuthListWidgetStyle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-private val sourceItems = listOf(
-    OAuth.VK,
-    OAuth.MAIL,
-    OAuth.OK,
-)
-
 /**
  * Constructs a multibranding widget that supports auth with multiple [OAuth]s.
  *
@@ -69,23 +63,25 @@ public fun OAuthListWidget(
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     val vkid = remember { VKID(context) }
-    val items = remember { sourceItems.filter { it in oAuths } }
+    if (oAuths.isEmpty()) {
+        error("You need to add at least one oAuth to display the widget")
+    }
     Row(
         modifier = modifier
     ) {
-        items.forEachIndexed { index, item ->
+        oAuths.forEachIndexed { index, item ->
             OAuthButton(
                 modifier = Modifier.weight(1f),
                 context = context,
                 style = style,
                 item = item,
-                showText = items.size == 1,
+                showText = oAuths.size == 1,
                 coroutineScope = coroutineScope,
                 vkid = vkid,
                 onAuth = onAuth,
                 onFail = onFail,
             )
-            if (index != items.lastIndex) {
+            if (index != oAuths.size - 1) {
                 Spacer(modifier = Modifier.width(12.dp))
             }
         }
