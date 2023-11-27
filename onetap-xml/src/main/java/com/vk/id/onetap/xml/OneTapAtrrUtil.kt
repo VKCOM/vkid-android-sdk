@@ -118,7 +118,7 @@ private fun TypedArray.getOneTapButtonsSize() = when (getInt(R.styleable.vkid_On
 }
 
 private fun TypedArray.getSignInToAnotherAccountButtonEnabled(): Boolean {
-    return getBoolean(R.styleable.vkid_OneTap_vkid_onetap_show_sign_in_to_another_account, false)
+    return getBoolean(R.styleable.vkid_OneTap_vkid_onetapShowSignInToAnotherAccount, false)
 }
 
 private fun TypedArray.getSheetServiceName(): String {

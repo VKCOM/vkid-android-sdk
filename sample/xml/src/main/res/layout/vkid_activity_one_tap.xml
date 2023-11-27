@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             app:vkid_buttonsCornerRadius="0dp"
             app:vkid_onetapStyle="light"
-            app:vkid_onetap_show_sign_in_to_another_account="true" />
+            app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
             android:layout_width="match_parent"
@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             app:vkid_buttonsCornerRadius="8dp"
             app:vkid_onetapStyle="light"
-            app:vkid_onetap_show_sign_in_to_another_account="true" />
+            app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
             android:layout_width="match_parent"
@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             app:vkid_buttonsCornerRadius="1000dp"
             app:vkid_onetapStyle="light"
-            app:vkid_onetap_show_sign_in_to_another_account="true" />
+            app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
             android:layout_width="match_parent"
@@ -69,7 +69,7 @@
             android:layout_height="wrap_content"
             app:vkid_buttonsCornerRadius="0dp"
             app:vkid_onetapStyle="transparentLight"
-            app:vkid_onetap_show_sign_in_to_another_account="true" />
+            app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
             android:layout_width="match_parent"
@@ -80,7 +80,7 @@
             android:layout_height="wrap_content"
             app:vkid_buttonsCornerRadius="8dp"
             app:vkid_onetapStyle="transparentLight"
-            app:vkid_onetap_show_sign_in_to_another_account="true" />
+            app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
             android:layout_width="match_parent"
@@ -91,7 +91,7 @@
             android:layout_height="wrap_content"
             app:vkid_buttonsCornerRadius="1000dp"
             app:vkid_onetapStyle="transparentLight"
-            app:vkid_onetap_show_sign_in_to_another_account="true" />
+            app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
             android:layout_width="match_parent"
@@ -118,7 +118,7 @@
                 android:layout_height="wrap_content"
                 app:vkid_buttonsCornerRadius="0dp"
                 app:vkid_onetapStyle="transparentDark"
-                app:vkid_onetap_show_sign_in_to_another_account="true" />
+                app:vkid_onetapShowSignInToAnotherAccount="true" />
 
             <View
                 android:layout_width="match_parent"
@@ -129,7 +129,7 @@
                 android:layout_height="wrap_content"
                 app:vkid_buttonsCornerRadius="8dp"
                 app:vkid_onetapStyle="transparentDark"
-                app:vkid_onetap_show_sign_in_to_another_account="true" />
+                app:vkid_onetapShowSignInToAnotherAccount="true" />
 
             <View
                 android:layout_width="match_parent"
@@ -140,7 +140,7 @@
                 android:layout_height="wrap_content"
                 app:vkid_buttonsCornerRadius="1000dp"
                 app:vkid_onetapStyle="transparentDark"
-                app:vkid_onetap_show_sign_in_to_another_account="true" />
+                app:vkid_onetapShowSignInToAnotherAccount="true" />
 
             <View
                 android:layout_width="match_parent"
@@ -164,7 +164,7 @@
             android:padding="16dp"
             app:vkid_buttonsElevation="0dp"
             app:vkid_onetapStyle="light"
-            app:vkid_onetap_show_sign_in_to_another_account="true" />
+            app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
             android:layout_width="match_parent"
@@ -177,7 +177,7 @@
             android:padding="16dp"
             app:vkid_buttonsElevation="4dp"
             app:vkid_onetapStyle="light"
-            app:vkid_onetap_show_sign_in_to_another_account="true" />
+            app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
             android:layout_width="match_parent"
@@ -190,7 +190,7 @@
             android:padding="16dp"
             app:vkid_buttonsElevation="8dp"
             app:vkid_onetapStyle="light"
-            app:vkid_onetap_show_sign_in_to_another_account="true" />
+            app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
             android:layout_width="match_parent"
@@ -215,7 +215,7 @@
             android:layout_height="wrap_content"
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="small32"
-            app:vkid_onetap_show_sign_in_to_another_account="true" />
+            app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
             android:layout_width="match_parent"
@@ -226,7 +226,7 @@
             android:layout_height="wrap_content"
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="small34"
-            app:vkid_onetap_show_sign_in_to_another_account="true" />
+            app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
             android:layout_width="match_parent"
@@ -237,7 +237,7 @@
             android:layout_height="wrap_content"
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="small36"
-            app:vkid_onetap_show_sign_in_to_another_account="true" />
+            app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
             android:layout_width="match_parent"
@@ -248,7 +248,7 @@
             android:layout_height="wrap_content"
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="small38"
-            app:vkid_onetap_show_sign_in_to_another_account="true" />
+            app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
             android:layout_width="match_parent"
@@ -259,7 +259,7 @@
             android:layout_height="wrap_content"
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="medium40"
-            app:vkid_onetap_show_sign_in_to_another_account="true" />
+            app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
             android:layout_width="match_parent"
@@ -270,7 +270,7 @@
             android:layout_height="wrap_content"
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="medium42"
-            app:vkid_onetap_show_sign_in_to_another_account="true" />
+            app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
             android:layout_width="match_parent"
@@ -281,7 +281,7 @@
             android:layout_height="wrap_content"
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="medium44"
-            app:vkid_onetap_show_sign_in_to_another_account="true" />
+            app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
             android:layout_width="match_parent"
@@ -292,7 +292,7 @@
             android:layout_height="wrap_content"
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="medium46"
-            app:vkid_onetap_show_sign_in_to_another_account="true" />
+            app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
             android:layout_width="match_parent"
@@ -303,7 +303,7 @@
             android:layout_height="wrap_content"
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="large48"
-            app:vkid_onetap_show_sign_in_to_another_account="true" />
+            app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
             android:layout_width="match_parent"
@@ -314,7 +314,7 @@
             android:layout_height="wrap_content"
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="large50"
-            app:vkid_onetap_show_sign_in_to_another_account="true" />
+            app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
             android:layout_width="match_parent"
@@ -325,7 +325,7 @@
             android:layout_height="wrap_content"
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="large52"
-            app:vkid_onetap_show_sign_in_to_another_account="true" />
+            app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
             android:layout_width="match_parent"
@@ -336,7 +336,7 @@
             android:layout_height="wrap_content"
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="large54"
-            app:vkid_onetap_show_sign_in_to_another_account="true" />
+            app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
             android:layout_width="match_parent"
@@ -347,7 +347,7 @@
             android:layout_height="wrap_content"
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="large56"
-            app:vkid_onetap_show_sign_in_to_another_account="true" />
+            app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
             android:layout_width="match_parent"
