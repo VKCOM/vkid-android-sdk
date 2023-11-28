@@ -45,7 +45,13 @@ internal class AuthResultHandler(
                 AccessToken(
                     authResult.token,
                     authResult.userId,
-                    authResult.expireTime
+                    authResult.expireTime,
+                    VKIDUser(
+                        firstName = authResult.firstName,
+                        lastName = authResult.lastName,
+                        photo200 = authResult.avatar,
+                        phone = authResult.phone,
+                    )
                 )
             )
         }
@@ -100,7 +106,14 @@ internal class AuthResultHandler(
                 AccessToken(
                     payload.accessToken,
                     payload.userId,
-                    payload.expiresIn.toExpireTime
+                    payload.expiresIn.toExpireTime,
+                    VKIDUser(
+                        firstName = oauth.firstName,
+                        lastName = oauth.lastName,
+                        photo200 = oauth.avatar,
+                        phone = payload.phone,
+                        email = payload.email
+                    )
                 )
             )
         }

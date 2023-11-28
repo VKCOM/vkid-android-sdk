@@ -1,15 +1,17 @@
 public final class com/vk/id/AccessToken : android/os/Parcelable {
 	public static final field CREATOR Landroid/os/Parcelable$Creator;
-	public fun <init> (Ljava/lang/String;JJ)V
+	public fun <init> (Ljava/lang/String;JJLcom/vk/id/VKIDUser;)V
 	public final fun component1 ()Ljava/lang/String;
 	public final fun component2 ()J
 	public final fun component3 ()J
-	public final fun copy (Ljava/lang/String;JJ)Lcom/vk/id/AccessToken;
-	public static synthetic fun copy$default (Lcom/vk/id/AccessToken;Ljava/lang/String;JJILjava/lang/Object;)Lcom/vk/id/AccessToken;
+	public final fun component4 ()Lcom/vk/id/VKIDUser;
+	public final fun copy (Ljava/lang/String;JJLcom/vk/id/VKIDUser;)Lcom/vk/id/AccessToken;
+	public static synthetic fun copy$default (Lcom/vk/id/AccessToken;Ljava/lang/String;JJLcom/vk/id/VKIDUser;ILjava/lang/Object;)Lcom/vk/id/AccessToken;
 	public fun describeContents ()I
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getExpireTime ()J
 	public final fun getToken ()Ljava/lang/String;
+	public final fun getUserData ()Lcom/vk/id/VKIDUser;
 	public final fun getUserID ()J
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
@@ -108,18 +110,22 @@ public abstract class com/vk/id/VKIDFetchUserFail {
 	public final fun getDescription ()Ljava/lang/String;
 }
 
-public final class com/vk/id/VKIDUser {
-	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
-	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+public final class com/vk/id/VKIDUser : android/os/Parcelable {
+	public static final field CREATOR Landroid/os/Parcelable$Creator;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Ljava/lang/String;
 	public final fun component2 ()Ljava/lang/String;
 	public final fun component3 ()Ljava/lang/String;
 	public final fun component4 ()Ljava/lang/String;
 	public final fun component5 ()Ljava/lang/String;
 	public final fun component6 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/vk/id/VKIDUser;
-	public static synthetic fun copy$default (Lcom/vk/id/VKIDUser;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/vk/id/VKIDUser;
+	public final fun component7 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/vk/id/VKIDUser;
+	public static synthetic fun copy$default (Lcom/vk/id/VKIDUser;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/vk/id/VKIDUser;
+	public fun describeContents ()I
 	public fun equals (Ljava/lang/Object;)Z
+	public final fun getEmail ()Ljava/lang/String;
 	public final fun getFirstName ()Ljava/lang/String;
 	public final fun getLastName ()Ljava/lang/String;
 	public final fun getPhone ()Ljava/lang/String;
@@ -128,6 +134,15 @@ public final class com/vk/id/VKIDUser {
 	public final fun getPhoto50 ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
+	public fun writeToParcel (Landroid/os/Parcel;I)V
+}
+
+public final class com/vk/id/VKIDUser$Creator : android/os/Parcelable$Creator {
+	public fun <init> ()V
+	public final fun createFromParcel (Landroid/os/Parcel;)Lcom/vk/id/VKIDUser;
+	public synthetic fun createFromParcel (Landroid/os/Parcel;)Ljava/lang/Object;
+	public final fun newArray (I)[Lcom/vk/id/VKIDUser;
+	public synthetic fun newArray (I)[Ljava/lang/Object;
 }
 
 public final class com/vk/id/auth/VKIDAuthParams {
