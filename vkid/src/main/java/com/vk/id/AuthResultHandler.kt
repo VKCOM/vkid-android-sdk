@@ -1,7 +1,7 @@
 package com.vk.id
 
 import android.content.Context
-import com.vk.AuthCallbacksHolder
+import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.AuthResult
 import com.vk.id.internal.auth.ServiceCredentials

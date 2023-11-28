@@ -1,6 +1,6 @@
 package com.vk.id
 
-import com.vk.AuthCallbacksHolder
+import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.internal.auth.AuthEventBridge
 import com.vk.id.internal.auth.AuthOptions

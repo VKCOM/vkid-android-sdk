@@ -7,7 +7,7 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import com.vk.AuthCallbacksHolder
+import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.AuthOptionsCreator
 import com.vk.id.AuthResultHandler
 import com.vk.id.VKID
