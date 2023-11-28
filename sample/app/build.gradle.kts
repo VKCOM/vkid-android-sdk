@@ -79,10 +79,9 @@ fun BaseAppModuleExtension.initVKID() {
                 )
             } catch (e: FileNotFoundException) {
                 logger.error(
-                    "Create a 'secrets.properties' file in the 'sample' folder and add your 'VKIDClientID' and 'VKIDClientSecret' to it." +
+                    "Warning! Sample would not work!\nCreate the 'secrets.properties' file in the 'sample/app' folder and add your 'VKIDClientID' and 'VKIDClientSecret' to it." +
                             "\nFor more information, refer to the 'README.md' file."
                 )
-                throw e
             }
         }
 
