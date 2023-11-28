@@ -6,9 +6,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
+import com.vk.id.commn.InternalVKIDApi
 import com.vk.id.multibranding.common.style.OAuthListWidgetBorderStyle
 import com.vk.id.multibranding.common.style.OAuthListWidgetCornersStyle
 
+@OptIn(InternalVKIDApi::class)
 internal fun Modifier.border(
     style: OAuthListWidgetBorderStyle,
     cornersStyle: OAuthListWidgetCornersStyle,
