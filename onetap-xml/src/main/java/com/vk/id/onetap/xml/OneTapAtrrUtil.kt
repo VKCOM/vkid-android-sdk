@@ -128,7 +128,7 @@ private fun TypedArray.getSheetServiceName(): String {
 }
 
 private fun TypedArray.getSheetAutoHideOnSuccess(): Boolean {
-    return getBoolean(R.styleable.VKIDOneTap_vkid_autoHideOnSuccess, true)
+    return getBoolean(R.styleable.vkid_OneTap_vkid_autoHideOnSuccess, true)
 }
 
 @Suppress("MagicNumber")
