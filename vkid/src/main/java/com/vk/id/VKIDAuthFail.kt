@@ -1,16 +1,26 @@
 package com.vk.id
 
 public sealed class VKIDAuthFail(public val description: String) {
-    public class Canceled(description: String) : VKIDAuthFail(description)
-    public class FailedApiCall(description: String, public val throwable: Throwable) :
-        VKIDAuthFail(description)
+    public data class Canceled(
+        private val errorDescription: String
+    ) : VKIDAuthFail(errorDescription)
 
-    public class FailedOAuthState(description: String) : VKIDAuthFail(description)
-    public class FailedRedirectActivity(description: String, public val throwable: Throwable?) :
-        VKIDAuthFail(
-            description
-        )
+    public data class FailedApiCall(
+        private val errorDescription: String,
+        public val throwable: Throwable
+    ) : VKIDAuthFail(errorDescription)
 
-    public class NoBrowserAvailable(description: String, public val throwable: Throwable?) :
-        VKIDAuthFail(description)
+    public data class FailedOAuthState(
+        private val errorDescription: String
+    ) : VKIDAuthFail(errorDescription)
+
+    public data class FailedRedirectActivity(
+        private val errorDescription: String,
+        public val throwable: Throwable?
+    ) : VKIDAuthFail(errorDescription)
+
+    public data class NoBrowserAvailable(
+        private val errorDescription: String,
+        public val throwable: Throwable?
+    ) : VKIDAuthFail(errorDescription)
 }
