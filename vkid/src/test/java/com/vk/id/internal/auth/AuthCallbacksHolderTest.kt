@@ -32,7 +32,7 @@ internal class AuthCallbacksHolderTest : BehaviorSpec({
         When("A callback is added and holder is cleared") {
             holder.add(createCallback())
             holder.clear()
-            Then("Holder is empty"){
+            Then("Holder is empty") {
                 holder.getAll() shouldBe emptySet()
             }
         }

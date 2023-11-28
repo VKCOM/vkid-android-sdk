@@ -7,13 +7,13 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.AuthOptionsCreator
 import com.vk.id.AuthResultHandler
 import com.vk.id.VKID
 import com.vk.id.internal.api.VKIDApi
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.AuthActivity
+import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthProvidersChooser
 import com.vk.id.internal.auth.AuthProvidersChooserDefault
 import com.vk.id.internal.auth.ServiceCredentials

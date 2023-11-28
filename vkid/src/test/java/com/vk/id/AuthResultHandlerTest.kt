@@ -21,14 +21,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
 import java.lang.IllegalStateException
 import javax.xml.transform.Result
-import kotlin.Result.Companion
 
 private const val ERROR_MESSAGE = "Error message"
 private val error = IllegalStateException("Error")
 private const val TOKEN = "token"
 private const val USER_ID = 0L
 private const val EXPIRE_TIME = 0L
-private const val EXPIRE_TIME_WITH_DIFF = 1L
 private const val UUID = "uuid"
 private const val DIFFERENT_UUID = "different uuid"
 private const val STATE = "state"
@@ -71,7 +69,6 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             serviceCredentials = serviceCredentials,
             api = api
         )
-
 
         suspend fun BehaviorSpecGivenContainerScope.whenHandleIsCalledWithFail(
             authResult: AuthResult,
@@ -168,7 +165,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
         When("Handle is called and api returns an error") {
             val authResult = authResultSuccess
             val callback = mockk<VKID.AuthCallback>()
-            val call = mockk<VKIDCall< VKIDTokenPayload>>()
+            val call = mockk<VKIDCall<VKIDTokenPayload>>()
             every { callbacksHolder.getAll() } returns setOf(callback)
             every { callback.onFail(any()) } just runs
             every { callbacksHolder.clear() } just runs
@@ -195,7 +192,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
         When("Handle is called and api returns success") {
             val authResult = authResultSuccess
             val callback = mockk<VKID.AuthCallback>()
-            val call = mockk<VKIDCall< VKIDTokenPayload>>()
+            val call = mockk<VKIDCall<VKIDTokenPayload>>()
             val payload = VKIDTokenPayload(TOKEN, 0, USER_ID, "", "", "")
             every { callbacksHolder.getAll() } returns setOf(callback)
             every { callback.onSuccess(any()) } just runs
