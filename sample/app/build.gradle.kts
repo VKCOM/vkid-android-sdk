@@ -54,9 +54,6 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.coroutines.android)
-    androidTestImplementation(libs.tests.ui.junit)
-    debugImplementation(libs.tests.ui.manifest)
-
     debugImplementation(libs.androidx.compose.ui.tooling)
 }
 
