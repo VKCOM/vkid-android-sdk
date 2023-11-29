@@ -61,7 +61,7 @@ import kotlinx.coroutines.launch
 @Composable
 public fun OAuthListWidget(
     modifier: Modifier = Modifier,
-    style: OAuthListWidgetStyle = OAuthListWidgetStyle.Light(),
+    style: OAuthListWidgetStyle = OAuthListWidgetStyle.Dark(),
     onAuth: OAuthListWidgetAuthCallback,
     onFail: (VKIDAuthFail) -> Unit,
     oAuths: Set<OAuth> = OAuth.values().toSet()
@@ -299,8 +299,8 @@ private fun getWidgetTitle(
 }
 
 private fun OAuthListWidgetStyle.toProviderTheme() = when (this) {
-    is OAuthListWidgetStyle.Dark -> Theme.Light
-    is OAuthListWidgetStyle.Light -> Theme.Dark
+    is OAuthListWidgetStyle.Light -> Theme.Light
+    is OAuthListWidgetStyle.Dark -> Theme.Dark
 }
 
 @Preview
@@ -327,7 +327,7 @@ private fun OAuthListWidgetWithTwoItems() {
 @Composable
 private fun OAuthListWidgetLight() {
     OAuthListWidget(
-        style = OAuthListWidgetStyle.Light(),
+        style = OAuthListWidgetStyle.Dark(),
         onAuth = OAuthListWidgetAuthCallback.WithOAuth { _, _ -> },
         onFail = {},
     )
@@ -338,7 +338,7 @@ private fun OAuthListWidgetLight() {
 private fun OAuthListWidgetDark() {
     OAuthListWidget(
         modifier = Modifier.background(Color.White),
-        style = OAuthListWidgetStyle.Dark(),
+        style = OAuthListWidgetStyle.Light(),
         oAuths = setOf(OAuth.VK),
         onAuth = OAuthListWidgetAuthCallback.WithOAuth { _, _ -> },
         onFail = {},

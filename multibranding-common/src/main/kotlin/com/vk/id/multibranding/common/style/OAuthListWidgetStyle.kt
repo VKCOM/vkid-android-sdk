@@ -26,7 +26,7 @@ public sealed class OAuthListWidgetStyle(
      * @param sizeStyle denotes the size of the widget.
      */
     @OptIn(InternalVKIDApi::class)
-    public class Light(
+    public class Dark(
         cornersStyle: OAuthListWidgetCornersStyle = OAuthListWidgetCornersStyle.Default,
         sizeStyle: OAuthListWidgetSizeStyle = OAuthListWidgetSizeStyle.DEFAULT,
     ) : OAuthListWidgetStyle(
@@ -43,7 +43,7 @@ public sealed class OAuthListWidgetStyle(
      * @param cornersStyle corner radius style.
      * @param sizeStyle denotes the size of the widget.
      */
-    public class Dark(
+    public class Light(
         cornersStyle: OAuthListWidgetCornersStyle = OAuthListWidgetCornersStyle.Default,
         sizeStyle: OAuthListWidgetSizeStyle = OAuthListWidgetSizeStyle.DEFAULT,
     ) : OAuthListWidgetStyle(
