@@ -1,4 +1,4 @@
-package com.vk
+package com.vk.id.internal.auth
 
 import com.vk.id.VKID
 import java.util.Collections
