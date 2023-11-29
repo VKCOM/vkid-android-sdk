@@ -154,12 +154,6 @@ public val multibrandingSampleData: List<Any> = listOf(
     OAuthListWidgetItem(
         style = OAuthListWidgetStyle.Dark(),
         oAuths = setOf(OAuth.VK),
-        width = 100,
-    ),
-    SpacerItem(),
-    OAuthListWidgetItem(
-        style = OAuthListWidgetStyle.Dark(),
-        oAuths = setOf(OAuth.VK),
         width = 200,
     ),
     SpacerItem(),
