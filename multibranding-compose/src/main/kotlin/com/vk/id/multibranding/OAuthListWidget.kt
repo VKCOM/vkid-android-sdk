@@ -27,6 +27,7 @@ import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -70,7 +71,10 @@ public fun OAuthListWidget(
     if (oAuths.isEmpty()) {
         error("You need to add at least one oAuth to display the widget")
     }
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         OAuthTitle()
         Spacer(modifier = Modifier.height(16.dp))
         Row {
@@ -96,7 +100,7 @@ public fun OAuthListWidget(
 
 @Composable
 private fun OAuthTitle() = BasicText(
-    text = "или войти через VK ID с использованием данных из сервиса",
+    text = stringResource(id = R.string.vkid_oauth_list_widget_note),
     style = TextStyle(
         fontSize = 13.sp,
         lineHeight = 16.sp,

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="vkid_oauth_list_widget_note">or sign in with VK ID using information from a service</string>
     <string name="vkid_oauth_list_widget_title_ok">Sign in with OK</string>
     <string name="vkid_oauth_list_widget_title_mail">Sign in with Mail.ru</string>
     <string name="vkid_oauth_list_widget_title_vk">Sign in with VK ID</string>
