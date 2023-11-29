@@ -37,7 +37,7 @@ public sealed class AlternateAccountButtonStyle(
         sizeStyle = sizeStyle,
     )
 
-    public class TransparentDark(
+    public class TransparentLight(
         cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
         sizeStyle: OneTapButtonSizeStyle = OneTapButtonSizeStyle.MEDIUM_44,
     ) : AlternateAccountButtonStyle(
@@ -49,7 +49,7 @@ public sealed class AlternateAccountButtonStyle(
         sizeStyle = sizeStyle,
     )
 
-    public class TransparentLight(
+    public class TransparentDark(
         cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
         sizeStyle: OneTapButtonSizeStyle = OneTapButtonSizeStyle.MEDIUM_44,
     ) : AlternateAccountButtonStyle(

@@ -58,7 +58,7 @@ public sealed class VKIDButtonStyle(
         elevationStyle = elevationStyle,
     )
 
-    public class TransparentDark(
+    public class TransparentLight(
         cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
         sizeStyle: OneTapButtonSizeStyle = OneTapButtonSizeStyle.MEDIUM_44,
         elevationStyle: OneTapButtonElevationStyle = OneTapButtonElevationStyle.Default,
@@ -77,7 +77,7 @@ public sealed class VKIDButtonStyle(
         elevationStyle = elevationStyle,
     )
 
-    public class TransparentLight(
+    public class TransparentDark(
         cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
         sizeStyle: OneTapButtonSizeStyle = OneTapButtonSizeStyle.MEDIUM_44,
         elevationStyle: OneTapButtonElevationStyle = OneTapButtonElevationStyle.Default,
