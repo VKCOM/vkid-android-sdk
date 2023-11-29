@@ -61,24 +61,26 @@ dependencies {
 }
 
 fun ApplicationDefaultConfig.initVKID() {
-    val secrets = Properties()
-    try {
-        secrets.load(FileInputStream(file("secrets.properties")))
-        val clientId = secrets["VKIDClientID"] ?: throw IllegalStateException("Add VKIDClientID to file secrets.properties")
-        val clientSecret = secrets["VKIDClientSecret"] ?: throw IllegalStateException("Add VKIDClientSecret to file secrets.properties")
-        addManifestPlaceholders(
-            mapOf(
-                "VKIDRedirectHost" to "vk.com",
-                "VKIDRedirectScheme" to "vk$clientId",
-                "VKIDClientID" to clientId,
-                "VKIDClientSecret" to clientSecret
+    if (gradle.startParameter.taskNames.any { it.contains("assemble") || it.contains("test") }) {
+        val secrets = Properties()
+        try {
+            secrets.load(FileInputStream(file("secrets.properties")))
+            val clientId = secrets["VKIDClientID"] ?: throw IllegalStateException("Add VKIDClientID to file secrets.properties")
+            val clientSecret = secrets["VKIDClientSecret"] ?: throw IllegalStateException("Add VKIDClientSecret to file secrets.properties")
+            addManifestPlaceholders(
+                mapOf(
+                    "VKIDRedirectHost" to "vk.com",
+                    "VKIDRedirectScheme" to "vk$clientId",
+                    "VKIDClientID" to clientId,
+                    "VKIDClientSecret" to clientSecret
+                )
             )
-        )
-    } catch (e: FileNotFoundException) {
-        logger.error(
-            "Warning! Sample would not work!\nCreate the 'secrets.properties' file in the 'sample/app' folder and add your 'VKIDClientID' and 'VKIDClientSecret' to it." +
-                    "\nFor more information, refer to the 'README.md' file."
-        )
+        } catch (e: FileNotFoundException) {
+            logger.error(
+                "Warning! Sample would not work!\nCreate the 'secrets.properties' file in the 'sample/app' folder and add your 'VKIDClientID' and 'VKIDClientSecret' to it." +
+                        "\nFor more information, refer to the 'README.md' file."
+            )
+        }
     }
 }
 
