@@ -41,7 +41,7 @@ internal class AuthResultHandler(
         if (authResult.oauth != null) {
             handleOauth(authResult)
         } else {
-            emitAuthFail(VKIDAuthFail.FailedOAuth("OAuth provider response do not have necessary OAuth data."))
+            emitAuthFail(VKIDAuthFail.FailedOAuth("OAuth provider response does not have necessary OAuth data."))
         }
     }
 
