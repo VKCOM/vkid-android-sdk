@@ -42,6 +42,7 @@ import com.vk.id.OAuth
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.VKIDAuthParams
+import com.vk.id.auth.VKIDAuthParams.Theme
 import com.vk.id.commn.InternalVKIDApi
 import com.vk.id.multibranding.common.callback.OAuthListWidgetAuthCallback
 import com.vk.id.multibranding.common.style.OAuthListWidgetStyle
@@ -150,7 +151,10 @@ private fun OAuthButton(
                                     onFail(fail)
                                 }
                             },
-                            VKIDAuthParams { oAuth = item }
+                            VKIDAuthParams {
+                                oAuth = item
+                                theme = style.toProviderTheme()
+                            }
                         )
                     }
                 }
@@ -292,6 +296,11 @@ private fun getWidgetTitle(
     OAuth.VK -> context.getString(R.string.vkid_oauth_list_widget_title_vk)
     OAuth.MAIL -> context.getString(R.string.vkid_oauth_list_widget_title_mail)
     OAuth.OK -> context.getString(R.string.vkid_oauth_list_widget_title_ok)
+}
+
+private fun OAuthListWidgetStyle.toProviderTheme() = when (this) {
+    is OAuthListWidgetStyle.Dark -> Theme.Light
+    is OAuthListWidgetStyle.Light -> Theme.Dark
 }
 
 @Preview
