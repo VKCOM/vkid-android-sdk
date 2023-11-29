@@ -85,6 +85,10 @@ public final class com/vk/id/VKIDAuthFail$FailedApiCall : com/vk/id/VKIDAuthFail
 	public fun hashCode ()I
 }
 
+public final class com/vk/id/VKIDAuthFail$FailedOAuth : com/vk/id/VKIDAuthFail {
+	public fun <init> (Ljava/lang/String;)V
+}
+
 public final class com/vk/id/VKIDAuthFail$FailedOAuthState : com/vk/id/VKIDAuthFail {
 	public fun <init> (Ljava/lang/String;)V
 	public fun equals (Ljava/lang/Object;)Z
