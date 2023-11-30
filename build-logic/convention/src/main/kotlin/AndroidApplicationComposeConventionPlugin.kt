@@ -12,7 +12,7 @@ class AndroidApplicationComposeConventionPlugin : Plugin<Project> {
             pluginManager.apply("vkid.android.application")
             val extension = extensions.getByType<ApplicationExtension>()
             configureAndroidCompose(extension)
-            configureKotest(extension)
+            configureKotest()
             configureDetekt(isCompose = true)
         }
     }
