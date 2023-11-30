@@ -1,0 +1,54 @@
+#!/bin/sh
+
+notifyAboutRunningTheHook() {
+  echo "*********************************************************"
+  echo "Running git pre-push hook."
+  echo "*********************************************************"
+}
+
+navigateToProjectDir() {
+  PROJECT_PATH="$(git rev-parse --show-toplevel)"
+  cd "$PROJECT_PATH"
+}
+
+runDetekt() {
+  echo "Running detekt..."
+  ./gradlew detekt
+
+  status=$?
+  if [ "$status" = 0 ]; then
+    echo "Static analysis found no problems."
+  else
+    echo "*********************************************************"
+    echo "       ********************************************      "
+    echo 1>&2 "Detekt found violations please review them."
+    echo "       ********************************************      "
+    echo "*********************************************************"
+    #Exit
+    exit 1
+  fi
+}
+
+runApiCheck() {
+  echo "Running apiCheck..."
+  ./gradlew apiCheck
+
+  status=$?
+  if [ "$status" = 0 ]; then
+    echo "apiCheck found no problems."
+  else
+    echo "*********************************************************"
+    echo "       ********************************************      "
+    echo 1>&2 "apiCheck found violations please review them."
+    echo "       ********************************************      "
+    echo "*********************************************************"
+    #Exit
+    exit 1
+  fi
+}
+
+set -e
+notifyAboutRunningTheHook
+runDetekt
+runApiCheck
+navigateToProjectDir

@@ -24,13 +24,14 @@
  * SPECIFIC RESULTS OF USE OF THE SOFTWARE.
  * UNDER NO CIRCUMSTANCES LLC “V KONTAKTE” BEAR LIABILITY TO THE LICENSEE OR ANY
  * THIRD PARTIES FOR ANY DAMAGE IN CONNECTION WITH USE OF THE SOFTWARE.
-*/
+ */
 
 package com.vk.id.internal.auth.app
 
 import android.content.Context
 import android.content.pm.PackageManager
 import android.content.pm.Signature
+import android.util.Base64
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.util.Locale
@@ -41,6 +42,12 @@ internal object SilentAuthInfoUtils {
         return calculateDigest(context, pkg, SilentAuthInfoUtils::calculateDigestHex)
     }
 
+    fun calculateDigestBase64(signature: Signature): String {
+        return calculateDigest(signature) { bytes ->
+            Base64.encodeToString(bytes, Base64.DEFAULT)
+        }
+    }
+
     private fun calculateDigestHex(signature: Signature): String {
         return calculateDigest(signature) { bytes ->
             val bi = BigInteger(1, bytes)
@@ -48,7 +55,12 @@ internal object SilentAuthInfoUtils {
         }
     }
 
-    private fun calculateDigest(context: Context, pkg: String, transform: (Signature) -> String): String? {
+    @Suppress("TooGenericExceptionCaught", "SwallowedException")
+    private fun calculateDigest(
+        context: Context,
+        pkg: String,
+        transform: (Signature) -> String
+    ): String? {
         return try {
             context.packageManager
                 .getPackageInfo(pkg, PackageManager.GET_SIGNATURES)

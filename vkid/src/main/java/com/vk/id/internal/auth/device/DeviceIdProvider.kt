@@ -24,7 +24,7 @@
  * SPECIFIC RESULTS OF USE OF THE SOFTWARE.
  * UNDER NO CIRCUMSTANCES LLC “V KONTAKTE” BEAR LIABILITY TO THE LICENSEE OR ANY
  * THIRD PARTIES FOR ANY DAMAGE IN CONNECTION WITH USE OF THE SOFTWARE.
-*/
+ */
 package com.vk.id.internal.auth.device
 
 import android.annotation.SuppressLint
@@ -35,7 +35,7 @@ import android.text.TextUtils
 import com.vk.id.internal.log.createLoggerForClass
 import com.vk.id.internal.util.MD5
 
-internal class DeviceIdProvider (private val deviceIdStorage: DeviceIdStorage) {
+internal class DeviceIdProvider(private val deviceIdStorage: DeviceIdStorage) {
     private val logger = createLoggerForClass()
     private var nextDeviceId = String()
 

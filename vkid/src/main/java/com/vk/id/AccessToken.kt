@@ -7,5 +7,6 @@ import kotlinx.parcelize.Parcelize
 public data class AccessToken(
     val token: String,
     val userID: Long,
-    val expireTime: Long
-): Parcelable
+    val expireTime: Long,
+    val userData: VKIDUser,
+) : Parcelable

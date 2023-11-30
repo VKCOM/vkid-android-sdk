@@ -24,13 +24,15 @@
  * SPECIFIC RESULTS OF USE OF THE SOFTWARE.
  * UNDER NO CIRCUMSTANCES LLC “V KONTAKTE” BEAR LIABILITY TO THE LICENSEE OR ANY
  * THIRD PARTIES FOR ANY DAMAGE IN CONNECTION WITH USE OF THE SOFTWARE.
-*/
+ */
 package com.vk.id.internal.util
 
 import java.security.MessageDigest
 
+@Suppress("MagicNumber")
 internal object MD5 {
-    private val hex = charArrayOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f')
+    private val hex =
+        charArrayOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f')
     private val tmpBuilder by threadLocal { StringBuilder() }
 
     @JvmStatic

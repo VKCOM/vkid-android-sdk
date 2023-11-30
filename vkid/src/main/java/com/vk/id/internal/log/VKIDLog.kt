@@ -20,7 +20,12 @@ internal object VKIDLog : LogEngine {
         return LoggerWithTag(tag, this)
     }
 
-    override fun log(logLevel: LogEngine.LogLevel, tag: String, message: String, throwable: Throwable?) {
+    override fun log(
+        logLevel: LogEngine.LogLevel,
+        tag: String,
+        message: String,
+        throwable: Throwable?
+    ) {
         logEngine.log(logLevel, tag, message, throwable)
     }
 }

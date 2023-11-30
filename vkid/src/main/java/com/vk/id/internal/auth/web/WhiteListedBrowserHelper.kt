@@ -13,6 +13,7 @@ internal object WhiteListedBrowserHelper {
         VersionedBrowserMatcher.SAMSUNG_CUSTOM_TAB
     )
 
+    @Suppress("TooGenericExceptionCaught")
     fun selectBestBrowser(context: Context): BrowserDescriptor? {
         return try {
             val allBrowsers: List<BrowserDescriptor> = BrowserSelector.getAllBrowsers(context)

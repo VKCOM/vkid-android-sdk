@@ -3,6 +3,7 @@ package com.vk.id
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.withType
 
 fun Project.configureDetekt(isCompose: Boolean = false) {
@@ -26,8 +27,13 @@ fun Project.configureDetekt(isCompose: Boolean = false) {
             if (isCompose) "$rootDir/config/detekt-compose.yml" else null
         )
         config.setFrom(configs)
+        autoCorrect = true
+
     }
     tasks.withType<DetektCreateBaselineTask>().configureEach {
         jvmTarget = "1.8"
+    }
+    dependencies {
+        "detektPlugins"(libs.findLibrary("detekt-formatting").get())
     }
 }

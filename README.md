@@ -3,9 +3,37 @@
     <img src="logo.svg" width="150" alt="VK ID SDK Logo">
   </h1>
   <p align="center">
+    <a href="https://artifactory-external.vkpartner.ru/ui/native/vkid-sdk-andorid/com/vk/id/">
+        <img src="https://img.shields.io/badge/stability-beta-red">
+    </a>
+    <a href="LICENSE">
+      <img src="https://img.shields.io/npm/l/@vkid/sdk?maxAge=3600">
+    </a>
+    <a href="https://artifactory-external.vkpartner.ru/ui/native/vkid-sdk-andorid/com/vk/id/">
+        <img src="https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Fartifactory-external.vkpartner.ru%2Fartifactory%2Fvkid-sdk-andorid%2Fcom%2Fvk%2Fid%2Fvkid%2Fmaven-metadata.xml"/>
+    </a>
+  </p>
+  <p align="center">
     VK ID SDK — библиотека для авторизации пользователей Android-приложений с помощью аккаунта VK ID.
   </p>
 </div>
+
+---
+:information_source: VK ID SDK сейчас находится в бета-тестировании. О проблемах вы можете сообщить с помощью <a href="https://github.com/VKCOM/vkid-android-sdk/issues">issues репозитория</a>.
+
+---
+
+## Демонстрация
+
+SDK поставляется с [тестовым примером приложения](sample/app), где можно посмотреть работу авторизации.
+Чтобы тестовое приложение успешно собралось, сначала создайте файл `sample/app/secrets.properties` и пропишите в нем client_id и client_secret вашего приложения VK ID:
+
+
+Файл `secrets.properties`:
+```
+VKIDClientSecret=Ваш защищённый ключ
+VKIDClientID=Ваш ID приложения
+```
 
 ## Предварительно
 
@@ -77,29 +105,18 @@ viewModelScope.launch {
 vkid.authorize(this@MainActivity, vkAuthCallback) // Первый параметр LifecycleOwner, например активити.
 ```
 
-## Демонстрация
-
-SDK поставляется с [тестовым примером приложения](sample), где можно посмотреть работу авторизации.
-Чтобы получить токен, создайте файл secrets.properties и пропишите в нем client_id и client_secret вашего приложения VK ID:
-
-
-Файл `secrets.properties`:
-```
-VKIDClientSecret=Ваш защищённый ключ
-VKIDClientID=Ваш ID приложения
-```
-
 ## Документация
 
 - [Что такое VK ID](https://id.vk.com/business/go/docs/vkid/latest/start-page)
 - [Создание приложения](https://platform.vk.com/docs/vkid/latest/create-application)
 - [Требования к дизайну](https://platform.vk.com/docs/vkid/latest/guidelines/design-rules)
 
+
+## Локальная сборка
+Если проект не собирается со странными ошибками, то скореe всего нужно выставить в настройках проекта в студии jdk-17. Для того, чтобы работали градл-скрипты из консоли, также нужно прописать в переменной среды JAVA_HOME путь по которому находится jdk 17-й версии.
+
 ## Contributing
 Проект VK ID SDK имеет открытый исходный код на GitHub, и вы можете присоединиться к его доработке — мы будем благодарны за внесение улучшений и исправление возможных ошибок.
-
-### Code of Conduct
-Если вы собираетесь вносить изменения в проект VK ID SDK, следуйте [правилам разработки](CODE_OF_CONDUCT.md). Они помогут понять, какие действия возможны, а какие недопустимы.
 
 ### Contributing Guide
 В [руководстве](CONTRIBUTING.md) вы можете подробно ознакомиться с процессом разработки и узнать, как предлагать улучшения и исправления, а ещё — как добавлять и тестировать свои изменения в VK ID SDK.

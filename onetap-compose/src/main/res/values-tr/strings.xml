@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="vkid_log_in_with_vkid">VK ID aracılığıyla gir</string>
+    <string name="vkid_auth_use_another_account">Войти в другой аккаунт</string>
+    <string name="vkid_log_in_as">%1$s olarak devam et</string>
+
+    <string name="vkid_schenario_enter_service_title">Hizmete girin yada oturum oluşturun</string>
+    <string name="vkid_schenario_enter_service_vkid_button_text_user_found">%1$s olarak gir</string>
+    <string name="vkid_schenario_enter_service_vkid_button_text_no_user">VK ID aracılığıyla gir</string>
+
+    <string name="vkid_schenario_registration_for_the_event_title">Eylemde kaydolun</string>
+    <string name="vkid_schenario_registration_for_the_event_vkid_button_text_user_found">%1$s olarak devam et</string>
+    <string name="vkid_schenario_registration_for_the_event_vkid_button_text_no_user">VK ID aracılığıyla devam et</string>
+
+    <string name="vkid_schenario_application_title">VK ID yardımıyla başvuru gönderin</string>
+    <string name="vkid_schenario_application_vkid_button_text_user_found">%1$s olarak devam et</string>
+    <string name="vkid_schenario_application_vkid_button_text_no_user">VK ID aracılığıyla devam et</string>
+
+    <string name="vkid_schenario_order_in_service_title">VK ID aracılığıyla %1$s te sipariş oluşturun</string>
+    <string name="vkid_schenario_order_in_service_vkid_button_text_user_found">%1$s olarak işlem yap</string>
+    <string name="vkid_schenario_order_in_service_vkid_button_text_no_user">VK ID ile işlem yap</string>
+
+    <string name="vkid_schenario_order_title">VK ID aracılığıyla sipariş oluşturun</string>
+    <string name="vkid_schenario_order_vkid_button_text_user_found">%1$s olarak işlem yap</string>
+    <string name="vkid_schenario_order_vkid_button_text_no_user">VK ID ile işlem yap</string>
+
+    <string name="vkid_schenario_enter_to_account_title">%1$s hesabına girin</string>
+    <string name="vkid_schenario_enter_to_account_vkid_button_text_user_found">%1$s olarak gir</string>
+    <string name="vkid_schenario_enter_to_account_vkid_button_text_no_user">VK ID aracılığıyla gir</string>
+
+    <string name="vkid_scenario_common_description">Bundan sonra hizmetin tüm özellikleri kullanımınıza sunulacaktır. Verileriniz güvenilir bir şekilde korunacaktır.</string>
+
+    <string name="vkid_sheet_state_auth_in_progress">Giriş yapılıyor…</string>
+    <string name="vkid_sheet_state_auth_success">Başarılı</string>
+    <string name="vkid_sheet_state_auth_failed_retry">Tekrar dene</string>
+    <string name="vkid_sheet_state_auth_failed">Üye girişi yapılamadı</string>
+</resources>

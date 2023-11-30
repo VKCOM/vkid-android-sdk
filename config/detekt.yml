@@ -5,3 +5,22 @@ build:
 config:
   validation: true
   warningsAsErrors: true
+
+complexity:
+  active: true
+  NestedBlockDepth:
+    # increased from 4 to 5
+    active: true
+    threshold: 5
+
+style:
+  active: true
+  MaxLineLength:
+    # disable to prefer ktlint rule
+    active: false
+
+formatting:
+  active: true
+  MaximumLineLength:
+    active: true
+    maxLineLength: 150

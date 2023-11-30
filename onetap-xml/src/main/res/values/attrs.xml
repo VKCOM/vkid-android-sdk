@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="vkid_OneTap">
+        <attr name="vkid_onetapStyle" format="enum">
+            <enum name="light" value="0"/>
+            <enum name="dark" value="1"/>
+            <enum name="transparentLight" value="2"/>
+            <enum name="transparentDark" value="3"/>
+            <enum name="icon" value="4"/>
+        </attr>
+        <attr name="vkid_buttonsCornerRadius" format="dimension"/>
+        <attr name="vkid_buttonsElevation" format="dimension"/>
+        <attr name="vkid_buttonsSize" format="enum">
+            <enum name="standard" value="0"/>
+            <enum name="small32" value="1"/>
+            <enum name="small34" value="2"/>
+            <enum name="small36" value="3"/>
+            <enum name="small38" value="4"/>
+            <enum name="medium40" value="5"/>
+            <enum name="medium42" value="6"/>
+            <enum name="medium44" value="7"/>
+            <enum name="medium46" value="8"/>
+            <enum name="large48" value="9"/>
+            <enum name="large50" value="10"/>
+            <enum name="large52" value="11"/>
+            <enum name="large54" value="12"/>
+            <enum name="large56" value="13"/>
+        </attr>
+        <attr name="vkid_onetapShowSignInToAnotherAccount" format="boolean"/>
+        <attr name="vkid_bottomSheetStyle" format="enum">
+            <enum name="light" value="0"/>
+            <enum name="dark" value="1"/>
+            <enum name="transparentLight" value="2"/>
+            <enum name="transparentDark" value="3"/>
+        </attr>
+        <attr name="vkid_bottomSheetCornerRadius" format="dimension"/>
+        <attr name="vkid_bottomSheetServiceName" format="string"/>
+        <attr name="vkid_bottomSheetScenario" format="enum">
+            <enum name="EnterService" value="0"/>
+            <enum name="RegistrationForTheEvent" value="1"/>
+            <enum name="Application" value="2"/>
+            <enum name="OrderInService" value="3"/>
+            <enum name="Order" value="4"/>
+            <enum name="EnterToAccount" value="5"/>
+        </attr>
+        <attr name="vkid_autoHideOnSuccess" format="boolean"/>
+    </declare-styleable>
+</resources>

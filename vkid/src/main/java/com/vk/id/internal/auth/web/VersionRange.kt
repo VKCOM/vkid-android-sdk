@@ -50,11 +50,15 @@ internal class VersionRange
         if (lowerBound == null) {
             return if (upperBound == null) {
                 "any version"
-            } else "$upperBound or lower"
+            } else {
+                "$upperBound or lower"
+            }
         }
         return if (upperBound != null) {
             "between $lowerBound and $upperBound"
-        } else "$lowerBound or higher"
+        } else {
+            "$lowerBound or higher"
+        }
     }
 
     companion object {

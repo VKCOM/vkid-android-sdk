@@ -24,10 +24,11 @@
  * SPECIFIC RESULTS OF USE OF THE SOFTWARE.
  * UNDER NO CIRCUMSTANCES LLC “V KONTAKTE” BEAR LIABILITY TO THE LICENSEE OR ANY
  * THIRD PARTIES FOR ANY DAMAGE IN CONNECTION WITH USE OF THE SOFTWARE.
-*/
+ */
 package com.vk.id.internal.auth.pkce
 
 import android.util.Base64
+import com.vk.id.internal.log.createLoggerForClass
 import java.io.UnsupportedEncodingException
 import java.nio.charset.Charset
 import java.security.MessageDigest
@@ -35,6 +36,8 @@ import java.security.NoSuchAlgorithmException
 import java.security.SecureRandom
 
 internal class PkceGeneratorSHA256 {
+
+    private val logger = createLoggerForClass()
 
     fun generateRandomCodeVerifier(entropySource: SecureRandom): String {
         val randomBytes = ByteArray(MIN_CODE_VERIFIER_ENTROPY)
@@ -50,9 +53,11 @@ internal class PkceGeneratorSHA256 {
             val digestBytes = sha256Digester.digest()
             Base64.encodeToString(digestBytes, PKCE_BASE64_ENCODE_SETTINGS)
         } catch (nsae: NoSuchAlgorithmException) {
+            logger.error("SHA-256 algorithm not available", nsae)
             codeVerifier
         } catch (uee: UnsupportedEncodingException) {
-            throw IllegalStateException("${CHARSET_NAME} encoding not supported", uee)
+            logger.error("Can't encode codeVerifier", uee)
+            throw IllegalStateException("$CHARSET_NAME encoding not supported", uee)
         }
     }
 
@@ -60,6 +65,7 @@ internal class PkceGeneratorSHA256 {
         private const val ALGORITHM = "SHA-256"
         private const val CHARSET_NAME = "ISO_8859_1"
         private const val MIN_CODE_VERIFIER_ENTROPY = 32
-        private const val PKCE_BASE64_ENCODE_SETTINGS = Base64.URL_SAFE or Base64.NO_PADDING or Base64.NO_WRAP
+        private const val PKCE_BASE64_ENCODE_SETTINGS =
+            Base64.URL_SAFE or Base64.NO_PADDING or Base64.NO_WRAP
     }
 }

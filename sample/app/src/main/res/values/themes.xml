@@ -1,0 +1,4 @@
+<resources>
+
+    <style name="Theme.LiteSDK" parent="Theme.AppCompat.Light.NoActionBar" />
+</resources>

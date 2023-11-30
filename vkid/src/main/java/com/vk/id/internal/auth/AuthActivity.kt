@@ -9,11 +9,13 @@ import android.os.Build
 import android.os.Bundle
 import androidx.core.app.ActivityOptionsCompat
 import com.vk.id.internal.auth.web.ContextUtils.addNewTaskFlag
+import com.vk.id.internal.log.createLoggerForClass
 import org.json.JSONException
 import org.json.JSONObject
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 
+@Suppress("TooManyFunctions")
 internal class AuthActivity : Activity() {
     /**
      * Flag indicating that auth process was started before onResume (cleared in onPause)
@@ -30,6 +32,8 @@ internal class AuthActivity : Activity() {
 
     private var authIntent: Intent? = null
 
+    private val logger = createLoggerForClass()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         overridePendingTransition(0, 0)
         super.onCreate(savedInstanceState)
@@ -41,7 +45,8 @@ internal class AuthActivity : Activity() {
             savedInstanceState?.getParcelable(KEY_AUTH_INTENT)
         }
 
-        isWaitingForAuthResult = savedInstanceState?.getBoolean(KEY_WAITING_FOR_AUTH_RESULT, false) ?: false
+        isWaitingForAuthResult =
+            savedInstanceState?.getBoolean(KEY_WAITING_FOR_AUTH_RESULT, false) ?: false
 
         processIntent(intent)
     }
@@ -55,7 +60,9 @@ internal class AuthActivity : Activity() {
         super.onResume()
         if (isWaitingForAuthResult && !authWasStarted) {
             // We're waiting for auth result but user returns to activity. Okay. Just finish it.
-            AuthEventBridge.onAuthResult(AuthResult.Canceled("User returns to auth activity without auth"))
+            AuthEventBridge.onAuthResult(
+                AuthResult.Canceled("User returns to auth activity without auth")
+            )
             finish()
         }
     }
@@ -87,13 +94,21 @@ internal class AuthActivity : Activity() {
         if (uri == null) {
             return AuthResult.AuthActiviyResultFailed("AuthActivity opened with null uri", null)
         }
-        val payload = uri.getQueryParameter("payload") ?: ""
-        val payloadJson = try {
-            JSONObject(payload)
+        return try {
+            val payload = uri.getQueryParameter("payload") ?: ""
+            val payloadJson = JSONObject(payload)
+            handlePayloadJson(payloadJson)
         } catch (e: JSONException) {
-            return AuthResult.AuthActiviyResultFailed("AuthActivity opened with invalid payload json", e)
+            AuthResult.AuthActiviyResultFailed(
+                "AuthActivity opened with invalid payload json",
+                e
+            )
+        } catch (e: UnsupportedOperationException) {
+            AuthResult.AuthActiviyResultFailed(
+                "AuthActivity opened with invalid url",
+                e
+            )
         }
-        return handlePayloadJson(payloadJson)
     }
 
     private fun handlePayloadJson(
@@ -107,7 +122,7 @@ internal class AuthActivity : Activity() {
         val code = oauth?.optString("code") ?: ""
         val state = oauth?.optString("state") ?: ""
 
-        return  AuthResult.Success(
+        return AuthResult.Success(
             token = token,
             uuid = uuid,
             expireTime = expireTime,
@@ -119,7 +134,6 @@ internal class AuthActivity : Activity() {
             oauth = oauth?.let { AuthResult.OAuth(code, state, "") }
         )
     }
-
 
     override fun onPause() {
         super.onPause()
@@ -144,8 +158,8 @@ internal class AuthActivity : Activity() {
         private const val KEY_WAITING_FOR_AUTH_RESULT = "KEY_WAITING_FOR_AUTH_RESULT"
 
         /**
-        * @throws android.content.ActivityNotFoundException
-        */
+         * @throws android.content.ActivityNotFoundException
+         */
         internal fun startForAuth(
             context: Context,
             authIntent: Intent,
@@ -179,8 +193,6 @@ internal class AuthActivity : Activity() {
         contract {
             returns(true) implies (intent != null)
         }
-        // todo not reliable?
-        // return intent?.data?.scheme?.startsWith("vk") ?: false
         return intent?.data?.scheme != null
     }
 
@@ -193,12 +205,16 @@ internal class AuthActivity : Activity() {
         }
         return try {
             startActivity(
-                authIntent, ActivityOptionsCompat.makeCustomAnimation(
-                    this, android.R.anim.fade_in, android.R.anim.fade_out
+                authIntent,
+                ActivityOptionsCompat.makeCustomAnimation(
+                    this,
+                    android.R.anim.fade_in,
+                    android.R.anim.fade_out
                 ).toBundle()
             )
             true
         } catch (e: ActivityNotFoundException) {
+            logger.error("Can't start auth", e)
             false
         }
     }
