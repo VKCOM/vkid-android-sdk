@@ -1,10 +1,8 @@
 package com.vk.id.sample.xml.onetap.item
 
 import android.content.Context
-import android.view.Gravity
-import android.widget.FrameLayout
-import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.setPadding
 import com.vk.id.onetap.common.OneTapOAuth
@@ -12,8 +10,8 @@ import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.xml.OneTap
 import com.vk.id.sample.xml.R
 import com.vk.id.sample.xml.uikit.common.dpToPixels
-import com.vk.id.sample.xml.uikit.common.onVKIDAuthFail
-import com.vk.id.sample.xml.uikit.common.onVKIDAuthSuccess
+import com.vk.id.sample.xml.uikit.common.getOneTapFailCallback
+import com.vk.id.sample.xml.uikit.common.getOneTapSuccessCallback
 
 private const val BUTTON_PADDING = 12
 private const val HORIZONTAL_PADDING = 8
@@ -53,10 +51,11 @@ public fun createOneTap(
             setPadding(context.dpToPixels(BUTTON_PADDING))
             this.style = style
             this.layoutParams = layoutParams
+            this.oAuths = item.oAuths
             this.isSignInToAnotherAccountEnabled = true
             setCallbacks(
-                onAuth = { _, it -> onVKIDAuthSuccess(context, it) },
-                onFail = { _, it -> onVKIDAuthFail(context, it) },
+                onAuth = getOneTapSuccessCallback(context) {},
+                onFail = getOneTapFailCallback(context),
             )
         }
     )

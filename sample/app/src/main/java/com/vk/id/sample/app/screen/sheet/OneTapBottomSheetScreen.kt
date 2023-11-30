@@ -38,8 +38,8 @@ import com.vk.id.onetap.compose.onetap.sheet.style.OneTapBottomSheetStyle
 import com.vk.id.onetap.compose.onetap.sheet.style.rememberOneTapBottomSheetStyle
 import com.vk.id.sample.app.screen.Button
 import com.vk.id.sample.app.screen.UseToken
-import com.vk.id.sample.xml.uikit.common.onVKIDAuthFail
-import com.vk.id.sample.xml.uikit.common.onVKIDAuthSuccess
+import com.vk.id.sample.xml.uikit.common.getOneTapFailCallback
+import com.vk.id.sample.xml.uikit.common.getOneTapSuccessCallback
 
 @Preview
 @Composable
@@ -61,11 +61,8 @@ fun OneTapBottomSheetScreen() {
         val bottomSheetState = rememberOneTapBottomSheetState()
         OneTapBottomSheet(
             style = selectedStyle.value,
-            onAuth = { oAuth, accessToken -> // TODO: Handle oAuth
-                token.value = accessToken
-                onVKIDAuthSuccess(context, accessToken)
-            },
-            onFail = { oAuth, fail -> onVKIDAuthFail(context, fail) }, // TODO: Handle oAuth
+            onAuth = getOneTapSuccessCallback(context) { token.value = it },
+            onFail = getOneTapFailCallback(context),
             state = bottomSheetState,
             scenario = selectedScenario.value,
             autoHideOnSuccess = autoHideSheetOnSuccess.value,

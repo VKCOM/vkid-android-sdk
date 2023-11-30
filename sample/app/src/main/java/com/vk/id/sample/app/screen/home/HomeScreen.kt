@@ -33,19 +33,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.vk.id.AccessToken
+import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
+import com.vk.id.onetap.compose.onetap.OneTap
 import com.vk.id.sample.app.BuildConfig
 import com.vk.id.sample.app.R
 import com.vk.id.sample.app.screen.Button
 import com.vk.id.sample.app.screen.UseToken
-import com.vk.id.sample.xml.uikit.common.onVKIDAuthFail
-import com.vk.id.sample.xml.uikit.common.onVKIDAuthSuccess
-import com.vk.id.onetap.common.OneTapOAuth
-import com.vk.id.onetap.compose.onetap.OneTap
-import com.vk.id.onetap.compose.onetap.sheet.OneTapBottomSheet
-import com.vk.id.onetap.compose.onetap.sheet.OneTapScenario
-import com.vk.id.onetap.compose.onetap.sheet.rememberOneTapBottomSheetState
+import com.vk.id.sample.xml.uikit.common.getOneTapFailCallback
+import com.vk.id.sample.xml.uikit.common.getOneTapSuccessCallback
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -68,11 +65,8 @@ fun HomeScreen(
         OneTap(
             modifier = Modifier.width(355.dp),
             style = OneTapStyle.Light(cornersStyle = OneTapButtonCornersStyle.Rounded),
-            onAuth = { oAuth, it -> // TODO: Handle oAuth
-                onVKIDAuthSuccess(context, it)
-                token = it
-            },
-            onFail = { oAuth, fail -> onVKIDAuthFail(context, fail) }, // TODO: Handle oAuth
+            onAuth = getOneTapSuccessCallback(context) { token = it },
+            onFail = getOneTapFailCallback(context),
             signInAnotherAccountButtonEnabled = true,
             oAuths = setOf(OneTapOAuth.MAIL, OneTapOAuth.OK),
         )
