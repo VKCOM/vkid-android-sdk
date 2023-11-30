@@ -4,7 +4,6 @@ package com.vk.id.onetap.compose.onetap.sheet.content
 
 import androidx.compose.runtime.MutableState
 import com.vk.id.AccessToken
-import com.vk.id.OAuth
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.VKIDAuthParams

@@ -10,5 +10,6 @@ android {
 
 dependencies {
     implementation(project(":common"))
+    implementation(project(":multibranding-common"))
     implementation(project(":vkid"))
 }

@@ -19,8 +19,6 @@ import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.VKIDAuthParams
-import com.vk.id.multibranding.common.callback.OAuthListWidgetAuthCallback
-import com.vk.id.multibranding.common.style.OAuthListWidgetStyle
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.compose.onetap.sheet.content.OneTapBottomSheetAuthStatus
 import com.vk.id.onetap.compose.onetap.sheet.content.SheetContentAuthFailed
@@ -65,7 +63,6 @@ public fun OneTapBottomSheet(
     onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit = { _, _ -> },
     oAuths: Set<OneTapOAuth> = emptySet(),
     style: OneTapBottomSheetStyle = OneTapBottomSheetStyle.Light(),
-    oAuthListWidgetStyle: OAuthListWidgetStyle = OAuthListWidgetStyle.Dark(),
     vkid: VKID? = null,
 ) {
     val context = LocalContext.current
@@ -82,7 +79,6 @@ public fun OneTapBottomSheet(
         onFail = onFail,
         oAuths = oAuths,
         style = style,
-        oAuthListWidgetStyle = oAuthListWidgetStyle,
         vkid = useVKID
     )
 }
@@ -99,7 +95,6 @@ private fun OneTapBottomSheetInternal(
     onAuth: (OneTapOAuth?, AccessToken) -> Unit,
     onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit,
     style: OneTapBottomSheetStyle,
-    oAuthListWidgetStyle: OAuthListWidgetStyle,
     oAuths: Set<OneTapOAuth> = emptySet(),
     vkid: VKID
 ) {
@@ -129,7 +124,6 @@ private fun OneTapBottomSheetInternal(
                         onAuth = onAuth,
                         onFail = onFail,
                         oAuths = oAuths,
-                        oAuthListWidgetStyle = oAuthListWidgetStyle,
                         serviceName = serviceName,
                         scenario = scenario,
                         dismissSheet = dismissSheet,
@@ -265,7 +259,6 @@ private fun OneTapBottomSheetPreview() {
         onAuth = { _, _ -> },
         onFail = { _, _ -> },
         oAuths = emptySet(),
-        oAuthListWidgetStyle = OAuthListWidgetStyle.Dark(),
         serviceName = "<Название сервиса>",
         scenario = OneTapScenario.EnterService,
         style = OneTapBottomSheetStyle.TransparentDark(),

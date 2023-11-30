@@ -4,6 +4,8 @@ package com.vk.id.onetap.compose.onetap
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -13,14 +15,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.vk.id.AccessToken
-import com.vk.id.OAuth
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.commn.InternalVKIDApi
 import com.vk.id.multibranding.OAuthListWidget
 import com.vk.id.multibranding.common.callback.OAuthListWidgetAuthCallback
-import com.vk.id.multibranding.common.style.OAuthListWidgetStyle
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.compose.button.alternate.AlternateAccountButton
@@ -49,7 +49,6 @@ public fun OneTap(
     onAuth: (OneTapOAuth?, AccessToken) -> Unit,
     onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit = { _, _ -> },
     oAuths: Set<OneTapOAuth> = emptySet(),
-    oAuthListWidgetStyle: OAuthListWidgetStyle = OAuthListWidgetStyle.Dark(), //TODO: Move to OneTapStyle
     vkid: VKID? = null,
     signInAnotherAccountButtonEnabled: Boolean = false
 ) {
@@ -72,7 +71,6 @@ public fun OneTap(
             modifier = modifier,
             style = style,
             oAuths = oAuths,
-            oAuthListWidgetStyle = oAuthListWidgetStyle,
             vkid = useVKID,
             signInAnotherAccountButtonEnabled = signInAnotherAccountButtonEnabled,
             vkidButtonTextProvider = null,
@@ -110,7 +108,6 @@ internal fun OneTap(
     modifier: Modifier = Modifier,
     style: OneTapStyle = OneTapStyle.Light(),
     oAuths: Set<OneTapOAuth>,
-    oAuthListWidgetStyle: OAuthListWidgetStyle,
     vkid: VKID,
     signInAnotherAccountButtonEnabled: Boolean = false,
     vkidButtonTextProvider: VKIDButtonTextProvider?,
@@ -140,12 +137,13 @@ internal fun OneTap(
             }
         }
         if (oAuths.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(16.dp))
             OAuthListWidget(
                 onAuth = OAuthListWidgetAuthCallback.WithOAuth { oAuth, accessToken ->
                     onAuth(OneTapOAuth.fromOAuth(oAuth), accessToken)
                 },
                 onFail = { oAuth, fail -> onFail(OneTapOAuth.fromOAuth(oAuth), fail) },
-                style = oAuthListWidgetStyle,
+                style = style.oAuthListWidgetStyle,
                 oAuths = oAuths.map { it.toOAuth() }.toSet(),
             )
         }
