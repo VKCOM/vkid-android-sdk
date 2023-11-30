@@ -9,11 +9,25 @@ public final class com/vk/id/onetap/common/BuildConfig {
 	public fun <init> ()V
 }
 
+public final class com/vk/id/onetap/common/OneTapOAuth : java/lang/Enum {
+	public static final field Companion Lcom/vk/id/onetap/common/OneTapOAuth$Companion;
+	public static final field MAIL Lcom/vk/id/onetap/common/OneTapOAuth;
+	public static final field OK Lcom/vk/id/onetap/common/OneTapOAuth;
+	public final fun toOAuth ()Lcom/vk/id/OAuth;
+	public static fun valueOf (Ljava/lang/String;)Lcom/vk/id/onetap/common/OneTapOAuth;
+	public static fun values ()[Lcom/vk/id/onetap/common/OneTapOAuth;
+}
+
+public final class com/vk/id/onetap/common/OneTapOAuth$Companion {
+	public final fun fromOAuth (Lcom/vk/id/OAuth;)Lcom/vk/id/onetap/common/OneTapOAuth;
+}
+
 public abstract class com/vk/id/onetap/common/OneTapStyle {
-	public synthetic fun <init> (Lcom/vk/id/onetap/common/button/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonSizeStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonElevationStyle;Lcom/vk/id/onetap/common/auth/style/VKIDButtonStyle;Lcom/vk/id/onetap/common/alternate/style/AlternateAccountButtonStyle;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Lcom/vk/id/onetap/common/button/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonSizeStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonElevationStyle;Lcom/vk/id/onetap/common/auth/style/VKIDButtonStyle;Lcom/vk/id/onetap/common/alternate/style/AlternateAccountButtonStyle;Lcom/vk/id/multibranding/common/style/OAuthListWidgetStyle;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getAlternateAccountButtonStyle ()Lcom/vk/id/onetap/common/alternate/style/AlternateAccountButtonStyle;
 	public final fun getCornersStyle ()Lcom/vk/id/onetap/common/button/style/OneTapButtonCornersStyle;
 	public final fun getElevationStyle ()Lcom/vk/id/onetap/common/button/style/OneTapButtonElevationStyle;
+	public final fun getOAuthListWidgetStyle ()Lcom/vk/id/multibranding/common/style/OAuthListWidgetStyle;
 	public final fun getSizeStyle ()Lcom/vk/id/onetap/common/button/style/OneTapButtonSizeStyle;
 	public final fun getVkidButtonStyle ()Lcom/vk/id/onetap/common/auth/style/VKIDButtonStyle;
 }
