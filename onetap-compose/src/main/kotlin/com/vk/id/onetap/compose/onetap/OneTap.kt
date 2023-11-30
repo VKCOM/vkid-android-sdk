@@ -103,6 +103,7 @@ public fun OneTap(
     }
 }
 
+@Suppress("LongParameterList")
 @Composable
 internal fun OneTap(
     modifier: Modifier = Modifier,

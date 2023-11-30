@@ -3,6 +3,7 @@ package com.vk.id.onetap.common.mutlibranding.style
 import com.vk.id.multibranding.common.style.OAuthListWidgetSizeStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonSizeStyle
 
+@Suppress("CyclomaticComplexMethod")
 internal fun OneTapButtonSizeStyle.toOAuthListWidgetStyle() = when (this) {
     OneTapButtonSizeStyle.DEFAULT -> OAuthListWidgetSizeStyle.DEFAULT
     OneTapButtonSizeStyle.SMALL_32 -> OAuthListWidgetSizeStyle.SMALL_32

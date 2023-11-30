@@ -83,7 +83,7 @@ public fun OneTapBottomSheet(
     )
 }
 
-@Suppress("LongParameterList")
+@Suppress("LongParameterList", "LongMethod")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun OneTapBottomSheetInternal(
@@ -131,20 +131,39 @@ private fun OneTapBottomSheetInternal(
                         authStatus = authStatus
                     )
                 }
-                is OneTapBottomSheetAuthStatus.AuthStarted -> SheetContentAuthInProgress(serviceName, style, dismissSheet)
+                is OneTapBottomSheetAuthStatus.AuthStarted -> SheetContentAuthInProgress(
+                    serviceName,
+                    style,
+                    dismissSheet
+                )
                 is OneTapBottomSheetAuthStatus.AuthFailedAlternate -> SheetContentAuthFailed(
                     serviceName,
                     style,
                     dismissSheet
                 ) {
-                    startAlternateAuth(coroutineScope, vkid, style, { onAuth(null, it) }, { onFail(null, it) }, authStatus)
+                    startAlternateAuth(
+                        coroutineScope,
+                        vkid,
+                        style,
+                        { onAuth(null, it) },
+                        { onFail(null, it) },
+                        authStatus
+                    )
                 }
 
-                is OneTapBottomSheetAuthStatus.AuthFailedVKID -> SheetContentAuthFailed(serviceName, style, dismissSheet) {
+                is OneTapBottomSheetAuthStatus.AuthFailedVKID -> SheetContentAuthFailed(
+                    serviceName,
+                    style,
+                    dismissSheet
+                ) {
                     startVKIDAuth(coroutineScope, vkid, style, { onAuth(null, it) }, { onFail(null, it) }, authStatus)
                 }
 
-                is OneTapBottomSheetAuthStatus.AuthFailedMultibranding -> SheetContentAuthFailed(serviceName, style, dismissSheet) {
+                is OneTapBottomSheetAuthStatus.AuthFailedMultibranding -> SheetContentAuthFailed(
+                    serviceName,
+                    style,
+                    dismissSheet
+                ) {
                     coroutineScope.launch {
                         vkid.authorize(
                             object : VKID.AuthCallback {
