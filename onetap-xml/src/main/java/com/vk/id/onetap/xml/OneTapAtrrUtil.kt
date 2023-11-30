@@ -155,8 +155,9 @@ private fun TypedArray.getSheetScenario() = when (getInt(R.styleable.vkid_OneTap
 }
 
 private fun TypedArray.getOAuths(): Set<OneTapOAuth> {
-    return (getString(R.styleable.vkid_OneTap_vkid_onetapOAuths) ?: "mail,ok")
+    return (getString(R.styleable.vkid_OneTap_vkid_onetapOAuths) ?: "")
         .split(',')
+        .filter { it.isNotBlank() }
         .map {
             when (it) {
                 "mail" -> OneTapOAuth.MAIL

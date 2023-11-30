@@ -14,6 +14,10 @@ private const val ELEVATION_4_DP = 4f
 private const val ELEVATION_8_DP = 8f
 
 public val buttonStylingData: List<Any> = listOf(
+    TitleItem("Without multibranding"),
+    HalfSpacerItem(),
+    OneTapItem(style = OneTapStyle.Light()),
+    HalfSpacerItem(),
     TitleItem("Primary"),
     HalfSpacerItem(),
     OneTapItem(
