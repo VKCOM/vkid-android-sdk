@@ -33,7 +33,7 @@ public class OAuthListWidget @JvmOverloads constructor(
     private val composeView = ComposeView(context)
 
     /** Styling widget configuration. */
-    public var style: OAuthListWidgetStyle = OAuthListWidgetStyle.Dark()
+    public var style: OAuthListWidgetStyle = OAuthListWidgetStyle.Light()
         set(value) {
             field = value
             onStyleChange(value)
@@ -122,8 +122,8 @@ private fun TypedArray.getCornerRadius(context: Context) = getDimension(
 )
 
 private fun TypedArray.getStyleConstructor() = when (getInt(R.styleable.vkid_OAuthListWidget_vkid_OAuthListStyle, 0)) {
-    1 -> OAuthListWidgetStyle::Light
-    else -> OAuthListWidgetStyle::Dark
+    1 -> OAuthListWidgetStyle::Dark
+    else -> OAuthListWidgetStyle::Light
 }
 
 @Suppress("MagicNumber", "CyclomaticComplexMethod")

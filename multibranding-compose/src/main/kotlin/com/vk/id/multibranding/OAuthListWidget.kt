@@ -42,6 +42,7 @@ import com.vk.id.OAuth
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.VKIDAuthParams
+import com.vk.id.auth.VKIDAuthParams.Theme
 import com.vk.id.commn.InternalVKIDApi
 import com.vk.id.multibranding.common.callback.OAuthListWidgetAuthCallback
 import com.vk.id.multibranding.common.style.OAuthListWidgetStyle
@@ -60,7 +61,7 @@ import kotlinx.coroutines.launch
 @Composable
 public fun OAuthListWidget(
     modifier: Modifier = Modifier,
-    style: OAuthListWidgetStyle = OAuthListWidgetStyle.Light(),
+    style: OAuthListWidgetStyle = OAuthListWidgetStyle.Dark(),
     onAuth: OAuthListWidgetAuthCallback,
     onFail: (VKIDAuthFail) -> Unit,
     oAuths: Set<OAuth> = OAuth.values().toSet()
@@ -150,7 +151,10 @@ private fun OAuthButton(
                                     onFail(fail)
                                 }
                             },
-                            VKIDAuthParams { oAuth = item }
+                            VKIDAuthParams {
+                                oAuth = item
+                                theme = style.toProviderTheme()
+                            }
                         )
                     }
                 }
@@ -294,6 +298,11 @@ private fun getWidgetTitle(
     OAuth.OK -> context.getString(R.string.vkid_oauth_list_widget_title_ok)
 }
 
+private fun OAuthListWidgetStyle.toProviderTheme() = when (this) {
+    is OAuthListWidgetStyle.Light -> Theme.Light
+    is OAuthListWidgetStyle.Dark -> Theme.Dark
+}
+
 @Preview
 @Composable
 private fun OAuthListWidgetWithOneItem() {
@@ -318,7 +327,7 @@ private fun OAuthListWidgetWithTwoItems() {
 @Composable
 private fun OAuthListWidgetLight() {
     OAuthListWidget(
-        style = OAuthListWidgetStyle.Light(),
+        style = OAuthListWidgetStyle.Dark(),
         onAuth = OAuthListWidgetAuthCallback.WithOAuth { _, _ -> },
         onFail = {},
     )
@@ -329,7 +338,7 @@ private fun OAuthListWidgetLight() {
 private fun OAuthListWidgetDark() {
     OAuthListWidget(
         modifier = Modifier.background(Color.White),
-        style = OAuthListWidgetStyle.Dark(),
+        style = OAuthListWidgetStyle.Light(),
         oAuths = setOf(OAuth.VK),
         onAuth = OAuthListWidgetAuthCallback.WithOAuth { _, _ -> },
         onFail = {},

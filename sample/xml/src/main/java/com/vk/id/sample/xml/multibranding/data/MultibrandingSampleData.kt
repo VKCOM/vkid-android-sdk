@@ -13,38 +13,38 @@ public val multibrandingSampleData: List<Any> = listOf(
     TitleItem("Multibranding widget"),
     HalfSpacerItem(),
     OAuthListWidgetItem(
-        style = OAuthListWidgetStyle.Dark(),
+        style = OAuthListWidgetStyle.Light(),
     ),
     SpacerItem(),
     OAuthListWidgetItem(
-        style = OAuthListWidgetStyle.Dark(),
+        style = OAuthListWidgetStyle.Light(),
         oAuths = setOf(OAuth.MAIL, OAuth.OK)
     ),
     SpacerItem(),
     OAuthListWidgetItem(
-        style = OAuthListWidgetStyle.Dark(),
+        style = OAuthListWidgetStyle.Light(),
         oAuths = setOf(OAuth.VK)
     ),
     SpacerItem(),
     OAuthListWidgetItem(
-        style = OAuthListWidgetStyle.Dark(),
+        style = OAuthListWidgetStyle.Light(),
         oAuths = setOf(OAuth.MAIL)
     ),
     SpacerItem(),
     OAuthListWidgetItem(
-        style = OAuthListWidgetStyle.Dark(),
+        style = OAuthListWidgetStyle.Light(),
         oAuths = setOf(OAuth.OK)
     ),
     HalfSpacerItem(),
     TitleItem("Light widget"),
     HalfSpacerItem(isDarkBackground = true),
     OAuthListWidgetItem(
-        style = OAuthListWidgetStyle.Light(),
+        style = OAuthListWidgetStyle.Dark(),
         isDarkBackground = true,
     ),
     SpacerItem(isDarkBackground = true),
     OAuthListWidgetItem(
-        style = OAuthListWidgetStyle.Light(),
+        style = OAuthListWidgetStyle.Dark(),
         isDarkBackground = true,
         oAuths = setOf(OAuth.VK),
     ),
@@ -52,19 +52,19 @@ public val multibrandingSampleData: List<Any> = listOf(
     TitleItem("Corner radius"),
     HalfSpacerItem(),
     OAuthListWidgetItem(
-        style = OAuthListWidgetStyle.Dark(
+        style = OAuthListWidgetStyle.Light(
             cornersStyle = OAuthListWidgetCornersStyle.None
         ),
     ),
     SpacerItem(),
     OAuthListWidgetItem(
-        style = OAuthListWidgetStyle.Dark(
+        style = OAuthListWidgetStyle.Light(
             cornersStyle = OAuthListWidgetCornersStyle.Rounded
         ),
     ),
     SpacerItem(),
     OAuthListWidgetItem(
-        style = OAuthListWidgetStyle.Dark(
+        style = OAuthListWidgetStyle.Light(
             cornersStyle = OAuthListWidgetCornersStyle.Round
         ),
     ),
@@ -72,79 +72,79 @@ public val multibrandingSampleData: List<Any> = listOf(
     TitleItem("Sizes"),
     HalfSpacerItem(),
     OAuthListWidgetItem(
-        style = OAuthListWidgetStyle.Dark(
+        style = OAuthListWidgetStyle.Light(
             sizeStyle = OAuthListWidgetSizeStyle.SMALL_32
         ),
     ),
     SpacerItem(),
     OAuthListWidgetItem(
-        style = OAuthListWidgetStyle.Dark(
+        style = OAuthListWidgetStyle.Light(
             sizeStyle = OAuthListWidgetSizeStyle.SMALL_34
         ),
     ),
     SpacerItem(),
     OAuthListWidgetItem(
-        style = OAuthListWidgetStyle.Dark(
+        style = OAuthListWidgetStyle.Light(
             sizeStyle = OAuthListWidgetSizeStyle.SMALL_36
         ),
     ),
     SpacerItem(),
     OAuthListWidgetItem(
-        style = OAuthListWidgetStyle.Dark(
+        style = OAuthListWidgetStyle.Light(
             sizeStyle = OAuthListWidgetSizeStyle.SMALL_38
         ),
     ),
     SpacerItem(),
     OAuthListWidgetItem(
-        style = OAuthListWidgetStyle.Dark(
+        style = OAuthListWidgetStyle.Light(
             sizeStyle = OAuthListWidgetSizeStyle.MEDIUM_40
         ),
     ),
     SpacerItem(),
     OAuthListWidgetItem(
-        style = OAuthListWidgetStyle.Dark(
+        style = OAuthListWidgetStyle.Light(
             sizeStyle = OAuthListWidgetSizeStyle.MEDIUM_42
         ),
     ),
     SpacerItem(),
     OAuthListWidgetItem(
-        style = OAuthListWidgetStyle.Dark(
+        style = OAuthListWidgetStyle.Light(
             sizeStyle = OAuthListWidgetSizeStyle.MEDIUM_44
         ),
     ),
     SpacerItem(),
     OAuthListWidgetItem(
-        style = OAuthListWidgetStyle.Dark(
+        style = OAuthListWidgetStyle.Light(
             sizeStyle = OAuthListWidgetSizeStyle.MEDIUM_46
         ),
     ),
     SpacerItem(),
     OAuthListWidgetItem(
-        style = OAuthListWidgetStyle.Dark(
+        style = OAuthListWidgetStyle.Light(
             sizeStyle = OAuthListWidgetSizeStyle.LARGE_48
         ),
     ),
     SpacerItem(),
     OAuthListWidgetItem(
-        style = OAuthListWidgetStyle.Dark(
+        style = OAuthListWidgetStyle.Light(
             sizeStyle = OAuthListWidgetSizeStyle.LARGE_50
         ),
     ),
     SpacerItem(),
     OAuthListWidgetItem(
-        style = OAuthListWidgetStyle.Dark(
+        style = OAuthListWidgetStyle.Light(
             sizeStyle = OAuthListWidgetSizeStyle.LARGE_52
         ),
     ),
     SpacerItem(),
     OAuthListWidgetItem(
-        style = OAuthListWidgetStyle.Dark(
+        style = OAuthListWidgetStyle.Light(
             sizeStyle = OAuthListWidgetSizeStyle.LARGE_54
         ),
     ),
     SpacerItem(),
     OAuthListWidgetItem(
-        style = OAuthListWidgetStyle.Dark(
+        style = OAuthListWidgetStyle.Light(
             sizeStyle = OAuthListWidgetSizeStyle.LARGE_56
         ),
     ),
@@ -152,19 +152,19 @@ public val multibrandingSampleData: List<Any> = listOf(
     TitleItem("Small widget"),
     HalfSpacerItem(),
     OAuthListWidgetItem(
-        style = OAuthListWidgetStyle.Dark(),
+        style = OAuthListWidgetStyle.Light(),
         oAuths = setOf(OAuth.VK),
         width = 200,
     ),
     SpacerItem(),
     OAuthListWidgetItem(
-        style = OAuthListWidgetStyle.Dark(),
+        style = OAuthListWidgetStyle.Light(),
         oAuths = setOf(OAuth.VK),
         width = 240,
     ),
     SpacerItem(),
     OAuthListWidgetItem(
-        style = OAuthListWidgetStyle.Dark(),
+        style = OAuthListWidgetStyle.Light(),
         oAuths = setOf(OAuth.VK),
         width = 280,
     ),
