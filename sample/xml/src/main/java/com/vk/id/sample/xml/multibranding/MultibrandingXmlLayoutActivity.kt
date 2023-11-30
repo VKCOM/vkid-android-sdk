@@ -17,7 +17,7 @@ public class MultibrandingXmlLayoutActivity : AppCompatActivity() {
         findViewById<View>(android.R.id.content).rootView.forEachView(OAuthListWidget::class) { widget ->
             widget.setCallbacks(
                 onAuth = getOAuthListCallback(this, {}),
-                onFail = { onVKIDAuthFail(this, it) },
+                onFail = { oAuth, fail -> onVKIDAuthFail(this, fail) }, // TODO: Handle oAuth
             )
         }
     }

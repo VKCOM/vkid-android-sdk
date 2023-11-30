@@ -14,11 +14,10 @@ public class OnetapSheetStylingXmlActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.vkid_activity_onetap_bottom_sheet)
         val vkidOneTapBottomSheet = findViewById<OneTapBottomSheet>(R.id.vkid_bottom_sheet)
-        vkidOneTapBottomSheet.setCallbacks(onAuth = {
-            onVKIDAuthSuccess(this, it)
-        }, onFail = {
-                onVKIDAuthFail(this, it)
-            })
+        vkidOneTapBottomSheet.setCallbacks(
+            onAuth = { oAuth, accessToken -> onVKIDAuthSuccess(this, accessToken) }, // TODO: Handle oAuth
+            onFail = { oAuth, fail -> onVKIDAuthFail(this, fail) } // TODO: Handle oAuth
+        )
         val button = findViewById<Button>(R.id.show_sheet_button)
         button.setOnClickListener {
             vkidOneTapBottomSheet.show()

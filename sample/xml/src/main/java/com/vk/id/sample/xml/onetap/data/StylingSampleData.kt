@@ -1,5 +1,6 @@
 package com.vk.id.sample.xml.onetap.data
 
+import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonElevationStyle
@@ -13,6 +14,15 @@ private const val ELEVATION_4_DP = 4f
 private const val ELEVATION_8_DP = 8f
 
 public val buttonStylingData: List<Any> = listOf(
+    TitleItem("With multibranding"),
+    HalfSpacerItem(),
+    OneTapItem(
+        style = OneTapStyle.Light(
+            cornersStyle = OneTapButtonCornersStyle.None,
+        ),
+        oAuths = setOf(OneTapOAuth.MAIL, OneTapOAuth.OK),
+    ),
+    HalfSpacerItem(),
     TitleItem("Primary"),
     HalfSpacerItem(),
     OneTapItem(

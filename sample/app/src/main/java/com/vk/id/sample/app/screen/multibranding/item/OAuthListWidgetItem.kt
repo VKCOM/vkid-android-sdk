@@ -35,7 +35,7 @@ fun HandleOAuthListWidgetItem(
             modifier = Modifier.width(item.width.dp),
             style = item.style,
             onAuth = getOAuthListCallback(context) { token.value = it },
-            onFail = { onVKIDAuthFail(context, it) },
+            onFail = { oAuth, fail -> onVKIDAuthFail(context, fail) }, // TODO: Handle oAuth
             oAuths = item.oAuths
         )
     }

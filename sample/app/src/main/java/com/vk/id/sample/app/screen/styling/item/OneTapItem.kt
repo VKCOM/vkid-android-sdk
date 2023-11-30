@@ -33,11 +33,12 @@ fun HandleOneTapItem(
         OneTap(
             modifier = Modifier.width(item.width.dp),
             style = item.style,
-            onAuth = {
-                onToken(it)
-                onVKIDAuthSuccess(context, it)
+            onAuth = { oAuth, accessToken ->
+                onToken(accessToken)
+                onVKIDAuthSuccess(context, accessToken) // TODO: Handle oAuth
             },
-            onFail = { onVKIDAuthFail(context, it) },
+            onFail = { oAuth, fail -> onVKIDAuthFail(context, fail) }, // TODO: Handle oAuth
+            oAuths = item.oAuths,
             signInAnotherAccountButtonEnabled = true
         )
     }

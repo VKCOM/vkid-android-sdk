@@ -13,10 +13,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.vk.id.AccessToken
+import com.vk.id.OAuth
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.commn.InternalVKIDApi
+import com.vk.id.multibranding.OAuthListWidget
+import com.vk.id.multibranding.common.callback.OAuthListWidgetAuthCallback
+import com.vk.id.multibranding.common.style.OAuthListWidgetStyle
+import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.compose.button.alternate.AlternateAccountButton
 import com.vk.id.onetap.compose.button.auth.VKIDButton
@@ -41,8 +46,10 @@ import com.vk.id.onetap.compose.button.startAuth
 public fun OneTap(
     modifier: Modifier = Modifier,
     style: OneTapStyle = OneTapStyle.Light(),
-    onAuth: (AccessToken) -> Unit,
-    onFail: (VKIDAuthFail) -> Unit = {},
+    onAuth: (OneTapOAuth?, AccessToken) -> Unit,
+    onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit = { _, _ -> },
+    oAuths: Set<OneTapOAuth> = emptySet(),
+    oAuthListWidgetStyle: OAuthListWidgetStyle = OAuthListWidgetStyle.Dark(), //TODO: Move to OneTapStyle
     vkid: VKID? = null,
     signInAnotherAccountButtonEnabled: Boolean = false
 ) {
@@ -56,23 +63,25 @@ public fun OneTap(
             startAuth(
                 coroutineScope,
                 useVKID,
-                onAuth,
-                onFail
+                { onAuth(null, it) },
+                { onFail(null, it) }
             )
         })
     } else {
         OneTap(
-            modifier,
-            style,
-            useVKID,
-            signInAnotherAccountButtonEnabled,
-            null,
+            modifier = modifier,
+            style = style,
+            oAuths = oAuths,
+            oAuthListWidgetStyle = oAuthListWidgetStyle,
+            vkid = useVKID,
+            signInAnotherAccountButtonEnabled = signInAnotherAccountButtonEnabled,
+            vkidButtonTextProvider = null,
             onVKIDButtonClick = {
                 startAuth(
                     coroutineScope,
                     useVKID,
-                    onAuth,
-                    onFail,
+                    { onAuth(null, it) },
+                    { onFail(null, it) },
                     VKIDAuthParams {
                         theme = style.toProviderTheme()
                     }
@@ -82,14 +91,16 @@ public fun OneTap(
                 startAuth(
                     coroutineScope,
                     useVKID,
-                    onAuth,
-                    onFail,
+                    { onAuth(null, it) },
+                    { onFail(null, it) },
                     VKIDAuthParams {
                         useOAuthProviderIfPossible = false
                         theme = style.toProviderTheme()
                     }
                 )
-            }
+            },
+            onAuth = onAuth,
+            onFail = onFail,
         )
     }
 }
@@ -98,11 +109,15 @@ public fun OneTap(
 internal fun OneTap(
     modifier: Modifier = Modifier,
     style: OneTapStyle = OneTapStyle.Light(),
+    oAuths: Set<OneTapOAuth>,
+    oAuthListWidgetStyle: OAuthListWidgetStyle,
     vkid: VKID,
     signInAnotherAccountButtonEnabled: Boolean = false,
     vkidButtonTextProvider: VKIDButtonTextProvider?,
     onVKIDButtonClick: () -> Unit,
     onAlternateButtonClick: () -> Unit,
+    onAuth: (OneTapOAuth?, AccessToken) -> Unit,
+    onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit,
 ) {
     val vkidButtonState = rememberVKIDButtonState()
     Column(modifier = modifier) {
@@ -124,6 +139,16 @@ internal fun OneTap(
                 )
             }
         }
+        if (oAuths.isNotEmpty()) {
+            OAuthListWidget(
+                onAuth = OAuthListWidgetAuthCallback.WithOAuth { oAuth, accessToken ->
+                    onAuth(OneTapOAuth.fromOAuth(oAuth), accessToken)
+                },
+                onFail = { oAuth, fail -> onFail(OneTapOAuth.fromOAuth(oAuth), fail) },
+                style = oAuthListWidgetStyle,
+                oAuths = oAuths.map { it.toOAuth() }.toSet(),
+            )
+        }
     }
 }
 
@@ -140,5 +165,5 @@ private fun OneTapStyle.toProviderTheme(): VKIDAuthParams.Theme? = when (this) {
 @Preview
 @Composable
 private fun OneTapPreview() {
-    OneTap(onAuth = {})
+    OneTap(onAuth = { _, _ -> })
 }

@@ -4,15 +4,24 @@ package com.vk.id.onetap.compose.onetap.sheet.content
 
 import androidx.compose.runtime.MutableState
 import com.vk.id.AccessToken
+import com.vk.id.OAuth
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.VKIDAuthParams
+import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.compose.button.startAuth
 import com.vk.id.onetap.compose.onetap.sheet.style.OneTapBottomSheetStyle
 import kotlinx.coroutines.CoroutineScope
 
-internal enum class OneTapBottomSheetAuthStatus {
-    Init, AuthStarted, AuthFailedVKID, AuthFailedAlternate, AuthSuccess
+internal sealed class OneTapBottomSheetAuthStatus {
+    object Init : OneTapBottomSheetAuthStatus()
+
+    object AuthStarted : OneTapBottomSheetAuthStatus()
+
+    object AuthFailedVKID : OneTapBottomSheetAuthStatus()
+    object AuthFailedAlternate : OneTapBottomSheetAuthStatus()
+    data class AuthFailedMultibranding(val oAuth: OneTapOAuth) : OneTapBottomSheetAuthStatus()
+    object AuthSuccess : OneTapBottomSheetAuthStatus()
 }
 
 @Suppress("LongParameterList")
@@ -70,7 +79,7 @@ internal fun startAlternateAuth(
     )
 }
 
-private fun OneTapBottomSheetStyle.toProviderTheme(): VKIDAuthParams.Theme = when (this) {
+internal fun OneTapBottomSheetStyle.toProviderTheme(): VKIDAuthParams.Theme = when (this) {
     is OneTapBottomSheetStyle.Dark,
     is OneTapBottomSheetStyle.TransparentDark -> VKIDAuthParams.Theme.Dark
     is OneTapBottomSheetStyle.Light,

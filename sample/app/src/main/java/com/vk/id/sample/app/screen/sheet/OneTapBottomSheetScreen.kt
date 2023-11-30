@@ -61,11 +61,11 @@ fun OneTapBottomSheetScreen() {
         val bottomSheetState = rememberOneTapBottomSheetState()
         OneTapBottomSheet(
             style = selectedStyle.value,
-            onAuth = {
-                token.value = it
-                onVKIDAuthSuccess(context, it)
+            onAuth = { oAuth, accessToken -> // TODO: Handle oAuth
+                token.value = accessToken
+                onVKIDAuthSuccess(context, accessToken)
             },
-            onFail = { onVKIDAuthFail(context, it) },
+            onFail = { oAuth, fail -> onVKIDAuthFail(context, fail) }, // TODO: Handle oAuth
             state = bottomSheetState,
             scenario = selectedScenario.value,
             autoHideOnSuccess = autoHideSheetOnSuccess.value,

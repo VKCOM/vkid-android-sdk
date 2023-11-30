@@ -48,7 +48,7 @@ internal fun createOAuthListWidgetItem(
             this.layoutParams = layoutParams
             setCallbacks(
                 onAuth = getOAuthListCallback(context, {}),
-                onFail = { onVKIDAuthFail(context, it) },
+                onFail = { oAuth, fail -> onVKIDAuthFail(context, fail) }, // TODO: Handle oAuth
             )
             oAuths = item.oAuths
         }

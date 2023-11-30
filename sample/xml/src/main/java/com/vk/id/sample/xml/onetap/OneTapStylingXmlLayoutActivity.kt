@@ -16,8 +16,8 @@ public class OneTapStylingXmlLayoutActivity : AppCompatActivity() {
         setContentView(R.layout.vkid_activity_one_tap)
         findViewById<View>(android.R.id.content).rootView.forEachView(OneTap::class) { widget ->
             widget.setCallbacks(
-                onAuth = { onVKIDAuthSuccess(this, it) },
-                onFail = { onVKIDAuthFail(this, it) },
+                onAuth = { oAuth, accessToken -> onVKIDAuthSuccess(this, accessToken) }, // TODO: Handle oAuth
+                onFail = { oAuth, fail -> onVKIDAuthFail(this, fail) }, // TODO: Handle oAuth
             )
         }
     }
