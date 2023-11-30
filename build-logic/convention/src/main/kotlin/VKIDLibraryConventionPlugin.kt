@@ -31,8 +31,8 @@ class VKIDLibraryConventionPlugin : Plugin<Project> {
                 }
 
                 resourcePrefix("vkid_")
-                configureKotest(this)
             }
+            configureKotest()
             configureDetekt(isCompose = false)
             dependencies {
                 add("androidTestImplementation", kotlin("test"))
