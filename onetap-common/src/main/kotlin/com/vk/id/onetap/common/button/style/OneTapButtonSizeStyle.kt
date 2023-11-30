@@ -1,5 +1,8 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.onetap.common.button.style
 
+import com.vk.id.commn.InternalVKIDApi
 import com.vk.id.onetap.common.icon.style.VKIconSizeStyle
 
 public enum class OneTapButtonSizeStyle {

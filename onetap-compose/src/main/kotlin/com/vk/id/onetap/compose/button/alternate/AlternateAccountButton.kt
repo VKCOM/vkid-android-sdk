@@ -1,3 +1,5 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.onetap.compose.button.alternate
 
 import androidx.compose.foundation.clickable
@@ -16,6 +18,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import com.vk.id.commn.InternalVKIDApi
 import com.vk.id.onetap.common.alternate.style.AlternateAccountButtonStyle
 import com.vk.id.onetap.compose.R
 import com.vk.id.onetap.compose.button.alternate.style.asColorResource

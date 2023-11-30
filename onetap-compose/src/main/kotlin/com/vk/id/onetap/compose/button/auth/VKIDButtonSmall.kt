@@ -1,3 +1,5 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.onetap.compose.button.auth
 
 import androidx.compose.animation.core.Animatable
@@ -27,6 +29,7 @@ import coil.compose.AsyncImage
 import coil.decode.DataSource
 import com.vk.id.VKID
 import com.vk.id.VKIDUser
+import com.vk.id.commn.InternalVKIDApi
 import com.vk.id.onetap.common.auth.style.VKIDButtonStyle
 import com.vk.id.onetap.compose.button.FetchUserData
 import com.vk.id.onetap.compose.button.OnFetchingProgress
