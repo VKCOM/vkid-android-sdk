@@ -41,13 +41,7 @@ internal class AuthResultHandler(
         if (authResult.oauth != null) {
             handleOauth(authResult)
         } else {
-            emitAuthSuccess(
-                AccessToken(
-                    authResult.token,
-                    authResult.userId,
-                    authResult.expireTime
-                )
-            )
+            emitAuthFail(VKIDAuthFail.FailedOAuth("OAuth provider response does not have necessary OAuth data."))
         }
     }
 
@@ -100,7 +94,14 @@ internal class AuthResultHandler(
                 AccessToken(
                     payload.accessToken,
                     payload.userId,
-                    payload.expiresIn.toExpireTime
+                    payload.expiresIn.toExpireTime,
+                    VKIDUser(
+                        firstName = oauth.firstName,
+                        lastName = oauth.lastName,
+                        photo200 = oauth.avatar,
+                        phone = payload.phone,
+                        email = payload.email
+                    )
                 )
             )
         }

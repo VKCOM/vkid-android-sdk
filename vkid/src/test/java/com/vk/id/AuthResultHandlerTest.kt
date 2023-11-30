@@ -19,8 +19,6 @@ import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
-import java.lang.IllegalStateException
-import javax.xml.transform.Result
 
 private const val ERROR_MESSAGE = "Error message"
 private val error = IllegalStateException("Error")
@@ -106,14 +104,16 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             val authResult = authResultSuccess.copy(oauth = null)
             val callback = mockk<VKID.AuthCallback>()
             every { callbacksHolder.getAll() } returns setOf(callback)
-            every { callback.onSuccess(any()) } just runs
+            every { callback.onFail(any()) } just runs
             every { callbacksHolder.clear() } just runs
             handler.handle(authResult)
             Then("Callbacks are requested from holder") {
                 verify { callbacksHolder.getAll() }
             }
             Then("It is emitted") {
-                verify { callback.onSuccess(AccessToken(TOKEN, USER_ID, EXPIRE_TIME)) }
+                verify {
+                    callback.onFail(ofType(VKIDAuthFail.FailedOAuth::class))
+                }
             }
             Then("Callbacks holder is cleared") {
                 verify { callbacksHolder.clear() }
@@ -135,7 +135,14 @@ internal class AuthResultHandlerTest : BehaviorSpec({
                 verify { callbacksHolder.getAll() }
             }
             Then("It is emitted") {
-                verify { callback.onFail(VKIDAuthFail.FailedOAuthState("Invalid uuid")) }
+                verify {
+                    callback.onFail(
+                        match {
+                            it is VKIDAuthFail.FailedOAuthState &&
+                                it.description == "Invalid uuid"
+                        }
+                    )
+                }
             }
             Then("Callbacks holder is cleared") {
                 verify { callbacksHolder.clear() }
@@ -176,7 +183,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             every { serviceCredentials.clientSecret } returns CLIENT_SECRET
             every { serviceCredentials.redirectUri } returns REDIRECT_URI
             every { api.getToken(CODE, CODE_VERIFIER, CLIENT_ID, CLIENT_SECRET, UUID, REDIRECT_URI) } returns call
-            every { call.execute() } returns kotlin.Result.failure(error)
+            every { call.execute() } returns Result.failure(error)
             launch(testDispatcher) { handler.handle(authResult) }
             testDispatcher.scheduler.advanceUntilIdle()
             Then("Callbacks are requested from holder") {
@@ -211,7 +218,22 @@ internal class AuthResultHandlerTest : BehaviorSpec({
                 verify { callbacksHolder.getAll() }
             }
             Then("It is emitted") {
-                verify { callback.onSuccess(AccessToken(TOKEN, USER_ID, -1)) }
+                verify {
+                    callback.onSuccess(
+                        AccessToken(
+                            TOKEN,
+                            USER_ID,
+                            -1,
+                            VKIDUser(
+                                firstName = "first name",
+                                lastName = "last name",
+                                phone = "",
+                                photo200 = "avatar",
+                                email = ""
+                            )
+                        )
+                    )
+                }
             }
             Then("Callbacks holder is cleared") {
                 verify { callbacksHolder.clear() }

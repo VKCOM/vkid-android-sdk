@@ -30,6 +30,8 @@ public sealed class VKIDAuthFail(
         }
     }
 
+    public class FailedOAuth(description: String) : VKIDAuthFail(description)
+
     public class FailedOAuthState(description: String) : VKIDAuthFail(description) {
         override fun equals(other: Any?): Boolean {
             return other is FailedOAuthState && description == other.description

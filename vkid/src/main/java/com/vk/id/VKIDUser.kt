@@ -1,7 +1,10 @@
 package com.vk.id
 
+import android.os.Parcelable
 import com.vk.silentauth.SilentAuthInfo
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 public data class VKIDUser(
     val firstName: String,
     val lastName: String,
@@ -9,7 +12,8 @@ public data class VKIDUser(
     val photo50: String? = null,
     val photo100: String? = null,
     val photo200: String? = null,
-)
+    val email: String? = null
+) : Parcelable
 
 internal fun SilentAuthInfo.toVKIDUser() = VKIDUser(
     firstName = firstName,
