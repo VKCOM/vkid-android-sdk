@@ -145,7 +145,7 @@ private fun TypedArray.getSize() = when (getInt(R.styleable.vkid_OAuthListWidget
 }
 
 private fun TypedArray.getOAuths(): Set<OAuth> {
-    return (getString(R.styleable.vkid_OAuthListWidget_vkid_oAuthListAllowedOAuths) ?: "vk,mail,ok")
+    return (getString(R.styleable.vkid_OAuthListWidget_vkid_oAuthListOAuths) ?: "vk,mail,ok")
         .split(',')
         .map {
             when (it) {

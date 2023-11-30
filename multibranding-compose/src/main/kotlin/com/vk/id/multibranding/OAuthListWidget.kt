@@ -63,7 +63,7 @@ public fun OAuthListWidget(
     modifier: Modifier = Modifier,
     style: OAuthListWidgetStyle = OAuthListWidgetStyle.Dark(),
     onAuth: OAuthListWidgetAuthCallback,
-    onFail: (OAuth, VKIDAuthFail) -> Unit, // TODO: sealed interface
+    onFail: (OAuth, VKIDAuthFail) -> Unit,
     oAuths: Set<OAuth> = OAuth.values().toSet()
 ) {
     val context = LocalContext.current

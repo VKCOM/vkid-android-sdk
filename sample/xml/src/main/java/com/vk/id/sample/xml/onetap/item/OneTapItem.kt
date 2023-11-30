@@ -20,7 +20,7 @@ public data class OneTapItem(
     val style: OneTapStyle,
     val width: Int = 335,
     val isDarkBackground: Boolean = false,
-    val oAuths: Set<OneTapOAuth> = emptySet(), // TODO: Add sample with oAuths
+    val oAuths: Set<OneTapOAuth> = emptySet(),
 )
 
 public fun createOneTap(
@@ -32,7 +32,7 @@ public fun createOneTap(
     if (item.isDarkBackground) setBackgroundResource(R.color.vkid_gray900)
     addView(
         OneTap(context).apply {
-            val layoutParams = if (style is OneTapStyle.Icon) {
+            val layoutParams = if (item.style is OneTapStyle.Icon) {
                 LayoutParams(
                     LayoutParams.WRAP_CONTENT,
                     LayoutParams.WRAP_CONTENT,

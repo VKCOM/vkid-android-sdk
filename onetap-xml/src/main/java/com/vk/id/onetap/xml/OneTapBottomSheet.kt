@@ -53,7 +53,8 @@ public class OneTapBottomSheet @JvmOverloads constructor(
             scenario = sheetSettings.scenario,
             onAuth = { oAuth, accessToken -> onAuth(oAuth, accessToken) },
             onFail = { oAuth, fail -> onFail(oAuth, fail) },
-            autoHideOnSuccess = sheetSettings.autoHideOnSuccess
+            autoHideOnSuccess = sheetSettings.autoHideOnSuccess,
+            oAuths = sheetSettings.oAuths,
         )
     }
 

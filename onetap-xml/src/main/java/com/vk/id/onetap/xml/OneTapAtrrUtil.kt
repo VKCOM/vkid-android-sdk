@@ -5,6 +5,7 @@ import android.content.res.TypedArray
 import android.util.AttributeSet
 import android.util.DisplayMetrics
 import android.util.TypedValue
+import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonElevationStyle
@@ -16,7 +17,7 @@ import com.vk.id.onetap.compose.onetap.sheet.style.OneTapSheetCornersStyle
 internal fun parseOneTapAttrs(
     context: Context,
     attrs: AttributeSet?,
-): Pair<OneTapStyle, Boolean> {
+): OneTapParsedAttrs {
     context.theme.obtainStyledAttributes(
         attrs,
         R.styleable.vkid_OneTap,
@@ -24,22 +25,33 @@ internal fun parseOneTapAttrs(
         0
     ).apply {
         try {
-            return getOneTapStyleConstructor()(
-                OneTapButtonCornersStyle.Custom(context.pixelsToDp(getButtonsCornerRadius(context))),
-                getOneTapButtonsSize(),
-                OneTapButtonElevationStyle.Custom(context.pixelsToDp(getOneTapButtonsElevation(context)))
-            ) to getSignInToAnotherAccountButtonEnabled()
+            return OneTapParsedAttrs(
+                style = getOneTapStyleConstructor()(
+                    OneTapButtonCornersStyle.Custom(context.pixelsToDp(getButtonsCornerRadius(context))),
+                    getOneTapButtonsSize(),
+                    OneTapButtonElevationStyle.Custom(context.pixelsToDp(getOneTapButtonsElevation(context)))
+                ),
+                isSignInToAnotherAccountEnabled = getSignInToAnotherAccountButtonEnabled(),
+                oAuths = getOAuths(),
+            )
         } finally {
             recycle()
         }
     }
 }
 
+internal data class OneTapParsedAttrs(
+    val style: OneTapStyle,
+    val isSignInToAnotherAccountEnabled: Boolean,
+    val oAuths: Set<OneTapOAuth>,
+)
+
 internal class OneTapBottomSheetAttributeSettings(
     val style: OneTapBottomSheetStyle,
     val serviceName: String,
     val scenario: OneTapScenario,
-    val autoHideOnSuccess: Boolean
+    val autoHideOnSuccess: Boolean,
+    val oAuths: Set<OneTapOAuth>,
 )
 
 internal fun parseOneTapBottomSheetAttrs(
@@ -61,7 +73,8 @@ internal fun parseOneTapBottomSheetAttrs(
                 ),
                 serviceName = getSheetServiceName(),
                 scenario = getSheetScenario(),
-                autoHideOnSuccess = getSheetAutoHideOnSuccess()
+                autoHideOnSuccess = getSheetAutoHideOnSuccess(),
+                oAuths = getOAuths(),
             )
         } finally {
             recycle()
@@ -139,6 +152,19 @@ private fun TypedArray.getSheetScenario() = when (getInt(R.styleable.vkid_OneTap
     4 -> OneTapScenario.Order
     5 -> OneTapScenario.EnterToAccount
     else -> OneTapScenario.EnterService
+}
+
+private fun TypedArray.getOAuths(): Set<OneTapOAuth> {
+    return (getString(R.styleable.vkid_OneTap_vkid_onetapOAuths) ?: "mail,ok")
+        .split(',')
+        .map {
+            when (it) {
+                "mail" -> OneTapOAuth.MAIL
+                "ok" -> OneTapOAuth.OK
+                else -> error("""Unexpected oauth "$it", please use one of "mail" or "ok", separated by commas""")
+            }
+        }
+        .toSet()
 }
 
 private fun Context.pixelsToDp(

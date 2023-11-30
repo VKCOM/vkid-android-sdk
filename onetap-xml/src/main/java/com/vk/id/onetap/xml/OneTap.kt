@@ -52,9 +52,10 @@ public class OneTap @JvmOverloads constructor(
     private var onOAuthsChange: (Set<OneTapOAuth>) -> Unit = {}
 
     init {
-        val (style, isSignInToAnotherAccountEnabled) = parseOneTapAttrs(context, attrs)
+        val (style, isSignInToAnotherAccountEnabled, oAuths) = parseOneTapAttrs(context, attrs)
         this.style = style
         this.isSignInToAnotherAccountEnabled = isSignInToAnotherAccountEnabled
+        this.oAuths = oAuths
         addView(composeView)
         composeView.setContent { Content() }
     }
