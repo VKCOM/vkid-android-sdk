@@ -4,15 +4,16 @@ import android.os.Parcelable
 import com.vk.silentauth.SilentAuthInfo
 import kotlinx.parcelize.Parcelize
 
+@Suppress("LongParameterList")
 @Parcelize
-public data class VKIDUser(
-    val firstName: String,
-    val lastName: String,
-    val phone: String? = null,
-    val photo50: String? = null,
-    val photo100: String? = null,
-    val photo200: String? = null,
-    val email: String? = null
+public class VKIDUser(
+    public val firstName: String,
+    public val lastName: String,
+    public val phone: String? = null,
+    public val photo50: String? = null,
+    public val photo100: String? = null,
+    public val photo200: String? = null,
+    public val email: String? = null
 ) : Parcelable
 
 internal fun SilentAuthInfo.toVKIDUser() = VKIDUser(

@@ -241,15 +241,8 @@ public final class com/vk/id/onetap/common/icon/style/VKIconSizeStyle : java/lan
 
 public final class com/vk/id/onetap/common/icon/style/VKIconStyle {
 	public fun <init> (Lcom/vk/id/onetap/common/icon/style/VKIconColorStyle;Lcom/vk/id/onetap/common/icon/style/VKIconSizeStyle;)V
-	public final fun component1 ()Lcom/vk/id/onetap/common/icon/style/VKIconColorStyle;
-	public final fun component2 ()Lcom/vk/id/onetap/common/icon/style/VKIconSizeStyle;
-	public final fun copy (Lcom/vk/id/onetap/common/icon/style/VKIconColorStyle;Lcom/vk/id/onetap/common/icon/style/VKIconSizeStyle;)Lcom/vk/id/onetap/common/icon/style/VKIconStyle;
-	public static synthetic fun copy$default (Lcom/vk/id/onetap/common/icon/style/VKIconStyle;Lcom/vk/id/onetap/common/icon/style/VKIconColorStyle;Lcom/vk/id/onetap/common/icon/style/VKIconSizeStyle;ILjava/lang/Object;)Lcom/vk/id/onetap/common/icon/style/VKIconStyle;
-	public fun equals (Ljava/lang/Object;)Z
 	public final fun getColorStyle ()Lcom/vk/id/onetap/common/icon/style/VKIconColorStyle;
 	public final fun getSizeStyle ()Lcom/vk/id/onetap/common/icon/style/VKIconSizeStyle;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
 }
 
 public final class com/vk/id/onetap/common/progress/style/CircleProgressStyle : java/lang/Enum {

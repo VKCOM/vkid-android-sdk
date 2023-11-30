@@ -4,9 +4,9 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-public data class AccessToken(
-    val token: String,
-    val userID: Long,
-    val expireTime: Long,
-    val userData: VKIDUser,
+public class AccessToken(
+    public val token: String,
+    public val userID: Long,
+    public val expireTime: Long,
+    public val userData: VKIDUser,
 ) : Parcelable
