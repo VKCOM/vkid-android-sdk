@@ -8,6 +8,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -24,7 +25,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -33,6 +36,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.vk.id.AccessToken
 import com.vk.id.OAuth
 import com.vk.id.VKID
@@ -67,27 +71,44 @@ public fun OAuthListWidget(
     if (oAuths.isEmpty()) {
         error("You need to add at least one oAuth to display the widget")
     }
-    Row(
-        modifier = modifier
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        oAuths.forEachIndexed { index, item ->
-            OAuthButton(
-                modifier = Modifier.weight(1f),
-                context = context,
-                style = style,
-                item = item,
-                showText = oAuths.size == 1,
-                coroutineScope = coroutineScope,
-                vkid = vkid,
-                onAuth = onAuth,
-                onFail = onFail,
-            )
-            if (index != oAuths.size - 1) {
-                Spacer(modifier = Modifier.width(12.dp))
+        OAuthTitle()
+        Spacer(modifier = Modifier.height(16.dp))
+        Row {
+            oAuths.forEachIndexed { index, item ->
+                OAuthButton(
+                    modifier = Modifier.weight(1f),
+                    context = context,
+                    style = style,
+                    item = item,
+                    showText = oAuths.size == 1,
+                    coroutineScope = coroutineScope,
+                    vkid = vkid,
+                    onAuth = onAuth,
+                    onFail = onFail,
+                )
+                if (index != oAuths.size - 1) {
+                    Spacer(modifier = Modifier.width(12.dp))
+                }
             }
         }
     }
 }
+
+@Composable
+private fun OAuthTitle() = BasicText(
+    text = stringResource(id = R.string.vkid_oauth_list_widget_note),
+    style = TextStyle(
+        fontSize = 13.sp,
+        lineHeight = 16.sp,
+        fontWeight = FontWeight.Normal,
+        color = colorResource(id = R.color.vkid_steel_gray_400),
+        textAlign = TextAlign.Center,
+    )
+)
 
 @OptIn(InternalVKIDApi::class)
 @Suppress("LongParameterList")
