@@ -12,6 +12,7 @@ dependencies {
     api(project(":vkid"))
 //    api(project(":multibranding-compose"))
     api(project(":onetap-common"))
+    implementation(project(":common"))
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.material.ripple)

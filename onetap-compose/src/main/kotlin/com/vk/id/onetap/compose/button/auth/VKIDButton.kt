@@ -1,3 +1,5 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.onetap.compose.button.auth
 
 import android.content.res.Resources
@@ -31,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.vk.id.VKID
 import com.vk.id.VKIDUser
+import com.vk.id.commn.InternalVKIDApi
 import com.vk.id.onetap.common.auth.style.VKIDButtonStyle
 import com.vk.id.onetap.compose.R
 import com.vk.id.onetap.compose.button.DURATION_OF_ANIMATION

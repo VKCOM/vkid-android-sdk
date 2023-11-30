@@ -1,10 +1,12 @@
 package com.vk.id.onetap.common.alternate.style
 
+import com.vk.id.commn.InternalVKIDApi
 import com.vk.id.onetap.common.auth.style.VKIDButtonBorderStyle
 import com.vk.id.onetap.common.auth.style.VKIDButtonRippleStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonSizeStyle
 
+@InternalVKIDApi
 public sealed class AlternateAccountButtonStyle(
     public val backgroundStyle: AlternateAccountButtonBackgroundStyle,
     public val borderStyle: VKIDButtonBorderStyle,
