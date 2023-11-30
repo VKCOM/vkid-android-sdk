@@ -1,3 +1,5 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.onetap.compose.onetap
 
 import androidx.compose.animation.AnimatedVisibility
@@ -14,6 +16,7 @@ import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.VKIDAuthParams
+import com.vk.id.commn.InternalVKIDApi
 import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.compose.button.alternate.AlternateAccountButton
 import com.vk.id.onetap.compose.button.auth.VKIDButton
