@@ -24,18 +24,21 @@ public class OneTapBottomSheet @JvmOverloads constructor(
     }
     private var onFail: (VKIDAuthFail) -> Unit = {}
 
-    private lateinit var state: OneTapBottomSheetState
+    private var state: OneTapBottomSheetState? = null
     init {
         val sheetSettings = parseOneTapBottomSheetAttrs(context, attrs)
-        composeView.setContent { Content(sheetSettings) }
+        composeView.setContent {
+            Content(sheetSettings)
+        }
         addView(composeView)
     }
 
     @Composable
     private fun Content(sheetSettings: OneTapBottomSheetAttributeSettings) {
-        state = rememberOneTapBottomSheetState()
         OneTapBottomSheet(
-            state = state,
+            state = rememberOneTapBottomSheetState().also {
+                state = it
+            },
             style = sheetSettings.style,
             serviceName = sheetSettings.serviceName,
             scenario = sheetSettings.scenario,
@@ -54,14 +57,14 @@ public class OneTapBottomSheet @JvmOverloads constructor(
     }
 
     public fun show() {
-        state.show()
+        state?.show()
     }
 
     public fun hide() {
-        state.hide()
+        state?.hide()
     }
 
-    public fun isVisible(): Boolean = state.isVisible
+    public fun isVisible(): Boolean = state?.isVisible ?: false
 
     @Suppress("EmptyFunctionBlock")
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {}
