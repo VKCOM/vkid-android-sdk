@@ -3,9 +3,37 @@
     <img src="logo.svg" width="150" alt="VK ID SDK Logo">
   </h1>
   <p align="center">
+    <a href="https://artifactory-external.vkpartner.ru/ui/native/vkid-sdk-andorid/com/vk/id/">
+        <img src="https://img.shields.io/badge/stability-beta-red">
+    </a>
+    <a href="LICENSE">
+      <img src="https://img.shields.io/npm/l/@vkid/sdk?maxAge=3600">
+    </a>
+    <a href="https://artifactory-external.vkpartner.ru/ui/native/vkid-sdk-andorid/com/vk/id/">
+        <img src="https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Fartifactory-external.vkpartner.ru%2Fartifactory%2Fvkid-sdk-andorid%2Fcom%2Fvk%2Fid%2Fvkid%2Fmaven-metadata.xml"/>
+    </a>
+  </p>
+  <p align="center">
     VK ID SDK — библиотека для авторизации пользователей Android-приложений с помощью аккаунта VK ID.
   </p>
 </div>
+
+---
+:information_source: VK ID SDK сейчас находится в бета-тестировании. О проблемах вы можете сообщить с помощью <a href="https://github.com/VKCOM/vkid-android-sdk/issues">issues репозитория</a>.
+
+---
+
+## Демонстрация
+
+SDK поставляется с [тестовым примером приложения](sample/app), где можно посмотреть работу авторизации.
+Чтобы тестовое приложение успешно собралось, сначала создайте файл `sample/app/secrets.properties` и пропишите в нем client_id и client_secret вашего приложения VK ID:
+
+
+Файл `secrets.properties`:
+```
+VKIDClientSecret=Ваш защищённый ключ
+VKIDClientID=Ваш ID приложения
+```
 
 ## Предварительно
 
@@ -75,18 +103,6 @@ viewModelScope.launch {
 или с передачей LifecycleOwner:
 ```kotlin
 vkid.authorize(this@MainActivity, vkAuthCallback) // Первый параметр LifecycleOwner, например активити.
-```
-
-## Демонстрация
-
-SDK поставляется с [тестовым примером приложения](sample), где можно посмотреть работу авторизации.
-Чтобы получить токен, создайте файл secrets.properties и пропишите в нем client_id и client_secret вашего приложения VK ID:
-
-
-Файл `secrets.properties`:
-```
-VKIDClientSecret=Ваш защищённый ключ
-VKIDClientID=Ваш ID приложения
 ```
 
 ## Документация
