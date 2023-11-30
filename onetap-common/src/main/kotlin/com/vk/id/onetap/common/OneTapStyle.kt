@@ -1,5 +1,8 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.onetap.common
 
+import com.vk.id.commn.InternalVKIDApi
 import com.vk.id.onetap.common.alternate.style.AlternateAccountButtonStyle
 import com.vk.id.onetap.common.auth.style.VKIDButtonStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
