@@ -10,7 +10,7 @@ android {
 
 dependencies {
     api(project(":vkid"))
-    api(project(":multibranding-compose"))
+//    api(project(":multibranding-compose"))
     api(project(":onetap-common"))
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.foundation)

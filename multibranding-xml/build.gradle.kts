@@ -1,6 +1,6 @@
 plugins {
     id("vkid.android.library.compose")
-    id("vkid.android.publish")
+//    id("vkid.android.publish")
     id("org.jetbrains.kotlinx.binary-compatibility-validator")
 }
 
