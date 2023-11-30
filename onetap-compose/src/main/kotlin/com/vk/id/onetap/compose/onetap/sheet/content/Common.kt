@@ -11,8 +11,13 @@ import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.compose.button.startAuth
 import com.vk.id.onetap.compose.onetap.sheet.style.OneTapBottomSheetStyle
 import kotlinx.coroutines.CoroutineScope
+import java.io.Serializable
 
-internal sealed class OneTapBottomSheetAuthStatus {
+internal sealed class OneTapBottomSheetAuthStatus : Serializable {
+    companion object {
+        private const val serialVersionUID: Long = 1
+    }
+
     object Init : OneTapBottomSheetAuthStatus()
 
     object AuthStarted : OneTapBottomSheetAuthStatus()
