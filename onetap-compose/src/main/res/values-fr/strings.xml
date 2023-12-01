@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="vkid_log_in_with_vkid">Se connecter avec VK ID</string>
+    <string name="vkid_auth_use_another_account">Se connecter à un autre compte</string>
+    <string name="vkid_log_in_as">Continuer en tant que %1$s</string>
+
+    <string name="vkid_schenario_enter_service_title">Connectez-vous au service ou inscrivez-vous</string>
+    <string name="vkid_schenario_enter_service_vkid_button_text_user_found">Se connecter en tant que %1$s</string>
+    <string name="vkid_schenario_enter_service_vkid_button_text_no_user">Se connecter avec VK ID</string>
+
+    <string name="vkid_schenario_registration_for_the_event_title">Inscrivez-vous àl \'événement</string>
+    <string name="vkid_schenario_registration_for_the_event_vkid_button_text_user_found">Continuer en tant que %1$s</string>
+    <string name="vkid_schenario_registration_for_the_event_vkid_button_text_no_user">Continuer avec VK ID</string>
+
+    <string name="vkid_schenario_application_title">Envoyez une demande avec VK ID</string>
+    <string name="vkid_schenario_application_vkid_button_text_user_found">Continuer en tant que %1$s</string>
+    <string name="vkid_schenario_application_vkid_button_text_no_user">Continuer avec VK ID</string>
+
+    <string name="vkid_schenario_order_in_service_title">Passez la commande sur %1$s avec VK ID</string>
+    <string name="vkid_schenario_order_in_service_vkid_button_text_user_found">Commander en tant que %1$s</string>
+    <string name="vkid_schenario_order_in_service_vkid_button_text_no_user">Commander avec VK ID</string>
+
+    <string name="vkid_schenario_order_title">Passez la commande avec VK ID</string>
+    <string name="vkid_schenario_order_vkid_button_text_user_found">Commander en tant que %1$s</string>
+    <string name="vkid_schenario_order_vkid_button_text_no_user">Commander avec VK ID</string>
+
+    <string name="vkid_schenario_enter_to_account_title">Connectez-vous à %1$s</string>
+    <string name="vkid_schenario_enter_to_account_vkid_button_text_user_found">Se connecter en tant que %1$s</string>
+    <string name="vkid_schenario_enter_to_account_vkid_button_text_no_user">Se connecter avec VK ID</string>
+
+    <string name="vkid_scenario_common_description">Cela vous permettra d\'avoir accès à toutes les fonctionnalités du service. Vos données personnelles seront soigneusement protégées.</string>
+
+    <string name="vkid_sheet_state_auth_in_progress">Connexion…</string>
+    <string name="vkid_sheet_state_auth_success">Succès</string>
+    <string name="vkid_sheet_state_auth_failed_retry">Réessayer</string>
+    <string name="vkid_sheet_state_auth_failed">Impossible de se connecter</string>
+</resources>

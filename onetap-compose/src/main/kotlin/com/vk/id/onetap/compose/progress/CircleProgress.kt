@@ -1,3 +1,5 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.onetap.compose.progress
 
 import androidx.compose.animation.core.LinearEasing
@@ -12,6 +14,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
+import com.vk.id.commn.InternalVKIDApi
+import com.vk.id.onetap.common.progress.style.CircleProgressStyle
 import com.vk.id.onetap.compose.R
 
 @Composable

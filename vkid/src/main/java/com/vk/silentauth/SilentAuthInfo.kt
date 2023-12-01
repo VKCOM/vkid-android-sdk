@@ -33,7 +33,6 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.vk.dto.common.id.UserId
 import com.vk.dto.common.id.isReal
-import com.vk.dto.common.id.toUserId
 import com.vk.silentauth.SilentAuthInfo.Companion.KEY_IS_EXCHANGE_USER
 import com.vk.silentauth.SilentAuthInfo.Companion.KEY_SERVICE
 import com.vk.silentauth.SilentAuthInfo.Companion.KEY_SERVICE_NAME
@@ -99,7 +98,7 @@ internal data class SilentAuthInfo(
         userId: UserId? = null,
         providerAppId: Int = 0
     ) : this(
-        userId ?: userIdOld.toLong().toUserId(),
+        userId ?: UserId(userIdOld.toLong()),
         uuid,
         token,
         expireTime,
