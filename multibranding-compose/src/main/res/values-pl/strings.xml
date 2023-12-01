@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="vkid_oauth_list_widget_title_ok">Wejdź poprzez OK</string>
+    <string name="vkid_oauth_list_widget_title_mail">Wejdź poprzez Mail.ru</string>
+    <string name="vkid_oauth_list_widget_title_vk">Wejdź poprzez VK ID</string>
+</resources>

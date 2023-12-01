@@ -37,4 +37,6 @@ dependencies {
     // force safe okio version, not from okhttp3
     implementation(libs.okio)
     testImplementation(libs.mockk)
+    testImplementation(libs.kotest.core)
+    testImplementation(libs.kotest.assertions)
 }

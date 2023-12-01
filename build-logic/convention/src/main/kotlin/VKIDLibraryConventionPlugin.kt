@@ -1,6 +1,7 @@
 import com.android.build.gradle.LibraryExtension
 import com.vk.id.Versions
 import com.vk.id.configureDetekt
+import com.vk.id.configureKotest
 import com.vk.id.configureKotlinAndroid
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -30,6 +31,7 @@ class VKIDLibraryConventionPlugin : Plugin<Project> {
                 }
 
                 resourcePrefix("vkid_")
+                configureKotest(this)
             }
             configureDetekt(isCompose = false)
             dependencies {

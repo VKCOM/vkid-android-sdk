@@ -7,10 +7,13 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import com.vk.id.AuthOptionsCreator
+import com.vk.id.AuthResultHandler
 import com.vk.id.VKID
 import com.vk.id.internal.api.VKIDApi
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.AuthActivity
+import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthProvidersChooser
 import com.vk.id.internal.auth.AuthProvidersChooserDefault
 import com.vk.id.internal.auth.ServiceCredentials
@@ -31,10 +34,10 @@ import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.TimeUnit
 
 internal class VKIDDepsProd(
-    override val appContext: Context
+    private val appContext: Context
 ) : VKIDDeps {
 
-    override val serviceCredentials: Lazy<ServiceCredentials> = lazy {
+    private val serviceCredentials: Lazy<ServiceCredentials> = lazy {
         val componentName = ComponentName(appContext, AuthActivity::class.java)
         val flags = PackageManager.GET_META_DATA or PackageManager.GET_ACTIVITIES
         val ai: ActivityInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -57,14 +60,14 @@ internal class VKIDDepsProd(
         ServiceCredentials(clientID, clientSecret, redirectUri)
     }
 
-    override val silentAuthServicesProvider: Lazy<SilentAuthServicesProvider> = lazy {
+    private val silentAuthServicesProvider: Lazy<SilentAuthServicesProvider> = lazy {
         SilentAuthServicesProvider(
             appContext,
             trustedProvidersCache.value
         )
     }
 
-    override val api: Lazy<VKIDApiService> = lazy {
+    private val api: Lazy<VKIDApiService> = lazy {
         val client = OkHttpClient.Builder()
             .readTimeout(OKHTTP_TIMEOUT_SECONDS, TimeUnit.SECONDS)
             .writeTimeout(OKHTTP_TIMEOUT_SECONDS, TimeUnit.SECONDS)
@@ -76,7 +79,7 @@ internal class VKIDDepsProd(
         VKIDApiService(api)
     }
 
-    override val trustedProvidersCache = lazy {
+    private val trustedProvidersCache = lazy {
         val creds = serviceCredentials.value
         TrustedProvidersCache(api, creds.clientID, creds.clientSecret, dispatchers)
     }
@@ -99,6 +102,7 @@ internal class VKIDDepsProd(
 
     override val authProvidersChooser: Lazy<AuthProvidersChooser> = lazy {
         AuthProvidersChooserDefault(
+            appContext,
             SilentAuthServicesProvider(
                 appContext,
                 trustedProvidersCache.value
@@ -106,15 +110,39 @@ internal class VKIDDepsProd(
         )
     }
 
-    override val prefsStore: Lazy<PrefsStore> = lazy {
+    override val authOptionsCreator: AuthOptionsCreator by lazy {
+        AuthOptionsCreator(
+            appContext = appContext,
+            pkceGenerator = pkceGenerator,
+            prefsStore = prefsStore,
+            serviceCredentials = serviceCredentials,
+            deviceIdProvider = deviceIdProvider,
+        )
+    }
+
+    override val authCallbacksHolder = AuthCallbacksHolder()
+
+    override val authResultHandler: Lazy<AuthResultHandler> = lazy {
+        AuthResultHandler(
+            appContext = appContext,
+            dispatchers = dispatchers,
+            callbacksHolder = authCallbacksHolder,
+            deviceIdProvider = deviceIdProvider.value,
+            prefsStore = prefsStore.value,
+            serviceCredentials = serviceCredentials.value,
+            api = api.value
+        )
+    }
+
+    private val prefsStore: Lazy<PrefsStore> = lazy {
         PrefsStore(appContext)
     }
 
-    override val deviceIdProvider: Lazy<DeviceIdProvider> = lazy {
+    private val deviceIdProvider: Lazy<DeviceIdProvider> = lazy {
         DeviceIdProvider(DeviceIdPrefs(appContext))
     }
 
-    override val pkceGenerator: Lazy<PkceGeneratorSHA256> = lazy {
+    private val pkceGenerator: Lazy<PkceGeneratorSHA256> = lazy {
         PkceGeneratorSHA256()
     }
 
@@ -138,9 +166,12 @@ internal class VKIDDepsProd(
         if (!isDebuggable()) {
             certificatePinner(
                 CertificatePinner.Builder()
-                    .add(HOST_NAME, HOST_CERTIFICATE_HASH_1)
-                    .add(HOST_NAME, HOST_CERTIFICATE_HASH_2)
-                    .add(HOST_NAME, HOST_CERTIFICATE_HASH_3)
+                    .add(HOST_NAME_API, HOST_CERTIFICATE_HASH_1)
+                    .add(HOST_NAME_API, HOST_CERTIFICATE_HASH_2)
+                    .add(HOST_NAME_API, HOST_CERTIFICATE_HASH_3)
+                    .add(HOST_NAME_OAUTH, HOST_CERTIFICATE_HASH_1)
+                    .add(HOST_NAME_OAUTH, HOST_CERTIFICATE_HASH_2)
+                    .add(HOST_NAME_OAUTH, HOST_CERTIFICATE_HASH_3)
                     .build()
             )
         }
@@ -150,7 +181,8 @@ internal class VKIDDepsProd(
     private fun isDebuggable() = appContext.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0
 
     private companion object {
-        private const val HOST_NAME = "api.vk.com"
+        private const val HOST_NAME_API = "api.vk.com"
+        private const val HOST_NAME_OAUTH = "oauth.vk.com"
         private const val HOST_CERTIFICATE_HASH_1 = "sha256/p+lqTZ1LH3x8myQuyq7TpS5Acm5DkluDFCFB1Xnqc/4="
         private const val HOST_CERTIFICATE_HASH_2 = "sha256/IQBnNBEiFuhj+8x6X8XLgh01V9Ic5/V3IRQLNFFc7v4="
         private const val HOST_CERTIFICATE_HASH_3 = "sha256/K87oWBWM9UZfyddvDfoxL+8lpNyoUB2ptGtn0fv6G2Q="

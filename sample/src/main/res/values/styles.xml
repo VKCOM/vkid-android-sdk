@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="onetapSampleTilteStyle">
-        <item name="android:textFontWeight" tools:targetApi="p">600</item>
-        <item name="android:textColor">@color/vkid_black</item>
-        <item name="android:textSize">24sp</item>
-        <item name="android:lineSpacingExtra">4sp</item>
-    </style>
-</resources>
