@@ -37,9 +37,9 @@ VKIDClientID=Ваш ID приложения
 
 ## Предварительно
 
-Что такое VK ID и как интегрировать его в приложение читайте здесь https://id.vk.com/business/go/docs/vkid/latest/start-page.
+Что такое VK ID и как интегрировать его в приложение читайте здесь https://id.vk.com/business/go/docs/ru/vkid/latest/vk-id/intro/plan.
 
-Чтобы подключить VK ID SDK, сначала получите ID приложения (app_id) и защищенный ключ (client_secret). Для этого создайте приложение в [кабинете подключения VK ID](https://id.vk.com/business/go/docs/vkid/latest/create-application).
+Чтобы подключить VK ID SDK, сначала получите ID приложения (app_id) и защищенный ключ (client_secret). Для этого создайте приложение в [кабинете подключения VK ID](https://id.vk.com/business/go).
 
 
 ## Установка
@@ -107,9 +107,9 @@ vkid.authorize(this@MainActivity, vkAuthCallback) // Первый парамет
 
 ## Документация
 
-- [Что такое VK ID](https://id.vk.com/business/go/docs/vkid/latest/start-page)
-- [Создание приложения](https://platform.vk.com/docs/vkid/latest/create-application)
-- [Требования к дизайну](https://platform.vk.com/docs/vkid/latest/guidelines/design-rules)
+- [Что такое VK ID](https://id.vk.com/business/go/docs/ru/vkid/latest/vk-id/intro/start-page)
+- [Создание приложения](https://id.vk.com/business/go/docs/ru/vkid/latest/vk-id/connection/create-application)
+- [Требования к дизайну](https://id.vk.com/business/go/docs/ru/vkid/archive/1.60/vk-id/guidelines/design-rules)
 
 
 ## Локальная сборка
