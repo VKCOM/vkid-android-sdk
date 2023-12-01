@@ -1,5 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="vkid_log_in_with_vkid">Войти с VK ID</string>
+    <string name="vkid_auth_use_another_account">Войти в другой аккаунт</string>
     <string name="vkid_log_in_as">Продолжить как %1$s</string>
+
+    <string name="vkid_schenario_enter_service_title">Войдите в сервис или зарегистрируйтесь</string>
+    <string name="vkid_schenario_enter_service_vkid_button_text_user_found">Войти как %1$s</string>
+    <string name="vkid_schenario_enter_service_vkid_button_text_no_user">Войти с VK ID</string>
+
+    <string name="vkid_schenario_registration_for_the_event_title">Зарегистрируйтесь на мероприятие</string>
+    <string name="vkid_schenario_registration_for_the_event_vkid_button_text_user_found">Продолжить как %1$s</string>
+    <string name="vkid_schenario_registration_for_the_event_vkid_button_text_no_user">Продолжить с VK ID</string>
+
+    <string name="vkid_schenario_application_title">Подайте заявку с VK ID</string>
+    <string name="vkid_schenario_application_vkid_button_text_user_found">Продолжить как %1$s</string>
+    <string name="vkid_schenario_application_vkid_button_text_no_user">Продолжить с VK ID</string>
+
+    <string name="vkid_schenario_order_in_service_title">Оформите заказ в %1$s с VK ID</string>
+    <string name="vkid_schenario_order_in_service_vkid_button_text_user_found">Оформить как %1$s</string>
+    <string name="vkid_schenario_order_in_service_vkid_button_text_no_user">Оформить с VK ID</string>
+
+    <string name="vkid_schenario_order_title">Оформите заказ с VK ID</string>
+    <string name="vkid_schenario_order_vkid_button_text_user_found">Оформить как %1$s</string>
+    <string name="vkid_schenario_order_vkid_button_text_no_user">Оформить с VK ID</string>
+
+    <string name="vkid_schenario_enter_to_account_title">Войдите в учётную запись %1$s</string>
+    <string name="vkid_schenario_enter_to_account_vkid_button_text_user_found">Войти как %1$s</string>
+    <string name="vkid_schenario_enter_to_account_vkid_button_text_no_user">Войти с VK ID</string>
+
+    <string name="vkid_scenario_common_description">После этого вам станут доступны все возможности сервиса. Ваши данные будут надёжно защищены.</string>
+
+    <string name="vkid_sheet_state_auth_in_progress">Авторизация…</string>
+    <string name="vkid_sheet_state_auth_success">Успешно</string>
+    <string name="vkid_sheet_state_auth_failed_retry">Повторить попытку</string>
+    <string name="vkid_sheet_state_auth_failed">Не удалось авторизоваться</string>
 </resources>

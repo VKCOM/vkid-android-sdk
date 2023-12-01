@@ -1,3 +1,5 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.onetap.compose.button
 
 import androidx.compose.animation.core.AnimationSpec
@@ -22,46 +24,49 @@ import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.VKIDUser
+import com.vk.id.auth.VKIDAuthParams
+import com.vk.id.commn.InternalVKIDApi
+import com.vk.id.onetap.common.auth.style.VKIDButtonStyle
+import com.vk.id.onetap.compose.button.auth.style.asColor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 @Suppress("LongParameterList")
 internal fun Modifier.clickable(
-    state: VKIDButtonState,
-    coroutineScope: CoroutineScope,
-    vkid: VKID,
     style: VKIDButtonStyle,
-    onAuth: (AccessToken) -> Unit,
-    onFail: (VKIDAuthFail) -> Unit
+    onClick: () -> Unit
 ): Modifier = composed {
     clickable(
         interactionSource = remember { MutableInteractionSource() },
         indication = rememberRipple(
             color = style.rippleStyle.asColor(),
         ),
-        enabled = state.inProgress.not(),
         role = Role.Button,
-        onClick = { startAuth(coroutineScope, vkid, onAuth, onFail) }
+        onClick = onClick
     )
 }
 
-private fun startAuth(
+internal fun startAuth(
     coroutineScope: CoroutineScope,
     vkid: VKID,
     onAuth: (AccessToken) -> Unit,
-    onFail: (VKIDAuthFail) -> Unit
+    onFail: (VKIDAuthFail) -> Unit,
+    params: VKIDAuthParams = VKIDAuthParams {}
 ) {
     coroutineScope.launch {
-        vkid.authorize(object : VKID.AuthCallback {
-            override fun onSuccess(accessToken: AccessToken) {
-                onAuth(accessToken)
-            }
+        vkid.authorize(
+            object : VKID.AuthCallback {
+                override fun onSuccess(accessToken: AccessToken) {
+                    onAuth(accessToken)
+                }
 
-            override fun onFail(fail: VKIDAuthFail) {
-                onFail(fail)
-            }
-        })
+                override fun onFail(fail: VKIDAuthFail) {
+                    onFail(fail)
+                }
+            },
+            params
+        )
     }
 }
 
@@ -82,6 +87,7 @@ internal fun FetchUserData(
                     onFetchingProgress.onFetched(user)
                 }
             }
+
             else -> {}
         }
         onDispose {

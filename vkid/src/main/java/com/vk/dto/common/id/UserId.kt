@@ -29,7 +29,6 @@ package com.vk.dto.common.id
 
 import android.os.Parcel
 import android.os.Parcelable
-import kotlin.math.absoluteValue
 
 /**
  * wrapper class to support Long user id
@@ -64,27 +63,6 @@ internal data class UserId(val value: Long) : Parcelable {
 
 internal fun UserId.isReal() = value != 0L
 
-internal fun UserId.abs() = copy(value = value.absoluteValue)
-
-internal fun UserId.negative() = copy(value = -value)
-
-internal operator fun UserId.unaryMinus() = negative()
-
 internal fun UserId.isGroupId() = value < 0
 
 internal fun UserId.isUserId() = value > 0
-
-internal fun Long.toUserId(): UserId = UserId(this)
-
-@Volatile
-@Deprecated("Only for debug usage")
-private var legacyObserver: () -> Unit = {}
-
-@Deprecated(
-    message = "don't use it in new code",
-    replaceWith = ReplaceWith("UserId()", "com.vk.dto.common.id.UserId")
-)
-internal fun UserId.legacyValue(): Int {
-    legacyObserver.invoke()
-    return value.toInt()
-}

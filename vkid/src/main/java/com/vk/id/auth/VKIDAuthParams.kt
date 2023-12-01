@@ -3,6 +3,7 @@ package com.vk.id.auth
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
+import com.vk.id.OAuth
 
 public inline fun VKIDAuthParams(initializer: VKIDAuthParams.Builder.() -> Unit): VKIDAuthParams {
     return VKIDAuthParams.Builder().apply(initializer).build()
@@ -10,7 +11,9 @@ public inline fun VKIDAuthParams(initializer: VKIDAuthParams.Builder.() -> Unit)
 
 public class VKIDAuthParams private constructor(
     public val locale: Locale? = null,
-    public val theme: Theme? = null
+    public val theme: Theme? = null,
+    public val useOAuthProviderIfPossible: Boolean = true,
+    public val oAuth: OAuth? = null,
 ) {
     public enum class Locale {
         RUS,
@@ -62,9 +65,13 @@ public class VKIDAuthParams private constructor(
     public class Builder {
         public var locale: Locale? = null
         public var theme: Theme? = null
+        public var useOAuthProviderIfPossible: Boolean = true
+        public var oAuth: OAuth? = null
         public fun build(): VKIDAuthParams = VKIDAuthParams(
             locale,
-            theme
+            theme,
+            useOAuthProviderIfPossible,
+            oAuth,
         )
     }
 }

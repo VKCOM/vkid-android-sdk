@@ -1,0 +1,105 @@
+package com.vk.id.onetap.compose.onetap.sheet.content
+
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.vk.id.AccessToken
+import com.vk.id.VKID
+import com.vk.id.VKIDAuthFail
+import com.vk.id.onetap.compose.R
+import com.vk.id.onetap.compose.onetap.OneTap
+import com.vk.id.onetap.compose.onetap.sheet.OneTapScenario
+import com.vk.id.onetap.compose.onetap.sheet.scenarioTitle
+import com.vk.id.onetap.compose.onetap.sheet.style.OneTapBottomSheetStyle
+import com.vk.id.onetap.compose.onetap.sheet.vkidButtonTextProvider
+
+@Suppress("LongParameterList")
+@Composable
+internal fun SheetContentMain(
+    vkid: VKID,
+    onAuth: (AccessToken) -> Unit,
+    onFail: (VKIDAuthFail) -> Unit,
+    serviceName: String,
+    scenario: OneTapScenario,
+    style: OneTapBottomSheetStyle,
+    dismissSheet: () -> Unit,
+    authStatus: MutableState<OneTapBottomSheetAuthStatus>
+) {
+    SheetContentBox(
+        serviceName = serviceName,
+        style = style,
+        dismissSheet = dismissSheet,
+    ) {
+        val resources = LocalContext.current.resources
+        Column(
+            Modifier.padding(horizontal = 32.dp, vertical = 36.dp)
+        ) {
+            val title = remember(scenario) {
+                scenario.scenarioTitle(serviceName = serviceName, resources = resources)
+            }
+            ContentTitle(title, style)
+            Spacer(Modifier.height(8.dp))
+            ContentDescription(stringResource(id = R.string.vkid_scenario_common_description), style)
+        }
+        val coroutineScope = rememberCoroutineScope()
+        OneTap(
+            style = style.oneTapStyle,
+            signInAnotherAccountButtonEnabled = true,
+            vkid = vkid,
+            vkidButtonTextProvider = remember(scenario) { scenario.vkidButtonTextProvider(resources) },
+            onVKIDButtonClick = {
+                startVKIDAuth(coroutineScope, vkid, style, onAuth, onFail, authStatus)
+            },
+            onAlternateButtonClick = {
+                startAlternateAuth(coroutineScope, vkid, style, onAuth, onFail, authStatus)
+            }
+        )
+    }
+}
+
+@Composable
+private fun ContentTitle(text: String, style: OneTapBottomSheetStyle) {
+    BasicText(
+        modifier = Modifier.fillMaxWidth(),
+        text = text,
+        style = TextStyle(
+            color = colorResource(id = style.contentTitleTextColor),
+            textAlign = TextAlign.Center,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.W500,
+            lineHeight = 24.sp,
+        )
+    )
+}
+
+@Composable
+private fun ContentDescription(text: String, style: OneTapBottomSheetStyle) {
+    BasicText(
+        modifier = Modifier.fillMaxWidth(),
+        text = text,
+        style = TextStyle(
+            color = colorResource(id = style.contentTextColor),
+            textAlign = TextAlign.Center,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.W400,
+            lineHeight = 20.sp,
+            letterSpacing = 0.1.sp
+        )
+    )
+}

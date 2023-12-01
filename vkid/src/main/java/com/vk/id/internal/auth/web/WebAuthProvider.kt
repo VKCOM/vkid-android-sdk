@@ -12,10 +12,14 @@ import com.vk.id.internal.auth.VKIDAuthProvider
 import com.vk.id.internal.auth.toAuthUriBrowser
 import com.vk.id.internal.log.createLoggerForClass
 
-internal class WebAuthProvider : VKIDAuthProvider {
+internal class WebAuthProvider(
+    private val context: Context,
+) : VKIDAuthProvider {
     private val logger = createLoggerForClass()
 
-    override fun auth(context: Context, authOptions: AuthOptions) {
+    override fun auth(
+        authOptions: AuthOptions
+    ) {
         val uri = authOptions.toAuthUriBrowser()
 
         val bestBrowser = WhiteListedBrowserHelper.selectBestBrowser(context)
