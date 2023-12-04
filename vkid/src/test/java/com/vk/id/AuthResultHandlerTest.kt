@@ -12,13 +12,16 @@ import com.vk.id.internal.concurrent.CoroutinesDispatchers
 import com.vk.id.internal.store.PrefsStore
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.spec.style.scopes.BehaviorSpecGivenContainerScope
+import io.kotest.core.test.testCoroutineScheduler
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestScope
 
 private const val ERROR_MESSAGE = "Error message"
 private val error = IllegalStateException("Error")
@@ -46,14 +49,18 @@ private val authResultSuccess = AuthResult.Success(
     oauth = AuthResult.OAuth(CODE, STATE, CODE_VERIFIER),
 )
 
+@OptIn(ExperimentalStdlibApi::class, ExperimentalCoroutinesApi::class)
 internal class AuthResultHandlerTest : BehaviorSpec({
+
+    coroutineTestScope = true
 
     Given("An AuthResultHandler") {
         val callbacksHolder = mockk<AuthCallbacksHolder>()
         val deviceIdProvider = mockk<DeviceIdProvider>()
         val prefsStore = mockk<PrefsStore>()
         val context = mockk<Context>()
-        val testDispatcher = StandardTestDispatcher()
+        val scheduler = testCoroutineScheduler
+        val testDispatcher = StandardTestDispatcher(scheduler)
         val dispatchers = mockk<CoroutinesDispatchers>()
         every { dispatchers.io } returns testDispatcher
         val api = mockk<VKIDApiService>()
@@ -129,8 +136,8 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             every { deviceIdProvider.getDeviceId(context) } returns DIFFERENT_UUID
             every { prefsStore.state } returns STATE
             every { prefsStore.codeVerifier } returns CODE_VERIFIER
-            launch(testDispatcher) { handler.handle(authResult) }
-            testDispatcher.scheduler.advanceUntilIdle()
+            TestScope(scheduler).launch { handler.handle(authResult) }
+            scheduler.advanceUntilIdle()
             Then("Callbacks are requested from holder") {
                 verify { callbacksHolder.getAll() }
             }
@@ -157,8 +164,8 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             every { deviceIdProvider.getDeviceId(context) } returns UUID
             every { prefsStore.state } returns DIFFERENT_STATE
             every { prefsStore.codeVerifier } returns CODE_VERIFIER
-            launch(testDispatcher) { handler.handle(authResult) }
-            testDispatcher.scheduler.advanceUntilIdle()
+            TestScope(scheduler).launch { handler.handle(authResult) }
+            scheduler.advanceUntilIdle()
             Then("Callbacks are requested from holder") {
                 verify { callbacksHolder.getAll() }
             }
@@ -184,8 +191,8 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             every { serviceCredentials.redirectUri } returns REDIRECT_URI
             every { api.getToken(CODE, CODE_VERIFIER, CLIENT_ID, CLIENT_SECRET, UUID, REDIRECT_URI) } returns call
             every { call.execute() } returns Result.failure(error)
-            launch(testDispatcher) { handler.handle(authResult) }
-            testDispatcher.scheduler.advanceUntilIdle()
+            TestScope(scheduler).launch { handler.handle(authResult) }
+            scheduler.advanceUntilIdle()
             Then("Callbacks are requested from holder") {
                 verify { callbacksHolder.getAll() }
             }
@@ -211,9 +218,9 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             every { serviceCredentials.clientSecret } returns CLIENT_SECRET
             every { serviceCredentials.redirectUri } returns REDIRECT_URI
             every { api.getToken(CODE, CODE_VERIFIER, CLIENT_ID, CLIENT_SECRET, UUID, REDIRECT_URI) } returns call
-            every { call.execute() } returns kotlin.Result.success(payload)
-            launch(testDispatcher) { handler.handle(authResult) }
-            testDispatcher.scheduler.advanceUntilIdle()
+            every { call.execute() } returns Result.success(payload)
+            TestScope(scheduler).launch(testDispatcher) { handler.handle(authResult) }
+            scheduler.advanceUntilIdle()
             Then("Callbacks are requested from holder") {
                 verify { callbacksHolder.getAll() }
             }
