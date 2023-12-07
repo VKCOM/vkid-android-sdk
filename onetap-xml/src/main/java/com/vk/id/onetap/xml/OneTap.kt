@@ -13,6 +13,12 @@ import com.vk.id.VKIDAuthFail
 import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.compose.onetap.OneTap
 
+/**
+ * OneTap is a view that provides VKID One Tap login interface.
+ * For more information how to integrate VK ID Authentication check docs https://id.vk.com/business/go/docs/ru/vkid/latest/vk-id/intro/plan
+ *
+ * You should [setCallbacks] on init view to get token after successful auth.
+ */
 public class OneTap @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -61,6 +67,9 @@ public class OneTap @JvmOverloads constructor(
         )
     }
 
+    /**
+     * Callbacks that provides auth result.
+     */
     public fun setCallbacks(
         onAuth: (AccessToken) -> Unit,
         onFail: (VKIDAuthFail) -> Unit = {},

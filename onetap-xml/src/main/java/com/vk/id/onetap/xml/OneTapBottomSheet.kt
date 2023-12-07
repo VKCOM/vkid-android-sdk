@@ -11,6 +11,14 @@ import com.vk.id.onetap.compose.onetap.sheet.OneTapBottomSheet
 import com.vk.id.onetap.compose.onetap.sheet.OneTapBottomSheetState
 import com.vk.id.onetap.compose.onetap.sheet.rememberOneTapBottomSheetState
 
+/**
+ * OneTap is a modal bottom sheet that provides VKID One Tap login interface.
+ * For more information how to integrate VK ID Authentication check docs https://id.vk.com/business/go/docs/ru/vkid/latest/vk-id/intro/plan
+ *
+ * You should [setCallbacks] on init view to get token after successful auth.
+ *
+ * To show or hide bottom sheet call [show] and [hide] methods.
+ */
 public class OneTapBottomSheet @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -48,6 +56,9 @@ public class OneTapBottomSheet @JvmOverloads constructor(
         )
     }
 
+    /**
+     * Callbacks that provides auth result.
+     */
     public fun setCallbacks(
         onAuth: (AccessToken) -> Unit,
         onFail: (VKIDAuthFail) -> Unit = {},
@@ -56,10 +67,16 @@ public class OneTapBottomSheet @JvmOverloads constructor(
         this.onFail = onFail
     }
 
+    /**
+     * Expand bottom sheet with animation
+     */
     public fun show() {
         state?.show()
     }
 
+    /**
+     * Hide bottom sheet with animation
+     */
     public fun hide() {
         state?.hide()
     }
