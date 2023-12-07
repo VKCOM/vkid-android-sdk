@@ -3,6 +3,14 @@ package com.vk.id
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
+/**
+ * Represents an access token for VK ID authentication.
+ *
+ * @property token The access token string.
+ * @property userID The user ID associated with this token.
+ * @property expireTime The expiration time of the token.
+ * @property userData The user data associated with this token.
+ */
 @Parcelize
 public class AccessToken(
     public val token: String,
