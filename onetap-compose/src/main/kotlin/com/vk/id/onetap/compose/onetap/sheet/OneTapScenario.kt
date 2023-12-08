@@ -5,12 +5,26 @@ import com.vk.id.VKIDUser
 import com.vk.id.onetap.compose.R
 import com.vk.id.onetap.compose.button.auth.VKIDButtonTextProvider
 
+/**
+ * Enumerates various scenarios for the One Tap authentication process.
+ */
 public enum class OneTapScenario {
+    // Standard scenario for entering a service.
     EnterService,
+
+    // Scenario for event registration.
     RegistrationForTheEvent,
+
+    // Scenario for application-related authentication.
     Application,
+
+    // Scenario for ordering within a service.
     OrderInService,
+
+    // Scenario for general order-related authentication.
     Order,
+
+    // Scenario for general entering into an account.
     EnterToAccount
 }
 

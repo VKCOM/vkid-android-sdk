@@ -36,6 +36,19 @@ public fun rememberOneTapBottomSheetState(): OneTapBottomSheetState {
     return rememberOneTapBottomSheetStateInternal()
 }
 
+/**
+ * Composable function to display a bottom sheet for VKID One Tap authentication.
+ *
+ * @param modifier Modifier for this composable.
+ * @param state The state of the bottom sheet. To control sheet create state instance with [rememberOneTapBottomSheetState] and pass it here.
+ * @param serviceName The name of the service for authentication. Will be displayed as title of sheet.
+ * @param scenario The [OneTapScenario] under which the authentication is being performed. It reflects on the texts of the button and sheet.
+ * @param autoHideOnSuccess Automatically hide the sheet on successful authentication.
+ * @param onAuth Callback function invoked on successful authentication with an AccessToken.
+ * @param onFail Callback function invoked on authentication failure with a VKIDAuthFail object.
+ * @param style The [OneTapBottomSheetStyle] of the bottom sheet. Default is [OneTapBottomSheetStyle.Light]
+ * @param vkid An optional VKID instance to use for authentication. If instance of VKID is not provided, it will be created on first composition.
+ */
 @Composable
 public fun OneTapBottomSheet(
     modifier: Modifier = Modifier,
@@ -168,20 +181,33 @@ private fun rememberOneTapBottomSheetStateInternal(): OneTapBottomSheetState {
     }
 }
 
+/**
+ * Manages the state of the One Tap Bottom Sheet. Should be created with [rememberOneTapBottomSheetState]
+ */
 public class OneTapBottomSheetState
 @OptIn(ExperimentalMaterial3Api::class)
 internal constructor(
     internal val materialSheetState: SheetState
 ) {
     internal var showSheet: (Boolean) -> Unit = {}
+
+    /**
+     * Shows the bottom sheet.
+     */
     public fun show() {
         showSheet(true)
     }
 
+    /**
+     * Hides the bottom sheet.
+     */
     public fun hide() {
         showSheet(false)
     }
 
+    /**
+     * Returns the visibility state of the bottom sheet.
+     */
     public val isVisible: Boolean
         get() {
             @OptIn(ExperimentalMaterial3Api::class)

@@ -25,6 +25,18 @@ import com.vk.id.onetap.compose.button.auth.VKIDButtonTextProvider
 import com.vk.id.onetap.compose.button.auth.rememberVKIDButtonState
 import com.vk.id.onetap.compose.button.startAuth
 
+/**
+ * Composable function to display a VKID One Tap login interface.
+ * For more information how to integrate VK ID Authentication check docs https://id.vk.com/business/go/docs/ru/vkid/latest/vk-id/intro/plan
+ *
+ * @param modifier Modifier for this composable.
+ * @param style The styling for the One Tap interface, default is [OneTapStyle.Light]
+ * @param onAuth Callback function invoked on successful authentication with an [AccessToken].
+ * @param onFail Callback function invoked on authentication failure with a [VKIDAuthFail] object.
+ * @param vkid An optional [VKID] instance to use for authentication.
+ *  If instance of VKID is not provided, it will be created on first composition.
+ * @param signInAnotherAccountButtonEnabled Flag to enable a button for signing into another account.
+ */
 @Composable
 public fun OneTap(
     modifier: Modifier = Modifier,
@@ -118,6 +130,7 @@ internal fun OneTap(
 private fun OneTapStyle.toProviderTheme(): VKIDAuthParams.Theme = when (this) {
     is OneTapStyle.Dark,
     is OneTapStyle.TransparentDark -> VKIDAuthParams.Theme.Dark
+
     is OneTapStyle.Light,
     is OneTapStyle.TransparentLight,
     is OneTapStyle.Icon -> VKIDAuthParams.Theme.Light
