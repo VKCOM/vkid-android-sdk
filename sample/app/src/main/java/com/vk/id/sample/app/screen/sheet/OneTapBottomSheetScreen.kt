@@ -30,12 +30,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.vk.id.AccessToken
 import com.vk.id.onetap.compose.onetap.sheet.OneTapBottomSheet
 import com.vk.id.onetap.compose.onetap.sheet.OneTapScenario
 import com.vk.id.onetap.compose.onetap.sheet.rememberOneTapBottomSheetState
 import com.vk.id.onetap.compose.onetap.sheet.style.OneTapBottomSheetStyle
 import com.vk.id.onetap.compose.onetap.sheet.style.rememberOneTapBottomSheetStyle
-import com.vk.id.sample.app.screen.home.Button
+import com.vk.id.sample.app.screen.Button
+import com.vk.id.sample.app.screen.UseToken
 import com.vk.id.sample.xml.uikit.common.onVKIDAuthFail
 import com.vk.id.sample.xml.uikit.common.onVKIDAuthSuccess
 
@@ -43,6 +45,7 @@ import com.vk.id.sample.xml.uikit.common.onVKIDAuthSuccess
 @Composable
 fun OneTapBottomSheetScreen() {
     val context = LocalContext.current
+    val token: MutableState<AccessToken?> = remember { mutableStateOf(null) }
     val selectedScenario = rememberSaveable { mutableStateOf(OneTapScenario.EnterService) }
     val selectedStyle = rememberOneTapBottomSheetStyle(
         OneTapBottomSheetStyle.Light()
@@ -58,7 +61,10 @@ fun OneTapBottomSheetScreen() {
         val bottomSheetState = rememberOneTapBottomSheetState()
         OneTapBottomSheet(
             style = selectedStyle.value,
-            onAuth = { onVKIDAuthSuccess(context, it) },
+            onAuth = {
+                token.value = it
+                onVKIDAuthSuccess(context, it)
+            },
             onFail = { onVKIDAuthFail(context, it) },
             state = bottomSheetState,
             scenario = selectedScenario.value,
@@ -88,6 +94,9 @@ fun OneTapBottomSheetScreen() {
                 }
             }
             Spacer(Modifier.weight(1f))
+        }
+        token.value?.let {
+            UseToken(accessToken = it)
         }
     }
 }
