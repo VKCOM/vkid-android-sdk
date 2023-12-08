@@ -13,14 +13,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,16 +28,18 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.vk.id.AccessToken
 import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
 import com.vk.id.onetap.compose.onetap.OneTap
 import com.vk.id.sample.app.BuildConfig
 import com.vk.id.sample.app.R
+import com.vk.id.sample.app.screen.Button
+import com.vk.id.sample.app.screen.UseToken
 import com.vk.id.sample.xml.uikit.common.onVKIDAuthFail
 import com.vk.id.sample.xml.uikit.common.onVKIDAuthSuccess
 import java.text.SimpleDateFormat
@@ -49,6 +51,8 @@ fun HomeScreen(
     navController: NavController
 ) {
     val context = LocalContext.current
+    // for demo purpose only, use secured place to keep token
+    var token: AccessToken? by remember { mutableStateOf(null) }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -60,10 +64,16 @@ fun HomeScreen(
         OneTap(
             modifier = Modifier.width(355.dp),
             style = OneTapStyle.Light(cornersStyle = OneTapButtonCornersStyle.Rounded),
-            onAuth = { onVKIDAuthSuccess(context, it) },
+            onAuth = {
+                onVKIDAuthSuccess(context, it)
+                token = it
+            },
             onFail = { onVKIDAuthFail(context, it) },
             signInAnotherAccountButtonEnabled = true
         )
+        token?.let {
+            UseToken(it)
+        }
         Spacer(modifier = Modifier.height(32.dp))
         Divider(thickness = 1.dp, color = colorResource(id = R.color.vkid_gray900_alpha50))
         Button("Onetap styling (compose)") {
@@ -98,33 +108,6 @@ fun HomeScreen(
                     .padding(12.dp)
             )
         }
-    }
-}
-
-@Composable
-internal fun Button(
-    text: String,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit,
-) {
-    Button(
-        modifier = modifier
-            .width(355.dp)
-            .padding(vertical = 8.dp)
-            .height(44.dp),
-        shape = RoundedCornerShape(8.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.vkid_azure_A100)),
-        onClick = onClick
-    ) {
-        Text(
-            text = text,
-            style = TextStyle(
-                fontSize = 16.sp,
-                lineHeight = 20.sp,
-                fontWeight = FontWeight.Medium,
-                textAlign = TextAlign.Center
-            )
-        )
     }
 }
 

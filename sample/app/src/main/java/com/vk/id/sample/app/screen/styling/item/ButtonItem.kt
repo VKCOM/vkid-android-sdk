@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.vk.id.AccessToken
 import com.vk.id.onetap.compose.onetap.OneTap
 import com.vk.id.sample.app.uikit.common.darkBackground
 import com.vk.id.sample.xml.onetap.item.ButtonItem
@@ -17,7 +18,8 @@ import com.vk.id.sample.xml.uikit.common.onVKIDAuthSuccess
 @Composable
 fun HandleButtonItem(
     context: Context,
-    item: Any
+    item: Any,
+    onToken: (AccessToken) -> Unit
 ) {
     if (item !is ButtonItem) return
     Row(
@@ -29,7 +31,10 @@ fun HandleButtonItem(
         OneTap(
             modifier = Modifier.width(item.width.dp),
             style = item.style,
-            onAuth = { onVKIDAuthSuccess(context, it) },
+            onAuth = {
+                onToken(it)
+                onVKIDAuthSuccess(context, it)
+            },
             onFail = { onVKIDAuthFail(context, it) },
             signInAnotherAccountButtonEnabled = true
         )
