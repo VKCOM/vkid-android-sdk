@@ -9,6 +9,14 @@ public inline fun VKIDAuthParams(initializer: VKIDAuthParams.Builder.() -> Unit)
     return VKIDAuthParams.Builder().apply(initializer).build()
 }
 
+/**
+ * VKIDAuthParams encapsulates parameters for VK ID authentication.
+ *
+ * @property locale The [Locale] setting for the authentication UI. Optional.
+ * @property theme The [Theme] setting for the authentication UI (Light or Dark). Optional.
+ * @property useOAuthProviderIfPossible Flag to use OAuth provider installed on device if possible. Defaults to true.
+ * @property oAuth The [OAuth] provider to be used for authentication. Optional.
+ */
 public class VKIDAuthParams private constructor(
     public val locale: Locale? = null,
     public val theme: Theme? = null,
