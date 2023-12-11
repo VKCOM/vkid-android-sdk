@@ -18,7 +18,9 @@ public final class com/vk/id/onetap/xml/OneTap : android/widget/FrameLayout {
 	public final fun getOAuths ()Ljava/util/Set;
 	public final fun getStyle ()Lcom/vk/id/onetap/common/OneTapStyle;
 	public final fun isSignInToAnotherAccountEnabled ()Z
+	public final fun setCallbacks (Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)V
 	public final fun setCallbacks (Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;)V
+	public static synthetic fun setCallbacks$default (Lcom/vk/id/onetap/xml/OneTap;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
 	public static synthetic fun setCallbacks$default (Lcom/vk/id/onetap/xml/OneTap;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)V
 	public final fun setOAuths (Ljava/util/Set;)V
 	public final fun setSignInToAnotherAccountEnabled (Z)V
