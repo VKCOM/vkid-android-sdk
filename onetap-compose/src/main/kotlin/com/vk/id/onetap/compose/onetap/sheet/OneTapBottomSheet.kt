@@ -34,6 +34,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
 
+/**
+ * Composable function which creates a state for [OneTapBottomSheet] and can be used as `state` parameter.
+ *
+ * It provides [OneTapBottomSheetState] which can, for example, trigger hiding and showing the bottom sheet.
+ */
 @Composable
 public fun rememberOneTapBottomSheetState(): OneTapBottomSheetState {
     return rememberOneTapBottomSheetStateInternal()
@@ -49,6 +54,46 @@ public fun rememberOneTapBottomSheetState(): OneTapBottomSheetState {
  * @param autoHideOnSuccess Automatically hide the sheet on successful authentication.
  * @param onAuth Callback function invoked on successful authentication with an AccessToken.
  * @param onFail Callback function invoked on authentication failure with a VKIDAuthFail object.
+ * @param style The [OneTapBottomSheetStyle] of the bottom sheet. Default is [OneTapBottomSheetStyle.Light]
+ * @param vkid An optional VKID instance to use for authentication. If instance of VKID is not provided, it will be created on first composition.
+ */
+@Composable
+public fun OneTapBottomSheet(
+    modifier: Modifier = Modifier,
+    state: OneTapBottomSheetState = rememberOneTapBottomSheetState(),
+    serviceName: String,
+    scenario: OneTapScenario = OneTapScenario.EnterService,
+    autoHideOnSuccess: Boolean = true,
+    onAuth: (AccessToken) -> Unit,
+    onFail: (VKIDAuthFail) -> Unit = {},
+    style: OneTapBottomSheetStyle = OneTapBottomSheetStyle.Light(),
+    vkid: VKID? = null,
+): Unit = OneTapBottomSheet(
+    modifier = modifier,
+    state = state,
+    serviceName = serviceName,
+    scenario = scenario,
+    autoHideOnSuccess = autoHideOnSuccess,
+    onAuth = { _, accessToken -> onAuth(accessToken) },
+    onFail = { _, fail -> onFail(fail) },
+    style = style,
+    vkid = vkid,
+)
+
+/**
+ * Composable function to display a bottom sheet for VKID One Tap authentication with multibranding.
+ *
+ * @param modifier Modifier for this composable.
+ * @param state The state of the bottom sheet. To control sheet create state instance with [rememberOneTapBottomSheetState] and pass it here.
+ * @param serviceName The name of the service for authentication. Will be displayed as title of sheet.
+ * @param scenario The [OneTapScenario] under which the authentication is being performed. It reflects on the texts of the button and sheet.
+ * @param autoHideOnSuccess Automatically hide the sheet on successful authentication.
+ * @param onAuth Callback function invoked on successful authentication with an [OneTapOAuth] and an [AccessToken].
+ * The first parameter is the OAuth which was used for authorization or null if the main flow with OneTap was used.
+ * The second parameter is the access token to be used for working with VK API.
+ * @param onFail Callback function invoked on authentication failure with an [OneTapOAuth] and a [VKIDAuthFail] object.
+ * The first parameter is the OAuth which was used for authorization or null if the main flow with OneTap was used.
+ * The second parameter is the error which happened during authorization.
  * @param style The [OneTapBottomSheetStyle] of the bottom sheet. Default is [OneTapBottomSheetStyle.Light]
  * @param vkid An optional VKID instance to use for authentication. If instance of VKID is not provided, it will be created on first composition.
  */
