@@ -84,15 +84,15 @@ fun HomeScreen(
         Button("Onetap styling (xml layout)") {
             navController.navigate("onetap-styling-xml-layout")
         }
-//        Button("Multibranding (compose)") {
-//            navController.navigate("multibranding-compose")
-//        }
-//        Button("Multibranding (xml code)") {
-//            navController.navigate("multibranding-xml-code")
-//        }
-//        Button("Multibranding (xml layout)") {
-//            navController.navigate("multibranding-xml-layout")
-//        }
+        Button("Multibranding (compose)") {
+            navController.navigate("multibranding-compose")
+        }
+        Button("Multibranding (xml code)") {
+            navController.navigate("multibranding-xml-code")
+        }
+        Button("Multibranding (xml layout)") {
+            navController.navigate("multibranding-xml-layout")
+        }
         Button("OneTapBottomSheet") {
             navController.navigate("onetap-bottom-sheet")
         }
