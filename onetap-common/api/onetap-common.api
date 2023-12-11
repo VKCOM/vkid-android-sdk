@@ -23,7 +23,7 @@ public final class com/vk/id/onetap/common/OneTapOAuth$Companion {
 }
 
 public abstract class com/vk/id/onetap/common/OneTapStyle {
-	public synthetic fun <init> (Lcom/vk/id/onetap/common/button/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonSizeStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonElevationStyle;Lcom/vk/id/onetap/common/auth/style/VKIDButtonStyle;Lcom/vk/id/onetap/common/alternate/style/AlternateAccountButtonStyle;Lcom/vk/id/multibranding/common/style/OAuthListWidgetStyle;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Lcom/vk/id/onetap/common/button/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonSizeStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonElevationStyle;Lcom/vk/id/onetap/common/auth/style/VKIDButtonStyle;Lcom/vk/id/onetap/common/alternate/style/AlternateAccountButtonStyle;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getAlternateAccountButtonStyle ()Lcom/vk/id/onetap/common/alternate/style/AlternateAccountButtonStyle;
 	public final fun getCornersStyle ()Lcom/vk/id/onetap/common/button/style/OneTapButtonCornersStyle;
 	public final fun getElevationStyle ()Lcom/vk/id/onetap/common/button/style/OneTapButtonElevationStyle;

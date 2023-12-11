@@ -17,8 +17,22 @@ public sealed class OneTapStyle(
     public val elevationStyle: OneTapButtonElevationStyle,
     public val vkidButtonStyle: VKIDButtonStyle,
     public val alternateAccountButtonStyle: AlternateAccountButtonStyle,
-    public val oAuthListWidgetStyle: OAuthListWidgetStyle,
 ) {
+    public val oAuthListWidgetStyle: OAuthListWidgetStyle
+        get() = when (this) {
+            is Icon,
+            is TransparentLight,
+            is Light -> OAuthListWidgetStyle.Light(
+                cornersStyle = cornersStyle.toOAuthListWidgetStyle(),
+                sizeStyle = sizeStyle.toOAuthListWidgetStyle(),
+            )
+            is TransparentDark,
+            is Dark -> OAuthListWidgetStyle.Dark(
+                cornersStyle = cornersStyle.toOAuthListWidgetStyle(),
+                sizeStyle = sizeStyle.toOAuthListWidgetStyle(),
+            )
+        }
+
     public class Light(
         cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
         sizeStyle: OneTapButtonSizeStyle = OneTapButtonSizeStyle.DEFAULT,
@@ -29,10 +43,6 @@ public sealed class OneTapStyle(
         elevationStyle = elevationStyle,
         vkidButtonStyle = VKIDButtonStyle.Light(cornersStyle, sizeStyle, elevationStyle),
         alternateAccountButtonStyle = AlternateAccountButtonStyle.Light(cornersStyle, sizeStyle),
-        oAuthListWidgetStyle = OAuthListWidgetStyle.Light(
-            cornersStyle = cornersStyle.toOAuthListWidgetStyle(),
-            sizeStyle = sizeStyle.toOAuthListWidgetStyle(),
-        ),
     )
 
     public class Dark(
@@ -45,10 +55,6 @@ public sealed class OneTapStyle(
         elevationStyle = elevationStyle,
         vkidButtonStyle = VKIDButtonStyle.Dark(cornersStyle, sizeStyle, elevationStyle),
         alternateAccountButtonStyle = AlternateAccountButtonStyle.Dark(cornersStyle, sizeStyle),
-        oAuthListWidgetStyle = OAuthListWidgetStyle.Dark(
-            cornersStyle = cornersStyle.toOAuthListWidgetStyle(),
-            sizeStyle = sizeStyle.toOAuthListWidgetStyle(),
-        ),
     )
 
     public class TransparentLight(
@@ -61,10 +67,6 @@ public sealed class OneTapStyle(
         elevationStyle = elevationStyle,
         vkidButtonStyle = VKIDButtonStyle.TransparentLight(cornersStyle, sizeStyle, elevationStyle),
         alternateAccountButtonStyle = AlternateAccountButtonStyle.TransparentLight(cornersStyle, sizeStyle),
-        oAuthListWidgetStyle = OAuthListWidgetStyle.Light(
-            cornersStyle = cornersStyle.toOAuthListWidgetStyle(),
-            sizeStyle = sizeStyle.toOAuthListWidgetStyle(),
-        ),
     )
 
     public class TransparentDark(
@@ -77,10 +79,6 @@ public sealed class OneTapStyle(
         elevationStyle = elevationStyle,
         vkidButtonStyle = VKIDButtonStyle.TransparentDark(cornersStyle, sizeStyle, elevationStyle),
         alternateAccountButtonStyle = AlternateAccountButtonStyle.TransparentDark(cornersStyle, sizeStyle),
-        oAuthListWidgetStyle = OAuthListWidgetStyle.Dark(
-            cornersStyle = cornersStyle.toOAuthListWidgetStyle(),
-            sizeStyle = sizeStyle.toOAuthListWidgetStyle(),
-        ),
     )
 
     public class Icon(
@@ -93,9 +91,5 @@ public sealed class OneTapStyle(
         elevationStyle = elevationStyle,
         vkidButtonStyle = VKIDButtonStyle.Light(cornersStyle, sizeStyle, elevationStyle),
         alternateAccountButtonStyle = AlternateAccountButtonStyle.Light(cornersStyle, sizeStyle),
-        oAuthListWidgetStyle = OAuthListWidgetStyle.Light(
-            cornersStyle = cornersStyle.toOAuthListWidgetStyle(),
-            sizeStyle = sizeStyle.toOAuthListWidgetStyle(),
-        ),
     )
 }
