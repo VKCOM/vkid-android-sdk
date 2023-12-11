@@ -59,7 +59,7 @@ public class OneTapBottomSheet @JvmOverloads constructor(
     }
 
     /**
-     * Callbacks that provides auth result.
+     * Callbacks that provide auth result for version with multibranding.
      */
     public fun setCallbacks(
         onAuth: (OneTapOAuth?, AccessToken) -> Unit,
@@ -67,6 +67,17 @@ public class OneTapBottomSheet @JvmOverloads constructor(
     ) {
         this.onAuth = onAuth
         this.onFail = onFail
+    }
+
+    /**
+     * Callbacks that provide auth result.
+     */
+    public fun setCallbacks(
+        onAuth: (AccessToken) -> Unit,
+        onFail: (VKIDAuthFail) -> Unit = {},
+    ) {
+        this.onAuth = { _, token -> onAuth(token) }
+        this.onFail = { _, fail -> onFail(fail) }
     }
 
     /**
