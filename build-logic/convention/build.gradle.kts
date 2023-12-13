@@ -43,6 +43,10 @@ gradlePlugin {
             id = "vkid.android.library.compose"
             implementationClass = "VKIDLibraryComposeConventionPlugin"
         }
+        register("androidTests") {
+            id = "vkid.android.tests"
+            implementationClass = "AndroidTestsPlugin"
+        }
         register("vkidPublish") {
             id = "vkid.android.publish"
             implementationClass = "VKIDPublishConventionPlugin"
