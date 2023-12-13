@@ -6,6 +6,10 @@ plugins {
 
 android {
     namespace = "com.vk.id.onetap.compose"
+
+    defaultConfig {
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
 }
 
 dependencies {
@@ -22,4 +26,13 @@ dependencies {
     implementation(libs.coil)
     implementation(libs.coil.compose)
     debugImplementation(libs.androidx.compose.ui.tooling)
+
+    // https://github.com/KasperskyLab/Kaspresso/issues/578
+    debugImplementation(libs.android.material)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
+    androidTestUtil(libs.androidx.test.orchestrator)
+    androidTestImplementation(libs.kaspresso)
+    androidTestImplementation(libs.kaspresso.compose)
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    androidTestImplementation(libs.kotest.assertions)
 }

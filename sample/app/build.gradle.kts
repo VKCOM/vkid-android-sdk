@@ -1,8 +1,3 @@
-import com.android.build.api.dsl.ApplicationDefaultConfig
-import java.io.FileInputStream
-import java.io.FileNotFoundException
-import java.util.Properties
-
 plugins {
     id("vkid.android.application.compose")
 }
@@ -16,10 +11,6 @@ android {
         versionName = properties["VERSION_NAME"] as? String ?: "NO_VERSION"
 
         setProperty("archivesBaseName", "vkid-${stringProperty("build.type")}-${stringProperty("build.number")}")
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        initVKID()
 
         signingConfigs {
             getByName("debug") {
@@ -56,30 +47,6 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.okhttp3.okhttp)
     debugImplementation(libs.androidx.compose.ui.tooling)
-}
-
-fun ApplicationDefaultConfig.initVKID() {
-    if (gradle.startParameter.taskNames.any { it.contains("assemble") || it.contains("test") || it.contains("lint")}) {
-        val secrets = Properties()
-        try {
-            secrets.load(FileInputStream(file("secrets.properties")))
-            val clientId = secrets["VKIDClientID"] ?: throw IllegalStateException("Add VKIDClientID to file secrets.properties")
-            val clientSecret = secrets["VKIDClientSecret"] ?: throw IllegalStateException("Add VKIDClientSecret to file secrets.properties")
-            addManifestPlaceholders(
-                mapOf(
-                    "VKIDRedirectHost" to "vk.com",
-                    "VKIDRedirectScheme" to "vk$clientId",
-                    "VKIDClientID" to clientId,
-                    "VKIDClientSecret" to clientSecret
-                )
-            )
-        } catch (e: FileNotFoundException) {
-            logger.error(
-                "Warning! Sample would not work!\nCreate the 'secrets.properties' file in the 'sample/app' folder and add your 'VKIDClientID' and 'VKIDClientSecret' to it." +
-                        "\nFor more information, refer to the 'README.md' file."
-            )
-        }
-    }
 }
 
 fun generateVersionCode(): Int {

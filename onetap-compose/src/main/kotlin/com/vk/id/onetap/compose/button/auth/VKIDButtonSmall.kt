@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
@@ -84,6 +85,7 @@ internal fun VKIDButtonSmall(
         horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.CenterHorizontally),
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
+            .testTag("vkid_button")
             .shadow(style.elevationStyle, style.cornersStyle)
             .width(style.sizeStyle.heightDp().dp)
             .height(style.sizeStyle)
