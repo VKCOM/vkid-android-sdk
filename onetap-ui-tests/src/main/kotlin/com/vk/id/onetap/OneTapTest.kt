@@ -1,39 +1,34 @@
-package com.vk.id.onetap.compose
+package com.vk.id.onetap
 
-import androidx.activity.ComponentActivity
+import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.kaspersky.components.composesupport.config.withComposeSupport
 import com.kaspersky.kaspresso.kaspresso.Kaspresso
 import com.kaspersky.kaspresso.testcases.api.testcase.TestCase
 import com.kaspersky.kaspresso.testcases.core.testcontext.TestContext
 import com.vk.id.AccessToken
 import com.vk.id.VKIDAuthFail
-import com.vk.id.onetap.compose.onetap.OneTap
-import io.github.kakaocup.compose.node.element.ComposeScreen.Companion.onComposeScreen
+import com.vk.id.autotest.AutoTestActivity
+import io.github.kakaocup.compose.node.element.ComposeScreen
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4ClassRunner::class)
-public class OneTapTest : TestCase(
+public abstract class OneTapTest : TestCase(
     kaspressoBuilder = Kaspresso.Builder.withComposeSupport()
 ) {
 
     @get:Rule
-    internal val composeTestRule = createAndroidComposeRule<ComponentActivity>()
+    public val composeTestRule: AndroidComposeTestRule<ActivityScenarioRule<AutoTestActivity>, AutoTestActivity> =
+        createAndroidComposeRule()
 
     @Test
-    internal fun tokenIsReceived() = run {
+    public fun tokenIsReceived(): Unit = run {
         var token: AccessToken? = null
-        composeTestRule.setContent {
-            OneTap(
-                onAuth = { token = it },
-            )
-        }
+        setContent(onAuth = { token = it })
         startAuth()
         waitForVkToStart()
         step("Token is received") {
@@ -44,14 +39,9 @@ public class OneTapTest : TestCase(
     }
 
     @Test
-    internal fun canceledIsReceived() = run {
+    public fun cancellationIsReceived(): Unit = run {
         var fail: VKIDAuthFail? = null
-        composeTestRule.setContent {
-            OneTap(
-                onAuth = {},
-                onFail = { fail = it },
-            )
-        }
+        setContent(onFail = { fail = it })
         startAuth()
         waitForVkToStart()
         step("Press back") {
@@ -64,8 +54,14 @@ public class OneTapTest : TestCase(
         }
     }
 
-    private fun TestContext<Unit>.startAuth() = step("Start auth") {
-        onComposeScreen<OneTapScreen>(composeTestRule) {
+    public abstract fun setContent(
+        onAuth: (AccessToken) -> Unit = {},
+        onFail: (VKIDAuthFail) -> Unit = {},
+    )
+
+
+    private fun TestContext<Unit>.startAuth(): Unit = step("Start auth") {
+        ComposeScreen.onComposeScreen<OneTapScreen>(composeTestRule) {
             oneTapButton {
                 performClick()
             }

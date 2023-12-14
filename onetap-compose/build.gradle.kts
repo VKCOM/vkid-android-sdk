@@ -23,4 +23,5 @@ dependencies {
     implementation(libs.coil)
     implementation(libs.coil.compose)
     debugImplementation(libs.androidx.compose.ui.tooling)
+    androidTestImplementation(project(":onetap-ui-tests"))
 }

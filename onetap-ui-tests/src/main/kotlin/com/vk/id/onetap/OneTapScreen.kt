@@ -1,14 +1,14 @@
-package com.vk.id.onetap.compose
+package com.vk.id.onetap
 
 import androidx.compose.ui.test.SemanticsNodeInteractionsProvider
 import io.github.kakaocup.compose.node.element.ComposeScreen
 import io.github.kakaocup.compose.node.element.KNode
 
-internal class OneTapScreen(
+public class OneTapScreen(
     semanticsProvider: SemanticsNodeInteractionsProvider
 ) : ComposeScreen<OneTapScreen>(semanticsProvider) {
 
-    val oneTapButton: KNode = child {
+    public val oneTapButton: KNode = child {
         hasTestTag("vkid_button")
     }
 }
