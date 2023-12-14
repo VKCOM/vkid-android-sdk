@@ -7,6 +7,8 @@ import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
@@ -41,7 +43,6 @@ import com.vk.id.onetap.compose.icon.VKIcon
 import com.vk.id.onetap.compose.onetap.style.clip
 import com.vk.id.onetap.compose.onetap.style.height
 import com.vk.id.onetap.compose.onetap.style.heightDp
-import com.vk.id.onetap.compose.onetap.style.iconPadding
 import com.vk.id.onetap.compose.onetap.style.shadow
 import com.vk.id.onetap.compose.progress.CircleProgress
 import kotlinx.coroutines.launch
@@ -139,13 +140,15 @@ private fun SmallButtonContent(
 ) {
     Box(
         modifier = Modifier
-            .iconPadding(style.sizeStyle),
+            .padding(8.dp),
+        contentAlignment = Alignment.Center
     ) {
         if (state.inProgress) {
             CircleProgress(style.progressStyle)
         } else {
             VKIcon(
                 modifier = Modifier
+                    .size(28.dp)
                     .graphicsLayer { this.translationX = animatedOffsetXVkIcon.value },
                 style = style.iconStyle
             )
