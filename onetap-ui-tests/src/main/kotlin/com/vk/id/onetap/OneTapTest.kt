@@ -59,7 +59,6 @@ public abstract class OneTapTest : TestCase(
         onFail: (VKIDAuthFail) -> Unit = {},
     )
 
-
     private fun TestContext<Unit>.startAuth(): Unit = step("Start auth") {
         ComposeScreen.onComposeScreen<OneTapScreen>(composeTestRule) {
             oneTapButton {
