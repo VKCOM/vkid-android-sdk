@@ -127,13 +127,13 @@ internal fun OneTap(
     }
 }
 
-private fun OneTapStyle.toProviderTheme(): VKIDAuthParams.Theme = when (this) {
+private fun OneTapStyle.toProviderTheme(): VKIDAuthParams.Theme? = when (this) {
     is OneTapStyle.Dark,
     is OneTapStyle.TransparentDark -> VKIDAuthParams.Theme.Dark
 
     is OneTapStyle.Light,
     is OneTapStyle.TransparentLight,
-    is OneTapStyle.Icon -> VKIDAuthParams.Theme.Light
+    is OneTapStyle.Icon -> null
 }
 
 @Preview
