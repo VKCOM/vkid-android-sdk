@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicText
@@ -114,14 +115,14 @@ internal fun VKIDButton(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Spacer(modifier = Modifier.weight(1f - animatedSpaceWeight))
+            Spacer(modifier = Modifier.width(animatedRightIconWidthCompensation.dp * (1 - animatedSpaceWeight)))
             LeftIconBox(style)
             Spacer(modifier = Modifier.weight(animatedSpaceWeight))
             TextBox(state, style)
             Spacer(modifier = Modifier.weight(animatedSpaceWeight))
-            Spacer(modifier = Modifier.width(animatedRightIconWidthCompensation.dp))
             Spacer(modifier = Modifier.weight(1f - animatedSpaceWeight))
+            RightIconBox(state, style, Modifier)
         }
-        RightIconBox(state, style, Modifier.align(Alignment.CenterEnd))
     }
 }
 
@@ -277,23 +278,26 @@ private fun TextBox(
     )
 
     @Suppress("MagicNumber")
-    BoxWithConstraints (
+    BoxWithConstraints(
         modifier = Modifier
             .fillMaxHeight()
             .graphicsLayer { this.alpha = animatedAlpha },
         contentAlignment = Alignment.Center
     ) {
         MeasureUnconstrainedViewWidth(viewToMeasure = {
-            BasicText(
-                text = state.text,
-                style = TextStyle(
-                    color = style.textStyle.asColorResource(),
-                    fontSize = style.sizeStyle.asFontSize(),
-                    lineHeight = style.sizeStyle.asLineHeight(),
-                    fontWeight = FontWeight.Medium,
-                    textAlign = TextAlign.Center
+            Row {
+                BasicText(
+                    text = state.text,
+                    style = TextStyle(
+                        color = style.textStyle.asColorResource(),
+                        fontSize = style.sizeStyle.asFontSize(),
+                        lineHeight = style.sizeStyle.asLineHeight(),
+                        fontWeight = FontWeight.Medium,
+                        textAlign = TextAlign.Center
+                    )
                 )
-            )
+                RightIconBox(state, style, Modifier)
+            }
         }) {
             if (it < maxWidth) {
                 BasicText(
@@ -358,14 +362,15 @@ private fun RightIconBox(
     ) {
         if (state.inProgress) {
             CircleProgress(style.progressStyle)
-        }
-        if (state.userIconUrl != null) {
+        } else if (state.userIconUrl != null) {
             AsyncImage(
                 model = state.userIconUrl,
                 contentDescription = null,
                 modifier = Modifier.clip(CircleShape),
                 contentScale = ContentScale.FillHeight,
             )
+        } else {
+            Spacer(modifier = Modifier.size(24.dp))
         }
     }
 }
