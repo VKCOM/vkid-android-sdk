@@ -3,15 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clipChildren="false"
         android:clipToPadding="false"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:gravity="center">
 
         <com.vk.id.sample.xml.uikit.item.TitleItemView
             android:id="@+id/primary_title"
@@ -28,7 +27,7 @@
 
         <com.vk.id.onetap.xml.OneTap
             android:id="@+id/onetap_primary_no_rounding"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingHorizontal="8dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -47,7 +46,7 @@
 
         <com.vk.id.onetap.xml.OneTap
             android:id="@+id/onetap_primary_rounded"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingHorizontal="8dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -66,7 +65,7 @@
 
         <com.vk.id.onetap.xml.OneTap
             android:id="@+id/onetap_primary_round"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingHorizontal="8dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -100,7 +99,7 @@
 
         <com.vk.id.onetap.xml.OneTap
             android:id="@+id/onetap_secondary_no_rounding"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingHorizontal="8dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -119,7 +118,7 @@
 
         <com.vk.id.onetap.xml.OneTap
             android:id="@+id/onetap_secondary_rounded"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingHorizontal="8dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -138,7 +137,7 @@
 
         <com.vk.id.onetap.xml.OneTap
             android:id="@+id/onetap_secondary_round"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingHorizontal="8dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -168,7 +167,6 @@
             android:layout_height="wrap_content"
             android:background="@color/vkid_gray900"
             android:gravity="center"
-            android:orientation="vertical"
             app:layout_constraintTop_toBottomOf="@id/onetap_secondary_dark_title">
 
             <View
@@ -179,7 +177,7 @@
 
             <com.vk.id.onetap.xml.OneTap
                 android:id="@+id/onetap_secondary_dark_no_rounding"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -198,7 +196,7 @@
 
             <com.vk.id.onetap.xml.OneTap
                 android:id="@+id/onetap_secondary_dark_rounded"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -217,7 +215,7 @@
 
             <com.vk.id.onetap.xml.OneTap
                 android:id="@+id/onetap_secondary_dark_round"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -252,7 +250,7 @@
 
         <com.vk.id.onetap.xml.OneTap
             android:id="@+id/onetap_elevation_zero"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingHorizontal="8dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -271,7 +269,7 @@
 
         <com.vk.id.onetap.xml.OneTap
             android:id="@+id/onetap_elevation_4dp"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingHorizontal="8dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -290,7 +288,7 @@
 
         <com.vk.id.onetap.xml.OneTap
             android:id="@+id/onetap_elevation_8dp"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingHorizontal="8dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -322,7 +320,7 @@
 
         <com.vk.id.onetap.xml.OneTap
             android:id="@+id/onetap_small32"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingHorizontal="8dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -341,7 +339,7 @@
 
         <com.vk.id.onetap.xml.OneTap
             android:id="@+id/onetap_small34"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingHorizontal="8dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -360,7 +358,7 @@
 
         <com.vk.id.onetap.xml.OneTap
             android:id="@+id/onetap_small36"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingHorizontal="8dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -379,7 +377,7 @@
 
         <com.vk.id.onetap.xml.OneTap
             android:id="@+id/onetap_small38"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingHorizontal="8dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -398,7 +396,7 @@
 
         <com.vk.id.onetap.xml.OneTap
             android:id="@+id/onetap_medium40"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingHorizontal="8dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -417,7 +415,7 @@
 
         <com.vk.id.onetap.xml.OneTap
             android:id="@+id/onetap_medium42"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingHorizontal="8dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -436,7 +434,7 @@
 
         <com.vk.id.onetap.xml.OneTap
             android:id="@+id/onetap_medium44"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingHorizontal="8dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -455,7 +453,7 @@
 
         <com.vk.id.onetap.xml.OneTap
             android:id="@+id/onetap_medium46"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingHorizontal="8dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -474,7 +472,7 @@
 
         <com.vk.id.onetap.xml.OneTap
             android:id="@+id/onetap_large48"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingHorizontal="8dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -493,7 +491,7 @@
 
         <com.vk.id.onetap.xml.OneTap
             android:id="@+id/onetap_large50"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingHorizontal="8dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -512,7 +510,7 @@
 
         <com.vk.id.onetap.xml.OneTap
             android:id="@+id/onetap_large52"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingHorizontal="8dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -531,7 +529,7 @@
 
         <com.vk.id.onetap.xml.OneTap
             android:id="@+id/onetap_large54"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingHorizontal="8dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -550,7 +548,7 @@
 
         <com.vk.id.onetap.xml.OneTap
             android:id="@+id/onetap_large56"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingHorizontal="8dp"
             app:layout_constraintEnd_toEndOf="parent"
