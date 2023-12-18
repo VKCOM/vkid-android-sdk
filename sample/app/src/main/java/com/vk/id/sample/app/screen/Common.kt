@@ -38,13 +38,13 @@ internal fun Button(
     androidx.compose.material3.Button(
         modifier = modifier
             .width(355.dp)
-            .padding(vertical = 8.dp)
-            .height(44.dp),
+            .padding(vertical = 8.dp),
         shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.vkid_azure_A100)),
         onClick = onClick
     ) {
         Text(
+            modifier = Modifier.padding(2.dp),
             text = text,
             style = TextStyle(
                 fontSize = 16.sp,
