@@ -2,12 +2,12 @@ package com.vk.id.sample.xml.onetap
 
 import android.content.Context
 import android.os.Bundle
-import android.view.Gravity
-import android.widget.FrameLayout
-import android.widget.FrameLayout.LayoutParams
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.setPadding
 import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.xml.OneTap
@@ -33,17 +33,17 @@ public class OnetapStylingXmlCodeActivity : AppCompatActivity() {
                         orientation = LinearLayout.VERTICAL
                         buttonStylingData.forEach {
                             (
-                                when (it) {
-                                    is TitleItem -> TitleItemView.create(context, it.text)
-                                    is OneTapItem -> createOneTap(
-                                        context,
-                                        it.style,
-                                        it.width,
-                                        it.isDarkBackground
-                                    )
-                                    else -> null
-                                }
-                                )?.let(::addView)
+                                    when (it) {
+                                        is TitleItem -> TitleItemView.create(context, it.text)
+                                        is OneTapItem -> createOneTap(
+                                            context,
+                                            it.style,
+                                            it.width,
+                                            it.isDarkBackground
+                                        )
+                                        else -> null
+                                    }
+                                    )?.let(::addView)
                         }
                     }
                 )
@@ -57,7 +57,7 @@ private fun createOneTap(
     style: OneTapStyle,
     width: Int,
     isDarkBackground: Boolean,
-) = FrameLayout(context).apply {
+) = ConstraintLayout(context).apply {
     layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
     setPadding(context.dpToPixels(8), 0, context.dpToPixels(8), 0)
     if (isDarkBackground) setBackgroundResource(R.color.vkid_gray900)
@@ -70,11 +70,15 @@ private fun createOneTap(
                 )
             } else {
                 LayoutParams(
-                    context.dpToPixels(width),
+                    0,
                     LayoutParams.WRAP_CONTENT,
                 )
             }
-            layoutParams.gravity = Gravity.CENTER
+            layoutParams.matchConstraintMaxWidth = context.dpToPixels(width)
+            layoutParams.bottomToBottom = ConstraintSet.PARENT_ID
+            layoutParams.endToEnd = ConstraintSet.PARENT_ID
+            layoutParams.startToStart = ConstraintSet.PARENT_ID
+            layoutParams.topToTop = ConstraintSet.PARENT_ID
             setPadding(context.dpToPixels(BUTTON_PADDING))
             this.style = style
             this.layoutParams = layoutParams
