@@ -18,6 +18,7 @@ public sealed class OneTapStyle(
     public val vkidButtonStyle: VKIDButtonStyle,
     public val alternateAccountButtonStyle: AlternateAccountButtonStyle,
 ) {
+    @InternalVKIDApi
     public val oAuthListWidgetStyle: OAuthListWidgetStyle
         get() = when (this) {
             is Icon,
