@@ -21,6 +21,7 @@ import com.vk.id.sample.xml.uikit.item.TitleItem
 import com.vk.id.sample.xml.uikit.item.TitleItemView
 
 private const val BUTTON_PADDING = 12
+private const val HORIZONTAL_PADDING = 8
 
 public class OnetapStylingXmlCodeActivity : AppCompatActivity() {
 
@@ -33,17 +34,17 @@ public class OnetapStylingXmlCodeActivity : AppCompatActivity() {
                         orientation = LinearLayout.VERTICAL
                         buttonStylingData.forEach {
                             (
-                                    when (it) {
-                                        is TitleItem -> TitleItemView.create(context, it.text)
-                                        is OneTapItem -> createOneTap(
-                                            context,
-                                            it.style,
-                                            it.width,
-                                            it.isDarkBackground
-                                        )
-                                        else -> null
-                                    }
-                                    )?.let(::addView)
+                                when (it) {
+                                    is TitleItem -> TitleItemView.create(context, it.text)
+                                    is OneTapItem -> createOneTap(
+                                        context,
+                                        it.style,
+                                        it.width,
+                                        it.isDarkBackground
+                                    )
+                                    else -> null
+                                }
+                                )?.let(::addView)
                         }
                     }
                 )
@@ -59,7 +60,7 @@ private fun createOneTap(
     isDarkBackground: Boolean,
 ) = ConstraintLayout(context).apply {
     layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
-    setPadding(context.dpToPixels(8), 0, context.dpToPixels(8), 0)
+    setPadding(context.dpToPixels(HORIZONTAL_PADDING), 0, context.dpToPixels(HORIZONTAL_PADDING), 0)
     if (isDarkBackground) setBackgroundResource(R.color.vkid_gray900)
     addView(
         OneTap(context).apply {
