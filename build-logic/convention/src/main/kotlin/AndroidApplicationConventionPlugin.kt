@@ -21,7 +21,6 @@ import com.vk.id.configureAndroidLint
 import com.vk.id.configureDetekt
 import com.vk.id.configureKotest
 import com.vk.id.configureKotlinAndroid
-import com.vk.id.configureManifestPlaceholders
 import com.vk.id.configurePrintApksTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -38,7 +37,6 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             extensions.configure<ApplicationExtension> {
                 configureKotlinAndroid(this)
                 defaultConfig.targetSdk = Versions.targetSdk
-                configureManifestPlaceholders(this)
             }
             extensions.configure<ApplicationAndroidComponentsExtension> {
                 configurePrintApksTask(this)

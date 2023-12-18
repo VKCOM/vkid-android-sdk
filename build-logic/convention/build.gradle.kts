@@ -45,7 +45,11 @@ gradlePlugin {
         }
         register("androidTests") {
             id = "vkid.android.tests"
-            implementationClass = "AndroidTestsPlugin"
+            implementationClass = "AndroidTestsConventionPlugin"
+        }
+        register("vkidApp") {
+            id = "vkid.placeholders"
+            implementationClass = "VKIDAppConventionPlugin"
         }
         register("vkidPublish") {
             id = "vkid.android.publish"

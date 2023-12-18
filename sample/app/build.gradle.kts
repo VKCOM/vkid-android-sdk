@@ -1,5 +1,6 @@
 plugins {
     id("vkid.android.application.compose")
+    id("vkid.placeholders")
 }
 
 android {

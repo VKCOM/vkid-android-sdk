@@ -1,22 +1,23 @@
 import com.android.build.api.dsl.CommonExtension
 import com.vk.id.UninstallTestAppTask
-import com.vk.id.configureManifestPlaceholders
 import com.vk.id.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
 
-class AndroidTestsPlugin : Plugin<Project> {
+class AndroidTestsConventionPlugin : Plugin<Project> {
 
     override fun apply(
         target: Project
     ): Unit = with(target) {
+        with(pluginManager) {
+            apply("vkid.placeholders")
+        }
         val android = extensions.getByName("android") as CommonExtension<*, *, *, *, *>
         android.apply {
             defaultConfig {
                 testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
             }
-            configureManifestPlaceholders(this)
         }
 
         dependencies {
