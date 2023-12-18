@@ -76,6 +76,8 @@ internal fun OneTapScenario.vkidButtonTextProvider(resources: Resources): VKIDBu
             }
         }
 
+        override fun userFoundShortText(user: VKIDUser) = userFoundText(user)
+
         override fun noUserText(): String =
             when (this@vkidButtonTextProvider) {
                 OneTapScenario.EnterService -> resources.getString(
@@ -95,5 +97,7 @@ internal fun OneTapScenario.vkidButtonTextProvider(resources: Resources): VKIDBu
                     R.string.vkid_schenario_enter_to_account_vkid_button_text_no_user
                 )
             }
+
+        override fun noUserShortText() = noUserText()
     }
 }
