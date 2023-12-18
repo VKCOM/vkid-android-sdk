@@ -13,7 +13,7 @@ import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.xml.OneTap
 import com.vk.id.sample.xml.R
 import com.vk.id.sample.xml.onetap.data.buttonStylingData
-import com.vk.id.sample.xml.onetap.item.ButtonItem
+import com.vk.id.sample.xml.onetap.item.OneTapItem
 import com.vk.id.sample.xml.uikit.common.dpToPixels
 import com.vk.id.sample.xml.uikit.common.onVKIDAuthFail
 import com.vk.id.sample.xml.uikit.common.onVKIDAuthSuccess
@@ -35,7 +35,7 @@ public class OnetapStylingXmlCodeActivity : AppCompatActivity() {
                             (
                                 when (it) {
                                     is TitleItem -> TitleItemView.create(context, it.text)
-                                    is ButtonItem -> createVKIDButton(
+                                    is OneTapItem -> createOneTap(
                                         context,
                                         it.style,
                                         it.width,
@@ -52,13 +52,14 @@ public class OnetapStylingXmlCodeActivity : AppCompatActivity() {
     }
 }
 
-private fun createVKIDButton(
+private fun createOneTap(
     context: Context,
     style: OneTapStyle,
     width: Int,
     isDarkBackground: Boolean,
 ) = FrameLayout(context).apply {
     layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+    setPadding(context.dpToPixels(8), 0, context.dpToPixels(8), 0)
     if (isDarkBackground) setBackgroundResource(R.color.vkid_gray900)
     addView(
         OneTap(context).apply {

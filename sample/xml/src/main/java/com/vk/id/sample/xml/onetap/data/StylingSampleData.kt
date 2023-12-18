@@ -4,7 +4,7 @@ import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonElevationStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonSizeStyle
-import com.vk.id.sample.xml.onetap.item.ButtonItem
+import com.vk.id.sample.xml.onetap.item.OneTapItem
 import com.vk.id.sample.xml.uikit.item.HalfSpacerItem
 import com.vk.id.sample.xml.uikit.item.SpacerItem
 import com.vk.id.sample.xml.uikit.item.TitleItem
@@ -15,19 +15,19 @@ private const val ELEVATION_8_DP = 8f
 public val buttonStylingData: List<Any> = listOf(
     TitleItem("Primary"),
     HalfSpacerItem(),
-    ButtonItem(
+    OneTapItem(
         style = OneTapStyle.Light(
             cornersStyle = OneTapButtonCornersStyle.None,
         )
     ),
     SpacerItem(),
-    ButtonItem(
+    OneTapItem(
         style = OneTapStyle.Light(
             cornersStyle = OneTapButtonCornersStyle.Rounded,
         ),
     ),
     SpacerItem(),
-    ButtonItem(
+    OneTapItem(
         style = OneTapStyle.Light(
             cornersStyle = OneTapButtonCornersStyle.Round,
         ),
@@ -35,19 +35,19 @@ public val buttonStylingData: List<Any> = listOf(
     HalfSpacerItem(),
     TitleItem("Secondary light"),
     HalfSpacerItem(),
-    ButtonItem(
+    OneTapItem(
         style = OneTapStyle.TransparentLight(
             cornersStyle = OneTapButtonCornersStyle.None,
         ),
     ),
     SpacerItem(),
-    ButtonItem(
+    OneTapItem(
         style = OneTapStyle.TransparentLight(
             cornersStyle = OneTapButtonCornersStyle.Rounded,
         ),
     ),
     SpacerItem(),
-    ButtonItem(
+    OneTapItem(
         style = OneTapStyle.TransparentLight(
             cornersStyle = OneTapButtonCornersStyle.Round,
         ),
@@ -55,21 +55,21 @@ public val buttonStylingData: List<Any> = listOf(
     HalfSpacerItem(),
     TitleItem("Secondary dark"),
     HalfSpacerItem(isDarkBackground = true),
-    ButtonItem(
+    OneTapItem(
         style = OneTapStyle.TransparentDark(
             cornersStyle = OneTapButtonCornersStyle.None,
         ),
         isDarkBackground = true
     ),
     SpacerItem(isDarkBackground = true),
-    ButtonItem(
+    OneTapItem(
         style = OneTapStyle.TransparentDark(
             cornersStyle = OneTapButtonCornersStyle.Rounded,
         ),
         isDarkBackground = true
     ),
     SpacerItem(isDarkBackground = true),
-    ButtonItem(
+    OneTapItem(
         style = OneTapStyle.TransparentDark(
             cornersStyle = OneTapButtonCornersStyle.Round,
         ),
@@ -78,21 +78,21 @@ public val buttonStylingData: List<Any> = listOf(
     HalfSpacerItem(isDarkBackground = true),
     TitleItem("Elevation"),
     HalfSpacerItem(),
-    ButtonItem(
+    OneTapItem(
         style = OneTapStyle.Light(
             cornersStyle = OneTapButtonCornersStyle.Rounded,
             elevationStyle = OneTapButtonElevationStyle.Default
         )
     ),
     SpacerItem(),
-    ButtonItem(
+    OneTapItem(
         style = OneTapStyle.Light(
             cornersStyle = OneTapButtonCornersStyle.Rounded,
             elevationStyle = OneTapButtonElevationStyle.Custom(ELEVATION_4_DP)
         ),
     ),
     SpacerItem(),
-    ButtonItem(
+    OneTapItem(
         style = OneTapStyle.Light(
             cornersStyle = OneTapButtonCornersStyle.Rounded,
             elevationStyle = OneTapButtonElevationStyle.Custom(ELEVATION_8_DP)
@@ -101,91 +101,91 @@ public val buttonStylingData: List<Any> = listOf(
     HalfSpacerItem(),
     TitleItem("Sizes"),
     HalfSpacerItem(),
-    ButtonItem(
+    OneTapItem(
         style = OneTapStyle.Light(
             cornersStyle = OneTapButtonCornersStyle.Rounded,
             sizeStyle = OneTapButtonSizeStyle.SMALL_32
         )
     ),
     SpacerItem(),
-    ButtonItem(
+    OneTapItem(
         style = OneTapStyle.Light(
             cornersStyle = OneTapButtonCornersStyle.Rounded,
             sizeStyle = OneTapButtonSizeStyle.SMALL_34
         ),
     ),
     SpacerItem(),
-    ButtonItem(
+    OneTapItem(
         style = OneTapStyle.Light(
             cornersStyle = OneTapButtonCornersStyle.Rounded,
             sizeStyle = OneTapButtonSizeStyle.SMALL_36
         ),
     ),
     SpacerItem(),
-    ButtonItem(
+    OneTapItem(
         style = OneTapStyle.Light(
             cornersStyle = OneTapButtonCornersStyle.Rounded,
             sizeStyle = OneTapButtonSizeStyle.SMALL_38
         ),
     ),
     SpacerItem(),
-    ButtonItem(
+    OneTapItem(
         style = OneTapStyle.Light(
             cornersStyle = OneTapButtonCornersStyle.Rounded,
             sizeStyle = OneTapButtonSizeStyle.MEDIUM_40
         ),
     ),
     SpacerItem(),
-    ButtonItem(
+    OneTapItem(
         style = OneTapStyle.Light(
             cornersStyle = OneTapButtonCornersStyle.Rounded,
             sizeStyle = OneTapButtonSizeStyle.MEDIUM_42
         ),
     ),
     SpacerItem(),
-    ButtonItem(
+    OneTapItem(
         style = OneTapStyle.Light(
             cornersStyle = OneTapButtonCornersStyle.Rounded,
             sizeStyle = OneTapButtonSizeStyle.MEDIUM_44
         ),
     ),
     SpacerItem(),
-    ButtonItem(
+    OneTapItem(
         style = OneTapStyle.Light(
             cornersStyle = OneTapButtonCornersStyle.Rounded,
             sizeStyle = OneTapButtonSizeStyle.MEDIUM_46
         ),
     ),
     SpacerItem(),
-    ButtonItem(
+    OneTapItem(
         style = OneTapStyle.Light(
             cornersStyle = OneTapButtonCornersStyle.Rounded,
             sizeStyle = OneTapButtonSizeStyle.LARGE_48
         ),
     ),
     SpacerItem(),
-    ButtonItem(
+    OneTapItem(
         style = OneTapStyle.Light(
             cornersStyle = OneTapButtonCornersStyle.Rounded,
             sizeStyle = OneTapButtonSizeStyle.LARGE_50
         ),
     ),
     SpacerItem(),
-    ButtonItem(
+    OneTapItem(
         style = OneTapStyle.Light(
             cornersStyle = OneTapButtonCornersStyle.Rounded,
             sizeStyle = OneTapButtonSizeStyle.LARGE_52
         ),
     ),
     SpacerItem(),
-    ButtonItem(
+    OneTapItem(
         style = OneTapStyle.Light(
             cornersStyle = OneTapButtonCornersStyle.Rounded,
             sizeStyle = OneTapButtonSizeStyle.LARGE_54
         ),
     ),
     SpacerItem(),
-    ButtonItem(
+    OneTapItem(
         style = OneTapStyle.Light(
             cornersStyle = OneTapButtonCornersStyle.Rounded,
             sizeStyle = OneTapButtonSizeStyle.LARGE_56
@@ -194,7 +194,7 @@ public val buttonStylingData: List<Any> = listOf(
     HalfSpacerItem(),
     TitleItem("Small button"),
     HalfSpacerItem(),
-    ButtonItem(
+    OneTapItem(
         style = OneTapStyle.Icon(
             cornersStyle = OneTapButtonCornersStyle.Default,
             sizeStyle = OneTapButtonSizeStyle.MEDIUM_44,
