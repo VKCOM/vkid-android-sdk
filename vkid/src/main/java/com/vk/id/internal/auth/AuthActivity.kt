@@ -116,14 +116,12 @@ internal class AuthActivity : Activity() {
     ): AuthResult {
         val uuid = payloadJson.optString("uuid")
         val expireTime = payloadJson.optLong("ttl", 0).toExpireTime
-        val token = payloadJson.optString("token")
         val user = payloadJson.optJSONObject("user")
         val oauth = payloadJson.optJSONObject("oauth")
         val code = oauth?.optString("code") ?: ""
         val state = oauth?.optString("state") ?: ""
 
         return AuthResult.Success(
-            token = token,
             uuid = uuid,
             expireTime = expireTime,
             userId = user?.optLong("id") ?: 0,

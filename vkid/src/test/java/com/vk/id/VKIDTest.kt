@@ -83,7 +83,6 @@ internal class VKIDTest : BehaviorSpec({
             TestScope(scheduler).launch {
                 AuthEventBridge.listener?.onAuthResult(
                     AuthResult.Success(
-                        token = "TOKEN",
                         uuid = "uuid",
                         expireTime = expireTime,
                         userId = 123L,

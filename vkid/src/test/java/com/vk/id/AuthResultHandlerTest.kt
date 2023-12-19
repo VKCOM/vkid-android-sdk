@@ -38,7 +38,6 @@ private const val CLIENT_ID = "client id"
 private const val CLIENT_SECRET = "client secret"
 private const val REDIRECT_URI = "redirect uri"
 private val authResultSuccess = AuthResult.Success(
-    token = TOKEN,
     uuid = UUID,
     expireTime = EXPIRE_TIME,
     userId = USER_ID,
