@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.vk.id.AccessToken
 import com.vk.id.sample.app.screen.UseToken
-import com.vk.id.sample.app.screen.styling.item.HandleButtonItem
+import com.vk.id.sample.app.screen.styling.item.HandleOneTapItem
 import com.vk.id.sample.app.uikit.item.HandleHalfSpacerItem
 import com.vk.id.sample.app.uikit.item.HandleSpacerItem
 import com.vk.id.sample.app.uikit.item.HandleTitleItem
@@ -38,8 +38,8 @@ fun OnetapStylingComposeScreen() {
             HandleSpacerItem(item = it)
             HandleHalfSpacerItem(item = it)
             HandleTitleItem(item = it)
-            HandleButtonItem(context = context, item = it) {
-                token.value = it
+            HandleOneTapItem(context = context, item = it) { accessToken ->
+                token.value = accessToken
             }
         }
     }

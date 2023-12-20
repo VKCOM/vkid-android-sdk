@@ -3,374 +3,596 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    >
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clipChildren="false"
         android:clipToPadding="false"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:gravity="center">
 
         <com.vk.id.sample.xml.uikit.item.TitleItemView
+            android:id="@+id/primary_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Primary" />
+            android:text="Primary"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <View
+            android:id="@+id/primary_title_spacer"
             android:layout_width="match_parent"
-            android:layout_height="12dp" />
+            android:layout_height="12dp"
+            app:layout_constraintTop_toBottomOf="@id/primary_title" />
 
         <com.vk.id.onetap.xml.OneTap
-            android:layout_width="355dp"
+            android:id="@+id/onetap_primary_no_rounding"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/primary_title_spacer"
+            app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsCornerRadius="0dp"
-            app:vkid_onetapStyle="light"
-            app:vkid_onetapShowSignInToAnotherAccount="true" />
+            app:vkid_onetapShowSignInToAnotherAccount="true"
+            app:vkid_onetapStyle="light" />
 
         <View
+            android:id="@+id/onetap_primary_no_rounding_spacer"
             android:layout_width="match_parent"
-            android:layout_height="24dp" />
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/onetap_primary_no_rounding" />
 
         <com.vk.id.onetap.xml.OneTap
-            android:layout_width="355dp"
+            android:id="@+id/onetap_primary_rounded"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/onetap_primary_no_rounding_spacer"
+            app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsCornerRadius="8dp"
-            app:vkid_onetapStyle="light"
-            app:vkid_onetapShowSignInToAnotherAccount="true" />
+            app:vkid_onetapShowSignInToAnotherAccount="true"
+            app:vkid_onetapStyle="light" />
 
         <View
+            android:id="@+id/onetap_primary_rounded_spacer"
             android:layout_width="match_parent"
-            android:layout_height="24dp" />
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/onetap_primary_rounded" />
 
         <com.vk.id.onetap.xml.OneTap
-            android:layout_width="355dp"
+            android:id="@+id/onetap_primary_round"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/onetap_primary_rounded_spacer"
+            app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsCornerRadius="1000dp"
-            app:vkid_onetapStyle="light"
-            app:vkid_onetapShowSignInToAnotherAccount="true" />
+            app:vkid_onetapShowSignInToAnotherAccount="true"
+            app:vkid_onetapStyle="light" />
 
         <View
+            android:id="@+id/onetap_primary_round_spacer"
             android:layout_width="match_parent"
-            android:layout_height="12dp" />
+            android:layout_height="12dp"
+            app:layout_constraintTop_toBottomOf="@id/onetap_primary_round" />
 
         <com.vk.id.sample.xml.uikit.item.TitleItemView
+            android:id="@+id/onetap_secondary_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Secondary light" />
+            android:text="Secondary light"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/onetap_primary_round_spacer" />
 
         <View
+            android:id="@+id/onetap_secondary_title_spacer"
             android:layout_width="match_parent"
-            android:layout_height="12dp" />
+            android:layout_height="12dp"
+            app:layout_constraintTop_toBottomOf="@id/onetap_secondary_title" />
 
         <com.vk.id.onetap.xml.OneTap
-            android:layout_width="355dp"
+            android:id="@+id/onetap_secondary_no_rounding"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/onetap_secondary_title_spacer"
+            app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsCornerRadius="0dp"
-            app:vkid_onetapStyle="transparentLight"
-            app:vkid_onetapShowSignInToAnotherAccount="true" />
+            app:vkid_onetapShowSignInToAnotherAccount="true"
+            app:vkid_onetapStyle="transparentLight" />
 
         <View
+            android:id="@+id/onetap_secondary_no_rounding_spacer"
             android:layout_width="match_parent"
-            android:layout_height="24dp" />
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/onetap_secondary_no_rounding" />
 
         <com.vk.id.onetap.xml.OneTap
-            android:layout_width="355dp"
+            android:id="@+id/onetap_secondary_rounded"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/onetap_secondary_no_rounding_spacer"
+            app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsCornerRadius="8dp"
-            app:vkid_onetapStyle="transparentLight"
-            app:vkid_onetapShowSignInToAnotherAccount="true" />
+            app:vkid_onetapShowSignInToAnotherAccount="true"
+            app:vkid_onetapStyle="transparentLight" />
 
         <View
+            android:id="@+id/onetap_secondary_rounded_spacer"
             android:layout_width="match_parent"
-            android:layout_height="24dp" />
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/onetap_secondary_rounded" />
 
         <com.vk.id.onetap.xml.OneTap
-            android:layout_width="355dp"
+            android:id="@+id/onetap_secondary_round"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/onetap_secondary_rounded_spacer"
+            app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsCornerRadius="1000dp"
-            app:vkid_onetapStyle="transparentLight"
-            app:vkid_onetapShowSignInToAnotherAccount="true" />
+            app:vkid_onetapShowSignInToAnotherAccount="true"
+            app:vkid_onetapStyle="transparentLight" />
 
         <View
+            android:id="@+id/onetap_secondary_round_spacer"
             android:layout_width="match_parent"
-            android:layout_height="12dp" />
+            android:layout_height="12dp"
+            app:layout_constraintTop_toBottomOf="@id/onetap_secondary_round" />
 
         <com.vk.id.sample.xml.uikit.item.TitleItemView
+            android:id="@+id/onetap_secondary_dark_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Secondary dark" />
+            android:text="Secondary dark"
+            app:layout_constraintTop_toBottomOf="@id/onetap_secondary_round_spacer" />
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/onetap_secondary_dark_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/vkid_gray900"
             android:gravity="center"
-            android:orientation="vertical">
+            app:layout_constraintTop_toBottomOf="@id/onetap_secondary_dark_title">
 
             <View
+                android:id="@+id/onetap_secondary_dark_container_spacer"
                 android:layout_width="match_parent"
-                android:layout_height="12dp" />
+                android:layout_height="12dp"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.vk.id.onetap.xml.OneTap
-                android:layout_width="355dp"
+                android:id="@+id/onetap_secondary_dark_no_rounding"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:paddingHorizontal="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/onetap_secondary_dark_container_spacer"
+                app:layout_constraintWidth_max="355dp"
                 app:vkid_buttonsCornerRadius="0dp"
-                app:vkid_onetapStyle="transparentDark"
-                app:vkid_onetapShowSignInToAnotherAccount="true" />
+                app:vkid_onetapShowSignInToAnotherAccount="true"
+                app:vkid_onetapStyle="transparentDark" />
 
             <View
+                android:id="@+id/onetap_secondary_dark_no_rounding_spacer"
                 android:layout_width="match_parent"
-                android:layout_height="24dp" />
+                android:layout_height="24dp"
+                app:layout_constraintTop_toBottomOf="@id/onetap_secondary_dark_no_rounding" />
 
             <com.vk.id.onetap.xml.OneTap
-                android:layout_width="355dp"
+                android:id="@+id/onetap_secondary_dark_rounded"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:paddingHorizontal="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/onetap_secondary_dark_no_rounding_spacer"
+                app:layout_constraintWidth_max="355dp"
                 app:vkid_buttonsCornerRadius="8dp"
-                app:vkid_onetapStyle="transparentDark"
-                app:vkid_onetapShowSignInToAnotherAccount="true" />
+                app:vkid_onetapShowSignInToAnotherAccount="true"
+                app:vkid_onetapStyle="transparentDark" />
 
             <View
+                android:id="@+id/onetap_secondary_dark_rounded_spacer"
                 android:layout_width="match_parent"
-                android:layout_height="24dp" />
+                android:layout_height="24dp"
+                app:layout_constraintTop_toBottomOf="@id/onetap_secondary_dark_rounded" />
 
             <com.vk.id.onetap.xml.OneTap
-                android:layout_width="355dp"
+                android:id="@+id/onetap_secondary_dark_round"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:paddingHorizontal="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/onetap_secondary_dark_rounded_spacer"
+                app:layout_constraintWidth_max="355dp"
                 app:vkid_buttonsCornerRadius="1000dp"
-                app:vkid_onetapStyle="transparentDark"
-                app:vkid_onetapShowSignInToAnotherAccount="true" />
+                app:vkid_onetapShowSignInToAnotherAccount="true"
+                app:vkid_onetapStyle="transparentDark" />
 
             <View
+                android:id="@+id/onetap_secondary_dark_round_spacer"
                 android:layout_width="match_parent"
-                android:layout_height="12dp" />
+                android:layout_height="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/onetap_secondary_dark_round" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.vk.id.sample.xml.uikit.item.TitleItemView
+            android:id="@+id/onetap_elevation_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Elevation" />
+            android:text="Elevation"
+            app:layout_constraintTop_toBottomOf="@id/onetap_secondary_dark_container" />
 
         <View
+            android:id="@+id/onetap_elevation_title_spacer"
             android:layout_width="match_parent"
-            android:layout_height="12dp" />
+            android:layout_height="12dp"
+            app:layout_constraintTop_toBottomOf="@id/onetap_elevation_title" />
 
         <com.vk.id.onetap.xml.OneTap
-            android:layout_width="355dp"
+            android:id="@+id/onetap_elevation_zero"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:clipToPadding="false"
-            android:padding="16dp"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/onetap_elevation_title_spacer"
+            app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsElevation="0dp"
-            app:vkid_onetapStyle="light"
-            app:vkid_onetapShowSignInToAnotherAccount="true" />
+            app:vkid_onetapShowSignInToAnotherAccount="true"
+            app:vkid_onetapStyle="light" />
 
         <View
+            android:id="@+id/onetap_elevation_zero_spacer"
             android:layout_width="match_parent"
-            android:layout_height="24dp" />
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/onetap_elevation_zero" />
 
         <com.vk.id.onetap.xml.OneTap
-            android:layout_width="355dp"
+            android:id="@+id/onetap_elevation_4dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:clipToPadding="false"
-            android:padding="16dp"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/onetap_elevation_zero_spacer"
+            app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsElevation="4dp"
-            app:vkid_onetapStyle="light"
-            app:vkid_onetapShowSignInToAnotherAccount="true" />
+            app:vkid_onetapShowSignInToAnotherAccount="true"
+            app:vkid_onetapStyle="light" />
 
         <View
+            android:id="@+id/onetap_elevation_4dp_spacer"
             android:layout_width="match_parent"
-            android:layout_height="24dp" />
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/onetap_elevation_4dp" />
 
         <com.vk.id.onetap.xml.OneTap
-            android:layout_width="355dp"
+            android:id="@+id/onetap_elevation_8dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:clipToPadding="false"
-            android:padding="16dp"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/onetap_elevation_4dp_spacer"
+            app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsElevation="8dp"
-            app:vkid_onetapStyle="light"
-            app:vkid_onetapShowSignInToAnotherAccount="true" />
+            app:vkid_onetapShowSignInToAnotherAccount="true"
+            app:vkid_onetapStyle="light" />
 
         <View
+            android:id="@+id/onetap_elevation_8dp_spacer"
             android:layout_width="match_parent"
-            android:layout_height="12dp" />
+            android:layout_height="12dp"
+            app:layout_constraintTop_toBottomOf="@id/onetap_elevation_8dp" />
 
         <com.vk.id.sample.xml.uikit.item.TitleItemView
+            android:id="@+id/onetap_title_sizes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Sizes" />
-
-        <com.vk.id.sample.xml.uikit.item.TitleItemView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Sizes" />
+            android:text="Sizes"
+            app:layout_constraintTop_toBottomOf="@id/onetap_elevation_8dp_spacer" />
 
         <View
+            android:id="@+id/onetap_title_sizes_spacer"
             android:layout_width="match_parent"
-            android:layout_height="12dp" />
+            android:layout_height="12dp"
+            app:layout_constraintTop_toBottomOf="@id/onetap_title_sizes" />
 
         <com.vk.id.onetap.xml.OneTap
-            android:layout_width="355dp"
+            android:id="@+id/onetap_small32"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/onetap_title_sizes_spacer"
+            app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="small32"
             app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
+            android:id="@+id/onetap_small32_spacer"
             android:layout_width="match_parent"
-            android:layout_height="24dp" />
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/onetap_small32" />
 
         <com.vk.id.onetap.xml.OneTap
-            android:layout_width="355dp"
+            android:id="@+id/onetap_small34"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/onetap_small32_spacer"
+            app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="small34"
             app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
+            android:id="@+id/onetap_small34_spacer"
             android:layout_width="match_parent"
-            android:layout_height="24dp" />
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/onetap_small34" />
 
         <com.vk.id.onetap.xml.OneTap
-            android:layout_width="355dp"
+            android:id="@+id/onetap_small36"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/onetap_small34_spacer"
+            app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="small36"
             app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
+            android:id="@+id/onetap_small36_spacer"
             android:layout_width="match_parent"
-            android:layout_height="24dp" />
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/onetap_small36" />
 
         <com.vk.id.onetap.xml.OneTap
-            android:layout_width="355dp"
+            android:id="@+id/onetap_small38"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/onetap_small36_spacer"
+            app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="small38"
             app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
+            android:id="@+id/onetap_small38_spacer"
             android:layout_width="match_parent"
-            android:layout_height="24dp" />
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/onetap_small38" />
 
         <com.vk.id.onetap.xml.OneTap
-            android:layout_width="355dp"
+            android:id="@+id/onetap_medium40"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/onetap_small38_spacer"
+            app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="medium40"
             app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
+            android:id="@+id/onetap_medium40_spacer"
             android:layout_width="match_parent"
-            android:layout_height="24dp" />
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/onetap_medium40" />
 
         <com.vk.id.onetap.xml.OneTap
-            android:layout_width="355dp"
+            android:id="@+id/onetap_medium42"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/onetap_medium40_spacer"
+            app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="medium42"
             app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
+            android:id="@+id/onetap_medium42_spacer"
             android:layout_width="match_parent"
-            android:layout_height="24dp" />
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/onetap_medium42" />
 
         <com.vk.id.onetap.xml.OneTap
-            android:layout_width="355dp"
+            android:id="@+id/onetap_medium44"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/onetap_medium42_spacer"
+            app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="medium44"
             app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
+            android:id="@+id/onetap_medium44_spacer"
             android:layout_width="match_parent"
-            android:layout_height="24dp" />
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/onetap_medium44" />
 
         <com.vk.id.onetap.xml.OneTap
-            android:layout_width="355dp"
+            android:id="@+id/onetap_medium46"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/onetap_medium44_spacer"
+            app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="medium46"
             app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
+            android:id="@+id/onetap_medium46_spacer"
             android:layout_width="match_parent"
-            android:layout_height="24dp" />
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/onetap_medium46" />
 
         <com.vk.id.onetap.xml.OneTap
-            android:layout_width="355dp"
+            android:id="@+id/onetap_large48"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/onetap_medium46_spacer"
+            app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="large48"
             app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
+            android:id="@+id/onetap_large48_spacer"
             android:layout_width="match_parent"
-            android:layout_height="24dp" />
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/onetap_large48" />
 
         <com.vk.id.onetap.xml.OneTap
-            android:layout_width="355dp"
+            android:id="@+id/onetap_large50"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/onetap_large48_spacer"
+            app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="large50"
             app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
+            android:id="@+id/onetap_large50_spacer"
             android:layout_width="match_parent"
-            android:layout_height="24dp" />
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/onetap_large50" />
 
         <com.vk.id.onetap.xml.OneTap
-            android:layout_width="355dp"
+            android:id="@+id/onetap_large52"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/onetap_large50_spacer"
+            app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="large52"
             app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
+            android:id="@+id/onetap_large52_spacer"
             android:layout_width="match_parent"
-            android:layout_height="24dp" />
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/onetap_large52" />
 
         <com.vk.id.onetap.xml.OneTap
-            android:layout_width="355dp"
+            android:id="@+id/onetap_large54"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/onetap_large52_spacer"
+            app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="large54"
             app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
+            android:id="@+id/onetap_large54_spacer"
             android:layout_width="match_parent"
-            android:layout_height="24dp" />
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/onetap_large54" />
 
         <com.vk.id.onetap.xml.OneTap
-            android:layout_width="355dp"
+            android:id="@+id/onetap_large56"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/onetap_large54_spacer"
+            app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="large56"
             app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
+            android:id="@+id/onetap_large56_spacer"
             android:layout_width="match_parent"
-            android:layout_height="12dp" />
+            android:layout_height="12dp"
+            app:layout_constraintTop_toBottomOf="@id/onetap_large56" />
 
         <com.vk.id.sample.xml.uikit.item.TitleItemView
+            android:id="@+id/onetap_small_button_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Small Button" />
+            android:text="Small Button"
+            app:layout_constraintTop_toBottomOf="@id/onetap_large56_spacer" />
 
         <View
+            android:id="@+id/onetap_small_button_title_spacer"
             android:layout_width="match_parent"
-            android:layout_height="12dp" />
+            android:layout_height="12dp"
+            app:layout_constraintTop_toBottomOf="@id/onetap_small_button_title" />
 
         <com.vk.id.onetap.xml.OneTap
+            android:id="@+id/onetap_small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/onetap_small_button_title_spacer"
             app:vkid_onetapStyle="icon" />
 
         <View
+            android:id="@+id/onetap_small_spacer"
             android:layout_width="match_parent"
-            android:layout_height="12dp" />
+            android:layout_height="12dp"
+            app:layout_constraintTop_toBottomOf="@id/onetap_small" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>
