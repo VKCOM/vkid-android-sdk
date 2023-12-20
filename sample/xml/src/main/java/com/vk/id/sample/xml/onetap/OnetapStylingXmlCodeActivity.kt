@@ -10,7 +10,6 @@ import com.vk.id.sample.xml.onetap.item.createOneTap
 import com.vk.id.sample.xml.uikit.item.TitleItem
 import com.vk.id.sample.xml.uikit.item.TitleItemView
 
-
 public class OnetapStylingXmlCodeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
