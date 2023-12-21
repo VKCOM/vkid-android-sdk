@@ -13,8 +13,8 @@ import com.vk.id.AccessToken
 import com.vk.id.onetap.compose.onetap.OneTap
 import com.vk.id.sample.app.uikit.common.darkBackground
 import com.vk.id.sample.xml.onetap.item.OneTapItem
-import com.vk.id.sample.xml.uikit.common.onVKIDAuthFail
-import com.vk.id.sample.xml.uikit.common.onVKIDAuthSuccess
+import com.vk.id.sample.xml.uikit.common.getOneTapFailCallback
+import com.vk.id.sample.xml.uikit.common.getOneTapSuccessCallback
 
 @Composable
 fun HandleOneTapItem(
@@ -33,11 +33,9 @@ fun HandleOneTapItem(
         OneTap(
             modifier = Modifier.width(item.width.dp),
             style = item.style,
-            onAuth = {
-                onToken(it)
-                onVKIDAuthSuccess(context, it)
-            },
-            onFail = { onVKIDAuthFail(context, it) },
+            onAuth = getOneTapSuccessCallback(context, onToken),
+            onFail = getOneTapFailCallback(context),
+            oAuths = item.oAuths,
             signInAnotherAccountButtonEnabled = true
         )
     }

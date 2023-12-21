@@ -63,7 +63,7 @@ public fun OAuthListWidget(
     modifier: Modifier = Modifier,
     style: OAuthListWidgetStyle = OAuthListWidgetStyle.Dark(),
     onAuth: OAuthListWidgetAuthCallback,
-    onFail: (VKIDAuthFail) -> Unit,
+    onFail: (OAuth, VKIDAuthFail) -> Unit,
     oAuths: Set<OAuth> = OAuth.values().toSet()
 ) {
     val context = LocalContext.current
@@ -79,7 +79,7 @@ public fun OAuthListWidget(
         OAuthTitle()
         Spacer(modifier = Modifier.height(16.dp))
         Row {
-            oAuths.forEachIndexed { index, item ->
+            oAuths.sorted().forEachIndexed { index, item ->
                 OAuthButton(
                     modifier = Modifier.weight(1f),
                     context = context,
@@ -89,7 +89,7 @@ public fun OAuthListWidget(
                     coroutineScope = coroutineScope,
                     vkid = vkid,
                     onAuth = onAuth,
-                    onFail = onFail,
+                    onFail = { onFail(item, it) },
                 )
                 if (index != oAuths.size - 1) {
                     Spacer(modifier = Modifier.width(12.dp))
@@ -309,7 +309,7 @@ private fun OAuthListWidgetWithOneItem() {
     OAuthListWidget(
         oAuths = setOf(OAuth.OK),
         onAuth = OAuthListWidgetAuthCallback.WithOAuth { _, _ -> },
-        onFail = {},
+        onFail = { _, _ -> },
     )
 }
 
@@ -319,7 +319,7 @@ private fun OAuthListWidgetWithTwoItems() {
     OAuthListWidget(
         oAuths = setOf(OAuth.VK, OAuth.OK),
         onAuth = OAuthListWidgetAuthCallback.WithOAuth { _, _ -> },
-        onFail = {},
+        onFail = { _, _ -> },
     )
 }
 
@@ -329,7 +329,7 @@ private fun OAuthListWidgetLight() {
     OAuthListWidget(
         style = OAuthListWidgetStyle.Dark(),
         onAuth = OAuthListWidgetAuthCallback.WithOAuth { _, _ -> },
-        onFail = {},
+        onFail = { _, _ -> },
     )
 }
 
@@ -341,6 +341,6 @@ private fun OAuthListWidgetDark() {
         style = OAuthListWidgetStyle.Light(),
         oAuths = setOf(OAuth.VK),
         onAuth = OAuthListWidgetAuthCallback.WithOAuth { _, _ -> },
-        onFail = {},
+        onFail = { _, _ -> },
     )
 }

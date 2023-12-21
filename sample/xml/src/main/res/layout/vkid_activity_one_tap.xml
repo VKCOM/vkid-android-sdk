@@ -2,8 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -13,11 +12,40 @@
         android:gravity="center">
 
         <com.vk.id.sample.xml.uikit.item.TitleItemView
+            android:id="@+id/no_multibranding_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Without multibranding"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/no_multibranding_title_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            app:layout_constraintTop_toBottomOf="@id/no_multibranding_title" />
+
+        <com.vk.id.onetap.xml.OneTap
+            android:id="@+id/no_multibranding_one_tap"
+            android:layout_width="355dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/no_multibranding_title_spacer"
+            app:vkid_onetapShowSignInToAnotherAccount="true"
+            app:vkid_onetapStyle="light" />
+
+        <View
+            android:id="@+id/no_multibranding_one_tap_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            app:layout_constraintTop_toBottomOf="@id/no_multibranding_one_tap" />
+
+        <com.vk.id.sample.xml.uikit.item.TitleItemView
             android:id="@+id/primary_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Primary"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/no_multibranding_one_tap_spacer" />
 
         <View
             android:id="@+id/primary_title_spacer"
@@ -35,6 +63,7 @@
             app:layout_constraintTop_toBottomOf="@id/primary_title_spacer"
             app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsCornerRadius="0dp"
+            app:vkid_onetapOAuths="mail,ok"
             app:vkid_onetapShowSignInToAnotherAccount="true"
             app:vkid_onetapStyle="light" />
 
@@ -54,6 +83,7 @@
             app:layout_constraintTop_toBottomOf="@id/onetap_primary_no_rounding_spacer"
             app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsCornerRadius="8dp"
+            app:vkid_onetapOAuths="mail,ok"
             app:vkid_onetapShowSignInToAnotherAccount="true"
             app:vkid_onetapStyle="light" />
 
@@ -73,6 +103,7 @@
             app:layout_constraintTop_toBottomOf="@id/onetap_primary_rounded_spacer"
             app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsCornerRadius="1000dp"
+            app:vkid_onetapOAuths="mail,ok"
             app:vkid_onetapShowSignInToAnotherAccount="true"
             app:vkid_onetapStyle="light" />
 
@@ -107,6 +138,7 @@
             app:layout_constraintTop_toBottomOf="@id/onetap_secondary_title_spacer"
             app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsCornerRadius="0dp"
+            app:vkid_onetapOAuths="mail,ok"
             app:vkid_onetapShowSignInToAnotherAccount="true"
             app:vkid_onetapStyle="transparentLight" />
 
@@ -126,6 +158,7 @@
             app:layout_constraintTop_toBottomOf="@id/onetap_secondary_no_rounding_spacer"
             app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsCornerRadius="8dp"
+            app:vkid_onetapOAuths="mail,ok"
             app:vkid_onetapShowSignInToAnotherAccount="true"
             app:vkid_onetapStyle="transparentLight" />
 
@@ -145,6 +178,7 @@
             app:layout_constraintTop_toBottomOf="@id/onetap_secondary_rounded_spacer"
             app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsCornerRadius="1000dp"
+            app:vkid_onetapOAuths="mail,ok"
             app:vkid_onetapShowSignInToAnotherAccount="true"
             app:vkid_onetapStyle="transparentLight" />
 
@@ -185,6 +219,7 @@
                 app:layout_constraintTop_toBottomOf="@id/onetap_secondary_dark_container_spacer"
                 app:layout_constraintWidth_max="355dp"
                 app:vkid_buttonsCornerRadius="0dp"
+                app:vkid_onetapOAuths="mail,ok"
                 app:vkid_onetapShowSignInToAnotherAccount="true"
                 app:vkid_onetapStyle="transparentDark" />
 
@@ -204,6 +239,7 @@
                 app:layout_constraintTop_toBottomOf="@id/onetap_secondary_dark_no_rounding_spacer"
                 app:layout_constraintWidth_max="355dp"
                 app:vkid_buttonsCornerRadius="8dp"
+                app:vkid_onetapOAuths="mail,ok"
                 app:vkid_onetapShowSignInToAnotherAccount="true"
                 app:vkid_onetapStyle="transparentDark" />
 
@@ -223,6 +259,7 @@
                 app:layout_constraintTop_toBottomOf="@id/onetap_secondary_dark_rounded_spacer"
                 app:layout_constraintWidth_max="355dp"
                 app:vkid_buttonsCornerRadius="1000dp"
+                app:vkid_onetapOAuths="mail,ok"
                 app:vkid_onetapShowSignInToAnotherAccount="true"
                 app:vkid_onetapStyle="transparentDark" />
 
@@ -258,6 +295,7 @@
             app:layout_constraintTop_toBottomOf="@id/onetap_elevation_title_spacer"
             app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsElevation="0dp"
+            app:vkid_onetapOAuths="mail,ok"
             app:vkid_onetapShowSignInToAnotherAccount="true"
             app:vkid_onetapStyle="light" />
 
@@ -277,6 +315,7 @@
             app:layout_constraintTop_toBottomOf="@id/onetap_elevation_zero_spacer"
             app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsElevation="4dp"
+            app:vkid_onetapOAuths="mail,ok"
             app:vkid_onetapShowSignInToAnotherAccount="true"
             app:vkid_onetapStyle="light" />
 
@@ -296,6 +335,7 @@
             app:layout_constraintTop_toBottomOf="@id/onetap_elevation_4dp_spacer"
             app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsElevation="8dp"
+            app:vkid_onetapOAuths="mail,ok"
             app:vkid_onetapShowSignInToAnotherAccount="true"
             app:vkid_onetapStyle="light" />
 
@@ -329,6 +369,7 @@
             app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="small32"
+            app:vkid_onetapOAuths="mail,ok"
             app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
@@ -348,6 +389,7 @@
             app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="small34"
+            app:vkid_onetapOAuths="mail,ok"
             app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
@@ -367,6 +409,7 @@
             app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="small36"
+            app:vkid_onetapOAuths="mail,ok"
             app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
@@ -386,6 +429,7 @@
             app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="small38"
+            app:vkid_onetapOAuths="mail,ok"
             app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
@@ -405,6 +449,7 @@
             app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="medium40"
+            app:vkid_onetapOAuths="mail,ok"
             app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
@@ -424,6 +469,7 @@
             app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="medium42"
+            app:vkid_onetapOAuths="mail,ok"
             app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
@@ -443,6 +489,7 @@
             app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="medium44"
+            app:vkid_onetapOAuths="mail,ok"
             app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
@@ -462,6 +509,7 @@
             app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="medium46"
+            app:vkid_onetapOAuths="mail,ok"
             app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
@@ -481,6 +529,7 @@
             app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="large48"
+            app:vkid_onetapOAuths="mail,ok"
             app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
@@ -500,6 +549,7 @@
             app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="large50"
+            app:vkid_onetapOAuths="mail,ok"
             app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
@@ -519,6 +569,7 @@
             app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="large52"
+            app:vkid_onetapOAuths="mail,ok"
             app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
@@ -538,6 +589,7 @@
             app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="large54"
+            app:vkid_onetapOAuths="mail,ok"
             app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
@@ -557,6 +609,7 @@
             app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="large56"
+            app:vkid_onetapOAuths="mail,ok"
             app:vkid_onetapShowSignInToAnotherAccount="true" />
 
         <View
@@ -585,6 +638,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/onetap_small_button_title_spacer"
+            app:vkid_onetapOAuths="mail,ok"
             app:vkid_onetapStyle="icon" />
 
         <View

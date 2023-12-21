@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import com.vk.id.AccessToken
 import com.vk.id.VKIDAuthFail
+import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.compose.onetap.sheet.OneTapBottomSheet
 import com.vk.id.onetap.compose.onetap.sheet.OneTapBottomSheetState
 import com.vk.id.onetap.compose.onetap.sheet.rememberOneTapBottomSheetState
@@ -27,10 +28,10 @@ public class OneTapBottomSheet @JvmOverloads constructor(
 
     private val composeView = ComposeView(context)
 
-    private var onAuth: (AccessToken) -> Unit = {
+    private var onAuth: (OneTapOAuth?, AccessToken) -> Unit = { _, _ ->
         throw IllegalStateException("No onAuth callback for VKID OneTap Button. Set it with setCallbacks method.")
     }
-    private var onFail: (VKIDAuthFail) -> Unit = {}
+    private var onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit = { _, _ -> }
 
     private var state: OneTapBottomSheetState? = null
     init {
@@ -50,21 +51,33 @@ public class OneTapBottomSheet @JvmOverloads constructor(
             style = sheetSettings.style,
             serviceName = sheetSettings.serviceName,
             scenario = sheetSettings.scenario,
-            onAuth = { onAuth(it) },
-            onFail = { onFail(it) },
-            autoHideOnSuccess = sheetSettings.autoHideOnSuccess
+            onAuth = { oAuth, accessToken -> onAuth(oAuth, accessToken) },
+            onFail = { oAuth, fail -> onFail(oAuth, fail) },
+            autoHideOnSuccess = sheetSettings.autoHideOnSuccess,
+            oAuths = sheetSettings.oAuths,
         )
     }
 
     /**
-     * Callbacks that provides auth result.
+     * Callbacks that provide auth result for version with multibranding.
+     */
+    public fun setCallbacks(
+        onAuth: (OneTapOAuth?, AccessToken) -> Unit,
+        onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit = { _, _ -> },
+    ) {
+        this.onAuth = onAuth
+        this.onFail = onFail
+    }
+
+    /**
+     * Callbacks that provide auth result.
      */
     public fun setCallbacks(
         onAuth: (AccessToken) -> Unit,
         onFail: (VKIDAuthFail) -> Unit = {},
     ) {
-        this.onAuth = onAuth
-        this.onFail = onFail
+        this.onAuth = { _, token -> onAuth(token) }
+        this.onFail = { _, fail -> onFail(fail) }
     }
 
     /**

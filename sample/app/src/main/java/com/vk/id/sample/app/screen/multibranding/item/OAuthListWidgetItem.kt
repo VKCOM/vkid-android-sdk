@@ -14,8 +14,8 @@ import com.vk.id.AccessToken
 import com.vk.id.multibranding.OAuthListWidget
 import com.vk.id.sample.app.uikit.common.darkBackground
 import com.vk.id.sample.xml.multibranding.item.OAuthListWidgetItem
-import com.vk.id.sample.xml.multibranding.util.getOAuthListCallback
-import com.vk.id.sample.xml.uikit.common.onVKIDAuthFail
+import com.vk.id.sample.xml.uikit.common.getMultibrandingFailCallback
+import com.vk.id.sample.xml.uikit.common.getMultibrandingSuccessCallback
 
 @Composable
 fun HandleOAuthListWidgetItem(
@@ -34,8 +34,8 @@ fun HandleOAuthListWidgetItem(
         OAuthListWidget(
             modifier = Modifier.width(item.width.dp),
             style = item.style,
-            onAuth = getOAuthListCallback(context) { token.value = it },
-            onFail = { onVKIDAuthFail(context, it) },
+            onAuth = getMultibrandingSuccessCallback(context) { token.value = it },
+            onFail = getMultibrandingFailCallback(context),
             oAuths = item.oAuths
         )
     }

@@ -32,7 +32,7 @@
             app:layout_constraintTop_toBottomOf="@id/multibranding_title_spacer"
             app:layout_constraintWidth_max="355dp"
             app:vkid_OAuthListStyle="transparentDark"
-            app:vkid_oAuthListAllowedOAuths="vk,mail,ok"
+            app:vkid_oAuthListOAuths="vk,mail,ok"
             app:vkid_oAuthListCornerRadius="8dp"
             app:vkid_oAuthListSize="standard" />
 
@@ -52,7 +52,7 @@
             app:layout_constraintTop_toBottomOf="@id/multibranding_3_spacer"
             app:layout_constraintWidth_max="355dp"
             app:vkid_OAuthListStyle="transparentDark"
-            app:vkid_oAuthListAllowedOAuths="mail,ok"
+            app:vkid_oAuthListOAuths="mail,ok"
             app:vkid_oAuthListCornerRadius="8dp"
             app:vkid_oAuthListSize="standard" />
 
@@ -72,7 +72,7 @@
             app:layout_constraintTop_toBottomOf="@id/multibranding_2_spacer"
             app:layout_constraintWidth_max="355dp"
             app:vkid_OAuthListStyle="transparentDark"
-            app:vkid_oAuthListAllowedOAuths="vk"
+            app:vkid_oAuthListOAuths="vk"
             app:vkid_oAuthListCornerRadius="8dp"
             app:vkid_oAuthListSize="standard" />
 
@@ -92,7 +92,7 @@
             app:layout_constraintTop_toBottomOf="@id/multibranding_vk_spacer"
             app:layout_constraintWidth_max="355dp"
             app:vkid_OAuthListStyle="transparentDark"
-            app:vkid_oAuthListAllowedOAuths="mail"
+            app:vkid_oAuthListOAuths="mail"
             app:vkid_oAuthListCornerRadius="8dp"
             app:vkid_oAuthListSize="standard" />
 
@@ -112,7 +112,7 @@
             app:layout_constraintTop_toBottomOf="@id/multibranding_mail_spacer"
             app:layout_constraintWidth_max="355dp"
             app:vkid_OAuthListStyle="transparentDark"
-            app:vkid_oAuthListAllowedOAuths="ok"
+            app:vkid_oAuthListOAuths="ok"
             app:vkid_oAuthListCornerRadius="8dp"
             app:vkid_oAuthListSize="standard" />
 
@@ -153,7 +153,7 @@
                 app:layout_constraintTop_toBottomOf="@id/multibranding_dark_title_spacer"
                 app:layout_constraintWidth_max="355dp"
                 app:vkid_OAuthListStyle="transparentLight"
-                app:vkid_oAuthListAllowedOAuths="vk,mail,ok"
+                app:vkid_oAuthListOAuths="vk,mail,ok"
                 app:vkid_oAuthListCornerRadius="8dp"
                 app:vkid_oAuthListSize="standard" />
 
@@ -173,7 +173,7 @@
                 app:layout_constraintTop_toBottomOf="@id/multibranding_dark_3_spacer"
                 app:layout_constraintWidth_max="355dp"
                 app:vkid_OAuthListStyle="transparentLight"
-                app:vkid_oAuthListAllowedOAuths="vk"
+                app:vkid_oAuthListOAuths="vk"
                 app:vkid_oAuthListCornerRadius="8dp"
                 app:vkid_oAuthListSize="standard" />
 
@@ -504,7 +504,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/multibranding_small_title_spacer"
-            app:vkid_oAuthListAllowedOAuths="vk" />
+            app:vkid_oAuthListOAuths="vk" />
 
         <View
             android:id="@+id/multibranding_small_vk_spacer"
@@ -519,7 +519,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/multibranding_small_vk_spacer"
-            app:vkid_oAuthListAllowedOAuths="vk" />
+            app:vkid_oAuthListOAuths="vk" />
 
         <View
             android:id="@+id/multibranding_small_vk_200_spacer"
@@ -534,7 +534,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/multibranding_small_vk_200_spacer"
-            app:vkid_oAuthListAllowedOAuths="vk" />
+            app:vkid_oAuthListOAuths="vk" />
 
         <View
             android:id="@+id/multibranding_small_vk_240_spacer"
@@ -549,7 +549,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/multibranding_small_vk_240_spacer"
-            app:vkid_oAuthListAllowedOAuths="vk" />
+            app:vkid_oAuthListOAuths="vk" />
 
         <View
             android:id="@+id/multibranding_small_vk_280_spacer"

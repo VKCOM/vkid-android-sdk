@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.vk.id.AccessToken
+import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
 import com.vk.id.onetap.compose.onetap.OneTap
@@ -40,8 +41,8 @@ import com.vk.id.sample.app.BuildConfig
 import com.vk.id.sample.app.R
 import com.vk.id.sample.app.screen.Button
 import com.vk.id.sample.app.screen.UseToken
-import com.vk.id.sample.xml.uikit.common.onVKIDAuthFail
-import com.vk.id.sample.xml.uikit.common.onVKIDAuthSuccess
+import com.vk.id.sample.xml.uikit.common.getOneTapFailCallback
+import com.vk.id.sample.xml.uikit.common.getOneTapSuccessCallback
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -64,12 +65,10 @@ fun HomeScreen(
         OneTap(
             modifier = Modifier.width(355.dp),
             style = OneTapStyle.Light(cornersStyle = OneTapButtonCornersStyle.Rounded),
-            onAuth = {
-                onVKIDAuthSuccess(context, it)
-                token = it
-            },
-            onFail = { onVKIDAuthFail(context, it) },
-            signInAnotherAccountButtonEnabled = true
+            onAuth = getOneTapSuccessCallback(context) { token = it },
+            onFail = getOneTapFailCallback(context),
+            signInAnotherAccountButtonEnabled = true,
+            oAuths = setOf(OneTapOAuth.MAIL, OneTapOAuth.OK),
         )
         token?.let {
             UseToken(it)
@@ -85,15 +84,15 @@ fun HomeScreen(
         Button("Onetap styling (xml layout)") {
             navController.navigate("onetap-styling-xml-layout")
         }
-//        Button("Multibranding (compose)") {
-//            navController.navigate("multibranding-compose")
-//        }
-//        Button("Multibranding (xml code)") {
-//            navController.navigate("multibranding-xml-code")
-//        }
-//        Button("Multibranding (xml layout)") {
-//            navController.navigate("multibranding-xml-layout")
-//        }
+        Button("Multibranding (compose)") {
+            navController.navigate("multibranding-compose")
+        }
+        Button("Multibranding (xml code)") {
+            navController.navigate("multibranding-xml-code")
+        }
+        Button("Multibranding (xml layout)") {
+            navController.navigate("multibranding-xml-layout")
+        }
         Button("OneTapBottomSheet") {
             navController.navigate("onetap-bottom-sheet")
         }

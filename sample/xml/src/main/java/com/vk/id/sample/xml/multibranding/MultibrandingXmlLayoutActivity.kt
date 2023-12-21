@@ -5,9 +5,9 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.vk.id.multibranding.xml.OAuthListWidget
 import com.vk.id.sample.xml.R
-import com.vk.id.sample.xml.multibranding.util.getOAuthListCallback
 import com.vk.id.sample.xml.uikit.common.forEachView
-import com.vk.id.sample.xml.uikit.common.onVKIDAuthFail
+import com.vk.id.sample.xml.uikit.common.getMultibrandingFailCallback
+import com.vk.id.sample.xml.uikit.common.getMultibrandingSuccessCallback
 
 public class MultibrandingXmlLayoutActivity : AppCompatActivity() {
 
@@ -16,8 +16,8 @@ public class MultibrandingXmlLayoutActivity : AppCompatActivity() {
         setContentView(R.layout.vkid_activity_multibranding)
         findViewById<View>(android.R.id.content).rootView.forEachView(OAuthListWidget::class) { widget ->
             widget.setCallbacks(
-                onAuth = getOAuthListCallback(this, {}),
-                onFail = { onVKIDAuthFail(this, it) },
+                onAuth = getMultibrandingSuccessCallback(this) {},
+                onFail = getMultibrandingFailCallback(this),
             )
         }
     }
