@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="vkid_log_in_with_vkid">Sign in with VK ID</string>
+    <string name="vkid_log_in_with_vkid_short" translatable="false">VK ID</string>
     <string name="vkid_auth_use_another_account">Sign in to other account</string>
     <string name="vkid_log_in_as">Continue as %1$s</string>
+    <string name="vkid_log_in">Continue</string>
 
     <string name="vkid_schenario_enter_service_title">Sign in to service or sign up</string>
     <string name="vkid_schenario_enter_service_vkid_button_text_user_found">Sign in as %1$s</string>

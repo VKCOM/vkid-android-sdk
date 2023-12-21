@@ -133,16 +133,14 @@ private fun defaultTextProvider(resources: Resources): VKIDButtonTextProvider =
             override fun userFoundText(user: VKIDUser): String =
                 resources.getString(R.string.vkid_log_in_as, user.firstName)
 
-            override fun userFoundShortText(user: VKIDUser): String {
-                return "Продолжить" // TODO: Translations
-            }
+            override fun userFoundShortText(user: VKIDUser): String =
+                resources.getString(R.string.vkid_log_in)
 
             override fun noUserText(): String =
                 resources.getString(R.string.vkid_log_in_with_vkid)
 
-            override fun noUserShortText(): String {
-                return "VK ID" // TODO: Translations
-            }
+            override fun noUserShortText(): String =
+                resources.getString(R.string.vkid_log_in_with_vkid_short)
         }
     }
 
