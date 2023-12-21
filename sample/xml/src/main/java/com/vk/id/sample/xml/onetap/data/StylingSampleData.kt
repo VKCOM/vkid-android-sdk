@@ -222,6 +222,23 @@ public val buttonStylingData: List<Any> = listOf(
         oAuths = setOf(OneTapOAuth.MAIL, OneTapOAuth.OK),
     ),
     HalfSpacerItem(),
+    TitleItem("Short button"),
+    HalfSpacerItem(),
+    OneTapItem(
+        style = OneTapStyle.Light(),
+        width = 200
+    ),
+    SpacerItem(),
+    OneTapItem(
+        style = OneTapStyle.Light(),
+        width = 240
+    ),
+    SpacerItem(),
+    OneTapItem(
+        style = OneTapStyle.Light(),
+        width = 280
+    ),
+    HalfSpacerItem(),
     TitleItem("Small button"),
     HalfSpacerItem(),
     OneTapItem(
