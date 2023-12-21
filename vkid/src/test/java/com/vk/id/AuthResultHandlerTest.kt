@@ -196,7 +196,11 @@ internal class AuthResultHandlerTest : BehaviorSpec({
                 verify { callbacksHolder.getAll() }
             }
             Then("It is emitted") {
-                verify { callback.onFail(VKIDAuthFail.FailedApiCall("Failed code to token exchange api call", error)) }
+                verify {
+                    callback.onFail(
+                        VKIDAuthFail.FailedApiCall("Failed code to token exchange api call: ${error.message}", error)
+                    )
+                }
             }
             Then("Callbacks holder is cleared") {
                 verify { callbacksHolder.clear() }

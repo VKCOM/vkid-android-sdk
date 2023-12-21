@@ -100,12 +100,12 @@ internal class AuthActivity : Activity() {
             handlePayloadJson(payloadJson)
         } catch (e: JSONException) {
             AuthResult.AuthActiviyResultFailed(
-                "AuthActivity opened with invalid payload json",
+                "AuthActivity opened with invalid payload json: $uri",
                 e
             )
         } catch (e: UnsupportedOperationException) {
             AuthResult.AuthActiviyResultFailed(
-                "AuthActivity opened with invalid url",
+                "AuthActivity opened with invalid url: $uri",
                 e
             )
         }

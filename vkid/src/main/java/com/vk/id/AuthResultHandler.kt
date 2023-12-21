@@ -84,7 +84,7 @@ internal class AuthResultHandler(
         callResult.onFailure {
             emitAuthFail(
                 VKIDAuthFail.FailedApiCall(
-                    "Failed code to token exchange api call",
+                    "Failed code to token exchange api call: ${it.message}",
                     it
                 )
             )
