@@ -5,6 +5,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.vk.id.auth.VKIDAuthParams
+import com.vk.id.commn.InternalVKIDApi
 import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthEventBridge
 import com.vk.id.internal.auth.AuthProvidersChooser
@@ -19,6 +20,10 @@ import com.vk.id.internal.log.LogEngine
 import com.vk.id.internal.log.VKIDLog
 import com.vk.id.internal.log.createLoggerForClass
 import com.vk.id.internal.user.UserDataFetcher
+import com.vk.id.test.ImmediateVKIDApi
+import com.vk.id.test.MockAuthProviderChooser
+import com.vk.id.test.MockAuthProviderConfig
+import com.vk.id.test.OverrideVKIDApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.currentCoroutineContext
@@ -36,6 +41,17 @@ public class VKID {
      * @param context The context of the application.
      */
     public constructor(context: Context) : this(VKIDDepsProd(context))
+
+    // TODO: Make constructor internal and add builder for test cases
+    @InternalVKIDApi
+    public constructor(
+        context: Context,
+        mockApi: OverrideVKIDApi,
+        mockAuthProviderConfig: MockAuthProviderConfig = MockAuthProviderConfig()
+    ) : this(object : VKIDDepsProd(context) {
+        override val authProvidersChooser = lazy { MockAuthProviderChooser(context, mockAuthProviderConfig) }
+        override val api = lazy { ImmediateVKIDApi(mockApi) }
+    })
 
     public companion object {
         /**
