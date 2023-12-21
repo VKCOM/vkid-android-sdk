@@ -13,9 +13,9 @@ class VKIDAppConventionPlugin : Plugin<Project>{
                 if (shouldInjectManifestPlaceholders()) {
                     val secrets = Properties()
                     try {
-                        secrets.load(FileInputStream(rootProject.file("secrets.properties")))
-                        val clientId = secrets["VKIDClientID"] ?: throw IllegalStateException("Add VKIDClientID to file secrets.properties")
-                        val clientSecret = secrets["VKIDClientSecret"] ?: throw IllegalStateException("Add VKIDClientSecret to file secrets.properties")
+                        secrets.load(FileInputStream(rootProject.file("sample/app/secrets.properties")))
+                        val clientId = secrets["VKIDClientID"] ?: throw IllegalStateException("Add VKIDClientID to file sample/app/secrets.properties")
+                        val clientSecret = secrets["VKIDClientSecret"] ?: throw IllegalStateException("Add VKIDClientSecret to file sample/app/secrets.properties")
                         addManifestPlaceholders(
                             mapOf(
                                 "VKIDRedirectHost" to "vk.com",
@@ -26,7 +26,7 @@ class VKIDAppConventionPlugin : Plugin<Project>{
                         )
                     } catch (e: FileNotFoundException) {
                         logger.error(
-                            "Warning! Build will not work!\nCreate the 'secrets.properties' file in the root folder and add your 'VKIDClientID' and 'VKIDClientSecret' to it." +
+                            "Warning! Build will not work!\nCreate the 'secrets.properties' file in the 'sample/app' folder and add your 'VKIDClientID' and 'VKIDClientSecret' to it." +
                                     "\nFor more information, refer to the 'README.md' file."
                         )
                         throw e

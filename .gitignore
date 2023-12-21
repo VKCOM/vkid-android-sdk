@@ -41,5 +41,3 @@ target/
 build-maven
 
 !gradle
-
-/secrets.properties
