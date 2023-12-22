@@ -30,24 +30,30 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.vk.id.AccessToken
+import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.compose.onetap.sheet.OneTapBottomSheet
 import com.vk.id.onetap.compose.onetap.sheet.OneTapScenario
 import com.vk.id.onetap.compose.onetap.sheet.rememberOneTapBottomSheetState
 import com.vk.id.onetap.compose.onetap.sheet.style.OneTapBottomSheetStyle
 import com.vk.id.onetap.compose.onetap.sheet.style.rememberOneTapBottomSheetStyle
-import com.vk.id.sample.app.screen.home.Button
-import com.vk.id.sample.xml.uikit.common.onVKIDAuthFail
-import com.vk.id.sample.xml.uikit.common.onVKIDAuthSuccess
+import com.vk.id.sample.app.screen.Button
+import com.vk.id.sample.app.screen.UseToken
+import com.vk.id.sample.xml.uikit.common.getOneTapFailCallback
+import com.vk.id.sample.xml.uikit.common.getOneTapSuccessCallback
 
 @Preview
 @Composable
+@Suppress("LongMethod")
 fun OneTapBottomSheetScreen() {
     val context = LocalContext.current
+    val token: MutableState<AccessToken?> = remember { mutableStateOf(null) }
     val selectedScenario = rememberSaveable { mutableStateOf(OneTapScenario.EnterService) }
     val selectedStyle = rememberOneTapBottomSheetStyle(
         OneTapBottomSheetStyle.Light()
     )
     val autoHideSheetOnSuccess = rememberSaveable { mutableStateOf(true) }
+    val selectedOAuths = rememberSaveable { mutableStateOf(setOf(OneTapOAuth.OK, OneTapOAuth.MAIL)) }
     Column(
         modifier = Modifier
             .padding(16.dp)
@@ -58,18 +64,23 @@ fun OneTapBottomSheetScreen() {
         val bottomSheetState = rememberOneTapBottomSheetState()
         OneTapBottomSheet(
             style = selectedStyle.value,
-            onAuth = { onVKIDAuthSuccess(context, it) },
-            onFail = { onVKIDAuthFail(context, it) },
+            onAuth = getOneTapSuccessCallback(context) { token.value = it },
+            onFail = getOneTapFailCallback(context),
             state = bottomSheetState,
             scenario = selectedScenario.value,
             autoHideOnSuccess = autoHideSheetOnSuccess.value,
-            serviceName = "VKID Sample"
+            serviceName = "VKID Sample",
+            oAuths = selectedOAuths.value,
         )
         Selector("Scenario") {
             ScenarioMenu(selectedScenario)
         }
         Selector("Style") {
             StyleMenu(selectedStyle)
+        }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            OAuthSelector(selectedOAuths = selectedOAuths, name = "Mail", oAuth = OneTapOAuth.MAIL)
+            OAuthSelector(selectedOAuths = selectedOAuths, name = "OK", oAuth = OneTapOAuth.OK)
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
             Checkbox(checked = autoHideSheetOnSuccess.value, onCheckedChange = { autoHideSheetOnSuccess.value = it })
@@ -89,7 +100,29 @@ fun OneTapBottomSheetScreen() {
             }
             Spacer(Modifier.weight(1f))
         }
+        token.value?.let {
+            UseToken(accessToken = it)
+        }
     }
+}
+
+@Composable
+private fun OAuthSelector(
+    selectedOAuths: MutableState<Set<OneTapOAuth>>,
+    name: String,
+    oAuth: OneTapOAuth,
+) {
+    Text(name)
+    Checkbox(
+        checked = selectedOAuths.value.contains(oAuth),
+        onCheckedChange = {
+            if (it) {
+                selectedOAuths.value = selectedOAuths.value + oAuth
+            } else {
+                selectedOAuths.value = selectedOAuths.value - oAuth
+            }
+        }
+    )
 }
 
 @Composable

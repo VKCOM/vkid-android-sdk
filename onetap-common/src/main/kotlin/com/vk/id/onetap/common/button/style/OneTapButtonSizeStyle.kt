@@ -26,11 +26,11 @@ public enum class OneTapButtonSizeStyle {
 }
 
 public fun OneTapButtonSizeStyle.asIconSizeStyle(): VKIconSizeStyle = when (this) {
-    OneTapButtonSizeStyle.DEFAULT -> VKIconSizeStyle.SMALL
+    OneTapButtonSizeStyle.DEFAULT -> VKIconSizeStyle.NORMAL
     OneTapButtonSizeStyle.SMALL_32,
     OneTapButtonSizeStyle.SMALL_34,
     OneTapButtonSizeStyle.SMALL_36,
-    OneTapButtonSizeStyle.SMALL_38 -> VKIconSizeStyle.NORMAL
+    OneTapButtonSizeStyle.SMALL_38 -> VKIconSizeStyle.SMALL
     OneTapButtonSizeStyle.MEDIUM_40,
     OneTapButtonSizeStyle.MEDIUM_42,
     OneTapButtonSizeStyle.MEDIUM_44,

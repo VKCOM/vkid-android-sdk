@@ -13,6 +13,9 @@ import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonSizeStyle
 import com.vk.id.onetap.compose.R
 
+/**
+ * Base class for defining the style of the One Tap Bottom Sheet.
+ */
 @Suppress("LongParameterList")
 public sealed class OneTapBottomSheetStyle(
     internal val cornersStyle: OneTapSheetCornersStyle,
@@ -26,6 +29,9 @@ public sealed class OneTapBottomSheetStyle(
     internal val contentTitleTextColor: Int,
 
 ) {
+    /**
+     * Represents the light style theme for the One Tap Bottom Sheet.
+     */
     public class Light(
         cornersStyle: OneTapSheetCornersStyle = OneTapSheetCornersStyle.Default,
         buttonsCornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
@@ -39,6 +45,9 @@ public sealed class OneTapBottomSheetStyle(
         contentTitleTextColor = R.color.vkid_black,
     )
 
+    /**
+     * Represents the dark style theme for the One Tap Bottom Sheet.
+     */
     public class Dark(
         cornersStyle: OneTapSheetCornersStyle = OneTapSheetCornersStyle.Default,
         buttonsCornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
@@ -52,6 +61,9 @@ public sealed class OneTapBottomSheetStyle(
         contentTitleTextColor = R.color.vkid_gray_100,
     )
 
+    /**
+     * Represents the transparent light style theme for the One Tap Bottom Sheet.
+     */
     public class TransparentLight(
         cornersStyle: OneTapSheetCornersStyle = OneTapSheetCornersStyle.Default,
         buttonsCornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
@@ -65,6 +77,9 @@ public sealed class OneTapBottomSheetStyle(
         contentTitleTextColor = R.color.vkid_black,
     )
 
+    /**
+     * Represents the transparent dark style theme for the One Tap Bottom Sheet.
+     */
     public class TransparentDark(
         cornersStyle: OneTapSheetCornersStyle = OneTapSheetCornersStyle.Default,
         buttonsCornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,

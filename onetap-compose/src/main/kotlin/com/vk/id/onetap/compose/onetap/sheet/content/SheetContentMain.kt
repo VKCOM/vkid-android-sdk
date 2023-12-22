@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
+import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.compose.R
 import com.vk.id.onetap.compose.onetap.OneTap
 import com.vk.id.onetap.compose.onetap.sheet.OneTapScenario
@@ -33,8 +34,9 @@ import com.vk.id.onetap.compose.onetap.sheet.vkidButtonTextProvider
 @Composable
 internal fun SheetContentMain(
     vkid: VKID,
-    onAuth: (AccessToken) -> Unit,
-    onFail: (VKIDAuthFail) -> Unit,
+    onAuth: (OneTapOAuth?, AccessToken) -> Unit,
+    onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit,
+    oAuths: Set<OneTapOAuth>,
     serviceName: String,
     scenario: OneTapScenario,
     style: OneTapBottomSheetStyle,
@@ -61,13 +63,20 @@ internal fun SheetContentMain(
         OneTap(
             style = style.oneTapStyle,
             signInAnotherAccountButtonEnabled = true,
+            oAuths = oAuths,
             vkid = vkid,
             vkidButtonTextProvider = remember(scenario) { scenario.vkidButtonTextProvider(resources) },
             onVKIDButtonClick = {
-                startVKIDAuth(coroutineScope, vkid, style, onAuth, onFail, authStatus)
+                startVKIDAuth(coroutineScope, vkid, style, { onAuth(null, it) }, { onFail(null, it) }, authStatus)
             },
             onAlternateButtonClick = {
-                startAlternateAuth(coroutineScope, vkid, style, onAuth, onFail, authStatus)
+                startAlternateAuth(coroutineScope, vkid, style, { onAuth(null, it) }, { onFail(null, it) }, authStatus)
+            },
+            onAuth = onAuth,
+            onFail = { oAuth, fail ->
+                check(oAuth != null) { error("oAuth is not provided in a multibranding flow error") }
+                authStatus.value = OneTapBottomSheetAuthStatus.AuthFailedMultibranding(oAuth)
+                onFail(oAuth, fail)
             }
         )
     }

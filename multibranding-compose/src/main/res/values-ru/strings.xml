@@ -3,5 +3,5 @@
     <string name="vkid_oauth_list_widget_note">или войти через VK ID с использованием данных из сервиса</string>
     <string name="vkid_oauth_list_widget_title_ok">Войти через OK</string>
     <string name="vkid_oauth_list_widget_title_mail">Войти с Почтой Mail.ru</string>
-    <string name="vkid_oauth_list_widget_title_vk">Войти через VK ID</string>
+    <string name="vkid_oauth_list_widget_title_vk">Войти с VK ID</string>
 </resources>

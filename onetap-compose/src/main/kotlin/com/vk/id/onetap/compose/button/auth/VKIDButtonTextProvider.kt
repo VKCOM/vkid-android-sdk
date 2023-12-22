@@ -4,5 +4,7 @@ import com.vk.id.VKIDUser
 
 internal interface VKIDButtonTextProvider {
     fun userFoundText(user: VKIDUser): String
+    fun userFoundShortText(user: VKIDUser): String
     fun noUserText(): String
+    fun noUserShortText(): String
 }
