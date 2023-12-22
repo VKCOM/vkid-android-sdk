@@ -14,11 +14,11 @@ import com.vk.id.AccessToken
 import com.vk.id.OAuth
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
+import com.vk.id.test.VKIDTestBuilder
+import com.vk.id.VKIDUser
 import com.vk.id.commn.InternalVKIDApi
 import com.vk.id.multibranding.OAuthListWidget
 import com.vk.id.multibranding.common.callback.OAuthListWidgetAuthCallback
-import com.vk.id.test.MockAuthProviderConfig
-import com.vk.id.test.OverrideVKIDApi
 import com.vk.id.test.VKIDTokenPayloadResponse
 import io.github.kakaocup.compose.node.element.ComposeScreen
 import io.kotest.matchers.shouldBe
@@ -47,6 +47,9 @@ public class MultibrandingTest(
         private const val EMAIL = "email"
         private const val PHONE = "phone"
         private const val PHONE_ACCESS_KEY = "phone access key"
+        private const val FIRST_NAME = "first name"
+        private const val LAST_NAME = "last name"
+        private const val AVATAR = "avatar"
 
         @JvmStatic
         @Parameterized.Parameters(name = "{0}")
@@ -57,8 +60,10 @@ public class MultibrandingTest(
     public fun tokenIsReceived(): Unit = run {
         var accessToken: AccessToken? = null
         var receivedOAuth: OAuth? = null
-        val api = mockApiSuccess()
-        val vkid = VKID(composeTestRule.activity, api)
+        val vkid = VKIDTestBuilder(composeTestRule.activity)
+            .mockApiSuccess()
+            .user(VKIDUser(firstName = FIRST_NAME, lastName = LAST_NAME, photo200 = AVATAR))
+            .build()
         setContent(
             vkid = vkid,
             onAuth = OAuthListWidgetAuthCallback.WithOAuth { oAuth, token ->
@@ -77,8 +82,15 @@ public class MultibrandingTest(
             flakySafely {
                 accessToken?.token shouldBe ACCESS_TOKEN
                 accessToken?.userID shouldBe USER_ID
-                accessToken?.userData?.email shouldBe EMAIL
-                accessToken?.userData?.phone shouldBe PHONE
+                accessToken?.userData shouldBe VKIDUser(
+                    firstName = FIRST_NAME,
+                    lastName = LAST_NAME,
+                    phone = PHONE,
+                    photo50 = null,
+                    photo100 = null,
+                    photo200 = AVATAR,
+                    email = EMAIL
+                )
             }
         }
     }
@@ -86,8 +98,9 @@ public class MultibrandingTest(
     @Test
     public fun failedApiCallIsReceived(): Unit = run {
         var fail: VKIDAuthFail? = null
-        val api = mockApiError()
-        val vkid = VKID(composeTestRule.activity, api)
+        val vkid = VKIDTestBuilder(composeTestRule.activity)
+            .mockApiError()
+            .build()
         setContent(
             vkid = vkid,
             onFail = { fail = it }
@@ -104,8 +117,9 @@ public class MultibrandingTest(
     @Test
     public fun cancellationIsReceived(): Unit = run {
         var fail: VKIDAuthFail? = null
-        val api = mockApiSuccess()
-        val vkid = VKID(composeTestRule.activity, api)
+        val vkid = VKIDTestBuilder(composeTestRule.activity)
+            .mockApiSuccess()
+            .build()
         setContent(
             vkid = vkid,
             onFail = { fail = it }
@@ -125,9 +139,10 @@ public class MultibrandingTest(
     @Test
     public fun failedOAuthIsReceived(): Unit = run {
         var fail: VKIDAuthFail? = null
-        val api = mockApiSuccess()
-        val authProviderConfig = MockAuthProviderConfig(overrideOAuthToNull = true)
-        val vkid = VKID(composeTestRule.activity, api, authProviderConfig)
+        val vkid = VKIDTestBuilder(composeTestRule.activity)
+            .mockApiSuccess()
+            .overrideOAuthToNull()
+            .build()
         setContent(
             vkid = vkid,
             onFail = { fail = it }
@@ -144,9 +159,10 @@ public class MultibrandingTest(
     @Test
     public fun invalidUuidIsReceived(): Unit = run {
         var fail: VKIDAuthFail? = null
-        val api = mockApiSuccess()
-        val authProviderConfig = MockAuthProviderConfig(overrideUuid = "wrong uuid")
-        val vkid = VKID(composeTestRule.activity, api, authProviderConfig)
+        val vkid = VKIDTestBuilder(composeTestRule.activity)
+            .mockApiSuccess()
+            .overrideUuid("wrong uuid")
+            .build()
         setContent(
             vkid = vkid,
             onFail = { fail = it }
@@ -163,9 +179,10 @@ public class MultibrandingTest(
     @Test
     public fun invalidStateIsReceived(): Unit = run {
         var fail: VKIDAuthFail? = null
-        val api = mockApiSuccess()
-        val authProviderConfig = MockAuthProviderConfig(overrideState = "wrong state")
-        val vkid = VKID(composeTestRule.activity, api, authProviderConfig)
+        val vkid = VKIDTestBuilder(composeTestRule.activity)
+            .mockApiSuccess()
+            .overrideState("wrong state")
+            .build()
         setContent(
             vkid = vkid,
             onFail = { fail = it }
@@ -194,26 +211,12 @@ public class MultibrandingTest(
         }
     }
 
-    private fun mockApiError() = object : OverrideVKIDApi {
-        override fun getToken(
-            code: String,
-            codeVerifier: String,
-            clientId: String,
-            clientSecret: String,
-            deviceId: String,
-            redirectUri: String
-        ) = Result.failure<VKIDTokenPayloadResponse>(UnsupportedOperationException("fake error"))
-    }
+    private fun VKIDTestBuilder.mockApiError() = getTokenResponse(
+        Result.failure(UnsupportedOperationException("fake error"))
+    )
 
-    private fun mockApiSuccess() = object : OverrideVKIDApi {
-        override fun getToken(
-            code: String,
-            codeVerifier: String,
-            clientId: String,
-            clientSecret: String,
-            deviceId: String,
-            redirectUri: String
-        ) = Result.success(
+    private fun VKIDTestBuilder.mockApiSuccess() = getTokenResponse(
+        Result.success(
             VKIDTokenPayloadResponse(
                 accessToken = ACCESS_TOKEN,
                 expiresIn = EXPIRES_IN,
@@ -223,7 +226,7 @@ public class MultibrandingTest(
                 phoneAccessKey = PHONE_ACCESS_KEY,
             )
         )
-    }
+    )
 
     private fun TestContext<Unit>.startAuth(): Unit = step("Start auth") {
         ComposeScreen.onComposeScreen<OneTapScreen>(composeTestRule) {

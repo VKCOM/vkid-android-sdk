@@ -9,9 +9,8 @@ import java.net.URLEncoder
 import androidx.compose.material3.Button
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import com.vk.id.VKIDUser
 
-// TODO: Move to module or debug/java/com/app_name/package_name
-// https://stackoverflow.com/questions/27507079/debug-test-specific-activity-declaration
 internal class TestAuthProviderActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,18 +32,17 @@ internal class TestAuthProviderActivity : ComponentActivity() {
         startActivity(intent)
     }
 
-    // TODO: Return user and test that it's the same in the returned AccessToken
     private val payload get() = """
         {
         "type":"oauth",
         "auth":1,
         "user":{
             "id":30320723,
-            "first_name":"Daniil",
-            "last_name":"K.",
-            "avatar":"https:\/\/sun9-3.userapi.com\/s\/v1\/ig2\/hEqer8Lx3oOqWUfBKYO_jqTnWyj331ms9vR0bX8reedL3057kvVV0HAt_M70G8uK4ldLDjS6hA2Ot3EGC5VGb0Uw.jpg?size=200x200&quality=95&crop=3,0,637,637&ava=1",
+            "first_name":"${user?.firstName ?: "Some first name"}",
+            "last_name":"${user?.lastName ?: "Some last name"}",
+            "avatar":"${user?.photo200 ?: "Some avatar"}",
             "avatar_base":null,
-            "phone":"+7 *** *** ** 42"
+            "phone":"Some phone"
         },
         "ttl":$expireTime,
         "uuid":"$uuid",
@@ -66,6 +64,7 @@ internal class TestAuthProviderActivity : ComponentActivity() {
         null
     }
 
+    private val user get() = intent.getParcelableExtra<VKIDUser>("user")
     private val redirectUri get() = intent.getStringExtra("redirectUri")
     private val overrideOAuthToNull get() = intent.getBooleanExtra("overrideOAuthToNull", true)
     private val uuid get() = intent.getStringExtra("deviceId")

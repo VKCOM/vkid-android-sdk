@@ -1,3 +1,5 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id
 
 import android.content.Context
@@ -42,12 +44,10 @@ public class VKID {
      */
     public constructor(context: Context) : this(VKIDDepsProd(context))
 
-    // TODO: Make constructor internal and add builder for test cases
-    @InternalVKIDApi
-    public constructor(
+    internal constructor(
         context: Context,
         mockApi: OverrideVKIDApi,
-        mockAuthProviderConfig: MockAuthProviderConfig = MockAuthProviderConfig()
+        mockAuthProviderConfig: MockAuthProviderConfig
     ) : this(object : VKIDDepsProd(context) {
         override val authProvidersChooser = lazy { MockAuthProviderChooser(context, mockAuthProviderConfig) }
         override val api = lazy { ImmediateVKIDApi(mockApi) }
