@@ -1,8 +1,7 @@
 @file:OptIn(InternalVKIDApi::class)
 
-package com.vk.id.onetap
+package com.vk.id.multibranding.ui.tests
 
-import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.rules.ActivityScenarioRule
@@ -14,11 +13,10 @@ import com.vk.id.AccessToken
 import com.vk.id.OAuth
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
-import com.vk.id.test.VKIDTestBuilder
 import com.vk.id.VKIDUser
 import com.vk.id.commn.InternalVKIDApi
-import com.vk.id.multibranding.OAuthListWidget
-import com.vk.id.multibranding.common.callback.OAuthListWidgetAuthCallback
+import com.vk.id.common.AutoTestActivity
+import com.vk.id.test.VKIDTestBuilder
 import com.vk.id.test.VKIDTokenPayloadResponse
 import io.github.kakaocup.compose.node.element.ComposeScreen
 import io.kotest.matchers.shouldBe
@@ -28,16 +26,15 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
-// TODO: Reuse for XML and Compose
 @RunWith(Parameterized::class)
-public class MultibrandingTest(
+public abstract class MultibrandingTest(
     private val oAuth: OAuth
 ) : TestCase(
     kaspressoBuilder = Kaspresso.Builder.withComposeSupport()
 ) {
 
     @get:Rule
-    public val composeTestRule: AndroidComposeTestRule<ActivityScenarioRule<ComponentActivity>, ComponentActivity> =
+    public val composeTestRule: AndroidComposeTestRule<ActivityScenarioRule<AutoTestActivity>, AutoTestActivity> =
         createAndroidComposeRule()
 
     private companion object {
@@ -66,7 +63,7 @@ public class MultibrandingTest(
             .build()
         setContent(
             vkid = vkid,
-            onAuth = OAuthListWidgetAuthCallback.WithOAuth { oAuth, token ->
+            onAuth = { oAuth, token ->
                 receivedOAuth = oAuth
                 accessToken = token
             },
@@ -233,19 +230,11 @@ public class MultibrandingTest(
         }
     }
 
-    private fun setContent(
+    protected abstract fun setContent(
         vkid: VKID,
-        onAuth: OAuthListWidgetAuthCallback = OAuthListWidgetAuthCallback.JustToken { },
+        onAuth: (OAuth, AccessToken) -> Unit = { _, _ -> },
         onFail: (VKIDAuthFail) -> Unit = {},
-    ) {
-        composeTestRule.setContent {
-            OAuthListWidget(
-                vkid = vkid,
-                onAuth = onAuth,
-                onFail = onFail,
-            )
-        }
-    }
+    )
 
     private fun VKIDTestBuilder.mockApiError() = getTokenResponse(
         Result.failure(UnsupportedOperationException("fake error"))

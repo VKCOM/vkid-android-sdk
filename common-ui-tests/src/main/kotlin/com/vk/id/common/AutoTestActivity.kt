@@ -1,4 +1,4 @@
-package com.vk.id.autotest
+package com.vk.id.common
 
 import android.os.Handler
 import android.os.Looper

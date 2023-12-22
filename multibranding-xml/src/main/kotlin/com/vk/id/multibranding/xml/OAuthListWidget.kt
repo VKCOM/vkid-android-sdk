@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import com.vk.id.AccessToken
 import com.vk.id.OAuth
+import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.multibranding.OAuthListWidget
 import com.vk.id.multibranding.common.callback.OAuthListWidgetAuthCallback
@@ -51,6 +52,12 @@ public class OAuthListWidget @JvmOverloads constructor(
         error("No onAuth callback for OAuthListWidget. Set it with setCallbacks method.")
     }
     private var onFail: (OAuth, VKIDAuthFail) -> Unit = { _, _ -> }
+    private var vkid: VKID? = null
+        set(value) {
+            field = value
+            onVKIDChange(value)
+        }
+    private var onVKIDChange: (VKID?) -> Unit = {}
 
     init {
         val (style, oAuths) = parseAttrs(context, attrs)
@@ -66,6 +73,8 @@ public class OAuthListWidget @JvmOverloads constructor(
         onStyleChange = { style.value = it }
         val oAuths = remember { mutableStateOf(oAuths) }
         onOAuthsChange = { oAuths.value = it }
+        val vkid = remember { mutableStateOf(vkid) }
+        onVKIDChange = { vkid.value = it }
         OAuthListWidget(
             modifier = Modifier,
             style = style.value,
@@ -76,7 +85,8 @@ public class OAuthListWidget @JvmOverloads constructor(
                 }
             },
             onFail = { oAuth, fail -> onFail(oAuth, fail) },
-            oAuths = oAuths.value
+            oAuths = oAuths.value,
+            vkid = vkid.value,
         )
     }
 
@@ -92,6 +102,16 @@ public class OAuthListWidget @JvmOverloads constructor(
     ) {
         this.onAuth = onAuth
         this.onFail = onFail
+    }
+
+    /**
+     * Set an optional [VKID] instance to use for authentication.
+     *  If instance of VKID is not provided, it will be created.
+     */
+    public fun setVKID(
+        vkid: VKID
+    ) {
+        this.vkid = vkid
     }
 }
 

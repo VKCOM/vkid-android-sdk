@@ -18,4 +18,5 @@ dependencies {
     implementation(libs.androidx.compose.material.ripple)
     implementation(libs.androidx.compose.ui.tooling.preview)
     debugImplementation(libs.androidx.compose.ui.tooling)
+    androidTestImplementation(project(":multibranding-ui-tests"))
 }

@@ -3,12 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.vk.id.onetap.ui.tests"
+    namespace = "com.vk.id.common.ui.tests"
 }
 
 dependencies {
     implementation(project(":vkid"))
-    api(project(":common-ui-tests"))
     implementation(libs.kaspresso)
     implementation(libs.kaspresso.compose)
     implementation(libs.androidx.compose.ui.test.junit4)
