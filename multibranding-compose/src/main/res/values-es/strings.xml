@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="vkid_oauth_list_widget_note">o iniciar sesión con VK ID utilizando la información de un servicio</string>
-    <string name="vkid_oauth_list_widget_title_ok">Iniciar sesión con OK</string>
-    <string name="vkid_oauth_list_widget_title_mail">Iniciar sesión con Mail.ru</string>
-    <string name="vkid_oauth_list_widget_title_vk">Iniciar sesión con VK ID</string>
+    <string name="vkid_oauth_list_widget_title_ok">Iniciar sesión con OK</string>
+    <string name="vkid_oauth_list_widget_title_mail">Iniciar sesión con Mail.ru</string>
+    <string name="vkid_oauth_list_widget_title_vk">Iniciar sesión con VK ID</string>
 </resources>
