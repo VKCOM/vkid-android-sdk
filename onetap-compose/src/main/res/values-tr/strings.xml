@@ -3,6 +3,7 @@
     <string name="vkid_log_in_with_vkid">VK ID aracılığıyla gir</string>
     <string name="vkid_auth_use_another_account">Войти в другой аккаунт</string>
     <string name="vkid_log_in_as">%1$s olarak devam et</string>
+    <string name="vkid_log_in">Devam</string>
 
     <string name="vkid_schenario_enter_service_title">Hizmete girin yada oturum oluşturun</string>
     <string name="vkid_schenario_enter_service_vkid_button_text_user_found">%1$s olarak gir</string>
