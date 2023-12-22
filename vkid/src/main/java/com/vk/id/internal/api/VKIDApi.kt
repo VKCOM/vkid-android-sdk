@@ -4,6 +4,7 @@ import okhttp3.Call
 
 internal interface VKIDApi {
 
+    @Suppress("LongParameterList")
     fun getToken(
         code: String,
         codeVerifier: String,

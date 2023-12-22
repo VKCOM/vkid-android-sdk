@@ -9,7 +9,8 @@ import com.vk.id.commn.InternalVKIDApi
 public class VKIDTestBuilder(
     private val context: Context
 ) {
-    private var getTokenResponse = Result.failure<VKIDTokenPayloadResponse>(UnsupportedOperationException("Not supported"))
+    private var getTokenResponse = Result
+        .failure<VKIDTokenPayloadResponse>(UnsupportedOperationException("Not supported"))
     private var mockApi: OverrideVKIDApi = object : OverrideVKIDApi {
         override fun getToken(
             code: String,
@@ -28,7 +29,7 @@ public class VKIDTestBuilder(
     public fun overrideOAuthToNull(): VKIDTestBuilder = updateConfig { copy(overrideOAuthToNull = true) }
     public fun user(user: VKIDUser): VKIDTestBuilder = updateConfig { copy(user = user) }
     public fun notifyNoBrowserAvailable(): VKIDTestBuilder = updateConfig { copy(notifyNoBrowserAvailable = true) }
-    public fun notifyFailedRedirectActivity(): VKIDTestBuilder = updateConfig { copy(notifyFailedRedirectActivity = true) }
+    public fun notifyFailedRedirect(): VKIDTestBuilder = updateConfig { copy(notifyFailedRedirectActivity = true) }
 
     private fun updateConfig(update: MockAuthProviderConfig.() -> MockAuthProviderConfig): VKIDTestBuilder = apply {
         authProviderConfig = authProviderConfig.update()

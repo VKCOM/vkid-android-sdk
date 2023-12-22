@@ -27,6 +27,7 @@ import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
 @RunWith(Parameterized::class)
+@Suppress("TooManyFunctions")
 public abstract class MultibrandingTest(
     private val oAuth: OAuth
 ) : TestCase(
@@ -96,7 +97,7 @@ public abstract class MultibrandingTest(
     public fun failedRedirectActivityIsReceived(): Unit = run {
         var fail: VKIDAuthFail? = null
         val vkid = VKIDTestBuilder(composeTestRule.activity)
-            .notifyFailedRedirectActivity()
+            .notifyFailedRedirect()
             .build()
         setContent(
             vkid = vkid,

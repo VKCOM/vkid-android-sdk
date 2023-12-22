@@ -5,11 +5,11 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import java.net.URLEncoder
 import androidx.compose.material3.Button
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import com.vk.id.VKIDUser
+import java.net.URLEncoder
 
 internal class TestAuthProviderActivity : ComponentActivity() {
 

@@ -11,8 +11,8 @@ import com.vk.id.AuthOptionsCreator
 import com.vk.id.AuthResultHandler
 import com.vk.id.VKID
 import com.vk.id.internal.api.VKIDApi
-import com.vk.id.internal.api.VKIDRealApi
 import com.vk.id.internal.api.VKIDApiService
+import com.vk.id.internal.api.VKIDRealApi
 import com.vk.id.internal.auth.AuthActivity
 import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthProvidersChooser

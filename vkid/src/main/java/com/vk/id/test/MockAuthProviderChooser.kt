@@ -29,7 +29,7 @@ internal class MockAuthProviderChooser(
                 AuthResult.NoBrowserAvailable("", IllegalStateException("Mocked no available browser"))
             )
         }
-        if (config.notifyFailedRedirectActivity){
+        if (config.notifyFailedRedirectActivity) {
             AuthEventBridge.onAuthResult(
                 AuthResult.AuthActiviyResultFailed("", IllegalStateException("Mocked activity result failed"))
             )

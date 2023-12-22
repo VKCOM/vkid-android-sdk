@@ -7,6 +7,7 @@ import com.vk.id.commn.InternalVKIDApi
 
 @InternalVKIDApi
 public interface OverrideVKIDApi {
+    @Suppress("LongParameterList")
     public fun getToken(
         code: String,
         codeVerifier: String,
