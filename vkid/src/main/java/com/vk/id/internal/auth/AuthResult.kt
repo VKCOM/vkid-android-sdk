@@ -29,7 +29,6 @@ package com.vk.id.internal.auth
 
 internal sealed class AuthResult {
     data class Success(
-        val token: String,
         val uuid: String,
         val expireTime: Long,
         val userId: Long,

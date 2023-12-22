@@ -3,6 +3,7 @@
     <string name="vkid_log_in_with_vkid">Войти с VK ID</string>
     <string name="vkid_auth_use_another_account">Войти в другой аккаунт</string>
     <string name="vkid_log_in_as">Продолжить как %1$s</string>
+    <string name="vkid_log_in">Продолжить</string>
 
     <string name="vkid_schenario_enter_service_title">Войдите в сервис или зарегистрируйтесь</string>
     <string name="vkid_schenario_enter_service_vkid_button_text_user_found">Войти как %1$s</string>

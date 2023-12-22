@@ -12,7 +12,7 @@ class VKIDLibraryComposeConventionPlugin : Plugin<Project> {
             pluginManager.apply("vkid.android.library")
             val extension = extensions.getByType<LibraryExtension>()
             configureAndroidCompose(extension)
-            configureKotest(extension)
+            configureKotest()
             configureDetekt(isCompose = true)
         }
     }

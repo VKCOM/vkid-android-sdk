@@ -8,16 +8,19 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,18 +28,21 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.vk.id.AccessToken
+import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
 import com.vk.id.onetap.compose.onetap.OneTap
 import com.vk.id.sample.app.BuildConfig
 import com.vk.id.sample.app.R
-import com.vk.id.sample.xml.uikit.common.onVKIDAuthFail
-import com.vk.id.sample.xml.uikit.common.onVKIDAuthSuccess
+import com.vk.id.sample.app.screen.Button
+import com.vk.id.sample.app.screen.UseToken
+import com.vk.id.sample.xml.uikit.common.getOneTapFailCallback
+import com.vk.id.sample.xml.uikit.common.getOneTapSuccessCallback
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -46,9 +52,12 @@ fun HomeScreen(
     navController: NavController
 ) {
     val context = LocalContext.current
+    // for demo purpose only, use secured place to keep token
+    var token: AccessToken? by remember { mutableStateOf(null) }
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -56,10 +65,14 @@ fun HomeScreen(
         OneTap(
             modifier = Modifier.width(355.dp),
             style = OneTapStyle.Light(cornersStyle = OneTapButtonCornersStyle.Rounded),
-            onAuth = { onVKIDAuthSuccess(context, it) },
-            onFail = { onVKIDAuthFail(context, it) },
-            signInAnotherAccountButtonEnabled = true
+            onAuth = getOneTapSuccessCallback(context) { token = it },
+            onFail = getOneTapFailCallback(context),
+            signInAnotherAccountButtonEnabled = true,
+            oAuths = setOf(OneTapOAuth.MAIL, OneTapOAuth.OK),
         )
+        token?.let {
+            UseToken(it)
+        }
         Spacer(modifier = Modifier.height(32.dp))
         Divider(thickness = 1.dp, color = colorResource(id = R.color.vkid_gray900_alpha50))
         Button("Onetap styling (compose)") {
@@ -71,55 +84,29 @@ fun HomeScreen(
         Button("Onetap styling (xml layout)") {
             navController.navigate("onetap-styling-xml-layout")
         }
-//        Button("Multibranding (compose)") {
-//            navController.navigate("multibranding-compose")
-//        }
-//        Button("Multibranding (xml code)") {
-//            navController.navigate("multibranding-xml-code")
-//        }
-//        Button("Multibranding (xml layout)") {
-//            navController.navigate("multibranding-xml-layout")
-//        }
+        Button("Multibranding (compose)") {
+            navController.navigate("multibranding-compose")
+        }
+        Button("Multibranding (xml code)") {
+            navController.navigate("multibranding-xml-code")
+        }
+        Button("Multibranding (xml layout)") {
+            navController.navigate("multibranding-xml-layout")
+        }
         Button("OneTapBottomSheet") {
             navController.navigate("onetap-bottom-sheet")
         }
         Button("OneTapBottomSheet (xml)") {
             navController.navigate("onetap-bottom-sheet-xml")
         }
-    }
-    Box(modifier = Modifier.fillMaxSize()) {
-        BuildInfo(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(12.dp)
-        )
-    }
-}
-
-@Composable
-internal fun Button(
-    text: String,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit,
-) {
-    Button(
-        modifier = modifier
-            .width(355.dp)
-            .padding(vertical = 8.dp)
-            .height(44.dp),
-        shape = RoundedCornerShape(8.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.vkid_azure_A100)),
-        onClick = onClick
-    ) {
-        Text(
-            text = text,
-            style = TextStyle(
-                fontSize = 16.sp,
-                lineHeight = 20.sp,
-                fontWeight = FontWeight.Medium,
-                textAlign = TextAlign.Center
+        Spacer(modifier = Modifier.weight(1f))
+        Box(modifier = Modifier.fillMaxWidth()) {
+            BuildInfo(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(12.dp)
             )
-        )
+        }
     }
 }
 

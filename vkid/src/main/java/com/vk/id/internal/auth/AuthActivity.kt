@@ -100,12 +100,12 @@ internal class AuthActivity : Activity() {
             handlePayloadJson(payloadJson)
         } catch (e: JSONException) {
             AuthResult.AuthActiviyResultFailed(
-                "AuthActivity opened with invalid payload json",
+                "AuthActivity opened with invalid payload json: $uri",
                 e
             )
         } catch (e: UnsupportedOperationException) {
             AuthResult.AuthActiviyResultFailed(
-                "AuthActivity opened with invalid url",
+                "AuthActivity opened with invalid url: $uri",
                 e
             )
         }
@@ -116,14 +116,12 @@ internal class AuthActivity : Activity() {
     ): AuthResult {
         val uuid = payloadJson.optString("uuid")
         val expireTime = payloadJson.optLong("ttl", 0).toExpireTime
-        val token = payloadJson.optString("token")
         val user = payloadJson.optJSONObject("user")
         val oauth = payloadJson.optJSONObject("oauth")
         val code = oauth?.optString("code") ?: ""
         val state = oauth?.optString("state") ?: ""
 
         return AuthResult.Success(
-            token = token,
             uuid = uuid,
             expireTime = expireTime,
             userId = user?.optLong("id") ?: 0,

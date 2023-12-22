@@ -1,8 +1,16 @@
 package com.vk.id
 
+/**
+ * Represents the failure cases for VK ID authentication.
+ */
 public sealed class VKIDAuthFail(
     public val description: String
 ) {
+    /**
+     * Authentication process was canceled.
+     *
+     * @param description Description of the cancellation.
+     */
     public class Canceled(
         description: String
     ) : VKIDAuthFail(description) {
@@ -15,6 +23,12 @@ public sealed class VKIDAuthFail(
         }
     }
 
+    /**
+     * Represents a failure due to an VK ID API call error.
+     *
+     * @param description Description of the API call failure.
+     * @param throwable The exception thrown during the API call.
+     */
     public class FailedApiCall(
         description: String,
         public val throwable: Throwable
@@ -30,8 +44,18 @@ public sealed class VKIDAuthFail(
         }
     }
 
+    /**
+     * Represents a failure in the OAuth authentication process.
+     *
+     * @param description Description of the OAuth failure.
+     */
     public class FailedOAuth(description: String) : VKIDAuthFail(description)
 
+    /**
+     * Represents a failure due to an invalid OAuth state.
+     *
+     * @param description Description of the OAuth state failure.
+     */
     public class FailedOAuthState(description: String) : VKIDAuthFail(description) {
         override fun equals(other: Any?): Boolean {
             return other is FailedOAuthState && description == other.description
@@ -42,6 +66,12 @@ public sealed class VKIDAuthFail(
         }
     }
 
+    /**
+     * Represents a failure due to an issue with the redirect activity.
+     *
+     * @param description Description of the redirect activity failure.
+     * @param throwable Optional exception thrown during the redirect activity process.
+     */
     public class FailedRedirectActivity(
         description: String,
         public val throwable: Throwable?
@@ -57,6 +87,12 @@ public sealed class VKIDAuthFail(
         }
     }
 
+    /**
+     * Represents a failure due to the absence of a suitable browser.
+     *
+     * @param description Description of the failure due to no available browser.
+     * @param throwable Optional exception related to the absence of the browser.
+     */
     public class NoBrowserAvailable(
         description: String,
         public val throwable: Throwable?

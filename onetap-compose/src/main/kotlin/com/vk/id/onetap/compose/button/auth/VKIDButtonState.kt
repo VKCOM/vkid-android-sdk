@@ -16,6 +16,7 @@ internal fun rememberVKIDButtonState(
 internal open class VKIDButtonState(
     inProgress: Boolean,
     text: String = "",
+    shortText: String = "",
     userIconUrl: String? = null,
     textVisible: Boolean = true,
     rightIconVisible: Boolean = false,
@@ -23,6 +24,7 @@ internal open class VKIDButtonState(
 ) {
     private var _inProgress: Boolean by mutableStateOf(inProgress)
     private var _text: String by mutableStateOf(text)
+    private var _shortText: String by mutableStateOf(shortText)
     private var _userIconUrl: String? by mutableStateOf(userIconUrl)
     private var _textVisible: Boolean by mutableStateOf(textVisible)
     private var _rightIconVisible: Boolean by mutableStateOf(rightIconVisible)
@@ -41,6 +43,14 @@ internal open class VKIDButtonState(
         internal set(value) {
             if (value != _text) {
                 _text = value
+            }
+        }
+
+    internal var shortText: String
+        get() = _shortText
+        internal set(value) {
+            if (value != _shortText) {
+                _shortText = value
             }
         }
 

@@ -50,7 +50,7 @@ public class OAuthListWidget @JvmOverloads constructor(
     private var onAuth: OAuthListWidgetAuthCallback = OAuthListWidgetAuthCallback.JustToken {
         error("No onAuth callback for OAuthListWidget. Set it with setCallbacks method.")
     }
-    private var onFail: (VKIDAuthFail) -> Unit = {}
+    private var onFail: (OAuth, VKIDAuthFail) -> Unit = { _, _ -> }
 
     init {
         val (style, oAuths) = parseAttrs(context, attrs)
@@ -75,7 +75,7 @@ public class OAuthListWidget @JvmOverloads constructor(
                     is OAuthListWidgetAuthCallback.JustToken -> callback(token)
                 }
             },
-            onFail = { onFail(it) },
+            onFail = { oAuth, fail -> onFail(oAuth, fail) },
             oAuths = oAuths.value
         )
     }
@@ -88,7 +88,7 @@ public class OAuthListWidget @JvmOverloads constructor(
      */
     public fun setCallbacks(
         onAuth: OAuthListWidgetAuthCallback,
-        onFail: (VKIDAuthFail) -> Unit = {},
+        onFail: (OAuth, VKIDAuthFail) -> Unit = { _, _ -> },
     ) {
         this.onAuth = onAuth
         this.onFail = onFail
@@ -145,8 +145,9 @@ private fun TypedArray.getSize() = when (getInt(R.styleable.vkid_OAuthListWidget
 }
 
 private fun TypedArray.getOAuths(): Set<OAuth> {
-    return (getString(R.styleable.vkid_OAuthListWidget_vkid_oAuthListAllowedOAuths) ?: "vk,mail,ok")
+    return (getString(R.styleable.vkid_OAuthListWidget_vkid_oAuthListOAuths) ?: "vk,mail,ok")
         .split(',')
+        .filter { it.isNotBlank() }
         .map {
             when (it) {
                 "vk" -> OAuth.VK

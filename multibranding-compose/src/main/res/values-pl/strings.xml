@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="vkid_oauth_list_widget_title_ok">Wejdź poprzez OK</string>
-    <string name="vkid_oauth_list_widget_title_mail">Wejdź poprzez Mail.ru</string>
-    <string name="vkid_oauth_list_widget_title_vk">Wejdź poprzez VK ID</string>
+    <string name="vkid_oauth_list_widget_note">lub wejdź poprzez VK ID przy użyciu danych z serwisu</string>
+    <string name="vkid_oauth_list_widget_title_ok">Zaloguj się z OK</string>
+    <string name="vkid_oauth_list_widget_title_mail">Zaloguj się z Mail.ru</string>
+    <string name="vkid_oauth_list_widget_title_vk">Zaloguj się z VK ID</string>
 </resources>

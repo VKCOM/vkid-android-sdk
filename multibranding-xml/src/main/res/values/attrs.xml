@@ -22,6 +22,6 @@
             <enum name="large54" value="12"/>
             <enum name="large56" value="13"/>
         </attr>
-        <attr name="vkid_oAuthListAllowedOAuths" format="string"/>
+        <attr name="vkid_oAuthListOAuths" format="string"/>
     </declare-styleable>
 </resources>
