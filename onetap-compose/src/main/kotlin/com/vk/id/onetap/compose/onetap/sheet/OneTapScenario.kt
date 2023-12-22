@@ -5,12 +5,26 @@ import com.vk.id.VKIDUser
 import com.vk.id.onetap.compose.R
 import com.vk.id.onetap.compose.button.auth.VKIDButtonTextProvider
 
+/**
+ * Enumerates various scenarios for the One Tap authentication process.
+ */
 public enum class OneTapScenario {
+    // Standard scenario for entering a service.
     EnterService,
+
+    // Scenario for event registration.
     RegistrationForTheEvent,
+
+    // Scenario for application-related authentication.
     Application,
+
+    // Scenario for ordering within a service.
     OrderInService,
+
+    // Scenario for general order-related authentication.
     Order,
+
+    // Scenario for general entering into an account.
     EnterToAccount
 }
 
@@ -62,6 +76,8 @@ internal fun OneTapScenario.vkidButtonTextProvider(resources: Resources): VKIDBu
             }
         }
 
+        override fun userFoundShortText(user: VKIDUser) = userFoundText(user)
+
         override fun noUserText(): String =
             when (this@vkidButtonTextProvider) {
                 OneTapScenario.EnterService -> resources.getString(
@@ -81,5 +97,7 @@ internal fun OneTapScenario.vkidButtonTextProvider(resources: Resources): VKIDBu
                     R.string.vkid_schenario_enter_to_account_vkid_button_text_no_user
                 )
             }
+
+        override fun noUserShortText() = noUserText()
     }
 }

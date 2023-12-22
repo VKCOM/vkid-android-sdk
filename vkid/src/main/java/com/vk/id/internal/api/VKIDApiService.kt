@@ -47,18 +47,28 @@ internal class VKIDApiService(
         list
     }
 
+    @Suppress("ThrowsCount")
     private fun Call.wrapTokenToVKIDCall(): VKIDCall<VKIDTokenPayload> {
         return wrapToVKIDCall {
-            if (it.body == null) throw IOException("Empty body $it")
-            val jsonObject = JSONObject(requireNotNull(it.body).string())
-            VKIDTokenPayload(
-                accessToken = jsonObject.getString("access_token"),
-                userId = jsonObject.getLong("user_id"),
-                expiresIn = jsonObject.optLong("expires_in"),
-                email = jsonObject.optString("email"),
-                phone = jsonObject.optString("phone"),
-                phoneAccessKey = jsonObject.optString("phone_access_key"),
-            )
+            if (it.body == null) throw IOException("Empty body ${it.code} $it")
+            val body = requireNotNull(it.body).string()
+            val jsonObject = JSONObject(body)
+            if (jsonObject.has("error")) {
+                throw IOException("Api error: ${it.code} $body")
+            }
+            try {
+                VKIDTokenPayload(
+                    accessToken = jsonObject.getString("access_token"),
+                    userId = jsonObject.getLong("user_id"),
+                    expiresIn = jsonObject.optLong("expires_in"),
+                    email = jsonObject.optString("email"),
+                    phone = jsonObject.optString("phone"),
+                    phoneAccessKey = jsonObject.optString("phone_access_key"),
+                )
+            } catch (@Suppress("SwallowedException") e: JSONException) {
+                val error = e.message
+                throw JSONException("$error: ${it.code} $body")
+            }
         }
     }
 

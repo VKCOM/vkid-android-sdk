@@ -1,7 +1,12 @@
 package com.vk.id.internal.log
 
 /**
- * Interface to implement for concrete logging platform, see [AndroidLogcatLogEngine] for example
+ * Interface defining a logging engine.
+ * Implement this interface to create a concrete logging platform.
+ * For an example, see [AndroidLogcatLogEngine].
+ *
+ * @property LogLevel The log level (INFO, DEBUG, ERROR).
+ * @function log Logs a message with a specified log level, tag, message, and optional throwable.
  */
 public interface LogEngine {
     public enum class LogLevel {

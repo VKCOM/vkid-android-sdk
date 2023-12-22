@@ -44,5 +44,6 @@
             <enum name="EnterToAccount" value="5"/>
         </attr>
         <attr name="vkid_autoHideOnSuccess" format="boolean"/>
+        <attr name="vkid_onetapOAuths" format="string"/>
     </declare-styleable>
 </resources>
