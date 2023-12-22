@@ -8,8 +8,10 @@ import com.vk.id.VKIDUser
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.commn.InternalVKIDApi
 import com.vk.id.internal.auth.AuthActivity
+import com.vk.id.internal.auth.AuthEventBridge
 import com.vk.id.internal.auth.AuthOptions
 import com.vk.id.internal.auth.AuthProvidersChooser
+import com.vk.id.internal.auth.AuthResult
 import com.vk.id.internal.auth.VKIDAuthProvider
 
 internal class MockAuthProviderChooser(
@@ -22,6 +24,16 @@ internal class MockAuthProviderChooser(
     }
 
     private fun startTestActivity(it: AuthOptions) {
+        if (config.notifyNoBrowserAvailable) {
+            AuthEventBridge.onAuthResult(
+                AuthResult.NoBrowserAvailable("", IllegalStateException("Mocked no available browser"))
+            )
+        }
+        if (config.notifyFailedRedirectActivity){
+            AuthEventBridge.onAuthResult(
+                AuthResult.AuthActiviyResultFailed("", IllegalStateException("Mocked activity result failed"))
+            )
+        }
         val intent = Intent(context, TestAuthProviderActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         intent.putExtra("appId", it.appId)
@@ -42,8 +54,10 @@ internal class MockAuthProviderChooser(
 }
 
 internal data class MockAuthProviderConfig(
-    internal val overrideUuid: String? = null,
-    internal val overrideState: String? = null,
-    internal val overrideOAuthToNull: Boolean = false,
-    internal val user: VKIDUser? = null,
+    val overrideUuid: String? = null,
+    val overrideState: String? = null,
+    val overrideOAuthToNull: Boolean = false,
+    val user: VKIDUser? = null,
+    val notifyNoBrowserAvailable: Boolean = false,
+    val notifyFailedRedirectActivity: Boolean = false,
 )

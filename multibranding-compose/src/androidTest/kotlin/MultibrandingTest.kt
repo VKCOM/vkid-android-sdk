@@ -96,6 +96,44 @@ public class MultibrandingTest(
     }
 
     @Test
+    public fun failedRedirectActivityIsReceived(): Unit = run {
+        var fail: VKIDAuthFail? = null
+        val vkid = VKIDTestBuilder(composeTestRule.activity)
+            .notifyFailedRedirectActivity()
+            .build()
+        setContent(
+            vkid = vkid,
+            onFail = { fail = it }
+        )
+        startAuth()
+        continueAuth()
+        step("Fail is received") {
+            flakySafely {
+                fail.shouldBeInstanceOf<VKIDAuthFail.FailedRedirectActivity>()
+            }
+        }
+    }
+
+    @Test
+    public fun noBrowserAvailableIsReceived(): Unit = run {
+        var fail: VKIDAuthFail? = null
+        val vkid = VKIDTestBuilder(composeTestRule.activity)
+            .notifyNoBrowserAvailable()
+            .build()
+        setContent(
+            vkid = vkid,
+            onFail = { fail = it }
+        )
+        startAuth()
+        continueAuth()
+        step("Fail is received") {
+            flakySafely {
+                fail.shouldBeInstanceOf<VKIDAuthFail.NoBrowserAvailable>()
+            }
+        }
+    }
+
+    @Test
     public fun failedApiCallIsReceived(): Unit = run {
         var fail: VKIDAuthFail? = null
         val vkid = VKIDTestBuilder(composeTestRule.activity)
@@ -135,7 +173,6 @@ public class MultibrandingTest(
         }
     }
 
-    // TODO: Unify tests
     @Test
     public fun failedOAuthIsReceived(): Unit = run {
         var fail: VKIDAuthFail? = null
@@ -195,7 +232,6 @@ public class MultibrandingTest(
             }
         }
     }
-    // TODO: Tests for other fails
 
     private fun setContent(
         vkid: VKID,

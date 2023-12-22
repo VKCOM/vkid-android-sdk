@@ -27,6 +27,8 @@ public class VKIDTestBuilder(
     public fun overrideState(state: String): VKIDTestBuilder = updateConfig { copy(overrideState = state) }
     public fun overrideOAuthToNull(): VKIDTestBuilder = updateConfig { copy(overrideOAuthToNull = true) }
     public fun user(user: VKIDUser): VKIDTestBuilder = updateConfig { copy(user = user) }
+    public fun notifyNoBrowserAvailable(): VKIDTestBuilder = updateConfig { copy(notifyNoBrowserAvailable = true) }
+    public fun notifyFailedRedirectActivity(): VKIDTestBuilder = updateConfig { copy(notifyFailedRedirectActivity = true) }
 
     private fun updateConfig(update: MockAuthProviderConfig.() -> MockAuthProviderConfig): VKIDTestBuilder = apply {
         authProviderConfig = authProviderConfig.update()
