@@ -37,7 +37,6 @@ class VKIDAppConventionPlugin : Plugin<Project>{
     }
 }
 
->>>>>>> 04144d8 (VKIDSDK-475: Move placeholder configuration to separate plugin)
 private fun Project.shouldInjectManifestPlaceholders() = gradle
     .startParameter
     .taskNames
