@@ -59,7 +59,7 @@ dependencies {
 }
 
 fun ApplicationDefaultConfig.initVKID() {
-    if (gradle.startParameter.taskNames.any { it.contains("assemble") || it.contains("test") }) {
+    if (gradle.startParameter.taskNames.any { it.contains("assemble") || it.contains("test") || it.contains("lint")}) {
         val secrets = Properties()
         try {
             secrets.load(FileInputStream(file("secrets.properties")))

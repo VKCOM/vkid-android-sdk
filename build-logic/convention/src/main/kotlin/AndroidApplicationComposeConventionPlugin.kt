@@ -1,5 +1,6 @@
 import com.android.build.api.dsl.ApplicationExtension
 import com.vk.id.configureAndroidCompose
+import com.vk.id.configureAndroidLint
 import com.vk.id.configureDetekt
 import com.vk.id.configureKotest
 import org.gradle.api.Plugin
@@ -12,8 +13,6 @@ class AndroidApplicationComposeConventionPlugin : Plugin<Project> {
             pluginManager.apply("vkid.android.application")
             val extension = extensions.getByType<ApplicationExtension>()
             configureAndroidCompose(extension)
-            configureKotest()
-            configureDetekt(isCompose = true)
         }
     }
 }
