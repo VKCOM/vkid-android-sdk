@@ -79,6 +79,7 @@ internal object BrowserSelector {
         if (resolvedDefaultActivity != null) {
             defaultBrowserPackage = resolvedDefaultActivity.activityInfo.packageName
         }
+        @SuppressLint("QueryPermissionsNeeded") // Registered in manifest
         val resolvedActivityList = pm.queryIntentActivities(BROWSER_INTENT, queryFlag)
         for (info in resolvedActivityList) {
             // ignore handlers which are not browsers
