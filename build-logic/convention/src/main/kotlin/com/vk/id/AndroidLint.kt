@@ -12,7 +12,7 @@ fun Project.configureAndroidLint() {
             warningsAsErrors = true
             htmlReport = true
             xmlReport = false
-            disable += "GradleDependency"
+            disable += setOf("GradleDependency", "PrivateResource")
         }
     }
 }

@@ -203,7 +203,7 @@ private fun OAuthListWithTextEnding(
         MeasureUnconstrainedViewWidth(viewToMeasure = {
             Row {
                 OAuthListWithTextEndingContent(
-                    textModifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     item = item,
                     style = style,
                     context = context
@@ -213,7 +213,7 @@ private fun OAuthListWithTextEnding(
             if (it < maxWidth) {
                 Row {
                     OAuthListWithTextEndingContent(
-                        textModifier = Modifier.weight(1f),
+                        modifier = Modifier.weight(1f),
                         item = item,
                         style = style,
                         context = context
@@ -226,13 +226,13 @@ private fun OAuthListWithTextEnding(
 
 @Composable
 private fun OAuthListWithTextEndingContent(
-    textModifier: Modifier,
+    modifier: Modifier,
     item: OAuth,
     style: OAuthListWidgetStyle,
     context: Context,
 ) {
     OAuthListText(
-        modifier = textModifier,
+        modifier = modifier,
         item = item,
         style = style,
         context = context,
@@ -252,9 +252,9 @@ private fun OAuthListImage(
 ) = Image(
     painter = painterResource(
         id = when (item) {
-            OAuth.VK -> R.drawable.vk_icon_blue
-            OAuth.MAIL -> R.drawable.mail_icon_blue
-            OAuth.OK -> R.drawable.ok_icon_yellow
+            OAuth.VK -> R.drawable.vkid_vk_icon_blue
+            OAuth.MAIL -> R.drawable.vkid_mail_icon_blue
+            OAuth.OK -> R.drawable.vkid_ok_icon_yellow
         }
     ),
     contentDescription = null,
