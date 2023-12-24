@@ -35,12 +35,12 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             }
 
             extensions.configure<ApplicationExtension> {
-                configureKotlinAndroid(this)
                 defaultConfig.targetSdk = Versions.targetSdk
             }
             extensions.configure<ApplicationAndroidComponentsExtension> {
                 configurePrintApksTask(this)
             }
+            configureKotlinAndroid()
             configureKotest()
             configureDetekt(isCompose = false)
             configureAndroidLint()

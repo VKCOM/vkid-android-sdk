@@ -20,10 +20,10 @@ class VKIDLibraryConventionPlugin : Plugin<Project> {
             }
 
             extensions.configure<LibraryExtension> {
-                configureKotlinAndroid(this)
                 defaultConfig.targetSdk = Versions.targetSdk
                 resourcePrefix("vkid_")
             }
+            configureKotlinAndroid()
             configureStrictMode()
             configureKotest()
             configureDetekt(isCompose = false)
