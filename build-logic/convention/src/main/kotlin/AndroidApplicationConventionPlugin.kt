@@ -42,7 +42,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                 configurePrintApksTask(this)
             }
             configureKotest()
-            configureDetekt(isCompose = true)
+            configureDetekt(isCompose = false)
             configureAndroidLint()
         }
     }
