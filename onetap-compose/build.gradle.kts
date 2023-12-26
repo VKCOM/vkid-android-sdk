@@ -1,5 +1,6 @@
 plugins {
     id("vkid.android.library.compose")
+    id("vkid.android.tests")
     id("vkid.android.publish")
     id("org.jetbrains.kotlinx.binary-compatibility-validator")
 }
@@ -22,4 +23,5 @@ dependencies {
     implementation(libs.coil)
     implementation(libs.coil.compose)
     debugImplementation(libs.androidx.compose.ui.tooling)
+    androidTestImplementation(project(":onetap-ui-tests"))
 }

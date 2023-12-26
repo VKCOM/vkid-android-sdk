@@ -12,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.vk.id.AccessToken
@@ -155,6 +156,7 @@ internal fun OneTap(
     val vkidButtonState = rememberVKIDButtonState()
     Column(modifier = modifier) {
         VKIDButton(
+            modifier = Modifier.testTag("vkid_button"),
             style = style.vkidButtonStyle,
             state = vkidButtonState,
             vkid = vkid,

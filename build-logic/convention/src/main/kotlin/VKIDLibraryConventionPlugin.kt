@@ -4,13 +4,12 @@ import com.vk.id.configureAndroidLint
 import com.vk.id.configureDetekt
 import com.vk.id.configureKotest
 import com.vk.id.configureKotlinAndroid
+import com.vk.id.configureStrictMode
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.kotlin
-import org.gradle.kotlin.dsl.withType
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 class VKIDLibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -23,16 +22,9 @@ class VKIDLibraryConventionPlugin : Plugin<Project> {
             extensions.configure<LibraryExtension> {
                 configureKotlinAndroid(this)
                 defaultConfig.targetSdk = Versions.targetSdk
-
-                tasks.withType<KotlinCompile>().configureEach {
-                    kotlinOptions {
-                        // Force implicit visibility modifiers to avoid mistakes like exposing internal api
-                        freeCompilerArgs = freeCompilerArgs + "-Xexplicit-api=strict"
-                    }
-                }
-
                 resourcePrefix("vkid_")
             }
+            configureStrictMode()
             configureKotest()
             configureDetekt(isCompose = false)
             configureAndroidLint()
