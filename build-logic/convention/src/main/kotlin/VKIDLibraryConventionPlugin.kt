@@ -1,5 +1,6 @@
 import com.android.build.gradle.LibraryExtension
 import com.vk.id.Versions
+import com.vk.id.configureAndroidLint
 import com.vk.id.configureDetekt
 import com.vk.id.configureKotest
 import com.vk.id.configureKotlinAndroid
@@ -34,6 +35,7 @@ class VKIDLibraryConventionPlugin : Plugin<Project> {
             }
             configureKotest()
             configureDetekt(isCompose = false)
+            configureAndroidLint()
             dependencies {
                 add("androidTestImplementation", kotlin("test"))
                 add("testImplementation", kotlin("test"))

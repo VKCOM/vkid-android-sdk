@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:ignore="HardcodedText">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -32,8 +34,8 @@
             app:layout_constraintTop_toBottomOf="@id/multibranding_title_spacer"
             app:layout_constraintWidth_max="355dp"
             app:vkid_OAuthListStyle="transparentDark"
-            app:vkid_oAuthListOAuths="vk,mail,ok"
             app:vkid_oAuthListCornerRadius="8dp"
+            app:vkid_oAuthListOAuths="vk,mail,ok"
             app:vkid_oAuthListSize="standard" />
 
         <View
@@ -52,8 +54,8 @@
             app:layout_constraintTop_toBottomOf="@id/multibranding_3_spacer"
             app:layout_constraintWidth_max="355dp"
             app:vkid_OAuthListStyle="transparentDark"
-            app:vkid_oAuthListOAuths="mail,ok"
             app:vkid_oAuthListCornerRadius="8dp"
+            app:vkid_oAuthListOAuths="mail,ok"
             app:vkid_oAuthListSize="standard" />
 
         <View
@@ -72,8 +74,8 @@
             app:layout_constraintTop_toBottomOf="@id/multibranding_2_spacer"
             app:layout_constraintWidth_max="355dp"
             app:vkid_OAuthListStyle="transparentDark"
-            app:vkid_oAuthListOAuths="vk"
             app:vkid_oAuthListCornerRadius="8dp"
+            app:vkid_oAuthListOAuths="vk"
             app:vkid_oAuthListSize="standard" />
 
         <View
@@ -92,8 +94,8 @@
             app:layout_constraintTop_toBottomOf="@id/multibranding_vk_spacer"
             app:layout_constraintWidth_max="355dp"
             app:vkid_OAuthListStyle="transparentDark"
-            app:vkid_oAuthListOAuths="mail"
             app:vkid_oAuthListCornerRadius="8dp"
+            app:vkid_oAuthListOAuths="mail"
             app:vkid_oAuthListSize="standard" />
 
         <View
@@ -112,8 +114,8 @@
             app:layout_constraintTop_toBottomOf="@id/multibranding_mail_spacer"
             app:layout_constraintWidth_max="355dp"
             app:vkid_OAuthListStyle="transparentDark"
-            app:vkid_oAuthListOAuths="ok"
             app:vkid_oAuthListCornerRadius="8dp"
+            app:vkid_oAuthListOAuths="ok"
             app:vkid_oAuthListSize="standard" />
 
         <View
@@ -153,8 +155,8 @@
                 app:layout_constraintTop_toBottomOf="@id/multibranding_dark_title_spacer"
                 app:layout_constraintWidth_max="355dp"
                 app:vkid_OAuthListStyle="transparentLight"
-                app:vkid_oAuthListOAuths="vk,mail,ok"
                 app:vkid_oAuthListCornerRadius="8dp"
+                app:vkid_oAuthListOAuths="vk,mail,ok"
                 app:vkid_oAuthListSize="standard" />
 
             <View
@@ -173,8 +175,8 @@
                 app:layout_constraintTop_toBottomOf="@id/multibranding_dark_3_spacer"
                 app:layout_constraintWidth_max="355dp"
                 app:vkid_OAuthListStyle="transparentLight"
-                app:vkid_oAuthListOAuths="vk"
                 app:vkid_oAuthListCornerRadius="8dp"
+                app:vkid_oAuthListOAuths="vk"
                 app:vkid_oAuthListSize="standard" />
 
             <View

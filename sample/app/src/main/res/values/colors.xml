@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <color name="vkid_azure_A100">#0077FF</color>
-    <color name="vkid_gray900_alpha50">#8019191A</color>
-    <color name="vkid_white">#FFFFFF</color>
-    <color name="vkid_white_alpha70">#B3FFFFFF</color>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <color name="vkid_azure_A100" tools:override="true">#0077FF</color>
+    <color name="vkid_gray900_alpha50" tools:override="true">#8019191A</color>
+    <color name="vkid_white" tools:override="true">#FFFFFF</color>
 </resources>

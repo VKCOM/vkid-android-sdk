@@ -1,5 +1,6 @@
 package com.vk.id.internal.auth.app
 
+import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -46,6 +47,7 @@ internal class SilentAuthServicesProvider(
             ?.let { VkAuthProviderInfo(ComponentName(packageName, name), it.weight) }
     }
 
+    @SuppressLint("QueryPermissionsNeeded") // Registered in manifest
     private fun getAppsWithSilentAuthServices() =
         context.applicationContext.packageManager.queryIntentServices(
             Intent(ACTION_GET_INFO),
