@@ -1,10 +1,10 @@
 package com.vk.id
 
-import com.android.build.api.dsl.CommonExtension
+import com.vk.id.util.android
 import org.gradle.api.Project
 
 fun Project.configureAndroidLint() {
-    (extensions.getByName("android") as CommonExtension<*, *, *, *, *>).apply {
+    extensions.android {
         lint {
             checkDependencies = true
             ignoreTestSources = true
