@@ -4,6 +4,7 @@ package com.vk.id.onetap.compose.onetap
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -27,6 +28,7 @@ import com.vk.id.onetap.compose.button.auth.VKIDButtonSmall
 import com.vk.id.onetap.compose.button.auth.VKIDButtonTextProvider
 import com.vk.id.onetap.compose.button.auth.rememberVKIDButtonState
 import com.vk.id.onetap.compose.button.startAuth
+import com.vk.id.onetap.compose.util.PlaceComposableIfFitsWidth
 
 /**
  * Composable function to display a VKID One Tap login interface.
@@ -78,6 +80,7 @@ public fun OneTap(
  *  Note that if text doesn't fit the available width the view will be hidden regardless of the flag.
  */
 @Composable
+@Suppress("LongMethod")
 public fun OneTap(
     modifier: Modifier = Modifier,
     style: OneTapStyle = OneTapStyle.Light(),
@@ -102,38 +105,54 @@ public fun OneTap(
             )
         })
     } else {
-        OneTap(
+        PlaceComposableIfFitsWidth(
             modifier = modifier,
-            style = style,
-            oAuths = oAuths,
-            vkid = useVKID,
-            signInAnotherAccountButtonEnabled = signInAnotherAccountButtonEnabled,
-            vkidButtonTextProvider = null,
-            onVKIDButtonClick = {
-                startAuth(
-                    coroutineScope,
-                    useVKID,
-                    { onAuth(null, it) },
-                    { onFail(null, it) },
-                    VKIDAuthParams {
-                        theme = style.toProviderTheme()
-                    }
+            measureModifier = modifier.fillMaxWidth(),
+            viewToMeasure = {
+                OneTap(
+                    modifier = it,
+                    style = style,
+                    oAuths = oAuths,
+                    vkid = useVKID,
+                    signInAnotherAccountButtonEnabled = signInAnotherAccountButtonEnabled,
+                    vkidButtonTextProvider = null,
+                    onVKIDButtonClick = {
+                        startAuth(
+                            coroutineScope,
+                            useVKID,
+                            { onAuth(null, it) },
+                            { onFail(null, it) },
+                            VKIDAuthParams {
+                                theme = style.toProviderTheme()
+                            }
+                        )
+                    },
+                    onAlternateButtonClick = {
+                        startAuth(
+                            coroutineScope,
+                            useVKID,
+                            { onAuth(null, it) },
+                            { onFail(null, it) },
+                            VKIDAuthParams {
+                                useOAuthProviderIfPossible = false
+                                theme = style.toProviderTheme()
+                            }
+                        )
+                    },
+                    onAuth = onAuth,
+                    onFail = onFail,
                 )
             },
-            onAlternateButtonClick = {
-                startAuth(
-                    coroutineScope,
-                    useVKID,
-                    { onAuth(null, it) },
-                    { onFail(null, it) },
-                    VKIDAuthParams {
-                        useOAuthProviderIfPossible = false
-                        theme = style.toProviderTheme()
-                    }
-                )
-            },
-            onAuth = onAuth,
-            onFail = onFail,
+            fallback = {
+                VKIDButtonSmall(style = style.vkidButtonStyle, vkid = vkid, onClick = {
+                    startAuth(
+                        coroutineScope,
+                        useVKID,
+                        { onAuth(null, it) },
+                        { onFail(null, it) }
+                    )
+                })
+            }
         )
     }
 }
