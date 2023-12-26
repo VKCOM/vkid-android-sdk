@@ -49,7 +49,7 @@ public fun createOneTap(
             layoutParams.startToStart = ConstraintSet.PARENT_ID
             layoutParams.topToTop = ConstraintSet.PARENT_ID
             setPadding(context.dpToPixels(BUTTON_PADDING))
-            this.style = style
+            this.style = item.style
             this.layoutParams = layoutParams
             this.oAuths = item.oAuths
             this.isSignInToAnotherAccountEnabled = true
