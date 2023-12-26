@@ -59,6 +59,7 @@ import com.vk.id.onetap.compose.onetap.style.height
 import com.vk.id.onetap.compose.onetap.style.iconPadding
 import com.vk.id.onetap.compose.onetap.style.shadow
 import com.vk.id.onetap.compose.progress.CircleProgress
+import com.vk.id.onetap.compose.util.MeasureUnconstrainedViewWidth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 
@@ -320,23 +321,6 @@ private fun TextBox(
                     )
                 )
             }
-        }
-    }
-}
-
-@Composable
-private fun MeasureUnconstrainedViewWidth(
-    viewToMeasure: @Composable () -> Unit,
-    content: @Composable (measuredWidth: Dp) -> Unit,
-) {
-    SubcomposeLayout { constraints ->
-        val measuredWidth = subcompose("viewToMeasure", viewToMeasure)[0].measure(Constraints()).width.toDp()
-        val measurable = subcompose("content") { content(measuredWidth) }
-        if (measurable.isNotEmpty()) {
-            val contentPlaceable = measurable[0].measure(constraints)
-            layout(contentPlaceable.width, contentPlaceable.height) { contentPlaceable.place(0, 0) }
-        } else {
-            layout(0, 0) {}
         }
     }
 }

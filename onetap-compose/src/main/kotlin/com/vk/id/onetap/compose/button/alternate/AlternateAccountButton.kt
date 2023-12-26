@@ -2,6 +2,7 @@
 
 package com.vk.id.onetap.compose.button.alternate
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -34,6 +35,7 @@ import com.vk.id.onetap.compose.onetap.style.height
 internal fun AlternateAccountButton(
     modifier: Modifier = Modifier,
     style: AlternateAccountButtonStyle = AlternateAccountButtonStyle.Light(),
+    @StringRes textResId: Int,
     onClick: () -> Unit,
 ) {
     Box(
@@ -54,7 +56,7 @@ internal fun AlternateAccountButton(
         contentAlignment = Alignment.Center
     ) {
         BasicText(
-            text = stringResource(id = R.string.vkid_auth_use_another_account),
+            text = stringResource(id = textResId),
             style = TextStyle(
                 color = style.textStyle.asColorResource(),
                 fontSize = style.sizeStyle.asFontSize(),
@@ -70,6 +72,7 @@ internal fun AlternateAccountButton(
 @Composable
 private fun AlternateAccountButtonPreview() {
     AlternateAccountButton(
+        textResId = R.string.vkid_auth_use_another_account_short,
         onClick = {},
     )
 }

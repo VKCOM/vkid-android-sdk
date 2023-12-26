@@ -3,6 +3,7 @@
     <string name="vkid_log_in_with_vkid">Sign in with VK ID</string>
     <string name="vkid_log_in_with_vkid_short" translatable="false">VK ID</string>
     <string name="vkid_auth_use_another_account">Sign in to other account</string>
+    <string name="vkid_auth_use_another_account_short">Change account</string>
     <string name="vkid_log_in_as">Continue as %1$s</string>
     <string name="vkid_log_in">Continue</string>
 

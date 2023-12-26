@@ -3,6 +3,7 @@
 package com.vk.id.onetap.compose.onetap
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -23,12 +24,14 @@ import com.vk.id.multibranding.OAuthListWidget
 import com.vk.id.multibranding.common.callback.OAuthListWidgetAuthCallback
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.common.OneTapStyle
+import com.vk.id.onetap.compose.R
 import com.vk.id.onetap.compose.button.alternate.AlternateAccountButton
 import com.vk.id.onetap.compose.button.auth.VKIDButton
 import com.vk.id.onetap.compose.button.auth.VKIDButtonSmall
 import com.vk.id.onetap.compose.button.auth.VKIDButtonTextProvider
 import com.vk.id.onetap.compose.button.auth.rememberVKIDButtonState
 import com.vk.id.onetap.compose.button.startAuth
+import com.vk.id.onetap.compose.util.MeasureUnconstrainedViewWidth
 
 /**
  * Composable function to display a VKID One Tap login interface.
@@ -41,6 +44,7 @@ import com.vk.id.onetap.compose.button.startAuth
  * @param vkid An optional [VKID] instance to use for authentication.
  *  If instance of VKID is not provided, it will be created on first composition.
  * @param signInAnotherAccountButtonEnabled Flag to enable a button for signing into another account.
+ *  Note that if text doesn't fit the available width the view will be hidden regardless of the flag.
  */
 @Composable
 public fun OneTap(
@@ -76,6 +80,7 @@ public fun OneTap(
  * @param vkid An optional [VKID] instance to use for authentication.
  *  If instance of VKID is not provided, it will be created on first composition.
  * @param signInAnotherAccountButtonEnabled Flag to enable a button for signing into another account.
+ *  Note that if text doesn't fit the available width the view will be hidden regardless of the flag.
  */
 @Composable
 public fun OneTap(
@@ -166,10 +171,39 @@ internal fun OneTap(
                 modifier = Modifier.padding(top = 12.dp),
                 visible = !vkidButtonState.userLoadFailed,
             ) {
-                AlternateAccountButton(
-                    style = style.alternateAccountButtonStyle,
-                    onClick = onAlternateButtonClick
-                )
+                BoxWithConstraints {
+                    MeasureUnconstrainedViewWidth(viewToMeasure = {
+                        AlternateAccountButton(
+                            style = style.alternateAccountButtonStyle,
+                            textResId = R.string.vkid_auth_use_another_account,
+                            onClick = onAlternateButtonClick
+                        )
+                    }) { largeViewMeasuredWidth ->
+                        if (largeViewMeasuredWidth < maxWidth) {
+                            AlternateAccountButton(
+                                style = style.alternateAccountButtonStyle,
+                                textResId = R.string.vkid_auth_use_another_account,
+                                onClick = onAlternateButtonClick
+                            )
+                        } else {
+                            MeasureUnconstrainedViewWidth(viewToMeasure = {
+                                AlternateAccountButton(
+                                    style = style.alternateAccountButtonStyle,
+                                    textResId = R.string.vkid_auth_use_another_account_short,
+                                    onClick = onAlternateButtonClick
+                                )
+                            }) { shortViewMasuredWidth ->
+                                if (shortViewMasuredWidth < maxWidth) {
+                                    AlternateAccountButton(
+                                        style = style.alternateAccountButtonStyle,
+                                        textResId = R.string.vkid_auth_use_another_account_short,
+                                        onClick = onAlternateButtonClick
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
         if (oAuths.isNotEmpty()) {
