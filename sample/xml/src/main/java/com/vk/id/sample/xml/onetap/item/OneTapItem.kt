@@ -43,7 +43,7 @@ public fun createOneTap(
                     LayoutParams.WRAP_CONTENT,
                 )
             }
-            layoutParams.matchConstraintMaxWidth = context.dpToPixels(width)
+            layoutParams.matchConstraintMaxWidth = context.dpToPixels(item.width)
             layoutParams.bottomToBottom = ConstraintSet.PARENT_ID
             layoutParams.endToEnd = ConstraintSet.PARENT_ID
             layoutParams.startToStart = ConstraintSet.PARENT_ID
