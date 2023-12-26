@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -64,11 +65,41 @@ public fun OAuthListWidget(
     style: OAuthListWidgetStyle = OAuthListWidgetStyle.Dark(),
     onAuth: OAuthListWidgetAuthCallback,
     onFail: (OAuth, VKIDAuthFail) -> Unit,
-    oAuths: Set<OAuth> = OAuth.values().toSet()
+    oAuths: Set<OAuth> = OAuth.values().toSet(),
+) {
+    OAuthListWidget(
+        modifier = modifier,
+        style = style,
+        onAuth = onAuth,
+        onFail = onFail,
+        oAuths = oAuths,
+        vkid = null
+    )
+}
+
+/**
+ * Constructs a multibranding widget that supports auth with multiple [OAuth]s.
+ *
+ * @param modifier Layout configuration for the widget.
+ * @param style Styling widget configuration.
+ * @param onAuth A callback to be invoked upon a successful auth.
+ * @param onFail A callback to be invoked upon an error during auth.
+ * @param oAuths A set of [OAuth]s the should be displayed to the user.
+ * @param vkid An optional [VKID] instance to use for authentication.
+ *  If instance of VKID is not provided, it will be created on first composition.
+ */
+@Composable
+public fun OAuthListWidget(
+    modifier: Modifier = Modifier,
+    style: OAuthListWidgetStyle = OAuthListWidgetStyle.Dark(),
+    onAuth: OAuthListWidgetAuthCallback,
+    onFail: (OAuth, VKIDAuthFail) -> Unit,
+    oAuths: Set<OAuth> = OAuth.values().toSet(),
+    vkid: VKID? = null,
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
-    val vkid = remember { VKID(context) }
+    val useVKID = vkid ?: remember { VKID(context) }
     if (oAuths.isEmpty()) {
         error("You need to add at least one oAuth to display the widget")
     }
@@ -81,13 +112,15 @@ public fun OAuthListWidget(
         Row {
             oAuths.sorted().forEachIndexed { index, item ->
                 OAuthButton(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .testTag("oauth_button_${item.name.lowercase()}")
+                        .weight(1f),
                     context = context,
                     style = style,
                     item = item,
                     showText = oAuths.size == 1,
                     coroutineScope = coroutineScope,
-                    vkid = vkid,
+                    vkid = useVKID,
                     onAuth = onAuth,
                     onFail = { onFail(item, it) },
                 )

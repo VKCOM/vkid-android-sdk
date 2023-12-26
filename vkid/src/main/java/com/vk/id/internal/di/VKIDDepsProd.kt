@@ -12,6 +12,7 @@ import com.vk.id.AuthResultHandler
 import com.vk.id.VKID
 import com.vk.id.internal.api.VKIDApi
 import com.vk.id.internal.api.VKIDApiService
+import com.vk.id.internal.api.VKIDRealApi
 import com.vk.id.internal.auth.AuthActivity
 import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthProvidersChooser
@@ -33,7 +34,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.TimeUnit
 
-internal class VKIDDepsProd(
+internal open class VKIDDepsProd(
     private val appContext: Context
 ) : VKIDDeps {
 
@@ -67,7 +68,7 @@ internal class VKIDDepsProd(
         )
     }
 
-    private val api: Lazy<VKIDApiService> = lazy {
+    override val api: Lazy<VKIDApi> = lazy {
         val client = OkHttpClient.Builder()
             .readTimeout(OKHTTP_TIMEOUT_SECONDS, TimeUnit.SECONDS)
             .writeTimeout(OKHTTP_TIMEOUT_SECONDS, TimeUnit.SECONDS)
@@ -75,13 +76,13 @@ internal class VKIDDepsProd(
             .addInterceptor(loggingInterceptor())
             .addCertificatePinnerIfNecessary()
             .build()
-        val api = VKIDApi(client)
-        VKIDApiService(api)
+        VKIDRealApi(client)
     }
+    private val apiService = lazy { VKIDApiService(api.value) }
 
     private val trustedProvidersCache = lazy {
         val creds = serviceCredentials.value
-        TrustedProvidersCache(api, creds.clientID, creds.clientSecret, dispatchers)
+        TrustedProvidersCache(apiService, creds.clientID, creds.clientSecret, dispatchers)
     }
 
     override val vkSilentAuthInfoProvider: Lazy<VkSilentAuthInfoProvider> = lazy {
@@ -130,7 +131,7 @@ internal class VKIDDepsProd(
             deviceIdProvider = deviceIdProvider.value,
             prefsStore = prefsStore.value,
             serviceCredentials = serviceCredentials.value,
-            api = api.value
+            api = apiService.value
         )
     }
 

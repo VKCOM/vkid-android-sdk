@@ -59,6 +59,7 @@
                     android:scheme="${VKIDRedirectScheme}" />
             </intent-filter>
         </activity>
+        <activity android:name=".test.TestAuthProviderActivity" />
     </application>
 
 </manifest>

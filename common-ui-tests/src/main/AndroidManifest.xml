@@ -3,7 +3,7 @@
 
     <application>
         <activity
-            android:name="com.vk.id.autotest.AutoTestActivity"
+            android:name="com.vk.id.common.AutoTestActivity"
             android:theme="@style/Theme.AppCompat.Light" />
     </application>
 </manifest>

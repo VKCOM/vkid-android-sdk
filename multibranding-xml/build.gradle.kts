@@ -1,6 +1,7 @@
 plugins {
     id("vkid.android.library.compose")
     id("vkid.android.publish")
+    id("vkid.android.tests")
     id("org.jetbrains.kotlinx.binary-compatibility-validator")
 }
 
@@ -13,4 +14,5 @@ dependencies {
     api(project(":multibranding-common"))
     implementation(project(":multibranding-compose"))
     implementation(libs.androidx.compose.ui)
+    androidTestImplementation(project(":multibranding-ui-tests"))
 }

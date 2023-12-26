@@ -8,6 +8,7 @@ android {
 
 dependencies {
     implementation(project(":vkid"))
+    api(project(":common-ui-tests"))
     implementation(libs.kaspresso)
     implementation(libs.kaspresso.compose)
     implementation(libs.androidx.compose.ui.test.junit4)

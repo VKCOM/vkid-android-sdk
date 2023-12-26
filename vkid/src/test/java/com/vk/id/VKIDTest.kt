@@ -1,6 +1,7 @@
 package com.vk.id
 
 import com.vk.id.auth.VKIDAuthParams
+import com.vk.id.internal.api.VKIDApi
 import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthEventBridge
 import com.vk.id.internal.auth.AuthOptions
@@ -51,6 +52,7 @@ internal class VKIDTest : BehaviorSpec({
                 override val dispatchers: CoroutinesDispatchers = dispatchers
                 override val vkSilentAuthInfoProvider: Lazy<VkSilentAuthInfoProvider> = mockk()
                 override val userDataFetcher: Lazy<UserDataFetcher> = lazy { userDataFetcher }
+                override val api: Lazy<VKIDApi> = lazy { mockk() }
             }
         )
 

@@ -1,5 +1,5 @@
 plugins {
-    id("vkid.android.library")
+    id("vkid.android.library.compose")
     id("vkid.android.publish")
     id("org.jetbrains.kotlin.plugin.parcelize")
     id("org.jetbrains.kotlinx.binary-compatibility-validator")
@@ -26,10 +26,15 @@ android {
 }
 
 dependencies {
+    implementation(project(":common"))
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.annotation)
+    implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.browser)
     implementation(libs.androidx.preference)
     implementation(libs.androidx.preference.ktx)
+    implementation(libs.gson)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.okhttp3.okhttp)

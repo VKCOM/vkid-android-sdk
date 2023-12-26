@@ -1,7 +1,10 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.internal.auth
 
 import android.content.Context
 import com.vk.id.auth.VKIDAuthParams
+import com.vk.id.commn.InternalVKIDApi
 import com.vk.id.internal.auth.app.AppAuthProvider
 import com.vk.id.internal.auth.app.SilentAuthServicesProvider
 import com.vk.id.internal.auth.web.WebAuthProvider
