@@ -15,7 +15,9 @@ import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -43,6 +45,7 @@ internal fun SheetContentBox(
 ) {
     Box(
         modifier = Modifier
+            .verticalScroll(rememberScrollState())
             .safeContentPadding()
             .wrapContentHeight()
             .fillMaxWidth()
