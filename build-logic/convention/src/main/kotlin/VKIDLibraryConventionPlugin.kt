@@ -1,3 +1,4 @@
+import com.android.build.api.variant.LibraryAndroidComponentsExtension
 import com.android.build.gradle.LibraryExtension
 import com.vk.id.Versions
 import com.vk.id.configureAndroidLint
@@ -22,6 +23,9 @@ class VKIDLibraryConventionPlugin : Plugin<Project> {
             extensions.configure<LibraryExtension> {
                 defaultConfig.targetSdk = Versions.targetSdk
                 resourcePrefix("vkid_")
+            }
+            extensions.configure<LibraryAndroidComponentsExtension> {
+                disableUnnecessaryAndroidTests(target)
             }
             configureKotlinAndroid()
             configureStrictMode()

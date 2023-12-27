@@ -16,6 +16,7 @@ cd vkid-android-sdk
 2. `./gradlew test` - прогон unit тестов
 3. `./gradlew lint` - запуск android линта
 4. `./gradlew detekt` - запуск detekt для проверки качества кода
+5. `./gradlew connectedAndroidTest` - запуск автотестов
 
 ## 🪵 Создание ветки
 
