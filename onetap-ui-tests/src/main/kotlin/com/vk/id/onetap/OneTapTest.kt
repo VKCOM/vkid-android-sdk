@@ -10,8 +10,9 @@ import com.kaspersky.kaspresso.testcases.api.testcase.TestCase
 import com.kaspersky.kaspresso.testcases.core.testcontext.TestContext
 import com.vk.id.AccessToken
 import com.vk.id.VKIDAuthFail
-import com.vk.id.common.AutoTestActivity
+import com.vk.id.onetap.common.OneTapOAuth
 import io.github.kakaocup.compose.node.element.ComposeScreen
+import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
@@ -30,21 +31,30 @@ public abstract class OneTapTest : TestCase(
 
     @Test
     public fun tokenIsReceived(): Unit = run {
-        var token: AccessToken? = null
-        setContent(onAuth = { token = it })
+        var receivedOAuth: OneTapOAuth? = null
+        var receivedToken: AccessToken? = null
+        setContent(onAuth = { oAuth, token ->
+            receivedOAuth = oAuth
+            receivedToken = token
+        })
         startAuth()
         waitForVkToStart()
         step("Token is received") {
             flakySafely {
-                token.shouldNotBeNull()
+                receivedOAuth.shouldBeNull()
+                receivedToken.shouldNotBeNull()
             }
         }
     }
 
     @Test
     public fun cancellationIsReceived(): Unit = run {
-        var fail: VKIDAuthFail? = null
-        setContent(onFail = { fail = it })
+        var receivedOAuth: OneTapOAuth? = null
+        var receivedFail: VKIDAuthFail? = null
+        setContent(onFail = { oAuth, fail ->
+            receivedOAuth = oAuth
+            receivedFail = fail
+        })
         startAuth()
         waitForVkToStart()
         step("Press back") {
@@ -52,14 +62,15 @@ public abstract class OneTapTest : TestCase(
         }
         step("Cancellation fail is received") {
             flakySafely {
-                fail.shouldBeInstanceOf<VKIDAuthFail.Canceled>()
+                receivedOAuth.shouldBeNull()
+                receivedFail.shouldBeInstanceOf<VKIDAuthFail.Canceled>()
             }
         }
     }
 
     public abstract fun setContent(
-        onAuth: (AccessToken) -> Unit = {},
-        onFail: (VKIDAuthFail) -> Unit = {},
+        onAuth: (OneTapOAuth?, AccessToken) -> Unit = { _, _ -> },
+        onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit = { _, _ -> },
     )
 
     private fun TestContext<Unit>.startAuth(): Unit = step("Start auth") {
