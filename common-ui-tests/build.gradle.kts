@@ -7,6 +7,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":common"))
     implementation(project(":vkid"))
     implementation(libs.kaspresso)
     implementation(libs.kaspresso.compose)

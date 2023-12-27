@@ -7,6 +7,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":common"))
     implementation(project(":vkid"))
     api(project(":onetap-common"))
     api(project(":common-ui-tests"))

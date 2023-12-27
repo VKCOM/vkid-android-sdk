@@ -13,11 +13,13 @@ import com.vk.id.AccessToken
 import com.vk.id.OAuth
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
-import com.vk.id.VKIDUser
 import com.vk.id.commn.InternalVKIDApi
 import com.vk.id.common.AutoTestActivity
+import com.vk.id.common.mockapi.MockApi
+import com.vk.id.common.mockapi.mockApiError
+import com.vk.id.common.mockapi.mockApiSuccess
+import com.vk.id.common.mockprovider.continueAuth
 import com.vk.id.test.VKIDTestBuilder
-import com.vk.id.test.VKIDTokenPayloadResponse
 import io.github.kakaocup.compose.node.element.ComposeScreen
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
@@ -39,15 +41,6 @@ public abstract class MultibrandingTest(
         createAndroidComposeRule()
 
     private companion object {
-        private const val ACCESS_TOKEN = "access token"
-        private const val EXPIRES_IN = 1000L
-        private const val USER_ID = 0L
-        private const val EMAIL = "email"
-        private const val PHONE = "phone"
-        private const val PHONE_ACCESS_KEY = "phone access key"
-        private const val FIRST_NAME = "first name"
-        private const val LAST_NAME = "last name"
-        private const val AVATAR = "avatar"
 
         @JvmStatic
         @Parameterized.Parameters(name = "{0}")
@@ -60,7 +53,7 @@ public abstract class MultibrandingTest(
         var receivedOAuth: OAuth? = null
         val vkid = VKIDTestBuilder(composeTestRule.activity)
             .mockApiSuccess()
-            .user(VKIDUser(firstName = FIRST_NAME, lastName = LAST_NAME, photo200 = AVATAR))
+            .user(MockApi.mockApiUser())
             .build()
         setContent(
             vkid = vkid,
@@ -70,7 +63,7 @@ public abstract class MultibrandingTest(
             },
         )
         startAuth()
-        continueAuth()
+        continueAuth(composeTestRule)
         step("OAuth is received") {
             flakySafely {
                 receivedOAuth shouldBe oAuth
@@ -78,17 +71,9 @@ public abstract class MultibrandingTest(
         }
         step("Token is received") {
             flakySafely {
-                accessToken?.token shouldBe ACCESS_TOKEN
-                accessToken?.userID shouldBe USER_ID
-                accessToken?.userData shouldBe VKIDUser(
-                    firstName = FIRST_NAME,
-                    lastName = LAST_NAME,
-                    phone = PHONE,
-                    photo50 = null,
-                    photo100 = null,
-                    photo200 = AVATAR,
-                    email = EMAIL
-                )
+                accessToken?.token shouldBe MockApi.ACCESS_TOKEN
+                accessToken?.userID shouldBe MockApi.USER_ID
+                accessToken?.userData shouldBe MockApi.mockReturnedUser()
             }
         }
     }
@@ -108,7 +93,7 @@ public abstract class MultibrandingTest(
             }
         )
         startAuth()
-        continueAuth()
+        continueAuth(composeTestRule)
         step("Fail is received") {
             flakySafely {
                 receivedFail.shouldBeInstanceOf<VKIDAuthFail.FailedRedirectActivity>()
@@ -132,7 +117,7 @@ public abstract class MultibrandingTest(
             }
         )
         startAuth()
-        continueAuth()
+        continueAuth(composeTestRule)
         step("Fail is received") {
             flakySafely {
                 receivedFail.shouldBeInstanceOf<VKIDAuthFail.NoBrowserAvailable>()
@@ -156,7 +141,7 @@ public abstract class MultibrandingTest(
             }
         )
         startAuth()
-        continueAuth()
+        continueAuth(composeTestRule)
         step("Fail is received") {
             flakySafely {
                 receivedFail.shouldBeInstanceOf<VKIDAuthFail.FailedApiCall>()
@@ -207,7 +192,7 @@ public abstract class MultibrandingTest(
             }
         )
         startAuth()
-        continueAuth()
+        continueAuth(composeTestRule)
         step("Fail is received") {
             flakySafely {
                 receivedFail.shouldBeInstanceOf<VKIDAuthFail.FailedOAuth>()
@@ -232,7 +217,7 @@ public abstract class MultibrandingTest(
             }
         )
         startAuth()
-        continueAuth()
+        continueAuth(composeTestRule)
         step("Fail is received") {
             flakySafely {
                 receivedFail shouldBe VKIDAuthFail.FailedOAuthState("Invalid uuid")
@@ -257,7 +242,7 @@ public abstract class MultibrandingTest(
             }
         )
         startAuth()
-        continueAuth()
+        continueAuth(composeTestRule)
         step("Fail is received") {
             flakySafely {
                 receivedFail shouldBe VKIDAuthFail.FailedOAuthState("Invalid state")
@@ -272,37 +257,12 @@ public abstract class MultibrandingTest(
         onFail: (OAuth, VKIDAuthFail) -> Unit = { _, _ -> },
     )
 
-    private fun VKIDTestBuilder.mockApiError() = getTokenResponse(
-        Result.failure(UnsupportedOperationException("fake error"))
-    )
-
-    private fun VKIDTestBuilder.mockApiSuccess() = getTokenResponse(
-        Result.success(
-            VKIDTokenPayloadResponse(
-                accessToken = ACCESS_TOKEN,
-                expiresIn = EXPIRES_IN,
-                userId = USER_ID,
-                email = EMAIL,
-                phone = PHONE,
-                phoneAccessKey = PHONE_ACCESS_KEY,
-            )
-        )
-    )
-
     private fun TestContext<Unit>.startAuth(): Unit = step("Start auth") {
         ComposeScreen.onComposeScreen<OneTapScreen>(composeTestRule) {
             when (oAuth) {
                 OAuth.VK -> vkButton.performClick()
                 OAuth.MAIL -> mailButton.performClick()
                 OAuth.OK -> okButton.performClick()
-            }
-        }
-    }
-
-    private fun TestContext<Unit>.continueAuth() = step("Wait for vk start") {
-        ComposeScreen.onComposeScreen<AuthProviderScreen>(composeTestRule) {
-            continueButton {
-                performClick()
             }
         }
     }

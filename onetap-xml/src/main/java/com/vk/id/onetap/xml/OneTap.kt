@@ -9,6 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import com.vk.id.AccessToken
+import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.common.OneTapStyle
@@ -23,7 +24,7 @@ import com.vk.id.onetap.compose.onetap.OneTap
 public class OneTap @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+    defStyleAttr: Int = 0,
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
     private val composeView = ComposeView(context)
@@ -50,6 +51,12 @@ public class OneTap @JvmOverloads constructor(
             onOAuthsChange(value)
         }
     private var onOAuthsChange: (Set<OneTapOAuth>) -> Unit = {}
+    private var vkid: VKID? = null
+        set(value) {
+            field = value
+            onVKIDChange(value)
+        }
+    private var onVKIDChange: (VKID?) -> Unit = {}
 
     init {
         val (style, isSignInToAnotherAccountEnabled, oAuths) = parseOneTapAttrs(context, attrs)
@@ -68,13 +75,16 @@ public class OneTap @JvmOverloads constructor(
         onSignInToAnotherAccountEnabled = { isSignInToAnotherAccountEnabled.value = it }
         val oAuths = remember { mutableStateOf(oAuths) }
         onOAuthsChange = { oAuths.value = it }
+        val vkid = remember { mutableStateOf(vkid) }
+        onVKIDChange = { vkid.value = it }
         OneTap(
             modifier = Modifier,
             style = style.value,
             onAuth = { oAuth, accessToken -> onAuth(oAuth, accessToken) },
             onFail = { oAuth, fail -> onFail(oAuth, fail) },
             oAuths = oAuths.value,
-            signInAnotherAccountButtonEnabled = isSignInToAnotherAccountEnabled.value
+            signInAnotherAccountButtonEnabled = isSignInToAnotherAccountEnabled.value,
+            vkid = vkid.value,
         )
     }
 
@@ -98,5 +108,15 @@ public class OneTap @JvmOverloads constructor(
     ) {
         this.onAuth = { _, token -> onAuth(token) }
         this.onFail = { _, fail -> onFail(fail) }
+    }
+
+    /**
+     * Set an optional [VKID] instance to use for authentication.
+     *  If instance of VKID is not provided, it will be created.
+     */
+    public fun setVKID(
+        vkid: VKID
+    ) {
+        this.vkid = vkid
     }
 }

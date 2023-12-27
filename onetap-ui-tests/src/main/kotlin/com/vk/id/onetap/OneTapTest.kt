@@ -1,3 +1,5 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.onetap
 
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
@@ -9,12 +11,18 @@ import com.kaspersky.kaspresso.kaspresso.Kaspresso
 import com.kaspersky.kaspresso.testcases.api.testcase.TestCase
 import com.kaspersky.kaspresso.testcases.core.testcontext.TestContext
 import com.vk.id.AccessToken
+import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
+import com.vk.id.commn.InternalVKIDApi
+import com.vk.id.common.AutoTestActivity
+import com.vk.id.common.mockapi.MockApi
+import com.vk.id.common.mockapi.mockApiSuccess
+import com.vk.id.common.mockprovider.continueAuth
 import com.vk.id.onetap.common.OneTapOAuth
+import com.vk.id.test.VKIDTestBuilder
 import io.github.kakaocup.compose.node.element.ComposeScreen
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
-import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import org.junit.Rule
 import org.junit.Test
@@ -26,19 +34,23 @@ public abstract class OneTapTest : TestCase(
 ) {
 
     @get:Rule
-    public val composeTestRule: AndroidComposeTestRule<ActivityScenarioRule<com.vk.id.common.AutoTestActivity>, com.vk.id.common.AutoTestActivity> =
+    public val composeTestRule: AndroidComposeTestRule<ActivityScenarioRule<AutoTestActivity>, AutoTestActivity> =
         createAndroidComposeRule()
 
     @Test
     public fun tokenIsReceived(): Unit = run {
         var receivedOAuth: OneTapOAuth? = null
         var receivedToken: AccessToken? = null
-        setContent(onAuth = { oAuth, token ->
+        val vkid = VKIDTestBuilder(composeTestRule.activity)
+            .mockApiSuccess()
+            .user(MockApi.mockApiUser())
+            .build()
+        setContent(vkid) { oAuth, token ->
             receivedOAuth = oAuth
             receivedToken = token
-        })
+        }
         startAuth()
-        waitForVkToStart()
+        continueAuth(composeTestRule)
         step("Token is received") {
             flakySafely {
                 receivedOAuth.shouldBeNull()
@@ -51,12 +63,12 @@ public abstract class OneTapTest : TestCase(
     public fun cancellationIsReceived(): Unit = run {
         var receivedOAuth: OneTapOAuth? = null
         var receivedFail: VKIDAuthFail? = null
-        setContent(onFail = { oAuth, fail ->
+        val vkid = VKIDTestBuilder(composeTestRule.activity).build()
+        setContent(vkid, onFail = { oAuth, fail ->
             receivedOAuth = oAuth
             receivedFail = fail
         })
         startAuth()
-        waitForVkToStart()
         step("Press back") {
             device.uiDevice.pressBack()
         }
@@ -69,8 +81,9 @@ public abstract class OneTapTest : TestCase(
     }
 
     public abstract fun setContent(
-        onAuth: (OneTapOAuth?, AccessToken) -> Unit = { _, _ -> },
+        vkid: VKID,
         onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit = { _, _ -> },
+        onAuth: (OneTapOAuth?, AccessToken) -> Unit = { _, _ -> },
     )
 
     private fun TestContext<Unit>.startAuth(): Unit = step("Start auth") {
@@ -78,12 +91,6 @@ public abstract class OneTapTest : TestCase(
             oneTapButton {
                 performClick()
             }
-        }
-    }
-
-    private fun TestContext<Unit>.waitForVkToStart() = step("Wait for vk start") {
-        flakySafely {
-            device.uiDevice.currentPackageName shouldBe "com.vkontakte.android"
         }
     }
 }

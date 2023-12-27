@@ -28,5 +28,5 @@ internal class ImmediateVKIDApi(
     override fun getSilentAuthProviders(
         clientId: String,
         clientSecret: String
-    ) = error("Not supported")
+    ) = MockVKIDCall(Result.success(VKIDSilentAuthProvidersResponse("null")))
 }
