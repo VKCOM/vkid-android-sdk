@@ -176,11 +176,13 @@ private fun OneTapBottomSheetInternal(
                         authStatus = authStatus
                     )
                 }
+
                 is OneTapBottomSheetAuthStatus.AuthStarted -> SheetContentAuthInProgress(
                     serviceName,
                     style,
                     dismissSheet
                 )
+
                 is OneTapBottomSheetAuthStatus.AuthFailedAlternate -> SheetContentAuthFailed(
                     serviceName,
                     style,
