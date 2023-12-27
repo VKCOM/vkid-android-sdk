@@ -28,11 +28,13 @@
 
         <com.vk.id.onetap.xml.OneTap
             android:id="@+id/no_multibranding_one_tap"
-            android:layout_width="355dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/no_multibranding_title_spacer"
+            app:layout_constraintWidth_max="355dp"
             app:vkid_onetapShowSignInToAnotherAccount="true"
             app:vkid_onetapStyle="light" />
 

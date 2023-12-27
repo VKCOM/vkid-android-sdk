@@ -13,8 +13,7 @@ import com.vk.id.sample.xml.uikit.common.dpToPixels
 import com.vk.id.sample.xml.uikit.common.getOneTapFailCallback
 import com.vk.id.sample.xml.uikit.common.getOneTapSuccessCallback
 
-private const val BUTTON_PADDING = 12
-private const val HORIZONTAL_PADDING = 8
+private const val BUTTON_PADDING = 8
 
 public data class OneTapItem(
     val style: OneTapStyle,
@@ -28,7 +27,6 @@ public fun createOneTap(
     item: OneTapItem,
 ): ConstraintLayout = ConstraintLayout(context).apply {
     layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
-    setPadding(context.dpToPixels(HORIZONTAL_PADDING), 0, context.dpToPixels(HORIZONTAL_PADDING), 0)
     if (item.isDarkBackground) setBackgroundResource(R.color.vkid_gray900)
     addView(
         OneTap(context).apply {
