@@ -29,6 +29,7 @@
 <resources>
     <string name="vkid_log_in_with_vkid">Iniciar sesión con VK ID</string>
     <string name="vkid_auth_use_another_account">Iniciar sesión con otra cuenta</string>
+    <string name="vkid_auth_use_another_account_short">Cambiar cuentas</string>
     <string name="vkid_log_in_as">Continuar como %1$s</string>
     <string name="vkid_log_in">Continuar</string>
 

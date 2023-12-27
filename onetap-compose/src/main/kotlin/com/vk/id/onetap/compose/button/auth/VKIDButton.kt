@@ -26,14 +26,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Constraints
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.vk.id.VKID
@@ -59,6 +56,7 @@ import com.vk.id.onetap.compose.onetap.style.height
 import com.vk.id.onetap.compose.onetap.style.iconPadding
 import com.vk.id.onetap.compose.onetap.style.shadow
 import com.vk.id.onetap.compose.progress.CircleProgress
+import com.vk.id.onetap.compose.util.MeasureUnconstrainedViewWidth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 
@@ -320,23 +318,6 @@ private fun TextBox(
                     )
                 )
             }
-        }
-    }
-}
-
-@Composable
-private fun MeasureUnconstrainedViewWidth(
-    viewToMeasure: @Composable () -> Unit,
-    content: @Composable (measuredWidth: Dp) -> Unit,
-) {
-    SubcomposeLayout { constraints ->
-        val measuredWidth = subcompose("viewToMeasure", viewToMeasure)[0].measure(Constraints()).width.toDp()
-        val measurable = subcompose("content") { content(measuredWidth) }
-        if (measurable.isNotEmpty()) {
-            val contentPlaceable = measurable[0].measure(constraints)
-            layout(contentPlaceable.width, contentPlaceable.height) { contentPlaceable.place(0, 0) }
-        } else {
-            layout(0, 0) {}
         }
     }
 }

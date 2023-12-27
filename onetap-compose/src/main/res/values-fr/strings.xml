@@ -2,6 +2,7 @@
 <resources>
     <string name="vkid_log_in_with_vkid">Se connecter avec VK ID</string>
     <string name="vkid_auth_use_another_account">Se connecter à un autre compte</string>
+    <string name="vkid_auth_use_another_account_short">Changer de compte</string>
     <string name="vkid_log_in_as">Continuer en tant que %1$s</string>
     <string name="vkid_log_in">Continuer</string>
 
