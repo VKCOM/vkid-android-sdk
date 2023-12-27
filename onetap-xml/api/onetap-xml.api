@@ -25,6 +25,7 @@ public final class com/vk/id/onetap/xml/OneTap : android/widget/FrameLayout {
 	public final fun setOAuths (Ljava/util/Set;)V
 	public final fun setSignInToAnotherAccountEnabled (Z)V
 	public final fun setStyle (Lcom/vk/id/onetap/common/OneTapStyle;)V
+	public final fun setVKID (Lcom/vk/id/VKID;)V
 }
 
 public final class com/vk/id/onetap/xml/OneTapBottomSheet : android/view/ViewGroup {
