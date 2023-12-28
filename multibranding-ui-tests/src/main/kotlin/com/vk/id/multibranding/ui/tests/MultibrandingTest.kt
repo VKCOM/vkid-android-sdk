@@ -95,70 +95,89 @@ public abstract class MultibrandingTest(
 
     @Test
     public fun failedRedirectActivityIsReceived(): Unit = run {
-        var fail: VKIDAuthFail? = null
+        var receivedFail: VKIDAuthFail? = null
+        var receivedOAuth: OAuth? = null
         val vkid = VKIDTestBuilder(composeTestRule.activity)
             .notifyFailedRedirect()
             .build()
         setContent(
             vkid = vkid,
-            onFail = { fail = it }
+            onFail = { oAuth, fail ->
+                receivedFail = fail
+                receivedOAuth = oAuth
+            }
         )
         startAuth()
         continueAuth()
         step("Fail is received") {
             flakySafely {
-                fail.shouldBeInstanceOf<VKIDAuthFail.FailedRedirectActivity>()
+                receivedFail.shouldBeInstanceOf<VKIDAuthFail.FailedRedirectActivity>()
+                receivedOAuth shouldBe oAuth
             }
         }
     }
 
     @Test
     public fun noBrowserAvailableIsReceived(): Unit = run {
-        var fail: VKIDAuthFail? = null
+        var receivedFail: VKIDAuthFail? = null
+        var receivedOAuth: OAuth? = null
         val vkid = VKIDTestBuilder(composeTestRule.activity)
             .notifyNoBrowserAvailable()
             .build()
         setContent(
             vkid = vkid,
-            onFail = { fail = it }
+            onFail = { oAuth, fail ->
+                receivedFail = fail
+                receivedOAuth = oAuth
+            }
         )
         startAuth()
         continueAuth()
         step("Fail is received") {
             flakySafely {
-                fail.shouldBeInstanceOf<VKIDAuthFail.NoBrowserAvailable>()
+                receivedFail.shouldBeInstanceOf<VKIDAuthFail.NoBrowserAvailable>()
+                receivedOAuth shouldBe oAuth
             }
         }
     }
 
     @Test
     public fun failedApiCallIsReceived(): Unit = run {
-        var fail: VKIDAuthFail? = null
+        var receivedFail: VKIDAuthFail? = null
+        var receivedOAuth: OAuth? = null
         val vkid = VKIDTestBuilder(composeTestRule.activity)
             .mockApiError()
             .build()
         setContent(
             vkid = vkid,
-            onFail = { fail = it }
+            onFail = { oAuth, fail ->
+                receivedFail = fail
+                receivedOAuth = oAuth
+            }
         )
         startAuth()
         continueAuth()
         step("Fail is received") {
             flakySafely {
-                fail.shouldBeInstanceOf<VKIDAuthFail.FailedApiCall>()
+                receivedFail.shouldBeInstanceOf<VKIDAuthFail.FailedApiCall>()
+                receivedOAuth shouldBe oAuth
             }
         }
     }
 
     @Test
     public fun cancellationIsReceived(): Unit = run {
-        var fail: VKIDAuthFail? = null
+        var receivedFail: VKIDAuthFail? = null
+        var receivedOAuth: OAuth? = null
         val vkid = VKIDTestBuilder(composeTestRule.activity)
             .mockApiSuccess()
             .build()
         setContent(
             vkid = vkid,
-            onFail = { fail = it }
+            onFail = { oAuth, fail ->
+                receivedFail = fail
+                receivedOAuth = oAuth
+            }
         )
         startAuth()
         step("Press back") {
@@ -166,67 +185,83 @@ public abstract class MultibrandingTest(
         }
         step("Fail is received") {
             flakySafely {
-                fail.shouldBeInstanceOf<VKIDAuthFail.Canceled>()
+                receivedFail.shouldBeInstanceOf<VKIDAuthFail.Canceled>()
+                receivedOAuth shouldBe oAuth
             }
         }
     }
 
     @Test
     public fun failedOAuthIsReceived(): Unit = run {
-        var fail: VKIDAuthFail? = null
+        var receivedFail: VKIDAuthFail? = null
+        var receivedOAuth: OAuth? = null
         val vkid = VKIDTestBuilder(composeTestRule.activity)
             .mockApiSuccess()
             .overrideOAuthToNull()
             .build()
         setContent(
             vkid = vkid,
-            onFail = { fail = it }
+            onFail = { oAuth, fail ->
+                receivedFail = fail
+                receivedOAuth = oAuth
+            }
         )
         startAuth()
         continueAuth()
         step("Fail is received") {
             flakySafely {
-                fail.shouldBeInstanceOf<VKIDAuthFail.FailedOAuth>()
+                receivedFail.shouldBeInstanceOf<VKIDAuthFail.FailedOAuth>()
+                receivedOAuth shouldBe oAuth
             }
         }
     }
 
     @Test
     public fun invalidUuidIsReceived(): Unit = run {
-        var fail: VKIDAuthFail? = null
+        var receivedFail: VKIDAuthFail? = null
+        var receivedOAuth: OAuth? = null
         val vkid = VKIDTestBuilder(composeTestRule.activity)
             .mockApiSuccess()
             .overrideUuid("wrong uuid")
             .build()
         setContent(
             vkid = vkid,
-            onFail = { fail = it }
+            onFail = { oAuth, fail ->
+                receivedFail = fail
+                receivedOAuth = oAuth
+            }
         )
         startAuth()
         continueAuth()
         step("Fail is received") {
             flakySafely {
-                fail shouldBe VKIDAuthFail.FailedOAuthState("Invalid uuid")
+                receivedFail shouldBe VKIDAuthFail.FailedOAuthState("Invalid uuid")
+                receivedOAuth shouldBe oAuth
             }
         }
     }
 
     @Test
     public fun invalidStateIsReceived(): Unit = run {
-        var fail: VKIDAuthFail? = null
+        var receivedFail: VKIDAuthFail? = null
+        var receivedOAuth: OAuth? = null
         val vkid = VKIDTestBuilder(composeTestRule.activity)
             .mockApiSuccess()
             .overrideState("wrong state")
             .build()
         setContent(
             vkid = vkid,
-            onFail = { fail = it }
+            onFail = { oAuth, fail ->
+                receivedFail = fail
+                receivedOAuth = oAuth
+            }
         )
         startAuth()
         continueAuth()
         step("Fail is received") {
             flakySafely {
-                fail shouldBe VKIDAuthFail.FailedOAuthState("Invalid state")
+                receivedFail shouldBe VKIDAuthFail.FailedOAuthState("Invalid state")
+                receivedOAuth shouldBe oAuth
             }
         }
     }
@@ -234,7 +269,7 @@ public abstract class MultibrandingTest(
     protected abstract fun setContent(
         vkid: VKID,
         onAuth: (OAuth, AccessToken) -> Unit = { _, _ -> },
-        onFail: (VKIDAuthFail) -> Unit = {},
+        onFail: (OAuth, VKIDAuthFail) -> Unit = { _, _ -> },
     )
 
     private fun VKIDTestBuilder.mockApiError() = getTokenResponse(
