@@ -16,6 +16,7 @@ import com.vk.id.VKIDAuthFail
 import com.vk.id.commn.InternalVKIDApi
 import com.vk.id.common.AutoTestActivity
 import com.vk.id.common.mockapi.MockApi
+import com.vk.id.common.mockapi.mockApiError
 import com.vk.id.common.mockapi.mockApiSuccess
 import com.vk.id.common.mockprovider.continueAuth
 import com.vk.id.onetap.common.OneTapOAuth
@@ -23,6 +24,7 @@ import com.vk.id.test.VKIDTestBuilder
 import io.github.kakaocup.compose.node.element.ComposeScreen
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import org.junit.Rule
 import org.junit.Test
@@ -76,6 +78,153 @@ public abstract class OneTapTest : TestCase(
             flakySafely {
                 receivedOAuth.shouldBeNull()
                 receivedFail.shouldBeInstanceOf<VKIDAuthFail.Canceled>()
+            }
+        }
+    }
+
+    @Test
+    public fun failedRedirectActivityIsReceived(): Unit = run {
+        var receivedFail: VKIDAuthFail? = null
+        var receivedOAuth: OneTapOAuth? = null
+        val vkid = VKIDTestBuilder(composeTestRule.activity)
+            .notifyFailedRedirect()
+            .build()
+        setContent(
+            vkid = vkid,
+            onFail = { oAuth, fail ->
+                receivedFail = fail
+                receivedOAuth = oAuth
+            }
+        )
+        startAuth()
+        continueAuth(composeTestRule)
+        step("Fail is received") {
+            flakySafely {
+                receivedFail.shouldBeInstanceOf<VKIDAuthFail.FailedRedirectActivity>()
+                receivedOAuth.shouldBeNull()
+            }
+        }
+    }
+
+    @Test
+    public fun noBrowserAvailableIsReceived(): Unit = run {
+        var receivedFail: VKIDAuthFail? = null
+        var receivedOAuth: OneTapOAuth? = null
+        val vkid = VKIDTestBuilder(composeTestRule.activity)
+            .notifyNoBrowserAvailable()
+            .build()
+        setContent(
+            vkid = vkid,
+            onFail = { oAuth, fail ->
+                receivedFail = fail
+                receivedOAuth = oAuth
+            }
+        )
+        startAuth()
+        continueAuth(composeTestRule)
+        step("Fail is received") {
+            flakySafely {
+                receivedFail.shouldBeInstanceOf<VKIDAuthFail.NoBrowserAvailable>()
+                receivedOAuth.shouldBeNull()
+            }
+        }
+    }
+
+    @Test
+    public fun failedApiCallIsReceived(): Unit = run {
+        var receivedFail: VKIDAuthFail? = null
+        var receivedOAuth: OneTapOAuth? = null
+        val vkid = VKIDTestBuilder(composeTestRule.activity)
+            .mockApiError()
+            .build()
+        setContent(
+            vkid = vkid,
+            onFail = { oAuth, fail ->
+                receivedFail = fail
+                receivedOAuth = oAuth
+            }
+        )
+        startAuth()
+        continueAuth(composeTestRule)
+        step("Fail is received") {
+            flakySafely {
+                receivedFail.shouldBeInstanceOf<VKIDAuthFail.FailedApiCall>()
+                receivedOAuth.shouldBeNull()
+            }
+        }
+    }
+
+    @Test
+    public fun failedOAuthIsReceived(): Unit = run {
+        var receivedFail: VKIDAuthFail? = null
+        var receivedOAuth: OneTapOAuth? = null
+        val vkid = VKIDTestBuilder(composeTestRule.activity)
+            .mockApiSuccess()
+            .overrideOAuthToNull()
+            .build()
+        setContent(
+            vkid = vkid,
+            onFail = { oAuth, fail ->
+                receivedFail = fail
+                receivedOAuth = oAuth
+            }
+        )
+        startAuth()
+        continueAuth(composeTestRule)
+        step("Fail is received") {
+            flakySafely {
+                receivedFail.shouldBeInstanceOf<VKIDAuthFail.FailedOAuth>()
+                receivedOAuth.shouldBeNull()
+            }
+        }
+    }
+
+    @Test
+    public fun invalidUuidIsReceived(): Unit = run {
+        var receivedFail: VKIDAuthFail? = null
+        var receivedOAuth: OneTapOAuth? = null
+        val vkid = VKIDTestBuilder(composeTestRule.activity)
+            .mockApiSuccess()
+            .overrideUuid("wrong uuid")
+            .build()
+        setContent(
+            vkid = vkid,
+            onFail = { oAuth, fail ->
+                receivedFail = fail
+                receivedOAuth = oAuth
+            }
+        )
+        startAuth()
+        continueAuth(composeTestRule)
+        step("Fail is received") {
+            flakySafely {
+                receivedFail shouldBe VKIDAuthFail.FailedOAuthState("Invalid uuid")
+                receivedOAuth.shouldBeNull()
+            }
+        }
+    }
+
+    @Test
+    public fun invalidStateIsReceived(): Unit = run {
+        var receivedFail: VKIDAuthFail? = null
+        var receivedOAuth: OneTapOAuth? = null
+        val vkid = VKIDTestBuilder(composeTestRule.activity)
+            .mockApiSuccess()
+            .overrideState("wrong state")
+            .build()
+        setContent(
+            vkid = vkid,
+            onFail = { oAuth, fail ->
+                receivedFail = fail
+                receivedOAuth = oAuth
+            }
+        )
+        startAuth()
+        continueAuth(composeTestRule)
+        step("Fail is received") {
+            flakySafely {
+                receivedFail shouldBe VKIDAuthFail.FailedOAuthState("Invalid state")
+                receivedOAuth.shouldBeNull()
             }
         }
     }
