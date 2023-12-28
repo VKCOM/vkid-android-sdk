@@ -1,6 +1,6 @@
-import com.android.build.api.dsl.CommonExtension
-import com.vk.id.UninstallTestAppTask
 import com.vk.id.libs
+import com.vk.id.uninstallTestAppTask
+import com.vk.id.util.android
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
@@ -13,8 +13,7 @@ class AndroidTestsConventionPlugin : Plugin<Project> {
         with(pluginManager) {
             apply("vkid.placeholders")
         }
-        val android = extensions.getByName("android") as CommonExtension<*, *, *, *, *>
-        android.apply {
+        extensions.android {
             defaultConfig {
                 testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
             }
@@ -32,10 +31,12 @@ class AndroidTestsConventionPlugin : Plugin<Project> {
             add("androidTestImplementation", libs.findLibrary("androidx-test-junit-ktx").get())
         }
 
-        tasks.register("uninstallTestApp", UninstallTestAppTask::class.java)
         tasks.configureEach {
             if (name == "connectedDebugAndroidTest") {
-                finalizedBy("uninstallTestApp")
+                val namespace = project.extensions.android.namespace ?: error("Project namespace is unspecified")
+                doLast {
+                    uninstallTestAppTask(namespace)
+                }
             }
         }
     }
