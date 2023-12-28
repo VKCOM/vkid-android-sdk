@@ -11,4 +11,8 @@ public class OneTapScreen(
     public val oneTapButton: KNode = child {
         hasTestTag("vkid_button")
     }
+
+    public val signInToAnotherAccountButton: KNode = child {
+        hasTestTag("sign_in_to_another_account")
+    }
 }
