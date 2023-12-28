@@ -33,3 +33,9 @@ public data class VKIDTokenPayloadResponse(
     @SerializedName("phone_access_key")
     val phoneAccessKey: String,
 )
+
+@InternalVKIDApi
+public data class VKIDSilentAuthProvidersResponse(
+    @SerializedName("response")
+    val response: String
+)

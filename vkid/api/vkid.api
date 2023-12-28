@@ -213,6 +213,18 @@ public abstract interface class com/vk/id/test/OverrideVKIDApi {
 	public abstract fun getToken-hUnOzRk (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Object;
 }
 
+public final class com/vk/id/test/VKIDSilentAuthProvidersResponse {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lcom/vk/id/test/VKIDSilentAuthProvidersResponse;
+	public static synthetic fun copy$default (Lcom/vk/id/test/VKIDSilentAuthProvidersResponse;Ljava/lang/String;ILjava/lang/Object;)Lcom/vk/id/test/VKIDSilentAuthProvidersResponse;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getResponse ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class com/vk/id/test/VKIDTestBuilder {
 	public static final field $stable I
 	public fun <init> (Landroid/content/Context;)V
