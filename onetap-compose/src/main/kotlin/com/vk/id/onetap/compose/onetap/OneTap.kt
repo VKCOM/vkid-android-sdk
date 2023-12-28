@@ -173,6 +173,7 @@ internal fun OneTap(
         if (oAuths.isNotEmpty()) {
             Spacer(modifier = Modifier.height(16.dp))
             OAuthListWidget(
+                vkid = vkid,
                 onAuth = OAuthListWidgetAuthCallback.WithOAuth { oAuth, accessToken ->
                     onAuth(OneTapOAuth.fromOAuth(oAuth), accessToken)
                 },

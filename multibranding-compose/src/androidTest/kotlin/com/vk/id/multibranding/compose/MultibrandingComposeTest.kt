@@ -14,8 +14,8 @@ public class MultibrandingComposeTest(
 
     override fun setContent(
         vkid: VKID,
-        onAuth: (OAuth, AccessToken) -> Unit,
-        onFail: (OAuth, VKIDAuthFail) -> Unit,
+        onAuth: (OAuth?, AccessToken) -> Unit,
+        onFail: (OAuth?, VKIDAuthFail) -> Unit,
     ) {
         composeTestRule.setContent {
             OAuthListWidget(
