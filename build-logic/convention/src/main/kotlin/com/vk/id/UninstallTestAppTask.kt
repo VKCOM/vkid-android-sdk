@@ -1,9 +1,5 @@
 package com.vk.id
 
-import com.android.build.api.dsl.CommonExtension
-import com.vk.id.util.android
-import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.TaskAction
 import java.io.IOException
 
 
@@ -16,17 +12,12 @@ import java.io.IOException
  *
  * Build system doesn't uninstall apks to save time, but this prevents clean test running.
  */
-internal open class UninstallTestAppTask : DefaultTask() {
-
-    private val android = project.extensions.android
-
-    @TaskAction
-    fun execute() {
-        println("adb uninstall ${android.namespace}.test")
-        val process = Runtime.getRuntime().exec("adb uninstall ${android.namespace}.test")
-        val exitCode = process.waitFor()
-        if (exitCode != 0) {
-            throw IOException("Command exited with $exitCode")
-        }
+fun uninstallTestAppTask(namespace: String) {
+    println("adb uninstall $namespace.test")
+    val process = Runtime.getRuntime().exec("adb uninstall $namespace.test")
+    process.errorReader().lines().forEach(::println)
+    val exitCode = process.waitFor()
+    if (exitCode != 0) {
+        throw IOException("Command exited with $exitCode")
     }
 }
