@@ -13,8 +13,8 @@ public class MultibrandingXmlTest(
 
     override fun setContent(
         vkid: VKID,
-        onAuth: (OAuth, AccessToken) -> Unit,
-        onFail: (OAuth, VKIDAuthFail) -> Unit,
+        onAuth: (OAuth?, AccessToken) -> Unit,
+        onFail: (OAuth?, VKIDAuthFail) -> Unit,
     ) {
         composeTestRule.activity.setContent(
             OAuthListWidget(composeTestRule.activity).apply {

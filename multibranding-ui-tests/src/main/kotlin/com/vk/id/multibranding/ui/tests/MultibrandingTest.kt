@@ -31,7 +31,8 @@ import org.junit.runners.Parameterized
 @RunWith(Parameterized::class)
 @Suppress("TooManyFunctions")
 public abstract class MultibrandingTest(
-    private val oAuth: OAuth
+    private val oAuth: OAuth,
+    private val skipTest: Boolean = false,
 ) : TestCase(
     kaspressoBuilder = Kaspresso.Builder.withComposeSupport()
 ) {
@@ -48,7 +49,7 @@ public abstract class MultibrandingTest(
     }
 
     @Test
-    public fun tokenIsReceived(): Unit = run {
+    public fun tokenIsReceived(): Unit = runIfShouldNotSkip {
         var accessToken: AccessToken? = null
         var receivedOAuth: OAuth? = null
         val vkid = VKIDTestBuilder(composeTestRule.activity)
@@ -79,7 +80,7 @@ public abstract class MultibrandingTest(
     }
 
     @Test
-    public fun failedRedirectActivityIsReceived(): Unit = run {
+    public fun failedRedirectActivityIsReceived(): Unit = runIfShouldNotSkip {
         var receivedFail: VKIDAuthFail? = null
         var receivedOAuth: OAuth? = null
         val vkid = VKIDTestBuilder(composeTestRule.activity)
@@ -103,7 +104,7 @@ public abstract class MultibrandingTest(
     }
 
     @Test
-    public fun noBrowserAvailableIsReceived(): Unit = run {
+    public fun noBrowserAvailableIsReceived(): Unit = runIfShouldNotSkip {
         var receivedFail: VKIDAuthFail? = null
         var receivedOAuth: OAuth? = null
         val vkid = VKIDTestBuilder(composeTestRule.activity)
@@ -127,7 +128,7 @@ public abstract class MultibrandingTest(
     }
 
     @Test
-    public fun failedApiCallIsReceived(): Unit = run {
+    public fun failedApiCallIsReceived(): Unit = runIfShouldNotSkip {
         var receivedFail: VKIDAuthFail? = null
         var receivedOAuth: OAuth? = null
         val vkid = VKIDTestBuilder(composeTestRule.activity)
@@ -151,7 +152,7 @@ public abstract class MultibrandingTest(
     }
 
     @Test
-    public fun cancellationIsReceived(): Unit = run {
+    public fun cancellationIsReceived(): Unit = runIfShouldNotSkip {
         var receivedFail: VKIDAuthFail? = null
         var receivedOAuth: OAuth? = null
         val vkid = VKIDTestBuilder(composeTestRule.activity)
@@ -177,7 +178,7 @@ public abstract class MultibrandingTest(
     }
 
     @Test
-    public fun failedOAuthIsReceived(): Unit = run {
+    public fun failedOAuthIsReceived(): Unit = runIfShouldNotSkip {
         var receivedFail: VKIDAuthFail? = null
         var receivedOAuth: OAuth? = null
         val vkid = VKIDTestBuilder(composeTestRule.activity)
@@ -202,7 +203,7 @@ public abstract class MultibrandingTest(
     }
 
     @Test
-    public fun invalidUuidIsReceived(): Unit = run {
+    public fun invalidUuidIsReceived(): Unit = runIfShouldNotSkip {
         var receivedFail: VKIDAuthFail? = null
         var receivedOAuth: OAuth? = null
         val vkid = VKIDTestBuilder(composeTestRule.activity)
@@ -227,7 +228,7 @@ public abstract class MultibrandingTest(
     }
 
     @Test
-    public fun invalidStateIsReceived(): Unit = run {
+    public fun invalidStateIsReceived(): Unit = runIfShouldNotSkip {
         var receivedFail: VKIDAuthFail? = null
         var receivedOAuth: OAuth? = null
         val vkid = VKIDTestBuilder(composeTestRule.activity)
@@ -251,10 +252,18 @@ public abstract class MultibrandingTest(
         }
     }
 
+    private fun runIfShouldNotSkip(
+        test: TestContext<Unit>.() -> Unit,
+    ) = run {
+        if (!skipTest) {
+            test()
+        }
+    }
+
     protected abstract fun setContent(
         vkid: VKID,
-        onAuth: (OAuth, AccessToken) -> Unit = { _, _ -> },
-        onFail: (OAuth, VKIDAuthFail) -> Unit = { _, _ -> },
+        onAuth: (OAuth?, AccessToken) -> Unit = { _, _ -> },
+        onFail: (OAuth?, VKIDAuthFail) -> Unit = { _, _ -> },
     )
 
     private fun TestContext<Unit>.startAuth(): Unit = step("Start auth") {
