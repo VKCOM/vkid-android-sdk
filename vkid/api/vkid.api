@@ -235,6 +235,7 @@ public final class com/vk/id/test/VKIDTestBuilder {
 	public final fun overrideOAuthToNull ()Lcom/vk/id/test/VKIDTestBuilder;
 	public final fun overrideState (Ljava/lang/String;)Lcom/vk/id/test/VKIDTestBuilder;
 	public final fun overrideUuid (Ljava/lang/String;)Lcom/vk/id/test/VKIDTestBuilder;
+	public final fun requireUnsetUseAuthProviderIfPossible ()Lcom/vk/id/test/VKIDTestBuilder;
 	public final fun user (Lcom/vk/id/VKIDUser;)Lcom/vk/id/test/VKIDTestBuilder;
 }
 
