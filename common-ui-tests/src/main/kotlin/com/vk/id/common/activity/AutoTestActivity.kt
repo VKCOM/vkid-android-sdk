@@ -1,4 +1,4 @@
-package com.vk.id.common
+package com.vk.id.common.activity
 
 import android.os.Handler
 import android.os.Looper

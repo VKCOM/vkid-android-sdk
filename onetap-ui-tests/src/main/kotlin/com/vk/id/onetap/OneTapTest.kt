@@ -14,7 +14,7 @@ import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.commn.InternalVKIDApi
-import com.vk.id.common.AutoTestActivity
+import com.vk.id.common.activity.AutoTestActivityRule
 import com.vk.id.common.mockapi.MockApi
 import com.vk.id.common.mockapi.mockApiError
 import com.vk.id.common.mockapi.mockApiSuccess
@@ -36,8 +36,7 @@ public abstract class OneTapTest : TestCase(
 ) {
 
     @get:Rule
-    public val composeTestRule: AndroidComposeTestRule<ActivityScenarioRule<AutoTestActivity>, AutoTestActivity> =
-        createAndroidComposeRule()
+    public val composeTestRule: AutoTestActivityRule = createAndroidComposeRule()
 
     @Test
     public fun tokenIsReceived(): Unit = run {
