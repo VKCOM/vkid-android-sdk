@@ -2,9 +2,7 @@
 
 package com.vk.id.onetap
 
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.kaspersky.components.composesupport.config.withComposeSupport
 import com.kaspersky.kaspresso.kaspresso.Kaspresso
@@ -14,7 +12,7 @@ import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.commn.InternalVKIDApi
-import com.vk.id.common.AutoTestActivity
+import com.vk.id.common.activity.AutoTestActivityRule
 import com.vk.id.common.mockapi.MockApi
 import com.vk.id.common.mockapi.mockApiError
 import com.vk.id.common.mockapi.mockApiSuccess
@@ -31,19 +29,19 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4ClassRunner::class)
+@Suppress("TooManyFunctions")
 public abstract class OneTapTest : TestCase(
     kaspressoBuilder = Kaspresso.Builder.withComposeSupport()
 ) {
 
     @get:Rule
-    public val composeTestRule: AndroidComposeTestRule<ActivityScenarioRule<AutoTestActivity>, AutoTestActivity> =
-        createAndroidComposeRule()
+    public val composeTestRule: AutoTestActivityRule = createAndroidComposeRule()
 
     @Test
     public fun tokenIsReceived(): Unit = run {
         var receivedOAuth: OneTapOAuth? = null
         var receivedToken: AccessToken? = null
-        val vkid = VKIDTestBuilder(composeTestRule.activity)
+        val vkid = vkidBuilder()
             .mockApiSuccess()
             .user(MockApi.mockApiUser())
             .build()
@@ -65,7 +63,7 @@ public abstract class OneTapTest : TestCase(
     public fun cancellationIsReceived(): Unit = run {
         var receivedOAuth: OneTapOAuth? = null
         var receivedFail: VKIDAuthFail? = null
-        val vkid = VKIDTestBuilder(composeTestRule.activity).build()
+        val vkid = vkidBuilder().build()
         setContent(vkid, onFail = { oAuth, fail ->
             receivedOAuth = oAuth
             receivedFail = fail
@@ -86,7 +84,7 @@ public abstract class OneTapTest : TestCase(
     public fun failedRedirectActivityIsReceived(): Unit = run {
         var receivedFail: VKIDAuthFail? = null
         var receivedOAuth: OneTapOAuth? = null
-        val vkid = VKIDTestBuilder(composeTestRule.activity)
+        val vkid = vkidBuilder()
             .notifyFailedRedirect()
             .build()
         setContent(
@@ -110,7 +108,7 @@ public abstract class OneTapTest : TestCase(
     public fun noBrowserAvailableIsReceived(): Unit = run {
         var receivedFail: VKIDAuthFail? = null
         var receivedOAuth: OneTapOAuth? = null
-        val vkid = VKIDTestBuilder(composeTestRule.activity)
+        val vkid = vkidBuilder()
             .notifyNoBrowserAvailable()
             .build()
         setContent(
@@ -134,7 +132,7 @@ public abstract class OneTapTest : TestCase(
     public fun failedApiCallIsReceived(): Unit = run {
         var receivedFail: VKIDAuthFail? = null
         var receivedOAuth: OneTapOAuth? = null
-        val vkid = VKIDTestBuilder(composeTestRule.activity)
+        val vkid = vkidBuilder()
             .mockApiError()
             .build()
         setContent(
@@ -158,7 +156,7 @@ public abstract class OneTapTest : TestCase(
     public fun failedOAuthIsReceived(): Unit = run {
         var receivedFail: VKIDAuthFail? = null
         var receivedOAuth: OneTapOAuth? = null
-        val vkid = VKIDTestBuilder(composeTestRule.activity)
+        val vkid = vkidBuilder()
             .mockApiSuccess()
             .overrideOAuthToNull()
             .build()
@@ -183,7 +181,7 @@ public abstract class OneTapTest : TestCase(
     public fun invalidUuidIsReceived(): Unit = run {
         var receivedFail: VKIDAuthFail? = null
         var receivedOAuth: OneTapOAuth? = null
-        val vkid = VKIDTestBuilder(composeTestRule.activity)
+        val vkid = vkidBuilder()
             .mockApiSuccess()
             .overrideUuid("wrong uuid")
             .build()
@@ -208,7 +206,7 @@ public abstract class OneTapTest : TestCase(
     public fun invalidStateIsReceived(): Unit = run {
         var receivedFail: VKIDAuthFail? = null
         var receivedOAuth: OneTapOAuth? = null
-        val vkid = VKIDTestBuilder(composeTestRule.activity)
+        val vkid = vkidBuilder()
             .mockApiSuccess()
             .overrideState("wrong state")
             .build()
@@ -235,7 +233,12 @@ public abstract class OneTapTest : TestCase(
         onAuth: (OneTapOAuth?, AccessToken) -> Unit = { _, _ -> },
     )
 
-    private fun TestContext<Unit>.startAuth(): Unit = step("Start auth") {
+    private fun vkidBuilder() = VKIDTestBuilder(composeTestRule.activity)
+        .mockUseAuthProviderIfPossible()
+
+    protected open fun VKIDTestBuilder.mockUseAuthProviderIfPossible(): VKIDTestBuilder = this
+
+    protected open fun TestContext<Unit>.startAuth(): Unit = step("Start auth") {
         ComposeScreen.onComposeScreen<OneTapScreen>(composeTestRule) {
             oneTapButton {
                 performClick()

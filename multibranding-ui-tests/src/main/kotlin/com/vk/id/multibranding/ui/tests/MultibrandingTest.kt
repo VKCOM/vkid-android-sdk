@@ -2,9 +2,7 @@
 
 package com.vk.id.multibranding.ui.tests
 
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.kaspersky.components.composesupport.config.withComposeSupport
 import com.kaspersky.kaspresso.kaspresso.Kaspresso
 import com.kaspersky.kaspresso.testcases.api.testcase.TestCase
@@ -14,7 +12,7 @@ import com.vk.id.OAuth
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.commn.InternalVKIDApi
-import com.vk.id.common.AutoTestActivity
+import com.vk.id.common.activity.AutoTestActivityRule
 import com.vk.id.common.mockapi.MockApi
 import com.vk.id.common.mockapi.mockApiError
 import com.vk.id.common.mockapi.mockApiSuccess
@@ -38,8 +36,7 @@ public abstract class MultibrandingTest(
 ) {
 
     @get:Rule
-    public val composeTestRule: AndroidComposeTestRule<ActivityScenarioRule<AutoTestActivity>, AutoTestActivity> =
-        createAndroidComposeRule()
+    public val composeTestRule: AutoTestActivityRule = createAndroidComposeRule()
 
     private companion object {
 

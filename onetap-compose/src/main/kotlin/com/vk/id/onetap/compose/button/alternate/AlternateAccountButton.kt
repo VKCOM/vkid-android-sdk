@@ -17,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -92,6 +93,7 @@ private fun AlternateAccountButton(
 ) {
     Box(
         modifier = modifier
+            .testTag("sign_in_to_another_account")
             .fillMaxWidth()
             .border(style.borderStyle, style.cornersStyle)
             .height(style.sizeStyle)

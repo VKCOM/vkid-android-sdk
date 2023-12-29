@@ -30,6 +30,11 @@ public class VKIDTestBuilder(
     public fun user(user: VKIDUser): VKIDTestBuilder = updateConfig { copy(user = user) }
     public fun notifyNoBrowserAvailable(): VKIDTestBuilder = updateConfig { copy(notifyNoBrowserAvailable = true) }
     public fun notifyFailedRedirect(): VKIDTestBuilder = updateConfig { copy(notifyFailedRedirectActivity = true) }
+    public fun requireUnsetUseAuthProviderIfPossible(): VKIDTestBuilder = updateConfig {
+        copy(
+            requireUnsetUseAuthProviderIfPossible = true
+        )
+    }
 
     private fun updateConfig(update: MockAuthProviderConfig.() -> MockAuthProviderConfig): VKIDTestBuilder = apply {
         authProviderConfig = authProviderConfig.update()
