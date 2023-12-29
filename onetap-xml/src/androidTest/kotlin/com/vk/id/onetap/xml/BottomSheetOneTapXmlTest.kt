@@ -10,7 +10,7 @@ import com.vk.id.onetap.common.OneTapOAuth
 
 public class BottomSheetOneTapXmlTest : OneTapTest() {
 
-    override fun setContent(
+    override fun setOneTapContent(
         vkid: VKID,
         onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit,
         onAuth: (OneTapOAuth?, AccessToken) -> Unit,

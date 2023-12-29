@@ -13,7 +13,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4ClassRunner::class)
 public class IconOneTapComposeTest : OneTapTest() {
 
-    override fun setContent(
+    override fun setOneTapContent(
         vkid: VKID,
         onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit,
         onAuth: (OneTapOAuth?, AccessToken) -> Unit,
