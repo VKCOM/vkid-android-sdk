@@ -9,7 +9,7 @@ import com.vk.id.onetap.compose.onetap.OneTap
 
 public class OneTapComposeTest : OneTapTest() {
 
-    override fun setContent(
+    override fun setOneTapContent(
         vkid: VKID,
         onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit,
         onAuth: (OneTapOAuth?, AccessToken) -> Unit,

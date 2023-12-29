@@ -9,7 +9,8 @@ import io.github.kakaocup.compose.node.element.ComposeScreen
 
 public abstract class ChangeAccountTest : OneTapTest() {
 
-    override fun VKIDTestBuilder.mockUseAuthProviderIfPossible(): VKIDTestBuilder = requireUnsetUseAuthProviderIfPossible()
+    protected override fun vkidBuilder(): VKIDTestBuilder = super.vkidBuilder()
+        .requireUnsetUseAuthProviderIfPossible()
 
     override fun TestContext<Unit>.startAuth() {
         ComposeScreen.onComposeScreen<OneTapScreen>(composeTestRule) {

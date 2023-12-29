@@ -8,7 +8,7 @@ import com.vk.id.onetap.common.OneTapOAuth
 
 public class XmlChangeAccountComposeTest : ChangeAccountTest() {
 
-    override fun setContent(
+    override fun setOneTapContent(
         vkid: VKID,
         onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit,
         onAuth: (OneTapOAuth?, AccessToken) -> Unit,

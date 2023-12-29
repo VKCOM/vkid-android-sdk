@@ -2,7 +2,6 @@ package com.vk.id.onetap.compose
 
 import android.os.Handler
 import android.os.Looper
-import androidx.compose.material3.Button
 import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
@@ -13,7 +12,7 @@ import com.vk.id.onetap.compose.onetap.sheet.rememberOneTapBottomSheetState
 
 public class BottomSheetOneTapComposeTest : OneTapTest() {
 
-    override fun setContent(
+    override fun setOneTapContent(
         vkid: VKID,
         onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit,
         onAuth: (OneTapOAuth?, AccessToken) -> Unit,
