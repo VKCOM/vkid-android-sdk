@@ -113,10 +113,12 @@ public class OneTap @JvmOverloads constructor(
     /**
      * Set an optional [VKID] instance to use for authentication.
      *  If instance of VKID is not provided, it will be created.
+     *  Note that you can't change the [VKID] instance after view was added to layout.
      */
     public fun setVKID(
-        vkid: VKID
+        vkid: VKID,
     ) {
+        check(!composeView.isAttachedToWindow) { "You're not allowed to change VKID instance after it was attached" }
         this.vkid = vkid
     }
 }
