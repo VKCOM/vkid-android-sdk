@@ -29,12 +29,20 @@ public class OneTap @JvmOverloads constructor(
 
     private val composeView = ComposeView(context)
 
-    public var style: OneTapStyle = OneTapStyle.Dark()
+    /**
+     * The styling for the One Tap interface, default is [OneTapStyle.Light]
+     */
+    public var style: OneTapStyle = OneTapStyle.Light()
         set(value) {
             field = value
             onStyleChange(value)
         }
     private var onStyleChange: (OneTapStyle) -> Unit = {}
+
+    /**
+     * Flag to enable a button for signing into another account.
+     * Note that if text doesn't fit the available width the view will be hidden regardless of the flag.
+     */
     public var isSignInToAnotherAccountEnabled: Boolean = false
         set(value) {
             field = value
@@ -45,6 +53,11 @@ public class OneTap @JvmOverloads constructor(
         throw IllegalStateException("No onAuth callback for VKID OneTap Button. Set it with setCallbacks method.")
     }
     private var onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit = { _, _ -> }
+
+    /**
+     * Adds support multibranding auth. By default this widget is not displayed.
+     * This property represents a set of [OneTapOAuth] to be displayed.
+     */
     public var oAuths: Set<OneTapOAuth> = emptySet()
         set(value) {
             field = value

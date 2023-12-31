@@ -31,6 +31,10 @@ public class OneTapBottomSheet @JvmOverloads constructor(
 
     private val composeView = ComposeView(context)
 
+    /**
+     * Adds support multibranding auth. By default this widget is not displayed.
+     * This property represents a set of [OneTapOAuth] to be displayed.
+     */
     public var oAuths: Set<OneTapOAuth> = emptySet()
         set(value) {
             field = value
