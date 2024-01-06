@@ -7,10 +7,6 @@ plugins {
 
 android {
     namespace = "com.vk.id.onetap.xml"
-
-    buildFeatures {
-        viewBinding = true
-    }
 }
 
 dependencies {
