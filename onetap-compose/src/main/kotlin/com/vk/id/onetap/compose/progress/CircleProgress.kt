@@ -11,9 +11,13 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import com.vk.id.commn.InternalVKIDApi
 import com.vk.id.onetap.common.progress.style.CircleProgressStyle
 import com.vk.id.onetap.compose.R
@@ -34,6 +38,11 @@ internal fun CircleProgress(
     )
     Image(
         modifier = Modifier
+            .semantics {
+                @OptIn(ExperimentalComposeUiApi::class)
+                testTagsAsResourceId = true
+            }
+            .testTag("circle_progress")
             .graphicsLayer {
                 rotationZ = angle
             },
