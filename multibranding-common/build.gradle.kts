@@ -12,5 +12,5 @@ android {
 dependencies {
     implementation(project(":vkid"))
     implementation(project(":common"))
-    baselineProfile(project(":baselineprofile")) // TODO: Create common plugin or move to existing
+    baselineProfile(project(":baseline-profile")) // TODO: Create common plugin or move to existing
 }

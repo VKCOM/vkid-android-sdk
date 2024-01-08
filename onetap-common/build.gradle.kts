@@ -13,5 +13,5 @@ dependencies {
     implementation(project(":common"))
     implementation(project(":multibranding-common"))
     implementation(project(":vkid"))
-    baselineProfile(project(":baselineprofile"))
+    baselineProfile(project(":baseline-profile"))
 }

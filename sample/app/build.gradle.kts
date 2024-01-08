@@ -57,7 +57,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.okhttp3.okhttp)
     implementation(libs.androidx.profileinstaller)
-    baselineProfile(project(":baselineprofile"))
+    baselineProfile(project(":baseline-profile"))
     debugImplementation(libs.androidx.compose.ui.tooling)
 }
 
