@@ -2,7 +2,7 @@ plugins {
     id("vkid.android.library")
     id("vkid.android.publish")
     id("org.jetbrains.kotlinx.binary-compatibility-validator")
-    alias(libs.plugins.baselineprofile)
+    id("vkid.android.baseline.profile")
 }
 
 android {
@@ -12,5 +12,4 @@ android {
 dependencies {
     implementation(project(":vkid"))
     implementation(project(":common"))
-    baselineProfile(project(":baseline-profile")) // TODO: Create common plugin or move to existing
 }

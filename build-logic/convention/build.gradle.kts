@@ -61,6 +61,12 @@ gradlePlugin {
             description = """Helper to create lockfiles for all modules with one command. 
                 |Usage: `./gradlew allDependencies --write-locks`""".trimMargin()
         }
+        register("vkidBaselineProfile") {
+            id = "vkid.android.baseline.profile"
+            implementationClass = "BaselineProfilePlugin"
+            description = """Helper to create baseline profile for all modules with one command. 
+                |Usage: `./gradlew generateBaselineProfiles`""".trimMargin()
+        }
     }
 }
 

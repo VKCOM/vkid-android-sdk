@@ -11543,7 +11543,6 @@ HSPLcoil/decode/ExifData$Companion;-><init>()V
 HSPLcoil/decode/ExifData$Companion;-><init>(Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 Lcoil/decode/ExifInterfaceInputStream;
 HSPLcoil/decode/ExifInterfaceInputStream;-><init>(Ljava/io/InputStream;)V
-HSPLcoil/decode/ExifInterfaceInputStream;->available()I
 HSPLcoil/decode/ExifInterfaceInputStream;->interceptBytesRead(I)I
 HSPLcoil/decode/ExifInterfaceInputStream;->read([BII)I
 Lcoil/decode/ExifOrientationPolicy;
@@ -13860,6 +13859,8 @@ Lkotlin/jvm/internal/Ref$BooleanRef;
 HSPLkotlin/jvm/internal/Ref$BooleanRef;-><init>()V
 Lkotlin/jvm/internal/Ref$FloatRef;
 HSPLkotlin/jvm/internal/Ref$FloatRef;-><init>()V
+Lkotlin/jvm/internal/Ref$IntRef;
+HSPLkotlin/jvm/internal/Ref$IntRef;-><init>()V
 Lkotlin/jvm/internal/Ref$ObjectRef;
 HSPLkotlin/jvm/internal/Ref$ObjectRef;-><init>()V
 Lkotlin/jvm/internal/Reflection;
@@ -15408,6 +15409,7 @@ HSPLokhttp3/Address;-><init>(Ljava/lang/String;ILokhttp3/Dns;Ljavax/net/SocketFa
 HSPLokhttp3/Address;->certificatePinner()Lokhttp3/CertificatePinner;
 HSPLokhttp3/Address;->connectionSpecs()Ljava/util/List;
 HSPLokhttp3/Address;->dns()Lokhttp3/Dns;
+HSPLokhttp3/Address;->equalsNonHost$okhttp(Lokhttp3/Address;)Z
 HSPLokhttp3/Address;->hashCode()I
 HSPLokhttp3/Address;->hostnameVerifier()Ljavax/net/ssl/HostnameVerifier;
 HSPLokhttp3/Address;->protocols()Ljava/util/List;
@@ -15960,6 +15962,7 @@ HSPLokhttp3/internal/Util;->canParseAsIpAddress(Ljava/lang/String;)Z
 HSPLokhttp3/internal/Util;->checkDuration(Ljava/lang/String;JLjava/util/concurrent/TimeUnit;)I
 HSPLokhttp3/internal/Util;->checkOffsetAndCount(JJJ)V
 HSPLokhttp3/internal/Util;->closeQuietly(Ljava/io/Closeable;)V
+HSPLokhttp3/internal/Util;->closeQuietly(Ljava/net/Socket;)V
 HSPLokhttp3/internal/Util;->delimiterOffset(Ljava/lang/String;CII)I
 HSPLokhttp3/internal/Util;->delimiterOffset(Ljava/lang/String;Ljava/lang/String;II)I
 HSPLokhttp3/internal/Util;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
@@ -16025,6 +16028,7 @@ HSPLokhttp3/internal/concurrent/Task;->initQueue$okhttp(Lokhttp3/internal/concur
 HSPLokhttp3/internal/concurrent/Task;->setNextExecuteNanoTime$okhttp(J)V
 Lokhttp3/internal/concurrent/TaskQueue;
 HSPLokhttp3/internal/concurrent/TaskQueue;-><init>(Lokhttp3/internal/concurrent/TaskRunner;Ljava/lang/String;)V
+HSPLokhttp3/internal/concurrent/TaskQueue;->cancelAllAndDecide$okhttp()Z
 HSPLokhttp3/internal/concurrent/TaskQueue;->getActiveTask$okhttp()Lokhttp3/internal/concurrent/Task;
 HSPLokhttp3/internal/concurrent/TaskQueue;->getCancelActiveTask$okhttp()Z
 HSPLokhttp3/internal/concurrent/TaskQueue;->getFutureTasks$okhttp()Ljava/util/List;
@@ -16035,6 +16039,8 @@ HSPLokhttp3/internal/concurrent/TaskQueue;->schedule(Lokhttp3/internal/concurren
 HSPLokhttp3/internal/concurrent/TaskQueue;->scheduleAndDecide$okhttp(Lokhttp3/internal/concurrent/Task;JZ)Z
 HSPLokhttp3/internal/concurrent/TaskQueue;->setActiveTask$okhttp(Lokhttp3/internal/concurrent/Task;)V
 HSPLokhttp3/internal/concurrent/TaskQueue;->setCancelActiveTask$okhttp(Z)V
+HSPLokhttp3/internal/concurrent/TaskQueue;->setShutdown$okhttp(Z)V
+HSPLokhttp3/internal/concurrent/TaskQueue;->shutdown()V
 Lokhttp3/internal/concurrent/TaskQueue$execute$1;
 HSPLokhttp3/internal/concurrent/TaskQueue$execute$1;-><init>(Ljava/lang/String;ZLkotlin/jvm/functions/Function0;)V
 HSPLokhttp3/internal/concurrent/TaskQueue$execute$1;->runOnce()J
@@ -16155,11 +16161,14 @@ HSPLokhttp3/internal/connection/RealConnection;->getIdleAtNs$okhttp()J
 HSPLokhttp3/internal/connection/RealConnection;->getNoNewExchanges()Z
 HSPLokhttp3/internal/connection/RealConnection;->handshake()Lokhttp3/Handshake;
 HSPLokhttp3/internal/connection/RealConnection;->incrementSuccessCount$okhttp()V
+HSPLokhttp3/internal/connection/RealConnection;->isEligible$okhttp(Lokhttp3/Address;Ljava/util/List;)Z
 HSPLokhttp3/internal/connection/RealConnection;->isHealthy(Z)Z
+HSPLokhttp3/internal/connection/RealConnection;->isMultiplexed$okhttp()Z
 HSPLokhttp3/internal/connection/RealConnection;->newCodec$okhttp(Lokhttp3/OkHttpClient;Lokhttp3/internal/http/RealInterceptorChain;)Lokhttp3/internal/http/ExchangeCodec;
 HSPLokhttp3/internal/connection/RealConnection;->onSettings(Lokhttp3/internal/http2/Http2Connection;Lokhttp3/internal/http2/Settings;)V
 HSPLokhttp3/internal/connection/RealConnection;->route()Lokhttp3/Route;
 HSPLokhttp3/internal/connection/RealConnection;->setIdleAtNs$okhttp(J)V
+HSPLokhttp3/internal/connection/RealConnection;->socket()Ljava/net/Socket;
 HSPLokhttp3/internal/connection/RealConnection;->startHttp2(I)V
 Lokhttp3/internal/connection/RealConnection$Companion;
 HSPLokhttp3/internal/connection/RealConnection$Companion;-><init>()V
@@ -16276,6 +16285,7 @@ Lokhttp3/internal/http2/ErrorCode;
 HSPLokhttp3/internal/http2/ErrorCode;->$values()[Lokhttp3/internal/http2/ErrorCode;
 HSPLokhttp3/internal/http2/ErrorCode;-><clinit>()V
 HSPLokhttp3/internal/http2/ErrorCode;-><init>(Ljava/lang/String;II)V
+HSPLokhttp3/internal/http2/ErrorCode;->getHttpCode()I
 Lokhttp3/internal/http2/ErrorCode$Companion;
 HSPLokhttp3/internal/http2/ErrorCode$Companion;-><init>()V
 HSPLokhttp3/internal/http2/ErrorCode$Companion;-><init>(Lkotlin/jvm/internal/DefaultConstructorMarker;)V
@@ -16329,13 +16339,16 @@ HSPLokhttp3/internal/http2/Http2Connection;->access$getDEFAULT_SETTINGS$cp()Lokh
 HSPLokhttp3/internal/http2/Http2Connection;->access$getSettingsListenerQueue$p(Lokhttp3/internal/http2/Http2Connection;)Lokhttp3/internal/concurrent/TaskQueue;
 HSPLokhttp3/internal/http2/Http2Connection;->access$getWriterQueue$p(Lokhttp3/internal/http2/Http2Connection;)Lokhttp3/internal/concurrent/TaskQueue;
 HSPLokhttp3/internal/http2/Http2Connection;->access$setWriteBytesMaximum$p(Lokhttp3/internal/http2/Http2Connection;J)V
+HSPLokhttp3/internal/http2/Http2Connection;->close$okhttp(Lokhttp3/internal/http2/ErrorCode;Lokhttp3/internal/http2/ErrorCode;Ljava/io/IOException;)V
 HSPLokhttp3/internal/http2/Http2Connection;->flush()V
 HSPLokhttp3/internal/http2/Http2Connection;->getClient$okhttp()Z
 HSPLokhttp3/internal/http2/Http2Connection;->getConnectionName$okhttp()Ljava/lang/String;
+HSPLokhttp3/internal/http2/Http2Connection;->getLastGoodStreamId$okhttp()I
 HSPLokhttp3/internal/http2/Http2Connection;->getListener$okhttp()Lokhttp3/internal/http2/Http2Connection$Listener;
 HSPLokhttp3/internal/http2/Http2Connection;->getNextStreamId$okhttp()I
 HSPLokhttp3/internal/http2/Http2Connection;->getOkHttpSettings()Lokhttp3/internal/http2/Settings;
 HSPLokhttp3/internal/http2/Http2Connection;->getPeerSettings()Lokhttp3/internal/http2/Settings;
+HSPLokhttp3/internal/http2/Http2Connection;->getSocket$okhttp()Ljava/net/Socket;
 HSPLokhttp3/internal/http2/Http2Connection;->getStream(I)Lokhttp3/internal/http2/Http2Stream;
 HSPLokhttp3/internal/http2/Http2Connection;->getStreams$okhttp()Ljava/util/Map;
 HSPLokhttp3/internal/http2/Http2Connection;->getWriteBytesMaximum()J
@@ -16348,6 +16361,7 @@ HSPLokhttp3/internal/http2/Http2Connection;->pushedStream$okhttp(I)Z
 HSPLokhttp3/internal/http2/Http2Connection;->removeStream$okhttp(I)Lokhttp3/internal/http2/Http2Stream;
 HSPLokhttp3/internal/http2/Http2Connection;->setNextStreamId$okhttp(I)V
 HSPLokhttp3/internal/http2/Http2Connection;->setPeerSettings(Lokhttp3/internal/http2/Settings;)V
+HSPLokhttp3/internal/http2/Http2Connection;->shutdown(Lokhttp3/internal/http2/ErrorCode;)V
 HSPLokhttp3/internal/http2/Http2Connection;->start$default(Lokhttp3/internal/http2/Http2Connection;ZLokhttp3/internal/concurrent/TaskRunner;ILjava/lang/Object;)V
 HSPLokhttp3/internal/http2/Http2Connection;->start(ZLokhttp3/internal/concurrent/TaskRunner;)V
 HSPLokhttp3/internal/http2/Http2Connection;->updateConnectionFlowControl$okhttp(J)V
@@ -16421,6 +16435,7 @@ HSPLokhttp3/internal/http2/Http2ExchangeCodec$Companion;->readHttp2HeadersList(L
 Lokhttp3/internal/http2/Http2Reader;
 HSPLokhttp3/internal/http2/Http2Reader;-><clinit>()V
 HSPLokhttp3/internal/http2/Http2Reader;-><init>(Lokio/BufferedSource;Z)V
+HSPLokhttp3/internal/http2/Http2Reader;->close()V
 HSPLokhttp3/internal/http2/Http2Reader;->nextFrame(ZLokhttp3/internal/http2/Http2Reader$Handler;)Z
 HSPLokhttp3/internal/http2/Http2Reader;->readConnectionPreface(Lokhttp3/internal/http2/Http2Reader$Handler;)V
 HSPLokhttp3/internal/http2/Http2Reader;->readData(Lokhttp3/internal/http2/Http2Reader$Handler;III)V
@@ -16501,11 +16516,13 @@ Lokhttp3/internal/http2/Http2Writer;
 HSPLokhttp3/internal/http2/Http2Writer;-><clinit>()V
 HSPLokhttp3/internal/http2/Http2Writer;-><init>(Lokio/BufferedSink;Z)V
 HSPLokhttp3/internal/http2/Http2Writer;->applyAndAckSettings(Lokhttp3/internal/http2/Settings;)V
+HSPLokhttp3/internal/http2/Http2Writer;->close()V
 HSPLokhttp3/internal/http2/Http2Writer;->connectionPreface()V
 HSPLokhttp3/internal/http2/Http2Writer;->data(ZILokio/Buffer;I)V
 HSPLokhttp3/internal/http2/Http2Writer;->dataFrame(IILokio/Buffer;I)V
 HSPLokhttp3/internal/http2/Http2Writer;->flush()V
 HSPLokhttp3/internal/http2/Http2Writer;->frameHeader(IIII)V
+HSPLokhttp3/internal/http2/Http2Writer;->goAway(ILokhttp3/internal/http2/ErrorCode;[B)V
 HSPLokhttp3/internal/http2/Http2Writer;->headers(ZILjava/util/List;)V
 HSPLokhttp3/internal/http2/Http2Writer;->maxDataLength()I
 HSPLokhttp3/internal/http2/Http2Writer;->settings(Lokhttp3/internal/http2/Settings;)V
@@ -16595,6 +16612,7 @@ Lokhttp3/internal/platform/android/AndroidCertificateChainCleaner;
 HSPLokhttp3/internal/platform/android/AndroidCertificateChainCleaner;-><clinit>()V
 HSPLokhttp3/internal/platform/android/AndroidCertificateChainCleaner;-><init>(Ljavax/net/ssl/X509TrustManager;Landroid/net/http/X509TrustManagerExtensions;)V
 HSPLokhttp3/internal/platform/android/AndroidCertificateChainCleaner;->clean(Ljava/util/List;Ljava/lang/String;)Ljava/util/List;
+HSPLokhttp3/internal/platform/android/AndroidCertificateChainCleaner;->equals(Ljava/lang/Object;)Z
 HSPLokhttp3/internal/platform/android/AndroidCertificateChainCleaner;->hashCode()I
 Lokhttp3/internal/platform/android/AndroidCertificateChainCleaner$Companion;
 HSPLokhttp3/internal/platform/android/AndroidCertificateChainCleaner$Companion;-><init>()V
@@ -16713,10 +16731,12 @@ HSPLokio/AsyncTimeout$Watchdog;-><init>()V
 HSPLokio/AsyncTimeout$Watchdog;->run()V
 Lokio/AsyncTimeout$sink$1;
 HSPLokio/AsyncTimeout$sink$1;-><init>(Lokio/AsyncTimeout;Lokio/Sink;)V
+HSPLokio/AsyncTimeout$sink$1;->close()V
 HSPLokio/AsyncTimeout$sink$1;->flush()V
 HSPLokio/AsyncTimeout$sink$1;->write(Lokio/Buffer;J)V
 Lokio/AsyncTimeout$source$1;
 HSPLokio/AsyncTimeout$source$1;-><init>(Lokio/AsyncTimeout;Lokio/Source;)V
+HSPLokio/AsyncTimeout$source$1;->close()V
 HSPLokio/AsyncTimeout$source$1;->read(Lokio/Buffer;J)J
 Lokio/Buffer;
 HSPLokio/Buffer;-><init>()V
