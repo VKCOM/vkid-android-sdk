@@ -3451,7 +3451,7 @@ HSPLandroidx/compose/runtime/SlotWriter;->getCapacity()I
 HSPLandroidx/compose/runtime/SlotWriter;->getClosed()Z
 HSPLandroidx/compose/runtime/SlotWriter;->getCurrentGroup()I
 HSPLandroidx/compose/runtime/SlotWriter;->getParent()I
-HSPLandroidx/compose/runtime/SlotWriter;->getSize$runtime_release()I
+HPLandroidx/compose/runtime/SlotWriter;->getSize$runtime_release()I
 HSPLandroidx/compose/runtime/SlotWriter;->getTable$runtime_release()Landroidx/compose/runtime/SlotTable;
 HSPLandroidx/compose/runtime/SlotWriter;->groupAux(I)Ljava/lang/Object;
 HSPLandroidx/compose/runtime/SlotWriter;->groupIndexToAddress(I)I
@@ -11543,6 +11543,7 @@ HSPLcoil/decode/ExifData$Companion;-><init>()V
 HSPLcoil/decode/ExifData$Companion;-><init>(Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 Lcoil/decode/ExifInterfaceInputStream;
 HSPLcoil/decode/ExifInterfaceInputStream;-><init>(Ljava/io/InputStream;)V
+HSPLcoil/decode/ExifInterfaceInputStream;->available()I
 HSPLcoil/decode/ExifInterfaceInputStream;->interceptBytesRead(I)I
 HSPLcoil/decode/ExifInterfaceInputStream;->read([BII)I
 Lcoil/decode/ExifOrientationPolicy;
