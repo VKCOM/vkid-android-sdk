@@ -1,6 +1,7 @@
 plugins {
     id("vkid.android.application.compose")
     id("vkid.placeholders")
+    alias(libs.plugins.baselineprofile)
 }
 
 android {
@@ -29,6 +30,13 @@ android {
             signingConfig = signingConfigs.findByName("debug")
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
+        create("benchmark") {
+            initWith(getByName("release"))
+            matchingFallbacks.add("release")
+            signingConfig = signingConfigs.getByName("debug")
+            isShrinkResources = false
+            isMinifyEnabled = false
+        }
     }
 }
 
@@ -47,6 +55,8 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.okhttp3.okhttp)
+    implementation(libs.androidx.profileinstaller)
+    baselineProfile(project(":baseline-profile"))
     debugImplementation(libs.androidx.compose.ui.tooling)
 }
 
