@@ -11,6 +11,8 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        mavenLocal()
+        maven(url = "https://artifactory-external.vkpartner.ru/artifactory/vkid-sdk-andorid/")
     }
 }
 rootProject.name = "VKID"

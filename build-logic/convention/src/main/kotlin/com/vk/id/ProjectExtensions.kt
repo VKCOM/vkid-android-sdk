@@ -31,3 +31,5 @@ fun Project.stringProperty(key: String, default: String = ""): String {
     }
     return prop ?: default
 }
+
+fun Project.booleanProperty(key: String, default: Boolean) = stringProperty(key, default.toString()).toBoolean()
