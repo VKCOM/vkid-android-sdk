@@ -8,6 +8,8 @@ androidxAnnotation = "1.6.0"
 androidxBrowser = "1.5.0"
 androidxComposeBom = "2023.10.01"
 androidxComposeCompiler = "1.4.6"
+#todo Remove this and use bom version after 1.2.0 is released
+androidxComposeMaterial3="1.2.0-beta01"
 androidxConstraintLayout = "2.1.4"
 androidxCore = "1.9.0"
 androidxNavigationCompose = "2.7.4"
@@ -43,7 +45,7 @@ androidx-browser = { group = "androidx.browser", name = "browser", version.ref =
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
 androidx-compose-material-ripple = { group = "androidx.compose.material", name = "material-ripple" }
-androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref="androidxComposeMaterial3"}
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
