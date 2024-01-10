@@ -67,6 +67,12 @@ gradlePlugin {
             description = """Helper to create baseline profile for all modules with one command. 
                 |Usage: `./gradlew generateBaselineProfiles`""".trimMargin()
         }
+        register("vkidProjectSubstitution") {
+            id = "vkid.android.project-substitution"
+            implementationClass = "ProjectSubstitutionPlugin"
+            description = """A plugin that replaces sample project dependencies with module dependencies. 
+                |Usage: Add `SUBSTITUTE_SAMPLE_PROJECTS_WITH_MODULES=true` to root gradle.properties""".trimMargin()
+        }
     }
 }
 

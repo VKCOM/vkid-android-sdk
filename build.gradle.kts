@@ -8,4 +8,5 @@ plugins {
     id("vkid.android.dependency.lock") apply true
     alias(libs.plugins.androidTest) apply false
     alias(libs.plugins.baselineprofile) apply false
+    id("vkid.android.project-substitution") apply true
 }
