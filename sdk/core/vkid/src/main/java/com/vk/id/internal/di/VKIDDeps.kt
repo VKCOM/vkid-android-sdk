@@ -6,7 +6,7 @@ import com.vk.id.internal.api.VKIDApi
 import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthProvidersChooser
 import com.vk.id.internal.concurrent.CoroutinesDispatchers
-import com.vk.id.internal.ipc.VkSilentAuthInfoProvider
+import com.vk.id.internal.ipc.SilentAuthInfoProvider
 import com.vk.id.internal.user.UserDataFetcher
 
 internal interface VKIDDeps {
@@ -15,7 +15,7 @@ internal interface VKIDDeps {
     val authCallbacksHolder: AuthCallbacksHolder
     val authResultHandler: Lazy<AuthResultHandler>
     val dispatchers: CoroutinesDispatchers
-    val vkSilentAuthInfoProvider: Lazy<VkSilentAuthInfoProvider>
+    val vkSilentAuthInfoProvider: Lazy<SilentAuthInfoProvider>
     val userDataFetcher: Lazy<UserDataFetcher>
     val api: Lazy<VKIDApi>
 }

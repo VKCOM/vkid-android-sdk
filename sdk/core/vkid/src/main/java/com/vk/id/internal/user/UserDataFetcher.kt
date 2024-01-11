@@ -3,7 +3,7 @@ package com.vk.id.internal.user
 import com.vk.id.VKIDUser
 import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.concurrent.CoroutinesDispatchers
-import com.vk.id.internal.ipc.VkSilentAuthInfoProvider
+import com.vk.id.internal.ipc.SilentAuthInfoProvider
 import com.vk.id.internal.util.currentTime
 import com.vk.id.toVKIDUser
 import kotlinx.coroutines.sync.Mutex
@@ -13,7 +13,7 @@ import kotlinx.coroutines.withContext
 internal class UserDataFetcher(
     private val dispatchers: CoroutinesDispatchers,
     private val serviceCredentials: ServiceCredentials,
-    private val vkSilentAuthInfoProvider: VkSilentAuthInfoProvider,
+    private val vkSilentAuthInfoProvider: SilentAuthInfoProvider,
 ) {
     // we want all instances of vkid call provider only once at a time
     companion object {

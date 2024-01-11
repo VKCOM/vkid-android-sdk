@@ -15,7 +15,7 @@ import com.vk.id.internal.auth.AuthResult
 import com.vk.id.internal.concurrent.CoroutinesDispatchers
 import com.vk.id.internal.di.VKIDDeps
 import com.vk.id.internal.di.VKIDDepsProd
-import com.vk.id.internal.ipc.VkSilentAuthInfoProvider
+import com.vk.id.internal.ipc.SilentAuthInfoProvider
 import com.vk.id.internal.log.AndroidLogcatLogEngine
 import com.vk.id.internal.log.FakeLogEngine
 import com.vk.id.internal.log.LogEngine
@@ -26,6 +26,7 @@ import com.vk.id.test.ImmediateVKIDApi
 import com.vk.id.test.MockAuthProviderChooser
 import com.vk.id.test.MockAuthProviderConfig
 import com.vk.id.test.OverrideVKIDApi
+import com.vk.id.test.TestSilentAuthInfoProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.currentCoroutineContext
@@ -51,6 +52,7 @@ public class VKID {
     ) : this(object : VKIDDepsProd(context) {
         override val authProvidersChooser = lazy { MockAuthProviderChooser(context, mockAuthProviderConfig) }
         override val api = lazy { ImmediateVKIDApi(mockApi) }
+        override val vkSilentAuthInfoProvider = lazy { TestSilentAuthInfoProvider() }
     })
 
     public companion object {
@@ -110,7 +112,7 @@ public class VKID {
     private val authCallbacksHolder: AuthCallbacksHolder
     private val authResultHandler: Lazy<AuthResultHandler>
     private val dispatchers: CoroutinesDispatchers
-    private val vkSilentAuthInfoProvider: Lazy<VkSilentAuthInfoProvider>
+    private val vkSilentAuthInfoProvider: Lazy<SilentAuthInfoProvider>
     private val userDataFetcher: Lazy<UserDataFetcher>
 
     /**
