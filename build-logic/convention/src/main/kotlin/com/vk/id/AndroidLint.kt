@@ -12,7 +12,12 @@ fun Project.configureAndroidLint() {
             warningsAsErrors = true
             htmlReport = true
             xmlReport = false
-            disable += setOf("GradleDependency", "AndroidGradlePluginVersion", "PrivateResource")
+            disable += setOf(
+                "GradleDependency",
+                "AndroidGradlePluginVersion",
+                "PrivateResource",
+                "ObsoleteLintCustomCheck",
+            )
         }
     }
 }
