@@ -1,6 +1,8 @@
 package com.vk.id.onetap.compose.util
 
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
@@ -18,6 +20,24 @@ internal fun MeasureUnconstrainedViewWidth(
             layout(contentPlaceable.width, contentPlaceable.height) { contentPlaceable.place(0, 0) }
         } else {
             layout(0, 0) {}
+        }
+    }
+}
+
+@Composable
+internal fun PlaceComposableIfFitsWidth(
+    modifier: Modifier,
+    measureModifier: Modifier = modifier,
+    viewToMeasure: @Composable (Modifier) -> Unit,
+    fallback: @Composable () -> Unit
+) {
+    BoxWithConstraints {
+        MeasureUnconstrainedViewWidth(viewToMeasure = { viewToMeasure(measureModifier) }) {
+            if (it < maxWidth) {
+                viewToMeasure(modifier)
+            } else {
+                fallback()
+            }
         }
     }
 }
