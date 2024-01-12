@@ -6,7 +6,9 @@ import com.vk.id.VKIDAuthFail
 import com.vk.id.onetap.OneTapTest
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.compose.onetap.OneTap
+import io.qameta.allure.kotlin.junit4.DisplayName
 
+@DisplayName("Auth in Compose OneTap")
 public class OneTapComposeTest : OneTapTest() {
 
     override fun setOneTapContent(

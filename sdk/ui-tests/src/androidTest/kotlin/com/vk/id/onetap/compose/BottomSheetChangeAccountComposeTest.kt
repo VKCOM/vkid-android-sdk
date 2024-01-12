@@ -9,7 +9,9 @@ import com.vk.id.onetap.ChangeAccountTest
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.compose.onetap.sheet.OneTapBottomSheet
 import com.vk.id.onetap.compose.onetap.sheet.rememberOneTapBottomSheetState
+import io.qameta.allure.kotlin.junit4.DisplayName
 
+@DisplayName("Change account in Compose BottomSheet")
 public class BottomSheetChangeAccountComposeTest : ChangeAccountTest() {
 
     override fun setOneTapContent(

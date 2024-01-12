@@ -7,7 +7,9 @@ import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.onetap.ChangeAccountTest
 import com.vk.id.onetap.common.OneTapOAuth
+import io.qameta.allure.kotlin.junit4.DisplayName
 
+@DisplayName("Change account in XML BottomSheet")
 public class BottomSheetChangeAccountXmlTest : ChangeAccountTest() {
 
     override fun setOneTapContent(

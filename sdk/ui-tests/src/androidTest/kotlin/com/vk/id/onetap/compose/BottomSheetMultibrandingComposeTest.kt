@@ -10,7 +10,9 @@ import com.vk.id.multibranding.ui.tests.MultibrandingTest
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.compose.onetap.sheet.OneTapBottomSheet
 import com.vk.id.onetap.compose.onetap.sheet.rememberOneTapBottomSheetState
+import io.qameta.allure.kotlin.junit4.DisplayName
 
+@DisplayName("Multibranding auth in Compose BottomSheet")
 public class BottomSheetMultibrandingComposeTest(
     private val oAuth: OAuth,
 ) : MultibrandingTest(oAuth, skipTest = oAuth == OAuth.VK) {

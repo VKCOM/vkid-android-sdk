@@ -7,7 +7,9 @@ import com.vk.id.VKIDAuthFail
 import com.vk.id.multibranding.ui.tests.MultibrandingTest
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.compose.onetap.OneTap
+import io.qameta.allure.kotlin.junit4.DisplayName
 
+@DisplayName("Multibranding in Compose OneTap")
 public class OneTapMultibrandingComposeTest(
     private val oAuth: OAuth,
 ) : MultibrandingTest(oAuth, skipTest = oAuth == OAuth.VK) {

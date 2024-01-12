@@ -11,6 +11,7 @@ dependencies {
     implementation(project(":vkid"))
     implementation(libs.kaspresso)
     implementation(libs.kaspresso.compose)
+    implementation(libs.kaspresso.allure)
     implementation(libs.androidx.compose.ui.test.junit4)
     implementation(libs.kotest.assertions)
 }

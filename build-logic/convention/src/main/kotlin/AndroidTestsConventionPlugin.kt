@@ -14,7 +14,7 @@ class AndroidTestsConventionPlugin : Plugin<Project> {
         }
         extensions.android {
             defaultConfig {
-                testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+                testInstrumentationRunner = "com.kaspersky.kaspresso.runner.KaspressoRunner"
             }
         }
 
@@ -25,6 +25,7 @@ class AndroidTestsConventionPlugin : Plugin<Project> {
             add("androidTestUtil", libs.findLibrary("androidx-test-orchestrator").get())
             add("androidTestImplementation", libs.findLibrary("kaspresso").get())
             add("androidTestImplementation", libs.findLibrary("kaspresso-compose").get())
+            add("androidTestImplementation", libs.findLibrary("allure-kotlin-junit4").get())
             add("androidTestImplementation", libs.findLibrary("androidx-compose-ui-test-junit4").get())
             add("androidTestImplementation", libs.findLibrary("kotest-assertions").get())
             add("androidTestImplementation", libs.findLibrary("androidx-test-junit-ktx").get())

@@ -3,9 +3,6 @@
 package com.vk.id.common.baseauthtest
 
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import com.kaspersky.components.composesupport.config.withComposeSupport
-import com.kaspersky.kaspresso.kaspresso.Kaspresso
-import com.kaspersky.kaspresso.testcases.api.testcase.TestCase
 import com.kaspersky.kaspresso.testcases.core.testcontext.TestContext
 import com.vk.id.AccessToken
 import com.vk.id.OAuth
@@ -13,6 +10,7 @@ import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.commn.InternalVKIDApi
 import com.vk.id.common.activity.AutoTestActivityRule
+import com.vk.id.common.basetest.BaseUiTest
 import com.vk.id.common.mockapi.MockApi
 import com.vk.id.common.mockapi.mockApiError
 import com.vk.id.common.mockapi.mockApiSuccess
@@ -20,6 +18,7 @@ import com.vk.id.common.mockprovider.continueAuth
 import com.vk.id.test.VKIDTestBuilder
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
+import io.qameta.allure.kotlin.junit4.DisplayName
 import org.junit.Rule
 import org.junit.Test
 
@@ -27,13 +26,12 @@ import org.junit.Test
 public abstract class BaseAuthTest(
     private val oAuth: OAuth?,
     private val skipTest: Boolean = false,
-) : TestCase(
-    kaspressoBuilder = Kaspresso.Builder.withComposeSupport()
-) {
+) : BaseUiTest() {
 
     @get:Rule
     public val composeTestRule: AutoTestActivityRule = createAndroidComposeRule()
 
+    @DisplayName("Test that token is received")
     @Test
     public fun tokenIsReceived(): Unit = runIfShouldNotSkip {
         var accessToken: AccessToken? = null
@@ -65,6 +63,7 @@ public abstract class BaseAuthTest(
         }
     }
 
+    @DisplayName("Test that failed redirect activity is received")
     @Test
     public fun failedRedirectActivityIsReceived(): Unit = runIfShouldNotSkip {
         var receivedFail: VKIDAuthFail? = null
@@ -89,6 +88,7 @@ public abstract class BaseAuthTest(
         }
     }
 
+    @DisplayName("Test that no browser available is received")
     @Test
     public fun noBrowserAvailableIsReceived(): Unit = runIfShouldNotSkip {
         var receivedFail: VKIDAuthFail? = null
@@ -113,6 +113,7 @@ public abstract class BaseAuthTest(
         }
     }
 
+    @DisplayName("Test that failed api call is received")
     @Test
     public fun failedApiCallIsReceived(): Unit = runIfShouldNotSkip {
         var receivedFail: VKIDAuthFail? = null
@@ -137,6 +138,7 @@ public abstract class BaseAuthTest(
         }
     }
 
+    @DisplayName("Test that cancellation is received")
     @Test
     public fun cancellationIsReceived(): Unit = runIfShouldNotSkip {
         var receivedFail: VKIDAuthFail? = null
@@ -163,6 +165,7 @@ public abstract class BaseAuthTest(
         }
     }
 
+    @DisplayName("Test that failed oauth is received")
     @Test
     public fun failedOAuthIsReceived(): Unit = runIfShouldNotSkip {
         var receivedFail: VKIDAuthFail? = null
@@ -188,6 +191,7 @@ public abstract class BaseAuthTest(
         }
     }
 
+    @DisplayName("Test that invalid uuid is received")
     @Test
     public fun invalidUuidIsReceived(): Unit = runIfShouldNotSkip {
         var receivedFail: VKIDAuthFail? = null
@@ -213,6 +217,7 @@ public abstract class BaseAuthTest(
         }
     }
 
+    @DisplayName("Test that invalid state is received")
     @Test
     public fun invalidStateIsReceived(): Unit = runIfShouldNotSkip {
         var receivedFail: VKIDAuthFail? = null
