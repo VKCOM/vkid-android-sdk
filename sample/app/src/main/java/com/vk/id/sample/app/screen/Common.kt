@@ -45,6 +45,7 @@ internal fun Button(
     ) {
         Text(
             modifier = Modifier.padding(2.dp),
+            color = colorResource(id = R.color.vkid_white),
             text = text,
             style = TextStyle(
                 fontSize = 16.sp,
