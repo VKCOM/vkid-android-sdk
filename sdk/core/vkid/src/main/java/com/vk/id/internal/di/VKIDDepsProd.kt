@@ -25,6 +25,7 @@ import com.vk.id.internal.auth.device.DeviceIdProvider
 import com.vk.id.internal.auth.pkce.PkceGeneratorSHA256
 import com.vk.id.internal.concurrent.CoroutinesDispatchers
 import com.vk.id.internal.concurrent.CoroutinesDispatchersProd
+import com.vk.id.internal.ipc.SilentAuthInfoProvider
 import com.vk.id.internal.ipc.VkSilentAuthInfoProvider
 import com.vk.id.internal.log.createLoggerForClass
 import com.vk.id.internal.store.PrefsStore
@@ -85,7 +86,7 @@ internal open class VKIDDepsProd(
         TrustedProvidersCache(apiService, creds.clientID, creds.clientSecret, dispatchers)
     }
 
-    override val vkSilentAuthInfoProvider: Lazy<VkSilentAuthInfoProvider> = lazy {
+    override val vkSilentAuthInfoProvider: Lazy<SilentAuthInfoProvider> = lazy {
         VkSilentAuthInfoProvider(
             context = appContext,
             servicesProvider = silentAuthServicesProvider.value,
