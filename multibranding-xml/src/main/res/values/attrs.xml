@@ -2,8 +2,8 @@
 <resources>
     <declare-styleable name="vkid_OAuthListWidget">
         <attr name="vkid_OAuthListStyle" format="enum">
-            <enum name="transparentLight" value="1"/>
-            <enum name="transparentDark" value="2"/>
+            <enum name="transparentDark" value="1"/>
+            <enum name="transparentLight" value="2"/>
             <enum name="transparentSystem" value="3"/>
         </attr>
         <attr name="vkid_oAuthListCornerRadius" format="dimension"/>
