@@ -8,7 +8,9 @@ import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.multibranding.ui.tests.MultibrandingTest
 import com.vk.id.onetap.common.OneTapOAuth
+import io.qameta.allure.kotlin.junit4.DisplayName
 
+@DisplayName("Multibranding auth in XML BottomSheet")
 public class BottomSheetMultibrandingXmlTest(
     private val oAuth: OAuth,
 ) : MultibrandingTest(oAuth, skipTest = oAuth == OAuth.VK) {

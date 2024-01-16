@@ -1,6 +1,5 @@
 package com.vk.id.onetap.compose
 
-import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
@@ -8,9 +7,9 @@ import com.vk.id.onetap.OneTapTest
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.compose.onetap.OneTap
-import org.junit.runner.RunWith
+import io.qameta.allure.kotlin.junit4.DisplayName
 
-@RunWith(AndroidJUnit4ClassRunner::class)
+@DisplayName("OneTap auth for Compose icon")
 public class IconOneTapComposeTest : OneTapTest() {
 
     override fun setOneTapContent(
