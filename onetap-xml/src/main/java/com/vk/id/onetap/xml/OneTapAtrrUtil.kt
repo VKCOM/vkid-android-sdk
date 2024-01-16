@@ -26,7 +26,7 @@ internal fun parseOneTapAttrs(
     ).apply {
         try {
             return OneTapParsedAttrs(
-                style = getOneTapStyleConstructor()(
+                style = getOneTapStyleConstructor(context)(
                     OneTapButtonCornersStyle.Custom(context.pixelsToDp(getButtonsCornerRadius(context))),
                     getOneTapButtonsSize(),
                     OneTapButtonElevationStyle.Custom(context.pixelsToDp(getOneTapButtonsElevation(context)))
@@ -66,7 +66,7 @@ internal fun parseOneTapBottomSheetAttrs(
     ).apply {
         try {
             return OneTapBottomSheetAttributeSettings(
-                style = getSheetStyleConstructor()(
+                style = getSheetStyleConstructor(context)(
                     OneTapSheetCornersStyle.Custom(context.pixelsToDp(getSheetCornerRadius(context))),
                     OneTapButtonCornersStyle.Custom(context.pixelsToDp(getButtonsCornerRadius(context))),
                     getOneTapButtonsSize(),
@@ -98,19 +98,27 @@ private fun TypedArray.getOneTapButtonsElevation(context: Context) = getDimensio
 )
 
 @Suppress("MagicNumber")
-private fun TypedArray.getOneTapStyleConstructor() = when (getInt(R.styleable.vkid_OneTap_vkid_onetapStyle, 0)) {
+private fun TypedArray.getOneTapStyleConstructor(
+    context: Context
+) = when (getInt(R.styleable.vkid_OneTap_vkid_onetapStyle, 0)) {
     1 -> OneTapStyle::Dark
     2 -> OneTapStyle::TransparentLight
     3 -> OneTapStyle::TransparentDark
     4 -> OneTapStyle::Icon
+    5 -> if (context.isDarkTheme) OneTapStyle::Dark else OneTapStyle::Light
+    6 -> if (context.isDarkTheme) OneTapStyle::TransparentDark else OneTapStyle::TransparentLight
     else -> OneTapStyle::Light
 }
 
 @Suppress("MagicNumber")
-private fun TypedArray.getSheetStyleConstructor() = when (getInt(R.styleable.vkid_OneTap_vkid_bottomSheetStyle, 0)) {
+private fun TypedArray.getSheetStyleConstructor(
+    context: Context
+) = when (getInt(R.styleable.vkid_OneTap_vkid_bottomSheetStyle, 0)) {
     1 -> OneTapBottomSheetStyle::Dark
     2 -> OneTapBottomSheetStyle::TransparentLight
     3 -> OneTapBottomSheetStyle::TransparentDark
+    4 -> if (context.isDarkTheme) OneTapBottomSheetStyle::Dark else OneTapBottomSheetStyle::Light
+    5 -> if (context.isDarkTheme) OneTapBottomSheetStyle::TransparentDark else OneTapBottomSheetStyle::TransparentLight
     else -> OneTapBottomSheetStyle::Light
 }
 

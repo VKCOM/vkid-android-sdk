@@ -1,5 +1,6 @@
 package com.vk.id.sample.app.screen.sheet
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -50,9 +51,8 @@ fun OneTapBottomSheetScreen() {
     val context = LocalContext.current
     val token: MutableState<AccessToken?> = remember { mutableStateOf(null) }
     val selectedScenario = rememberSaveable { mutableStateOf(OneTapScenario.EnterService) }
-    val selectedStyle = rememberOneTapBottomSheetStyle(
-        OneTapBottomSheetStyle.Light()
-    )
+    val defaultStyle = if (isSystemInDarkTheme()) OneTapBottomSheetStyle.Dark() else OneTapBottomSheetStyle.Light()
+    val selectedStyle = rememberOneTapBottomSheetStyle(defaultStyle)
     val autoHideSheetOnSuccess = rememberSaveable { mutableStateOf(true) }
     val selectedOAuths = rememberSaveable { mutableStateOf(setOf(OneTapOAuth.OK, OneTapOAuth.MAIL)) }
     Column(
