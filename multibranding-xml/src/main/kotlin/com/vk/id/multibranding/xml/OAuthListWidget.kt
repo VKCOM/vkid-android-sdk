@@ -128,7 +128,7 @@ private fun parseAttrs(
         0
     ).apply {
         try {
-            return getStyleConstructor()(
+            return getStyleConstructor(context)(
                 OAuthListWidgetCornersStyle.Custom(context.pixelsToDp(getCornerRadius(context))),
                 getSize(),
             ) to getOAuths()
@@ -143,9 +143,12 @@ private fun TypedArray.getCornerRadius(context: Context) = getDimension(
     context.dpToPixels(OAuthListWidgetCornersStyle.Default.radiusDp)
 )
 
-private fun TypedArray.getStyleConstructor() = when (getInt(R.styleable.vkid_OAuthListWidget_vkid_OAuthListStyle, 0)) {
+private fun TypedArray.getStyleConstructor(
+    context: Context
+) = when (getInt(R.styleable.vkid_OAuthListWidget_vkid_OAuthListStyle, 0)) {
     1 -> OAuthListWidgetStyle::Dark
-    else -> OAuthListWidgetStyle::Light
+    2 -> OAuthListWidgetStyle::Light
+    else -> if (context.isDarkTheme) OAuthListWidgetStyle::Dark else OAuthListWidgetStyle::Light
 }
 
 @Suppress("MagicNumber", "CyclomaticComplexMethod")
