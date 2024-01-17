@@ -2,4 +2,5 @@
 <resources>
     <color name="vkid_black">#000000</color>
     <color name="vkid_gray900">#19191A</color>
+    <color name="vkid_background">@color/vkid_white</color>
 </resources>

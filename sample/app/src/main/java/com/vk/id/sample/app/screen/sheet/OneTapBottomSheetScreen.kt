@@ -15,6 +15,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -84,7 +85,10 @@ fun OneTapBottomSheetScreen() {
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
             Checkbox(checked = autoHideSheetOnSuccess.value, onCheckedChange = { autoHideSheetOnSuccess.value = it })
-            Text("Auto hide on success")
+            Text(
+                "Auto hide on success",
+                color = MaterialTheme.colorScheme.onBackground
+            )
         }
         Spacer(Modifier.padding(16.dp))
         Row {
@@ -112,7 +116,10 @@ private fun OAuthSelector(
     name: String,
     oAuth: OneTapOAuth,
 ) {
-    Text(name)
+    Text(
+        text = name,
+        color = MaterialTheme.colorScheme.onBackground
+    )
     Checkbox(
         checked = selectedOAuths.value.contains(oAuth),
         onCheckedChange = {
@@ -131,7 +138,11 @@ private fun Selector(name: String, content: @Composable RowScope.() -> Unit) {
         Modifier.padding(start = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = name, fontWeight = FontWeight.Bold)
+        Text(
+            text = name,
+            color = MaterialTheme.colorScheme.onBackground,
+            fontWeight = FontWeight.Bold,
+        )
         Spacer(Modifier.weight(1f))
         content()
     }
