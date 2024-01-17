@@ -13,6 +13,7 @@ androidxComposeCompiler = "1.4.6"
 androidxComposeMaterial3="1.2.0-beta01"
 androidxConstraintLayout = "2.1.4"
 androidxCore = "1.9.0"
+androidxCoreSplashscreen = "1.0.1"
 androidxNavigationCompose = "2.7.4"
 androidxOrchestrator = "1.4.2"
 androidxTestJunitKtx = "1.1.5"
@@ -56,6 +57,7 @@ androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "andoridxUiTestJunit4" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidxConstraintLayout" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
+androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "androidxCoreSplashscreen" }
 androidx-lifecycle-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycle-runtime-compose" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigationCompose" }
 androidx-preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }
