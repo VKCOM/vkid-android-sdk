@@ -1,5 +1,16 @@
 #!/bin/bash
 
+# A script that bumps sdk version to the provided one
+# Usage: ./bump_version.sh X.Y.Z
+#
+# This script does the following:
+# - Checks that there are no uncommited changes
+# - Switches to develop
+# - Creates new branch task/VKIDSDK-0/bump-version-to-X-Y-Z from develop
+# - Changes VERSION_NAME to X.Y.Z in gradle.properties
+# - Creates a commit "VKIDSDK-0: Update version to X.Y.Z"
+# - Opens a merge request to develop with branch task/VKIDSDK-0/bump-version-to-X-Y-Z
+
 bumpVersion() {
     NEW_VERSION=$1
     assertValidSemver $NEW_VERSION
@@ -7,12 +18,14 @@ bumpVersion() {
     CURRENT_VERSION="$(fetchCurrentVersion $VERSION_FILE)"
     assertNewVersionIsDifferent $CURRENT_VERSION $NEW_VERSION
     bumpVersionInVersionFile $VERSION_FILE $CURRENT_VERSION $NEW_VERSION
+    echo "Updated version to $NEW_VERSION"
 }
 
 commitVersionChange() {
     git add -A
     git commit -m "VKIDSDK-0: Update version to $1"
     echo "Commited version change to $1"
+    echo "Checked out version change branch"
 }
 
 checkoutVersionChangeBranch() {
