@@ -19,11 +19,13 @@ import com.vk.id.internal.auth.web.VersionRange.Companion.atLeast
  * Matches a browser based on its package name, set of signatures, version and whether it is
  * being used as a custom tab. This can be used as part of a browser whitelist or blacklist.
  */
+@Suppress("RedundantConstructorKeyword")
 internal class VersionedBrowserMatcher
 /**
  * Creates a browser matcher that requires an exact match on package name, set of signature
  * hashes, custom tab usage mode, and a version range.
- */(
+ */
+constructor(
     private val mPackageName: String,
     private val mSignatureHashes: Set<String>,
     private val mUsingCustomTab: Boolean,

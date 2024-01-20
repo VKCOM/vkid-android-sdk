@@ -64,10 +64,12 @@ internal fun VKIDButtonSmall(
         coroutineScope,
         useVKID,
         object : OnFetchingProgress {
-            override suspend fun onPreFetch() { /*nothing*/
+            override suspend fun onPreFetch() {
+                /*nothing*/
             }
 
-            override fun onDispose() { /*nothing*/
+            override fun onDispose() {
+                /*nothing*/
             }
 
             override suspend fun onFetched(user: VKIDUser?) {

@@ -248,7 +248,8 @@ private fun processSheetShow(
     state: OneTapBottomSheetState
 ): (Boolean) -> Unit =
     remember {
-        { show ->
+        {
+                show ->
             if (show) {
                 authStatus.value = OneTapBottomSheetAuthStatus.Init
             }

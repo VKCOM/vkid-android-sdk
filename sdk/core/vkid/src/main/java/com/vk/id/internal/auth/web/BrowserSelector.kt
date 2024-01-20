@@ -160,9 +160,9 @@ internal object BrowserSelector {
     private fun isFullBrowser(resolveInfo: ResolveInfo): Boolean {
         // The filter must match ACTION_VIEW, CATEGORY_BROWSEABLE, and at least one scheme,
         if ((
-            !resolveInfo.filter.hasAction(Intent.ACTION_VIEW) ||
-                !resolveInfo.filter.hasCategory(Intent.CATEGORY_BROWSABLE)
-            ) || resolveInfo.filter.schemesIterator() == null
+                !resolveInfo.filter.hasAction(Intent.ACTION_VIEW) ||
+                    !resolveInfo.filter.hasCategory(Intent.CATEGORY_BROWSABLE)
+                ) || resolveInfo.filter.schemesIterator() == null
         ) {
             return false
         }

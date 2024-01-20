@@ -23,7 +23,9 @@ public class VKIDTestBuilder(
     }
     private var authProviderConfig: MockAuthProviderConfig = MockAuthProviderConfig()
 
-    public fun getTokenResponse(response: Result<VKIDTokenPayloadResponse>): VKIDTestBuilder = apply { this.getTokenResponse = response }
+    public fun getTokenResponse(response: Result<VKIDTokenPayloadResponse>): VKIDTestBuilder = apply {
+        this.getTokenResponse = response
+    }
     public fun overrideUuid(uuid: String): VKIDTestBuilder = updateConfig { copy(overrideUuid = uuid) }
     public fun overrideState(state: String): VKIDTestBuilder = updateConfig { copy(overrideState = state) }
     public fun overrideOAuthToNull(): VKIDTestBuilder = updateConfig { copy(overrideOAuthToNull = true) }
