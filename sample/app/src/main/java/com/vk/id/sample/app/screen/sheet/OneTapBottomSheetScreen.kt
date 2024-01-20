@@ -186,7 +186,7 @@ private fun ScenarioMenu(
                         expanded = false
                     }
                 )
-                if (i != OneTapScenario.values().size - 1) {
+                if (i != OneTapScenario.entries.size - 1) {
                     Divider()
                 }
             }
