@@ -48,7 +48,15 @@ public final class com/vk/id/onetap/compose/onetap/sheet/content/ComposableSingl
 
 public abstract class com/vk/id/onetap/compose/onetap/sheet/style/OneTapBottomSheetStyle {
 	public static final field $stable I
+	public static final field Companion Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapBottomSheetStyle$Companion;
 	public synthetic fun <init> (Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetCornersStyle;Lcom/vk/id/onetap/common/OneTapStyle;Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetBackgroundStyle;IIILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public final class com/vk/id/onetap/compose/onetap/sheet/style/OneTapBottomSheetStyle$Companion {
+	public final fun system (Landroid/content/Context;Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonSizeStyle;)Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapBottomSheetStyle;
+	public static synthetic fun system$default (Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapBottomSheetStyle$Companion;Landroid/content/Context;Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonSizeStyle;ILjava/lang/Object;)Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapBottomSheetStyle;
+	public final fun transparentSystem (Landroid/content/Context;Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonSizeStyle;)Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapBottomSheetStyle;
+	public static synthetic fun transparentSystem$default (Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapBottomSheetStyle$Companion;Landroid/content/Context;Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapSheetCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonSizeStyle;ILjava/lang/Object;)Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapBottomSheetStyle;
 }
 
 public final class com/vk/id/onetap/compose/onetap/sheet/style/OneTapBottomSheetStyle$Dark : com/vk/id/onetap/compose/onetap/sheet/style/OneTapBottomSheetStyle {
