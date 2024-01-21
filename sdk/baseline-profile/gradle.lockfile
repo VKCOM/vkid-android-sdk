@@ -170,6 +170,7 @@ org.jetbrains.kotlin:kotlin-daemon-embeddable:1.9.22=kotlinBuildToolsApiClasspat
 org.jetbrains.kotlin:kotlin-klib-commonizer-embeddable:1.9.22=kotlinKlibCommonizerClasspath
 org.jetbrains.kotlin:kotlin-parcelize-runtime:1.9.22=benchmarkReleaseTestedApks,nonMinifiedReleaseTestedApks
 org.jetbrains.kotlin:kotlin-reflect:1.6.10=kotlinBuildToolsApiClasspath,kotlinCompilerClasspath,kotlinKlibCommonizerClasspath
+org.jetbrains.kotlin:kotlin-reflect:1.9.22=benchmarkReleaseTestedApks,nonMinifiedReleaseTestedApks
 org.jetbrains.kotlin:kotlin-script-runtime:1.9.22=kotlinBuildToolsApiClasspath,kotlinCompilerClasspath,kotlinKlibCommonizerClasspath
 org.jetbrains.kotlin:kotlin-stdlib-common:1.9.22=benchmarkReleaseCompileClasspath,benchmarkReleaseRuntimeClasspath,benchmarkReleaseTestedApks,implementationDependenciesMetadata,nonMinifiedReleaseCompileClasspath,nonMinifiedReleaseRuntimeClasspath,nonMinifiedReleaseTestedApks
 org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.20=benchmarkReleaseCompileClasspath,benchmarkReleaseRuntimeClasspath,nonMinifiedReleaseCompileClasspath,nonMinifiedReleaseRuntimeClasspath

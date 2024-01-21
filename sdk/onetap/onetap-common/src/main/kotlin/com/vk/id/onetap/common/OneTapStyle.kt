@@ -126,7 +126,7 @@ public sealed class OneTapStyle(
             cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
             sizeStyle: OneTapButtonSizeStyle = OneTapButtonSizeStyle.DEFAULT,
             elevationStyle: OneTapButtonElevationStyle = OneTapButtonElevationStyle.Default,
-        ): OneTapStyle = (if (context.isDarkTheme) ::Dark else ::Light)(
+        ): OneTapStyle = (if (context.isDarkTheme) ::TransparentDark else ::TransparentLight)(
             cornersStyle,
             sizeStyle,
             elevationStyle,

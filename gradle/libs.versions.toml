@@ -70,6 +70,7 @@ gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 kaspresso = { group = "com.kaspersky.android-components", name = "kaspresso", version.ref = "kaspresso" }
 kaspresso-compose = { group = "com.kaspersky.android-components", name = "kaspresso-compose-support", version.ref = "kaspresso" }
 kaspresso-allure = { group = "com.kaspersky.android-components", name = "kaspresso-allure-support", version.ref = "kaspresso" }
+kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotest-core = { group = "io.kotest", name = "kotest-runner-junit5", version.ref = "kotest" }

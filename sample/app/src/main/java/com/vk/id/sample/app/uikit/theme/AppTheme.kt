@@ -5,29 +5,36 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
+import com.vk.id.sample.app.R
+import com.vk.id.sample.xml.R as xmlR
 
 @Composable
 fun AppTheme(
     useDarkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    val colors = if (!useDarkTheme) {
-        LightColors
+    if (!useDarkTheme) {
+        MaterialTheme(
+            colorScheme = LightColors(),
+            content = content
+        )
     } else {
-        DarkColors
+        MaterialTheme(
+            colorScheme = DarkColors(),
+            content = content
+        )
     }
-
-    MaterialTheme(
-        colorScheme = colors,
-        content = content
-    )
 }
 
-private val LightColors = lightColorScheme(
-    background = Color.White
+@Composable
+private fun LightColors() = lightColorScheme(
+    primary = colorResource(R.color.vkid_azure_A100),
+    background = colorResource(R.color.vkid_white),
 )
 
-private val DarkColors = darkColorScheme(
-    background = Color(0xFF19191A)
+@Composable
+private fun DarkColors() = darkColorScheme(
+    primary = colorResource(R.color.vkid_azure_A100),
+    background = colorResource(id = xmlR.color.vkid_gray900)
 )

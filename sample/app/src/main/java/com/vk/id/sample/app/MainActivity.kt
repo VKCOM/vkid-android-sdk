@@ -20,7 +20,6 @@ import com.vk.id.sample.app.uikit.theme.AppTheme
 import com.vk.id.sample.xml.multibranding.MultibrandingXmlCodeActivity
 import com.vk.id.sample.xml.multibranding.MultibrandingXmlLayoutActivity
 import com.vk.id.sample.xml.onetap.OneTapStylingXmlLayoutActivity
-import com.vk.id.sample.xml.onetap.OnetapStylingXmlCodeActivity
 import com.vk.id.sample.xml.onetapsheet.OnetapSheetStylingXmlActivity
 
 class MainActivity : ComponentActivity() {
@@ -38,7 +37,6 @@ class MainActivity : ComponentActivity() {
                     ) {
                         composable("home") { HomeScreen(navController) }
                         composable("onetap-styling-compose") { OnetapStylingComposeScreen() }
-                        activity("onetap-styling-xml-code") { activityClass = OnetapStylingXmlCodeActivity::class }
                         activity("onetap-styling-xml-layout") { activityClass = OneTapStylingXmlLayoutActivity::class }
                         composable("multibranding-compose") { MultibrandingComposeScreen() }
                         activity("multibranding-xml-code") { activityClass = MultibrandingXmlCodeActivity::class }
