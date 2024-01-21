@@ -83,25 +83,22 @@ fun HomeScreen(
         }
         Spacer(modifier = Modifier.height(32.dp))
         Divider(thickness = 1.dp, color = colorResource(id = R.color.vkid_gray900_alpha50))
-        Button("Onetap styling (compose)") {
+        Button("Onetap styling (code)") {
             navController.navigate("onetap-styling-compose")
         }
         Button("Onetap styling (xml layout)") {
             navController.navigate("onetap-styling-xml-layout")
         }
-        Button("Multibranding (compose)") {
+        Button("Multibranding (code)") {
             navController.navigate("multibranding-compose")
-        }
-        Button("Multibranding (xml code)") {
-            navController.navigate("multibranding-xml-code")
         }
         Button("Multibranding (xml layout)") {
             navController.navigate("multibranding-xml-layout")
         }
-        Button("OneTapBottomSheet") {
+        Button("OneTapBottomSheet (code)") {
             navController.navigate("onetap-bottom-sheet")
         }
-        Button("OneTapBottomSheet (xml)") {
+        Button("OneTapBottomSheet (xml layout)") {
             navController.navigate("onetap-bottom-sheet-xml")
         }
         Spacer(modifier = Modifier.weight(1f))

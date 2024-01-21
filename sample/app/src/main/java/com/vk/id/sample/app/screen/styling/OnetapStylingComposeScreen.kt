@@ -78,6 +78,8 @@ fun OnetapStylingComposeScreen() {
             }
         )
     }
+    val shouldUseXml = remember { mutableStateOf(false) }
+    val signInToAnotherAccountEnabled = remember { mutableStateOf(true) }
     val selectedStyle = styleConstructor.value.invoke(
         OneTapButtonCornersStyle.Custom(MAX_RADIUS_DP * cornersStylePercent.floatValue),
         selectedSize.value,
@@ -86,8 +88,6 @@ fun OnetapStylingComposeScreen() {
 
     val useDarkTheme = selectedStyle is OneTapStyle.Dark ||
         selectedStyle is OneTapStyle.TransparentDark
-    val shouldUseXml = remember { mutableStateOf(false) }
-    val signInToAnotherAccountEnabled = remember { mutableStateOf(true) }
     AppTheme(
         useDarkTheme = useDarkTheme
     ) {

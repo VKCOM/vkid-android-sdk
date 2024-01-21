@@ -2,7 +2,6 @@ package com.vk.id.sample.app.screen.sheet
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -10,25 +9,16 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.Divider
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.vk.id.AccessToken
@@ -40,8 +30,15 @@ import com.vk.id.onetap.compose.onetap.sheet.style.OneTapBottomSheetStyle
 import com.vk.id.onetap.compose.onetap.sheet.style.rememberOneTapBottomSheetStyle
 import com.vk.id.sample.app.screen.Button
 import com.vk.id.sample.app.screen.UseToken
+import com.vk.id.sample.app.uikit.selector.DropdownSelector
 import com.vk.id.sample.xml.uikit.common.getOneTapFailCallback
 import com.vk.id.sample.xml.uikit.common.getOneTapSuccessCallback
+import java.util.Locale
+import kotlin.reflect.full.companionObject
+import kotlin.reflect.full.createType
+import kotlin.reflect.full.functions
+import kotlin.reflect.full.isSubtypeOf
+import kotlin.reflect.full.primaryConstructor
 
 @Preview
 @Composable
@@ -71,12 +68,24 @@ fun OneTapBottomSheetScreen() {
             serviceName = "VKID Sample",
             oAuths = selectedOAuths.value,
         )
-        Selector("Scenario") {
-            ScenarioMenu(selectedScenario)
-        }
-        Selector("Style") {
-            StyleMenu(selectedStyle)
-        }
+        DropdownSelector(
+            values = enumValues<OneTapScenario>().associateBy { it.name },
+            selectedValue = selectedScenario.value.name,
+            onValueSelected = { selectedScenario.value = it }
+        )
+        DropdownSelector(
+            values = OneTapBottomSheetStyle::class.sealedSubclasses.associate {
+                it.simpleName!! to { it.primaryConstructor!!.call() }
+            } + OneTapBottomSheetStyle::class.companionObject!!.functions.filter { it.returnType.isSubtypeOf(OneTapBottomSheetStyle::class.createType()) }
+                .associate {
+                    it.name.replaceFirstChar { char -> if (char.isLowerCase()) char.titlecase(Locale.getDefault()) else char.toString() } to
+                        {
+                            it.callBy(mapOf(it.parameters.first() to OneTapBottomSheetStyle.Companion, it.parameters[1] to context)) as OneTapBottomSheetStyle
+                        }
+                },
+            selectedValue = selectedStyle.value::class.simpleName ?: error("Can get simple style"),
+            onValueSelected = { selectedStyle.value = it.invoke() }
+        )
         Row(verticalAlignment = Alignment.CenterVertically) {
             OAuthSelector(selectedOAuths = selectedOAuths, name = "Mail", oAuth = OneTapOAuth.MAIL)
             OAuthSelector(selectedOAuths = selectedOAuths, name = "OK", oAuth = OneTapOAuth.OK)
@@ -128,123 +137,4 @@ private fun OAuthSelector(
             }
         }
     )
-}
-
-@Composable
-private fun Selector(name: String, content: @Composable RowScope.() -> Unit) {
-    Row(
-        Modifier.padding(start = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = name,
-            color = MaterialTheme.colorScheme.onBackground,
-            fontWeight = FontWeight.Bold,
-        )
-        Spacer(Modifier.weight(1f))
-        content()
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun ScenarioMenu(
-    selectedScenario: MutableState<OneTapScenario>
-) {
-    var expanded by remember { mutableStateOf(false) }
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = {
-            expanded = !expanded
-        }
-    ) {
-        TextField(
-            value = selectedScenario.value.name,
-            onValueChange = {},
-            readOnly = true,
-            trailingIcon = {
-                ExposedDropdownMenuDefaults.TrailingIcon(
-                    expanded = expanded
-                )
-            },
-            modifier = Modifier.menuAnchor()
-        )
-
-        ExposedDropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { }
-        ) {
-            enumValues<OneTapScenario>().forEachIndexed { i, scenario ->
-                DropdownMenuItem(
-                    text = {
-                        Text(scenario.name)
-                    },
-                    onClick = {
-                        selectedScenario.value = scenario
-                        expanded = false
-                    }
-                )
-                if (i != OneTapScenario.entries.size - 1) {
-                    Divider()
-                }
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun StyleMenu(
-    selectedStyle: MutableState<OneTapBottomSheetStyle>
-) {
-    val context = LocalContext.current
-    var expanded by remember { mutableStateOf(false) }
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = {
-            expanded = !expanded
-        }
-    ) {
-        TextField(
-            value = selectedStyle.value::class.simpleName ?: "Never",
-            onValueChange = {},
-            readOnly = true,
-            trailingIcon = {
-                ExposedDropdownMenuDefaults.TrailingIcon(
-                    expanded = expanded
-                )
-            },
-            modifier = Modifier.menuAnchor()
-        )
-
-        ExposedDropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { }
-        ) {
-            val styles = remember {
-                listOf(
-                    "System" to OneTapBottomSheetStyle.system(context),
-                    "Light" to OneTapBottomSheetStyle.Light(),
-                    "Dark" to OneTapBottomSheetStyle.Dark(),
-                    "TransparentSystem" to OneTapBottomSheetStyle.transparentSystem(context),
-                    "TransparentLight" to OneTapBottomSheetStyle.TransparentLight(),
-                    "TransparentDark" to OneTapBottomSheetStyle.TransparentDark(),
-                )
-            }
-            styles.forEachIndexed { i, style ->
-                DropdownMenuItem(
-                    text = {
-                        Text(style.first)
-                    },
-                    onClick = {
-                        selectedStyle.value = style.second
-                        expanded = false
-                    }
-                )
-                if (i != styles.size - 1) {
-                    Divider()
-                }
-            }
-        }
-    }
 }
