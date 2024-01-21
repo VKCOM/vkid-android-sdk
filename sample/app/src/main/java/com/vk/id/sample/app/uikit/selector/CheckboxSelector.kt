@@ -5,7 +5,27 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
+
+@Composable
+internal inline fun <reified T : Enum<T>> EnumStateCheckboxSelector(
+    state: MutableState<Set<T>>
+) {
+    enumValues<T>().forEach { value ->
+        CheckboxSelector(
+            title = value.name,
+            isChecked = state.value.contains(value),
+            onCheckedChange = {
+                if (it) {
+                    state.value = state.value + value
+                } else {
+                    state.value = state.value - value
+                }
+            }
+        )
+    }
+}
 
 @Composable
 internal fun CheckboxSelector(

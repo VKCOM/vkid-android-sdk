@@ -8,9 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -30,7 +27,9 @@ import com.vk.id.onetap.compose.onetap.sheet.style.OneTapBottomSheetStyle
 import com.vk.id.onetap.compose.onetap.sheet.style.rememberOneTapBottomSheetStyle
 import com.vk.id.sample.app.screen.Button
 import com.vk.id.sample.app.screen.UseToken
+import com.vk.id.sample.app.uikit.selector.CheckboxSelector
 import com.vk.id.sample.app.uikit.selector.DropdownSelector
+import com.vk.id.sample.app.uikit.selector.EnumStateCheckboxSelector
 import com.vk.id.sample.xml.uikit.common.getOneTapFailCallback
 import com.vk.id.sample.xml.uikit.common.getOneTapSuccessCallback
 import java.util.Locale
@@ -55,7 +54,7 @@ fun OneTapBottomSheetScreen() {
             .padding(16.dp)
             .fillMaxSize()
             .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.Start
     ) {
         val bottomSheetState = rememberOneTapBottomSheetState()
         OneTapBottomSheet(
@@ -86,17 +85,12 @@ fun OneTapBottomSheetScreen() {
             selectedValue = selectedStyle.value::class.simpleName ?: error("Can get simple style"),
             onValueSelected = { selectedStyle.value = it.invoke() }
         )
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            OAuthSelector(selectedOAuths = selectedOAuths, name = "Mail", oAuth = OneTapOAuth.MAIL)
-            OAuthSelector(selectedOAuths = selectedOAuths, name = "OK", oAuth = OneTapOAuth.OK)
-        }
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Checkbox(checked = autoHideSheetOnSuccess.value, onCheckedChange = { autoHideSheetOnSuccess.value = it })
-            Text(
-                "Auto hide on success",
-                color = MaterialTheme.colorScheme.onBackground
-            )
-        }
+        EnumStateCheckboxSelector(state = selectedOAuths)
+        CheckboxSelector(
+            title = "Auto hide on success",
+            isChecked = autoHideSheetOnSuccess.value,
+            onCheckedChange = { autoHideSheetOnSuccess.value = it }
+        )
         Spacer(Modifier.padding(16.dp))
         Row {
             Button(
@@ -115,26 +109,4 @@ fun OneTapBottomSheetScreen() {
             UseToken(accessToken = it)
         }
     }
-}
-
-@Composable
-private fun OAuthSelector(
-    selectedOAuths: MutableState<Set<OneTapOAuth>>,
-    name: String,
-    oAuth: OneTapOAuth,
-) {
-    Text(
-        text = name,
-        color = MaterialTheme.colorScheme.onBackground
-    )
-    Checkbox(
-        checked = selectedOAuths.value.contains(oAuth),
-        onCheckedChange = {
-            if (it) {
-                selectedOAuths.value = selectedOAuths.value + oAuth
-            } else {
-                selectedOAuths.value = selectedOAuths.value - oAuth
-            }
-        }
-    )
 }

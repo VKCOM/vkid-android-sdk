@@ -39,6 +39,7 @@ import com.vk.id.onetap.xml.OneTap
 import com.vk.id.sample.app.screen.UseToken
 import com.vk.id.sample.app.uikit.selector.CheckboxSelector
 import com.vk.id.sample.app.uikit.selector.DropdownSelector
+import com.vk.id.sample.app.uikit.selector.EnumStateCheckboxSelector
 import com.vk.id.sample.app.uikit.selector.SliderSelector
 import com.vk.id.sample.app.uikit.theme.AppTheme
 import com.vk.id.sample.xml.uikit.common.dpToPixels
@@ -147,19 +148,7 @@ fun OnetapStylingComposeScreen() {
                 isChecked = signInToAnotherAccountEnabled.value,
                 onCheckedChange = { signInToAnotherAccountEnabled.value = it }
             )
-            OneTapOAuth.entries.forEach { oAuth ->
-                CheckboxSelector(
-                    title = oAuth.name,
-                    isChecked = selectedOAuths.value.contains(oAuth),
-                    onCheckedChange = {
-                        if (it) {
-                            selectedOAuths.value = selectedOAuths.value + oAuth
-                        } else {
-                            selectedOAuths.value = selectedOAuths.value - oAuth
-                        }
-                    }
-                )
-            }
+            EnumStateCheckboxSelector(state = selectedOAuths)
             DropdownSelector(
                 modifier = Modifier.padding(vertical = 16.dp),
                 values = OneTapStyle::class.sealedSubclasses.associate {
