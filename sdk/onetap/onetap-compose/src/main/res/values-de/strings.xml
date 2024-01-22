@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="vkid_log_in_with_vkid">Mit VK-ID anmelden</string>
+    <string name="vkid_auth_use_another_account">Mit einem anderen Konto anmelden</string>
+    <string name="vkid_auth_use_another_account_short">Konto wechseln</string>
+    <string name="vkid_log_in_as">Als %1$s fortfahren</string>
+    <string name="vkid_log_in">Fortfahren</string>
+
+    <string name="vkid_schenario_enter_service_title">Melden Sie sich beim Dienst an oder registrieren Sie sich</string>
+    <string name="vkid_schenario_enter_service_vkid_button_text_user_found">Als %1$s anmelden</string>
+    <string name="vkid_schenario_enter_service_vkid_button_text_no_user">Mit VK-ID anmelden</string>
+
+    <string name="vkid_schenario_registration_for_the_event_title">Melden Sie sich für die Veranstaltung an</string>
+    <string name="vkid_schenario_registration_for_the_event_vkid_button_text_user_found">Als %1$s fortfahren</string>
+    <string name="vkid_schenario_registration_for_the_event_vkid_button_text_no_user">Mit VK-ID fortfahren</string>
+
+    <string name="vkid_schenario_application_title">Bewerben Sie mit VK-ID</string>
+    <string name="vkid_schenario_application_vkid_button_text_user_found">Als %1$s fortfahren</string>
+    <string name="vkid_schenario_application_vkid_button_text_no_user">Mit VK-ID fortfahren</string>
+
+    <string name="vkid_schenario_order_in_service_title">Machen Sie eine Bestellung auf %1$s mit VK-ID</string>
+    <string name="vkid_schenario_order_in_service_vkid_button_text_user_found">Als %1$s bestellen</string>
+    <string name="vkid_schenario_order_in_service_vkid_button_text_no_user">Mit VK-ID bestellen</string>
+
+    <string name="vkid_schenario_order_title">Machen Sie eine Bestellung mit VK-ID</string>
+    <string name="vkid_schenario_order_vkid_button_text_user_found">Als %1$s bestellen</string>
+    <string name="vkid_schenario_order_vkid_button_text_no_user">Mit VK-ID bestellen</string>
+
+    <string name="vkid_schenario_enter_to_account_title">Melden Sie sich bei Ihrem %1$s-Konto an</string>
+    <string name="vkid_schenario_enter_to_account_vkid_button_text_user_found">Als %1$s anmelden</string>
+    <string name="vkid_schenario_enter_to_account_vkid_button_text_no_user">Mit VK-ID anmelden</string>
+
+    <string name="vkid_scenario_common_description">Anschließend stehen Ihnen alle Funktionen des Dienstes zur Verfügung. Ihre persönlichen Daten werden sorgfältig geschützt.</string>
+
+    <string name="vkid_sheet_state_auth_in_progress">Anmeldung</string>
+    <string name="vkid_sheet_state_auth_success">Gelungen!</string>
+    <string name="vkid_sheet_state_auth_failed_retry">Erneut versuchen</string>
+    <string name="vkid_sheet_state_auth_failed">Anmeldung fehlgeschlagen</string>
+</resources>

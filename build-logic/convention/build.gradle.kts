@@ -43,6 +43,14 @@ gradlePlugin {
             id = "vkid.android.library.compose"
             implementationClass = "VKIDLibraryComposeConventionPlugin"
         }
+        register("androidTests") {
+            id = "vkid.android.tests"
+            implementationClass = "AndroidTestsConventionPlugin"
+        }
+        register("vkidApp") {
+            id = "vkid.placeholders"
+            implementationClass = "VKIDAppConventionPlugin"
+        }
         register("vkidPublish") {
             id = "vkid.android.publish"
             implementationClass = "VKIDPublishConventionPlugin"
@@ -52,6 +60,18 @@ gradlePlugin {
             implementationClass = "DependencyLockPlugin"
             description = """Helper to create lockfiles for all modules with one command. 
                 |Usage: `./gradlew allDependencies --write-locks`""".trimMargin()
+        }
+        register("vkidBaselineProfile") {
+            id = "vkid.android.baseline.profile"
+            implementationClass = "BaselineProfilePlugin"
+            description = """Helper to create baseline profile for all modules with one command. 
+                |Usage: `./gradlew generateBaselineProfiles`""".trimMargin()
+        }
+        register("vkidProjectSubstitution") {
+            id = "vkid.android.project-substitution"
+            implementationClass = "ProjectSubstitutionPlugin"
+            description = """A plugin that replaces sample project dependencies with module dependencies. 
+                |Usage: Add `SUBSTITUTE_SAMPLE_PROJECTS_WITH_MODULES=true` to root gradle.properties""".trimMargin()
         }
     }
 }

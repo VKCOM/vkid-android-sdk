@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:ignore="HardcodedText">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -27,11 +28,13 @@
 
         <com.vk.id.onetap.xml.OneTap
             android:id="@+id/no_multibranding_one_tap"
-            android:layout_width="355dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/no_multibranding_title_spacer"
+            app:layout_constraintWidth_max="355dp"
             app:vkid_onetapShowSignInToAnotherAccount="true"
             app:vkid_onetapStyle="light" />
 
@@ -46,8 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Primary"
-            app:layout_constraintTop_toBottomOf="@id/no_multibranding_one_tap_spacer"
-            tools:ignore="HardcodedText" />
+            app:layout_constraintTop_toBottomOf="@id/no_multibranding_one_tap_spacer" />
 
         <View
             android:id="@+id/primary_title_spacer"
@@ -122,8 +124,7 @@
             android:text="Secondary light"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/onetap_primary_round_spacer"
-            tools:ignore="HardcodedText" />
+            app:layout_constraintTop_toBottomOf="@id/onetap_primary_round_spacer" />
 
         <View
             android:id="@+id/onetap_secondary_title_spacer"
@@ -196,8 +197,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Secondary dark"
-            app:layout_constraintTop_toBottomOf="@id/onetap_secondary_round_spacer"
-            tools:ignore="HardcodedText" />
+            app:layout_constraintTop_toBottomOf="@id/onetap_secondary_round_spacer" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/onetap_secondary_dark_container"
@@ -281,8 +281,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Elevation"
-            app:layout_constraintTop_toBottomOf="@id/onetap_secondary_dark_container"
-            tools:ignore="HardcodedText" />
+            app:layout_constraintTop_toBottomOf="@id/onetap_secondary_dark_container" />
 
         <View
             android:id="@+id/onetap_elevation_title_spacer"
@@ -356,7 +355,7 @@
             android:layout_height="wrap_content"
             android:text="Sizes"
             app:layout_constraintTop_toBottomOf="@id/onetap_elevation_8dp_spacer"
-            tools:ignore="HardcodedText" />
+            />
 
         <View
             android:id="@+id/onetap_title_sizes_spacer"
@@ -630,7 +629,7 @@
             android:layout_height="wrap_content"
             android:text="Short button"
             app:layout_constraintTop_toBottomOf="@id/onetap_large56_spacer"
-            tools:ignore="HardcodedText" />
+            />
 
         <View
             android:id="@+id/onetap_short_button_title_spacer"
@@ -701,7 +700,7 @@
             android:layout_height="wrap_content"
             android:text="Small button"
             app:layout_constraintTop_toBottomOf="@id/onetap_short_280_spacer"
-            tools:ignore="HardcodedText" />
+            />
 
         <View
             android:id="@+id/onetap_small_button_title_spacer"

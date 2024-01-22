@@ -4,6 +4,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -48,6 +49,7 @@ import java.util.Date
 import java.util.Locale
 
 @Composable
+@Suppress("LongMethod")
 fun HomeScreen(
     navController: NavController
 ) {
@@ -64,7 +66,13 @@ fun HomeScreen(
         Spacer(modifier = Modifier.height(32.dp))
         OneTap(
             modifier = Modifier.width(355.dp),
-            style = OneTapStyle.Light(cornersStyle = OneTapButtonCornersStyle.Rounded),
+            style = (
+                if (isSystemInDarkTheme()) {
+                    OneTapStyle.Dark(cornersStyle = OneTapButtonCornersStyle.Rounded)
+                } else {
+                    OneTapStyle.Light(cornersStyle = OneTapButtonCornersStyle.Rounded)
+                }
+                ),
             onAuth = getOneTapSuccessCallback(context) { token = it },
             onFail = getOneTapFailCallback(context),
             signInAnotherAccountButtonEnabled = true,
