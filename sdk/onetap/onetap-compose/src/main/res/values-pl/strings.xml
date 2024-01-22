@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="vkid_log_in_with_vkid">Wejdź z VK ID</string>
+    <string name="vkid_auth_use_another_account">Wejdź na inne konto</string>
+    <string name="vkid_auth_use_another_account_short">Zmień konto</string>
+    <string name="vkid_log_in_as">Kontynuuj jako %1$s</string>
+    <string name="vkid_log_in">Kontynuuj</string>
+
+    <string name="vkid_schenario_enter_service_title">Wejdź do serwisu lub zarejestruj się</string>
+    <string name="vkid_schenario_enter_service_vkid_button_text_user_found">Wejdź jako %1$s</string>
+    <string name="vkid_schenario_enter_service_vkid_button_text_no_user">Wejdź z VK ID</string>
+
+    <string name="vkid_schenario_registration_for_the_event_title">Zarejestruj się na wydarzenie</string>
+    <string name="vkid_schenario_registration_for_the_event_vkid_button_text_user_found">Kontynuuj jako %1$s</string>
+    <string name="vkid_schenario_registration_for_the_event_vkid_button_text_no_user">Kontynuuj z VK ID</string>
+
+    <string name="vkid_schenario_application_title">Złóż wniosek z VK ID</string>
+    <string name="vkid_schenario_application_vkid_button_text_user_found">Kontynuuj jako %1$s</string>
+    <string name="vkid_schenario_application_vkid_button_text_no_user">Kontynuuj z VK ID</string>
+
+    <string name="vkid_schenario_order_in_service_title">Wypełnij zamówienie w %1$s z VK ID</string>
+    <string name="vkid_schenario_order_in_service_vkid_button_text_user_found">Wypełnij jako %1$s</string>
+    <string name="vkid_schenario_order_in_service_vkid_button_text_no_user">Wypełnij z VK ID</string>
+
+    <string name="vkid_schenario_order_title">Wypełnij zamówienie z VK ID</string>
+    <string name="vkid_schenario_order_vkid_button_text_user_found">Wypełnij jako %1$s</string>
+    <string name="vkid_schenario_order_vkid_button_text_no_user">Wypełnij z VK ID</string>
+
+    <string name="vkid_schenario_enter_to_account_title">Wejdź na rachunek %1$s</string>
+    <string name="vkid_schenario_enter_to_account_vkid_button_text_user_found">Wejdź jako %1$s</string>
+    <string name="vkid_schenario_enter_to_account_vkid_button_text_no_user">Wejdź z VK ID</string>
+
+    <string name="vkid_scenario_common_description">Po tym wszystkie funkcje serwisu będą dostępne. Twoje dane będą dobrze chronione.</string>
+
+    <string name="vkid_sheet_state_auth_in_progress">Autoryzacja…</string>
+    <string name="vkid_sheet_state_auth_success">Pomyślnie</string>
+    <string name="vkid_sheet_state_auth_failed_retry">Powtórz próbę</string>
+    <string name="vkid_sheet_state_auth_failed">Nieudana autoryzacja</string>
+</resources>
