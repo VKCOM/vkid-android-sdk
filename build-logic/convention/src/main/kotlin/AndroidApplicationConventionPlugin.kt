@@ -17,6 +17,9 @@
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import com.vk.id.Versions
+import com.vk.id.configureAndroidLint
+import com.vk.id.configureDetekt
+import com.vk.id.configureKotest
 import com.vk.id.configureKotlinAndroid
 import com.vk.id.configurePrintApksTask
 import org.gradle.api.Plugin
@@ -32,12 +35,15 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             }
 
             extensions.configure<ApplicationExtension> {
-                configureKotlinAndroid(this)
                 defaultConfig.targetSdk = Versions.targetSdk
             }
             extensions.configure<ApplicationAndroidComponentsExtension> {
                 configurePrintApksTask(this)
             }
+            configureKotlinAndroid()
+            configureKotest()
+            configureDetekt(isCompose = false)
+            configureAndroidLint()
         }
     }
 

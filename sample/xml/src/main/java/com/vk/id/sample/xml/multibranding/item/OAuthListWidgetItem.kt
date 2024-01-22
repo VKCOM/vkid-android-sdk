@@ -13,7 +13,7 @@ import com.vk.id.sample.xml.uikit.common.dpToPixels
 import com.vk.id.sample.xml.uikit.common.getMultibrandingFailCallback
 import com.vk.id.sample.xml.uikit.common.getMultibrandingSuccessCallback
 
-private const val WIDGET_PADDING = 12
+private const val WIDGET_PADDING = 8
 private const val WIDGET_WIDTH = 355
 
 public data class OAuthListWidgetItem(

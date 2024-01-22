@@ -1,4 +1,7 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="Theme.LiteSDK" parent="Theme.AppCompat.Light.NoActionBar" />
+    <style name="Theme.LiteSDK" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowSplashScreenBackground" tools:targetApi="s">@color/splash_background</item>
+        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">@drawable/splash</item>
+    </style>
 </resources>
