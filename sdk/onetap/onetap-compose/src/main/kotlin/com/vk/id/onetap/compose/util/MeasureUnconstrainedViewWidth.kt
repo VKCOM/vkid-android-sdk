@@ -31,10 +31,12 @@ internal fun PlaceComposableIfFitsWidth(
     viewToMeasure: @Composable (Modifier) -> Unit,
     fallback: @Composable () -> Unit
 ) {
-    BoxWithConstraints {
-        MeasureUnconstrainedViewWidth(viewToMeasure = { viewToMeasure(measureModifier) }) {
-            if (it < maxWidth) {
-                viewToMeasure(modifier)
+    MeasureUnconstrainedViewWidth(viewToMeasure = { viewToMeasure(measureModifier) }) {
+        BoxWithConstraints(
+            modifier = modifier,
+        ) {
+            if (it <= maxWidth) {
+                viewToMeasure(Modifier)
             } else {
                 fallback()
             }

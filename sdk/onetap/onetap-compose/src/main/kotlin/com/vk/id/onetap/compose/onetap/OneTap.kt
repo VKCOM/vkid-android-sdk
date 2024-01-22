@@ -108,7 +108,7 @@ public fun OneTap(
     } else {
         PlaceComposableIfFitsWidth(
             modifier = modifier,
-            measureModifier = modifier.fillMaxWidth(),
+            measureModifier = Modifier.fillMaxWidth(),
             viewToMeasure = {
                 OneTap(
                     modifier = it,

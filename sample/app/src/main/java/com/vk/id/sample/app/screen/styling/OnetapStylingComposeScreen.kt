@@ -49,7 +49,7 @@ import com.vk.id.sample.xml.uikit.common.getOneTapFailCallback
 import com.vk.id.sample.xml.uikit.common.getOneTapSuccessCallback
 
 private const val TOTAL_WIDTH_PADDING_DP = 16
-private const val MIN_WIDTH_DP = 32f
+private const val MIN_WIDTH_DP = 48f
 private const val MAX_RADIUS_DP = 30
 private const val MAX_ELEVATION_DP = 20
 
@@ -65,7 +65,7 @@ fun OnetapStylingComposeScreen() {
     val cornersStylePercent = remember { mutableFloatStateOf(0f) }
     val selectedSize = remember { mutableStateOf(OneTapButtonSizeStyle.DEFAULT) }
     val selectedElevationStyle = remember { mutableFloatStateOf(0f) }
-    val selectedOAuths = remember { mutableStateOf(OneTapOAuth.entries.toSet()) }
+    val selectedOAuths = remember { mutableStateOf(emptySet<OneTapOAuth>()) }
     val styleConstructor = remember { mutableStateOf(OneTapStyle.Companion::system.carry(context)) }
     val shouldUseXml = remember { mutableStateOf(false) }
     val signInToAnotherAccountEnabled = remember { mutableStateOf(true) }
