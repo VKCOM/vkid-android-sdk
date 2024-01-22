@@ -14,11 +14,14 @@
 bumpVersion() {
     NEW_VERSION=$1
     assertValidSemver $NEW_VERSION
-    VERSION_FILE="$(git rev-parse --show-toplevel)/gradle.properties"
-    CURRENT_VERSION="$(fetchCurrentVersion $VERSION_FILE)"
+    CURRENT_VERSION="$(fetchCurrentVersion)"
     assertNewVersionIsDifferent $CURRENT_VERSION $NEW_VERSION
-    bumpVersionInVersionFile $VERSION_FILE $CURRENT_VERSION $NEW_VERSION
+    bumpVersionInVersionFile $CURRENT_VERSION $NEW_VERSION
     echo "Updated version to $NEW_VERSION"
+}
+
+importCommon() {
+    source "$(git rev-parse --show-toplevel)/scripts/release/release_common.sh"
 }
 
 commitVersionChange() {
@@ -37,14 +40,10 @@ createMergeRequest() {
     echo "Created merge request with with version change"
 }
 
-fetchCurrentVersion() {
-    echo $(grep -Eo 'VERSION_NAME=.*' "$1") | awk -F'=' '{print $2}'
-}
-
 bumpVersionInVersionFile() {
-    VERSION_FILE=$1
-    CURRENT_VERSION=$2
-    NEW_VERSION=$3
+    VERSION_FILE="$(fetchVersionFile)"
+    CURRENT_VERSION=$1
+    NEW_VERSION=$2
     sed -i '' "s/$CURRENT_VERSION/$NEW_VERSION/" "$VERSION_FILE"
 }
 
@@ -86,6 +85,7 @@ isValidSemver() {
 }
 
 set -e
+importCommon
 assertWorkdirIsClean
 checkoutDevelop
 checkoutVersionChangeBranch $1
