@@ -11,8 +11,15 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        mavenLocal()
-        maven(url = "https://artifactory-external.vkpartner.ru/artifactory/vkid-sdk-andorid/")
+        val SUBSTITUTE_SAMPLE_PROJECTS_WITH_MODULES: String by settings
+        if (SUBSTITUTE_SAMPLE_PROJECTS_WITH_MODULES == "true") {
+            maven(url = "https://artifactory-external.vkpartner.ru/artifactory/vkid-sdk-andorid/")
+            mavenLocal {
+                content {
+                    includeGroup("com.vk.id")
+                }
+            }
+        }
     }
 }
 rootProject.name = "VKID"
