@@ -85,7 +85,7 @@ internal fun VKIDButton(
     FetchUserDataWithAnimation(coroutineScope, state, useVKID, useTextProvider)
     Box(
         modifier = modifier
-            .shadow(style.elevationStyle, style.cornersStyle)
+            .shadow(style)
             .height(style.sizeStyle)
             .border(style.borderStyle, style.cornersStyle)
             .clip(style.cornersStyle)

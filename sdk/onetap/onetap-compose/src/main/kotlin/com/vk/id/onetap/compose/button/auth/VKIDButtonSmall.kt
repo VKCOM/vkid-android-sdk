@@ -88,7 +88,7 @@ internal fun VKIDButtonSmall(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .testTag("vkid_button")
-            .shadow(style.elevationStyle, style.cornersStyle)
+            .shadow(style)
             .width(style.sizeStyle.heightDp().dp)
             .height(style.sizeStyle)
             .border(style.borderStyle, style.cornersStyle)
