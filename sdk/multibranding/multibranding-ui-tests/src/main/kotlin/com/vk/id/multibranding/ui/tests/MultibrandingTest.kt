@@ -19,7 +19,7 @@ public abstract class MultibrandingTest(
     private companion object {
 
         @JvmStatic
-        @Parameterized.Parameters(name = "{0}")
+        @Parameterized.Parameters
         fun data() = OAuth.values()
     }
 
