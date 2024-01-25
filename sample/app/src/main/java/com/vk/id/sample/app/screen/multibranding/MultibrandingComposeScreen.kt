@@ -91,38 +91,40 @@ fun MultibrandingComposeScreen() {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.Start,
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                val width = maxOf(MIN_WIDTH_DP, (screenWidth * widthPercent.floatValue))
-                if (shouldUseXml.value) {
-                    var oAuthListWidget: OAuthListWidget? by remember { mutableStateOf(null) }
-                    AndroidView(factory = { context ->
-                        OAuthListWidget(context).apply {
-                            setCallbacks(
-                                onAuth = getMultibrandingSuccessCallback(context) {},
-                                onFail = getMultibrandingFailCallback(context),
+            if (selectedOAuths.value.isNotEmpty()) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    val width = maxOf(MIN_WIDTH_DP, (screenWidth * widthPercent.floatValue))
+                    if (shouldUseXml.value) {
+                        var oAuthListWidget: OAuthListWidget? by remember { mutableStateOf(null) }
+                        AndroidView(factory = { context ->
+                            OAuthListWidget(context).apply {
+                                setCallbacks(
+                                    onAuth = getMultibrandingSuccessCallback(context) {},
+                                    onFail = getMultibrandingFailCallback(context),
+                                )
+                                oAuthListWidget = this
+                            }
+                        })
+                        oAuthListWidget?.apply {
+                            layoutParams = ViewGroup.LayoutParams(
+                                context.dpToPixels(width.toInt()),
+                                ViewGroup.LayoutParams.WRAP_CONTENT,
                             )
-                            oAuthListWidget = this
+                            style = selectedStyle
+                            oAuths = selectedOAuths.value
                         }
-                    })
-                    oAuthListWidget?.apply {
-                        layoutParams = ViewGroup.LayoutParams(
-                            context.dpToPixels(width.toInt()),
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                    } else {
+                        OAuthListWidget(
+                            modifier = Modifier.width(width.dp),
+                            style = selectedStyle,
+                            onAuth = getMultibrandingSuccessCallback(context) { token.value = it },
+                            onFail = getMultibrandingFailCallback(context),
+                            oAuths = selectedOAuths.value
                         )
-                        style = selectedStyle
-                        oAuths = selectedOAuths.value
                     }
-                } else {
-                    OAuthListWidget(
-                        modifier = Modifier.width(width.dp),
-                        style = selectedStyle,
-                        onAuth = getMultibrandingSuccessCallback(context) { token.value = it },
-                        onFail = getMultibrandingFailCallback(context),
-                        oAuths = selectedOAuths.value
-                    )
                 }
             }
             Spacer(modifier = Modifier.height(16.dp))
