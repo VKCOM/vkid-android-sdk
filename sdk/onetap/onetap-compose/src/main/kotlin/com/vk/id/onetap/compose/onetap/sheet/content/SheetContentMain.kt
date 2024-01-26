@@ -30,7 +30,7 @@ import com.vk.id.onetap.compose.onetap.sheet.scenarioTitle
 import com.vk.id.onetap.compose.onetap.sheet.style.OneTapBottomSheetStyle
 import com.vk.id.onetap.compose.onetap.sheet.vkidButtonTextProvider
 
-@Suppress("LongParameterList")
+@Suppress("LongParameterList", "NonSkippableComposable")
 @Composable
 internal fun SheetContentMain(
     vkid: VKID,

@@ -1,8 +1,11 @@
 package com.vk.id.onetap.common.button.style
 
+import androidx.compose.runtime.Immutable
+
 /**
  * OneTap's corners style.
  */
+@Immutable
 public sealed class OneTapButtonCornersStyle(
     /**
      * Corner radius in DPs.

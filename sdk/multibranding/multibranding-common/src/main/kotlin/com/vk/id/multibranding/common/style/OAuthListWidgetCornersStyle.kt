@@ -1,8 +1,11 @@
 package com.vk.id.multibranding.common.style
 
+import androidx.compose.runtime.Immutable
+
 /**
  * OAuthListWidget's corners style.
  */
+@Immutable
 public sealed class OAuthListWidgetCornersStyle(
     /**
      * Corner radius in DPs.

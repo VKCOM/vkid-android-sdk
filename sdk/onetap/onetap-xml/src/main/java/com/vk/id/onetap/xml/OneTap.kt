@@ -82,6 +82,7 @@ public class OneTap @JvmOverloads constructor(
         clipToPadding = false
     }
 
+    @Suppress("NonSkippableComposable")
     @Composable
     private fun Content() {
         val style = remember { mutableStateOf(style) }

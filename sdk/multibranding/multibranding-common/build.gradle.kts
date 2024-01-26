@@ -12,4 +12,5 @@ android {
 dependencies {
     implementation(project(":vkid"))
     implementation(project(":common"))
+    implementation(libs.androidx.compose.runtime)
 }

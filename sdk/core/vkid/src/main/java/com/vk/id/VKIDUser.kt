@@ -1,6 +1,7 @@
 package com.vk.id
 
 import android.os.Parcelable
+import androidx.compose.runtime.Immutable
 import com.vk.silentauth.SilentAuthInfo
 import kotlinx.parcelize.Parcelize
 
@@ -17,6 +18,7 @@ import kotlinx.parcelize.Parcelize
  */
 @Suppress("LongParameterList")
 @Parcelize
+@Immutable
 public class VKIDUser(
     public val firstName: String,
     public val lastName: String,

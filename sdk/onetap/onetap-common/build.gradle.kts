@@ -13,4 +13,5 @@ dependencies {
     implementation(project(":common"))
     implementation(project(":multibranding-common"))
     implementation(project(":vkid"))
+    implementation(libs.androidx.compose.runtime)
 }

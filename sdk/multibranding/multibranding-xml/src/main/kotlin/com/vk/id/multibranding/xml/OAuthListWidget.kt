@@ -67,6 +67,7 @@ public class OAuthListWidget @JvmOverloads constructor(
         composeView.setContent { Content() }
     }
 
+    @Suppress("NonSkippableComposable")
     @Composable
     private fun Content() {
         val style = remember { mutableStateOf(style) }

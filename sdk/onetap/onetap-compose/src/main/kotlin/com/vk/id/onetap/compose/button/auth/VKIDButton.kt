@@ -142,6 +142,7 @@ private fun defaultTextProvider(resources: Resources): VKIDButtonTextProvider =
         }
     }
 
+@Suppress("NonSkippableComposable")
 @Composable
 private fun FetchUserDataWithAnimation(
     coroutineScope: CoroutineScope,
