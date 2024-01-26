@@ -11,7 +11,7 @@
 # - Pushes diff between GitLab's master and GitHub's public branch to public branch on GitHub
 
 importCommon() {
-    source "$(git rev-parse --show-toplevel)/scripts/release/release_common.sh"
+    source "$(git rev-parse --show-toplevel)/scripts/common/versions.sh"
 }
 
 set -e

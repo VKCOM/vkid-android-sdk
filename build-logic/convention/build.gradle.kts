@@ -23,6 +23,7 @@ dependencies {
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.ksp.gradlePlugin)
     compileOnly(libs.detekt.gradlePlugin)
+    implementation(libs.dokka.gradlePlugin)
 }
 
 gradlePlugin {
@@ -72,6 +73,12 @@ gradlePlugin {
             implementationClass = "ProjectSubstitutionPlugin"
             description = """A plugin that replaces sample project dependencies with module dependencies. 
                 |Usage: Add `SUBSTITUTE_SAMPLE_PROJECTS_WITH_MODULES=true` to root gradle.properties""".trimMargin()
+        }
+        register("vkidDokka") {
+            id = "vkid.dokka"
+            implementationClass = "VKIDDokkaPlugin"
+            description = """A plugin that configures dokka for documntation generation. 
+                |Usage: ./gradlew dokkaHtmlMultiModule""".trimMargin()
         }
     }
 }
