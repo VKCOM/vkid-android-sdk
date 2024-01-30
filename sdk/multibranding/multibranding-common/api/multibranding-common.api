@@ -80,12 +80,18 @@ public final class com/vk/id/multibranding/common/style/OAuthListWidgetSizeStyle
 }
 
 public abstract class com/vk/id/multibranding/common/style/OAuthListWidgetStyle {
+	public static final field Companion Lcom/vk/id/multibranding/common/style/OAuthListWidgetStyle$Companion;
 	public synthetic fun <init> (Lcom/vk/id/multibranding/common/style/OAuthListWidgetCornersStyle;Lcom/vk/id/multibranding/common/style/OAuthListWidgetRippleStyle;Lcom/vk/id/multibranding/common/style/OAuthListWidgetBorderStyle;Lcom/vk/id/multibranding/common/style/OAuthListWidgetTextStyle;Lcom/vk/id/multibranding/common/style/OAuthListWidgetSizeStyle;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getBorderStyle ()Lcom/vk/id/multibranding/common/style/OAuthListWidgetBorderStyle;
 	public final fun getCornersStyle ()Lcom/vk/id/multibranding/common/style/OAuthListWidgetCornersStyle;
 	public final fun getRippleStyle ()Lcom/vk/id/multibranding/common/style/OAuthListWidgetRippleStyle;
 	public final fun getSizeStyle ()Lcom/vk/id/multibranding/common/style/OAuthListWidgetSizeStyle;
 	public final fun getTextStyle ()Lcom/vk/id/multibranding/common/style/OAuthListWidgetTextStyle;
+}
+
+public final class com/vk/id/multibranding/common/style/OAuthListWidgetStyle$Companion {
+	public final fun system (Landroid/content/Context;Lcom/vk/id/multibranding/common/style/OAuthListWidgetCornersStyle;Lcom/vk/id/multibranding/common/style/OAuthListWidgetSizeStyle;)Lcom/vk/id/multibranding/common/style/OAuthListWidgetStyle;
+	public static synthetic fun system$default (Lcom/vk/id/multibranding/common/style/OAuthListWidgetStyle$Companion;Landroid/content/Context;Lcom/vk/id/multibranding/common/style/OAuthListWidgetCornersStyle;Lcom/vk/id/multibranding/common/style/OAuthListWidgetSizeStyle;ILjava/lang/Object;)Lcom/vk/id/multibranding/common/style/OAuthListWidgetStyle;
 }
 
 public final class com/vk/id/multibranding/common/style/OAuthListWidgetStyle$Dark : com/vk/id/multibranding/common/style/OAuthListWidgetStyle {

@@ -1,3 +1,5 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.multibranding
 
 import androidx.compose.foundation.border

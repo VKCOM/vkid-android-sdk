@@ -37,7 +37,7 @@ fun MultibrandingComposeScreen() {
                 UseToken(accessToken = it)
             }
         }
-        multibrandingSampleData.forEach {
+        multibrandingSampleData(context).forEach {
             HandleSpacerItem(item = it)
             HandleHalfSpacerItem(item = it)
             HandleTitleItem(item = it)
