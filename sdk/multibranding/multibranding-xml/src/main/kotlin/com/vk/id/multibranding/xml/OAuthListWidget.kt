@@ -42,7 +42,7 @@ public class OAuthListWidget @JvmOverloads constructor(
     private var onStyleChange: (OAuthListWidgetStyle) -> Unit = {}
 
     /** A set of [OAuth]s the should be displayed to the user. */
-    public var oAuths: Set<OAuth> = OAuth.values().toSet()
+    public var oAuths: Set<OAuth> = OAuth.entries.toSet()
         set(value) {
             field = value
             onOAuthsChange(value)

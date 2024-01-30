@@ -35,6 +35,7 @@ public final class com/vk/id/OAuth : java/lang/Enum {
 	public static final field MAIL Lcom/vk/id/OAuth;
 	public static final field OK Lcom/vk/id/OAuth;
 	public static final field VK Lcom/vk/id/OAuth;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lcom/vk/id/OAuth;
 	public static fun values ()[Lcom/vk/id/OAuth;
 }
@@ -175,6 +176,7 @@ public final class com/vk/id/auth/VKIDAuthParams$Locale : java/lang/Enum {
 	public static final field SPA Lcom/vk/id/auth/VKIDAuthParams$Locale;
 	public static final field TURKEY Lcom/vk/id/auth/VKIDAuthParams$Locale;
 	public static final field UKR Lcom/vk/id/auth/VKIDAuthParams$Locale;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lcom/vk/id/auth/VKIDAuthParams$Locale;
 	public static fun values ()[Lcom/vk/id/auth/VKIDAuthParams$Locale;
 }
@@ -182,6 +184,7 @@ public final class com/vk/id/auth/VKIDAuthParams$Locale : java/lang/Enum {
 public final class com/vk/id/auth/VKIDAuthParams$Theme : java/lang/Enum {
 	public static final field Dark Lcom/vk/id/auth/VKIDAuthParams$Theme;
 	public static final field Light Lcom/vk/id/auth/VKIDAuthParams$Theme;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lcom/vk/id/auth/VKIDAuthParams$Theme;
 	public static fun values ()[Lcom/vk/id/auth/VKIDAuthParams$Theme;
 }
@@ -198,6 +201,7 @@ public final class com/vk/id/internal/log/LogEngine$LogLevel : java/lang/Enum {
 	public static final field DEBUG Lcom/vk/id/internal/log/LogEngine$LogLevel;
 	public static final field ERROR Lcom/vk/id/internal/log/LogEngine$LogLevel;
 	public static final field INFO Lcom/vk/id/internal/log/LogEngine$LogLevel;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lcom/vk/id/internal/log/LogEngine$LogLevel;
 	public static fun values ()[Lcom/vk/id/internal/log/LogEngine$LogLevel;
 }

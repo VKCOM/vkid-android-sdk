@@ -20,10 +20,14 @@ package com.vk.id.internal.auth.web
  * are discarded to produce a compact, canonical representation. Empty versions are equivalent to
  * "0". Each numeric part is expected to fit within a 64-bit integer.
  */
+@Suppress("RedundantConstructorKeyword")
 internal class DelimitedVersion
 /**
  * Creates a version with the specified parts, ordered from major to minor.
- */(private val mNumericParts: LongArray) : Comparable<DelimitedVersion> {
+ */
+constructor(
+    private val mNumericParts: LongArray
+) : Comparable<DelimitedVersion> {
     override fun toString(): String {
         if (mNumericParts.isEmpty()) {
             return "0"

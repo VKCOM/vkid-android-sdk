@@ -18,7 +18,7 @@ private const val WIDGET_WIDTH = 355
 
 public data class OAuthListWidgetItem(
     val style: OAuthListWidgetStyle,
-    val oAuths: Set<OAuth> = OAuth.values().toSet(),
+    val oAuths: Set<OAuth> = OAuth.entries.toSet(),
     val width: Int = WIDGET_WIDTH,
     val isDarkBackground: Boolean = false,
 )
