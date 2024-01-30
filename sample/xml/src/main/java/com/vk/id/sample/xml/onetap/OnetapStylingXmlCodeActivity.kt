@@ -1,9 +1,11 @@
 package com.vk.id.sample.xml.onetap
 
 import android.os.Bundle
+import android.view.View
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.appcompat.app.AppCompatActivity
+import com.vk.id.sample.xml.R
 import com.vk.id.sample.xml.onetap.data.buttonStylingData
 import com.vk.id.sample.xml.onetap.item.OneTapItem
 import com.vk.id.sample.xml.onetap.item.createOneTap
@@ -19,7 +21,7 @@ public class OnetapStylingXmlCodeActivity : AppCompatActivity() {
                 addView(
                     LinearLayout(context).apply {
                         orientation = LinearLayout.VERTICAL
-                        buttonStylingData.forEach {
+                        buttonStylingData(context).forEach {
                             (
                                 when (it) {
                                     is TitleItem -> TitleItemView.create(context, it.text)
@@ -32,5 +34,6 @@ public class OnetapStylingXmlCodeActivity : AppCompatActivity() {
                 )
             }
         )
+        findViewById<View>(android.R.id.content).setBackgroundResource(R.color.vkid_background)
     }
 }

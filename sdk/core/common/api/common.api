@@ -1,6 +1,10 @@
 public abstract interface annotation class com/vk/id/commn/InternalVKIDApi : java/lang/annotation/Annotation {
 }
 
+public final class com/vk/id/commn/util/IsDarkThemeKt {
+	public static final fun isDarkTheme (Landroid/content/Context;)Z
+}
+
 public final class com/vk/id/common/BuildConfig {
 	public static final field BUILD_TYPE Ljava/lang/String;
 	public static final field CI_BUILD_NUMBER Ljava/lang/Integer;

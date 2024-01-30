@@ -2,7 +2,9 @@
 
 package com.vk.id.onetap.common
 
+import android.content.Context
 import com.vk.id.commn.InternalVKIDApi
+import com.vk.id.commn.util.isDarkTheme
 import com.vk.id.multibranding.common.style.OAuthListWidgetStyle
 import com.vk.id.onetap.common.alternate.style.AlternateAccountButtonStyle
 import com.vk.id.onetap.common.auth.style.VKIDButtonStyle
@@ -27,6 +29,7 @@ public sealed class OneTapStyle(
                 cornersStyle = cornersStyle.toOAuthListWidgetStyle(),
                 sizeStyle = sizeStyle.toOAuthListWidgetStyle(),
             )
+
             is TransparentDark,
             is Dark -> OAuthListWidgetStyle.Dark(
                 cornersStyle = cornersStyle.toOAuthListWidgetStyle(),
@@ -93,4 +96,40 @@ public sealed class OneTapStyle(
         vkidButtonStyle = VKIDButtonStyle.Light(cornersStyle, sizeStyle, elevationStyle),
         alternateAccountButtonStyle = AlternateAccountButtonStyle.Light(cornersStyle, sizeStyle),
     )
+
+    public companion object {
+        /**
+         * Returns a style which is based on the current them.
+         * The return value is either [Dark] or [Light]
+         *
+         * @param context Context which can be used to retrieve dark theme status.
+         */
+        public fun system(
+            context: Context,
+            cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
+            sizeStyle: OneTapButtonSizeStyle = OneTapButtonSizeStyle.DEFAULT,
+            elevationStyle: OneTapButtonElevationStyle = OneTapButtonElevationStyle.Default,
+        ): OneTapStyle = (if (context.isDarkTheme) ::Dark else ::Light)(
+            cornersStyle,
+            sizeStyle,
+            elevationStyle,
+        )
+
+        /**
+         * Returns a style which is based on the current them.
+         * The return value is either [TransparentDark] or [TransparentLight]
+         *
+         * @param context Context which can be used to retrieve dark theme status.
+         */
+        public fun transparentSystem(
+            context: Context,
+            cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
+            sizeStyle: OneTapButtonSizeStyle = OneTapButtonSizeStyle.DEFAULT,
+            elevationStyle: OneTapButtonElevationStyle = OneTapButtonElevationStyle.Default,
+        ): OneTapStyle = (if (context.isDarkTheme) ::Dark else ::Light)(
+            cornersStyle,
+            sizeStyle,
+            elevationStyle,
+        )
+    }
 }

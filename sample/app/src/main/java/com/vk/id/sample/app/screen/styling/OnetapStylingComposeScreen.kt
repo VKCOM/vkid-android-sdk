@@ -34,7 +34,7 @@ fun OnetapStylingComposeScreen() {
         token.value?.let {
             UseToken(accessToken = it)
         }
-        buttonStylingData.forEach {
+        buttonStylingData(context).forEach {
             HandleSpacerItem(item = it)
             HandleHalfSpacerItem(item = it)
             HandleTitleItem(item = it)

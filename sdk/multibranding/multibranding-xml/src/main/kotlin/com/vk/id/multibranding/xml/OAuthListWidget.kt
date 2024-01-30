@@ -16,6 +16,8 @@ import com.vk.id.AccessToken
 import com.vk.id.OAuth
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
+import com.vk.id.commn.InternalVKIDApi
+import com.vk.id.commn.util.isDarkTheme
 import com.vk.id.multibranding.OAuthListWidget
 import com.vk.id.multibranding.common.callback.OAuthListWidgetAuthCallback
 import com.vk.id.multibranding.common.style.OAuthListWidgetCornersStyle
@@ -143,6 +145,7 @@ private fun TypedArray.getCornerRadius(context: Context) = getDimension(
     context.dpToPixels(OAuthListWidgetCornersStyle.Default.radiusDp)
 )
 
+@OptIn(InternalVKIDApi::class)
 private fun TypedArray.getStyleConstructor(
     context: Context
 ) = when (getInt(R.styleable.vkid_OAuthListWidget_vkid_OAuthListStyle, 0)) {
