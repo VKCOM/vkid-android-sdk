@@ -21,23 +21,14 @@ bumpVersion() {
 }
 
 importCommon() {
-    source "$(git rev-parse --show-toplevel)/scripts/release/release_common.sh"
+    source "$(git rev-parse --show-toplevel)/scripts/common/versions.sh"
+    source "$(git rev-parse --show-toplevel)/scripts/common/git.sh"
 }
 
 commitVersionChange() {
-    git add -A
-    git commit -m "VKIDSDK-0: Update version to $1"
+    commitCurrent "VKIDSDK-0: Update version to $1"
     echo "Commited version change to $1"
     echo "Checked out version change branch"
-}
-
-checkoutVersionChangeBranch() {
-    git checkout -b task/VKIDSDK-0/bump-version-to-$1
-}
-
-createMergeRequest() {
-    git push -o merge_request.create --set-upstream origin task/VKIDSDK-0/bump-version-to-$1
-    echo "Created merge request with with version change"
 }
 
 bumpVersionInVersionFile() {
@@ -45,20 +36,6 @@ bumpVersionInVersionFile() {
     CURRENT_VERSION=$1
     NEW_VERSION=$2
     sed -i '' "s/$CURRENT_VERSION/$NEW_VERSION/" "$VERSION_FILE"
-}
-
-assertWorkdirIsClean() {
-    if [ -z "$(git status --porcelain)" ]; then
-        # Working directory clean
-        echo "Workdir is clean"
-    else
-        echo "ERROR: You have uncommited changes"
-        exit 1
-    fi
-}
-
-checkoutDevelop() {
-    git checkout develop
 }
 
 assertNewVersionIsDifferent() {
@@ -84,11 +61,18 @@ isValidSemver() {
     fi
 }
 
+createVersionMergeRequest() {
+    BRANCH_NAME=$1
+    createMergeRequest $BRANCH_NAME
+    echo "Created merge request with with version change"
+}
+
 set -e
 importCommon
 assertWorkdirIsClean
 checkoutDevelop
-checkoutVersionChangeBranch $1
+BRANCH_NAME="task/VKIDSDK-0/bump-version-to-$1"
+checkoutNewBranch $BRANCH_NAME
 bumpVersion $1
 commitVersionChange $1
-createMergeRequest $1
+createVersionMergeRequest $BRANCH_NAME

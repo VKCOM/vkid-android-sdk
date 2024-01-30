@@ -47,5 +47,6 @@ private fun Project.shouldInjectManifestPlaceholders() = gradle
         it.contains("assemble")
                 || it.endsWith("test")
                 || it.contains("lint")
+                || it.contains("dokka")
                 || it.contains("generatebaselineprofile")
     }

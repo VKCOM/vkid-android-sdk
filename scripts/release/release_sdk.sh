@@ -42,12 +42,8 @@ getTeamcityToken() {
     security find-generic-password -w -s 'vkid_teamcity_token' -a 'vkid_user'
 }
 
-checkoutDevelop() {
-    git checkout develop
-}
-
 importCommon() {
-    source "$(git rev-parse --show-toplevel)/scripts/release/release_common.sh"
+    source "$(git rev-parse --show-toplevel)/scripts/common/versions.sh"
 }
 
 set -e
