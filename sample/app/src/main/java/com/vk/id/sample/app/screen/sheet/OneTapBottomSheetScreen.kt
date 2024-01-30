@@ -1,6 +1,5 @@
 package com.vk.id.sample.app.screen.sheet
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -51,8 +50,7 @@ fun OneTapBottomSheetScreen() {
     val context = LocalContext.current
     val token: MutableState<AccessToken?> = remember { mutableStateOf(null) }
     val selectedScenario = rememberSaveable { mutableStateOf(OneTapScenario.EnterService) }
-    val defaultStyle = if (isSystemInDarkTheme()) OneTapBottomSheetStyle.Dark() else OneTapBottomSheetStyle.Light()
-    val selectedStyle = rememberOneTapBottomSheetStyle(defaultStyle)
+    val selectedStyle = rememberOneTapBottomSheetStyle(OneTapBottomSheetStyle.system(context))
     val autoHideSheetOnSuccess = rememberSaveable { mutableStateOf(true) }
     val selectedOAuths = rememberSaveable { mutableStateOf(setOf(OneTapOAuth.OK, OneTapOAuth.MAIL)) }
     Column(
@@ -199,6 +197,7 @@ private fun ScenarioMenu(
 private fun StyleMenu(
     selectedStyle: MutableState<OneTapBottomSheetStyle>
 ) {
+    val context = LocalContext.current
     var expanded by remember { mutableStateOf(false) }
     ExposedDropdownMenuBox(
         expanded = expanded,
@@ -224,10 +223,12 @@ private fun StyleMenu(
         ) {
             val styles = remember {
                 listOf(
+                    "System" to OneTapBottomSheetStyle.system(context),
                     "Light" to OneTapBottomSheetStyle.Light(),
                     "Dark" to OneTapBottomSheetStyle.Dark(),
+                    "TransparentSystem" to OneTapBottomSheetStyle.transparentSystem(context),
+                    "TransparentLight" to OneTapBottomSheetStyle.TransparentLight(),
                     "TransparentDark" to OneTapBottomSheetStyle.TransparentDark(),
-                    "TransparentLight" to OneTapBottomSheetStyle.TransparentLight()
                 )
             }
             styles.forEachIndexed { i, style ->
