@@ -1,5 +1,6 @@
 package com.vk.id.sample.app.uikit.selector
 
+import android.content.Context
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenuItem
@@ -14,6 +15,32 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import com.vk.id.sample.app.util.carrying.carry
+import java.util.Locale
+import kotlin.reflect.KClass
+import kotlin.reflect.KFunction
+import kotlin.reflect.full.companionObject
+import kotlin.reflect.full.companionObjectInstance
+import kotlin.reflect.full.createType
+import kotlin.reflect.full.functions
+import kotlin.reflect.full.isSubtypeOf
+import kotlin.reflect.full.primaryConstructor
+
+internal fun <T : Any> KClass<T>.styleConstructors(
+    context: Context
+) = simpleStyleConstructors() + systemStyleConstructors(context)
+
+fun <T : Any> KClass<T>.simpleStyleConstructors() = sealedSubclasses
+    .associate { it.simpleName!! to it.primaryConstructor!! }
+
+private fun <T : Any> KClass<T>.systemStyleConstructors(context: Context) = companionObject!!
+    .functions
+    .filter { it.returnType.isSubtypeOf(createType()) }
+    .filterIsInstance<KFunction<T>>()
+    .associate {
+        it.name.replaceFirstChar { char -> if (char.isLowerCase()) char.titlecase(Locale.getDefault()) else char.toString() } to
+            it.carry(companionObjectInstance, context)
+    }
 
 @Suppress("NonSkippableComposable")
 @OptIn(ExperimentalMaterial3Api::class)

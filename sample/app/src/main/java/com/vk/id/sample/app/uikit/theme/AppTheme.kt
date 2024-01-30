@@ -16,25 +16,25 @@ fun AppTheme(
 ) {
     if (!useDarkTheme) {
         MaterialTheme(
-            colorScheme = LightColors(),
+            colorScheme = lightColors(),
             content = content
         )
     } else {
         MaterialTheme(
-            colorScheme = DarkColors(),
+            colorScheme = darkColors(),
             content = content
         )
     }
 }
 
 @Composable
-private fun LightColors() = lightColorScheme(
+private fun lightColors() = lightColorScheme(
     primary = colorResource(R.color.vkid_azure_A100),
     background = colorResource(R.color.vkid_white),
 )
 
 @Composable
-private fun DarkColors() = darkColorScheme(
+private fun darkColors() = darkColorScheme(
     primary = colorResource(R.color.vkid_azure_A100),
     background = colorResource(id = xmlR.color.vkid_gray900)
 )

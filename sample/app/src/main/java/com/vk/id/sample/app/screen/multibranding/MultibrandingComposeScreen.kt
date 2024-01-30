@@ -40,16 +40,12 @@ import com.vk.id.sample.app.uikit.selector.CheckboxSelector
 import com.vk.id.sample.app.uikit.selector.DropdownSelector
 import com.vk.id.sample.app.uikit.selector.EnumStateCheckboxSelector
 import com.vk.id.sample.app.uikit.selector.SliderSelector
+import com.vk.id.sample.app.uikit.selector.styleConstructors
 import com.vk.id.sample.app.uikit.theme.AppTheme
+import com.vk.id.sample.app.util.carrying.carry
 import com.vk.id.sample.xml.uikit.common.dpToPixels
 import com.vk.id.sample.xml.uikit.common.getMultibrandingFailCallback
 import com.vk.id.sample.xml.uikit.common.getMultibrandingSuccessCallback
-import java.util.Locale
-import kotlin.reflect.full.companionObject
-import kotlin.reflect.full.createType
-import kotlin.reflect.full.functions
-import kotlin.reflect.full.isSubtypeOf
-import kotlin.reflect.full.primaryConstructor
 
 private const val MIN_WIDTH_DP = 100f
 private const val TOTAL_WIDTH_PADDING_DP = 16
@@ -66,16 +62,9 @@ fun MultibrandingComposeScreen() {
     val cornersStylePercent = remember { mutableFloatStateOf(0f) }
     val selectedSize = remember { mutableStateOf(OAuthListWidgetSizeStyle.DEFAULT) }
     val selectedOAuths = remember { mutableStateOf(OAuth.entries.toSet()) }
-    val styleConstructor = remember {
-        mutableStateOf(
-            { cornersStyle: OAuthListWidgetCornersStyle,
-              sizeStyle: OAuthListWidgetSizeStyle ->
-                OAuthListWidgetStyle.system(context, cornersStyle, sizeStyle)
-            }
-        )
-    }
+    val styleConstructor = remember { mutableStateOf(OAuthListWidgetStyle.Companion::system.carry(context)) }
     val shouldUseXml = remember { mutableStateOf(false) }
-    val selectedStyle = styleConstructor.value.invoke(
+    val selectedStyle = styleConstructor.value.call(
         OAuthListWidgetCornersStyle.Custom(MAX_RADIUS_DP * cornersStylePercent.floatValue),
         selectedSize.value,
     )
@@ -136,19 +125,7 @@ fun MultibrandingComposeScreen() {
             EnumStateCheckboxSelector(state = selectedOAuths)
             DropdownSelector(
                 modifier = Modifier.padding(vertical = 16.dp),
-                values = OAuthListWidgetStyle::class.sealedSubclasses.associate {
-                    it.simpleName!! to { cornersStyle: OAuthListWidgetCornersStyle,
-                                         sizeStyle: OAuthListWidgetSizeStyle ->
-                        it.primaryConstructor!!.call(cornersStyle, sizeStyle)
-                    }
-                } + OAuthListWidgetStyle::class.companionObject!!.functions.filter { it.returnType.isSubtypeOf(OAuthListWidgetStyle::class.createType()) }
-                    .associate {
-                        it.name.replaceFirstChar { char -> if (char.isLowerCase()) char.titlecase(Locale.getDefault()) else char.toString() } to
-                            { cornersStyle: OAuthListWidgetCornersStyle,
-                              sizeStyle: OAuthListWidgetSizeStyle ->
-                                it.call(OAuthListWidgetStyle.Companion, context, cornersStyle, sizeStyle) as OAuthListWidgetStyle
-                            }
-                    },
+                values = OAuthListWidgetStyle::class.styleConstructors(context),
                 selectedValue = selectedStyle::class.simpleName ?: error("Can get simple style"),
                 onValueSelected = { styleConstructor.value = it }
             )

@@ -25,10 +25,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.vk.id.AccessToken
 import com.vk.id.onetap.common.OneTapOAuth
+import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
+import com.vk.id.onetap.common.button.style.OneTapButtonSizeStyle
 import com.vk.id.onetap.compose.onetap.sheet.OneTapBottomSheet
 import com.vk.id.onetap.compose.onetap.sheet.OneTapScenario
 import com.vk.id.onetap.compose.onetap.sheet.rememberOneTapBottomSheetState
 import com.vk.id.onetap.compose.onetap.sheet.style.OneTapBottomSheetStyle
+import com.vk.id.onetap.compose.onetap.sheet.style.OneTapSheetCornersStyle
 import com.vk.id.onetap.compose.onetap.sheet.style.rememberOneTapBottomSheetStyle
 import com.vk.id.onetap.xml.OneTapBottomSheet
 import com.vk.id.sample.app.screen.Button
@@ -36,14 +39,9 @@ import com.vk.id.sample.app.screen.UseToken
 import com.vk.id.sample.app.uikit.selector.CheckboxSelector
 import com.vk.id.sample.app.uikit.selector.DropdownSelector
 import com.vk.id.sample.app.uikit.selector.EnumStateCheckboxSelector
+import com.vk.id.sample.app.uikit.selector.styleConstructors
 import com.vk.id.sample.xml.uikit.common.getOneTapFailCallback
 import com.vk.id.sample.xml.uikit.common.getOneTapSuccessCallback
-import java.util.Locale
-import kotlin.reflect.full.companionObject
-import kotlin.reflect.full.createType
-import kotlin.reflect.full.functions
-import kotlin.reflect.full.isSubtypeOf
-import kotlin.reflect.full.primaryConstructor
 
 @Preview
 @Composable
@@ -99,17 +97,15 @@ fun OneTapBottomSheetScreen() {
             onValueSelected = { selectedScenario.value = it }
         )
         DropdownSelector(
-            values = OneTapBottomSheetStyle::class.sealedSubclasses.associate {
-                it.simpleName!! to { it.primaryConstructor!!.call() }
-            } + OneTapBottomSheetStyle::class.companionObject!!.functions.filter { it.returnType.isSubtypeOf(OneTapBottomSheetStyle::class.createType()) }
-                .associate {
-                    it.name.replaceFirstChar { char -> if (char.isLowerCase()) char.titlecase(Locale.getDefault()) else char.toString() } to
-                        {
-                            it.callBy(mapOf(it.parameters.first() to OneTapBottomSheetStyle.Companion, it.parameters[1] to context)) as OneTapBottomSheetStyle
-                        }
-                },
+            values = OneTapBottomSheetStyle::class.styleConstructors(context),
             selectedValue = selectedStyle.value::class.simpleName ?: error("Can get simple style"),
-            onValueSelected = { selectedStyle.value = it.invoke() }
+            onValueSelected = {
+                selectedStyle.value = it.call(
+                    OneTapSheetCornersStyle.Default,
+                    OneTapButtonCornersStyle.Default,
+                    OneTapButtonSizeStyle.DEFAULT,
+                )
+            }
         )
         CheckboxSelector(
             title = "XML",

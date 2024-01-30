@@ -41,16 +41,12 @@ import com.vk.id.sample.app.uikit.selector.CheckboxSelector
 import com.vk.id.sample.app.uikit.selector.DropdownSelector
 import com.vk.id.sample.app.uikit.selector.EnumStateCheckboxSelector
 import com.vk.id.sample.app.uikit.selector.SliderSelector
+import com.vk.id.sample.app.uikit.selector.styleConstructors
 import com.vk.id.sample.app.uikit.theme.AppTheme
+import com.vk.id.sample.app.util.carrying.carry
 import com.vk.id.sample.xml.uikit.common.dpToPixels
 import com.vk.id.sample.xml.uikit.common.getOneTapFailCallback
 import com.vk.id.sample.xml.uikit.common.getOneTapSuccessCallback
-import java.util.Locale
-import kotlin.reflect.full.companionObject
-import kotlin.reflect.full.createType
-import kotlin.reflect.full.functions
-import kotlin.reflect.full.isSubtypeOf
-import kotlin.reflect.full.primaryConstructor
 
 private const val TOTAL_WIDTH_PADDING_DP = 16
 private const val MIN_WIDTH_DP = 32f
@@ -70,18 +66,10 @@ fun OnetapStylingComposeScreen() {
     val selectedSize = remember { mutableStateOf(OneTapButtonSizeStyle.DEFAULT) }
     val selectedElevationStyle = remember { mutableFloatStateOf(0f) }
     val selectedOAuths = remember { mutableStateOf(OneTapOAuth.entries.toSet()) }
-    val styleConstructor = remember {
-        mutableStateOf(
-            { cornersStyle: OneTapButtonCornersStyle,
-              sizeStyle: OneTapButtonSizeStyle,
-              elevationStyle: OneTapButtonElevationStyle ->
-                OneTapStyle.system(context, cornersStyle, sizeStyle, elevationStyle = elevationStyle)
-            }
-        )
-    }
+    val styleConstructor = remember { mutableStateOf(OneTapStyle.Companion::system.carry(context)) }
     val shouldUseXml = remember { mutableStateOf(false) }
     val signInToAnotherAccountEnabled = remember { mutableStateOf(true) }
-    val selectedStyle = styleConstructor.value.invoke(
+    val selectedStyle = styleConstructor.value.call(
         OneTapButtonCornersStyle.Custom(MAX_RADIUS_DP * cornersStylePercent.floatValue),
         selectedSize.value,
         OneTapButtonElevationStyle.Custom(MAX_ELEVATION_DP * selectedElevationStyle.floatValue),
@@ -151,22 +139,7 @@ fun OnetapStylingComposeScreen() {
             EnumStateCheckboxSelector(state = selectedOAuths)
             DropdownSelector(
                 modifier = Modifier.padding(vertical = 16.dp),
-                values = OneTapStyle::class.sealedSubclasses.associate {
-                    it.simpleName!! to
-                        { cornersStyle: OneTapButtonCornersStyle,
-                          sizeStyle: OneTapButtonSizeStyle,
-                          elevationStyle: OneTapButtonElevationStyle ->
-                            it.primaryConstructor!!.call(cornersStyle, sizeStyle, elevationStyle)
-                        }
-                }
-                    + OneTapStyle::class.companionObject!!.functions.filter { it.returnType.isSubtypeOf(OneTapStyle::class.createType()) }.associate {
-                    it.name.replaceFirstChar { char -> if (char.isLowerCase()) char.titlecase(Locale.getDefault()) else char.toString() } to
-                        { cornersStyle: OneTapButtonCornersStyle,
-                          sizeStyle: OneTapButtonSizeStyle,
-                          elevationStyle: OneTapButtonElevationStyle ->
-                            it.call(OneTapStyle.Companion, context, cornersStyle, sizeStyle, elevationStyle) as OneTapStyle
-                        }
-                },
+                values = OneTapStyle::class.styleConstructors(context),
                 selectedValue = selectedStyle::class.simpleName ?: error("Can get simple style"),
                 onValueSelected = {
                     styleConstructor.value = it
