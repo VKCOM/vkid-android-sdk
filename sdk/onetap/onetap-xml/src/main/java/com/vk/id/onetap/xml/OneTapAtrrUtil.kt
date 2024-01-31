@@ -8,7 +8,6 @@ import android.util.AttributeSet
 import android.util.DisplayMetrics
 import android.util.TypedValue
 import com.vk.id.commn.InternalVKIDApi
-import com.vk.id.commn.util.isDarkTheme
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
@@ -109,8 +108,24 @@ private fun TypedArray.getOneTapStyleConstructor(
     2 -> OneTapStyle::TransparentLight
     3 -> OneTapStyle::TransparentDark
     4 -> OneTapStyle::Icon
-    5 -> if (context.isDarkTheme) OneTapStyle::Dark else OneTapStyle::Light
-    6 -> if (context.isDarkTheme) OneTapStyle::TransparentDark else OneTapStyle::TransparentLight
+    5 -> { cornersStyle: OneTapButtonCornersStyle, sizeStyle: OneTapButtonSizeStyle, elevationStyle: OneTapButtonElevationStyle ->
+        OneTapStyle.system(
+            context = context,
+            cornersStyle = cornersStyle,
+            sizeStyle = sizeStyle,
+            elevationStyle = elevationStyle
+        )
+    }
+
+    6 -> { cornersStyle: OneTapButtonCornersStyle, sizeStyle: OneTapButtonSizeStyle, elevationStyle: OneTapButtonElevationStyle ->
+        OneTapStyle.transparentSystem(
+            context = context,
+            cornersStyle = cornersStyle,
+            sizeStyle = sizeStyle,
+            elevationStyle = elevationStyle
+        )
+    }
+
     else -> OneTapStyle::Light
 }
 
@@ -121,8 +136,24 @@ private fun TypedArray.getSheetStyleConstructor(
     1 -> OneTapBottomSheetStyle::Dark
     2 -> OneTapBottomSheetStyle::TransparentLight
     3 -> OneTapBottomSheetStyle::TransparentDark
-    4 -> if (context.isDarkTheme) OneTapBottomSheetStyle::Dark else OneTapBottomSheetStyle::Light
-    5 -> if (context.isDarkTheme) OneTapBottomSheetStyle::TransparentDark else OneTapBottomSheetStyle::TransparentLight
+    4 -> { cornersStyle: OneTapSheetCornersStyle, buttonsCornersStyle: OneTapButtonCornersStyle, sizeStyle: OneTapButtonSizeStyle ->
+        OneTapBottomSheetStyle.system(
+            context = context,
+            cornersStyle = cornersStyle,
+            buttonsCornersStyle = buttonsCornersStyle,
+            buttonsSizeStyle = sizeStyle
+        )
+    }
+
+    5 -> { cornersStyle: OneTapSheetCornersStyle, buttonsCornersStyle: OneTapButtonCornersStyle, sizeStyle: OneTapButtonSizeStyle ->
+        OneTapBottomSheetStyle.transparentSystem(
+            context = context,
+            cornersStyle = cornersStyle,
+            buttonsCornersStyle = buttonsCornersStyle,
+            buttonsSizeStyle = sizeStyle
+        )
+    }
+
     else -> OneTapBottomSheetStyle::Light
 }
 

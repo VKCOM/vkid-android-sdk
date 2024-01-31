@@ -16,8 +16,6 @@ import com.vk.id.AccessToken
 import com.vk.id.OAuth
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
-import com.vk.id.commn.InternalVKIDApi
-import com.vk.id.commn.util.isDarkTheme
 import com.vk.id.multibranding.OAuthListWidget
 import com.vk.id.multibranding.common.callback.OAuthListWidgetAuthCallback
 import com.vk.id.multibranding.common.style.OAuthListWidgetCornersStyle
@@ -130,7 +128,7 @@ private fun parseAttrs(
         0
     ).apply {
         try {
-            return getStyleConstructor(context)(
+            return getStyleConstructor(context = context)(
                 OAuthListWidgetCornersStyle.Custom(context.pixelsToDp(getCornerRadius(context))),
                 getSize(),
             ) to getOAuths()
@@ -145,13 +143,14 @@ private fun TypedArray.getCornerRadius(context: Context) = getDimension(
     context.dpToPixels(OAuthListWidgetCornersStyle.Default.radiusDp)
 )
 
-@OptIn(InternalVKIDApi::class)
 private fun TypedArray.getStyleConstructor(
     context: Context
 ) = when (getInt(R.styleable.vkid_OAuthListWidget_vkid_OAuthListStyle, 0)) {
     1 -> OAuthListWidgetStyle::Dark
     2 -> OAuthListWidgetStyle::Light
-    else -> if (context.isDarkTheme) OAuthListWidgetStyle::Dark else OAuthListWidgetStyle::Light
+    else -> { cornersStyle: OAuthListWidgetCornersStyle, sizeStyle: OAuthListWidgetSizeStyle ->
+        OAuthListWidgetStyle.system(context, cornersStyle, sizeStyle)
+    }
 }
 
 @Suppress("MagicNumber", "CyclomaticComplexMethod")
