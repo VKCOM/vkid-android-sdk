@@ -97,6 +97,7 @@ public sealed class OneTapBottomSheetStyle @InternalVKIDApi constructor(
         contentTitleTextColor = R.color.vkid_gray_100,
     )
 
+    /** @suppress */
     public companion object {
         /**
          * Create a style for the OneTap Bottomsheet that
@@ -134,6 +135,11 @@ public sealed class OneTapBottomSheetStyle @InternalVKIDApi constructor(
     }
 }
 
+/**
+ * Remembers [OneTapBottomSheetStyle].
+ *
+ * @param initialValue The starting value that should be used for style.
+ */
 @Composable
 public fun rememberOneTapBottomSheetStyle(initialValue: OneTapBottomSheetStyle): MutableState<OneTapBottomSheetStyle> {
     return rememberSaveable(stateSaver = BottomSheetStyleSaver) {

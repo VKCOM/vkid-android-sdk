@@ -31,7 +31,7 @@ class VKIDDokkaPlugin : Plugin<Project> {
             failOnWarning.set(true)
             suppressInheritedMembers.set(true)
             dokkaSourceSets.configureEach {
-                reportUndocumented.set(false) //todo: Add documentation and set to true
+                reportUndocumented.set(true)
                 jdkVersion.set(11)
             }
         }

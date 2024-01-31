@@ -53,6 +53,7 @@ public class OneTapBottomSheet @JvmOverloads constructor(
     private var onVKIDChange: (VKID?) -> Unit = {}
 
     private var state: OneTapBottomSheetState? = null
+
     init {
         val sheetSettings = parseOneTapBottomSheetAttrs(context, attrs)
         this.oAuths = sheetSettings.oAuths
@@ -131,5 +132,8 @@ public class OneTapBottomSheet @JvmOverloads constructor(
         state?.hide()
     }
 
+    /**
+     * Whether the bottom sheet is visible.
+     */
     public fun isVisible(): Boolean = state?.isVisible ?: false
 }

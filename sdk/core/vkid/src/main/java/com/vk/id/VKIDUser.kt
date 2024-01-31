@@ -27,6 +27,7 @@ public class VKIDUser(
     public val email: String? = null
 ) : Parcelable {
 
+    /** @suppress */
     override fun hashCode(): Int {
         var result = firstName.hashCode()
         result = 31 * result + lastName.hashCode()
@@ -38,6 +39,7 @@ public class VKIDUser(
         return result
     }
 
+    /** @suppress */
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
