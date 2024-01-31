@@ -33,7 +33,7 @@ java {
 
 publishing {
     publications {
-        val dokkaTemplatePlugin by creating(MavenPublication::class) {
+        creating(MavenPublication::class) {
             artifactId = project.name
             from(components["kotlin"])
 
