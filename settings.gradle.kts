@@ -11,6 +11,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        if (gradle.startParameter.taskNames.map { it.lowercase() }.any { it.contains("dokka") }) {
+            mavenLocal()
+        }
         val SUBSTITUTE_SAMPLE_PROJECTS_WITH_MODULES: String by settings
         if (SUBSTITUTE_SAMPLE_PROJECTS_WITH_MODULES == "true") {
             maven(url = "https://artifactory-external.vkpartner.ru/artifactory/vkid-sdk-andorid/")
