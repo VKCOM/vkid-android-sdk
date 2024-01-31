@@ -77,7 +77,7 @@ gradlePlugin {
         register("vkidDokka") {
             id = "vkid.dokka"
             implementationClass = "VKIDDokkaPlugin"
-            description = """A plugin that configures dokka for documntation generation. 
+            description = """A plugin that configures dokka for documentation generation. 
                 |Usage: ./gradlew dokkaHtmlMultiModule""".trimMargin()
         }
     }
