@@ -31,6 +31,8 @@ public sealed class OAuthListWidgetCornersStyle(
 
     /**
      * A custom style with required corner radius.
+     *
+     * @param radiusDp Radius in DPs.
      */
     public class Custom(radiusDp: Float) : OAuthListWidgetCornersStyle(radiusDp)
 

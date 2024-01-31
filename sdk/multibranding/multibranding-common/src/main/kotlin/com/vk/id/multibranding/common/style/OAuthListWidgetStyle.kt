@@ -56,6 +56,7 @@ public sealed class OAuthListWidgetStyle(
         sizeStyle = sizeStyle,
     )
 
+    /** @suppress */
     public companion object {
         /**
          * Returns a style which is based on the current them.

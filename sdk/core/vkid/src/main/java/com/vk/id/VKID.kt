@@ -55,6 +55,7 @@ public class VKID {
         override val vkSilentAuthInfoProvider = lazy { TestSilentAuthInfoProvider() }
     })
 
+    /** @suppress */
     public companion object {
         /**
          * The logging engine used by VKID.
@@ -173,7 +174,14 @@ public class VKID {
      * Callback interface for handling the authentication result.
      */
     public interface AuthCallback {
+        /**
+         * Called upon successful auth.
+         */
         public fun onSuccess(accessToken: AccessToken)
+
+        /**
+         * Called upon any failure during auth.
+         */
         public fun onFail(fail: VKIDAuthFail)
     }
 }

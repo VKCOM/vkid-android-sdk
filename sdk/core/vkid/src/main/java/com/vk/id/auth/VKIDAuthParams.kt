@@ -5,6 +5,11 @@ import android.content.res.Configuration
 import android.os.Build
 import com.vk.id.OAuth
 
+/**
+ * Create [VKIDAuthParams].
+ *
+ * @param initializer params' initialization.
+ */
 public inline fun VKIDAuthParams(initializer: VKIDAuthParams.Builder.() -> Unit): VKIDAuthParams {
     return VKIDAuthParams.Builder().apply(initializer).build()
 }
@@ -23,17 +28,54 @@ public class VKIDAuthParams private constructor(
     public val useOAuthProviderIfPossible: Boolean = true,
     public val oAuth: OAuth? = null,
 ) {
+    /**
+     * Represents a locale that user prefers during authorization.
+     */
     public enum class Locale {
+        /**
+         * Russian locale.
+         */
         RUS,
+
+        /**
+         * Ukrainian locale.
+         */
         UKR,
+
+        /**
+         * English locale.
+         */
         ENG,
+
+        /**
+         * Spanish locale.
+         */
         SPA,
+
+        /**
+         * German locale.
+         */
         GERMAN,
+
+        /**
+         * Polish locale.
+         */
         POL,
+
+        /**
+         * French locale.
+         */
         FRA,
+
+        /**
+         * Turkish locale.
+         */
         TURKEY;
 
         internal companion object {
+            /**
+             * Returns the current system locale.
+             */
             fun systemLocale(context: Context): Locale? {
                 val systemLocale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     context.resources.configuration.locales.get(0)
@@ -56,8 +98,19 @@ public class VKIDAuthParams private constructor(
         }
     }
 
+    /**
+     * Represents a theme that should be used to display data during authorization.
+     */
     public enum class Theme {
-        Light, Dark;
+        /**
+         * Represents light theme.
+         */
+        Light,
+
+        /**
+         * Represents dark theme.
+         */
+        Dark;
 
         internal companion object {
             fun systemTheme(context: Context): Theme? =
@@ -69,12 +122,34 @@ public class VKIDAuthParams private constructor(
         }
     }
 
+    /**
+     * Builder for [VKIDAuthParams]
+     */
     @Suppress("MemberVisibilityCanBePrivate")
     public class Builder {
+        /**
+         * Locale that should be used during authorization.
+         */
         public var locale: Locale? = null
+
+        /**
+         * Theme that should be used during authorization.
+         */
         public var theme: Theme? = null
+
+        /**
+         * Whether to use existing auth provider.
+         */
         public var useOAuthProviderIfPossible: Boolean = true
+
+        /**
+         * An [OAuth] that shoud be used for authorization.
+         */
         public var oAuth: OAuth? = null
+
+        /**
+         * Constructs [VKIDAuthParams] object with provided values.
+         */
         public fun build(): VKIDAuthParams = VKIDAuthParams(
             locale,
             theme,

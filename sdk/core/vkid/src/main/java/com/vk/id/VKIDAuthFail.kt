@@ -4,6 +4,9 @@ package com.vk.id
  * Represents the failure cases for VK ID authentication.
  */
 public sealed class VKIDAuthFail(
+    /**
+     * Text description of the failure.
+     */
     public val description: String
 ) {
     /**
@@ -14,10 +17,12 @@ public sealed class VKIDAuthFail(
     public class Canceled(
         description: String
     ) : VKIDAuthFail(description) {
+        /** @suppress */
         override fun equals(other: Any?): Boolean {
             return other is Canceled && description == other.description
         }
 
+        /** @suppress */
         override fun hashCode(): Int {
             return description.hashCode()
         }
@@ -33,10 +38,12 @@ public sealed class VKIDAuthFail(
         description: String,
         public val throwable: Throwable
     ) : VKIDAuthFail(description) {
+        /** @suppress */
         override fun equals(other: Any?): Boolean {
             return other is FailedApiCall && description == other.description && throwable == other.throwable
         }
 
+        /** @suppress */
         override fun hashCode(): Int {
             var result = description.hashCode()
             result = 31 * result + throwable.hashCode()
@@ -57,10 +64,12 @@ public sealed class VKIDAuthFail(
      * @param description Description of the OAuth state failure.
      */
     public class FailedOAuthState(description: String) : VKIDAuthFail(description) {
+        /** @suppress */
         override fun equals(other: Any?): Boolean {
             return other is FailedOAuthState && description == other.description
         }
 
+        /** @suppress */
         override fun hashCode(): Int {
             return description.hashCode()
         }
@@ -76,10 +85,12 @@ public sealed class VKIDAuthFail(
         description: String,
         public val throwable: Throwable?
     ) : VKIDAuthFail(description) {
+        /** @suppress */
         override fun equals(other: Any?): Boolean {
             return other is FailedRedirectActivity && description == other.description && throwable == other.throwable
         }
 
+        /** @suppress */
         override fun hashCode(): Int {
             var result = description.hashCode()
             result = 31 * result + throwable.hashCode()
@@ -97,10 +108,12 @@ public sealed class VKIDAuthFail(
         description: String,
         public val throwable: Throwable?
     ) : VKIDAuthFail(description) {
+        /** @suppress */
         override fun equals(other: Any?): Boolean {
             return other is NoBrowserAvailable && description == other.description && throwable == other.throwable
         }
 
+        /** @suppress */
         override fun hashCode(): Int {
             var result = description.hashCode()
             result = 31 * result + throwable.hashCode()
