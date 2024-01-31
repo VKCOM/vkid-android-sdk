@@ -15,10 +15,6 @@ import com.vk.id.sample.xml.uikit.common.isDarkTheme
 private const val TEXT_PADDING = 8
 private const val TEXT_FONT_WEIGHT = 700
 
-public data class TitleItem(
-    val text: String
-)
-
 public class TitleItemView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,

@@ -43,7 +43,9 @@ android {
 dependencies {
     implementation(project(":sample-xml"))
     implementation(project(":multibranding-compose"))
+    implementation(project(":multibranding-xml"))
     implementation(project(":onetap-compose"))
+    implementation(project(":onetap-xml"))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)
     implementation(platform(libs.androidx.compose.bom))
@@ -54,6 +56,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.kotlin.reflect)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.okhttp3.okhttp)
     implementation(libs.androidx.profileinstaller)
