@@ -8,11 +8,6 @@ importCommon() {
     source "$(git rev-parse --show-toplevel)/scripts/common/git.sh"
 }
 
-deleteBranch() {
-    BRANCH_NAME=$1
-    git branch -D $BRANCH_NAME
-}
-
 runDokka() {
     ./gradlew dokkaHtmlMultiModule
 }
