@@ -3,6 +3,7 @@
 package com.vk.id.onetap.common
 
 import android.content.Context
+import androidx.compose.runtime.Immutable
 import com.vk.id.commn.InternalVKIDApi
 import com.vk.id.commn.util.isDarkTheme
 import com.vk.id.multibranding.common.style.OAuthListWidgetStyle
@@ -22,6 +23,7 @@ import com.vk.id.onetap.common.mutlibranding.style.toOAuthListWidgetStyle
  * @param vkidButtonStyle style for the button.
  * @param alternateAccountButtonStyle style for the alternate account button.
  */
+@Immutable
 public sealed class OneTapStyle(
     public val cornersStyle: OneTapButtonCornersStyle,
     public val sizeStyle: OneTapButtonSizeStyle,

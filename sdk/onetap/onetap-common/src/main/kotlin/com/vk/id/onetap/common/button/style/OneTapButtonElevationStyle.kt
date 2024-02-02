@@ -1,8 +1,11 @@
 package com.vk.id.onetap.common.button.style
 
+import androidx.compose.runtime.Immutable
+
 /**
  * OneTap's button elevation style.
  */
+@Immutable
 public sealed class OneTapButtonElevationStyle(
     /**
      * Button elevation in DPs.

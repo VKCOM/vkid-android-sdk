@@ -1,6 +1,7 @@
 package com.vk.id.onetap.compose.onetap.sheet.style
 
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
@@ -10,6 +11,7 @@ import androidx.compose.ui.unit.dp
  *
  * @param radiusDp The radius of the corners in density-independent pixels.
  */
+@Immutable
 public sealed class OneTapSheetCornersStyle(
     public val radiusDp: Float
 ) {

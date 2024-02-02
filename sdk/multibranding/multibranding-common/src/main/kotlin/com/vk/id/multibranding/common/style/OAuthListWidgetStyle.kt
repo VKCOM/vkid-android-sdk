@@ -3,6 +3,7 @@
 package com.vk.id.multibranding.common.style
 
 import android.content.Context
+import androidx.compose.runtime.Immutable
 import com.vk.id.commn.InternalVKIDApi
 import com.vk.id.commn.util.isDarkTheme
 
@@ -15,6 +16,7 @@ import com.vk.id.commn.util.isDarkTheme
  * @param textStyle style of the text displayed of the widget.
  * @param sizeStyle denotes the size of the widget.
  */
+@Immutable
 public sealed class OAuthListWidgetStyle(
     public val cornersStyle: OAuthListWidgetCornersStyle,
     public val rippleStyle: OAuthListWidgetRippleStyle,

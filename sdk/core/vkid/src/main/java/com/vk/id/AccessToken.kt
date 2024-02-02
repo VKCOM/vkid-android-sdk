@@ -1,6 +1,7 @@
 package com.vk.id
 
 import android.os.Parcelable
+import androidx.compose.runtime.Immutable
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -12,6 +13,7 @@ import kotlinx.parcelize.Parcelize
  * @property userData The user data associated with this token.
  */
 @Parcelize
+@Immutable
 public class AccessToken(
     public val token: String,
     public val userID: Long,

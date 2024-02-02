@@ -1,5 +1,6 @@
 package com.vk.id.onetap.common.auth.style
 
+import androidx.compose.runtime.Immutable
 import com.vk.id.commn.InternalVKIDApi
 import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonElevationStyle
@@ -10,6 +11,7 @@ import com.vk.id.onetap.common.icon.style.VKIconStyle
 import com.vk.id.onetap.common.progress.style.CircleProgressStyle
 
 @Suppress("LongParameterList")
+@Immutable
 @InternalVKIDApi
 public sealed class VKIDButtonStyle(
     public val backgroundStyle: VKIDButtonBackgroundStyle,

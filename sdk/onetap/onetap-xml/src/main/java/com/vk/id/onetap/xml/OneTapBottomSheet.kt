@@ -63,6 +63,7 @@ public class OneTapBottomSheet @JvmOverloads constructor(
         addView(composeView)
     }
 
+    @Suppress("NonSkippableComposable")
     @Composable
     private fun Content(sheetSettings: OneTapBottomSheetAttributeSettings) {
         val vkid = remember { mutableStateOf(vkid) }

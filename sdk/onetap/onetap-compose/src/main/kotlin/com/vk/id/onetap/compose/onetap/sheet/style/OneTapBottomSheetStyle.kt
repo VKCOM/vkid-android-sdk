@@ -6,6 +6,7 @@ import android.content.Context
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.Saver
@@ -21,6 +22,7 @@ import com.vk.id.onetap.compose.R
 /**
  * Base class for defining the style of the One Tap Bottom Sheet.
  */
+@Immutable
 @Suppress("LongParameterList")
 public sealed class OneTapBottomSheetStyle @InternalVKIDApi constructor(
     internal val cornersStyle: OneTapSheetCornersStyle,
