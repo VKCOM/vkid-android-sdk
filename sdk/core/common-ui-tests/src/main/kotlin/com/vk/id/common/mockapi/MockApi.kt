@@ -3,7 +3,7 @@
 package com.vk.id.common.mockapi
 
 import com.vk.id.VKIDUser
-import com.vk.id.commn.InternalVKIDApi
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.test.VKIDTestBuilder
 import com.vk.id.test.VKIDTokenPayloadResponse
 

@@ -1,6 +1,6 @@
 package com.vk.id.test
 
-import com.vk.id.commn.InternalVKIDApi
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.api.VKIDApi
 
 @InternalVKIDApi

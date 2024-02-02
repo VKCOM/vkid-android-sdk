@@ -4,8 +4,8 @@ package com.vk.id.multibranding.common.style
 
 import android.content.Context
 import androidx.compose.runtime.Immutable
-import com.vk.id.commn.InternalVKIDApi
-import com.vk.id.commn.util.isDarkTheme
+import com.vk.id.common.InternalVKIDApi
+import com.vk.id.common.util.isDarkTheme
 
 /**
  * The style for OAuthListWidget.

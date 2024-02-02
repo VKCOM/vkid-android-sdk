@@ -23,7 +23,7 @@ internal class HideInternalApiTransformer(
     }
 
     private fun isInternalAnnotation(annotation: Annotations.Annotation): Boolean {
-        return annotation.dri.packageName == "com.vk.id.commn"
+        return annotation.dri.packageName == "com.vk.id.common"
             && annotation.dri.classNames == "InternalVKIDApi"
     }
 }
