@@ -1,4 +1,4 @@
-package com.vk.id.commn
+package com.vk.id.common
 
 /**
  * This annotation marks APIs that you should not use under any circumstances.

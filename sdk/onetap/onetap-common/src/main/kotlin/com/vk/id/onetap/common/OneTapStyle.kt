@@ -4,8 +4,8 @@ package com.vk.id.onetap.common
 
 import android.content.Context
 import androidx.compose.runtime.Immutable
-import com.vk.id.commn.InternalVKIDApi
-import com.vk.id.commn.util.isDarkTheme
+import com.vk.id.common.InternalVKIDApi
+import com.vk.id.common.util.isDarkTheme
 import com.vk.id.multibranding.common.style.OAuthListWidgetStyle
 import com.vk.id.onetap.common.alternate.style.AlternateAccountButtonStyle
 import com.vk.id.onetap.common.auth.style.VKIDButtonStyle

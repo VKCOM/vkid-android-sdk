@@ -1,8 +1,8 @@
-package com.vk.id.commn.util
+package com.vk.id.common.util
 
 import android.content.Context
 import android.content.res.Configuration
-import com.vk.id.commn.InternalVKIDApi
+import com.vk.id.common.InternalVKIDApi
 
 @InternalVKIDApi
 public val Context.isDarkTheme: Boolean

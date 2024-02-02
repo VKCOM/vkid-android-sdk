@@ -3,7 +3,7 @@ package com.vk.id.test
 import android.content.Context
 import com.vk.id.VKID
 import com.vk.id.VKIDUser
-import com.vk.id.commn.InternalVKIDApi
+import com.vk.id.common.InternalVKIDApi
 
 @InternalVKIDApi
 public class VKIDTestBuilder(

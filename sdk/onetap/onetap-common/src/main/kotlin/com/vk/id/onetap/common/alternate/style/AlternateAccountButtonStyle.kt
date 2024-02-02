@@ -1,7 +1,7 @@
 package com.vk.id.onetap.common.alternate.style
 
 import androidx.compose.runtime.Immutable
-import com.vk.id.commn.InternalVKIDApi
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.onetap.common.auth.style.VKIDButtonBorderStyle
 import com.vk.id.onetap.common.auth.style.VKIDButtonRippleStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
