@@ -3,6 +3,20 @@
 > **Note**\
 > Описание основных изменений в релизах VK ID SDK. Наш SDK следует [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.3.0
+
+### Added
+- Документация классов SDK
+- Поддержка системной темы во всех компонентах
+- Поддержка Skippable функций в классах SDK
+- Отображение данных пользователя в семпле
+
+### Changed
+- Elevation игнорируется для Transparent стилей OneTap
+
+### Fixed
+- Обрезание тени OneTap
+
 ## 1.2.0
 
 ### Added
