@@ -89,6 +89,7 @@ fun OnetapStylingComposeScreen() {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.Start,
         ) {
+            Spacer(modifier = Modifier.height(16.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
@@ -156,6 +157,7 @@ fun OnetapStylingComposeScreen() {
             token.value?.let {
                 UseToken(accessToken = it)
             }
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }

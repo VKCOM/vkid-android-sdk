@@ -71,6 +71,7 @@ fun MultibrandingComposeScreen() {
     AppTheme(
         useDarkTheme = selectedStyle is OAuthListWidgetStyle.Dark
     ) {
+        Spacer(modifier = Modifier.height(16.dp))
         Column(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.background)
@@ -139,6 +140,7 @@ fun MultibrandingComposeScreen() {
             token.value?.let {
                 UseToken(accessToken = it)
             }
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
