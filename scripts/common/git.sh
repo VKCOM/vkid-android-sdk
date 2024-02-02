@@ -31,3 +31,8 @@ commitCurrent() {
     git add -A
     git commit -m "$COMMIT_MESSAGE"
 }
+
+deleteBranch() {
+    BRANCH_NAME=$1
+    git branch -D $BRANCH_NAME
+}
