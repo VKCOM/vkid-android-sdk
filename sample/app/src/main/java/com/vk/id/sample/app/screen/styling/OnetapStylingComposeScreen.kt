@@ -55,7 +55,7 @@ private const val MAX_ELEVATION_DP = 20
 
 @Suppress("LongMethod")
 @Composable
-fun OnetapStylingComposeScreen() {
+internal fun OnetapStylingComposeScreen() {
     val token: MutableState<AccessToken?> = remember { mutableStateOf(null) }
     val context = LocalContext.current
 
