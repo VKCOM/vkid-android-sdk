@@ -3,7 +3,7 @@
 package com.vk.id.onetap
 
 import com.kaspersky.kaspresso.testcases.core.testcontext.TestContext
-import com.vk.id.commn.InternalVKIDApi
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.test.VKIDTestBuilder
 import io.github.kakaocup.compose.node.element.ComposeScreen
 

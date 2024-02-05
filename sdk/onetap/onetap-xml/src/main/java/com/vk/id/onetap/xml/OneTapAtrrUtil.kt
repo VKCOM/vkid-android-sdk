@@ -7,7 +7,7 @@ import android.content.res.TypedArray
 import android.util.AttributeSet
 import android.util.DisplayMetrics
 import android.util.TypedValue
-import com.vk.id.commn.InternalVKIDApi
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle

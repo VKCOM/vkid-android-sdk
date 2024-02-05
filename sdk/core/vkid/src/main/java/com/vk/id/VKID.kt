@@ -7,7 +7,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.vk.id.auth.VKIDAuthParams
-import com.vk.id.commn.InternalVKIDApi
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthEventBridge
 import com.vk.id.internal.auth.AuthProvidersChooser
