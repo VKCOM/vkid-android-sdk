@@ -30,6 +30,10 @@ class AndroidTestsConventionPlugin : Plugin<Project> {
             add("androidTestImplementation", libs.findLibrary("androidx-compose-ui-test-junit4").get())
             add("androidTestImplementation", libs.findLibrary("kotest-assertions").get())
             add("androidTestImplementation", libs.findLibrary("androidx-test-junit-ktx").get())
+            add("implementation", libs.findLibrary("kotlinx-coroutines-core").get())
+            // https://issuetracker.google.com/issues/323394096
+            add("implementation", libs.findLibrary("androidx-collection").get())
+            add("implementation", libs.findLibrary("androidx-core-ktx").get())
         }
     }
 }

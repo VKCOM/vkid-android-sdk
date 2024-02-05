@@ -7,6 +7,7 @@ androidxActivity = "1.8.2"
 androidxAppcompat = "1.6.1"
 androidxAnnotation = "1.7.1"
 androidxBrowser = "1.7.0"
+androidxCollection = "1.4.0"
 androidxComposeBom = "2024.01.00"
 androidxComposeCompiler = "1.5.8"
 androidxConstraintLayout = "2.1.4"
@@ -44,6 +45,7 @@ androidx-activity-compose = { group = "androidx.activity", name = "activity-comp
 androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "androidxAnnotation" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidxAppcompat" }
 androidx-browser = { group = "androidx.browser", name = "browser", version.ref = "androidxBrowser" }
+androidx-collection = { group = "androidx.collection", name = "collection", version.ref = "androidxCollection" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
 androidx-compose-compiler = { group = "androidx.compose.compiler", name = "compiler", version.ref = "androidxComposeCompiler" }
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
