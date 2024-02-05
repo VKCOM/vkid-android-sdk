@@ -24,7 +24,3 @@ public final class com/vk/id/multibranding/xml/OAuthListWidget : android/widget/
 	public final fun setVKID (Lcom/vk/id/VKID;)V
 }
 
-public synthetic class com/vk/id/multibranding/xml/OAuthListWidget$EntriesMappings {
-	public static final synthetic field entries$0 Lkotlin/enums/EnumEntries;
-}
-
