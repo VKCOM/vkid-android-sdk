@@ -5,7 +5,7 @@ import android.os.Looper
 import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
-import com.vk.id.onetap.ChangeAccountTest
+import com.vk.id.onetap.base.ChangeAccountTest
 import com.vk.id.onetap.common.OneTapOAuth
 import io.qameta.allure.kotlin.junit4.DisplayName
 

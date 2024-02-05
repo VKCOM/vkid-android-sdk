@@ -1,12 +1,12 @@
-package com.vk.id.multibranding.ui.tests
+package com.vk.id.multibranding.screen
 
 import androidx.compose.ui.test.SemanticsNodeInteractionsProvider
 import io.github.kakaocup.compose.node.element.ComposeScreen
 import io.github.kakaocup.compose.node.element.KNode
 
-public class OneTapScreen(
+public class MultibrandingScreen(
     semanticsProvider: SemanticsNodeInteractionsProvider
-) : ComposeScreen<OneTapScreen>(semanticsProvider) {
+) : ComposeScreen<MultibrandingScreen>(semanticsProvider) {
 
     public val vkButton: KNode = child {
         hasTestTag("oauth_button_vk")

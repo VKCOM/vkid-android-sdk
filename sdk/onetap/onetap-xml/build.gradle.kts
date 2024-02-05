@@ -15,6 +15,4 @@ dependencies {
     implementation(project(":onetap-compose"))
     implementation(libs.androidx.compose.ui)
     implementation(libs.coil)
-    androidTestImplementation(project(":onetap-ui-tests"))
-    androidTestImplementation(project(":multibranding-ui-tests"))
 }
