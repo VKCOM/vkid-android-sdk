@@ -10,7 +10,7 @@ import com.vk.id.sample.app.R
 import com.vk.id.sample.xml.R as xmlR
 
 @Composable
-fun AppTheme(
+internal fun AppTheme(
     useDarkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {

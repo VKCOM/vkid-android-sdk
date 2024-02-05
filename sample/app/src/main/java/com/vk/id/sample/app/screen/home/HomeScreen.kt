@@ -50,7 +50,7 @@ import java.util.Locale
 
 @Composable
 @Suppress("LongMethod")
-fun HomeScreen(
+internal fun HomeScreen(
     navController: NavController
 ) {
     val context = LocalContext.current

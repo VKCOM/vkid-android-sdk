@@ -47,7 +47,7 @@ import com.vk.id.sample.xml.uikit.common.getOneTapSuccessCallback
 @Preview
 @Composable
 @Suppress("LongMethod")
-fun OneTapBottomSheetScreen() {
+internal fun OneTapBottomSheetScreen() {
     val context = LocalContext.current
     val token: MutableState<AccessToken?> = remember { mutableStateOf(null) }
     val selectedScenario = rememberSaveable { mutableStateOf(OneTapScenario.EnterService) }
