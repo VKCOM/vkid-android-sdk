@@ -6,7 +6,7 @@ import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.multibranding.OAuthListWidget
 import com.vk.id.multibranding.common.callback.OAuthListWidgetAuthCallback
-import com.vk.id.multibranding.ui.tests.MultibrandingTest
+import com.vk.id.multibranding.base.MultibrandingTest
 import io.qameta.allure.kotlin.junit4.DisplayName
 
 @DisplayName("Compose multibranding auth")

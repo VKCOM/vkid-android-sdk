@@ -1,4 +1,4 @@
-package com.vk.id.multibranding.ui.tests
+package com.vk.id.multibranding.base
 
 import com.kaspersky.kaspresso.testcases.core.testcontext.TestContext
 import com.vk.id.OAuth
@@ -24,7 +24,7 @@ public abstract class MultibrandingTest(
     }
 
     protected override fun TestContext<Unit>.startAuth(): Unit = step("Start auth") {
-        ComposeScreen.onComposeScreen<OneTapScreen>(composeTestRule) {
+        ComposeScreen.onComposeScreen<com.vk.id.multibranding.screen.MultibrandingScreen>(composeTestRule) {
             when (oAuth) {
                 OAuth.VK -> vkButton.performClick()
                 OAuth.MAIL -> mailButton.performClick()

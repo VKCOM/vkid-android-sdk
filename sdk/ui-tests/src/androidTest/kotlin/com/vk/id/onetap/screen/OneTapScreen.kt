@@ -1,4 +1,4 @@
-package com.vk.id.onetap
+package com.vk.id.onetap.screen
 
 import androidx.compose.ui.test.SemanticsNodeInteractionsProvider
 import io.github.kakaocup.compose.node.element.ComposeScreen
