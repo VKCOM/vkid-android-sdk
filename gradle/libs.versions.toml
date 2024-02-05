@@ -1,13 +1,14 @@
 [versions]
 allure = "2.4.0"
 androidDesugarJdkLibs = "2.0.4"
-androidGradlePlugin = "8.2.1"
+androidGradlePlugin = "8.2.2"
 androidMaterial = "1.11.0"
 androidxActivity = "1.8.2"
 androidxAppcompat = "1.6.1"
 androidxAnnotation = "1.7.1"
 androidxBrowser = "1.7.0"
-androidxComposeBom = "2023.10.01"
+androidxCollection = "1.4.0"
+androidxComposeBom = "2024.01.00"
 androidxComposeCompiler = "1.5.8"
 androidxConstraintLayout = "2.1.4"
 androidxCore = "1.12.0"
@@ -15,10 +16,10 @@ androidxCoreSplashscreen = "1.0.1"
 androidxNavigationCompose = "2.7.6"
 androidxOrchestrator = "1.4.2"
 androidxTestJunitKtx = "1.1.5"
-andoridxUiTestJunit4 = "1.5.4"
-binary-compatibility-validator = "0.13.2"
+andoridxUiTestJunit4 = "1.6.0"
+binary-compatibility-validator = "0.14.0"
 coil = "2.5.0"
-detekt = "1.23.4"
+detekt = "1.23.5"
 dokka = "1.9.10"
 gson = "2.10.1"
 kaspresso = "1.5.3"
@@ -32,8 +33,8 @@ okHttpVersion = "4.12.0"
 okioVersion = "3.4.0"
 preference = "1.2.1"
 junit = "1.1.5"
-benchmarkMacroJunit4 = "1.2.2"
-baselineprofile = "1.2.2"
+benchmarkMacroJunit4 = "1.2.3"
+baselineprofile = "1.2.3"
 profileinstaller = "1.3.1"
 
 [libraries]
@@ -44,6 +45,7 @@ androidx-activity-compose = { group = "androidx.activity", name = "activity-comp
 androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "androidxAnnotation" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidxAppcompat" }
 androidx-browser = { group = "androidx.browser", name = "browser", version.ref = "androidxBrowser" }
+androidx-collection = { group = "androidx.collection", name = "collection", version.ref = "androidxCollection" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
 androidx-compose-compiler = { group = "androidx.compose.compiler", name = "compiler", version.ref = "androidxComposeCompiler" }
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
