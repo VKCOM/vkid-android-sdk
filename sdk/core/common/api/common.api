@@ -1,10 +1,3 @@
-public abstract interface annotation class com/vk/id/commn/InternalVKIDApi : java/lang/annotation/Annotation {
-}
-
-public final class com/vk/id/commn/util/IsDarkThemeKt {
-	public static final fun isDarkTheme (Landroid/content/Context;)Z
-}
-
 public final class com/vk/id/common/BuildConfig {
 	public static final field BUILD_TYPE Ljava/lang/String;
 	public static final field CI_BUILD_NUMBER Ljava/lang/Integer;
@@ -14,5 +7,12 @@ public final class com/vk/id/common/BuildConfig {
 	public static final field VKID_BUILD_TIME Ljava/lang/Long;
 	public static final field VKID_VERSION_NAME Ljava/lang/String;
 	public fun <init> ()V
+}
+
+public abstract interface annotation class com/vk/id/common/InternalVKIDApi : java/lang/annotation/Annotation {
+}
+
+public final class com/vk/id/common/util/IsDarkThemeKt {
+	public static final fun isDarkTheme (Landroid/content/Context;)Z
 }
 

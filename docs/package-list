@@ -1,14 +1,14 @@
 $dokka.format:html-v1
 $dokka.linkExtension:html
-$dokka.location:com.vk.id.commn.util////PointingToDeclaration/common/com.vk.id.commn.util.html
+$dokka.location:com.vk.id.common.util////PointingToDeclaration/common/com.vk.id.common.util.html
 $dokka.location:com.vk.id.onetap.common.alternate.style////PointingToDeclaration/onetap-common/com.vk.id.onetap.common.alternate.style.html
 $dokka.location:com.vk.id.onetap.common.auth.style////PointingToDeclaration/onetap-common/com.vk.id.onetap.common.auth.style.html
 $dokka.location:com.vk.id.onetap.common.icon.style////PointingToDeclaration/onetap-common/com.vk.id.onetap.common.icon.style.html
 $dokka.location:com.vk.id.onetap.common.progress.style////PointingToDeclaration/onetap-common/com.vk.id.onetap.common.progress.style.html
 $dokka.location:com.vk.id.test////PointingToDeclaration/vkid/com.vk.id.test.html
 module:common
-com.vk.id.commn
-com.vk.id.commn.util
+com.vk.id.common
+com.vk.id.common.util
 module:multibranding-common
 com.vk.id.multibranding.common.callback
 com.vk.id.multibranding.common.style
