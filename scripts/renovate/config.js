@@ -43,5 +43,5 @@ module.exports = {
 
     "draftPR": true,
 
-    "baseBranches": ["task/VKIDSDK-0/renovate-support"],
+    "baseBranches": ["develop"],
 }
