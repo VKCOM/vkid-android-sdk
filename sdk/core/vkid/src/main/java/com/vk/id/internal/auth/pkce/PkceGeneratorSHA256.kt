@@ -64,7 +64,7 @@ internal class PkceGeneratorSHA256 {
     companion object {
         private const val ALGORITHM = "SHA-256"
         private const val CHARSET_NAME = "ISO_8859_1"
-        private const val MIN_CODE_VERIFIER_ENTROPY = 32
+        private const val MIN_CODE_VERIFIER_ENTROPY = 128
         private const val PKCE_BASE64_ENCODE_SETTINGS =
             Base64.URL_SAFE or Base64.NO_PADDING or Base64.NO_WRAP
     }
