@@ -1,3 +1,5 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.onetap.xml
 
 import android.content.Context
@@ -5,6 +7,7 @@ import android.content.res.TypedArray
 import android.util.AttributeSet
 import android.util.DisplayMetrics
 import android.util.TypedValue
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
@@ -26,7 +29,7 @@ internal fun parseOneTapAttrs(
     ).apply {
         try {
             return OneTapParsedAttrs(
-                style = getOneTapStyleConstructor()(
+                style = getOneTapStyleConstructor(context)(
                     OneTapButtonCornersStyle.Custom(context.pixelsToDp(getButtonsCornerRadius(context))),
                     getOneTapButtonsSize(),
                     OneTapButtonElevationStyle.Custom(context.pixelsToDp(getOneTapButtonsElevation(context)))
@@ -66,7 +69,7 @@ internal fun parseOneTapBottomSheetAttrs(
     ).apply {
         try {
             return OneTapBottomSheetAttributeSettings(
-                style = getSheetStyleConstructor()(
+                style = getSheetStyleConstructor(context)(
                     OneTapSheetCornersStyle.Custom(context.pixelsToDp(getSheetCornerRadius(context))),
                     OneTapButtonCornersStyle.Custom(context.pixelsToDp(getButtonsCornerRadius(context))),
                     getOneTapButtonsSize(),
@@ -98,19 +101,59 @@ private fun TypedArray.getOneTapButtonsElevation(context: Context) = getDimensio
 )
 
 @Suppress("MagicNumber")
-private fun TypedArray.getOneTapStyleConstructor() = when (getInt(R.styleable.vkid_OneTap_vkid_onetapStyle, 0)) {
+private fun TypedArray.getOneTapStyleConstructor(
+    context: Context
+) = when (getInt(R.styleable.vkid_OneTap_vkid_onetapStyle, 0)) {
     1 -> OneTapStyle::Dark
     2 -> OneTapStyle::TransparentLight
     3 -> OneTapStyle::TransparentDark
     4 -> OneTapStyle::Icon
+    5 -> { cornersStyle: OneTapButtonCornersStyle, sizeStyle: OneTapButtonSizeStyle, elevationStyle: OneTapButtonElevationStyle ->
+        OneTapStyle.system(
+            context = context,
+            cornersStyle = cornersStyle,
+            sizeStyle = sizeStyle,
+            elevationStyle = elevationStyle
+        )
+    }
+
+    6 -> { cornersStyle: OneTapButtonCornersStyle, sizeStyle: OneTapButtonSizeStyle, elevationStyle: OneTapButtonElevationStyle ->
+        OneTapStyle.transparentSystem(
+            context = context,
+            cornersStyle = cornersStyle,
+            sizeStyle = sizeStyle,
+            elevationStyle = elevationStyle
+        )
+    }
+
     else -> OneTapStyle::Light
 }
 
 @Suppress("MagicNumber")
-private fun TypedArray.getSheetStyleConstructor() = when (getInt(R.styleable.vkid_OneTap_vkid_bottomSheetStyle, 0)) {
+private fun TypedArray.getSheetStyleConstructor(
+    context: Context
+) = when (getInt(R.styleable.vkid_OneTap_vkid_bottomSheetStyle, 0)) {
     1 -> OneTapBottomSheetStyle::Dark
     2 -> OneTapBottomSheetStyle::TransparentLight
     3 -> OneTapBottomSheetStyle::TransparentDark
+    4 -> { cornersStyle: OneTapSheetCornersStyle, buttonsCornersStyle: OneTapButtonCornersStyle, sizeStyle: OneTapButtonSizeStyle ->
+        OneTapBottomSheetStyle.system(
+            context = context,
+            cornersStyle = cornersStyle,
+            buttonsCornersStyle = buttonsCornersStyle,
+            buttonsSizeStyle = sizeStyle
+        )
+    }
+
+    5 -> { cornersStyle: OneTapSheetCornersStyle, buttonsCornersStyle: OneTapButtonCornersStyle, sizeStyle: OneTapButtonSizeStyle ->
+        OneTapBottomSheetStyle.transparentSystem(
+            context = context,
+            cornersStyle = cornersStyle,
+            buttonsCornersStyle = buttonsCornersStyle,
+            buttonsSizeStyle = sizeStyle
+        )
+    }
+
     else -> OneTapBottomSheetStyle::Light
 }
 

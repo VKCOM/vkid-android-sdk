@@ -19,8 +19,8 @@ public abstract class MultibrandingTest(
     private companion object {
 
         @JvmStatic
-        @Parameterized.Parameters(name = "{0}")
-        fun data() = OAuth.values()
+        @Parameterized.Parameters
+        fun data() = OAuth.entries
     }
 
     protected override fun TestContext<Unit>.startAuth(): Unit = step("Start auth") {

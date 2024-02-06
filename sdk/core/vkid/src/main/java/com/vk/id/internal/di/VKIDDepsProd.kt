@@ -13,6 +13,8 @@ import com.vk.id.VKID
 import com.vk.id.internal.api.VKIDApi
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.api.VKIDRealApi
+import com.vk.id.internal.api.useragent.UserAgentInterceptor
+import com.vk.id.internal.api.useragent.UserAgentProvider
 import com.vk.id.internal.auth.AuthActivity
 import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthProvidersChooser
@@ -75,6 +77,7 @@ internal open class VKIDDepsProd(
             .writeTimeout(OKHTTP_TIMEOUT_SECONDS, TimeUnit.SECONDS)
             .connectTimeout(OKHTTP_TIMEOUT_SECONDS, TimeUnit.SECONDS)
             .addInterceptor(loggingInterceptor())
+            .addInterceptor(UserAgentInterceptor(UserAgentProvider(appContext)))
             .addCertificatePinnerIfNecessary()
             .build()
         VKIDRealApi(client)

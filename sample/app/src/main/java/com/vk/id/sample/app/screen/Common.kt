@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -61,7 +62,16 @@ internal fun Button(
 internal fun UseToken(accessToken: AccessToken) {
     Column(horizontalAlignment = Alignment.Start) {
         Spacer(modifier = Modifier.height(24.dp))
-        Text(text = "Current user: ${accessToken.userID}")
+        Text(
+            color = MaterialTheme.colorScheme.onBackground,
+            text = """|
+                |Current user: ${accessToken.userID}
+                |First name: ${accessToken.userData.firstName}
+                |Last name: ${accessToken.userData.lastName}
+                |Phone: ${accessToken.userData.phone}
+                |Email: ${accessToken.userData.email}
+            """.trimMargin()
+        )
         Spacer(modifier = Modifier.height(12.dp))
         val coroutineScope = rememberCoroutineScope()
         val context = LocalContext.current

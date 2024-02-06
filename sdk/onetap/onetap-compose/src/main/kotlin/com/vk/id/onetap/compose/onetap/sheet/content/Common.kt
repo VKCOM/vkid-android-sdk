@@ -2,6 +2,7 @@
 
 package com.vk.id.onetap.compose.onetap.sheet.content
 
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.MutableState
 import com.vk.id.AccessToken
 import com.vk.id.VKID
@@ -13,6 +14,7 @@ import com.vk.id.onetap.compose.onetap.sheet.style.OneTapBottomSheetStyle
 import kotlinx.coroutines.CoroutineScope
 import java.io.Serializable
 
+@Immutable
 internal sealed class OneTapBottomSheetAuthStatus : Serializable {
     companion object {
         private const val serialVersionUID: Long = 1

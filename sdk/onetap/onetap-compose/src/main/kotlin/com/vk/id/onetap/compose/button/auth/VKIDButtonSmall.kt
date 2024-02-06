@@ -32,7 +32,7 @@ import coil.compose.AsyncImage
 import coil.decode.DataSource
 import com.vk.id.VKID
 import com.vk.id.VKIDUser
-import com.vk.id.commn.InternalVKIDApi
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.onetap.common.auth.style.VKIDButtonStyle
 import com.vk.id.onetap.compose.button.FetchUserData
 import com.vk.id.onetap.compose.button.OnFetchingProgress
@@ -64,10 +64,12 @@ internal fun VKIDButtonSmall(
         coroutineScope,
         useVKID,
         object : OnFetchingProgress {
-            override suspend fun onPreFetch() { /*nothing*/
+            override suspend fun onPreFetch() {
+                /*nothing*/
             }
 
-            override fun onDispose() { /*nothing*/
+            override fun onDispose() {
+                /*nothing*/
             }
 
             override suspend fun onFetched(user: VKIDUser?) {
@@ -86,7 +88,7 @@ internal fun VKIDButtonSmall(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .testTag("vkid_button")
-            .shadow(style.elevationStyle, style.cornersStyle)
+            .shadow(style)
             .width(style.sizeStyle.heightDp().dp)
             .height(style.sizeStyle)
             .border(style.borderStyle, style.cornersStyle)

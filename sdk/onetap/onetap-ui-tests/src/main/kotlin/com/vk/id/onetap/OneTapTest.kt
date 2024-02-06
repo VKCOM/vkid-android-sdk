@@ -8,7 +8,7 @@ import com.vk.id.AccessToken
 import com.vk.id.OAuth
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
-import com.vk.id.commn.InternalVKIDApi
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.common.baseauthtest.BaseAuthTest
 import com.vk.id.onetap.common.OneTapOAuth
 import io.github.kakaocup.compose.node.element.ComposeScreen

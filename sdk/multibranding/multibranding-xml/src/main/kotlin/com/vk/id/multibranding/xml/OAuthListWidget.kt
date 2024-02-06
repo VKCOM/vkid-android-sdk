@@ -42,7 +42,7 @@ public class OAuthListWidget @JvmOverloads constructor(
     private var onStyleChange: (OAuthListWidgetStyle) -> Unit = {}
 
     /** A set of [OAuth]s the should be displayed to the user. */
-    public var oAuths: Set<OAuth> = OAuth.values().toSet()
+    public var oAuths: Set<OAuth> = OAuth.entries.toSet()
         set(value) {
             field = value
             onOAuthsChange(value)
@@ -67,6 +67,7 @@ public class OAuthListWidget @JvmOverloads constructor(
         composeView.setContent { Content() }
     }
 
+    @Suppress("NonSkippableComposable")
     @Composable
     private fun Content() {
         val style = remember { mutableStateOf(style) }
@@ -128,7 +129,7 @@ private fun parseAttrs(
         0
     ).apply {
         try {
-            return getStyleConstructor()(
+            return getStyleConstructor(context = context)(
                 OAuthListWidgetCornersStyle.Custom(context.pixelsToDp(getCornerRadius(context))),
                 getSize(),
             ) to getOAuths()
@@ -143,9 +144,14 @@ private fun TypedArray.getCornerRadius(context: Context) = getDimension(
     context.dpToPixels(OAuthListWidgetCornersStyle.Default.radiusDp)
 )
 
-private fun TypedArray.getStyleConstructor() = when (getInt(R.styleable.vkid_OAuthListWidget_vkid_OAuthListStyle, 0)) {
+private fun TypedArray.getStyleConstructor(
+    context: Context
+) = when (getInt(R.styleable.vkid_OAuthListWidget_vkid_OAuthListStyle, 0)) {
     1 -> OAuthListWidgetStyle::Dark
-    else -> OAuthListWidgetStyle::Light
+    2 -> OAuthListWidgetStyle::Light
+    else -> { cornersStyle: OAuthListWidgetCornersStyle, sizeStyle: OAuthListWidgetSizeStyle ->
+        OAuthListWidgetStyle.system(context, cornersStyle, sizeStyle)
+    }
 }
 
 @Suppress("MagicNumber", "CyclomaticComplexMethod")

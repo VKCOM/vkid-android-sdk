@@ -3,7 +3,7 @@
 package com.vk.id.test
 
 import com.google.gson.annotations.SerializedName
-import com.vk.id.commn.InternalVKIDApi
+import com.vk.id.common.InternalVKIDApi
 
 @InternalVKIDApi
 public interface OverrideVKIDApi {

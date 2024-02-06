@@ -1,6 +1,6 @@
 package com.vk.id.multibranding.common.style
 
-import com.vk.id.commn.InternalVKIDApi
+import com.vk.id.common.InternalVKIDApi
 
 /**
  * OAuthListWidget's border style.

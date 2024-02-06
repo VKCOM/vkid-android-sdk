@@ -1,6 +1,7 @@
 plugins {
     id("vkid.android.library")
     id("vkid.android.publish")
+    id("vkid.dokka")
     id("org.jetbrains.kotlinx.binary-compatibility-validator")
 }
 
@@ -11,4 +12,5 @@ android {
 dependencies {
     implementation(project(":vkid"))
     implementation(project(":common"))
+    implementation(libs.androidx.compose.runtime)
 }

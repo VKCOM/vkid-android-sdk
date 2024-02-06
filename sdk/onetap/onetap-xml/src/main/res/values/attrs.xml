@@ -7,6 +7,8 @@
             <enum name="transparentLight" value="2"/>
             <enum name="transparentDark" value="3"/>
             <enum name="icon" value="4"/>
+            <enum name="system" value="5"/>
+            <enum name="transparentSystem" value="6"/>
         </attr>
         <attr name="vkid_buttonsCornerRadius" format="dimension"/>
         <attr name="vkid_buttonsElevation" format="dimension"/>
@@ -32,6 +34,8 @@
             <enum name="dark" value="1"/>
             <enum name="transparentLight" value="2"/>
             <enum name="transparentDark" value="3"/>
+            <enum name="system" value="4"/>
+            <enum name="transparentSystem" value="5"/>
         </attr>
         <attr name="vkid_bottomSheetCornerRadius" format="dimension"/>
         <attr name="vkid_bottomSheetServiceName" format="string"/>
