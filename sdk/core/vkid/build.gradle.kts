@@ -35,6 +35,7 @@ dependencies {
     implementation(libs.androidx.browser)
     implementation(libs.androidx.preference)
     implementation(libs.androidx.preference.ktx)
+    implementation(libs.androidx.security.crypto)
     implementation(libs.gson)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.core)
