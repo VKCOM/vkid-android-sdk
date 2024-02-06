@@ -3,7 +3,7 @@ package com.vk.id.test
 import android.content.Context
 import com.vk.id.VKID
 import com.vk.id.VKIDUser
-import com.vk.id.commn.InternalVKIDApi
+import com.vk.id.common.InternalVKIDApi
 
 @InternalVKIDApi
 public class VKIDTestBuilder(
@@ -23,7 +23,9 @@ public class VKIDTestBuilder(
     }
     private var authProviderConfig: MockAuthProviderConfig = MockAuthProviderConfig()
 
-    public fun getTokenResponse(response: Result<VKIDTokenPayloadResponse>): VKIDTestBuilder = apply { this.getTokenResponse = response }
+    public fun getTokenResponse(response: Result<VKIDTokenPayloadResponse>): VKIDTestBuilder = apply {
+        this.getTokenResponse = response
+    }
     public fun overrideUuid(uuid: String): VKIDTestBuilder = updateConfig { copy(overrideUuid = uuid) }
     public fun overrideState(state: String): VKIDTestBuilder = updateConfig { copy(overrideState = state) }
     public fun overrideOAuthToNull(): VKIDTestBuilder = updateConfig { copy(overrideOAuthToNull = true) }

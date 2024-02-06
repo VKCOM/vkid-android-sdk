@@ -1,6 +1,7 @@
 package com.vk.id
 
 import android.os.Parcelable
+import androidx.compose.runtime.Immutable
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -12,6 +13,7 @@ import kotlinx.parcelize.Parcelize
  * @property userData The user data associated with this token.
  */
 @Parcelize
+@Immutable
 public class AccessToken(
     public val token: String,
     public val userID: Long,
@@ -19,6 +21,7 @@ public class AccessToken(
     public val userData: VKIDUser,
 ) : Parcelable {
 
+    /** @suppress */
     override fun hashCode(): Int {
         var result = token.hashCode()
         result = 31 * result + userID.hashCode()
@@ -27,6 +30,7 @@ public class AccessToken(
         return result
     }
 
+    /** @suppress */
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

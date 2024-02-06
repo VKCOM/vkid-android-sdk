@@ -7,6 +7,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -128,7 +129,7 @@ public fun OneTapBottomSheet(
     )
 }
 
-@Suppress("LongParameterList", "LongMethod")
+@Suppress("LongParameterList", "LongMethod", "NonSkippableComposable")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun OneTapBottomSheetInternal(
@@ -248,7 +249,8 @@ private fun processSheetShow(
     state: OneTapBottomSheetState
 ): (Boolean) -> Unit =
     remember {
-        { show ->
+        {
+                show ->
             if (show) {
                 authStatus.value = OneTapBottomSheetAuthStatus.Init
             }
@@ -282,6 +284,7 @@ private fun rememberOneTapBottomSheetStateInternal(): OneTapBottomSheetState {
 /**
  * Manages the state of the One Tap Bottom Sheet. Should be created with [rememberOneTapBottomSheetState]
  */
+@Stable
 public class OneTapBottomSheetState
 @OptIn(ExperimentalMaterial3Api::class)
 internal constructor(

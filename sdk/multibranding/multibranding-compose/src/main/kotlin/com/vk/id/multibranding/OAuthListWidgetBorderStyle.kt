@@ -1,3 +1,5 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.multibranding
 
 import androidx.compose.foundation.border
@@ -6,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
-import com.vk.id.commn.InternalVKIDApi
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.multibranding.common.style.OAuthListWidgetBorderStyle
 import com.vk.id.multibranding.common.style.OAuthListWidgetCornersStyle
 

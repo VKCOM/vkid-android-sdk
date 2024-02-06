@@ -1,11 +1,13 @@
 package com.vk.id.onetap.common.alternate.style
 
-import com.vk.id.commn.InternalVKIDApi
+import androidx.compose.runtime.Immutable
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.onetap.common.auth.style.VKIDButtonBorderStyle
 import com.vk.id.onetap.common.auth.style.VKIDButtonRippleStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonSizeStyle
 
+@Immutable
 @InternalVKIDApi
 public sealed class AlternateAccountButtonStyle(
     public val backgroundStyle: AlternateAccountButtonBackgroundStyle,

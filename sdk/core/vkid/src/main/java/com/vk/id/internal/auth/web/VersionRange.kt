@@ -19,12 +19,13 @@ import com.vk.id.internal.auth.web.DelimitedVersion.Companion.parse
  * A browser filter which matches when a browser falls into a version range. Versions are
  * expected to match the semantics of [DelimitedVersion].
  */
-@Suppress("MemberVisibilityCanBePrivate", "unused")
+@Suppress("MemberVisibilityCanBePrivate", "unused", "RedundantConstructorKeyword")
 internal class VersionRange
 /**
  * Creates a version range with the specified bounds. A null bound is treated as "no bound"
  * on that end.
- */(
+ */
+constructor(
     private val lowerBound: DelimitedVersion?,
     private val upperBound: DelimitedVersion?
 ) {

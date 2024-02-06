@@ -25,6 +25,7 @@ internal class AuthResultHandler(
 ) {
 
     private val logger = createLoggerForClass()
+
     internal suspend fun handle(
         authResult: AuthResult
     ) {
@@ -46,13 +47,12 @@ internal class AuthResultHandler(
     }
 
     private suspend fun handleOauth(oauth: AuthResult.Success) {
-        lateinit var realUuid: String
-        lateinit var realState: String
-        lateinit var codeVerifier: String
-        withContext(dispatchers.io) {
-            realUuid = deviceIdProvider.getDeviceId(appContext)
-            realState = prefsStore.state
-            codeVerifier = prefsStore.codeVerifier
+        val (realUuid, realState, codeVerifier) = withContext(dispatchers.io) {
+            listOf(
+                deviceIdProvider.getDeviceId(appContext),
+                prefsStore.state,
+                prefsStore.codeVerifier,
+            )
         }
 
         if (realUuid != oauth.uuid) {
@@ -113,10 +113,12 @@ internal class AuthResultHandler(
             message,
             error
         )
+
         is AuthResult.AuthActiviyResultFailed -> VKIDAuthFail.FailedRedirectActivity(
             message,
             error
         )
+
         is AuthResult.Success -> error("AuthResult is Success and cannot be converted to fail!")
     }
 

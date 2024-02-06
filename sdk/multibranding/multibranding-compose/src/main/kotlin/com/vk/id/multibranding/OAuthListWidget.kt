@@ -44,7 +44,7 @@ import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.auth.VKIDAuthParams.Theme
-import com.vk.id.commn.InternalVKIDApi
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.multibranding.common.callback.OAuthListWidgetAuthCallback
 import com.vk.id.multibranding.common.style.OAuthListWidgetStyle
 import kotlinx.coroutines.CoroutineScope
@@ -65,7 +65,7 @@ public fun OAuthListWidget(
     style: OAuthListWidgetStyle = OAuthListWidgetStyle.Dark(),
     onAuth: OAuthListWidgetAuthCallback,
     onFail: (OAuth, VKIDAuthFail) -> Unit,
-    oAuths: Set<OAuth> = OAuth.values().toSet(),
+    oAuths: Set<OAuth> = OAuth.entries.toSet(),
 ) {
     OAuthListWidget(
         modifier = modifier,
@@ -94,7 +94,7 @@ public fun OAuthListWidget(
     style: OAuthListWidgetStyle = OAuthListWidgetStyle.Dark(),
     onAuth: OAuthListWidgetAuthCallback,
     onFail: (OAuth, VKIDAuthFail) -> Unit,
-    oAuths: Set<OAuth> = OAuth.values().toSet(),
+    oAuths: Set<OAuth> = OAuth.entries.toSet(),
     vkid: VKID? = null,
 ) {
     val context = LocalContext.current

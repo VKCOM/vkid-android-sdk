@@ -1,13 +1,19 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.onetap.compose.onetap.sheet.style
 
+import android.content.Context
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.mapSaver
 import androidx.compose.runtime.saveable.rememberSaveable
+import com.vk.id.common.InternalVKIDApi
+import com.vk.id.common.util.isDarkTheme
 import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonSizeStyle
@@ -16,8 +22,9 @@ import com.vk.id.onetap.compose.R
 /**
  * Base class for defining the style of the One Tap Bottom Sheet.
  */
+@Immutable
 @Suppress("LongParameterList")
-public sealed class OneTapBottomSheetStyle(
+public sealed class OneTapBottomSheetStyle @InternalVKIDApi constructor(
     internal val cornersStyle: OneTapSheetCornersStyle,
     internal val oneTapStyle: OneTapStyle,
     internal val backgroundStyle: OneTapSheetBackgroundStyle,
@@ -27,7 +34,6 @@ public sealed class OneTapBottomSheetStyle(
     internal val contentTextColor: Int,
     @ColorRes
     internal val contentTitleTextColor: Int,
-
 ) {
     /**
      * Represents the light style theme for the One Tap Bottom Sheet.
@@ -92,8 +98,50 @@ public sealed class OneTapBottomSheetStyle(
         contentTextColor = R.color.vkid_gray_500,
         contentTitleTextColor = R.color.vkid_gray_100,
     )
+
+    /** @suppress */
+    public companion object {
+        /**
+         * Create a style for the OneTap Bottomsheet that
+         * varies between [Light] and [Dark] based on system settings.
+         */
+        public fun system(
+            context: Context,
+            cornersStyle: OneTapSheetCornersStyle = OneTapSheetCornersStyle.Default,
+            buttonsCornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
+            buttonsSizeStyle: OneTapButtonSizeStyle = OneTapButtonSizeStyle.DEFAULT,
+        ): OneTapBottomSheetStyle {
+            return (if (context.isDarkTheme) ::Dark else ::Light)(
+                cornersStyle,
+                buttonsCornersStyle,
+                buttonsSizeStyle,
+            )
+        }
+
+        /**
+         * Create a transparent style for the OneTap Bottomsheet that
+         * varies between [TransparentLight] and [TransparentDark] depending on the system settings.
+         */
+        public fun transparentSystem(
+            context: Context,
+            cornersStyle: OneTapSheetCornersStyle = OneTapSheetCornersStyle.Default,
+            buttonsCornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
+            buttonsSizeStyle: OneTapButtonSizeStyle = OneTapButtonSizeStyle.DEFAULT,
+        ): OneTapBottomSheetStyle {
+            return (if (context.isDarkTheme) ::TransparentDark else ::TransparentLight)(
+                cornersStyle,
+                buttonsCornersStyle,
+                buttonsSizeStyle,
+            )
+        }
+    }
 }
 
+/**
+ * Remembers [OneTapBottomSheetStyle].
+ *
+ * @param initialValue The starting value that should be used for style.
+ */
 @Composable
 public fun rememberOneTapBottomSheetStyle(initialValue: OneTapBottomSheetStyle): MutableState<OneTapBottomSheetStyle> {
     return rememberSaveable(stateSaver = BottomSheetStyleSaver) {
@@ -113,19 +161,11 @@ internal val BottomSheetStyleSaver: Saver<OneTapBottomSheetStyle, Any> = run {
     mapSaver(
         save = {
             val keysToSave = mutableMapOf<String, Any>()
-            when (it) {
-                is OneTapBottomSheetStyle.Dark -> {
-                    keysToSave[classNameKey] = darkStyleKey
-                }
-                is OneTapBottomSheetStyle.Light -> {
-                    keysToSave[classNameKey] = lightStyleKey
-                }
-                is OneTapBottomSheetStyle.TransparentDark -> {
-                    keysToSave[classNameKey] = transparentDarkStyleKey
-                }
-                is OneTapBottomSheetStyle.TransparentLight -> {
-                    keysToSave[classNameKey] = transparentLightStyleKey
-                }
+            keysToSave[classNameKey] = when (it) {
+                is OneTapBottomSheetStyle.Dark -> darkStyleKey
+                is OneTapBottomSheetStyle.Light -> lightStyleKey
+                is OneTapBottomSheetStyle.TransparentDark -> transparentDarkStyleKey
+                is OneTapBottomSheetStyle.TransparentLight -> transparentLightStyleKey
             }
             keysToSave[sheetCornersRadiusKey] = it.cornersStyle.radiusDp
             keysToSave[buttonsCornersRadiusKey] = it.oneTapStyle.cornersStyle.radiusDp
@@ -154,11 +194,13 @@ internal val BottomSheetStyleSaver: Saver<OneTapBottomSheetStyle, Any> = run {
                     buttonsCornersStyle,
                     buttonsSizeStyle
                 )
+
                 transparentLightStyleKey -> OneTapBottomSheetStyle.TransparentLight(
                     cornersStyle,
                     buttonsCornersStyle,
                     buttonsSizeStyle
                 )
+
                 else -> OneTapBottomSheetStyle.Light()
             }
         }

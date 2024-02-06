@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.vk.id.VKID
 import com.vk.id.VKIDUser
-import com.vk.id.commn.InternalVKIDApi
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.onetap.common.auth.style.VKIDButtonStyle
 import com.vk.id.onetap.compose.R
 import com.vk.id.onetap.compose.button.DURATION_OF_ANIMATION
@@ -85,7 +85,7 @@ internal fun VKIDButton(
     FetchUserDataWithAnimation(coroutineScope, state, useVKID, useTextProvider)
     Box(
         modifier = modifier
-            .shadow(style.elevationStyle, style.cornersStyle)
+            .shadow(style)
             .height(style.sizeStyle)
             .border(style.borderStyle, style.cornersStyle)
             .clip(style.cornersStyle)
@@ -142,6 +142,7 @@ private fun defaultTextProvider(resources: Resources): VKIDButtonTextProvider =
         }
     }
 
+@Suppress("NonSkippableComposable")
 @Composable
 private fun FetchUserDataWithAnimation(
     coroutineScope: CoroutineScope,

@@ -18,7 +18,6 @@
         app:layout_constraintVertical_bias="0.0"
         tools:ignore="HardcodedText" />
 
-
     <com.vk.id.onetap.xml.OneTapBottomSheet
         android:id="@+id/vkid_bottom_sheet"
         android:layout_width="match_parent"
@@ -26,6 +25,7 @@
         app:vkid_autoHideOnSuccess="false"
         app:vkid_bottomSheetScenario="OrderInService"
         app:vkid_bottomSheetServiceName="Sample xml"
+        app:vkid_bottomSheetStyle="system"
         app:vkid_onetapOAuths="mail,ok" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
