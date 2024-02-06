@@ -6,5 +6,18 @@ package com.vk.id
 public enum class OAuth(
     internal val serverName: String
 ) {
-    VK("vk_id"), MAIL("mail_ru"), OK("ok_ru")
+    /**
+     * Represents VK OAuth provider.
+     */
+    VK("vk_id"),
+
+    /**
+     * Represents Mail OAuth provider.
+     */
+    MAIL("mail_ru"),
+
+    /**
+     * Represents OK OAuth provider.
+     */
+    OK("ok_ru")
 }

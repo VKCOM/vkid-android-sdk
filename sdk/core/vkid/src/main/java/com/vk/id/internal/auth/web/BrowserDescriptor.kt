@@ -23,6 +23,7 @@ import java.security.NoSuchAlgorithmException
 /**
  * Represents a browser that may be used for an authorization flow.
  */
+@Suppress("RedundantConstructorKeyword")
 internal class BrowserDescriptor
 /**
  * Creates a description of a browser from the core properties that are frequently used to
@@ -35,7 +36,8 @@ internal class BrowserDescriptor
  * generated for a signature by calling [.generateSignatureHash].
  * @param version         The version name of the browser.
  * @param useCustomTab    Whether it is intended to use the browser as a custom tab.
- */(
+ */
+constructor(
     /**
      * The package name of the browser app.
      */

@@ -45,7 +45,8 @@ private fun Project.shouldInjectManifestPlaceholders() = gradle
     .map { it.lowercase() }
     .any {
         it.contains("assemble")
-                || it.contains("test")
+                || it.endsWith("test")
                 || it.contains("lint")
+                || it.contains("dokka")
                 || it.contains("generatebaselineprofile")
     }

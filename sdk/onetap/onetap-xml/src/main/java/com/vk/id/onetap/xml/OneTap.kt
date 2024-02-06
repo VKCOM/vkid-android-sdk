@@ -78,8 +78,11 @@ public class OneTap @JvmOverloads constructor(
         this.oAuths = oAuths
         addView(composeView)
         composeView.setContent { Content() }
+        clipChildren = false
+        clipToPadding = false
     }
 
+    @Suppress("NonSkippableComposable")
     @Composable
     private fun Content() {
         val style = remember { mutableStateOf(style) }
