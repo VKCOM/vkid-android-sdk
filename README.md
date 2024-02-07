@@ -75,7 +75,10 @@ android {
 ### Инициализация VK ID SDK
 Инициализируйте работу VK ID SDK через объект `VKID`.
 ```kotlin
-val vkid = VKID(context)
+// В Application или Activity
+fun onCreate() {
+    val vkid = VKID(context)
+}
 ```
 ### Авторизация
 Результат авторизации передается в коллбэк `VKID.AuthCallback`, поэтому его нужно объявить:
