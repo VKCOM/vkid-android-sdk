@@ -41,6 +41,8 @@ VKIDClientID=Ваш ID приложения
 
 Чтобы подключить VK ID SDK, сначала получите ID приложения (app_id) и защищенный ключ (client_secret). Для этого создайте приложение в [кабинете подключения VK ID](https://id.vk.com/business/go).
 
+Документацию по API SDK можно найти здесь https://vkcom.github.io/vkid-android-sdk/
+
 
 ## Установка
 
