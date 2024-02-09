@@ -15,6 +15,7 @@ androidxCore = "1.12.0"
 androidxCoreSplashscreen = "1.0.1"
 androidxNavigationCompose = "2.7.6"
 androidxOrchestrator = "1.4.2"
+androidxSecurityCrypto = "1.1.0-alpha06"
 androidxTestJunitKtx = "1.1.5"
 andoridxUiTestJunit4 = "1.6.0"
 binary-compatibility-validator = "0.14.0"
@@ -65,6 +66,7 @@ androidx-lifecycle-compose = { group = "androidx.lifecycle", name = "lifecycle-r
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigationCompose" }
 androidx-preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }
 androidx-preference-ktx = { group = "androidx.preference", name = "preference-ktx", version.ref = "preference" }
+androidx-security-crypto = { group = "androidx.security", name = "security-crypto", version.ref = "androidxSecurityCrypto" }
 androidx-test-orchestrator = { group = "androidx.test", name = "orchestrator", version.ref = "androidxOrchestrator" }
 androidx-test-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "androidxTestJunitKtx" }
 coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
