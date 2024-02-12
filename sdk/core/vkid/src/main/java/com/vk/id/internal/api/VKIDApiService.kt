@@ -47,6 +47,20 @@ internal class VKIDApiService(
         }
     }
 
+    fun refreshToken(
+        refreshToken: String,
+        clientId: String,
+        deviceId: String,
+        state: String,
+    ): VKIDCall<VKIDTokenPayload> {
+        return api.refreshToken(
+            refreshToken = refreshToken,
+            clientId = clientId,
+            deviceId = deviceId,
+            state = state,
+        ).wrapTokenToVKIDCall()
+    }
+
     private inline fun <T> JSONArray?.parseList(parser: (JSONObject) -> T) = this?.let {
         val list = ArrayList<T>(length())
         for (i in 0 until length()) optJSONObject(i)?.let { list.add(parser.invoke(it)) }

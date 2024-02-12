@@ -12,6 +12,7 @@ import com.vk.id.internal.concurrent.CoroutinesDispatchers
 import com.vk.id.internal.di.VKIDDeps
 import com.vk.id.internal.ipc.VkSilentAuthInfoProvider
 import com.vk.id.internal.user.UserDataFetcher
+import com.vk.id.refresh.VKIDTokenRefresher
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.testCoroutineScheduler
 import io.kotest.matchers.shouldBe
@@ -53,6 +54,7 @@ internal class VKIDTest : BehaviorSpec({
                 override val vkSilentAuthInfoProvider: Lazy<VkSilentAuthInfoProvider> = mockk()
                 override val userDataFetcher: Lazy<UserDataFetcher> = lazy { userDataFetcher }
                 override val api: Lazy<VKIDApi> = lazy { mockk() }
+                override val tokenRefresher: Lazy<VKIDTokenRefresher> = lazy { mockk() }
             }
         )
 
