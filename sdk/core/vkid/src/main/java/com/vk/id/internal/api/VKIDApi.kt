@@ -9,9 +9,9 @@ internal interface VKIDApi {
         code: String,
         codeVerifier: String,
         clientId: String,
-        clientSecret: String,
         deviceId: String,
         redirectUri: String,
+        state: String,
     ): Call
 
     fun getSilentAuthProviders(

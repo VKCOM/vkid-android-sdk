@@ -16,9 +16,9 @@ public class VKIDTestBuilder(
             code: String,
             codeVerifier: String,
             clientId: String,
-            clientSecret: String,
             deviceId: String,
-            redirectUri: String
+            redirectUri: String,
+            state: String,
         ) = getTokenResponse
     }
     private var authProviderConfig: MockAuthProviderConfig = MockAuthProviderConfig()

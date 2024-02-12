@@ -18,12 +18,18 @@ internal class VKIDApiService(
         code: String,
         codeVerifier: String,
         clientId: String,
-        clientSecret: String,
         deviceId: String,
-        redirectUri: String
+        redirectUri: String,
+        state: String,
     ): VKIDCall<VKIDTokenPayload> {
-        return api.getToken(code, codeVerifier, clientId, clientSecret, deviceId, redirectUri)
-            .wrapTokenToVKIDCall()
+        return api.getToken(
+            code = code,
+            codeVerifier = codeVerifier,
+            clientId = clientId,
+            deviceId = deviceId,
+            redirectUri = redirectUri,
+            state = state,
+        ).wrapTokenToVKIDCall()
     }
 
     fun getSilentAuthProviders(
@@ -59,6 +65,7 @@ internal class VKIDApiService(
             try {
                 VKIDTokenPayload(
                     accessToken = jsonObject.getString("access_token"),
+                    refreshToken = jsonObject.getString("refresh_token"),
                     userId = jsonObject.getLong("user_id"),
                     expiresIn = jsonObject.optLong("expires_in"),
                     email = jsonObject.optString("email"),
