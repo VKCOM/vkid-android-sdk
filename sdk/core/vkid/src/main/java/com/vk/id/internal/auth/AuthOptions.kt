@@ -20,9 +20,10 @@ internal data class AuthOptions(
 )
 
 private const val APP_ID = "app_id"
+private const val CLIENT_ID = "client_id"
 private const val AUTHORITY_BROWSER = "id.vk.com"
 private const val AUTHORITY_CODE_FLOW = "vkcexternalauth-codeflow"
-private const val PATH_BROWSER = "auth"
+private const val PATH_BROWSER = "authorize"
 private const val CODE_CHALLENGE = "code_challenge"
 private const val CODE_CHALLENGE_METHOD = "code_challenge_method"
 private const val REDIRECT_URI = "redirect_uri"
@@ -31,6 +32,7 @@ private const val RESPONSE_TYPE_CODE = "code"
 private const val SCHEME_BROWSER = "https"
 private const val STATE = "state"
 private const val UUID = "uuid"
+private const val DEVICE_ID = "device_id"
 private const val ACTION = "action"
 private const val LOCALE = "lang_id"
 private const val THEME = "scheme"
@@ -42,18 +44,33 @@ internal fun basicCodeFlowUri(appPackage: String) = Uri.Builder()
     .authority(AUTHORITY_CODE_FLOW)
     .build()
 
-internal fun AuthOptions.toAuthUriBrowser(): Uri = toAuthUriBuilder()
-    .scheme(SCHEME_BROWSER)
-    .authority(AUTHORITY_BROWSER)
-    .path(PATH_BROWSER)
-    .build()
+internal fun AuthOptions.toAuthUriBrowser(): Uri {
+    val builder = Uri.Builder()
+        .appendQueryParameter(CLIENT_ID, appId)
+        .appendQueryParameter(RESPONSE_TYPE, RESPONSE_TYPE_CODE)
+        .appendQueryParameter(REDIRECT_URI, redirectUri)
+        .appendQueryParameter(STATE, state)
+        .appendQueryParameter(DEVICE_ID, deviceId)
 
-internal fun AuthOptions.toAuthUriCodeFlow(appPackage: String): Uri = toAuthUriBuilder()
-    .scheme(appPackage)
-    .authority(AUTHORITY_CODE_FLOW)
-    .build()
+    if (oAuth != null) {
+        builder.appendQueryParameter(ACTION, oAuth.toQueryParam())
+    }
+    if (locale != null) {
+        builder.appendQueryParameter(LOCALE, locale)
+    }
+    if (theme != null) {
+        builder.appendQueryParameter(THEME, theme)
+    }
+    if (webAuthPhoneScreen) {
+        builder.appendQueryParameter(SCREEN_PARAM, SCREEN_PHONE)
+    }
+    return builder.scheme(SCHEME_BROWSER)
+        .authority(AUTHORITY_BROWSER)
+        .path(PATH_BROWSER)
+        .build()
+}
 
-private fun AuthOptions.toAuthUriBuilder(): Uri.Builder {
+internal fun AuthOptions.toAuthUriCodeFlow(appPackage: String): Uri {
     val builder = Uri.Builder()
         .appendQueryParameter(APP_ID, appId)
         .appendQueryParameter(RESPONSE_TYPE, RESPONSE_TYPE_CODE)
@@ -75,7 +92,9 @@ private fun AuthOptions.toAuthUriBuilder(): Uri.Builder {
     if (webAuthPhoneScreen) {
         builder.appendQueryParameter(SCREEN_PARAM, SCREEN_PHONE)
     }
-    return builder
+    return builder.scheme(appPackage)
+        .authority(AUTHORITY_CODE_FLOW)
+        .build()
 }
 
 @Suppress("MagicNumber")
