@@ -1,6 +1,7 @@
 package com.vk.id
 
 import android.content.Context
+import android.util.Base64
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.internal.auth.AuthOptions
 import com.vk.id.internal.auth.ServiceCredentials
@@ -31,13 +32,15 @@ internal class AuthOptionsCreator(
         val locale = authParams.locale ?: VKIDAuthParams.Locale.systemLocale(appContext)
         val theme = authParams.theme ?: VKIDAuthParams.Theme.systemTheme(appContext)
         val credentials = serviceCredentials.value
+        val deviceId = deviceIdProvider.value.getDeviceId(appContext)
+        val redirectUri = "${credentials.redirectUri}?oauth2_params=${getOAuth2Params(deviceId, codeChallenge)}"
         return AuthOptions(
             appId = credentials.clientID,
             clientSecret = credentials.clientSecret,
             codeChallenge = codeChallenge,
             codeChallengeMethod = "sha256",
             deviceId = deviceIdProvider.value.getDeviceId(appContext),
-            redirectUri = credentials.redirectUri,
+            redirectUri = redirectUri,
             state = state,
             locale = locale?.toQueryParam(),
             theme = theme?.toQueryParam(),
@@ -46,4 +49,11 @@ internal class AuthOptionsCreator(
             oAuth = authParams.oAuth,
         )
     }
+
+    private fun getOAuth2Params(deviceId: String, codeChallenge: String) = Base64
+        .encodeToString(
+            """{"device":"$deviceId","code_challenge":"$codeChallenge"}""".encodeToByteArray(),
+            Base64.DEFAULT
+        )
+        .filter { it != '\n' }
 }
