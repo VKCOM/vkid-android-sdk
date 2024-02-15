@@ -8,7 +8,7 @@ import com.vk.id.internal.api.sslpinning.okhttp.utils.addSslSocketFactory
 import com.vk.id.internal.log.createLoggerForClass
 import okhttp3.OkHttpClient
 
-internal class VkClientOkHttpProvider(
+internal class SslPinningProvider(
     context: Context,
     isSslPinningEnabled: Boolean,
 ) {

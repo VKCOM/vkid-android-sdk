@@ -13,7 +13,7 @@ import com.vk.id.VKID
 import com.vk.id.internal.api.VKIDApi
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.api.VKIDRealApi
-import com.vk.id.internal.api.sslpinning.VkClientOkHttpProvider
+import com.vk.id.internal.api.sslpinning.SslPinningProvider
 import com.vk.id.internal.api.useragent.UserAgentInterceptor
 import com.vk.id.internal.api.useragent.UserAgentProvider
 import com.vk.id.internal.auth.AuthActivity
@@ -71,6 +71,8 @@ internal open class VKIDDepsProd(
         )
     }
 
+    private val sslPinningProvider = SslPinningProvider(appContext, !isDebuggable())
+
     override val api: Lazy<VKIDApi> = lazy {
         val client = OkHttpClient.Builder()
             .readTimeout(OKHTTP_TIMEOUT_SECONDS, TimeUnit.SECONDS)
@@ -78,7 +80,7 @@ internal open class VKIDDepsProd(
             .connectTimeout(OKHTTP_TIMEOUT_SECONDS, TimeUnit.SECONDS)
             .addInterceptor(loggingInterceptor())
             .addInterceptor(UserAgentInterceptor(UserAgentProvider(appContext)))
-            .let(VkClientOkHttpProvider(appContext, !isDebuggable())::addSslPinning)
+            .let(sslPinningProvider::addSslPinning)
             .build()
         VKIDRealApi(client)
     }
