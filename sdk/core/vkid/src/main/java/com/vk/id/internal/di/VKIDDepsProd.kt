@@ -3,16 +3,17 @@ package com.vk.id.internal.di
 import android.content.ComponentName
 import android.content.Context
 import android.content.pm.ActivityInfo
+import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import com.vk.id.AuthOptionsCreator
 import com.vk.id.AuthResultHandler
+import com.vk.id.R
 import com.vk.id.VKID
 import com.vk.id.internal.api.VKIDApi
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.api.VKIDRealApi
-import com.vk.id.internal.api.sslpinning.SslPinningProvider
 import com.vk.id.internal.api.useragent.UserAgentInterceptor
 import com.vk.id.internal.api.useragent.UserAgentProvider
 import com.vk.id.internal.auth.AuthActivity
@@ -32,8 +33,10 @@ import com.vk.id.internal.ipc.VkSilentAuthInfoProvider
 import com.vk.id.internal.log.createLoggerForClass
 import com.vk.id.internal.store.PrefsStore
 import com.vk.id.internal.user.UserDataFetcher
+import okhttp3.CertificatePinner
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import java.io.BufferedInputStream
 import java.util.concurrent.TimeUnit
 
 internal open class VKIDDepsProd(
@@ -70,8 +73,6 @@ internal open class VKIDDepsProd(
         )
     }
 
-    private val sslPinningProvider = SslPinningProvider(appContext)
-
     override val api: Lazy<VKIDApi> = lazy {
         val client = OkHttpClient.Builder()
             .readTimeout(OKHTTP_TIMEOUT_SECONDS, TimeUnit.SECONDS)
@@ -79,7 +80,7 @@ internal open class VKIDDepsProd(
             .connectTimeout(OKHTTP_TIMEOUT_SECONDS, TimeUnit.SECONDS)
             .addInterceptor(loggingInterceptor())
             .addInterceptor(UserAgentInterceptor(UserAgentProvider(appContext)))
-            .let(sslPinningProvider::addSslPinning)
+            .addCertificatePinnerIfNecessary()
             .build()
         VKIDRealApi(client)
     }
@@ -168,7 +169,27 @@ internal open class VKIDDepsProd(
         return logging
     }
 
+    private fun OkHttpClient.Builder.addCertificatePinnerIfNecessary(): OkHttpClient.Builder {
+        if (!isDebuggable()) {
+            val builder = CertificatePinner.Builder()
+            BufferedInputStream(appContext.resources.openRawResource(R.raw.vkid_certs))
+                .reader()
+                .readLines()
+                .map { "sha256/$it" }
+                .forEach { pin ->
+                    builder.add(HOST_NAME_API, pin)
+                    builder.add(HOST_NAME_OAUTH, pin)
+                }
+            certificatePinner(builder.build())
+        }
+        return this
+    }
+
+    private fun isDebuggable() = appContext.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0
+
     private companion object {
+        private const val HOST_NAME_API = "api.vk.com"
+        private const val HOST_NAME_OAUTH = "oauth.vk.com"
         private const val OKHTTP_TIMEOUT_SECONDS = 60L
     }
 }
