@@ -3,7 +3,6 @@ package com.vk.id.internal.di
 import android.content.ComponentName
 import android.content.Context
 import android.content.pm.ActivityInfo
-import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -71,7 +70,7 @@ internal open class VKIDDepsProd(
         )
     }
 
-    private val sslPinningProvider = SslPinningProvider(appContext, !isDebuggable())
+    private val sslPinningProvider = SslPinningProvider(appContext)
 
     override val api: Lazy<VKIDApi> = lazy {
         val client = OkHttpClient.Builder()
@@ -168,8 +167,6 @@ internal open class VKIDDepsProd(
         logging.level = HttpLoggingInterceptor.Level.BASIC
         return logging
     }
-
-    private fun isDebuggable() = appContext.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0
 
     private companion object {
         private const val OKHTTP_TIMEOUT_SECONDS = 60L

@@ -1,15 +1,18 @@
 package com.vk.id.internal.api.sslpinning.api
 
+import android.content.Context
 import com.vk.id.internal.api.sslpinning.okhttp.security.SSLCertificateStore
 import com.vk.id.internal.api.sslpinning.okhttp.trust.SSLTrustManager
 
-internal class DefaultSSLTrustManagerProvider {
+internal class DefaultSSLTrustManagerProvider(
+    private val context: Context
+) {
 
     private lateinit var certificateStore: SSLCertificateStore
     private var reuseSslSocketFactory = false
 
     private val lazyTrustManager by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
-        SSLTrustManager(certificateStore)
+        SSLTrustManager(context, certificateStore)
     }
 
     fun init(store: SSLCertificateStore, reuseSslSocketFactory: Boolean) {
@@ -21,6 +24,6 @@ internal class DefaultSSLTrustManagerProvider {
         if (reuseSslSocketFactory) {
             lazyTrustManager
         } else {
-            SSLTrustManager(certificateStore)
+            SSLTrustManager(context, certificateStore)
         }
 }
