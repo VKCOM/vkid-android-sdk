@@ -58,11 +58,6 @@ internal open class SSLKeyStore(
     private val serialNumberVkRUCertificate = BigInteger("551222861474729630828211419619667128155611726319")
 
     init {
-        val source = BufferedInputStream(
-            context.resources.openRawResource(R.raw.vkid_cacerts),
-            CA_CERTS_FILE_SIZE
-        )
-
         val keyStorePassword = "vkcerts"
         initFuture = ThreadPoolExecutor(
             1,
@@ -76,7 +71,13 @@ internal open class SSLKeyStore(
                 }
             }
         ).apply { allowCoreThreadTimeOut(true) }
-            .submit { initStore(source, keyStorePassword) }
+            .submit {
+                val source = BufferedInputStream(
+                    context.resources.openRawResource(R.raw.vkid_cacerts),
+                    CA_CERTS_FILE_SIZE
+                )
+                initStore(source, keyStorePassword)
+            }
     }
 
     fun addInitializationListener(listener: SSLKeyStoreInitializationListener) {
