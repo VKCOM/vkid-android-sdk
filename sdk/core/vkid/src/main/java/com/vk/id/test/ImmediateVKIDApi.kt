@@ -11,17 +11,17 @@ internal class ImmediateVKIDApi(
         code: String,
         codeVerifier: String,
         clientId: String,
-        clientSecret: String,
         deviceId: String,
-        redirectUri: String
+        redirectUri: String,
+        state: String,
     ) = MockVKIDCall(
         mockApi.getToken(
             code = code,
             codeVerifier = codeVerifier,
             clientId = clientId,
-            clientSecret = clientSecret,
             deviceId = deviceId,
-            redirectUri = redirectUri
+            redirectUri = redirectUri,
+            state = state,
         )
     )
 

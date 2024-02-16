@@ -32,6 +32,8 @@ import com.vk.id.internal.ipc.VkSilentAuthInfoProvider
 import com.vk.id.internal.log.createLoggerForClass
 import com.vk.id.internal.store.PrefsStore
 import com.vk.id.internal.user.UserDataFetcher
+import com.vk.id.storage.EncryptedSharedPreferencesStorage
+import com.vk.id.storage.TokenStorage
 import okhttp3.CertificatePinner
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -135,9 +137,12 @@ internal open class VKIDDepsProd(
             deviceIdProvider = deviceIdProvider.value,
             prefsStore = prefsStore.value,
             serviceCredentials = serviceCredentials.value,
-            api = apiService.value
+            api = apiService.value,
+            tokenStorage = tokenStorage,
         )
     }
+
+    private val tokenStorage by lazy { TokenStorage(EncryptedSharedPreferencesStorage(appContext)) }
 
     private val prefsStore: Lazy<PrefsStore> = lazy {
         PrefsStore(appContext)

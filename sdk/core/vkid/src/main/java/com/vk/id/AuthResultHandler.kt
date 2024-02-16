@@ -11,6 +11,7 @@ import com.vk.id.internal.concurrent.CoroutinesDispatchers
 import com.vk.id.internal.log.createLoggerForClass
 import com.vk.id.internal.store.PrefsStore
 import com.vk.id.internal.util.currentTime
+import com.vk.id.storage.TokenStorage
 import kotlinx.coroutines.withContext
 
 @Suppress("LongParameterList")
@@ -21,7 +22,8 @@ internal class AuthResultHandler(
     private val deviceIdProvider: DeviceIdProvider,
     private val prefsStore: PrefsStore,
     private val serviceCredentials: ServiceCredentials,
-    private val api: VKIDApiService
+    private val api: VKIDApiService,
+    private val tokenStorage: TokenStorage,
 ) {
 
     private val logger = createLoggerForClass()
@@ -73,12 +75,12 @@ internal class AuthResultHandler(
         // execute token request
         val callResult = withContext(dispatchers.io) {
             api.getToken(
-                oauth.oauth.code,
-                codeVerifier,
-                serviceCredentials.clientID,
-                serviceCredentials.clientSecret,
+                code = oauth.oauth.code,
+                codeVerifier = codeVerifier,
+                clientId = serviceCredentials.clientID,
                 deviceId = realUuid,
-                serviceCredentials.redirectUri,
+                redirectUri = serviceCredentials.redirectUri,
+                state = realState,
             ).execute()
         }
         callResult.onFailure {
@@ -90,20 +92,21 @@ internal class AuthResultHandler(
             )
         }
         callResult.onSuccess { payload ->
-            emitAuthSuccess(
-                AccessToken(
-                    payload.accessToken,
-                    payload.userId,
-                    payload.expiresIn.toExpireTime,
-                    VKIDUser(
-                        firstName = oauth.firstName,
-                        lastName = oauth.lastName,
-                        photo200 = oauth.avatar,
-                        phone = payload.phone,
-                        email = payload.email
-                    )
+            val token = AccessToken(
+                payload.accessToken,
+                payload.userId,
+                payload.expiresIn.toExpireTime,
+                VKIDUser(
+                    firstName = oauth.firstName,
+                    lastName = oauth.lastName,
+                    photo200 = oauth.avatar,
+                    phone = payload.phone,
+                    email = payload.email
                 )
             )
+            tokenStorage.accessToken = token
+            tokenStorage.refreshToken = payload.refreshToken
+            emitAuthSuccess(token)
         }
     }
 

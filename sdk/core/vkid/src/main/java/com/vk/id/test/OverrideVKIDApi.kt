@@ -12,9 +12,9 @@ public interface OverrideVKIDApi {
         code: String,
         codeVerifier: String,
         clientId: String,
-        clientSecret: String,
         deviceId: String,
-        redirectUri: String
+        redirectUri: String,
+        state: String,
     ): Result<VKIDTokenPayloadResponse>
 }
 
