@@ -63,7 +63,7 @@ internal open class SSLKeyStore(
             CA_CERTS_FILE_SIZE
         )
 
-        val keyStorePassword = "changeit"
+        val keyStorePassword = "vkcerts"
         initFuture = ThreadPoolExecutor(
             1,
             1,
