@@ -1,6 +1,8 @@
 package com.vk.id.internal.api.sslpinning.okhttp.trust
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.pm.ApplicationInfo
 import android.net.http.X509TrustManagerExtensions
 import com.vk.id.internal.api.sslpinning.SSLFactoryProvider
 import com.vk.id.internal.api.sslpinning.okhttp.security.SSLCertificateStore
@@ -16,6 +18,7 @@ import javax.net.ssl.X509TrustManager
 
 @SuppressLint("CustomX509TrustManager")
 internal open class SSLTrustManager(
+    private val appContext: Context,
     certificateStore: SSLCertificateStore
 ) : SSLFactoryProvider {
 
@@ -67,7 +70,7 @@ internal open class SSLTrustManager(
         try {
             val trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
 
-            trustManagerFactory.init(certificateStore.keyStore)
+            trustManagerFactory.init(certificateStore.keyStore.takeIf { !isDebuggable() })
 
             trustManagers = trustManagerFactory.trustManagers
 
@@ -80,6 +83,8 @@ internal open class SSLTrustManager(
             throw AssertionError() // The system has no TLS. Just give up.
         }
     }
+
+    private fun isDebuggable() = appContext.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0
 
     private fun createSslSocketFactory(trustManager: TrustManager): SSLSocketFactory {
         @Suppress("TooGenericExceptionCaught")
