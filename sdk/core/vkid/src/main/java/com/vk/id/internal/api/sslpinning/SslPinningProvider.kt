@@ -10,11 +10,10 @@ import okhttp3.OkHttpClient
 
 internal class SslPinningProvider(
     context: Context,
-    isSslPinningEnabled: Boolean,
 ) {
 
     private var certificateStore: SSLCertificateStore
-    private var defaultTrustManagerProvider = DefaultSSLTrustManagerProvider()
+    private var defaultTrustManagerProvider = DefaultSSLTrustManagerProvider(context)
 
     private val defaultWebLoggerInitializationListener = object : SSLKeyStore.SSLKeyStoreInitializationListener {
 
@@ -31,7 +30,7 @@ internal class SslPinningProvider(
         val ketStore = SSLKeyStore(context = context, useDefaultHost = true)
             .apply { addInitializationListener(defaultWebLoggerInitializationListener) }
 
-        val certStore = SSLCertificateStore(ketStore, isSslPinningEnabled)
+        val certStore = SSLCertificateStore(ketStore)
         certificateStore = certStore
 
         defaultTrustManagerProvider.init(certificateStore, true)
