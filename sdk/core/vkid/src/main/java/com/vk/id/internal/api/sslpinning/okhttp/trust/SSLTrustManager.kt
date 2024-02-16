@@ -23,6 +23,8 @@ internal open class SSLTrustManager(
 ) : SSLFactoryProvider {
 
     override val factory: SSLSocketFactory
+    private val wrappedTrustManager: X509TrustManager
+    private val trustManagerExtensions: X509TrustManagerExtensions
 
     init {
         systemDefaultTrustManager(certificateStore).let {
@@ -33,20 +35,14 @@ internal open class SSLTrustManager(
         factory = createSslSocketFactory(this)
     }
 
-    private var wrappedTrustManager: X509TrustManager? = null
-    private var trustManagers: Array<TrustManager>? = null
-    private var trustManagerExtensions = wrappedTrustManager?.let {
-        X509TrustManagerExtensions(it)
-    }
-
     @Throws(CertificateException::class)
     override fun checkClientTrusted(chain: Array<X509Certificate>?, authType: String?) {
-        wrappedTrustManager?.checkClientTrusted(chain, authType)
+        wrappedTrustManager.checkClientTrusted(chain, authType)
     }
 
     @Throws(CertificateException::class)
     override fun checkServerTrusted(chain: Array<X509Certificate>?, authType: String?) {
-        wrappedTrustManager?.checkServerTrusted(chain, authType)
+        wrappedTrustManager.checkServerTrusted(chain, authType)
     }
 
     @Suppress("unused")
@@ -56,13 +52,13 @@ internal open class SSLTrustManager(
         authType: String,
         hostname: String?
     ): List<X509Certificate> {
-        return trustManagerExtensions?.checkServerTrusted(certs, authType, hostname)
+        return trustManagerExtensions.checkServerTrusted(certs, authType, hostname)
             ?: certs?.toList()
             ?: emptyList()
     }
 
     override fun getAcceptedIssuers(): Array<X509Certificate>? {
-        return wrappedTrustManager?.acceptedIssuers
+        return wrappedTrustManager.acceptedIssuers
     }
 
     private fun systemDefaultTrustManager(certificateStore: SSLCertificateStore): X509TrustManager {
@@ -72,13 +68,13 @@ internal open class SSLTrustManager(
 
             trustManagerFactory.init(certificateStore.keyStore.takeIf { !isDebuggable() })
 
-            trustManagers = trustManagerFactory.trustManagers
+            val trustManagers = trustManagerFactory.trustManagers
 
-            if (trustManagers!!.size != 1 || trustManagers!![0] !is X509TrustManager) {
+            if (trustManagers!!.size != 1 || trustManagers[0] !is X509TrustManager) {
                 throw IllegalStateException("Unexpected default trust managers:" + Arrays.toString(trustManagers))
             }
 
-            return trustManagers!![0] as X509TrustManager
+            return trustManagers[0] as X509TrustManager
         } catch (e: GeneralSecurityException) {
             throw AssertionError() // The system has no TLS. Just give up.
         }
