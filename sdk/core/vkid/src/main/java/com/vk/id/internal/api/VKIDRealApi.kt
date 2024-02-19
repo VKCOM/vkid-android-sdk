@@ -46,6 +46,23 @@ internal class VKIDRealApi(
         return createRequest(HOST_API, PATH_SILENT_AUTH_PROVIDERS, formBody)
     }
 
+    override fun refreshToken(
+        refreshToken: String,
+        clientId: String,
+        deviceId: String,
+        state: String
+    ): Call {
+        val formBody = FormBody.Builder()
+            .add(FIELD_GRANT_TYPE, VALUE_REFRESH_TOKEN)
+            .add(FIELD_REFRESH_TOKEN, refreshToken)
+            .add(FIELD_CLIENT_ID, clientId)
+            .add(FIELD_DEVICE_ID, deviceId)
+            .add(FIELD_STATE, state)
+            .build()
+
+        return createRequest(HOST_VK_ID, PATH_AUTH, formBody)
+    }
+
     private fun createRequest(host: String, path: String, requestBody: RequestBody): Call {
         val url = host.toHttpUrl().newBuilder()
             .addPathSegments(path)
@@ -72,9 +89,11 @@ internal class VKIDRealApi(
         private const val FIELD_REDIRECT_URI = "redirect_uri"
         private const val FIELD_GRANT_TYPE = "grant_type"
         private const val FIELD_STATE = "state"
+        private const val FIELD_REFRESH_TOKEN = "refresh_token"
 
         private const val FIELD_API_VERSION = "v"
         private const val API_VERSION_VALUE = "5.220"
         private const val VALUE_AUTHORIZATION_CODE = "authorization_code"
+        private const val VALUE_REFRESH_TOKEN = "refresh_token"
     }
 }

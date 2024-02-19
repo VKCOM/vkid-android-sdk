@@ -18,4 +18,11 @@ internal interface VKIDApi {
         clientId: String,
         clientSecret: String,
     ): Call
+
+    fun refreshToken(
+        refreshToken: String,
+        clientId: String,
+        deviceId: String,
+        state: String,
+    ): Call
 }

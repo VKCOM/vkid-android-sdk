@@ -49,6 +49,8 @@ public final class com/vk/id/VKID {
 	public static synthetic fun authorize$default (Lcom/vk/id/VKID;Landroidx/lifecycle/LifecycleOwner;Lcom/vk/id/VKID$AuthCallback;Lcom/vk/id/auth/VKIDAuthParams;ILjava/lang/Object;)V
 	public static synthetic fun authorize$default (Lcom/vk/id/VKID;Lcom/vk/id/VKID$AuthCallback;Lcom/vk/id/auth/VKIDAuthParams;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public final fun fetchUserData-IoAF18A (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun refreshToken (Landroidx/lifecycle/LifecycleOwner;Lcom/vk/id/refresh/VKIDRefreshTokenCallback;)V
+	public final fun refreshToken (Lcom/vk/id/refresh/VKIDRefreshTokenCallback;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public abstract interface class com/vk/id/VKID$AuthCallback {
@@ -204,6 +206,39 @@ public final class com/vk/id/internal/log/LogEngine$LogLevel : java/lang/Enum {
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lcom/vk/id/internal/log/LogEngine$LogLevel;
 	public static fun values ()[Lcom/vk/id/internal/log/LogEngine$LogLevel;
+}
+
+public abstract interface class com/vk/id/refresh/VKIDRefreshTokenCallback {
+	public abstract fun onFail (Lcom/vk/id/refresh/VKIDRefreshTokenFail;)V
+	public abstract fun onSuccess (Lcom/vk/id/AccessToken;)V
+}
+
+public abstract class com/vk/id/refresh/VKIDRefreshTokenFail {
+	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getDescription ()Ljava/lang/String;
+}
+
+public final class com/vk/id/refresh/VKIDRefreshTokenFail$FailedApiCall : com/vk/id/refresh/VKIDRefreshTokenFail {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getThrowable ()Ljava/lang/Throwable;
+	public fun hashCode ()I
+}
+
+public final class com/vk/id/refresh/VKIDRefreshTokenFail$RefreshTokenExpired : com/vk/id/refresh/VKIDRefreshTokenFail {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+}
+
+public final class com/vk/id/refresh/VKIDRefreshTokenFail$Unauthorized : com/vk/id/refresh/VKIDRefreshTokenFail {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
 }
 
 public final class com/vk/id/test/ComposableSingletons$TestAuthProviderActivityKt {

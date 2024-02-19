@@ -30,8 +30,10 @@ import com.vk.id.internal.concurrent.CoroutinesDispatchersProd
 import com.vk.id.internal.ipc.SilentAuthInfoProvider
 import com.vk.id.internal.ipc.VkSilentAuthInfoProvider
 import com.vk.id.internal.log.createLoggerForClass
+import com.vk.id.internal.state.StateGenerator
 import com.vk.id.internal.store.PrefsStore
 import com.vk.id.internal.user.UserDataFetcher
+import com.vk.id.refresh.VKIDTokenRefresher
 import com.vk.id.storage.EncryptedSharedPreferencesStorage
 import com.vk.id.storage.TokenStorage
 import okhttp3.CertificatePinner
@@ -124,6 +126,7 @@ internal open class VKIDDepsProd(
             prefsStore = prefsStore,
             serviceCredentials = serviceCredentials,
             deviceIdProvider = deviceIdProvider,
+            stateGenerator = stateGenerator
         )
     }
 
@@ -141,6 +144,18 @@ internal open class VKIDDepsProd(
             tokenStorage = tokenStorage,
         )
     }
+    override val tokenRefresher: Lazy<VKIDTokenRefresher> = lazy {
+        VKIDTokenRefresher(
+            context = appContext,
+            api = apiService.value,
+            tokenStorage = tokenStorage,
+            deviceIdProvider = deviceIdProvider.value,
+            serviceCredentials = serviceCredentials.value,
+            stateGenerator = stateGenerator,
+        )
+    }
+
+    private val stateGenerator by lazy { StateGenerator(prefsStore.value) }
 
     private val tokenStorage by lazy { TokenStorage(EncryptedSharedPreferencesStorage(appContext)) }
 

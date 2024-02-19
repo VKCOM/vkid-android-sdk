@@ -22,6 +22,8 @@ import com.vk.id.internal.log.LogEngine
 import com.vk.id.internal.log.VKIDLog
 import com.vk.id.internal.log.createLoggerForClass
 import com.vk.id.internal.user.UserDataFetcher
+import com.vk.id.refresh.VKIDRefreshTokenCallback
+import com.vk.id.refresh.VKIDTokenRefresher
 import com.vk.id.test.ImmediateVKIDApi
 import com.vk.id.test.MockAuthProviderChooser
 import com.vk.id.test.MockAuthProviderConfig
@@ -100,6 +102,7 @@ public class VKID {
         this.dispatchers = deps.dispatchers
         this.vkSilentAuthInfoProvider = deps.vkSilentAuthInfoProvider
         this.userDataFetcher = deps.userDataFetcher
+        this.tokenRefresher = deps.tokenRefresher
 
         logger.info(
             "VKID initialized\nVersion name: ${BuildConfig.VKID_VERSION_NAME}\nCI build: ${BuildConfig.CI_BUILD_NUMBER} ${BuildConfig.CI_BUILD_TYPE}"
@@ -115,6 +118,7 @@ public class VKID {
     private val dispatchers: CoroutinesDispatchers
     private val vkSilentAuthInfoProvider: Lazy<SilentAuthInfoProvider>
     private val userDataFetcher: Lazy<UserDataFetcher>
+    private val tokenRefresher: Lazy<VKIDTokenRefresher>
 
     /**
      * Initiates the authorization process.
@@ -158,6 +162,30 @@ public class VKID {
             val bestAuthProvider = authProvidersChooser.value.chooseBest(authParams)
             val fullAuthOptions = authOptionsCreator.create(authParams)
             bestAuthProvider.auth(fullAuthOptions)
+        }
+    }
+
+    /**
+     * Initiates token refreshing.
+     *
+     * @param lifecycleOwner The [LifecycleOwner] in which the authorization process should be handled.
+     * @param callback [VKIDRefreshTokenCallback] to handle the result of the token refreshing.
+     */
+    public fun refreshToken(
+        lifecycleOwner: LifecycleOwner,
+        callback: VKIDRefreshTokenCallback,
+    ) {
+        lifecycleOwner.lifecycleScope.launch { refreshToken(callback) }
+    }
+
+    /**
+     * Initiates token refreshing.
+     *
+     * @param callback [VKIDRefreshTokenCallback] to handle the result of the token refreshing.
+     */
+    public suspend fun refreshToken(callback: VKIDRefreshTokenCallback) {
+        withContext(dispatchers.io) {
+            tokenRefresher.value.refresh(callback)
         }
     }
 
