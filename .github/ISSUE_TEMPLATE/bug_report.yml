@@ -1,0 +1,122 @@
+name: Баг репорт
+description: Помогите нем улучшить SDK, рассказав о баге
+title: "[BUG]: "
+labels: [ "bug" ]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > Пожалуйста, перед заведением баг репорта, поищите похожие проблемы в issues.
+        > Сами issues находятся здесь: https://github.com/VKCOM/vkid-android-sdk/issues
+        >
+        > Аккуратно заполните информацию ниже, чтобы помочь нам разобраться в ситуации
+
+  - type: textarea
+    attributes:
+      label: Опишите баг
+      description: |
+        Четкое и ясное описание того, в чем состоит баг
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Вопроизведение
+      description: |
+        Шаги для воспроизведения ошибочного поведения:
+          1. Перейти на '...'
+          2. Нажать на '...'
+          3. Прокрутить к '...'
+          4. Увидеть ошибку в '...'
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Ожидаемое поведение
+      description: |
+        Описание того, что ожидалось увидеть
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Фактическое поведение
+      description: |
+        Что происходит на самом деле
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Используемые модули и их версии
+      description: |
+        Модули SDK, которые вы используете [например, "com.vk.id:vkid:1.1.0"]
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Скриншоты
+      description: |
+        По возможности, добавьте скриншоты, чтобы лучше пояснить проблему
+    validations:
+      required: false
+
+  - type: textarea
+    attributes:
+      label: Смартфон или эмулятор
+      description: |
+        Пожалуйста, заполните следующую информацию:
+          - Устройство: [ например, Pixel 5 ]
+          - OS: [ например, Android 14 ]
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Внутренний или внешний сервис
+      description: |
+        Является ли ваш проект частью экосистемы VK?
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Обновляли ли вы сдк
+      description: |
+        Ошибка появлилась после обновления или на уже работавшей версии?
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Исправлена ли ошибка
+      description: |
+        Пробовали ли вы проверить, есть ли ошибка на последней версии SDK?
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Где инициализиурете SDK
+      description: |
+        Application, Activity и.т.д..
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Версия клиента авторизации
+      description: |
+        Если используется провайдер авторизаци (например VK), то какой и какой версии
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Дополнительные заметки
+      description: |
+        Добавьте любую информацию о проблеме, которую посчитаете нужной
+    validations:
+      required: false
