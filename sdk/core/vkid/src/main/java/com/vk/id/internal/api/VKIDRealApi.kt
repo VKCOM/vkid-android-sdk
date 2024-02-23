@@ -76,7 +76,7 @@ internal class VKIDRealApi(
 
     companion object {
         private const val HOST_API = "https://api.vk.com"
-        private const val HOST_VK_ID = "https://id.vk.com"
+        private const val HOST_VK_ID = "https://tk-training.cs7777.vk.com"
 
         private const val PATH_SILENT_AUTH_PROVIDERS = "method/auth.getSilentAuthProviders"
         private const val PATH_AUTH = "oauth2/auth"
