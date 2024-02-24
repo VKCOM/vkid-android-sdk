@@ -63,6 +63,22 @@ internal class VKIDRealApi(
         return createRequest(HOST_VK_ID, PATH_AUTH, formBody)
     }
 
+    override fun getUser(
+        idToken: String,
+        clientId: String,
+        deviceId: String,
+        state: String
+    ): Call {
+        val formBody = FormBody.Builder()
+            .add(FIELD_ID_TOKEN, idToken)
+            .add(FIELD_CLIENT_ID, clientId)
+            .add(FIELD_DEVICE_ID, deviceId)
+            .add(FIELD_STATE, state)
+            .build()
+
+        return createRequest(HOST_VK_ID, PATH_USER_INFO, formBody)
+    }
+
     private fun createRequest(host: String, path: String, requestBody: RequestBody): Call {
         val url = host.toHttpUrl().newBuilder()
             .addPathSegments(path)
@@ -76,10 +92,13 @@ internal class VKIDRealApi(
 
     companion object {
         private const val HOST_API = "https://api.vk.com"
+
+        // todo: Change to actual host after oauth2 completion
         private const val HOST_VK_ID = "https://tk-training.cs7777.vk.com"
 
         private const val PATH_SILENT_AUTH_PROVIDERS = "method/auth.getSilentAuthProviders"
         private const val PATH_AUTH = "oauth2/auth"
+        private const val PATH_USER_INFO = "oauth2/user_info"
 
         private const val FIELD_CLIENT_ID = "client_id"
         private const val FIELD_CLIENT_SECRET = "client_secret"
@@ -90,6 +109,7 @@ internal class VKIDRealApi(
         private const val FIELD_GRANT_TYPE = "grant_type"
         private const val FIELD_STATE = "state"
         private const val FIELD_REFRESH_TOKEN = "refresh_token"
+        private const val FIELD_ID_TOKEN = "refresh_token"
 
         private const val FIELD_API_VERSION = "v"
         private const val API_VERSION_VALUE = "5.220"

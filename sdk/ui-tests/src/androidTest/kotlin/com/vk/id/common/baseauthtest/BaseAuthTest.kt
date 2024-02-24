@@ -217,7 +217,7 @@ public abstract class BaseAuthTest(
 
     @DisplayName("Test that invalid uuid is received")
     @Test
-    public fun invalidUuidIsReceived(): Unit = runIfShouldNotSkip {
+    open public fun invalidUuidIsReceived(): Unit = runIfShouldNotSkip {
         var receivedFail: VKIDAuthFail? = null
         var receivedOAuth: OAuth? = null
         before {

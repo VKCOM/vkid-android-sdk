@@ -3,12 +3,14 @@ package com.vk.id
 import android.content.Context
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.api.VKIDCall
+import com.vk.id.internal.api.dto.VKIDUserInfoPayload
 import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthResult
 import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.auth.VKIDTokenPayload
 import com.vk.id.internal.auth.device.DeviceIdProvider
 import com.vk.id.internal.concurrent.CoroutinesDispatchers
+import com.vk.id.internal.state.StateGenerator
 import com.vk.id.internal.store.PrefsStore
 import com.vk.id.storage.TokenStorage
 import io.kotest.core.spec.style.BehaviorSpec
@@ -29,6 +31,7 @@ private const val ERROR_MESSAGE = "Error message"
 private val error = IllegalStateException("Error")
 private const val ACCESS_TOKEN = "access token"
 private const val REFRESH_TOKEN = "refresh token"
+private const val ID_TOKEN = "id token"
 private const val USER_ID = 0L
 private const val EXPIRE_TIME = 0L
 private const val UUID = "uuid"
@@ -73,6 +76,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
         val api = mockk<VKIDApiService>()
         val serviceCredentials = mockk<ServiceCredentials>()
         val tokenStorage = mockk<TokenStorage>()
+        val stateGenerator = mockk<StateGenerator>()
         val handler = AuthResultHandler(
             appContext = context,
             dispatchers = dispatchers,
@@ -82,6 +86,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             serviceCredentials = serviceCredentials,
             api = api,
             tokenStorage = tokenStorage,
+            stateGenerator = stateGenerator,
         )
 
         suspend fun BehaviorSpecGivenContainerScope.whenHandleIsCalledWithFail(
@@ -222,7 +227,9 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             val authResult = authResultSuccess
             val callback = mockk<VKID.AuthCallback>()
             val call = mockk<VKIDCall<VKIDTokenPayload>>()
-            val payload = VKIDTokenPayload(ACCESS_TOKEN, REFRESH_TOKEN, 0, USER_ID, EMAIL, PHONE, "")
+            val userInfoCall = mockk<VKIDCall<VKIDUserInfoPayload>>()
+            val payload = VKIDTokenPayload(ACCESS_TOKEN, REFRESH_TOKEN, ID_TOKEN, 0, USER_ID)
+            val userInfoPayload = VKIDUserInfoPayload(FIRST_NAME, LAST_NAME, PHONE, AVATAR, EMAIL, STATE)
             val token = AccessToken(
                 token = ACCESS_TOKEN,
                 userID = USER_ID,
@@ -245,7 +252,10 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             every { serviceCredentials.clientSecret } returns CLIENT_SECRET
             every { serviceCredentials.redirectUri } returns REDIRECT_URI
             every { api.getToken(CODE, CODE_VERIFIER, CLIENT_ID, UUID, REDIRECT_URI, STATE) } returns call
+            every { api.getUserInfo(ID_TOKEN, CLIENT_ID, UUID, STATE) } returns userInfoCall
             every { call.execute() } returns Result.success(payload)
+            every { userInfoCall.execute() } returns Result.success(userInfoPayload)
+            every { stateGenerator.regenerateState() } returns STATE
             runTest(scheduler) { handler.handle(authResult) }
             Then("Access token is saved") {
                 verify { tokenStorage.accessToken = token }

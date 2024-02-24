@@ -227,6 +227,13 @@ public final class com/vk/id/refresh/VKIDRefreshTokenFail$FailedApiCall : com/vk
 	public fun hashCode ()I
 }
 
+public final class com/vk/id/refresh/VKIDRefreshTokenFail$FailedOAuthState : com/vk/id/refresh/VKIDRefreshTokenFail {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+}
+
 public final class com/vk/id/refresh/VKIDRefreshTokenFail$RefreshTokenExpired : com/vk/id/refresh/VKIDRefreshTokenFail {
 	public static final field $stable I
 	public fun <init> (Ljava/lang/String;)V
@@ -250,6 +257,7 @@ public final class com/vk/id/test/ComposableSingletons$TestAuthProviderActivityK
 
 public abstract interface class com/vk/id/test/OverrideVKIDApi {
 	public abstract fun getToken-hUnOzRk (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Object;
+	public abstract fun getUserInfo-BWLJW6A (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Object;
 }
 
 public final class com/vk/id/test/VKIDSilentAuthProvidersResponse {
@@ -269,6 +277,7 @@ public final class com/vk/id/test/VKIDTestBuilder {
 	public fun <init> (Landroid/content/Context;)V
 	public final fun build ()Lcom/vk/id/VKID;
 	public final fun getTokenResponse (Ljava/lang/Object;)Lcom/vk/id/test/VKIDTestBuilder;
+	public final fun getUserInfoResponse (Ljava/lang/Object;)Lcom/vk/id/test/VKIDTestBuilder;
 	public final fun notifyFailedRedirect ()Lcom/vk/id/test/VKIDTestBuilder;
 	public final fun notifyNoBrowserAvailable ()Lcom/vk/id/test/VKIDTestBuilder;
 	public final fun overrideOAuthToNull ()Lcom/vk/id/test/VKIDTestBuilder;
@@ -280,22 +289,54 @@ public final class com/vk/id/test/VKIDTestBuilder {
 
 public final class com/vk/id/test/VKIDTokenPayloadResponse {
 	public static final field $stable I
-	public fun <init> (Ljava/lang/String;JJLjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;JJ)V
 	public final fun component1 ()Ljava/lang/String;
-	public final fun component2 ()J
-	public final fun component3 ()J
-	public final fun component4 ()Ljava/lang/String;
-	public final fun component5 ()Ljava/lang/String;
-	public final fun component6 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/String;JJLjava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/vk/id/test/VKIDTokenPayloadResponse;
-	public static synthetic fun copy$default (Lcom/vk/id/test/VKIDTokenPayloadResponse;Ljava/lang/String;JJLjava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/vk/id/test/VKIDTokenPayloadResponse;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()J
+	public final fun component5 ()J
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;JJ)Lcom/vk/id/test/VKIDTokenPayloadResponse;
+	public static synthetic fun copy$default (Lcom/vk/id/test/VKIDTokenPayloadResponse;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;JJILjava/lang/Object;)Lcom/vk/id/test/VKIDTokenPayloadResponse;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getAccessToken ()Ljava/lang/String;
-	public final fun getEmail ()Ljava/lang/String;
 	public final fun getExpiresIn ()J
-	public final fun getPhone ()Ljava/lang/String;
-	public final fun getPhoneAccessKey ()Ljava/lang/String;
+	public final fun getIdToken ()Ljava/lang/String;
+	public final fun getRefreshToken ()Ljava/lang/String;
 	public final fun getUserId ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/vk/id/test/VKIDUserInfoPayloadResponse {
+	public static final field $stable I
+	public fun <init> (Lcom/vk/id/test/VKIDUserPayloadResponse;Ljava/lang/String;)V
+	public final fun component1 ()Lcom/vk/id/test/VKIDUserPayloadResponse;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Lcom/vk/id/test/VKIDUserPayloadResponse;Ljava/lang/String;)Lcom/vk/id/test/VKIDUserInfoPayloadResponse;
+	public static synthetic fun copy$default (Lcom/vk/id/test/VKIDUserInfoPayloadResponse;Lcom/vk/id/test/VKIDUserPayloadResponse;Ljava/lang/String;ILjava/lang/Object;)Lcom/vk/id/test/VKIDUserInfoPayloadResponse;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getState ()Ljava/lang/String;
+	public final fun getUser ()Lcom/vk/id/test/VKIDUserPayloadResponse;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/vk/id/test/VKIDUserPayloadResponse {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/vk/id/test/VKIDUserPayloadResponse;
+	public static synthetic fun copy$default (Lcom/vk/id/test/VKIDUserPayloadResponse;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/vk/id/test/VKIDUserPayloadResponse;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAvatar ()Ljava/lang/String;
+	public final fun getEmail ()Ljava/lang/String;
+	public final fun getFirstName ()Ljava/lang/String;
+	public final fun getLastName ()Ljava/lang/String;
+	public final fun getPhone ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
