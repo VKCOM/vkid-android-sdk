@@ -8,6 +8,8 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.common.InternalVKIDApi
+import com.vk.id.exchangetoken.VKIDExchangeTokenToV2Callback
+import com.vk.id.exchangetoken.VKIDTokenExchanger
 import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthEventBridge
 import com.vk.id.internal.auth.AuthProvidersChooser
@@ -103,6 +105,7 @@ public class VKID {
         this.vkSilentAuthInfoProvider = deps.vkSilentAuthInfoProvider
         this.userDataFetcher = deps.userDataFetcher
         this.tokenRefresher = deps.tokenRefresher
+        this.tokenExchanger = deps.tokenExchanger
 
         logger.info(
             "VKID initialized\nVersion name: ${BuildConfig.VKID_VERSION_NAME}\nCI build: ${BuildConfig.CI_BUILD_NUMBER} ${BuildConfig.CI_BUILD_TYPE}"
@@ -119,6 +122,7 @@ public class VKID {
     private val vkSilentAuthInfoProvider: Lazy<SilentAuthInfoProvider>
     private val userDataFetcher: Lazy<UserDataFetcher>
     private val tokenRefresher: Lazy<VKIDTokenRefresher>
+    private val tokenExchanger: Lazy<VKIDTokenExchanger>
 
     /**
      * Initiates the authorization process.
@@ -186,6 +190,36 @@ public class VKID {
     public suspend fun refreshToken(callback: VKIDRefreshTokenCallback) {
         withContext(dispatchers.io) {
             tokenRefresher.value.refresh(callback)
+        }
+    }
+
+    /**
+     * Exchanges v1 access token to v2 access token.
+     *
+     * @param lifecycleOwner The [LifecycleOwner] in which the authorization process should be handled.
+     * @param v1Token The token to exchange.
+     * @param callback [VKIDExchangeTokenToV2Callback] to handle the result of the token exchange.
+     */
+    public fun exchangeTokenToV2(
+        lifecycleOwner: LifecycleOwner,
+        v1Token: String,
+        callback: VKIDExchangeTokenToV2Callback
+    ) {
+        lifecycleOwner.lifecycleScope.launch { exchangeTokenToV2(v1Token = v1Token, callback = callback) }
+    }
+
+    /**
+     * Exchanges v1 access token to v2 access token.
+     *
+     * @param v1Token The token to exchange.
+     * @param callback [VKIDExchangeTokenToV2Callback] to handle the result of the token exchange.
+     */
+    public suspend fun exchangeTokenToV2(
+        v1Token: String,
+        callback: VKIDExchangeTokenToV2Callback
+    ) {
+        withContext(dispatchers.io) {
+            tokenExchanger.value.exchange(v1Token = v1Token, callback = callback)
         }
     }
 

@@ -1,6 +1,7 @@
 package com.vk.id
 
 import com.vk.id.auth.VKIDAuthParams
+import com.vk.id.exchangetoken.VKIDTokenExchanger
 import com.vk.id.internal.api.VKIDApi
 import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthEventBridge
@@ -55,6 +56,7 @@ internal class VKIDTest : BehaviorSpec({
                 override val userDataFetcher: Lazy<UserDataFetcher> = lazy { userDataFetcher }
                 override val api: Lazy<VKIDApi> = lazy { mockk() }
                 override val tokenRefresher: Lazy<VKIDTokenRefresher> = lazy { mockk() }
+                override val tokenExchanger: Lazy<VKIDTokenExchanger> = lazy { mockk() }
             }
         )
 

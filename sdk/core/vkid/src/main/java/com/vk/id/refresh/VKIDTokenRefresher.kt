@@ -1,15 +1,14 @@
 package com.vk.id.refresh
 
 import android.content.Context
-import com.vk.id.AccessToken
-import com.vk.id.VKIDUser
+import com.vk.id.fetchuser.VKIDUserInfoFetcher
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.auth.device.DeviceIdProvider
-import com.vk.id.internal.auth.toExpireTime
 import com.vk.id.internal.state.StateGenerator
 import com.vk.id.storage.TokenStorage
 
+@Suppress("LongParameterList")
 internal class VKIDTokenRefresher(
     private val context: Context,
     private val api: VKIDApiService,
@@ -17,6 +16,7 @@ internal class VKIDTokenRefresher(
     private val deviceIdProvider: DeviceIdProvider,
     private val serviceCredentials: ServiceCredentials,
     private val stateGenerator: StateGenerator,
+    private val userInfoFetcher: VKIDUserInfoFetcher,
 ) {
     fun refresh(callback: VKIDRefreshTokenCallback) {
         val deviceId = deviceIdProvider.getDeviceId(context)
@@ -29,37 +29,18 @@ internal class VKIDTokenRefresher(
             state = refreshTokenState,
         ).execute()
         result.onSuccess { payload ->
-            val userInfoState = stateGenerator.regenerateState()
-            val userInfoResult = api.getUserInfo(
-                idToken = payload.idToken,
-                clientId = serviceCredentials.clientID,
-                deviceId = clientId,
-                state = userInfoState
-            ).execute()
-            userInfoResult.onFailure {
-                callback.onFail(
-                    VKIDRefreshTokenFail.FailedApiCall("Failed to fetch user data due to ${it.message}", it)
-                )
-            }
-            userInfoResult.onSuccess {
-                if (it.state != userInfoState) {
-                    callback.onFail(VKIDRefreshTokenFail.FailedOAuthState("Wrong state for getting user info"))
-                    return
-                }
-                val accessToken = AccessToken(
-                    token = payload.accessToken,
-                    userID = payload.userId,
-                    expireTime = payload.expiresIn.toExpireTime,
-                    userData = VKIDUser(
-                        firstName = it.firstName,
-                        lastName = it.lastName,
-                        photo200 = it.avatar,
+            userInfoFetcher.fetch(
+                payload = payload,
+                onSuccess = callback::onSuccess,
+                onFailedApiCall = {
+                    callback.onFail(
+                        VKIDRefreshTokenFail.FailedApiCall("Failed to fetch user data due to ${it.message}", it)
                     )
-                )
-                tokenStorage.accessToken = accessToken
-                tokenStorage.refreshToken = payload.refreshToken
-                callback.onSuccess(accessToken)
-            }
+                },
+                onFailedOAuthState = {
+                    callback.onFail(VKIDRefreshTokenFail.FailedOAuthState("Wrong state for getting user info"))
+                }
+            )
         }
         result.onFailure {
             callback.onFail(

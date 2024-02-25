@@ -32,4 +32,11 @@ internal interface VKIDApi {
         deviceId: String,
         state: String,
     ): Call
+
+    fun exchangeToken(
+        v1Token: String,
+        clientId: String,
+        deviceId: String,
+        state: String,
+    ): Call
 }

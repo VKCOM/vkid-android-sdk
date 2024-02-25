@@ -51,4 +51,11 @@ internal class ImmediateVKIDApi(
             state = state
         )
     )
+
+    override fun exchangeToken(
+        v1Token: String,
+        clientId: String,
+        deviceId: String,
+        state: String
+    ) = MockVKIDCall(Result.failure<Unit>(RuntimeException("Not supported")))
 }
