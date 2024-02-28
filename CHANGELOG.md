@@ -3,6 +3,11 @@
 > **Note**\
 > Описание основных изменений в релизах VK ID SDK. Наш SDK следует [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.3.1
+
+### Changed
+- Обновлена поддержка SSL Pinning
+
 ## 1.3.0
 
 ### Added

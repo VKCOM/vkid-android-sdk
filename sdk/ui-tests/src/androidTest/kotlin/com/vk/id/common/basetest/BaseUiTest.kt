@@ -7,6 +7,6 @@ import com.kaspersky.kaspresso.testcases.api.testcase.TestCase
 
 public open class BaseUiTest : TestCase(
     kaspressoBuilder = Kaspresso.Builder
-        .withForcedAllureSupport()
+        .withForcedAllureSupport(shouldRecordVideo = false)
         .addComposeSupport()
 )
