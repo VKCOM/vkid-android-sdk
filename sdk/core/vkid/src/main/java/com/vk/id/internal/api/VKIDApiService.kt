@@ -1,5 +1,6 @@
 package com.vk.id.internal.api
 
+import com.vk.id.internal.api.dto.VKIDUserInfoPayload
 import com.vk.id.internal.auth.VKIDTokenPayload
 import com.vk.id.internal.auth.app.VkAuthSilentAuthProvider
 import okhttp3.Call
@@ -30,6 +31,31 @@ internal class VKIDApiService(
             redirectUri = redirectUri,
             state = state,
         ).wrapTokenToVKIDCall()
+    }
+
+    fun getUserInfo(
+        idToken: String,
+        clientId: String,
+        deviceId: String,
+        state: String,
+    ): VKIDCall<VKIDUserInfoPayload> {
+        return api.getUser(
+            idToken = idToken,
+            clientId = clientId,
+            deviceId = deviceId,
+            state = state,
+        ).wrapToVKIDCall { response ->
+            val body = JSONObject(requireNotNull(response.body).string())
+            val user = body.getJSONObject("user")
+            VKIDUserInfoPayload(
+                firstName = user.getString("first_name"),
+                lastName = user.getString("last_name"),
+                phone = user.getString("phone"),
+                avatar = user.getString("avatar"),
+                email = user.getString("email"),
+                state = body.getString("state"),
+            )
+        }
     }
 
     fun getSilentAuthProviders(
@@ -80,11 +106,9 @@ internal class VKIDApiService(
                 VKIDTokenPayload(
                     accessToken = jsonObject.getString("access_token"),
                     refreshToken = jsonObject.getString("refresh_token"),
+                    idToken = jsonObject.getString("id_token"),
                     userId = jsonObject.getLong("user_id"),
                     expiresIn = jsonObject.optLong("expires_in"),
-                    email = jsonObject.optString("email"),
-                    phone = jsonObject.optString("phone"),
-                    phoneAccessKey = jsonObject.optString("phone_access_key"),
                 )
             } catch (@Suppress("SwallowedException") e: JSONException) {
                 val error = e.message

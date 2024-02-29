@@ -16,22 +16,47 @@ public interface OverrideVKIDApi {
         redirectUri: String,
         state: String,
     ): Result<VKIDTokenPayloadResponse>
+
+    public fun getUserInfo(
+        idToken: String,
+        clientId: String,
+        deviceId: String,
+        state: String,
+    ): Result<VKIDUserInfoPayloadResponse>
 }
 
 @InternalVKIDApi
 public data class VKIDTokenPayloadResponse(
     @SerializedName("access_token")
     val accessToken: String,
+    @SerializedName("refresh_token")
+    val refreshToken: String,
+    @SerializedName("id_token")
+    val idToken: String,
     @SerializedName("expires_in")
     val expiresIn: Long,
     @SerializedName("user_id")
     val userId: Long,
-    @SerializedName("email")
-    val email: String,
+)
+
+@InternalVKIDApi
+public data class VKIDUserInfoPayloadResponse(
+    val user: VKIDUserPayloadResponse,
+    val state: String,
+)
+
+@InternalVKIDApi
+public data class VKIDUserPayloadResponse(
+    @SerializedName("first_name")
+    val firstName: String,
+    @SerializedName("last_name")
+    val lastName: String,
     @SerializedName("phone")
     val phone: String,
-    @SerializedName("phone_access_key")
-    val phoneAccessKey: String,
+    @SerializedName("email")
+    val email: String,
+    @SerializedName("avatar")
+    val avatar: String,
 )
 
 @InternalVKIDApi

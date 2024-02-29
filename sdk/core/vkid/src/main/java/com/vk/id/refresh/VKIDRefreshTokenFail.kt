@@ -10,6 +10,23 @@ public sealed class VKIDRefreshTokenFail(
     public val description: String
 ) {
     /**
+     * Represents a failure due to an invalid OAuth state.
+     *
+     * @param description Description of the OAuth state failure.
+     */
+    public class FailedOAuthState(description: String) : VKIDRefreshTokenFail(description) {
+        /** @suppress */
+        override fun equals(other: Any?): Boolean {
+            return other is FailedOAuthState && description == other.description
+        }
+
+        /** @suppress */
+        override fun hashCode(): Int {
+            return description.hashCode()
+        }
+    }
+
+    /**
      * Represents a failure due to an VK ID API call error.
      *
      * @param description Description of the API call failure.

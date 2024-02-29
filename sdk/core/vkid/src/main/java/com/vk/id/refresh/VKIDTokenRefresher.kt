@@ -19,29 +19,47 @@ internal class VKIDTokenRefresher(
     private val stateGenerator: StateGenerator,
 ) {
     fun refresh(callback: VKIDRefreshTokenCallback) {
+        val deviceId = deviceIdProvider.getDeviceId(context)
+        val clientId = serviceCredentials.clientID
+        val refreshTokenState = stateGenerator.regenerateState()
         val result = api.refreshToken(
             refreshToken = tokenStorage.refreshToken ?: return emitUnauthorizedFail(callback),
-            deviceId = deviceIdProvider.getDeviceId(context),
-            clientId = serviceCredentials.clientID,
-            state = stateGenerator.regenerateState()
+            deviceId = deviceId,
+            clientId = clientId,
+            state = refreshTokenState,
         ).execute()
-        result.onSuccess {
-            // todo: Unify with AuthResultHandler in VKIDSDK-792
-            val accessToken = AccessToken(
-                token = it.accessToken,
-                userID = it.userId,
-                expireTime = it.expiresIn.toExpireTime,
-                userData = VKIDUser(
-                    firstName = "",
-                    lastName = "",
-                    photo200 = "",
-                    phone = it.phone,
-                    email = it.email
+        result.onSuccess { payload ->
+            val userInfoState = stateGenerator.regenerateState()
+            val userInfoResult = api.getUserInfo(
+                idToken = payload.idToken,
+                clientId = serviceCredentials.clientID,
+                deviceId = clientId,
+                state = userInfoState
+            ).execute()
+            userInfoResult.onFailure {
+                callback.onFail(
+                    VKIDRefreshTokenFail.FailedApiCall("Failed to fetch user data due to ${it.message}", it)
                 )
-            )
-            tokenStorage.accessToken = accessToken
-            tokenStorage.refreshToken = it.refreshToken
-            callback.onSuccess(accessToken)
+            }
+            userInfoResult.onSuccess {
+                if (it.state != userInfoState) {
+                    callback.onFail(VKIDRefreshTokenFail.FailedOAuthState("Wrong state for getting user info"))
+                    return
+                }
+                val accessToken = AccessToken(
+                    token = payload.accessToken,
+                    userID = payload.userId,
+                    expireTime = payload.expiresIn.toExpireTime,
+                    userData = VKIDUser(
+                        firstName = it.firstName,
+                        lastName = it.lastName,
+                        photo200 = it.avatar,
+                    )
+                )
+                tokenStorage.accessToken = accessToken
+                tokenStorage.refreshToken = payload.refreshToken
+                callback.onSuccess(accessToken)
+            }
         }
         result.onFailure {
             callback.onFail(

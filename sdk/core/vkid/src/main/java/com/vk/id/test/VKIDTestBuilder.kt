@@ -11,6 +11,8 @@ public class VKIDTestBuilder(
 ) {
     private var getTokenResponse = Result
         .failure<VKIDTokenPayloadResponse>(UnsupportedOperationException("Not supported"))
+    private var getUserInfoResponse = Result
+        .failure<VKIDUserInfoPayloadResponse>(UnsupportedOperationException("Not supported"))
     private var mockApi: OverrideVKIDApi = object : OverrideVKIDApi {
         override fun getToken(
             code: String,
@@ -20,11 +22,21 @@ public class VKIDTestBuilder(
             redirectUri: String,
             state: String,
         ) = getTokenResponse
+
+        override fun getUserInfo(
+            idToken: String,
+            clientId: String,
+            deviceId: String,
+            state: String
+        ) = getUserInfoResponse
     }
     private var authProviderConfig: MockAuthProviderConfig = MockAuthProviderConfig()
 
     public fun getTokenResponse(response: Result<VKIDTokenPayloadResponse>): VKIDTestBuilder = apply {
         this.getTokenResponse = response
+    }
+    public fun getUserInfoResponse(response: Result<VKIDUserInfoPayloadResponse>): VKIDTestBuilder = apply {
+        this.getUserInfoResponse = response
     }
     public fun overrideUuid(uuid: String): VKIDTestBuilder = updateConfig { copy(overrideUuid = uuid) }
     public fun overrideState(state: String): VKIDTestBuilder = updateConfig { copy(overrideState = state) }

@@ -33,4 +33,5 @@ module:vkid
 com.vk.id
 com.vk.id.auth
 com.vk.id.internal.log
+com.vk.id.refresh
 com.vk.id.test

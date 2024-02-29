@@ -25,4 +25,11 @@ internal interface VKIDApi {
         deviceId: String,
         state: String,
     ): Call
+
+    fun getUser(
+        idToken: String,
+        clientId: String,
+        deviceId: String,
+        state: String,
+    ): Call
 }
