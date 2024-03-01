@@ -1,7 +1,7 @@
 package com.vk.id.exchangetoken
 
 import android.content.Context
-import com.vk.id.fetchuser.VKIDUserInfoFetcher
+import com.vk.id.TokensHandler
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.auth.device.DeviceIdProvider
@@ -13,7 +13,7 @@ internal class VKIDTokenExchanger(
     private val deviceIdProvider: DeviceIdProvider,
     private val serviceCredentials: ServiceCredentials,
     private val stateGenerator: StateGenerator,
-    private val userInfoFetcher: VKIDUserInfoFetcher,
+    private val tokensHandler: TokensHandler,
 ) {
     fun exchange(v1Token: String, callback: VKIDExchangeTokenToV2Callback) {
         val deviceId = deviceIdProvider.getDeviceId(context)
@@ -31,7 +31,7 @@ internal class VKIDTokenExchanger(
             )
         }
         result.onSuccess { payload ->
-            userInfoFetcher.fetch(
+            tokensHandler.handle(
                 payload = payload,
                 onSuccess = callback::onSuccess,
                 onFailedApiCall = {

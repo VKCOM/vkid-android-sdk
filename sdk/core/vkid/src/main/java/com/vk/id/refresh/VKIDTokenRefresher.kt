@@ -1,7 +1,7 @@
 package com.vk.id.refresh
 
 import android.content.Context
-import com.vk.id.fetchuser.VKIDUserInfoFetcher
+import com.vk.id.TokensHandler
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.auth.device.DeviceIdProvider
@@ -16,7 +16,7 @@ internal class VKIDTokenRefresher(
     private val deviceIdProvider: DeviceIdProvider,
     private val serviceCredentials: ServiceCredentials,
     private val stateGenerator: StateGenerator,
-    private val userInfoFetcher: VKIDUserInfoFetcher,
+    private val tokensHandler: TokensHandler,
 ) {
     fun refresh(callback: VKIDRefreshTokenCallback) {
         val deviceId = deviceIdProvider.getDeviceId(context)
@@ -29,7 +29,7 @@ internal class VKIDTokenRefresher(
             state = refreshTokenState,
         ).execute()
         result.onSuccess { payload ->
-            userInfoFetcher.fetch(
+            tokensHandler.handle(
                 payload = payload,
                 onSuccess = callback::onSuccess,
                 onFailedApiCall = {

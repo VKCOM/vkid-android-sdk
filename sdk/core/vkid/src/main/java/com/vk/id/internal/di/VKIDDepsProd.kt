@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import com.vk.id.AuthOptionsCreator
 import com.vk.id.AuthResultHandler
+import com.vk.id.TokensHandler
 import com.vk.id.VKID
 import com.vk.id.exchangetoken.VKIDTokenExchanger
 import com.vk.id.fetchuser.VKIDUserInfoFetcher
@@ -144,7 +145,7 @@ internal open class VKIDDepsProd(
             prefsStore = prefsStore.value,
             serviceCredentials = serviceCredentials.value,
             api = apiService.value,
-            userInfoFetcher = userInfoFetcher.value
+            tokensHandler = tokensHandler.value,
         )
     }
     override val tokenRefresher: Lazy<VKIDTokenRefresher> = lazy {
@@ -155,7 +156,7 @@ internal open class VKIDDepsProd(
             deviceIdProvider = deviceIdProvider.value,
             serviceCredentials = serviceCredentials.value,
             stateGenerator = stateGenerator,
-            userInfoFetcher = userInfoFetcher.value
+            tokensHandler = tokensHandler.value,
         )
     }
     override val tokenExchanger: Lazy<VKIDTokenExchanger> = lazy {
@@ -165,7 +166,7 @@ internal open class VKIDDepsProd(
             deviceIdProvider = deviceIdProvider.value,
             serviceCredentials = serviceCredentials.value,
             stateGenerator = stateGenerator,
-            userInfoFetcher = userInfoFetcher.value
+            tokensHandler = tokensHandler.value,
         )
     }
 
@@ -174,7 +175,13 @@ internal open class VKIDDepsProd(
             api = apiService.value,
             stateGenerator = stateGenerator,
             serviceCredentials = serviceCredentials.value,
-            tokenStorage = tokenStorage,
+        )
+    }
+
+    private val tokensHandler = lazy {
+        TokensHandler(
+            userInfoFetcher.value,
+            tokenStorage
         )
     }
 

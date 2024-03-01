@@ -1,7 +1,6 @@
 package com.vk.id
 
 import android.content.Context
-import com.vk.id.fetchuser.VKIDUserInfoFetcher
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.api.VKIDCall
 import com.vk.id.internal.auth.AuthCallbacksHolder
@@ -20,9 +19,7 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 
 private const val ERROR_MESSAGE = "Error message"
@@ -45,7 +42,6 @@ private const val FIRST_NAME = "first name"
 private const val LAST_NAME = "last name"
 private const val AVATAR = "avatar"
 private const val PHONE = "phone"
-private const val EMAIL = "email"
 private val authResultSuccess = AuthResult.Success(
     uuid = UUID,
     expireTime = EXPIRE_TIME,
@@ -73,7 +69,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
         every { dispatchers.io } returns testDispatcher
         val api = mockk<VKIDApiService>()
         val serviceCredentials = mockk<ServiceCredentials>()
-        val userInfoFetcher = mockk<VKIDUserInfoFetcher>()
+        val tokensHandler = mockk<TokensHandler>()
         val handler = AuthResultHandler(
             appContext = context,
             dispatchers = dispatchers,
@@ -82,7 +78,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             prefsStore = prefsStore,
             serviceCredentials = serviceCredentials,
             api = api,
-            userInfoFetcher = userInfoFetcher,
+            tokensHandler = tokensHandler
         )
 
         suspend fun BehaviorSpecGivenContainerScope.whenHandleIsCalledWithFail(
@@ -146,7 +142,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             every { deviceIdProvider.getDeviceId(context) } returns DIFFERENT_UUID
             every { prefsStore.state } returns STATE
             every { prefsStore.codeVerifier } returns CODE_VERIFIER
-            TestScope(scheduler).launch { handler.handle(authResult) }
+            runTest(scheduler) { handler.handle(authResult) }
             scheduler.advanceUntilIdle()
             Then("Callbacks are requested from holder") {
                 verify { callbacksHolder.getAll() }
@@ -174,7 +170,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             every { deviceIdProvider.getDeviceId(context) } returns UUID
             every { prefsStore.state } returns DIFFERENT_STATE
             every { prefsStore.codeVerifier } returns CODE_VERIFIER
-            TestScope(scheduler).launch { handler.handle(authResult) }
+            runTest(scheduler) { handler.handle(authResult) }
             scheduler.advanceUntilIdle()
             Then("Callbacks are requested from holder") {
                 verify { callbacksHolder.getAll() }
@@ -222,18 +218,6 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             val callback = mockk<VKID.AuthCallback>()
             val call = mockk<VKIDCall<VKIDTokenPayload>>()
             val payload = VKIDTokenPayload(ACCESS_TOKEN, REFRESH_TOKEN, ID_TOKEN, 0, USER_ID)
-            val token = AccessToken(
-                token = ACCESS_TOKEN,
-                userID = USER_ID,
-                expireTime = -1,
-                userData = VKIDUser(
-                    firstName = FIRST_NAME,
-                    lastName = LAST_NAME,
-                    phone = PHONE,
-                    photo200 = AVATAR,
-                    email = EMAIL,
-                )
-            )
             every { callbacksHolder.getAll() } returns setOf(callback)
             every { callback.onSuccess(any()) } just runs
             every { callbacksHolder.clear() } just runs
@@ -245,10 +229,10 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             every { serviceCredentials.redirectUri } returns REDIRECT_URI
             every { api.getToken(CODE, CODE_VERIFIER, CLIENT_ID, UUID, REDIRECT_URI, STATE) } returns call
             every { call.execute() } returns Result.success(payload)
-            every { userInfoFetcher.fetch(any(), any(), any(), any()) } just runs
+            every { tokensHandler.handle(any(), any(), any(), any()) } just runs
             runTest(scheduler) { handler.handle(authResult) }
             Then("User info fetcher is called") {
-                verify { userInfoFetcher.fetch(payload, any(), any(), any()) }
+                verify { tokensHandler.handle(payload, any(), any(), any()) }
             }
         }
     }

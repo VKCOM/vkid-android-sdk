@@ -1,7 +1,6 @@
 package com.vk.id
 
 import android.content.Context
-import com.vk.id.fetchuser.VKIDUserInfoFetcher
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthResult
@@ -22,7 +21,7 @@ internal class AuthResultHandler(
     private val prefsStore: PrefsStore,
     private val serviceCredentials: ServiceCredentials,
     private val api: VKIDApiService,
-    private val userInfoFetcher: VKIDUserInfoFetcher,
+    private val tokensHandler: TokensHandler
 ) {
 
     private val logger = createLoggerForClass()
@@ -91,7 +90,7 @@ internal class AuthResultHandler(
             )
         }
         callResult.onSuccess { payload ->
-            userInfoFetcher.fetch(
+            tokensHandler.handle(
                 payload = payload,
                 onSuccess = ::emitAuthSuccess,
                 onFailedApiCall = {
