@@ -76,6 +76,24 @@ internal class VKIDRealApi(
             .add(FIELD_STATE, state)
             .build()
 
+        return createRequest(HOST_VK_ID, PATH_AUTH, formBody)
+    }
+
+    override fun exchangeToken(
+        v1Token: String,
+        clientId: String,
+        deviceId: String,
+        state: String
+    ): Call {
+        val formBody = FormBody.Builder()
+            .add(FIELD_RESPONSE_TYPE, VALUE_TOKEN)
+            .add(FIELD_GRANT_TYPE, VALUE_ACCESS_TOKEN)
+            .add(FIELD_ACCESS_TOKEN, v1Token)
+            .add(FIELD_CLIENT_ID, clientId)
+            .add(FIELD_DEVICE_ID, deviceId)
+            .add(FIELD_STATE, state)
+            .build()
+
         return createRequest(HOST_VK_ID, PATH_USER_INFO, formBody)
     }
 
@@ -109,11 +127,15 @@ internal class VKIDRealApi(
         private const val FIELD_GRANT_TYPE = "grant_type"
         private const val FIELD_STATE = "state"
         private const val FIELD_REFRESH_TOKEN = "refresh_token"
-        private const val FIELD_ID_TOKEN = "refresh_token"
+        private const val FIELD_ID_TOKEN = "id_token"
+        private const val FIELD_ACCESS_TOKEN = "access_token"
+        private const val FIELD_RESPONSE_TYPE = "response_type"
 
         private const val FIELD_API_VERSION = "v"
         private const val API_VERSION_VALUE = "5.220"
         private const val VALUE_AUTHORIZATION_CODE = "authorization_code"
         private const val VALUE_REFRESH_TOKEN = "refresh_token"
+        private const val VALUE_TOKEN = "token"
+        private const val VALUE_ACCESS_TOKEN = "access_token"
     }
 }

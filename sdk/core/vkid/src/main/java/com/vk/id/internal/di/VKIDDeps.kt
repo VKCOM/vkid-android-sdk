@@ -2,6 +2,7 @@ package com.vk.id.internal.di
 
 import com.vk.id.AuthOptionsCreator
 import com.vk.id.AuthResultHandler
+import com.vk.id.exchangetoken.VKIDTokenExchanger
 import com.vk.id.internal.api.VKIDApi
 import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthProvidersChooser
@@ -20,4 +21,5 @@ internal interface VKIDDeps {
     val userDataFetcher: Lazy<UserDataFetcher>
     val api: Lazy<VKIDApi>
     val tokenRefresher: Lazy<VKIDTokenRefresher>
+    val tokenExchanger: Lazy<VKIDTokenExchanger>
 }
