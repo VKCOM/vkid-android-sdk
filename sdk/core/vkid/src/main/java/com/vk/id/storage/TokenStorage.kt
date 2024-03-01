@@ -13,6 +13,12 @@ internal class TokenStorage(
         get() = preferences.getString(REFRESH_TOKEN_KEY)
         set(value) = preferences.set(REFRESH_TOKEN_KEY, value)
 
+    fun clear() {
+        idToken = null
+        accessToken = null
+        refreshToken = null
+    }
+
     companion object {
         private const val REFRESH_TOKEN_KEY = "REFRESH_TOKEN_KEY"
         private const val ID_TOKEN_KEY = "ID_TOKEN_KEY"

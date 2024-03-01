@@ -3,6 +3,7 @@ package com.vk.id.internal.api
 import com.vk.id.internal.api.dto.VKIDUserInfoPayload
 import com.vk.id.internal.auth.VKIDTokenPayload
 import com.vk.id.internal.auth.app.VkAuthSilentAuthProvider
+import com.vk.id.logout.VKIDInvalidTokenException
 import okhttp3.Call
 import okhttp3.Response
 import org.json.JSONArray
@@ -99,6 +100,33 @@ internal class VKIDApiService(
             deviceId = deviceId,
             state = state,
         ).wrapTokenToVKIDCall()
+    }
+
+    fun logout(
+        accessToken: String,
+        clientId: String,
+        deviceId: String,
+    ): VKIDCall<Unit> {
+        val call = api.logout(
+            accessToken = accessToken,
+            clientId = clientId,
+            deviceId = deviceId,
+        )
+        return object : VKIDCall<Unit> {
+            override fun execute(): Result<Unit> {
+                val result = call.execute()
+                val body = JSONObject(requireNotNull(result.body).string())
+                return when {
+                    body.isNull("error") -> Result.success(Unit)
+                    body.getString("error") == "invalid_token" -> Result.failure(VKIDInvalidTokenException())
+                    else -> Result.failure(IOException())
+                }
+            }
+
+            override fun cancel() {
+                call.cancel()
+            }
+        }
     }
 
     private inline fun <T> JSONArray?.parseList(parser: (JSONObject) -> T) = this?.let {

@@ -39,4 +39,10 @@ internal interface VKIDApi {
         deviceId: String,
         state: String,
     ): Call
+
+    fun logout(
+        accessToken: String,
+        clientId: String,
+        deviceId: String,
+    ): Call
 }
