@@ -37,6 +37,7 @@ import com.vk.id.internal.state.StateGenerator
 import com.vk.id.internal.store.PrefsStore
 import com.vk.id.internal.user.UserDataFetcher
 import com.vk.id.refresh.VKIDTokenRefresher
+import com.vk.id.refreshuser.VKIDUserRefresher
 import com.vk.id.storage.EncryptedSharedPreferencesStorage
 import com.vk.id.storage.TokenStorage
 import okhttp3.OkHttpClient
@@ -167,6 +168,16 @@ internal open class VKIDDepsProd(
             serviceCredentials = serviceCredentials.value,
             stateGenerator = stateGenerator,
             tokensHandler = tokensHandler.value,
+        )
+    }
+    override val userRefresher: Lazy<VKIDUserRefresher> = lazy {
+        VKIDUserRefresher(
+            context = appContext,
+            api = apiService.value,
+            tokenStorage = tokenStorage,
+            stateGenerator = stateGenerator,
+            deviceIdProvider = deviceIdProvider.value,
+            serviceCredentials = serviceCredentials.value,
         )
     }
 

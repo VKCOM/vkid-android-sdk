@@ -26,6 +26,7 @@ internal class TokensHandler(
                 )
                 tokenStorage.accessToken = accessToken
                 tokenStorage.refreshToken = payload.refreshToken
+                tokenStorage.idToken = payload.idToken
                 onSuccess(accessToken)
             },
             onFailedApiCall = onFailedApiCall,
