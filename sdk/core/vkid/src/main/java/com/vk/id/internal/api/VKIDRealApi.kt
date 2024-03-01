@@ -97,6 +97,20 @@ internal class VKIDRealApi(
         return createRequest(HOST_VK_ID, PATH_USER_INFO, formBody)
     }
 
+    override fun logout(
+        accessToken: String,
+        clientId: String,
+        deviceId: String
+    ): Call {
+        val formBody = FormBody.Builder()
+            .add(FIELD_ACCESS_TOKEN, accessToken)
+            .add(FIELD_CLIENT_ID, clientId)
+            .add(FIELD_DEVICE_ID, deviceId)
+            .build()
+
+        return createRequest(HOST_VK_ID, PATH_LOGOUT, formBody)
+    }
+
     private fun createRequest(host: String, path: String, requestBody: RequestBody): Call {
         val url = host.toHttpUrl().newBuilder()
             .addPathSegments(path)
@@ -117,6 +131,7 @@ internal class VKIDRealApi(
         private const val PATH_SILENT_AUTH_PROVIDERS = "method/auth.getSilentAuthProviders"
         private const val PATH_AUTH = "oauth2/auth"
         private const val PATH_USER_INFO = "oauth2/user_info"
+        private const val PATH_LOGOUT = "oauth2/logout"
 
         private const val FIELD_CLIENT_ID = "client_id"
         private const val FIELD_CLIENT_SECRET = "client_secret"

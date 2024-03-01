@@ -36,6 +36,7 @@ import com.vk.id.internal.log.createLoggerForClass
 import com.vk.id.internal.state.StateGenerator
 import com.vk.id.internal.store.PrefsStore
 import com.vk.id.internal.user.UserDataFetcher
+import com.vk.id.logout.VKIDLoggerOut
 import com.vk.id.refresh.VKIDTokenRefresher
 import com.vk.id.refreshuser.VKIDUserRefresher
 import com.vk.id.storage.EncryptedSharedPreferencesStorage
@@ -180,7 +181,15 @@ internal open class VKIDDepsProd(
             serviceCredentials = serviceCredentials.value,
         )
     }
-
+    override val loggerOut: Lazy<VKIDLoggerOut> = lazy {
+        VKIDLoggerOut(
+            context = appContext,
+            api = apiService.value,
+            tokenStorage = tokenStorage,
+            deviceIdProvider = deviceIdProvider.value,
+            serviceCredentials = serviceCredentials.value,
+        )
+    }
     private val userInfoFetcher: Lazy<VKIDUserInfoFetcher> = lazy {
         VKIDUserInfoFetcher(
             api = apiService.value,

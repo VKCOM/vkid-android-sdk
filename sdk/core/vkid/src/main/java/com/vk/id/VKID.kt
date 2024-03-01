@@ -24,6 +24,8 @@ import com.vk.id.internal.log.LogEngine
 import com.vk.id.internal.log.VKIDLog
 import com.vk.id.internal.log.createLoggerForClass
 import com.vk.id.internal.user.UserDataFetcher
+import com.vk.id.logout.VKIDLoggerOut
+import com.vk.id.logout.VKIDLogoutCallback
 import com.vk.id.refresh.VKIDRefreshTokenCallback
 import com.vk.id.refresh.VKIDTokenRefresher
 import com.vk.id.refreshuser.VKIDRefreshUserCallback
@@ -43,6 +45,7 @@ import kotlinx.coroutines.withContext
  * VKID is the main entry point for integrating VK ID authentication into an Android application.
  * Check readme for more information about integration steps https://github.com/VKCOM/vkid-android-sdk#readme
  */
+@Suppress("TooManyFunctions")
 public class VKID {
     /**
      * Constructs a new instance of VKID.
@@ -109,6 +112,7 @@ public class VKID {
         this.tokenRefresher = deps.tokenRefresher
         this.tokenExchanger = deps.tokenExchanger
         this.userRefresher = deps.userRefresher
+        this.loggerOut = deps.loggerOut
 
         logger.info(
             "VKID initialized\nVersion name: ${BuildConfig.VKID_VERSION_NAME}\nCI build: ${BuildConfig.CI_BUILD_NUMBER} ${BuildConfig.CI_BUILD_TYPE}"
@@ -127,6 +131,7 @@ public class VKID {
     private val tokenRefresher: Lazy<VKIDTokenRefresher>
     private val tokenExchanger: Lazy<VKIDTokenExchanger>
     private val userRefresher: Lazy<VKIDUserRefresher>
+    private val loggerOut: Lazy<VKIDLoggerOut>
 
     /**
      * Initiates the authorization process.
@@ -250,6 +255,32 @@ public class VKID {
     ) {
         withContext(dispatchers.io) {
             userRefresher.value.refresh(callback = callback)
+        }
+    }
+
+    /**
+     * Logs out user and invalidates the access token.
+     *
+     * @param lifecycleOwner The [LifecycleOwner] in which the logging out should be handled.
+     * @param callback [VKIDLogoutCallback] to handle the result of logging out.
+     */
+    public fun logout(
+        callback: VKIDLogoutCallback,
+        lifecycleOwner: LifecycleOwner,
+    ) {
+        lifecycleOwner.lifecycleScope.launch { logout(callback = callback) }
+    }
+
+    /**
+     * Logs out user and invalidates the access token.
+     *
+     * @param callback [VKIDLogoutCallback] to handle the result of logging out.
+     */
+    public suspend fun logout(
+        callback: VKIDLogoutCallback,
+    ) {
+        withContext(dispatchers.io) {
+            loggerOut.value.logout(callback = callback)
         }
     }
 

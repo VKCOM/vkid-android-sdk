@@ -9,6 +9,7 @@ import com.vk.id.internal.auth.AuthProvidersChooser
 import com.vk.id.internal.concurrent.CoroutinesDispatchers
 import com.vk.id.internal.ipc.SilentAuthInfoProvider
 import com.vk.id.internal.user.UserDataFetcher
+import com.vk.id.logout.VKIDLoggerOut
 import com.vk.id.refresh.VKIDTokenRefresher
 import com.vk.id.refreshuser.VKIDUserRefresher
 
@@ -24,4 +25,5 @@ internal interface VKIDDeps {
     val tokenRefresher: Lazy<VKIDTokenRefresher>
     val tokenExchanger: Lazy<VKIDTokenExchanger>
     val userRefresher: Lazy<VKIDUserRefresher>
+    val loggerOut: Lazy<VKIDLoggerOut>
 }
