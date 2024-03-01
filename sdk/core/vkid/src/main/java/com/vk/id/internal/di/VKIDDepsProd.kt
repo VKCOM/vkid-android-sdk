@@ -80,9 +80,10 @@ internal open class VKIDDepsProd(
             .connectTimeout(OKHTTP_TIMEOUT_SECONDS, TimeUnit.SECONDS)
             .addInterceptor(loggingInterceptor())
             .addInterceptor(UserAgentInterceptor(UserAgentProvider(appContext)))
-            .addCertificatePinnerIfNecessary()
-            .build()
-        VKIDRealApi(client)
+        if (!isDebuggable()) {
+            client.addVKPins()
+        }
+        VKIDRealApi(client.build())
     }
     private val apiService = lazy { VKIDApiService(api.value) }
 
@@ -169,27 +170,23 @@ internal open class VKIDDepsProd(
         return logging
     }
 
-    private fun OkHttpClient.Builder.addCertificatePinnerIfNecessary(): OkHttpClient.Builder {
-        if (!isDebuggable()) {
-            val builder = CertificatePinner.Builder()
-            BufferedInputStream(appContext.resources.openRawResource(R.raw.vkid_certs))
-                .reader()
-                .readLines()
-                .map { "sha256/$it" }
-                .forEach { pin ->
-                    builder.add(HOST_NAME_API, pin)
-                    builder.add(HOST_NAME_OAUTH, pin)
-                }
-            certificatePinner(builder.build())
-        }
+    private fun OkHttpClient.Builder.addVKPins(): OkHttpClient.Builder {
+        val builder = CertificatePinner.Builder()
+        BufferedInputStream(appContext.resources.openRawResource(R.raw.vkid_cacerts_pins))
+            .reader()
+            .readLines()
+            .map { "sha256/$it" }
+            .forEach { pin ->
+                builder.add(HOST_NAME_API, pin)
+            }
+        certificatePinner(builder.build())
         return this
     }
 
     private fun isDebuggable() = appContext.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0
 
     private companion object {
-        private const val HOST_NAME_API = "api.vk.com"
-        private const val HOST_NAME_OAUTH = "oauth.vk.com"
+        private const val HOST_NAME_API = "*.vk.com"
         private const val OKHTTP_TIMEOUT_SECONDS = 60L
     }
 }
