@@ -26,6 +26,8 @@ import com.vk.id.internal.log.createLoggerForClass
 import com.vk.id.internal.user.UserDataFetcher
 import com.vk.id.refresh.VKIDRefreshTokenCallback
 import com.vk.id.refresh.VKIDTokenRefresher
+import com.vk.id.refreshuser.VKIDRefreshUserCallback
+import com.vk.id.refreshuser.VKIDUserRefresher
 import com.vk.id.test.ImmediateVKIDApi
 import com.vk.id.test.MockAuthProviderChooser
 import com.vk.id.test.MockAuthProviderConfig
@@ -106,6 +108,7 @@ public class VKID {
         this.userDataFetcher = deps.userDataFetcher
         this.tokenRefresher = deps.tokenRefresher
         this.tokenExchanger = deps.tokenExchanger
+        this.userRefresher = deps.userRefresher
 
         logger.info(
             "VKID initialized\nVersion name: ${BuildConfig.VKID_VERSION_NAME}\nCI build: ${BuildConfig.CI_BUILD_NUMBER} ${BuildConfig.CI_BUILD_TYPE}"
@@ -123,6 +126,7 @@ public class VKID {
     private val userDataFetcher: Lazy<UserDataFetcher>
     private val tokenRefresher: Lazy<VKIDTokenRefresher>
     private val tokenExchanger: Lazy<VKIDTokenExchanger>
+    private val userRefresher: Lazy<VKIDUserRefresher>
 
     /**
      * Initiates the authorization process.
@@ -220,6 +224,32 @@ public class VKID {
     ) {
         withContext(dispatchers.io) {
             tokenExchanger.value.exchange(v1Token = v1Token, callback = callback)
+        }
+    }
+
+    /**
+     * Fetches up-to-data user data using token from previous auth.
+     *
+     * @param lifecycleOwner The [LifecycleOwner] in which the user data refreshing should be handled.
+     * @param callback [VKIDRefreshUserCallback] to handle the result of the user data refreshing.
+     */
+    public fun refreshUserData(
+        lifecycleOwner: LifecycleOwner,
+        callback: VKIDRefreshUserCallback,
+    ) {
+        lifecycleOwner.lifecycleScope.launch { refreshUserData(callback = callback) }
+    }
+
+    /**
+     * Fetches up-to-data user data using token from previous auth.
+     *
+     * @param callback [VKIDRefreshUserCallback] to handle the result of the user data refreshing.
+     */
+    public suspend fun refreshUserData(
+        callback: VKIDRefreshUserCallback,
+    ) {
+        withContext(dispatchers.io) {
+            userRefresher.value.refresh(callback = callback)
         }
     }
 
