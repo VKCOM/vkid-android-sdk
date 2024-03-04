@@ -126,7 +126,7 @@ internal class VKIDRealApi(
         private const val HOST_API = "https://api.vk.com"
 
         // todo: Change to actual host after oauth2 completion
-        private const val HOST_VK_ID = "https://tk-training.cs7777.vk.com"
+        private const val HOST_VK_ID = "https://tk-training.id.cs7777.vk.com"
 
         private const val PATH_SILENT_AUTH_PROVIDERS = "method/auth.getSilentAuthProviders"
         private const val PATH_AUTH = "oauth2/auth"

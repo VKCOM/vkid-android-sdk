@@ -86,7 +86,6 @@ public abstract class BaseAuthTest(
         }.after {
         }.run {
             startAuth()
-            continueAuth()
             step("Fail is received") {
                 flakySafely {
                     receivedFail.shouldBeInstanceOf<VKIDAuthFail.FailedRedirectActivity>()
@@ -115,7 +114,6 @@ public abstract class BaseAuthTest(
         }.after {
         }.run {
             startAuth()
-            continueAuth()
             step("Fail is received") {
                 flakySafely {
                     receivedFail.shouldBeInstanceOf<VKIDAuthFail.NoBrowserAvailable>()
@@ -209,36 +207,6 @@ public abstract class BaseAuthTest(
             step("Fail is received") {
                 flakySafely {
                     receivedFail.shouldBeInstanceOf<VKIDAuthFail.FailedOAuth>()
-                    receivedOAuth shouldBe oAuth
-                }
-            }
-        }
-    }
-
-    @DisplayName("Test that invalid uuid is received")
-    @Test
-    open public fun invalidUuidIsReceived(): Unit = runIfShouldNotSkip {
-        var receivedFail: VKIDAuthFail? = null
-        var receivedOAuth: OAuth? = null
-        before {
-            val vkid = vkidBuilder()
-                .mockApiSuccess()
-                .overrideUuid("wrong uuid")
-                .build()
-            setContent(
-                vkid = vkid,
-                onFail = { oAuth, fail ->
-                    receivedFail = fail
-                    receivedOAuth = oAuth
-                }
-            )
-        }.after {
-        }.run {
-            startAuth()
-            continueAuth()
-            step("Fail is received") {
-                flakySafely {
-                    receivedFail shouldBe VKIDAuthFail.FailedOAuthState("Invalid uuid")
                     receivedOAuth shouldBe oAuth
                 }
             }

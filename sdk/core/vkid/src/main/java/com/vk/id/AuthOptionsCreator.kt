@@ -31,7 +31,7 @@ internal class AuthOptionsCreator(
         val theme = authParams.theme ?: VKIDAuthParams.Theme.systemTheme(appContext)
         val credentials = serviceCredentials.value
         val deviceId = deviceIdProvider.value.getDeviceId(appContext)
-        val redirectUri = "${credentials.redirectUri}?oauth2_params=${getOAuth2Params(deviceId, codeChallenge)}"
+        val redirectUri = "${credentials.redirectUri}?oauth2_params=${getOAuth2Params(deviceId)}"
         return AuthOptions(
             appId = credentials.clientID,
             clientSecret = credentials.clientSecret,
@@ -48,10 +48,7 @@ internal class AuthOptionsCreator(
         )
     }
 
-    private fun getOAuth2Params(deviceId: String, codeChallenge: String) = Base64
-        .encodeToString(
-            """{"device":"$deviceId","code_challenge":"$codeChallenge"}""".encodeToByteArray(),
-            Base64.DEFAULT
-        )
+    private fun getOAuth2Params(deviceId: String) = Base64
+        .encodeToString("""{"device":"$deviceId"}""".encodeToByteArray(), Base64.DEFAULT)
         .filter { it != '\n' }
 }

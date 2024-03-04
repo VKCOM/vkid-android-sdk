@@ -23,11 +23,12 @@ private const val APP_ID = "app_id"
 private const val CLIENT_ID = "client_id"
 
 // todo: Change to actual host after oauth2 completion
-private const val AUTHORITY_BROWSER = "tk-training.cs7777.vk.com"
+private const val AUTHORITY_BROWSER = "tk-training.id.cs7777.vk.com"
 private const val AUTHORITY_CODE_FLOW = "vkcexternalauth-codeflow"
 private const val PATH_BROWSER = "authorize"
 private const val CODE_CHALLENGE = "code_challenge"
 private const val CODE_CHALLENGE_METHOD = "code_challenge_method"
+private const val CODE_CHALLENGE_METHOD_VALUE = "s256"
 private const val REDIRECT_URI = "redirect_uri"
 private const val RESPONSE_TYPE = "response_type"
 private const val RESPONSE_TYPE_CODE = "code"
@@ -51,6 +52,8 @@ internal fun AuthOptions.toAuthUriBrowser(): Uri {
         .appendQueryParameter(CLIENT_ID, appId)
         .appendQueryParameter(RESPONSE_TYPE, RESPONSE_TYPE_CODE)
         .appendQueryParameter(REDIRECT_URI, redirectUri)
+        .appendQueryParameter(CODE_CHALLENGE_METHOD, CODE_CHALLENGE_METHOD_VALUE)
+        .appendQueryParameter(CODE_CHALLENGE, codeChallenge)
         .appendQueryParameter(STATE, state)
         .appendQueryParameter(DEVICE_ID, deviceId)
 

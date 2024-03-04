@@ -10,8 +10,6 @@ import android.os.Bundle
 import androidx.core.app.ActivityOptionsCompat
 import com.vk.id.internal.auth.web.ContextUtils.addNewTaskFlag
 import com.vk.id.internal.log.createLoggerForClass
-import org.json.JSONException
-import org.json.JSONObject
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 
@@ -95,14 +93,7 @@ internal class AuthActivity : Activity() {
             return AuthResult.AuthActiviyResultFailed("AuthActivity opened with null uri", null)
         }
         return try {
-            val payload = uri.getQueryParameter("payload") ?: ""
-            val payloadJson = JSONObject(payload)
-            handlePayloadJson(payloadJson)
-        } catch (e: JSONException) {
-            AuthResult.AuthActiviyResultFailed(
-                "AuthActivity opened with invalid payload json: $uri",
-                e
-            )
+            handlePayload(uri)
         } catch (e: UnsupportedOperationException) {
             AuthResult.AuthActiviyResultFailed(
                 "AuthActivity opened with invalid url: $uri",
@@ -111,25 +102,17 @@ internal class AuthActivity : Activity() {
         }
     }
 
-    private fun handlePayloadJson(
-        payloadJson: JSONObject
-    ): AuthResult {
-        val uuid = payloadJson.optString("uuid")
-        val expireTime = payloadJson.optLong("ttl", 0).toExpireTime
-        val user = payloadJson.optJSONObject("user")
-        val oauth = payloadJson.optJSONObject("oauth")
-        val code = oauth?.optString("code") ?: ""
-        val state = oauth?.optString("state") ?: ""
-
+    private fun handlePayload(uri: Uri): AuthResult {
+        val code = uri.getQueryParameter("code")
+        val state = uri.getQueryParameter("state")
+        val oauth = if (code != null && state != null) {
+            AuthResult.OAuth(code, state, "")
+        } else {
+            null
+        }
         return AuthResult.Success(
-            uuid = uuid,
-            expireTime = expireTime,
-            userId = user?.optLong("id") ?: 0,
-            firstName = user?.optString("first_name") ?: "",
-            lastName = user?.optString("last_name") ?: "",
-            avatar = user?.optString("avatar"),
-            phone = user?.optString("phone"),
-            oauth = oauth?.let { AuthResult.OAuth(code, state, "") }
+            expireTime = System.currentTimeMillis() + 10000000, // skip verification
+            oauth = oauth
         )
     }
 

@@ -29,13 +29,7 @@ package com.vk.id.internal.auth
 
 internal sealed class AuthResult {
     data class Success(
-        val uuid: String,
         val expireTime: Long,
-        val userId: Long,
-        val firstName: String,
-        val lastName: String,
-        val avatar: String?,
-        val phone: String?,
         val oauth: OAuth?
     ) : AuthResult()
 

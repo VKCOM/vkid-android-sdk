@@ -195,6 +195,7 @@ internal open class VKIDDepsProd(
             api = apiService.value,
             stateGenerator = stateGenerator,
             serviceCredentials = serviceCredentials.value,
+            dispatchers = dispatchers,
         )
     }
 

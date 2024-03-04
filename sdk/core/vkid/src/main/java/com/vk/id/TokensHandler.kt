@@ -9,7 +9,7 @@ internal class TokensHandler(
     private val userInfoFetcher: VKIDUserInfoFetcher,
     private val tokenStorage: TokenStorage,
 ) {
-    fun handle(
+    suspend fun handle(
         payload: VKIDTokenPayload,
         onSuccess: (AccessToken) -> Unit,
         onFailedApiCall: (Throwable) -> Unit,

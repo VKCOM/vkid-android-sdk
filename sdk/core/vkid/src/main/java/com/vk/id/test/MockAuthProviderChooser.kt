@@ -28,11 +28,13 @@ internal class MockAuthProviderChooser(
             AuthEventBridge.onAuthResult(
                 AuthResult.NoBrowserAvailable("", IllegalStateException("Mocked no available browser"))
             )
+            return
         }
         if (config.notifyFailedRedirectActivity) {
             AuthEventBridge.onAuthResult(
                 AuthResult.AuthActiviyResultFailed("", IllegalStateException("Mocked activity result failed"))
             )
+            return
         }
         if (config.requireUnsetUseAuthProviderIfPossible) {
             check(options.webAuthPhoneScreen) { "Use auth provider if possible was required to be false" }
