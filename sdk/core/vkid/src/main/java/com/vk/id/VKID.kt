@@ -39,6 +39,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
 /**
@@ -119,6 +121,7 @@ public class VKID {
         )
     }
 
+    private val requestMutex = Mutex()
     private val logger = createLoggerForClass()
 
     private val authProvidersChooser: Lazy<AuthProvidersChooser>
@@ -167,11 +170,13 @@ public class VKID {
             override fun onAuthResult(authResult: AuthResult) {
                 CoroutineScope(authContext + Job()).launch {
                     authResultHandler.value.handle(authResult)
+                    requestMutex.unlock()
                 }
             }
         }
 
         withContext(dispatchers.io) {
+            requestMutex.lock()
             val bestAuthProvider = authProvidersChooser.value.chooseBest(authParams)
             val fullAuthOptions = authOptionsCreator.create(authParams)
             bestAuthProvider.auth(fullAuthOptions)
@@ -198,7 +203,9 @@ public class VKID {
      */
     public suspend fun refreshToken(callback: VKIDRefreshTokenCallback) {
         withContext(dispatchers.io) {
-            tokenRefresher.value.refresh(callback)
+            requestMutex.withLock {
+                tokenRefresher.value.refresh(callback)
+            }
         }
     }
 
@@ -228,7 +235,9 @@ public class VKID {
         callback: VKIDExchangeTokenToV2Callback
     ) {
         withContext(dispatchers.io) {
-            tokenExchanger.value.exchange(v1Token = v1Token, callback = callback)
+            requestMutex.withLock {
+                tokenExchanger.value.exchange(v1Token = v1Token, callback = callback)
+            }
         }
     }
 
@@ -254,7 +263,9 @@ public class VKID {
         callback: VKIDRefreshUserCallback,
     ) {
         withContext(dispatchers.io) {
-            userRefresher.value.refresh(callback = callback)
+            requestMutex.withLock {
+                userRefresher.value.refresh(callback = callback)
+            }
         }
     }
 
@@ -280,7 +291,9 @@ public class VKID {
         callback: VKIDLogoutCallback,
     ) {
         withContext(dispatchers.io) {
-            loggerOut.value.logout(callback = callback)
+            requestMutex.withLock {
+                loggerOut.value.logout(callback = callback)
+            }
         }
     }
 
