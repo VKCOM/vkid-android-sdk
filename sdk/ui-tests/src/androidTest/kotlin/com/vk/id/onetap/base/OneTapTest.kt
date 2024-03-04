@@ -10,8 +10,8 @@ import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.common.baseauthtest.BaseAuthTest
-import com.vk.id.onetap.screen.OneTapScreen
 import com.vk.id.onetap.common.OneTapOAuth
+import com.vk.id.onetap.screen.OneTapScreen
 import io.github.kakaocup.compose.node.element.ComposeScreen
 import org.junit.runner.RunWith
 
