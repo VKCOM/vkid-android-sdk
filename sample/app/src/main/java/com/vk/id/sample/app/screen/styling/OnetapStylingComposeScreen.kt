@@ -47,6 +47,7 @@ import com.vk.id.sample.app.util.carrying.carry
 import com.vk.id.sample.xml.uikit.common.dpToPixels
 import com.vk.id.sample.xml.uikit.common.getOneTapFailCallback
 import com.vk.id.sample.xml.uikit.common.getOneTapSuccessCallback
+import com.vk.id.sample.xml.vkid
 
 private const val TOTAL_WIDTH_PADDING_DP = 16
 private const val MIN_WIDTH_DP = 48f
@@ -99,6 +100,7 @@ internal fun OnetapStylingComposeScreen() {
                     var oneTapView: OneTap? by remember { mutableStateOf(null) }
                     AndroidView(factory = { context ->
                         OneTap(context).apply {
+                            setVKID(context.vkid)
                             setCallbacks(
                                 onAuth = getOneTapSuccessCallback(context) { token.value = it },
                                 onFail = getOneTapFailCallback(context),
@@ -107,6 +109,7 @@ internal fun OnetapStylingComposeScreen() {
                         }
                     })
                     oneTapView?.apply {
+                        setVKID(context.vkid)
                         layoutParams = LayoutParams(
                             if (selectedStyle is OneTapStyle.Icon) WRAP_CONTENT else context.dpToPixels(width.toInt()),
                             WRAP_CONTENT,
