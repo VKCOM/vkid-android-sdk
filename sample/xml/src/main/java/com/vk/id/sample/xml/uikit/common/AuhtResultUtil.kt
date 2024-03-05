@@ -28,7 +28,7 @@ private fun String.hideLastCharacters(firstCharactersToKeepVisible: Int): String
     }
 }
 
-private fun onVKIDAuthSuccess(
+public fun onVKIDAuthSuccess(
     context: Context,
     oAuth: OAuth?,
     accessToken: AccessToken,
@@ -56,7 +56,7 @@ public fun getOneTapSuccessCallback(
     onVKIDAuthSuccess(context, oAuth?.toOAuth(), token)
 }
 
-private fun onVKIDAuthFail(
+public fun onVKIDAuthFail(
     context: Context,
     oAuth: OAuth?,
     fail: VKIDAuthFail,
