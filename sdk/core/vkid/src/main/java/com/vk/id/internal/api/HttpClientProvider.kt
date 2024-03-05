@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.pm.ApplicationInfo
 import androidx.annotation.VisibleForTesting
 import com.vk.id.R
-import com.vk.id.VKID
 import com.vk.id.internal.api.useragent.UserAgentInterceptor
 import com.vk.id.internal.api.useragent.UserAgentProvider
 import com.vk.id.internal.log.createLoggerForClass
@@ -51,9 +50,7 @@ internal class HttpClientProvider(
         val logging = HttpLoggingInterceptor(object : HttpLoggingInterceptor.Logger {
             private val logger = createLoggerForClass()
             override fun log(message: String) {
-                if (VKID.logsEnabled) {
-                    logger.debug(message)
-                }
+                logger.debug(message)
             }
         })
         logging.level = HttpLoggingInterceptor.Level.BASIC

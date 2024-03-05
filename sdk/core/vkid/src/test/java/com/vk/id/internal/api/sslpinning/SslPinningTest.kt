@@ -22,7 +22,7 @@ internal class SslPinningTest : BehaviorSpec({
     // - Enable mac proxy in charles
     // - Disable VPN
     // - Change flag to true
-    val charlesEnabled = true
+    val charlesEnabled = false
     Given("Http client builder with ssl pinning") {
         val context = mockk<Context>()
         val resources = mockk<Resources>()
