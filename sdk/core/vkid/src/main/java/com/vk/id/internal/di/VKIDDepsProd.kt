@@ -194,6 +194,9 @@ internal open class VKIDDepsProd(
             dispatchers = dispatchers,
         )
     }
+
+    override val tokenStorage by lazy { TokenStorage(EncryptedSharedPreferencesStorage(appContext)) }
+
     private val userInfoFetcher: Lazy<VKIDUserInfoFetcher> = lazy {
         VKIDUserInfoFetcher(
             api = apiService.value,
@@ -211,8 +214,6 @@ internal open class VKIDDepsProd(
     }
 
     private val stateGenerator by lazy { StateGenerator(prefsStore.value) }
-
-    private val tokenStorage by lazy { TokenStorage(EncryptedSharedPreferencesStorage(appContext)) }
 
     private val prefsStore: Lazy<PrefsStore> = lazy {
         PrefsStore(appContext)
