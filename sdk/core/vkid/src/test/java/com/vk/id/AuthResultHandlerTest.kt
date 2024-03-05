@@ -13,6 +13,8 @@ import com.vk.id.internal.store.PrefsStore
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.spec.style.scopes.BehaviorSpecGivenContainerScope
 import io.kotest.core.test.testCoroutineScheduler
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -30,7 +32,6 @@ private const val ID_TOKEN = "id token"
 private const val USER_ID = 0L
 private const val EXPIRE_TIME = 0L
 private const val UUID = "uuid"
-private const val DIFFERENT_UUID = "different uuid"
 private const val STATE = "state"
 private const val DIFFERENT_STATE = "differentstate"
 private const val CODE_VERIFIER = "code verifier"
@@ -38,18 +39,8 @@ private const val CODE = "code"
 private const val CLIENT_ID = "client id"
 private const val CLIENT_SECRET = "client secret"
 private const val REDIRECT_URI = "redirect uri"
-private const val FIRST_NAME = "first name"
-private const val LAST_NAME = "last name"
-private const val AVATAR = "avatar"
-private const val PHONE = "phone"
 private val authResultSuccess = AuthResult.Success(
-    uuid = UUID,
     expireTime = EXPIRE_TIME,
-    userId = USER_ID,
-    firstName = FIRST_NAME,
-    lastName = LAST_NAME,
-    avatar = AVATAR,
-    phone = PHONE,
     oauth = AuthResult.OAuth(CODE, STATE, CODE_VERIFIER),
 )
 
@@ -133,34 +124,6 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             }
         }
 
-        When("Handle is called with wrong uuid") {
-            val authResult = authResultSuccess
-            val callback = mockk<VKID.AuthCallback>()
-            every { callbacksHolder.getAll() } returns setOf(callback)
-            every { callback.onFail(any()) } just runs
-            every { callbacksHolder.clear() } just runs
-            every { deviceIdProvider.getDeviceId(context) } returns DIFFERENT_UUID
-            every { prefsStore.state } returns STATE
-            every { prefsStore.codeVerifier } returns CODE_VERIFIER
-            runTest(scheduler) { handler.handle(authResult) }
-            scheduler.advanceUntilIdle()
-            Then("Callbacks are requested from holder") {
-                verify { callbacksHolder.getAll() }
-            }
-            Then("It is emitted") {
-                verify {
-                    callback.onFail(
-                        match {
-                            it is VKIDAuthFail.FailedOAuthState &&
-                                it.description == "Invalid uuid"
-                        }
-                    )
-                }
-            }
-            Then("Callbacks holder is cleared") {
-                verify { callbacksHolder.clear() }
-            }
-        }
         When("Handle is called with wrong state") {
             val authResult = authResultSuccess
             val callback = mockk<VKID.AuthCallback>()
@@ -229,10 +192,10 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             every { serviceCredentials.redirectUri } returns REDIRECT_URI
             every { api.getToken(CODE, CODE_VERIFIER, CLIENT_ID, UUID, REDIRECT_URI, STATE) } returns call
             every { call.execute() } returns Result.success(payload)
-            every { tokensHandler.handle(any(), any(), any(), any()) } just runs
+            coEvery { tokensHandler.handle(any(), any(), any(), any()) } just runs
             runTest(scheduler) { handler.handle(authResult) }
             Then("User info fetcher is called") {
-                verify { tokensHandler.handle(payload, any(), any(), any()) }
+                coVerify { tokensHandler.handle(payload, any(), any(), any()) }
             }
         }
     }

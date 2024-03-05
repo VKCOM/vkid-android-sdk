@@ -15,7 +15,7 @@ internal class VKIDTokenExchanger(
     private val stateGenerator: StateGenerator,
     private val tokensHandler: TokensHandler,
 ) {
-    fun exchange(v1Token: String, callback: VKIDExchangeTokenToV2Callback) {
+    suspend fun exchange(v1Token: String, callback: VKIDExchangeTokenToV2Callback) {
         val deviceId = deviceIdProvider.getDeviceId(context)
         val clientId = serviceCredentials.clientID
         val state = stateGenerator.regenerateState()

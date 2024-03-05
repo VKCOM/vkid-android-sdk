@@ -28,7 +28,7 @@ public class VKIDTestBuilder(
             clientId: String,
             deviceId: String,
             state: String
-        ) = getUserInfoResponse
+        ) = getUserInfoResponse.map { it.copy(state = state) }
     }
     private var authProviderConfig: MockAuthProviderConfig = MockAuthProviderConfig()
 

@@ -21,7 +21,7 @@ public object MockApi {
     public const val FIRST_NAME: String = "first name"
     public const val LAST_NAME: String = "last name"
     public const val AVATAR: String = "avatar"
-    public const val STATE: String = "avatar"
+    public const val STATE: String = "state"
 
     public fun mockApiUser(): VKIDUser = VKIDUser(
         firstName = FIRST_NAME,

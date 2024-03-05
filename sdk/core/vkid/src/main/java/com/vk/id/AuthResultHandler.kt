@@ -55,12 +55,6 @@ internal class AuthResultHandler(
             )
         }
 
-        if (realUuid != oauth.uuid) {
-            logger.error("Invalid oauth UUID, want $realUuid but received ${oauth.uuid}", null)
-            emitAuthFail(VKIDAuthFail.FailedOAuthState("Invalid uuid"))
-            return
-        }
-
         if (realState != oauth.oauth?.state) {
             logger.error(
                 "Invalid oauth state, want $realState but received ${oauth.oauth?.state}",

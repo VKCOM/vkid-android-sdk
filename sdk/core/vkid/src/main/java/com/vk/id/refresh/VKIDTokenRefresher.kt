@@ -18,7 +18,7 @@ internal class VKIDTokenRefresher(
     private val stateGenerator: StateGenerator,
     private val tokensHandler: TokensHandler,
 ) {
-    fun refresh(callback: VKIDRefreshTokenCallback) {
+    suspend fun refresh(callback: VKIDRefreshTokenCallback) {
         val deviceId = deviceIdProvider.getDeviceId(context)
         val clientId = serviceCredentials.clientID
         val refreshTokenState = stateGenerator.regenerateState()
