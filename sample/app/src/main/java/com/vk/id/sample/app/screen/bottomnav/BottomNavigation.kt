@@ -2,6 +2,7 @@ package com.vk.id.sample.app.screen.bottomnav
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -19,7 +20,7 @@ internal fun BottomNavigation(
     content: @Composable (PaddingValues) -> Unit
 ) = Scaffold(
     bottomBar = {
-        NavigationBar {
+        NavigationBar(containerColor = MaterialTheme.colorScheme.primary) {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentDestination = navBackStackEntry?.destination
             Screen.entries.forEach { screen ->

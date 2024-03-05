@@ -30,11 +30,13 @@ internal fun AppTheme(
 @Composable
 private fun lightColors() = lightColorScheme(
     primary = colorResource(R.color.vkid_azure_A100),
+    onPrimary = colorResource(R.color.vkid_white),
     background = colorResource(R.color.vkid_white),
 )
 
 @Composable
 private fun darkColors() = darkColorScheme(
     primary = colorResource(R.color.vkid_azure_A100),
-    background = colorResource(id = xmlR.color.vkid_gray900)
+    onPrimary = colorResource(id = xmlR.color.vkid_black),
+    background = colorResource(id = xmlR.color.vkid_gray900),
 )
