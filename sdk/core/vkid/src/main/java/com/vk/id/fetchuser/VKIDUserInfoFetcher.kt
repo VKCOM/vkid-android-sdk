@@ -14,7 +14,7 @@ internal class VKIDUserInfoFetcher(
     private val dispatchers: CoroutinesDispatchers,
 ) {
     suspend fun fetch(
-        idToken: String,
+        accessToken: String,
         onSuccess: (VKIDUser) -> Unit,
         onFailedApiCall: (Throwable) -> Unit,
         onFailedOAuthState: () -> Unit,
@@ -23,7 +23,7 @@ internal class VKIDUserInfoFetcher(
         val userInfoState = stateGenerator.regenerateState()
         val userInfoResult = withContext(dispatchers.io) {
             api.getUserInfo(
-                idToken = idToken,
+                accessToken = accessToken,
                 clientId = serviceCredentials.clientID,
                 deviceId = clientId,
                 state = userInfoState

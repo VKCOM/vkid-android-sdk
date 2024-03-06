@@ -27,7 +27,7 @@ internal interface VKIDApi {
     ): Call
 
     fun getUser(
-        idToken: String,
+        accessToken: String,
         clientId: String,
         deviceId: String,
         state: String,

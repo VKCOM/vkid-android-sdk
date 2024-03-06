@@ -24,7 +24,7 @@ public class VKIDTestBuilder(
         ) = getTokenResponse
 
         override fun getUserInfo(
-            idToken: String,
+            accessToken: String,
             clientId: String,
             deviceId: String,
             state: String

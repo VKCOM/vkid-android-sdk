@@ -15,15 +15,11 @@ internal class TokenStorage(
             null
         }
         set(value) = preferences.set(ACCESS_TOKEN_KEY, value?.let(gson::toJson))
-    var idToken: String?
-        get() = preferences.getString(ID_TOKEN_KEY)
-        set(value) = preferences.set(ID_TOKEN_KEY, value)
     var refreshToken: String?
         get() = preferences.getString(REFRESH_TOKEN_KEY)
         set(value) = preferences.set(REFRESH_TOKEN_KEY, value)
 
     fun clear() {
-        idToken = null
         accessToken = null
         refreshToken = null
     }
@@ -31,6 +27,5 @@ internal class TokenStorage(
     companion object {
         private const val ACCESS_TOKEN_KEY = "ACCESS_TOKEN_KEY"
         private const val REFRESH_TOKEN_KEY = "REFRESH_TOKEN_KEY"
-        private const val ID_TOKEN_KEY = "ID_TOKEN_KEY"
     }
 }

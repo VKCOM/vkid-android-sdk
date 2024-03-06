@@ -64,13 +64,13 @@ internal class VKIDRealApi(
     }
 
     override fun getUser(
-        idToken: String,
+        accessToken: String,
         clientId: String,
         deviceId: String,
         state: String
     ): Call {
         val formBody = FormBody.Builder()
-            .add(FIELD_ID_TOKEN, idToken)
+            .add(FIELD_ID_TOKEN, accessToken)
             .add(FIELD_CLIENT_ID, clientId)
             .add(FIELD_DEVICE_ID, deviceId)
             .add(FIELD_STATE, state)

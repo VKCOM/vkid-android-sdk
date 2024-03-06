@@ -5,7 +5,6 @@ import java.util.concurrent.TimeUnit
 internal data class VKIDTokenPayload(
     val accessToken: String,
     val refreshToken: String,
-    val idToken: String,
     val expiresIn: Long,
     val userId: Long,
 )
