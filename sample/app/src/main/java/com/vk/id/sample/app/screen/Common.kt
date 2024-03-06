@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vk.id.AccessToken
 import com.vk.id.sample.app.R
+import com.vk.id.sample.xml.uikit.common.copyToClipboard
 import com.vk.id.sample.xml.uikit.common.showToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -80,6 +81,9 @@ internal fun UseToken(accessToken: AccessToken) {
                 val bday = getUserBday(accessToken)
                 showToast(context, "Birth Day: $bday")
             }
+        }
+        Button(text = "Copy access token to clipboard", modifier = Modifier.width(300.dp)) {
+            copyToClipboard(context, "Access token", accessToken.token)
         }
     }
 }
