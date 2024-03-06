@@ -51,6 +51,7 @@ public final class com/vk/id/VKID {
 	public final fun exchangeTokenToV2 (Landroidx/lifecycle/LifecycleOwner;Ljava/lang/String;Lcom/vk/id/exchangetoken/VKIDExchangeTokenToV2Callback;)V
 	public final fun exchangeTokenToV2 (Ljava/lang/String;Lcom/vk/id/exchangetoken/VKIDExchangeTokenToV2Callback;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun fetchUserData-IoAF18A (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun getAccessToken ()Lcom/vk/id/AccessToken;
 	public final fun logout (Lcom/vk/id/logout/VKIDLogoutCallback;Landroidx/lifecycle/LifecycleOwner;)V
 	public final fun logout (Lcom/vk/id/logout/VKIDLogoutCallback;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun refreshToken (Landroidx/lifecycle/LifecycleOwner;Lcom/vk/id/refresh/VKIDRefreshTokenCallback;)V

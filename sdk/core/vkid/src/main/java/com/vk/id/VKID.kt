@@ -30,6 +30,7 @@ import com.vk.id.refresh.VKIDRefreshTokenCallback
 import com.vk.id.refresh.VKIDTokenRefresher
 import com.vk.id.refreshuser.VKIDRefreshUserCallback
 import com.vk.id.refreshuser.VKIDUserRefresher
+import com.vk.id.storage.TokenStorage
 import com.vk.id.test.ImmediateVKIDApi
 import com.vk.id.test.MockAuthProviderChooser
 import com.vk.id.test.MockAuthProviderConfig
@@ -115,6 +116,7 @@ public class VKID {
         this.tokenExchanger = deps.tokenExchanger
         this.userRefresher = deps.userRefresher
         this.loggerOut = deps.loggerOut
+        this.tokenStorage = deps.tokenStorage
 
         logger.info(
             "VKID initialized\nVersion name: ${BuildConfig.VKID_VERSION_NAME}\nCI build: ${BuildConfig.CI_BUILD_NUMBER} ${BuildConfig.CI_BUILD_TYPE}"
@@ -135,6 +137,7 @@ public class VKID {
     private val tokenExchanger: Lazy<VKIDTokenExchanger>
     private val userRefresher: Lazy<VKIDUserRefresher>
     private val loggerOut: Lazy<VKIDLoggerOut>
+    private val tokenStorage: TokenStorage
 
     /**
      * Initiates the authorization process.
@@ -288,6 +291,12 @@ public class VKID {
             loggerOut.value.logout(callback = callback)
         }
     }
+
+    /**
+     * Returns current access token or null if auth wasn't passed
+     */
+    public val accessToken: AccessToken?
+        get() = tokenStorage.accessToken
 
     /**
      * Fetches the user data.
