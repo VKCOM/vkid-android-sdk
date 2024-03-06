@@ -1,35 +1,35 @@
 [versions]
 allure = "2.4.0"
 androidDesugarJdkLibs = "2.0.4"
-androidGradlePlugin = "8.2.2"
+androidGradlePlugin = "8.3.0"
 androidMaterial = "1.11.0"
 androidxActivity = "1.8.2"
 androidxAppcompat = "1.6.1"
 androidxAnnotation = "1.7.1"
 androidxBrowser = "1.7.0"
 androidxCollection = "1.4.0"
-androidxComposeBom = "2024.01.00"
-androidxComposeCompiler = "1.5.8"
+androidxComposeBom = "2024.02.01"
+androidxComposeCompiler = "1.5.10"
 androidxConstraintLayout = "2.1.4"
 androidxCore = "1.12.0"
 androidxCoreSplashscreen = "1.0.1"
-androidxMaterial3 = "1.2.0-rc01"
-androidxNavigationCompose = "2.7.6"
+androidxMaterial3 = "1.2.0"
+androidxNavigationCompose = "2.7.7"
 androidxOrchestrator = "1.4.2"
 androidxTestJunitKtx = "1.1.5"
-andoridxUiTestJunit4 = "1.6.0"
+andoridxUiTestJunit4 = "1.6.2"
 binary-compatibility-validator = "0.14.0"
-coil = "2.5.0"
+coil = "2.6.0"
 detekt = "1.23.5"
-dokka = "1.9.10"
+dokka = "1.9.20"
 gson = "2.10.1"
-kaspresso = "1.5.4"
+kaspresso = "1.5.5"
 kotlin = "1.9.22"
-kotlinxCoroutines = "1.7.3"
+kotlinxCoroutines = "1.8.0"
 kotest = "5.8.0"
-ksp = "1.9.22-1.0.17"
+ksp = "1.9.22-1.0.18"
 lifecycle-runtime-compose = "2.7.0"
-mockk = "1.13.9"
+mockk = "1.13.10"
 okHttpVersion = "4.12.0"
 okioVersion = "3.4.0"
 preference = "1.2.1"
@@ -84,7 +84,7 @@ kotest-assertions = { group = "io.kotest", name = "kotest-assertions-core", vers
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 okhttp3-okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okHttpVersion" }
 okhttp3-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okHttpVersion" }
-okio = { group = "com.squareup.okio", name = "okio", version = { require = "3.7.0" } }
+okio = { group = "com.squareup.okio", name = "okio", version = { require = "3.8.0" } }
 vk-userid = { group = "com.vk", name = "android-sdk-id", version.ref = "vkUserIdVersion" }
 vk-sdk-core = { group = "com.vk", name = "android-sdk-core", version.ref = "vkSdkVersion" }
 vk-sdk-api = { group = "com.vk", name = "android-sdk-api", version.ref = "vkSdkVersion" }
