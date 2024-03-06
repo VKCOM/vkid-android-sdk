@@ -9,9 +9,9 @@ public interface VKIDRefreshUserCallback {
     /**
      * Called upon successful user refreshing.
      *
-     * @param token Up-to-date user data.
+     * @param user Up-to-date user data.
      */
-    public fun onSuccess(token: VKIDUser)
+    public fun onSuccess(user: VKIDUser)
 
     /**
      * Called upon any failure during user refreshing.

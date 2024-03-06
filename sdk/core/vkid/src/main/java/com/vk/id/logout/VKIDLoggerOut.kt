@@ -4,7 +4,9 @@ import android.content.Context
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.auth.device.DeviceIdProvider
+import com.vk.id.internal.concurrent.CoroutinesDispatchers
 import com.vk.id.storage.TokenStorage
+import kotlinx.coroutines.withContext
 
 internal class VKIDLoggerOut(
     private val context: Context,
@@ -12,8 +14,9 @@ internal class VKIDLoggerOut(
     private val tokenStorage: TokenStorage,
     private val deviceIdProvider: DeviceIdProvider,
     private val serviceCredentials: ServiceCredentials,
+    private val dispatchers: CoroutinesDispatchers,
 ) {
-    fun logout(callback: VKIDLogoutCallback) {
+    suspend fun logout(callback: VKIDLogoutCallback) {
         val token = tokenStorage.accessToken?.token ?: run {
             tokenStorage.clear()
             callback.onFail(VKIDLogoutFail.Unauthorized("Not authorized, can't logout"))
@@ -21,11 +24,13 @@ internal class VKIDLoggerOut(
         }
         val deviceId = deviceIdProvider.getDeviceId(context)
         val clientId = serviceCredentials.clientID
-        api.logout(
-            accessToken = token,
-            deviceId = deviceId,
-            clientId = clientId,
-        ).execute().onFailure {
+        withContext(dispatchers.io) {
+            api.logout(
+                accessToken = token,
+                deviceId = deviceId,
+                clientId = clientId,
+            ).execute()
+        }.onFailure {
             tokenStorage.clear()
             if (it is VKIDInvalidTokenException) {
                 callback.onFail(VKIDLogoutFail.AccessTokenTokenExpired("Access token is expired, no need to logout"))

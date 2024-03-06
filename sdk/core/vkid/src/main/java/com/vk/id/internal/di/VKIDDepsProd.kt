@@ -159,6 +159,7 @@ internal open class VKIDDepsProd(
             serviceCredentials = serviceCredentials.value,
             stateGenerator = stateGenerator,
             tokensHandler = tokensHandler.value,
+            dispatchers = dispatchers,
         )
     }
     override val tokenExchanger: Lazy<VKIDTokenExchanger> = lazy {
@@ -169,6 +170,7 @@ internal open class VKIDDepsProd(
             serviceCredentials = serviceCredentials.value,
             stateGenerator = stateGenerator,
             tokensHandler = tokensHandler.value,
+            dispatchers = dispatchers,
         )
     }
     override val userRefresher: Lazy<VKIDUserRefresher> = lazy {
@@ -179,6 +181,7 @@ internal open class VKIDDepsProd(
             stateGenerator = stateGenerator,
             deviceIdProvider = deviceIdProvider.value,
             serviceCredentials = serviceCredentials.value,
+            dispatchers = dispatchers,
         )
     }
     override val loggerOut: Lazy<VKIDLoggerOut> = lazy {
@@ -188,6 +191,7 @@ internal open class VKIDDepsProd(
             tokenStorage = tokenStorage,
             deviceIdProvider = deviceIdProvider.value,
             serviceCredentials = serviceCredentials.value,
+            dispatchers = dispatchers,
         )
     }
     private val userInfoFetcher: Lazy<VKIDUserInfoFetcher> = lazy {

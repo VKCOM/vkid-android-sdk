@@ -202,10 +202,8 @@ public class VKID {
      * @param callback [VKIDRefreshTokenCallback] to handle the result of the token refreshing.
      */
     public suspend fun refreshToken(callback: VKIDRefreshTokenCallback) {
-        withContext(dispatchers.io) {
-            requestMutex.withLock {
-                tokenRefresher.value.refresh(callback)
-            }
+        requestMutex.withLock {
+            tokenRefresher.value.refresh(callback)
         }
     }
 
@@ -234,10 +232,8 @@ public class VKID {
         v1Token: String,
         callback: VKIDExchangeTokenToV2Callback
     ) {
-        withContext(dispatchers.io) {
-            requestMutex.withLock {
-                tokenExchanger.value.exchange(v1Token = v1Token, callback = callback)
-            }
+        requestMutex.withLock {
+            tokenExchanger.value.exchange(v1Token = v1Token, callback = callback)
         }
     }
 
@@ -262,10 +258,8 @@ public class VKID {
     public suspend fun refreshUserData(
         callback: VKIDRefreshUserCallback,
     ) {
-        withContext(dispatchers.io) {
-            requestMutex.withLock {
-                userRefresher.value.refresh(callback = callback)
-            }
+        requestMutex.withLock {
+            userRefresher.value.refresh(callback = callback)
         }
     }
 
@@ -290,10 +284,8 @@ public class VKID {
     public suspend fun logout(
         callback: VKIDLogoutCallback,
     ) {
-        withContext(dispatchers.io) {
-            requestMutex.withLock {
-                loggerOut.value.logout(callback = callback)
-            }
+        requestMutex.withLock {
+            loggerOut.value.logout(callback = callback)
         }
     }
 

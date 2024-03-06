@@ -46,6 +46,7 @@ import com.vk.id.sample.app.util.carrying.carry
 import com.vk.id.sample.xml.uikit.common.dpToPixels
 import com.vk.id.sample.xml.uikit.common.getMultibrandingFailCallback
 import com.vk.id.sample.xml.uikit.common.getMultibrandingSuccessCallback
+import com.vk.id.sample.xml.vkid
 
 private const val MIN_WIDTH_DP = 100f
 private const val TOTAL_WIDTH_PADDING_DP = 16
@@ -91,6 +92,7 @@ internal fun MultibrandingComposeScreen() {
                         var oAuthListWidget: OAuthListWidget? by remember { mutableStateOf(null) }
                         AndroidView(factory = { context ->
                             OAuthListWidget(context).apply {
+                                setVKID(context.vkid)
                                 setCallbacks(
                                     onAuth = getMultibrandingSuccessCallback(context) {},
                                     onFail = getMultibrandingFailCallback(context),
@@ -105,6 +107,7 @@ internal fun MultibrandingComposeScreen() {
                             )
                             style = selectedStyle
                             oAuths = selectedOAuths.value
+                            setVKID(context.vkid)
                         }
                     } else {
                         OAuthListWidget(

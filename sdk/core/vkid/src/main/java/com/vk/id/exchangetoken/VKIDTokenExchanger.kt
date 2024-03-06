@@ -5,8 +5,11 @@ import com.vk.id.TokensHandler
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.auth.device.DeviceIdProvider
+import com.vk.id.internal.concurrent.CoroutinesDispatchers
 import com.vk.id.internal.state.StateGenerator
+import kotlinx.coroutines.withContext
 
+@Suppress("LongParameterList")
 internal class VKIDTokenExchanger(
     private val context: Context,
     private val api: VKIDApiService,
@@ -14,17 +17,20 @@ internal class VKIDTokenExchanger(
     private val serviceCredentials: ServiceCredentials,
     private val stateGenerator: StateGenerator,
     private val tokensHandler: TokensHandler,
+    private val dispatchers: CoroutinesDispatchers,
 ) {
     suspend fun exchange(v1Token: String, callback: VKIDExchangeTokenToV2Callback) {
         val deviceId = deviceIdProvider.getDeviceId(context)
         val clientId = serviceCredentials.clientID
         val state = stateGenerator.regenerateState()
-        val result = api.exchangeToken(
-            v1Token = v1Token,
-            clientId = clientId,
-            deviceId = deviceId,
-            state = state
-        ).execute()
+        val result = withContext(dispatchers.io) {
+            api.exchangeToken(
+                v1Token = v1Token,
+                clientId = clientId,
+                deviceId = deviceId,
+                state = state
+            ).execute()
+        }
         result.onFailure {
             callback.onFail(
                 VKIDExchangeTokenFail.FailedApiCall("Failed code to refresh token due to: ${it.message}", it)

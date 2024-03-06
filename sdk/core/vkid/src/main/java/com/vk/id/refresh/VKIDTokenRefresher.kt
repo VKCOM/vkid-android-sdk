@@ -5,8 +5,10 @@ import com.vk.id.TokensHandler
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.auth.device.DeviceIdProvider
+import com.vk.id.internal.concurrent.CoroutinesDispatchers
 import com.vk.id.internal.state.StateGenerator
 import com.vk.id.storage.TokenStorage
+import kotlinx.coroutines.withContext
 
 @Suppress("LongParameterList")
 internal class VKIDTokenRefresher(
@@ -17,17 +19,22 @@ internal class VKIDTokenRefresher(
     private val serviceCredentials: ServiceCredentials,
     private val stateGenerator: StateGenerator,
     private val tokensHandler: TokensHandler,
+    private val dispatchers: CoroutinesDispatchers,
 ) {
     suspend fun refresh(callback: VKIDRefreshTokenCallback) {
         val deviceId = deviceIdProvider.getDeviceId(context)
         val clientId = serviceCredentials.clientID
         val refreshTokenState = stateGenerator.regenerateState()
-        val result = api.refreshToken(
-            refreshToken = tokenStorage.refreshToken ?: return emitUnauthorizedFail(callback),
-            deviceId = deviceId,
-            clientId = clientId,
-            state = refreshTokenState,
-        ).execute()
+        val refreshToken = tokenStorage.refreshToken ?: return emitUnauthorizedFail(callback)
+
+        val result = withContext(dispatchers.io) {
+            api.refreshToken(
+                refreshToken = refreshToken,
+                deviceId = deviceId,
+                clientId = clientId,
+                state = refreshTokenState,
+            ).execute()
+        }
         result.onSuccess { payload ->
             tokensHandler.handle(
                 payload = payload,

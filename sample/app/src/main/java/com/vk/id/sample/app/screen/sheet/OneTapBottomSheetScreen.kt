@@ -43,6 +43,7 @@ import com.vk.id.sample.app.uikit.selector.EnumStateCheckboxSelector
 import com.vk.id.sample.app.uikit.selector.styleConstructors
 import com.vk.id.sample.xml.uikit.common.getOneTapFailCallback
 import com.vk.id.sample.xml.uikit.common.getOneTapSuccessCallback
+import com.vk.id.sample.xml.vkid
 
 @Preview
 @Composable
@@ -71,6 +72,7 @@ internal fun OneTapBottomSheetScreen() {
             if (shouldUseXml.value) {
                 AndroidView(factory = { context ->
                     OneTapBottomSheet(context).apply {
+                        setVKID(context.vkid)
                         setCallbacks(
                             onAuth = getOneTapSuccessCallback(context) { token.value = it },
                             onFail = getOneTapFailCallback(context),
@@ -81,6 +83,7 @@ internal fun OneTapBottomSheetScreen() {
                 bottomSheetView?.oAuths = selectedOAuths.value
             } else {
                 OneTapBottomSheet(
+                    vkid = context.vkid,
                     style = selectedStyle.value,
                     onAuth = getOneTapSuccessCallback(context) { token.value = it },
                     onFail = getOneTapFailCallback(context),

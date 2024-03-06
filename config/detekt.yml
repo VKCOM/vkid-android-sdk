@@ -24,3 +24,6 @@ formatting:
   MaximumLineLength:
     active: true
     maxLineLength: 150
+  ArgumentListWrapping:
+    active: true
+    maxLineLength: 150
