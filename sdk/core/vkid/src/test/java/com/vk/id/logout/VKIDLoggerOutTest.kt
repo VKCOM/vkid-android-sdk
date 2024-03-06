@@ -1,15 +1,13 @@
-package com.vk.id.refreshuser
+package com.vk.id.logout
 
 import android.content.Context
 import com.vk.id.AccessToken
 import com.vk.id.VKIDUser
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.api.VKIDCall
-import com.vk.id.internal.api.dto.VKIDUserInfoPayload
 import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.auth.device.DeviceIdProvider
 import com.vk.id.internal.concurrent.CoroutinesDispatchers
-import com.vk.id.internal.state.StateGenerator
 import com.vk.id.storage.TokenStorage
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.testCoroutineScheduler
@@ -28,7 +26,6 @@ private const val CLIENT_SECRET = "client secret"
 private const val REDIRECT_URI = "redirect uri"
 private const val ACCESS_TOKEN_VALUE = "access token"
 private const val DEVICE_ID = "device id"
-private const val STATE = "state"
 private const val FIRST_NAME = "first"
 private const val LAST_NAME = "last"
 private const val PHONE = "phone"
@@ -50,21 +47,13 @@ private val ACCESS_TOKEN = AccessToken(
     -1,
     VKID_USER,
 )
-private val USER_INFO_PAYLOAD = VKIDUserInfoPayload(
-    firstName = FIRST_NAME,
-    lastName = LAST_NAME,
-    phone = PHONE,
-    email = EMAIL,
-    avatar = AVATAR,
-    state = STATE,
-)
 
 @OptIn(ExperimentalStdlibApi::class, ExperimentalCoroutinesApi::class)
-internal class VKIDUserRefresherTest : BehaviorSpec({
+internal class VKIDLoggerOutTest : BehaviorSpec({
 
     coroutineTestScope = true
 
-    Given("User info fetcher") {
+    Given("Logger out") {
         val context = mockk<Context>()
         val api = mockk<VKIDApiService>()
         val tokenStorage = mockk<TokenStorage>()
@@ -75,90 +64,104 @@ internal class VKIDUserRefresherTest : BehaviorSpec({
             clientSecret = CLIENT_SECRET,
             redirectUri = REDIRECT_URI,
         )
-        val stateGenerator = mockk<StateGenerator>()
         val dispatchers = mockk<CoroutinesDispatchers>()
         val scheduler = testCoroutineScheduler
         val testDispatcher = StandardTestDispatcher(scheduler)
         every { dispatchers.io } returns testDispatcher
-        val refresher = VKIDUserRefresher(
+        val loggerOut = VKIDLoggerOut(
             context = context,
             api = api,
             tokenStorage = tokenStorage,
-            stateGenerator = stateGenerator,
             deviceIdProvider = deviceIdProvider,
             serviceCredentials = serviceCredentials,
             dispatchers = dispatchers,
         )
-        every { stateGenerator.regenerateState() } returns STATE
         When("Token is not available") {
             every { tokenStorage.accessToken } returns null
-            val fail = VKIDRefreshUserFail.Unauthorized("Not authorized")
-            val callback = mockk<VKIDRefreshUserCallback>()
+            every { tokenStorage.clear() } just runs
+            val fail = VKIDLogoutFail.Unauthorized("Not authorized, can't logout")
+            val callback = mockk<VKIDLogoutCallback>()
             every { callback.onFail(fail) } just runs
-            runTest(scheduler) { refresher.refresh(callback) }
+            runTest(scheduler) { loggerOut.logout(callback) }
+
+            Then("Clears token storage") {
+                verify { tokenStorage.clear() }
+            }
             Then("Calls onFail with unauthorized fail") {
-                verify(exactly = 0) { callback.onSuccess(any()) }
+                verify(exactly = 0) { callback.onSuccess() }
                 verify { callback.onFail(fail) }
             }
         }
         When("Api returns an error") {
             every { tokenStorage.accessToken } returns ACCESS_TOKEN
-            val call = mockk<VKIDCall<VKIDUserInfoPayload>>()
+            every { tokenStorage.clear() } just runs
+            val call = mockk<VKIDCall<Unit>>()
             val exception = Exception("message")
             every { call.execute() } returns Result.failure(exception)
             coEvery {
-                api.getUserInfo(
+                api.logout(
                     accessToken = ACCESS_TOKEN_VALUE,
                     clientId = CLIENT_ID,
                     deviceId = DEVICE_ID,
-                    state = STATE
                 )
             } returns call
-            val fail = VKIDRefreshUserFail.FailedApiCall("Failed to fetch user data due to message", exception)
-            val callback = mockk<VKIDRefreshUserCallback>()
+            val fail = VKIDLogoutFail.FailedApiCall("Failed to logout due to message", exception)
+            val callback = mockk<VKIDLogoutCallback>()
             every { callback.onFail(fail) } just runs
-            runTest(scheduler) { refresher.refresh(callback) }
+            runTest(scheduler) { loggerOut.logout(callback) }
+            Then("Clears token storage") {
+                verify { tokenStorage.clear() }
+            }
             Then("Calls onFail with api fail") {
-                verify(exactly = 0) { callback.onSuccess(any()) }
+                verify(exactly = 0) { callback.onSuccess() }
                 verify { callback.onFail(fail) }
             }
         }
-        When("Api returns wrong state") {
-            val call = mockk<VKIDCall<VKIDUserInfoPayload>>()
-            every { call.execute() } returns Result.success(USER_INFO_PAYLOAD.copy(state = "wrong state"))
+        When("Api returns invalid token exception") {
+            every { tokenStorage.accessToken } returns ACCESS_TOKEN
+            every { tokenStorage.clear() } just runs
+            val call = mockk<VKIDCall<Unit>>()
+            val exception = VKIDInvalidTokenException()
+            every { call.execute() } returns Result.failure(exception)
             coEvery {
-                api.getUserInfo(
+                api.logout(
                     accessToken = ACCESS_TOKEN_VALUE,
                     clientId = CLIENT_ID,
                     deviceId = DEVICE_ID,
-                    state = STATE
                 )
             } returns call
-            val fail = VKIDRefreshUserFail.FailedOAuthState("Wrong state for getting user info")
-            val callback = mockk<VKIDRefreshUserCallback>()
+            val fail = VKIDLogoutFail.AccessTokenTokenExpired("Access token is expired, no need to logout")
+            val callback = mockk<VKIDLogoutCallback>()
             every { callback.onFail(fail) } just runs
-            runTest(scheduler) { refresher.refresh(callback) }
-            Then("Calls onFailedOAuthState") {
-                verify(exactly = 0) { callback.onSuccess(any()) }
+            runTest(scheduler) { loggerOut.logout(callback) }
+            Then("Clears token storage") {
+                verify { tokenStorage.clear() }
+            }
+            Then("Calls onFail with token expiration fail") {
+                verify(exactly = 0) { callback.onSuccess() }
                 verify { callback.onFail(fail) }
             }
         }
-        When("Api returns user") {
-            val call = mockk<VKIDCall<VKIDUserInfoPayload>>()
-            every { call.execute() } returns Result.success(USER_INFO_PAYLOAD)
+        When("Api call succeeds") {
+            every { tokenStorage.accessToken } returns ACCESS_TOKEN
+            every { tokenStorage.clear() } just runs
+            val call = mockk<VKIDCall<Unit>>()
+            every { call.execute() } returns Result.success(Unit)
             coEvery {
-                api.getUserInfo(
+                api.logout(
                     accessToken = ACCESS_TOKEN_VALUE,
                     clientId = CLIENT_ID,
                     deviceId = DEVICE_ID,
-                    state = STATE
                 )
             } returns call
-            val callback = mockk<VKIDRefreshUserCallback>()
-            every { callback.onSuccess(VKID_USER) } just runs
-            runTest(scheduler) { refresher.refresh(callback) }
+            val callback = mockk<VKIDLogoutCallback>()
+            every { callback.onSuccess() } just runs
+            runTest(scheduler) { loggerOut.logout(callback) }
+            Then("Clears token storage") {
+                verify { tokenStorage.clear() }
+            }
             Then("Calls onSuccess") {
-                verify { callback.onSuccess(VKID_USER) }
+                verify { callback.onSuccess() }
                 verify(exactly = 0) { callback.onFail(any()) }
             }
         }
