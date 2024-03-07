@@ -6,7 +6,7 @@ import android.content.Context
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import com.vk.id.analytics.LogTracker
+import com.vk.id.analytics.LogcatTracker
 import com.vk.id.analytics.VKIDAnalytics
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.common.InternalVKIDApi
@@ -84,7 +84,7 @@ public class VKID {
                 field = value
                 if (value) {
                     VKIDLog.setLogEngine(logEngine)
-                    LogTracker().let {
+                    LogcatTracker().let {
                         analyticsDebugTracker = it
                         VKIDAnalytics.addTracker(it)
                     }
@@ -96,7 +96,7 @@ public class VKID {
                 }
             }
 
-        private var analyticsDebugTracker: LogTracker? = null
+        private var analyticsDebugTracker: LogcatTracker? = null
     }
 
     /**
