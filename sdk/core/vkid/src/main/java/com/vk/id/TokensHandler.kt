@@ -16,7 +16,7 @@ internal class TokensHandler(
         onFailedOAuthState: () -> Unit,
     ) {
         userInfoFetcher.fetch(
-            idToken = payload.idToken,
+            accessToken = payload.accessToken,
             onSuccess = {
                 val accessToken = AccessToken(
                     token = payload.accessToken,
@@ -26,7 +26,6 @@ internal class TokensHandler(
                 )
                 tokenStorage.accessToken = accessToken
                 tokenStorage.refreshToken = payload.refreshToken
-                tokenStorage.idToken = payload.idToken
                 onSuccess(accessToken)
             },
             onFailedApiCall = onFailedApiCall,

@@ -18,7 +18,7 @@ public interface OverrideVKIDApi {
     ): Result<VKIDTokenPayloadResponse>
 
     public fun getUserInfo(
-        idToken: String,
+        accessToken: String,
         clientId: String,
         deviceId: String,
         state: String,

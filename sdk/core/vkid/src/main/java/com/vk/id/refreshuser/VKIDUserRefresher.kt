@@ -21,7 +21,7 @@ internal class VKIDUserRefresher(
     private val dispatchers: CoroutinesDispatchers,
 ) {
     suspend fun refresh(callback: VKIDRefreshUserCallback) {
-        val idToken = tokenStorage.idToken ?: run {
+        val accessToken = tokenStorage.accessToken?.token ?: run {
             callback.onFail(VKIDRefreshUserFail.Unauthorized("Not authorized"))
             return
         }
@@ -30,7 +30,7 @@ internal class VKIDUserRefresher(
         val state = stateGenerator.regenerateState()
         withContext(dispatchers.io) {
             api.getUserInfo(
-                idToken = idToken,
+                accessToken = accessToken,
                 clientId = clientId,
                 deviceId = deviceId,
                 state = state

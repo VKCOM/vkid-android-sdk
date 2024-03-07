@@ -46,8 +46,6 @@ private val TOKEN_JSON = """{
 private const val REFRESH_TOKEN_KEY = "REFRESH_TOKEN_KEY"
 private const val REFRESH_TOKEN = "refresh token"
 
-private const val ID_TOKEN_KEY = "ID_TOKEN_KEY"
-
 internal class TokenStorageTest : BehaviorSpec({
     isolationMode = IsolationMode.InstancePerLeaf
     Given("A token storage") {
@@ -102,12 +100,10 @@ internal class TokenStorageTest : BehaviorSpec({
         When("Storage is cleared") {
             every { prefs.set(ACCESS_TOKEN_KEY, null) } just runs
             every { prefs.set(REFRESH_TOKEN_KEY, null) } just runs
-            every { prefs.set(ID_TOKEN_KEY, null) } just runs
             storage.clear()
             Then("Prefs for all keys are cleared") {
                 verify { prefs.set(ACCESS_TOKEN_KEY, null) }
                 verify { prefs.set(REFRESH_TOKEN_KEY, null) }
-                verify { prefs.set(ID_TOKEN_KEY, null) }
             }
         }
     }

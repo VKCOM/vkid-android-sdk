@@ -35,13 +35,13 @@ internal class VKIDApiService(
     }
 
     fun getUserInfo(
-        idToken: String,
+        accessToken: String,
         clientId: String,
         deviceId: String,
         state: String,
     ): VKIDCall<VKIDUserInfoPayload> {
         return api.getUser(
-            idToken = idToken,
+            accessToken = accessToken,
             clientId = clientId,
             deviceId = deviceId,
             state = state,
@@ -148,7 +148,6 @@ internal class VKIDApiService(
                 VKIDTokenPayload(
                     accessToken = jsonObject.getString("access_token"),
                     refreshToken = jsonObject.getString("refresh_token"),
-                    idToken = jsonObject.getString("id_token"),
                     userId = jsonObject.getLong("user_id"),
                     expiresIn = jsonObject.optLong("expires_in"),
                 )

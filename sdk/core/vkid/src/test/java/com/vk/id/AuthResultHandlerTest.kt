@@ -28,7 +28,6 @@ private const val ERROR_MESSAGE = "Error message"
 private val error = IllegalStateException("Error")
 private const val ACCESS_TOKEN = "access token"
 private const val REFRESH_TOKEN = "refresh token"
-private const val ID_TOKEN = "id token"
 private const val USER_ID = 0L
 private const val EXPIRE_TIME = 0L
 private const val UUID = "uuid"
@@ -180,7 +179,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             val authResult = authResultSuccess
             val callback = mockk<VKID.AuthCallback>()
             val call = mockk<VKIDCall<VKIDTokenPayload>>()
-            val payload = VKIDTokenPayload(ACCESS_TOKEN, REFRESH_TOKEN, ID_TOKEN, 0, USER_ID)
+            val payload = VKIDTokenPayload(ACCESS_TOKEN, REFRESH_TOKEN, 0, USER_ID)
             every { callbacksHolder.getAll() } returns setOf(callback)
             every { callback.onSuccess(any()) } just runs
             every { callbacksHolder.clear() } just runs

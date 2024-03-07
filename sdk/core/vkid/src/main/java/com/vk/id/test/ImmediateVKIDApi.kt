@@ -39,13 +39,13 @@ internal class ImmediateVKIDApi(
     ) = MockVKIDCall(Result.failure<VKIDTokenPayload>(RuntimeException("Not supported")))
 
     override fun getUser(
-        idToken: String,
+        accessToken: String,
         clientId: String,
         deviceId: String,
         state: String
     ) = MockVKIDCall(
         mockApi.getUserInfo(
-            idToken = idToken,
+            accessToken = accessToken,
             clientId = clientId,
             deviceId = deviceId,
             state = state
