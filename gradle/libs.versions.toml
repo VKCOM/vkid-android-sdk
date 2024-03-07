@@ -31,7 +31,6 @@ ksp = "1.9.22-1.0.18"
 lifecycle-runtime-compose = "2.7.0"
 mockk = "1.13.10"
 okHttpVersion = "4.12.0"
-okioVersion = "3.4.0"
 preference = "1.2.1"
 junit = "1.1.5"
 benchmarkMacroJunit4 = "1.2.3"
@@ -84,7 +83,6 @@ kotest-assertions = { group = "io.kotest", name = "kotest-assertions-core", vers
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 okhttp3-okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okHttpVersion" }
 okhttp3-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okHttpVersion" }
-okio = { group = "com.squareup.okio", name = "okio", version = { require = "3.8.0" } }
 vk-userid = { group = "com.vk", name = "android-sdk-id", version.ref = "vkUserIdVersion" }
 vk-sdk-core = { group = "com.vk", name = "android-sdk-core", version.ref = "vkSdkVersion" }
 vk-sdk-api = { group = "com.vk", name = "android-sdk-api", version.ref = "vkSdkVersion" }

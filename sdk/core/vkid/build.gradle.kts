@@ -33,8 +33,6 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.okhttp3.okhttp)
     implementation(libs.okhttp3.logging)
-    // force safe okio version, not from okhttp3
-    implementation(libs.okio)
     implementation(libs.vk.userid)
     testImplementation(libs.mockk)
     testImplementation(libs.kotest.core)
