@@ -189,6 +189,7 @@ com.squareup.okhttp3:okhttp:4.12.0=debugAndroidTestRuntimeClasspath
 com.squareup.okio:okio-jvm:3.7.0=debugAndroidTestRuntimeClasspath
 com.squareup.okio:okio:3.7.0=debugAndroidTestRuntimeClasspath
 com.squareup:javawriter:2.1.1=androidTestImplementationDependenciesMetadata,debugAndroidTestCompileClasspath,debugAndroidTestRuntimeClasspath
+com.vk:android-sdk-id:4.0.1=debugAndroidTestRuntimeClasspath
 io.coil-kt:coil-base:2.5.0=debugAndroidTestRuntimeClasspath
 io.coil-kt:coil-compose-base:2.5.0=debugAndroidTestRuntimeClasspath
 io.coil-kt:coil-compose:2.5.0=debugAndroidTestRuntimeClasspath
