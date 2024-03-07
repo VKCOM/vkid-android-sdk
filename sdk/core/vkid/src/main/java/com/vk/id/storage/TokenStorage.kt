@@ -1,11 +1,20 @@
 package com.vk.id.storage
 
+import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
 import com.vk.id.AccessToken
 
 internal class TokenStorage(
     private val preferences: EncryptedSharedPreferencesStorage
 ) {
-    var accessToken: AccessToken? = null
+    private val gson = Gson()
+    var accessToken: AccessToken?
+        get() = try {
+            gson.fromJson(preferences.getString(ACCESS_TOKEN_KEY), AccessToken::class.java)
+        } catch (@Suppress("SwallowedException") e: JsonSyntaxException) {
+            null
+        }
+        set(value) = preferences.set(ACCESS_TOKEN_KEY, value?.let(gson::toJson))
     var idToken: String?
         get() = preferences.getString(ID_TOKEN_KEY)
         set(value) = preferences.set(ID_TOKEN_KEY, value)
@@ -20,6 +29,7 @@ internal class TokenStorage(
     }
 
     companion object {
+        private const val ACCESS_TOKEN_KEY = "ACCESS_TOKEN_KEY"
         private const val REFRESH_TOKEN_KEY = "REFRESH_TOKEN_KEY"
         private const val ID_TOKEN_KEY = "ID_TOKEN_KEY"
     }
