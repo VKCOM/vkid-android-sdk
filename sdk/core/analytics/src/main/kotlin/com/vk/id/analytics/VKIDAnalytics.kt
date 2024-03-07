@@ -25,12 +25,13 @@ public class VKIDAnalytics private constructor() {
             trackersArray.forEach { it.trackEvent(name, *params) }
         }
 
-        /** Adds new tracker. */
+        /** Adds new tracker. If [tracker] was already added then nothing happens.*/
         @JvmStatic
-        public fun addTracker(vararg trackers: Tracker) {
-            for (tracker in trackers) {
-                require(tracker !== this) { "Cannot add VKIDAnalytics into itself." }
+        public fun addTracker(tracker: Tracker) {
+            if (trackers.contains(tracker)) {
+                return
             }
+            require(tracker !== this) { "Cannot add VKIDAnalytics into itself." }
             synchronized(this.trackers) {
                 this.trackers.addAll(trackers)
                 trackersArray = this.trackers.toTypedArray()
