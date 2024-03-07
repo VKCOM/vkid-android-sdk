@@ -33,8 +33,8 @@ public class VKIDAnalytics private constructor() {
             }
             require(tracker !== this) { "Cannot add VKIDAnalytics into itself." }
             synchronized(this.trackers) {
-                this.trackers.addAll(trackers)
-                trackersArray = this.trackers.toTypedArray()
+                trackers.add(tracker)
+                trackersArray = trackers.toTypedArray()
             }
         }
 
