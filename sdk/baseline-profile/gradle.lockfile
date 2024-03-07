@@ -149,6 +149,7 @@ com.squareup.okio:okio:3.3.0=benchmarkReleaseCompileClasspath,benchmarkReleaseRu
 com.squareup.okio:okio:3.7.0=benchmarkReleaseTestedApks,nonMinifiedReleaseTestedApks
 com.squareup.wire:wire-runtime-jvm:4.7.0=benchmarkReleaseCompileClasspath,benchmarkReleaseRuntimeClasspath,nonMinifiedReleaseCompileClasspath,nonMinifiedReleaseRuntimeClasspath
 com.squareup.wire:wire-runtime:4.7.0=benchmarkReleaseCompileClasspath,benchmarkReleaseRuntimeClasspath,implementationDependenciesMetadata,nonMinifiedReleaseCompileClasspath,nonMinifiedReleaseRuntimeClasspath
+com.vk:android-sdk-id:4.0.1=benchmarkReleaseTestedApks,nonMinifiedReleaseTestedApks
 io.coil-kt:coil-base:2.5.0=benchmarkReleaseTestedApks,nonMinifiedReleaseTestedApks
 io.coil-kt:coil-compose-base:2.5.0=benchmarkReleaseTestedApks,nonMinifiedReleaseTestedApks
 io.coil-kt:coil-compose:2.5.0=benchmarkReleaseTestedApks,nonMinifiedReleaseTestedApks
