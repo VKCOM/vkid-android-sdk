@@ -4,7 +4,7 @@
 #
 # Prerequisites
 # - Add 'vkid_teamcity_token' with user 'vkid_user' to your keychain group 'Auth'('Вход'). The value should be your Teamcity api token.
-# - Add 'vkid_teamcity_url' with user 'vkid_user' to to your keychain group 'Auth'('Вход'). The vallu should be the teamcity host.
+# - Add 'vkid_teamcity_url' with user 'vkid_user' to to your keychain group 'Auth'('Вход'). The value should be the teamcity host.
 #
 # Usage:
 # - ./release_sdk.sh
@@ -52,7 +52,7 @@ importCommon() {
     source "$(git rev-parse --show-toplevel)/scripts/common/git.sh"
 }
 
-set -e
+set -ex
 importCommon
 checkoutDevelop
 startReleaseSdkBuild

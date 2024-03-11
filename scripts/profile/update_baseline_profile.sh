@@ -12,13 +12,17 @@ generateBaselineProfile() {
     ./gradlew generateBaselineProfiles
 }
 
-set -e
+set -ex
 importCommon
 assertWorkdirIsClean
 checkoutDevelop
+generateBaselineProfile
+if nothingToCommit; then
+    echo "Baseline profile generated nothing"
+    exit 0
+fi
 BRANCH_NAME="task/VKIDSDK-0/update-baseline-profile"
 deleteBranch $BRANCH_NAME
 checkoutNewBranch $BRANCH_NAME
-generateBaselineProfile
 commitCurrent "VKIDSDK-0: Update baseline profile"
 createMergeRequest $BRANCH_NAME
