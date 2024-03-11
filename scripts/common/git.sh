@@ -34,5 +34,5 @@ commitCurrent() {
 
 deleteBranch() {
     BRANCH_NAME=$1
-    git branch -D $BRANCH_NAME
+    git branch -D $BRANCH_NAME || true
 }
