@@ -20,10 +20,14 @@ set -e
 importCommon
 assertWorkdirIsClean
 checkoutDevelop
+publishDokkaSkipPlugin
+runDokka
+if nothingToCommit; then
+    echo "Dokka have nothing to add"
+    exit 0
+fi
 BRANCH_NAME="task/VKIDSDK-0/update-documentation"
 deleteBranch $BRANCH_NAME
 checkoutNewBranch $BRANCH_NAME
-publishDokkaSkipPlugin
-runDokka
 commitCurrent "VKIDSDK-0: Update documentation"
 createMergeRequest $BRANCH_NAME

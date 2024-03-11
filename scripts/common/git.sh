@@ -36,3 +36,11 @@ deleteBranch() {
     BRANCH_NAME=$1
     git branch -D $BRANCH_NAME || true
 }
+
+nothingToCommit() {
+  if [[ $(git status --porcelain) ]]; then
+    true
+  else
+    false
+  fi
+}
