@@ -16,7 +16,7 @@ publishDokkaSkipPlugin() {
     ./gradlew :build-logic:dokka-skip:publishToMavenLocal
 }
 
-set -e
+set -ex
 importCommon
 assertWorkdirIsClean
 checkoutDevelop

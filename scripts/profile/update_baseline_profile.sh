@@ -12,7 +12,7 @@ generateBaselineProfile() {
     ./gradlew generateBaselineProfiles
 }
 
-set -e
+set -ex
 importCommon
 assertWorkdirIsClean
 checkoutDevelop
