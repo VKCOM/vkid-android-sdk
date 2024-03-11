@@ -14,11 +14,14 @@
 
 VKID_GITHUB_TOKEN="$(security find-generic-password -w -s 'vkid_github_token' -a 'vkid_user')"
 VKID_GITLAB_TOKEN="$(security find-generic-password -w -s 'vkid_gitlab_token' -a 'vkid_user')"
+VKID_GITLAB_HOST="$(security find-generic-password -w -s 'vkid_gitlab_host' -a 'vkid_user')"
 CONFIG_FILE="$(git rev-parse --show-toplevel)/scripts/renovate/config.js"
 
 docker run \
 	-it \
 	-e GITHUB_COM_TOKEN="$VKID_GITHUB_TOKEN" \
+	-e VKID_GITLAB_TOKEN="$VKID_GITLAB_TOKEN" \
+	-e VKID_GITLAB_HOST="$VKID_GITLAB_HOST" \
 	-e LOG_LEVEL="debug" \
 	-v $CONFIG_FILE:/usr/src/app/config.js \
 	renovate/renovate \
