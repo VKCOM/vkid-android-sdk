@@ -166,7 +166,6 @@ public class VKID {
      *
      * @return A Result object containing the fetched [VKIDUser] or an error.
      */
-    @InternalVKIDApi
     public suspend fun fetchUserData(): Result<VKIDUser?> {
         return Result.success(userDataFetcher.value.fetchUserData())
     }

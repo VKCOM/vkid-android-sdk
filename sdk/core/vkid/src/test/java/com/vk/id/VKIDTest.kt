@@ -1,9 +1,6 @@
-@file:OptIn(InternalVKIDApi::class)
-
 package com.vk.id
 
 import com.vk.id.auth.VKIDAuthParams
-import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.api.VKIDApi
 import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthEventBridge
