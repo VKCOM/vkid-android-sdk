@@ -199,10 +199,12 @@ internal open class VKIDDepsProd(
 
     private val userInfoFetcher: Lazy<VKIDUserInfoFetcher> = lazy {
         VKIDUserInfoFetcher(
+            context = appContext,
             api = apiService.value,
             stateGenerator = stateGenerator,
             serviceCredentials = serviceCredentials.value,
             dispatchers = dispatchers,
+            deviceIdProvider = deviceIdProvider.value,
         )
     }
 

@@ -1,7 +1,5 @@
 package com.vk.id.logout
 
-import com.vk.id.refreshuser.VKIDRefreshUserFail
-
 /**
  * Represents the failure cases for VK ID logout.
  */
@@ -65,7 +63,7 @@ public sealed class VKIDLogoutFail(
     ) : VKIDLogoutFail(description) {
         /** @suppress */
         override fun equals(other: Any?): Boolean {
-            return other is VKIDRefreshUserFail && description == other.description
+            return other is VKIDLogoutFail && description == other.description
         }
 
         /** @suppress */
