@@ -30,7 +30,7 @@ internal fun <T : Any> KClass<T>.styleConstructors(
     context: Context
 ) = simpleStyleConstructors() + systemStyleConstructors(context)
 
-fun <T : Any> KClass<T>.simpleStyleConstructors() = sealedSubclasses
+internal fun <T : Any> KClass<T>.simpleStyleConstructors() = sealedSubclasses
     .associate { it.simpleName!! to it.primaryConstructor!! }
 
 private fun <T : Any> KClass<T>.systemStyleConstructors(context: Context) = companionObject!!

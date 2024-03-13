@@ -14,7 +14,3 @@ public final class com/vk/id/multibranding/OAuthListWidgetKt {
 	public static final fun OAuthListWidget (Landroidx/compose/ui/Modifier;Lcom/vk/id/multibranding/common/style/OAuthListWidgetStyle;Lcom/vk/id/multibranding/common/callback/OAuthListWidgetAuthCallback;Lkotlin/jvm/functions/Function2;Ljava/util/Set;Lcom/vk/id/VKID;Landroidx/compose/runtime/Composer;II)V
 }
 
-public synthetic class com/vk/id/multibranding/OAuthListWidgetKt$EntriesMappings {
-	public static final synthetic field entries$0 Lkotlin/enums/EnumEntries;
-}
-

@@ -4,6 +4,7 @@
 #
 # Prerequisites
 # - Add 'vkid_teamcity_token' with user 'vkid_user' to your keychain group 'Auth'('Вход'). The value should be your Teamcity api token.
+# - Add 'vkid_teamcity_url' with user 'vkid_user' to to your keychain group 'Auth'('Вход'). The value should be the teamcity host.
 #
 # Usage:
 # - ./release_sdk.sh
@@ -35,7 +36,11 @@ startReleaseSdkBuild() {
         -H "Authorization: Bearer $(getTeamcityToken)" \
         -H "Accept: application/json" \
         -H "Content-Type:application/json" \
-        -X POST --data "$(generate_post_data)" "https://teamcity2.mvk.com/app/rest/buildQueue"
+        -X POST --data "$(generate_post_data)" "https://$(getTeamcityUrl)/app/rest/buildQueue"
+}
+
+getTeamcityUrl() {
+    security find-generic-password -w -s 'vkid_teamcity_url' -a 'vkid_user'
 }
 
 getTeamcityToken() {
@@ -44,9 +49,10 @@ getTeamcityToken() {
 
 importCommon() {
     source "$(git rev-parse --show-toplevel)/scripts/common/versions.sh"
+    source "$(git rev-parse --show-toplevel)/scripts/common/git.sh"
 }
 
-set -e
+set -ex
 importCommon
 checkoutDevelop
 startReleaseSdkBuild

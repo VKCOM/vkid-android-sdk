@@ -1,0 +1,12 @@
+name: Документация
+description: Расскажите нам об ошибке в документации или предложите идею по ее улучшению
+title: "[DOC]: "
+labels: [ "doc" ]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Описание
+      description: Подробное описание ошибки или идеи по улучшению
+    validations:
+      required: true
