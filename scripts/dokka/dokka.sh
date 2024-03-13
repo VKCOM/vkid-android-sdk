@@ -8,11 +8,6 @@ importCommon() {
     source "$(git rev-parse --show-toplevel)/scripts/common/git.sh"
 }
 
-deleteBranch() {
-    BRANCH_NAME=$1
-    git branch -D $BRANCH_NAME
-}
-
 runDokka() {
     ./gradlew dokkaHtmlMultiModule
 }
@@ -21,14 +16,18 @@ publishDokkaSkipPlugin() {
     ./gradlew :build-logic:dokka-skip:publishToMavenLocal
 }
 
-set -e
+set -ex
 importCommon
 assertWorkdirIsClean
 checkoutDevelop
+publishDokkaSkipPlugin
+runDokka
+if nothingToCommit; then
+    echo "Dokka have nothing to add"
+    exit 0
+fi
 BRANCH_NAME="task/VKIDSDK-0/update-documentation"
 deleteBranch $BRANCH_NAME
 checkoutNewBranch $BRANCH_NAME
-publishDokkaSkipPlugin
-runDokka
 commitCurrent "VKIDSDK-0: Update documentation"
 createMergeRequest $BRANCH_NAME

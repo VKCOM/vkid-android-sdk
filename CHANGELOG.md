@@ -2,6 +2,17 @@
 
 > **Note**\
 > Описание основных изменений в релизах VK ID SDK. Наш SDK следует [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+ 
+## 1.3.2
+
+### Added
+- В сeмпле теперь можно скопировать access token в буфер обмена
+ 
+### Fixed
+- Фикс дублирования класса UserId при подключении библиотек https://github.com/VKCOM/vk-android-sdk
+ 
+### Changed
+- Обновлена поддержка SSL Pinning
 
 ## 1.3.1
 

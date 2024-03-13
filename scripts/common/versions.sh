@@ -7,5 +7,5 @@ fetchVersionFile() {
 }
 
 fetchCurrentVersion() {
-    echo $(grep -Eo 'VERSION_NAME=.*' "$(fetchVersionFile)") | awk -F'=' '{print $2}'
+    grep -Eo 'VERSION_NAME=.*' "$(fetchVersionFile)" | awk -F'=' '{print $2}'
 }

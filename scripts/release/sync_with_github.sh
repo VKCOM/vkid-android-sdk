@@ -14,7 +14,7 @@ importCommon() {
     source "$(git rev-parse --show-toplevel)/scripts/common/versions.sh"
 }
 
-set -e
+set -ex
 importCommon
 git checkout master
 PUBLIC_REPO_URL="git@github.com:VKCOM/vkid-android-sdk.git"

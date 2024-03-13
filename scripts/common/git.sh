@@ -18,16 +18,29 @@ checkoutDevelop() {
 
 createMergeRequest() {
     BRANCH_NAME=$1
-    git push -o merge_request.create --set-upstream origin $BRANCH_NAME
+    git push -o merge_request.create --set-upstream origin "$BRANCH_NAME"
 }
 
 checkoutNewBranch() {
     BRANCH_NAME=$1
-    git checkout -b $1
+    git checkout -b "$1"
 }
 
 commitCurrent() {
     COMMIT_MESSAGE=$1
     git add -A
     git commit -m "$COMMIT_MESSAGE"
+}
+
+deleteBranch() {
+    BRANCH_NAME=$1
+    git branch -D "$BRANCH_NAME" || true
+}
+
+nothingToCommit() {
+  if [[ $(git status --porcelain) ]]; then
+    true
+  else
+    false
+  fi
 }

@@ -54,7 +54,7 @@ private const val MAX_RADIUS_DP = 30
 @Preview
 @Composable
 @Suppress("LongMethod")
-fun MultibrandingComposeScreen() {
+internal fun MultibrandingComposeScreen() {
     val context = LocalContext.current
     val token: MutableState<AccessToken?> = remember { mutableStateOf(null) }
     val screenWidth = LocalConfiguration.current.screenWidthDp - TOTAL_WIDTH_PADDING_DP

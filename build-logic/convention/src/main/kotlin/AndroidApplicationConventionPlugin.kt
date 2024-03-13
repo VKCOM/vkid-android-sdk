@@ -22,6 +22,7 @@ import com.vk.id.configureDetekt
 import com.vk.id.configureKotest
 import com.vk.id.configureKotlinAndroid
 import com.vk.id.configurePrintApksTask
+import com.vk.id.configureStrictMode
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -41,6 +42,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                 configurePrintApksTask(this)
             }
             configureKotlinAndroid()
+            configureStrictMode()
             configureKotest()
             configureDetekt(isCompose = false)
             configureAndroidLint()

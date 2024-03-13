@@ -14,13 +14,6 @@ android {
         consumerProguardFiles("consumer-rules.pro")
     }
 
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-        }
-    }
-
     buildFeatures {
         aidl = true
     }
@@ -42,6 +35,7 @@ dependencies {
     implementation(libs.okhttp3.logging)
     // force safe okio version, not from okhttp3
     implementation(libs.okio)
+    implementation(libs.vk.userid)
     testImplementation(libs.mockk)
     testImplementation(libs.kotest.core)
     testImplementation(libs.kotest.assertions)

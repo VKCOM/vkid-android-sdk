@@ -14,5 +14,4 @@ dependencies {
     api(project(":multibranding-common"))
     implementation(project(":multibranding-compose"))
     implementation(libs.androidx.compose.ui)
-    androidTestImplementation(project(":multibranding-ui-tests"))
 }

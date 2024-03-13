@@ -4,7 +4,7 @@
 # Usage: ./bump_version.sh X.Y.Z
 #
 # This script does the following:
-# - Checks that there are no uncommited changes
+# - Checks that there are no uncommitted changes
 # - Switches to develop
 # - Creates new branch task/VKIDSDK-0/bump-version-to-X-Y-Z from develop
 # - Changes VERSION_NAME to X.Y.Z in gradle.properties
@@ -13,10 +13,10 @@
 
 bumpVersion() {
     NEW_VERSION=$1
-    assertValidSemver $NEW_VERSION
+    assertValidSemver "$NEW_VERSION"
     CURRENT_VERSION="$(fetchCurrentVersion)"
-    assertNewVersionIsDifferent $CURRENT_VERSION $NEW_VERSION
-    bumpVersionInVersionFile $CURRENT_VERSION $NEW_VERSION
+    assertNewVersionIsDifferent "$CURRENT_VERSION" "$NEW_VERSION"
+    bumpVersionInVersionFile "$CURRENT_VERSION" "$NEW_VERSION"
     echo "Updated version to $NEW_VERSION"
 }
 
@@ -27,7 +27,7 @@ importCommon() {
 
 commitVersionChange() {
     commitCurrent "VKIDSDK-0: Update version to $1"
-    echo "Commited version change to $1"
+    echo "Committed version change to $1"
     echo "Checked out version change branch"
 }
 
@@ -48,7 +48,7 @@ assertNewVersionIsDifferent() {
 }
 
 assertValidSemver() {
-    if ! isValidSemver $1; then
+    if ! isValidSemver "$1"; then
         echo "ERROR: $1 isn't a valid semantic versioning"
         exit 1
     fi
@@ -63,16 +63,16 @@ isValidSemver() {
 
 createVersionMergeRequest() {
     BRANCH_NAME=$1
-    createMergeRequest $BRANCH_NAME
+    createMergeRequest "$BRANCH_NAME"
     echo "Created merge request with with version change"
 }
 
-set -e
+set -ex
 importCommon
 assertWorkdirIsClean
 checkoutDevelop
 BRANCH_NAME="task/VKIDSDK-0/bump-version-to-$1"
-checkoutNewBranch $BRANCH_NAME
-bumpVersion $1
-commitVersionChange $1
-createVersionMergeRequest $BRANCH_NAME
+checkoutNewBranch "$BRANCH_NAME"
+bumpVersion "$1"
+commitVersionChange "$1"
+createVersionMergeRequest "$BRANCH_NAME"
