@@ -11,8 +11,6 @@ dependencies {
     androidTestImplementation(project(":vkid"))
     androidTestImplementation(project(":onetap-xml"))
     androidTestImplementation(project(":onetap-compose"))
-    androidTestImplementation(project(":onetap-ui-tests"))
     androidTestImplementation(project(":multibranding-xml"))
     androidTestImplementation(project(":multibranding-compose"))
-    androidTestImplementation(project(":multibranding-ui-tests"))
 }

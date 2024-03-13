@@ -21,7 +21,7 @@ import com.vk.id.sample.xml.multibranding.MultibrandingXmlLayoutActivity
 import com.vk.id.sample.xml.onetap.OneTapStylingXmlLayoutActivity
 import com.vk.id.sample.xml.onetapsheet.OnetapSheetStylingXmlActivity
 
-class MainActivity : ComponentActivity() {
+internal class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

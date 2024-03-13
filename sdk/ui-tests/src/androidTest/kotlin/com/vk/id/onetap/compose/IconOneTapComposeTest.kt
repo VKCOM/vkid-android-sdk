@@ -3,7 +3,7 @@ package com.vk.id.onetap.compose
 import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
-import com.vk.id.onetap.OneTapTest
+import com.vk.id.onetap.base.OneTapTest
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.compose.onetap.OneTap

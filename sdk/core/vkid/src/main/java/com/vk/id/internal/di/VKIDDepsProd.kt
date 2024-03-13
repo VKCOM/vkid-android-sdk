@@ -8,13 +8,10 @@ import android.os.Build
 import android.os.Bundle
 import com.vk.id.AuthOptionsCreator
 import com.vk.id.AuthResultHandler
-import com.vk.id.VKID
+import com.vk.id.internal.api.HttpClientProvider
 import com.vk.id.internal.api.VKIDApi
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.api.VKIDRealApi
-import com.vk.id.internal.api.sslpinning.SslPinningProvider
-import com.vk.id.internal.api.useragent.UserAgentInterceptor
-import com.vk.id.internal.api.useragent.UserAgentProvider
 import com.vk.id.internal.auth.AuthActivity
 import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthProvidersChooser
@@ -29,12 +26,8 @@ import com.vk.id.internal.concurrent.CoroutinesDispatchers
 import com.vk.id.internal.concurrent.CoroutinesDispatchersProd
 import com.vk.id.internal.ipc.SilentAuthInfoProvider
 import com.vk.id.internal.ipc.VkSilentAuthInfoProvider
-import com.vk.id.internal.log.createLoggerForClass
 import com.vk.id.internal.store.PrefsStore
 import com.vk.id.internal.user.UserDataFetcher
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import java.util.concurrent.TimeUnit
 
 internal open class VKIDDepsProd(
     private val appContext: Context
@@ -70,18 +63,8 @@ internal open class VKIDDepsProd(
         )
     }
 
-    private val sslPinningProvider = SslPinningProvider(appContext)
-
     override val api: Lazy<VKIDApi> = lazy {
-        val client = OkHttpClient.Builder()
-            .readTimeout(OKHTTP_TIMEOUT_SECONDS, TimeUnit.SECONDS)
-            .writeTimeout(OKHTTP_TIMEOUT_SECONDS, TimeUnit.SECONDS)
-            .connectTimeout(OKHTTP_TIMEOUT_SECONDS, TimeUnit.SECONDS)
-            .addInterceptor(loggingInterceptor())
-            .addInterceptor(UserAgentInterceptor(UserAgentProvider(appContext)))
-            .let(sslPinningProvider::addSslPinning)
-            .build()
-        VKIDRealApi(client)
+        VKIDRealApi(HttpClientProvider(context = appContext).provide())
     }
     private val apiService = lazy { VKIDApiService(api.value) }
 
@@ -154,23 +137,6 @@ internal open class VKIDDepsProd(
 
     override val dispatchers: CoroutinesDispatchers
         get() = CoroutinesDispatchersProd()
-
-    private fun loggingInterceptor(): HttpLoggingInterceptor {
-        val logging = HttpLoggingInterceptor(object : HttpLoggingInterceptor.Logger {
-            private val logger = createLoggerForClass()
-            override fun log(message: String) {
-                if (VKID.logsEnabled) {
-                    logger.debug(message)
-                }
-            }
-        })
-        logging.level = HttpLoggingInterceptor.Level.BASIC
-        return logging
-    }
-
-    private companion object {
-        private const val OKHTTP_TIMEOUT_SECONDS = 60L
-    }
 }
 
 private const val MISSED_PLACEHOLDER_ERROR_MESSAGE =
