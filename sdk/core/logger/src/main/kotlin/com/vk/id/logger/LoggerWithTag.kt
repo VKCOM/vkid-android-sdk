@@ -1,8 +1,11 @@
-package com.vk.id.internal.log
+package com.vk.id.logger
+
+import com.vk.id.common.InternalVKIDApi
 
 /**
  * Implementation of [Logger] that remembers tag and proxies calls to [LogEngine] with it.
  */
+@InternalVKIDApi
 internal class LoggerWithTag(private val tag: String, private val logEngine: LogEngine) : Logger {
     override fun info(message: String) {
         logEngine.log(LogEngine.LogLevel.INFO, tag, message, null)

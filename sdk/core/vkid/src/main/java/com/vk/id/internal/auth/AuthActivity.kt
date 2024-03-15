@@ -1,3 +1,5 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.internal.auth
 
 import android.app.Activity
@@ -8,8 +10,9 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import androidx.core.app.ActivityOptionsCompat
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.auth.web.ContextUtils.addNewTaskFlag
-import com.vk.id.internal.log.createLoggerForClass
+import com.vk.id.logger.createLoggerForClass
 import org.json.JSONException
 import org.json.JSONObject
 import kotlin.contracts.ExperimentalContracts

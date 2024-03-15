@@ -11,12 +11,15 @@
  * express or implied. See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.internal.auth.web
 
 import android.content.pm.PackageInfo
 import android.content.pm.Signature
 import android.util.Base64
-import com.vk.id.internal.log.createLoggerForClass
+import com.vk.id.common.InternalVKIDApi
+import com.vk.id.logger.createLoggerForClass
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 
