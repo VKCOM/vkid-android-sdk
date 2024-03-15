@@ -1,4 +1,6 @@
-package com.vk.id.internal.log
+package com.vk.id.logger
+
+import com.vk.id.common.InternalVKIDApi
 
 /**
  * Global singleton class to manage logging.
@@ -9,14 +11,17 @@ package com.vk.id.internal.log
  *
  * Nothing is logged by default, to start actual logging you need to set the LogEngine with [setLogEngine].
  */
-internal object VKIDLog : LogEngine {
+@InternalVKIDApi
+public object VKIDLog : LogEngine {
     private var logEngine: LogEngine = FakeLogEngine()
 
-    internal fun setLogEngine(logEngine: LogEngine) {
-        this.logEngine = logEngine
+    @InternalVKIDApi
+    public fun setLogEngine(logEngine: LogEngine) {
+        VKIDLog.logEngine = logEngine
     }
 
-    internal fun createLoggerForTag(tag: String): Logger {
+    @InternalVKIDApi
+    public fun createLoggerForTag(tag: String): Logger {
         return LoggerWithTag(tag, this)
     }
 
@@ -30,6 +35,7 @@ internal object VKIDLog : LogEngine {
     }
 }
 
-internal inline fun <reified T> T.createLoggerForClass(): Logger {
+@InternalVKIDApi
+public inline fun <reified T> T.createLoggerForClass(): Logger {
     return VKIDLog.createLoggerForTag(T::class.java.simpleName)
 }

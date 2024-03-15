@@ -1,5 +1,8 @@
-package com.vk.id.internal.log
+@file:OptIn(InternalVKIDApi::class)
 
+package com.vk.id.logger
+
+import com.vk.id.common.InternalVKIDApi
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.confirmVerified

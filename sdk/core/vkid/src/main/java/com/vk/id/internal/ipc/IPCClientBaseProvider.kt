@@ -35,7 +35,8 @@ import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.content.pm.Signature
 import android.os.IBinder
-import com.vk.id.internal.log.createLoggerForClass
+import com.vk.id.common.InternalVKIDApi
+import com.vk.id.logger.createLoggerForClass
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
@@ -43,6 +44,7 @@ import kotlin.math.max
 
 internal abstract class IPCClientBaseProvider<T> {
 
+    @OptIn(InternalVKIDApi::class)
     private val logger = createLoggerForClass()
 
     open lateinit var appContext: Context
@@ -96,6 +98,7 @@ internal abstract class IPCClientBaseProvider<T> {
             .firstOrNull()
     }
 
+    @OptIn(InternalVKIDApi::class)
     @Suppress("TooGenericExceptionCaught")
     protected fun prepareSpecificApp(component: ComponentName): ConnectionInfo<T>? {
         var connectionInfo = connectionsMap[component]
@@ -178,6 +181,7 @@ internal abstract class IPCClientBaseProvider<T> {
         }
     }
 
+    @OptIn(InternalVKIDApi::class)
     private fun <T> waitForConnection(connectionInfo: ConnectionInfo<T>, startTime: Long, timeout: Long): Boolean {
         val actualTimeout = calculateActualTimeout(startTime, timeout)
         return try {

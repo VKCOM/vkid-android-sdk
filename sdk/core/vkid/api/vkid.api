@@ -57,9 +57,9 @@ public abstract interface class com/vk/id/VKID$AuthCallback {
 }
 
 public final class com/vk/id/VKID$Companion {
-	public final fun getLogEngine ()Lcom/vk/id/internal/log/LogEngine;
+	public final fun getLogEngine ()Lcom/vk/id/logger/LogEngine;
 	public final fun getLogsEnabled ()Z
-	public final fun setLogEngine (Lcom/vk/id/internal/log/LogEngine;)V
+	public final fun setLogEngine (Lcom/vk/id/logger/LogEngine;)V
 	public final fun setLogsEnabled (Z)V
 }
 
@@ -191,19 +191,6 @@ public final class com/vk/id/auth/VKIDAuthParams$Theme : java/lang/Enum {
 
 public final class com/vk/id/auth/VKIDAuthParamsKt {
 	public static final fun VKIDAuthParams (Lkotlin/jvm/functions/Function1;)Lcom/vk/id/auth/VKIDAuthParams;
-}
-
-public abstract interface class com/vk/id/internal/log/LogEngine {
-	public abstract fun log (Lcom/vk/id/internal/log/LogEngine$LogLevel;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)V
-}
-
-public final class com/vk/id/internal/log/LogEngine$LogLevel : java/lang/Enum {
-	public static final field DEBUG Lcom/vk/id/internal/log/LogEngine$LogLevel;
-	public static final field ERROR Lcom/vk/id/internal/log/LogEngine$LogLevel;
-	public static final field INFO Lcom/vk/id/internal/log/LogEngine$LogLevel;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public static fun valueOf (Ljava/lang/String;)Lcom/vk/id/internal/log/LogEngine$LogLevel;
-	public static fun values ()[Lcom/vk/id/internal/log/LogEngine$LogLevel;
 }
 
 public final class com/vk/id/test/ComposableSingletons$TestAuthProviderActivityKt {

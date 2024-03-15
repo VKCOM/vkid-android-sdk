@@ -1,12 +1,15 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.internal.api
 
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import androidx.annotation.VisibleForTesting
 import com.vk.id.R
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.api.useragent.UserAgentInterceptor
 import com.vk.id.internal.api.useragent.UserAgentProvider
-import com.vk.id.internal.log.createLoggerForClass
+import com.vk.id.logger.createLoggerForClass
 import okhttp3.CertificatePinner
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

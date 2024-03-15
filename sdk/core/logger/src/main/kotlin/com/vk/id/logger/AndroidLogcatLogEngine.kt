@@ -1,11 +1,13 @@
-package com.vk.id.internal.log
+package com.vk.id.logger
 
 import android.util.Log
+import com.vk.id.common.InternalVKIDApi
 
 /**
  * [LogEngine] implementation that logs to Android's Logcat.
  */
-internal class AndroidLogcatLogEngine : LogEngine {
+@InternalVKIDApi
+public class AndroidLogcatLogEngine : LogEngine {
     override fun log(
         logLevel: LogEngine.LogLevel,
         tag: String,

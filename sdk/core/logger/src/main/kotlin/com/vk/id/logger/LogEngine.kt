@@ -1,4 +1,4 @@
-package com.vk.id.internal.log
+package com.vk.id.logger
 
 /**
  * Interface defining a logging engine.
