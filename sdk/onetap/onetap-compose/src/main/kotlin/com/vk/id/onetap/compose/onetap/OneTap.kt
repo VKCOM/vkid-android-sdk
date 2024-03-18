@@ -7,8 +7,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
@@ -17,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
+import com.vk.id.VKIDUser
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.multibranding.OAuthListWidget
@@ -96,39 +100,64 @@ public fun OneTap(
         VKID(context)
     }
     val coroutineScope = rememberCoroutineScope()
+    var user by remember { mutableStateOf<VKIDUser?>(null) }
     if (style is OneTapStyle.Icon) {
+        OneTapAnalytics.OneTapIconShowed()
         VKIDButtonSmall(style = style.vkidButtonStyle, vkid = vkid, onClick = {
+            OneTapAnalytics.oneTapPressedIcon(user)
             startAuth(
                 coroutineScope,
                 useVKID,
-                { onAuth(null, it) },
-                { onFail(null, it) }
+                {
+                    OneTapAnalytics.authSuccessIcon()
+                    onAuth(null, it)
+                },
+                {
+                    OneTapAnalytics.authErrorIcon(user)
+                    onFail(null, it)
+                }
             )
+        }, onUserFetched = {
+            user = it
+            it?.let {
+                OneTapAnalytics.userWasFoundIcon()
+            }
         })
     } else {
         PlaceComposableIfFitsWidth(
             modifier = modifier,
             measureModifier = Modifier.fillMaxWidth(),
-            viewToMeasure = {
+            viewToMeasure = { measureModifier, measureInProgress ->
+                if (!measureInProgress) {
+                    OneTapAnalytics.OneTapShowed(signInAnotherAccountButtonEnabled)
+                }
                 OneTap(
-                    modifier = it,
+                    modifier = measureModifier,
                     style = style,
                     oAuths = oAuths,
                     vkid = useVKID,
                     signInAnotherAccountButtonEnabled = signInAnotherAccountButtonEnabled,
                     vkidButtonTextProvider = null,
                     onVKIDButtonClick = {
+                        OneTapAnalytics.oneTapPressed(user)
                         startAuth(
                             coroutineScope,
                             useVKID,
-                            { onAuth(null, it) },
-                            { onFail(null, it) },
+                            {
+                                OneTapAnalytics.authSuccess()
+                                onAuth(null, it)
+                            },
+                            {
+                                OneTapAnalytics.authError(user)
+                                onFail(null, it)
+                            },
                             VKIDAuthParams {
                                 theme = style.toProviderTheme()
                             }
                         )
                     },
                     onAlternateButtonClick = {
+                        OneTapAnalytics.alternatePressed()
                         startAuth(
                             coroutineScope,
                             useVKID,
@@ -142,16 +171,35 @@ public fun OneTap(
                     },
                     onAuth = onAuth,
                     onFail = onFail,
+                    onUserFetched = {
+                        if (!measureInProgress) {
+                            user = it
+                            it?.let {
+                                OneTapAnalytics.userWasFound(signInAnotherAccountButtonEnabled)
+                            }
+                        }
+                    }
                 )
             },
             fallback = {
+                OneTapAnalytics.OneTapIconShowed()
                 VKIDButtonSmall(style = style.vkidButtonStyle, vkid = useVKID, onClick = {
+                    OneTapAnalytics.oneTapPressedIcon(user)
                     startAuth(
                         coroutineScope,
                         useVKID,
-                        { onAuth(null, it) },
-                        { onFail(null, it) }
+                        {
+                            OneTapAnalytics.authSuccessIcon()
+                            onAuth(null, it)
+                        },
+                        {
+                            OneTapAnalytics.authErrorIcon(user)
+                            onFail(null, it)
+                        }
                     )
+                }, onUserFetched = {
+                    user = it
+                    it?.let { OneTapAnalytics.userWasFoundIcon() }
                 })
             }
         )
@@ -171,6 +219,7 @@ internal fun OneTap(
     onAlternateButtonClick: () -> Unit,
     onAuth: (OneTapOAuth?, AccessToken) -> Unit,
     onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit,
+    onUserFetched: (VKIDUser?) -> Unit,
 ) {
     val vkidButtonState = rememberVKIDButtonState()
     Column(modifier = modifier) {
@@ -180,7 +229,8 @@ internal fun OneTap(
             state = vkidButtonState,
             vkid = vkid,
             textProvider = vkidButtonTextProvider,
-            onClick = onVKIDButtonClick
+            onClick = onVKIDButtonClick,
+            onUserFetched = onUserFetched
         )
         if (signInAnotherAccountButtonEnabled) {
             AdaptiveAlternateAccountButton(
