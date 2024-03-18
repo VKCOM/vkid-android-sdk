@@ -77,7 +77,8 @@ internal fun SheetContentMain(
                 check(oAuth != null) { error("oAuth is not provided in a multibranding flow error") }
                 authStatus.value = OneTapBottomSheetAuthStatus.AuthFailedMultibranding(oAuth)
                 onFail(oAuth, fail)
-            }
+            },
+            onUserFetched = {}
         )
     }
 }

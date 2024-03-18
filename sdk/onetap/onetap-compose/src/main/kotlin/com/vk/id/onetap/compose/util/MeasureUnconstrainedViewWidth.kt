@@ -28,15 +28,15 @@ internal fun MeasureUnconstrainedViewWidth(
 internal fun PlaceComposableIfFitsWidth(
     modifier: Modifier,
     measureModifier: Modifier = modifier,
-    viewToMeasure: @Composable (Modifier) -> Unit,
+    viewToMeasure: @Composable (Modifier, measureInProgress: Boolean) -> Unit,
     fallback: @Composable () -> Unit
 ) {
-    MeasureUnconstrainedViewWidth(viewToMeasure = { viewToMeasure(measureModifier) }) {
+    MeasureUnconstrainedViewWidth(viewToMeasure = { viewToMeasure(measureModifier, true) }) {
         BoxWithConstraints(
             modifier = modifier,
         ) {
             if (it <= maxWidth) {
-                viewToMeasure(Modifier)
+                viewToMeasure(Modifier, false)
             } else {
                 fallback()
             }
