@@ -145,7 +145,7 @@ public fun OneTap(
                 )
             },
             fallback = {
-                VKIDButtonSmall(style = style.vkidButtonStyle, vkid = vkid, onClick = {
+                VKIDButtonSmall(style = style.vkidButtonStyle, vkid = useVKID, onClick = {
                     startAuth(
                         coroutineScope,
                         useVKID,
