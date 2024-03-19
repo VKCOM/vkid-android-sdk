@@ -151,7 +151,7 @@ internal abstract class IPCClientBaseProvider<T> {
                     // I'm not sure if onServiceDisconnected() can be called without onServiceConnected(). Because
                     // if it does, there is possibility of this situation:
                     // We have called bind() during prepare() on some thread (T1), then we called prepareSpecificApp() in
-                    // getSpecificAppSilentAuthInfos() so we called latch.await() on this thread (T2). Then onServiceConnected()
+                    // getSpecificAppSilentAuthInfos() so we called latch.await() on this thread (T2). Then onServiceDisconnected()
                     // is called on T1. We have to call bind again() without blocking the T2 (or have to wait until
                     // system recreates service, but c'mon...).
                     //
