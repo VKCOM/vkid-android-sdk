@@ -1,7 +1,9 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id
 
 import com.vk.id.auth.VKIDAuthParams
-import com.vk.id.internal.api.VKIDApi
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthEventBridge
 import com.vk.id.internal.auth.AuthOptions
@@ -12,6 +14,7 @@ import com.vk.id.internal.concurrent.CoroutinesDispatchers
 import com.vk.id.internal.di.VKIDDeps
 import com.vk.id.internal.ipc.VkSilentAuthInfoProvider
 import com.vk.id.internal.user.UserDataFetcher
+import com.vk.id.network.VKIDApi
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.testCoroutineScheduler
 import io.kotest.matchers.shouldBe

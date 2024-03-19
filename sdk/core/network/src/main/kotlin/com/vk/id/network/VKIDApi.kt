@@ -1,11 +1,13 @@
-package com.vk.id.internal.api
+package com.vk.id.network
 
+import com.vk.id.common.InternalVKIDApi
 import okhttp3.Call
 
-internal interface VKIDApi {
+@InternalVKIDApi
+public interface VKIDApi {
 
     @Suppress("LongParameterList")
-    fun getToken(
+    public fun getToken(
         code: String,
         codeVerifier: String,
         clientId: String,
@@ -14,7 +16,7 @@ internal interface VKIDApi {
         redirectUri: String,
     ): Call
 
-    fun getSilentAuthProviders(
+    public fun getSilentAuthProviders(
         clientId: String,
         clientSecret: String,
     ): Call

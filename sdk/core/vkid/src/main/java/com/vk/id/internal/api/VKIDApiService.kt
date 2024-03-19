@@ -1,9 +1,14 @@
+@file:OptIn(InternalVKIDApi::class, InternalVKIDApi::class)
+
 package com.vk.id.internal.api
 
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.auth.VKIDTokenPayload
 import com.vk.id.internal.auth.app.VkAuthSilentAuthProvider
+import com.vk.id.network.VKIDApi
+import com.vk.id.network.VKIDCall
+import com.vk.id.network.wrapToVKIDCall
 import okhttp3.Call
-import okhttp3.Response
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -69,25 +74,6 @@ internal class VKIDApiService(
                 val error = e.message
                 throw JSONException("$error: ${it.code} $body")
             }
-        }
-    }
-
-    private fun <T> Call.wrapToVKIDCall(
-        responseMapping: (response: Response) -> T,
-    ): VKIDCall<T> {
-        return object : VKIDCall<T> {
-            override fun execute(): Result<T> {
-                return try {
-                    val response = this@wrapToVKIDCall.execute()
-                    Result.success(responseMapping(response))
-                } catch (ioe: IOException) {
-                    Result.failure(ioe)
-                } catch (je: JSONException) {
-                    Result.failure(je)
-                }
-            }
-
-            override fun cancel() = this@wrapToVKIDCall.cancel()
         }
     }
 }

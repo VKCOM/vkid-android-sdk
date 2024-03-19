@@ -1,22 +1,21 @@
 @file:OptIn(InternalVKIDApi::class)
 
-package com.vk.id.internal.api
+package com.vk.id.network
 
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import androidx.annotation.VisibleForTesting
-import com.vk.id.R
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.internal.api.useragent.UserAgentInterceptor
-import com.vk.id.internal.api.useragent.UserAgentProvider
 import com.vk.id.logger.createLoggerForClass
+import com.vk.id.network.useragent.UserAgentInterceptor
+import com.vk.id.network.useragent.UserAgentProvider
 import okhttp3.CertificatePinner
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.io.BufferedInputStream
 import java.util.concurrent.TimeUnit
 
-internal class HttpClientProvider(
+internal class OkHttpClientProvider(
     private val context: Context
 ) {
     fun provide() = provideBuilderWithSslPinning()

@@ -25,8 +25,11 @@
  * UNDER NO CIRCUMSTANCES LLC “V KONTAKTE” BEAR LIABILITY TO THE LICENSEE OR ANY
  * THIRD PARTIES FOR ANY DAMAGE IN CONNECTION WITH USE OF THE SOFTWARE.
  */
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.internal.auth.app
 
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.concurrent.CoroutinesDispatchers
 import kotlinx.coroutines.withContext
