@@ -1,3 +1,5 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.internal.di
 
 import android.content.ComponentName
@@ -8,10 +10,8 @@ import android.os.Build
 import android.os.Bundle
 import com.vk.id.AuthOptionsCreator
 import com.vk.id.AuthResultHandler
-import com.vk.id.internal.api.HttpClientProvider
-import com.vk.id.internal.api.VKIDApi
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.api.VKIDApiService
-import com.vk.id.internal.api.VKIDRealApi
 import com.vk.id.internal.auth.AuthActivity
 import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthProvidersChooser
@@ -28,6 +28,8 @@ import com.vk.id.internal.ipc.SilentAuthInfoProvider
 import com.vk.id.internal.ipc.VkSilentAuthInfoProvider
 import com.vk.id.internal.store.PrefsStore
 import com.vk.id.internal.user.UserDataFetcher
+import com.vk.id.network.VKIDApi
+import com.vk.id.network.VKIDRealApi
 
 internal open class VKIDDepsProd(
     private val appContext: Context
@@ -64,7 +66,7 @@ internal open class VKIDDepsProd(
     }
 
     override val api: Lazy<VKIDApi> = lazy {
-        VKIDRealApi(HttpClientProvider(context = appContext).provide())
+        VKIDRealApi.getInstance(context = appContext)
     }
     private val apiService = lazy { VKIDApiService(api.value) }
 

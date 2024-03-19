@@ -21,6 +21,7 @@ android {
 
 dependencies {
     implementation(project(":common"))
+    implementation(project(":network"))
     implementation(project(":logger"))
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
@@ -32,8 +33,6 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.core)
-    implementation(libs.okhttp3.okhttp)
-    implementation(libs.okhttp3.logging)
     implementation(libs.vk.userid)
     testImplementation(libs.mockk)
     testImplementation(libs.kotest.core)

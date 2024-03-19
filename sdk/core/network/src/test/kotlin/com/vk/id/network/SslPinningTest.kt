@@ -1,10 +1,8 @@
-package com.vk.id.internal.api.sslpinning
+package com.vk.id.network
 
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.res.Resources
-import com.vk.id.R
-import com.vk.id.internal.api.HttpClientProvider
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
@@ -31,7 +29,7 @@ internal class SslPinningTest : BehaviorSpec({
         val applicationInfo = ApplicationInfo()
         applicationInfo.flags = 0
         every { context.applicationInfo } returns applicationInfo
-        val builder = HttpClientProvider(context).provideBuilderWithSslPinning()
+        val builder = com.vk.id.network.OkHttpClientProvider(context).provideBuilderWithSslPinning()
             .readTimeout(300, TimeUnit.SECONDS)
             .writeTimeout(300, TimeUnit.SECONDS)
             .connectTimeout(300, TimeUnit.SECONDS)

@@ -1,11 +1,11 @@
-package com.vk.id.internal.api.useragent
+package com.vk.id.network.useragent
 
 import android.content.Context
 import android.graphics.Point
 import android.os.Build
 import android.view.WindowManager
 import androidx.core.content.pm.PackageInfoCompat
-import com.vk.id.BuildConfig
+import com.vk.id.network.BuildConfig
 import okio.Buffer
 import java.util.Locale
 

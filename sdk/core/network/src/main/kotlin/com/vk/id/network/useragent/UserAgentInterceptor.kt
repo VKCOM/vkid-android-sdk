@@ -1,4 +1,4 @@
-package com.vk.id.internal.api.useragent
+package com.vk.id.network.useragent
 
 import okhttp3.Interceptor
 import okhttp3.Response

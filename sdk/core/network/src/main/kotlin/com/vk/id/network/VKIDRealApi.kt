@@ -1,5 +1,7 @@
-package com.vk.id.internal.api
+package com.vk.id.network
 
+import android.content.Context
+import com.vk.id.common.InternalVKIDApi
 import okhttp3.Call
 import okhttp3.FormBody
 import okhttp3.HttpUrl.Companion.toHttpUrl
@@ -8,7 +10,9 @@ import okhttp3.Request
 import okhttp3.RequestBody
 
 @Suppress("LongParameterList")
-internal class VKIDRealApi(
+@InternalVKIDApi
+/** Singleton **/
+public class VKIDRealApi private constructor(
     private val client: OkHttpClient,
 ) : VKIDApi {
 
@@ -56,7 +60,16 @@ internal class VKIDRealApi(
         return client.newCall(request)
     }
 
-    companion object {
+    public companion object {
+        @Volatile
+        private var instance: VKIDRealApi? = null
+
+        public fun getInstance(context: Context): VKIDRealApi {
+            return instance ?: synchronized(this) {
+                instance ?: VKIDRealApi(OkHttpClientProvider(context).provide()).also { instance = it }
+            }
+        }
+
         private const val HOST_API = "https://api.vk.com"
         private const val HOST_OAUTH = "https://oauth.vk.com"
 

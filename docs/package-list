@@ -1,6 +1,7 @@
 $dokka.format:html-v1
 $dokka.linkExtension:html
 $dokka.location:com.vk.id.common.util////PointingToDeclaration/common/com.vk.id.common.util.html
+$dokka.location:com.vk.id.network////PointingToDeclaration/network/com.vk.id.network.html
 $dokka.location:com.vk.id.onetap.common.alternate.style////PointingToDeclaration/onetap-common/com.vk.id.onetap.common.alternate.style.html
 $dokka.location:com.vk.id.onetap.common.auth.style////PointingToDeclaration/onetap-common/com.vk.id.onetap.common.auth.style.html
 $dokka.location:com.vk.id.onetap.common.icon.style////PointingToDeclaration/onetap-common/com.vk.id.onetap.common.icon.style.html
@@ -18,6 +19,8 @@ module:multibranding-compose
 com.vk.id.multibranding
 module:multibranding-xml
 com.vk.id.multibranding.xml
+module:network
+com.vk.id.network
 module:onetap-common
 com.vk.id.onetap.common
 com.vk.id.onetap.common.alternate.style
