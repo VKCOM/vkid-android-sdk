@@ -22,56 +22,56 @@ public class BottomSheetMultibrandingXmlTest(
 
     @Test
     @AllureId("2290788")
-    @DisplayName("Успешное получение токена в XML BottomSheet")
+    @DisplayName("Успешное получение токена в XML BottomSheet Мультибрендинге")
     override fun tokenIsReceived() {
         super.tokenIsReceived()
     }
 
     @Test
     @AllureId("2290730")
-    @DisplayName("Получение ошибочного редиректа в Activity в XML BottomSheet")
+    @DisplayName("Получение ошибочного редиректа в Activity в XML BottomSheet Мультибрендинге")
     override fun failedRedirectActivityIsReceived() {
         super.failedRedirectActivityIsReceived()
     }
 
     @Test
     @AllureId("2290808")
-    @DisplayName("Получение ошибки отсутсвия браузера в XML BottomSheet")
+    @DisplayName("Получение ошибки отсутсвия браузера в XML BottomSheet Мультибрендинге")
     override fun noBrowserAvailableIsReceived() {
         super.noBrowserAvailableIsReceived()
     }
 
     @Test
     @AllureId("2290819")
-    @DisplayName("Получение ошибки апи в XML BottomSheet")
+    @DisplayName("Получение ошибки апи в XML BottomSheet Мультибрендинге")
     override fun failedApiCallIsReceived() {
         super.failedApiCallIsReceived()
     }
 
     @Test
     @AllureId("2290813")
-    @DisplayName("Получение ошибки отмены авторизации в XML BottomSheet")
+    @DisplayName("Получение ошибки отмены авторизации в XML BottomSheet Мультибрендинге")
     override fun cancellationIsReceived() {
         super.cancellationIsReceived()
     }
 
     @Test
     @AllureId("2290786")
-    @DisplayName("Получение ошибки отсутствия данных oauth в XML BottomSheet")
+    @DisplayName("Получение ошибки отсутствия данных oauth в XML BottomSheet Мультибрендинге")
     override fun failedOAuthIsReceived() {
         super.failedOAuthIsReceived()
     }
 
     @Test
     @AllureId("2290799")
-    @DisplayName("Получение ошибки неверного uuid в XML BottomSheet")
+    @DisplayName("Получение ошибки неверного uuid в XML BottomSheet Мультибрендинге")
     override fun invalidUuidIsReceived() {
         super.invalidUuidIsReceived()
     }
 
     @Test
     @AllureId("2290795")
-    @DisplayName("Получение ошибки неверного state в XML BottomSheet")
+    @DisplayName("Получение ошибки неверного state в XML BottomShee Мультибрендингеt")
     override fun invalidStateIsReceived() {
         super.invalidStateIsReceived()
     }

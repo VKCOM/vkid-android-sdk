@@ -37,7 +37,9 @@ public abstract class BaseAuthTest(
 
     @Before
     public fun setAllureParam() {
-        oAuth?.let { Allure.parameter("oauth", it.name) }
+        if (!skipTest) {
+            oAuth?.let { Allure.parameter("oauth", it.name) }
+        }
     }
 
     public open fun tokenIsReceived(): Unit = runIfShouldNotSkip {

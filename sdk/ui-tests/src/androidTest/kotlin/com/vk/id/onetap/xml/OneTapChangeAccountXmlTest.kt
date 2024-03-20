@@ -17,56 +17,56 @@ public class OneTapChangeAccountXmlTest : ChangeAccountTest() {
 
     @Test
     @AllureId("2289913")
-    @DisplayName("Успешное получение токена в XML OneTap")
+    @DisplayName("Успешное получение токена в XML OneTap смене аккаунта")
     override fun tokenIsReceived() {
         super.tokenIsReceived()
     }
 
     @Test
     @AllureId("2289725")
-    @DisplayName("Получение ошибочного редиректа в Activity в XML OneTap")
+    @DisplayName("Получение ошибочного редиректа в Activity в XML OneTap смене аккаунта")
     override fun failedRedirectActivityIsReceived() {
         super.failedRedirectActivityIsReceived()
     }
 
     @Test
     @AllureId("2289667")
-    @DisplayName("Получение ошибки отсутсвия браузера в XML OneTap")
+    @DisplayName("Получение ошибки отсутсвия браузера в XML OneTap смене аккаунта")
     override fun noBrowserAvailableIsReceived() {
         super.noBrowserAvailableIsReceived()
     }
 
     @Test
     @AllureId("2289567")
-    @DisplayName("Получение ошибки апи в XML OneTap")
+    @DisplayName("Получение ошибки апи в XML OneTap смене аккаунта")
     override fun failedApiCallIsReceived() {
         super.failedApiCallIsReceived()
     }
 
     @Test
     @AllureId("2289936")
-    @DisplayName("Получение ошибки отмены авторизации в XML OneTap")
+    @DisplayName("Получение ошибки отмены авторизации в XML OneTap смене аккаунта")
     override fun cancellationIsReceived() {
         super.cancellationIsReceived()
     }
 
     @Test
     @AllureId("2289809")
-    @DisplayName("Получение ошибки отсутствия данных oauth в XML OneTap")
+    @DisplayName("Получение ошибки отсутствия данных oauth в XML OneTap смене аккаунта")
     override fun failedOAuthIsReceived() {
         super.failedOAuthIsReceived()
     }
 
     @Test
     @AllureId("2289901")
-    @DisplayName("Получение ошибки неверного uuid в XML OneTap")
+    @DisplayName("Получение ошибки неверного uuid в XML OneTap смене аккаунта")
     override fun invalidUuidIsReceived() {
         super.invalidUuidIsReceived()
     }
 
     @Test
     @AllureId("2289684")
-    @DisplayName("Получение ошибки неверного state в XML OneTap")
+    @DisplayName("Получение ошибки неверного state в XML OneTap смене аккаунта")
     override fun invalidStateIsReceived() {
         super.invalidStateIsReceived()
     }

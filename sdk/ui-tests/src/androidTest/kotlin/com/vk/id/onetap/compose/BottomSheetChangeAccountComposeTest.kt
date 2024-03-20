@@ -21,56 +21,56 @@ public class BottomSheetChangeAccountComposeTest : ChangeAccountTest() {
 
     @Test
     @AllureId("2289544")
-    @DisplayName("Успешное получение токена в Compose BottomSheet")
+    @DisplayName("Успешное получение токена в Compose BottomSheet смене аккаунта")
     override fun tokenIsReceived() {
         super.tokenIsReceived()
     }
 
     @Test
     @AllureId("2289885")
-    @DisplayName("Получение ошибочного редиректа в Activity в Compose BottomSheet")
+    @DisplayName("Получение ошибочного редиректа в Activity в Compose BottomSheet смене аккаунта")
     override fun failedRedirectActivityIsReceived() {
         super.failedRedirectActivityIsReceived()
     }
 
     @Test
     @AllureId("2289671")
-    @DisplayName("Получение ошибки отсутсвия браузера в Compose BottomSheet")
+    @DisplayName("Получение ошибки отсутсвия браузера в Compose BottomSheet смене аккаунта")
     override fun noBrowserAvailableIsReceived() {
         super.noBrowserAvailableIsReceived()
     }
 
     @Test
     @AllureId("2289744")
-    @DisplayName("Получение ошибки апи в Compose BottomSheet")
+    @DisplayName("Получение ошибки апи в Compose BottomSheet смене аккаунта")
     override fun failedApiCallIsReceived() {
         super.failedApiCallIsReceived()
     }
 
     @Test
     @AllureId("2289722")
-    @DisplayName("Получение ошибки отмены авторизации в Compose BottomSheet")
+    @DisplayName("Получение ошибки отмены авторизации в Compose BottomSheet смене аккаунта")
     override fun cancellationIsReceived() {
         super.cancellationIsReceived()
     }
 
     @Test
     @AllureId("2289580")
-    @DisplayName("Получение ошибки отсутствия данных oauth в Compose BottomSheet")
+    @DisplayName("Получение ошибки отсутствия данных oauth в Compose BottomSheet смене аккаунта")
     override fun failedOAuthIsReceived() {
         super.failedOAuthIsReceived()
     }
 
     @Test
     @AllureId("2289864")
-    @DisplayName("Получение ошибки неверного uuid в Compose BottomSheet")
+    @DisplayName("Получение ошибки неверного uuid в Compose BottomSheet смене аккаунта")
     override fun invalidUuidIsReceived() {
         super.invalidUuidIsReceived()
     }
 
     @Test
     @AllureId("2289665")
-    @DisplayName("Получение ошибки неверного state в Compose BottomSheet")
+    @DisplayName("Получение ошибки неверного state в Compose BottomSheet смене аккаунта")
     override fun invalidStateIsReceived() {
         super.invalidStateIsReceived()
     }
