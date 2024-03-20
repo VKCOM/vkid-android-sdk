@@ -22,56 +22,56 @@ public class BottomSheetMultibrandingXmlTest(
 
     @Test
     @AllureId("2290788")
-    @DisplayName(DISPLAY_NAME_TOKEN_IS_RECEIVED)
+    @DisplayName("Успешное получение токена в XML BottomSheet")
     override fun tokenIsReceived() {
         super.tokenIsReceived()
     }
 
     @Test
     @AllureId("2290730")
-    @DisplayName(DISPLAY_NAME_FAILED_REDIRECT)
+    @DisplayName("Получение ошибочного редиректа в Activity в XML BottomSheet")
     override fun failedRedirectActivityIsReceived() {
         super.failedRedirectActivityIsReceived()
     }
 
     @Test
     @AllureId("2290808")
-    @DisplayName(DISPLAY_NAME_NO_BROWSER)
+    @DisplayName("Получение ошибки отсутсвия браузера в XML BottomSheet")
     override fun noBrowserAvailableIsReceived() {
         super.noBrowserAvailableIsReceived()
     }
 
     @Test
     @AllureId("2290819")
-    @DisplayName(DISPLAY_NAME_FAILED_API_CALL)
+    @DisplayName("Получение ошибки апи в XML BottomSheet")
     override fun failedApiCallIsReceived() {
         super.failedApiCallIsReceived()
     }
 
     @Test
     @AllureId("2290813")
-    @DisplayName(DISPLAY_NAME_CANCELLATION)
+    @DisplayName("Получение ошибки отмены авторизации в XML BottomSheet")
     override fun cancellationIsReceived() {
         super.cancellationIsReceived()
     }
 
     @Test
     @AllureId("2290786")
-    @DisplayName(DISPLAY_NAME_FAILED_OAUTH)
+    @DisplayName("Получение ошибки отсутствия данных oauth в XML BottomSheet")
     override fun failedOAuthIsReceived() {
         super.failedOAuthIsReceived()
     }
 
     @Test
     @AllureId("2290799")
-    @DisplayName(DISPLAY_NAME_INVALID_UUID)
+    @DisplayName("Получение ошибки неверного uuid в XML BottomSheet")
     override fun invalidUuidIsReceived() {
         super.invalidUuidIsReceived()
     }
 
     @Test
     @AllureId("2290795")
-    @DisplayName(DISPLAY_NAME_INVALID_STATE)
+    @DisplayName("Получение ошибки неверного state в XML BottomSheet")
     override fun invalidStateIsReceived() {
         super.invalidStateIsReceived()
     }

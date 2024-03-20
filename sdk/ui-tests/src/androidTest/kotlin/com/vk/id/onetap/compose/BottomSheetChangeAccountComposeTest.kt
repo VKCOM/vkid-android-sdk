@@ -21,56 +21,56 @@ public class BottomSheetChangeAccountComposeTest : ChangeAccountTest() {
 
     @Test
     @AllureId("2289544")
-    @DisplayName(DISPLAY_NAME_TOKEN_IS_RECEIVED)
+    @DisplayName("Успешное получение токена в Compose BottomSheet")
     override fun tokenIsReceived() {
         super.tokenIsReceived()
     }
 
     @Test
     @AllureId("2289885")
-    @DisplayName(DISPLAY_NAME_FAILED_REDIRECT)
+    @DisplayName("Получение ошибочного редиректа в Activity в Compose BottomSheet")
     override fun failedRedirectActivityIsReceived() {
         super.failedRedirectActivityIsReceived()
     }
 
     @Test
     @AllureId("2289671")
-    @DisplayName(DISPLAY_NAME_NO_BROWSER)
+    @DisplayName("Получение ошибки отсутсвия браузера в Compose BottomSheet")
     override fun noBrowserAvailableIsReceived() {
         super.noBrowserAvailableIsReceived()
     }
 
     @Test
     @AllureId("2289744")
-    @DisplayName(DISPLAY_NAME_FAILED_API_CALL)
+    @DisplayName("Получение ошибки апи в Compose BottomSheet")
     override fun failedApiCallIsReceived() {
         super.failedApiCallIsReceived()
     }
 
     @Test
     @AllureId("2289722")
-    @DisplayName(DISPLAY_NAME_CANCELLATION)
+    @DisplayName("Получение ошибки отмены авторизации в Compose BottomSheet")
     override fun cancellationIsReceived() {
         super.cancellationIsReceived()
     }
 
     @Test
     @AllureId("2289580")
-    @DisplayName(DISPLAY_NAME_FAILED_OAUTH)
+    @DisplayName("Получение ошибки отсутствия данных oauth в Compose BottomSheet")
     override fun failedOAuthIsReceived() {
         super.failedOAuthIsReceived()
     }
 
     @Test
     @AllureId("2289864")
-    @DisplayName(DISPLAY_NAME_INVALID_UUID)
+    @DisplayName("Получение ошибки неверного uuid в Compose BottomSheet")
     override fun invalidUuidIsReceived() {
         super.invalidUuidIsReceived()
     }
 
     @Test
     @AllureId("2289665")
-    @DisplayName(DISPLAY_NAME_INVALID_STATE)
+    @DisplayName("Получение ошибки неверного state в Compose BottomSheet")
     override fun invalidStateIsReceived() {
         super.invalidStateIsReceived()
     }

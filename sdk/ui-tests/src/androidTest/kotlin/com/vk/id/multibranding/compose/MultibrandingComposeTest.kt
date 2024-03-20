@@ -21,56 +21,56 @@ public class MultibrandingComposeTest(
 
     @Test
     @AllureId("2290791")
-    @DisplayName(DISPLAY_NAME_TOKEN_IS_RECEIVED)
+    @DisplayName("Успешное получение токена в Compose Мультибрендинге")
     override fun tokenIsReceived() {
         super.tokenIsReceived()
     }
 
     @Test
     @AllureId("2290746")
-    @DisplayName(DISPLAY_NAME_FAILED_REDIRECT)
+    @DisplayName("Получение ошибочного редиректа в Activity в Compose Мультибрендинге")
     override fun failedRedirectActivityIsReceived() {
         super.failedRedirectActivityIsReceived()
     }
 
     @Test
     @AllureId("2290712")
-    @DisplayName(DISPLAY_NAME_NO_BROWSER)
+    @DisplayName("Получение ошибки отсутсвия браузера в Compose Мультибрендинге")
     override fun noBrowserAvailableIsReceived() {
         super.noBrowserAvailableIsReceived()
     }
 
     @Test
     @AllureId("2290777")
-    @DisplayName(DISPLAY_NAME_FAILED_API_CALL)
+    @DisplayName("Получение ошибки апи в Compose Мультибрендинге")
     override fun failedApiCallIsReceived() {
         super.failedApiCallIsReceived()
     }
 
     @Test
     @AllureId("2290690")
-    @DisplayName(DISPLAY_NAME_CANCELLATION)
+    @DisplayName("Получение ошибки отмены авторизации в Compose Мультибрендинге")
     override fun cancellationIsReceived() {
         super.cancellationIsReceived()
     }
 
     @Test
     @AllureId("2290739")
-    @DisplayName(DISPLAY_NAME_FAILED_OAUTH)
+    @DisplayName("Получение ошибки отсутствия данных oauth в Compose Мультибрендинге")
     override fun failedOAuthIsReceived() {
         super.failedOAuthIsReceived()
     }
 
     @Test
     @AllureId("2290797")
-    @DisplayName(DISPLAY_NAME_INVALID_UUID)
+    @DisplayName("Получение ошибки неверного uuid в Compose Мультибрендинге")
     override fun invalidUuidIsReceived() {
         super.invalidUuidIsReceived()
     }
 
     @Test
     @AllureId("2290770")
-    @DisplayName(DISPLAY_NAME_INVALID_STATE)
+    @DisplayName("Получение ошибки неверного state в Compose Мультибрендинге")
     override fun invalidStateIsReceived() {
         super.invalidStateIsReceived()
     }

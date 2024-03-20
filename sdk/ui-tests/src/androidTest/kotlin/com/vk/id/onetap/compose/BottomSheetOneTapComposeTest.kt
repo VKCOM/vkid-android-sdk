@@ -21,56 +21,56 @@ public class BottomSheetOneTapComposeTest : OneTapTest() {
 
     @Test
     @AllureId("2289875")
-    @DisplayName(DISPLAY_NAME_TOKEN_IS_RECEIVED)
+    @DisplayName("Успешное получение токена в Compose BottomSheet")
     override fun tokenIsReceived() {
         super.tokenIsReceived()
     }
 
     @Test
     @AllureId("2289805")
-    @DisplayName(DISPLAY_NAME_FAILED_REDIRECT)
+    @DisplayName("Получение ошибочного редиректа в Activity в Compose BottomSheet")
     override fun failedRedirectActivityIsReceived() {
         super.failedRedirectActivityIsReceived()
     }
 
     @Test
     @AllureId("2289878")
-    @DisplayName(DISPLAY_NAME_NO_BROWSER)
+    @DisplayName("Получение ошибки отсутсвия браузера в Compose BottomSheet")
     override fun noBrowserAvailableIsReceived() {
         super.noBrowserAvailableIsReceived()
     }
 
     @Test
     @AllureId("2289645")
-    @DisplayName(DISPLAY_NAME_FAILED_API_CALL)
+    @DisplayName("Получение ошибки апи в Compose BottomSheet")
     override fun failedApiCallIsReceived() {
         super.failedApiCallIsReceived()
     }
 
     @Test
     @AllureId("2289602")
-    @DisplayName(DISPLAY_NAME_CANCELLATION)
+    @DisplayName("Получение ошибки отмены авторизации в Compose BottomSheet")
     override fun cancellationIsReceived() {
         super.cancellationIsReceived()
     }
 
     @Test
     @AllureId("2289968")
-    @DisplayName(DISPLAY_NAME_FAILED_OAUTH)
+    @DisplayName("Получение ошибки отсутствия данных oauth в Compose BottomSheet")
     override fun failedOAuthIsReceived() {
         super.failedOAuthIsReceived()
     }
 
     @Test
     @AllureId("2289894")
-    @DisplayName(DISPLAY_NAME_INVALID_UUID)
+    @DisplayName("Получение ошибки неверного uuid в Compose BottomSheet")
     override fun invalidUuidIsReceived() {
         super.invalidUuidIsReceived()
     }
 
     @Test
     @AllureId("2289701")
-    @DisplayName(DISPLAY_NAME_INVALID_STATE)
+    @DisplayName("Получение ошибки неверного state в Compose BottomSheet")
     override fun invalidStateIsReceived() {
         super.invalidStateIsReceived()
     }

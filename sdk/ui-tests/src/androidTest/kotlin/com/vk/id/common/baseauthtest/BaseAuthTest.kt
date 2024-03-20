@@ -287,15 +287,4 @@ public abstract class BaseAuthTest(
     protected abstract fun TestContext<Unit>.startAuth()
 
     protected open fun vkidBuilder(): VKIDTestBuilder = VKIDTestBuilder(composeTestRule.activity)
-
-    internal companion object {
-        const val DISPLAY_NAME_TOKEN_IS_RECEIVED = "Успешное получение токена"
-        const val DISPLAY_NAME_FAILED_REDIRECT = "Получение ошибочного редиректа в Activity"
-        const val DISPLAY_NAME_NO_BROWSER = "Получение ошибки отсутсвия браузера"
-        const val DISPLAY_NAME_FAILED_API_CALL = "Получение ошибки апи"
-        const val DISPLAY_NAME_CANCELLATION = "Получение ошибки отмены авторизации"
-        const val DISPLAY_NAME_FAILED_OAUTH = "Получение ошибки отсутствия данных oauth"
-        const val DISPLAY_NAME_INVALID_UUID = "Получение ошибки неверного uuid"
-        const val DISPLAY_NAME_INVALID_STATE = "Получение ошибки неверного state"
-    }
 }

@@ -20,56 +20,56 @@ public class OneTapMultibrandingXmlTest(
 
     @Test
     @AllureId("2290718")
-    @DisplayName(DISPLAY_NAME_TOKEN_IS_RECEIVED)
+    @DisplayName("Успешное получение токена в XML OneTap")
     override fun tokenIsReceived() {
         super.tokenIsReceived()
     }
 
     @Test
     @AllureId("2290691")
-    @DisplayName(DISPLAY_NAME_FAILED_REDIRECT)
+    @DisplayName("Получение ошибочного редиректа в Activity в XML OneTap")
     override fun failedRedirectActivityIsReceived() {
         super.failedRedirectActivityIsReceived()
     }
 
     @Test
     @AllureId("2290764")
-    @DisplayName(DISPLAY_NAME_NO_BROWSER)
+    @DisplayName("Получение ошибки отсутсвия браузера в XML OneTap")
     override fun noBrowserAvailableIsReceived() {
         super.noBrowserAvailableIsReceived()
     }
 
     @Test
     @AllureId("2290701")
-    @DisplayName(DISPLAY_NAME_FAILED_API_CALL)
+    @DisplayName("Получение ошибки апи в XML OneTap")
     override fun failedApiCallIsReceived() {
         super.failedApiCallIsReceived()
     }
 
     @Test
     @AllureId("2290684")
-    @DisplayName(DISPLAY_NAME_CANCELLATION)
+    @DisplayName("Получение ошибки отмены авторизации в XML OneTap")
     override fun cancellationIsReceived() {
         super.cancellationIsReceived()
     }
 
     @Test
     @AllureId("2290750")
-    @DisplayName(DISPLAY_NAME_FAILED_OAUTH)
+    @DisplayName("Получение ошибки отсутствия данных oauth в XML OneTap")
     override fun failedOAuthIsReceived() {
         super.failedOAuthIsReceived()
     }
 
     @Test
     @AllureId("2290765")
-    @DisplayName(DISPLAY_NAME_INVALID_UUID)
+    @DisplayName("Получение ошибки неверного uuid в XML OneTap")
     override fun invalidUuidIsReceived() {
         super.invalidUuidIsReceived()
     }
 
     @Test
     @AllureId("2290805")
-    @DisplayName(DISPLAY_NAME_INVALID_STATE)
+    @DisplayName("Получение ошибки неверного state в XML OneTap")
     override fun invalidStateIsReceived() {
         super.invalidStateIsReceived()
     }
