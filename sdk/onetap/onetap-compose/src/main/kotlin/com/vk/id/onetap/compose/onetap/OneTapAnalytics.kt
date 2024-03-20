@@ -31,12 +31,12 @@ internal object OneTapAnalytics {
     }
 
     @Composable
-    internal fun OneTapIconShowed() {
-        OneTapShowed(icon = true)
+    internal fun OneTapIconShown() {
+        OneTapShown(icon = true)
     }
 
     @Composable
-    internal fun OneTapShowed(signInAnotherAccountButton: Boolean = false, icon: Boolean = false) {
+    internal fun OneTapShown(signInAnotherAccountButton: Boolean = false, icon: Boolean = false) {
         val lifecycleOwner = rememberUpdatedState(LocalLifecycleOwner.current)
         DisposableEffect(lifecycleOwner.value) {
             val lifecycle = lifecycleOwner.value.lifecycle
