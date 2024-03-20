@@ -13,7 +13,7 @@ public abstract class ChangeAccountTest : OneTapTest() {
     protected override fun vkidBuilder(): VKIDTestBuilder = super.vkidBuilder()
         .requireUnsetUseAuthProviderIfPossible()
 
-    override fun TestContext<Unit>.startAuth() {
+    override fun TestContext<Unit>.startAuth(): Unit = step("Начало авторизации") {
         ComposeScreen.onComposeScreen<OneTapScreen>(composeTestRule) {
             signInToAnotherAccountButton {
                 performClick()

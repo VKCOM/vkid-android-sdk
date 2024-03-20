@@ -4,14 +4,75 @@ import com.vk.id.AccessToken
 import com.vk.id.OAuth
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
+import com.vk.id.common.allure.Feature
+import com.vk.id.common.feature.TestFeature
 import com.vk.id.multibranding.base.MultibrandingTest
 import com.vk.id.onetap.common.OneTapOAuth
+import io.qameta.allure.kotlin.AllureId
 import io.qameta.allure.kotlin.junit4.DisplayName
+import org.junit.Test
 
-@DisplayName("Multibranding auth in XML OneTap")
+@Feature(TestFeature.MULTIBRANDING)
+@DisplayName("Мультибрендинг в XML OneTap")
 public class OneTapMultibrandingXmlTest(
     private val oAuth: OAuth,
 ) : MultibrandingTest(oAuth, skipTest = oAuth == OAuth.VK) {
+
+    @Test
+    @AllureId("2290718")
+    @DisplayName("Успешное получение токена в XML OneTap Мультибрендинге")
+    override fun tokenIsReceived() {
+        super.tokenIsReceived()
+    }
+
+    @Test
+    @AllureId("2290691")
+    @DisplayName("Получение ошибочного редиректа в Activity в XML OneTap Мультибрендинге")
+    override fun failedRedirectActivityIsReceived() {
+        super.failedRedirectActivityIsReceived()
+    }
+
+    @Test
+    @AllureId("2290764")
+    @DisplayName("Получение ошибки отсутсвия браузера в XML OneTap Мультибрендинге")
+    override fun noBrowserAvailableIsReceived() {
+        super.noBrowserAvailableIsReceived()
+    }
+
+    @Test
+    @AllureId("2290701")
+    @DisplayName("Получение ошибки апи в XML OneTap Мультибрендинге")
+    override fun failedApiCallIsReceived() {
+        super.failedApiCallIsReceived()
+    }
+
+    @Test
+    @AllureId("2290684")
+    @DisplayName("Получение ошибки отмены авторизации в XML OneTap Мультибрендинге")
+    override fun cancellationIsReceived() {
+        super.cancellationIsReceived()
+    }
+
+    @Test
+    @AllureId("2290750")
+    @DisplayName("Получение ошибки отсутствия данных oauth в XML OneTap Мультибрендинге")
+    override fun failedOAuthIsReceived() {
+        super.failedOAuthIsReceived()
+    }
+
+    @Test
+    @AllureId("2290765")
+    @DisplayName("Получение ошибки неверного uuid в XML OneTap Мультибрендинге")
+    override fun invalidUuidIsReceived() {
+        super.invalidUuidIsReceived()
+    }
+
+    @Test
+    @AllureId("2290805")
+    @DisplayName("Получение ошибки неверного state в XML OneTap Мультибрендинге")
+    override fun invalidStateIsReceived() {
+        super.invalidStateIsReceived()
+    }
 
     override fun setContent(
         vkid: VKID,

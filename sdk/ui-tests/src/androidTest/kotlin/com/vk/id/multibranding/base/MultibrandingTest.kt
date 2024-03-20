@@ -23,7 +23,7 @@ public abstract class MultibrandingTest(
         fun data() = OAuth.entries
     }
 
-    protected override fun TestContext<Unit>.startAuth(): Unit = step("Start auth") {
+    protected override fun TestContext<Unit>.startAuth(): Unit = step("Начало авторизации") {
         ComposeScreen.onComposeScreen<com.vk.id.multibranding.screen.MultibrandingScreen>(composeTestRule) {
             when (oAuth) {
                 OAuth.VK -> vkButton.performClick()
