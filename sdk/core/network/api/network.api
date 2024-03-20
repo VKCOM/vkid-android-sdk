@@ -9,27 +9,6 @@ public final class com/vk/id/network/BuildConfig {
 	public fun <init> ()V
 }
 
-public abstract interface class com/vk/id/network/VKIDApi {
-	public abstract fun getSilentAuthProviders (Ljava/lang/String;Ljava/lang/String;)Lokhttp3/Call;
-	public abstract fun getToken (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lokhttp3/Call;
-}
-
-public abstract interface class com/vk/id/network/VKIDCall {
-	public abstract fun cancel ()V
-	public abstract fun execute-d1pmJ48 ()Ljava/lang/Object;
-}
-
-public final class com/vk/id/network/VKIDCallKt {
-	public static final fun wrapToVKIDCall (Lokhttp3/Call;Lkotlin/jvm/functions/Function1;)Lcom/vk/id/network/VKIDCall;
-}
-
-public final class com/vk/id/network/VKIDRealApi : com/vk/id/network/VKIDApi {
-	public static final field Companion Lcom/vk/id/network/VKIDRealApi$Companion;
-	public synthetic fun <init> (Lokhttp3/OkHttpClient;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public fun getSilentAuthProviders (Ljava/lang/String;Ljava/lang/String;)Lokhttp3/Call;
-	public fun getToken (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lokhttp3/Call;
-}
-
 public final class com/vk/id/network/VKIDRealApi$Companion {
 	public final fun getInstance (Landroid/content/Context;)Lcom/vk/id/network/VKIDRealApi;
 }

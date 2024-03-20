@@ -200,58 +200,6 @@ public final class com/vk/id/test/ComposableSingletons$TestAuthProviderActivityK
 	public final fun getLambda-1$vkid_release ()Lkotlin/jvm/functions/Function3;
 }
 
-public abstract interface class com/vk/id/test/OverrideVKIDApi {
-	public abstract fun getToken-hUnOzRk (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Object;
-}
-
-public final class com/vk/id/test/VKIDSilentAuthProvidersResponse {
-	public static final field $stable I
-	public fun <init> (Ljava/lang/String;)V
-	public final fun component1 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/String;)Lcom/vk/id/test/VKIDSilentAuthProvidersResponse;
-	public static synthetic fun copy$default (Lcom/vk/id/test/VKIDSilentAuthProvidersResponse;Ljava/lang/String;ILjava/lang/Object;)Lcom/vk/id/test/VKIDSilentAuthProvidersResponse;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getResponse ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class com/vk/id/test/VKIDTestBuilder {
-	public static final field $stable I
-	public fun <init> (Landroid/content/Context;)V
-	public final fun build ()Lcom/vk/id/VKID;
-	public final fun getTokenResponse (Ljava/lang/Object;)Lcom/vk/id/test/VKIDTestBuilder;
-	public final fun notifyFailedRedirect ()Lcom/vk/id/test/VKIDTestBuilder;
-	public final fun notifyNoBrowserAvailable ()Lcom/vk/id/test/VKIDTestBuilder;
-	public final fun overrideOAuthToNull ()Lcom/vk/id/test/VKIDTestBuilder;
-	public final fun overrideState (Ljava/lang/String;)Lcom/vk/id/test/VKIDTestBuilder;
-	public final fun overrideUuid (Ljava/lang/String;)Lcom/vk/id/test/VKIDTestBuilder;
-	public final fun requireUnsetUseAuthProviderIfPossible ()Lcom/vk/id/test/VKIDTestBuilder;
-	public final fun user (Lcom/vk/id/VKIDUser;)Lcom/vk/id/test/VKIDTestBuilder;
-}
-
-public final class com/vk/id/test/VKIDTokenPayloadResponse {
-	public static final field $stable I
-	public fun <init> (Ljava/lang/String;JJLjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
-	public final fun component1 ()Ljava/lang/String;
-	public final fun component2 ()J
-	public final fun component3 ()J
-	public final fun component4 ()Ljava/lang/String;
-	public final fun component5 ()Ljava/lang/String;
-	public final fun component6 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/String;JJLjava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/vk/id/test/VKIDTokenPayloadResponse;
-	public static synthetic fun copy$default (Lcom/vk/id/test/VKIDTokenPayloadResponse;Ljava/lang/String;JJLjava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/vk/id/test/VKIDTokenPayloadResponse;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getAccessToken ()Ljava/lang/String;
-	public final fun getEmail ()Ljava/lang/String;
-	public final fun getExpiresIn ()J
-	public final fun getPhone ()Ljava/lang/String;
-	public final fun getPhoneAccessKey ()Ljava/lang/String;
-	public final fun getUserId ()J
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
 public abstract interface class com/vk/silentauth/ISilentAuthInfoProvider : android/os/IInterface {
 	public static final field DESCRIPTOR Ljava/lang/String;
 	public abstract fun getSilentAuthInfos (ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/util/List;
