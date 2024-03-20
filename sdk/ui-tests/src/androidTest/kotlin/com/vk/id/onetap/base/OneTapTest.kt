@@ -1,5 +1,3 @@
-@file:OptIn(InternalVKIDApi::class)
-
 package com.vk.id.onetap.base
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
@@ -8,7 +6,6 @@ import com.vk.id.AccessToken
 import com.vk.id.OAuth
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
-import com.vk.id.common.InternalVKIDApi
 import com.vk.id.common.baseauthtest.BaseAuthTest
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.screen.OneTapScreen
