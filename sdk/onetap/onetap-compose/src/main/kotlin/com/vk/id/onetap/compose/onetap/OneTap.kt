@@ -102,7 +102,7 @@ public fun OneTap(
     val coroutineScope = rememberCoroutineScope()
     var user by remember { mutableStateOf<VKIDUser?>(null) }
     if (style is OneTapStyle.Icon) {
-        OneTapAnalytics.OneTapIconShowed()
+        OneTapAnalytics.OneTapIconShown()
         VKIDButtonSmall(style = style.vkidButtonStyle, vkid = vkid, onClick = {
             OneTapAnalytics.oneTapPressedIcon(user)
             startAuth(
@@ -129,7 +129,7 @@ public fun OneTap(
             measureModifier = Modifier.fillMaxWidth(),
             viewToMeasure = { measureModifier, measureInProgress ->
                 if (!measureInProgress) {
-                    OneTapAnalytics.OneTapShowed(signInAnotherAccountButtonEnabled)
+                    OneTapAnalytics.OneTapShown(signInAnotherAccountButtonEnabled)
                 }
                 OneTap(
                     modifier = measureModifier,
@@ -182,7 +182,7 @@ public fun OneTap(
                 )
             },
             fallback = {
-                OneTapAnalytics.OneTapIconShowed()
+                OneTapAnalytics.OneTapIconShown()
                 VKIDButtonSmall(style = style.vkidButtonStyle, vkid = useVKID, onClick = {
                     OneTapAnalytics.oneTapPressedIcon(user)
                     startAuth(
