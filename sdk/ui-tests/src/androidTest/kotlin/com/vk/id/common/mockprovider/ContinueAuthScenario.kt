@@ -9,7 +9,7 @@ public class ContinueAuthScenario(
     semanticsProvider: SemanticsNodeInteractionsProvider,
 ) : BaseScenario<Unit>() {
     override val steps: TestContext<Unit>.() -> Unit = {
-        step("Complete provider auth") {
+        step("Авторизация в провайдере") {
             ComposeScreen.onComposeScreen<AuthProviderScreen>(semanticsProvider) {
                 continueButton {
                     performClick()

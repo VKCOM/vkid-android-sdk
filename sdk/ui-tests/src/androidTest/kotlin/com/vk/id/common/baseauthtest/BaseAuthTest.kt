@@ -59,12 +59,12 @@ public abstract class BaseAuthTest(
         }.run {
             startAuth()
             continueAuth()
-            step("OAuth is received") {
+            step("Получен OAuth") {
                 flakySafely {
                     receivedOAuth shouldBe oAuth
                 }
             }
-            step("Token is received") {
+            step("Получен токен") {
                 flakySafely {
                     accessToken?.token shouldBe MockApi.ACCESS_TOKEN
                     accessToken?.userID shouldBe MockApi.USER_ID
@@ -92,7 +92,7 @@ public abstract class BaseAuthTest(
         }.run {
             startAuth()
             continueAuth()
-            step("Fail is received") {
+            step("Получена ошибка") {
                 flakySafely {
                     receivedFail.shouldBeInstanceOf<VKIDAuthFail.FailedRedirectActivity>()
                     receivedOAuth shouldBe oAuth
@@ -119,7 +119,7 @@ public abstract class BaseAuthTest(
         }.run {
             startAuth()
             continueAuth()
-            step("Fail is received") {
+            step("Получена ошибка") {
                 flakySafely {
                     receivedFail.shouldBeInstanceOf<VKIDAuthFail.NoBrowserAvailable>()
                     receivedOAuth shouldBe oAuth
@@ -146,7 +146,7 @@ public abstract class BaseAuthTest(
         }.run {
             startAuth()
             continueAuth()
-            step("Fail is received") {
+            step("Получена ошибка") {
                 flakySafely {
                     receivedFail.shouldBeInstanceOf<VKIDAuthFail.FailedApiCall>()
                     receivedOAuth shouldBe oAuth
@@ -172,10 +172,10 @@ public abstract class BaseAuthTest(
         }.after {
         }.run {
             startAuth()
-            step("Press back") {
+            step("Нажатие кнопки 'назад'") {
                 device.uiDevice.pressBack()
             }
-            step("Fail is received") {
+            step("Получена ошибка") {
                 flakySafely {
                     receivedFail.shouldBeInstanceOf<VKIDAuthFail.Canceled>()
                     receivedOAuth shouldBe oAuth
@@ -203,7 +203,7 @@ public abstract class BaseAuthTest(
         }.run {
             startAuth()
             continueAuth()
-            step("Fail is received") {
+            step("Получена ошибка") {
                 flakySafely {
                     receivedFail.shouldBeInstanceOf<VKIDAuthFail.FailedOAuth>()
                     receivedOAuth shouldBe oAuth
@@ -231,7 +231,7 @@ public abstract class BaseAuthTest(
         }.run {
             startAuth()
             continueAuth()
-            step("Fail is received") {
+            step("Получена ошибка") {
                 flakySafely {
                     receivedFail shouldBe VKIDAuthFail.FailedOAuthState("Invalid uuid")
                     receivedOAuth shouldBe oAuth
@@ -259,7 +259,7 @@ public abstract class BaseAuthTest(
         }.run {
             startAuth()
             continueAuth()
-            step("Fail is received") {
+            step("Получена ошибка") {
                 flakySafely {
                     receivedFail shouldBe VKIDAuthFail.FailedOAuthState("Invalid state")
                     receivedOAuth shouldBe oAuth

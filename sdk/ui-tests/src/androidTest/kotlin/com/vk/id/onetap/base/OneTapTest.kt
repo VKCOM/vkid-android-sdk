@@ -34,7 +34,7 @@ public abstract class OneTapTest : BaseAuthTest(
         onAuth: (OneTapOAuth?, AccessToken) -> Unit = { _, _ -> },
     )
 
-    protected override fun TestContext<Unit>.startAuth(): Unit = step("Start auth") {
+    protected override fun TestContext<Unit>.startAuth(): Unit = step("Начало авторизации") {
         ComposeScreen.onComposeScreen<OneTapScreen>(composeTestRule) {
             oneTapButton {
                 performClick()
