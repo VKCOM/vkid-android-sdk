@@ -60,6 +60,7 @@ public class VKIDRealApi private constructor(
         return client.newCall(request)
     }
 
+    @InternalVKIDApi
     public companion object {
         @Volatile
         private var instance: VKIDRealApi? = null
