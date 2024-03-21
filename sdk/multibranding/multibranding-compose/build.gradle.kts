@@ -2,7 +2,7 @@ plugins {
     id("vkid.android.library.compose")
     id("vkid.android.publish")
     id("vkid.dokka")
-    id("org.jetbrains.kotlinx.binary-compatibility-validator")
+    id("vkid.binaryCompatibilityValidator")
 }
 
 android {
