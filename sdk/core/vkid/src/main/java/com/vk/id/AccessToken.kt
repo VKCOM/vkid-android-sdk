@@ -9,7 +9,7 @@ import kotlinx.parcelize.Parcelize
  *
  * @property token The access token string.
  * @property userID The user ID associated with this token.
- * @property expireTime The expiration time of the token.
+ * @property expireTime The expiration time of the token. If the value is -1 the token will not expire.
  * @property userData The user data associated with this token.
  */
 @Parcelize
