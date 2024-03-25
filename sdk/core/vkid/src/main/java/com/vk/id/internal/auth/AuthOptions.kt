@@ -17,6 +17,7 @@ internal data class AuthOptions(
     val theme: String?,
     val webAuthPhoneScreen: Boolean,
     val oAuth: OAuth?,
+    val extraParams: Map<String, String>?,
 )
 
 private const val APP_ID = "app_id"
@@ -74,6 +75,9 @@ private fun AuthOptions.toAuthUriBuilder(): Uri.Builder {
     }
     if (webAuthPhoneScreen) {
         builder.appendQueryParameter(SCREEN_PARAM, SCREEN_PHONE)
+    }
+    extraParams?.forEach { (key, value) ->
+        builder.appendQueryParameter(key, value)
     }
     return builder
 }
