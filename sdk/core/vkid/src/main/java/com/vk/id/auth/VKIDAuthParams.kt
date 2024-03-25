@@ -21,12 +21,14 @@ public inline fun VKIDAuthParams(initializer: VKIDAuthParams.Builder.() -> Unit)
  * @property theme The [Theme] setting for the authentication UI (Light or Dark). Optional.
  * @property useOAuthProviderIfPossible Flag to use OAuth provider installed on device if possible. Defaults to true.
  * @property oAuth The [OAuth] provider to be used for authentication. Optional.
+ * @property extraParams Key-value pairs of extra params that client want to send to auth provider. Optional.
  */
 public class VKIDAuthParams private constructor(
     public val locale: Locale? = null,
     public val theme: Theme? = null,
     public val useOAuthProviderIfPossible: Boolean = true,
     public val oAuth: OAuth? = null,
+    public val extraParams: Map<String, String>? = null
 ) {
     /**
      * Represents a locale that user prefers during authorization.
@@ -148,6 +150,11 @@ public class VKIDAuthParams private constructor(
         public var oAuth: OAuth? = null
 
         /**
+         * Extra params that should be send to auth provider
+         */
+        public var extraParams: Map<String, String>? = null
+
+        /**
          * Constructs [VKIDAuthParams] object with provided values.
          */
         public fun build(): VKIDAuthParams = VKIDAuthParams(
@@ -155,6 +162,7 @@ public class VKIDAuthParams private constructor(
             theme,
             useOAuthProviderIfPossible,
             oAuth,
+            extraParams
         )
     }
 }
