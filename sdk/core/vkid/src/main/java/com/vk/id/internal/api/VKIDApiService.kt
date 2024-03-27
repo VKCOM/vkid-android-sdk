@@ -148,6 +148,7 @@ internal class VKIDApiService(
                 VKIDTokenPayload(
                     accessToken = jsonObject.getString("access_token"),
                     refreshToken = jsonObject.getString("refresh_token"),
+                    idToken = jsonObject.getString("id_token"),
                     userId = jsonObject.getLong("user_id"),
                     expiresIn = jsonObject.optLong("expires_in"),
                 )

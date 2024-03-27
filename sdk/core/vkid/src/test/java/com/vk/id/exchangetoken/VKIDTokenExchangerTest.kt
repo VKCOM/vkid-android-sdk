@@ -29,6 +29,7 @@ private const val CLIENT_SECRET = "client secret"
 private const val REDIRECT_URI = "redirect uri"
 private const val ACCESS_TOKEN_VALUE = "access token"
 private const val REFRESH_TOKEN = "refresh token"
+private const val ID_TOKEN = "id token"
 private const val DEVICE_ID = "device id"
 private const val STATE = "state"
 private const val FIRST_NAME = "first"
@@ -48,14 +49,16 @@ private val VKID_USER = VKIDUser(
     email = EMAIL,
 )
 private val ACCESS_TOKEN = AccessToken(
-    ACCESS_TOKEN_VALUE,
-    USER_ID,
-    -1,
-    VKID_USER,
+    token = ACCESS_TOKEN_VALUE,
+    idToken = ID_TOKEN,
+    userID = USER_ID,
+    expireTime = -1,
+    userData = VKID_USER,
 )
 private val TOKEN_PAYLOAD = VKIDTokenPayload(
     accessToken = ACCESS_TOKEN_VALUE,
     refreshToken = REFRESH_TOKEN,
+    idToken = ID_TOKEN,
     expiresIn = -1,
     userId = USER_ID,
 )

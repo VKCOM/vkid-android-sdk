@@ -20,11 +20,13 @@ internal class TokensHandler(
             onSuccess = {
                 val accessToken = AccessToken(
                     token = payload.accessToken,
+                    idToken = payload.idToken,
                     userID = payload.userId,
                     expireTime = payload.expiresIn.toExpireTime,
                     userData = it
                 )
                 tokenStorage.accessToken = accessToken
+                tokenStorage.idToken = payload.idToken
                 tokenStorage.refreshToken = payload.refreshToken
                 onSuccess(accessToken)
             },

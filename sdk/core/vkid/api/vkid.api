@@ -2,9 +2,12 @@ public final class com/vk/id/AccessToken : android/os/Parcelable {
 	public static final field $stable I
 	public static final field CREATOR Landroid/os/Parcelable$Creator;
 	public fun <init> (Ljava/lang/String;JJLcom/vk/id/VKIDUser;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;JJLcom/vk/id/VKIDUser;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;JJLcom/vk/id/VKIDUser;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun describeContents ()I
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getExpireTime ()J
+	public final fun getIdToken ()Ljava/lang/String;
 	public final fun getToken ()Ljava/lang/String;
 	public final fun getUserData ()Lcom/vk/id/VKIDUser;
 	public final fun getUserID ()J

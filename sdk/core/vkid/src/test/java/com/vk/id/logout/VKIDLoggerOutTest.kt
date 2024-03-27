@@ -25,6 +25,7 @@ private const val CLIENT_ID = "client id"
 private const val CLIENT_SECRET = "client secret"
 private const val REDIRECT_URI = "redirect uri"
 private const val ACCESS_TOKEN_VALUE = "access token"
+private const val ID_TOKEN_VALUE = "id token"
 private const val DEVICE_ID = "device id"
 private const val FIRST_NAME = "first"
 private const val LAST_NAME = "last"
@@ -42,10 +43,11 @@ private val VKID_USER = VKIDUser(
     email = EMAIL,
 )
 private val ACCESS_TOKEN = AccessToken(
-    ACCESS_TOKEN_VALUE,
-    USER_ID,
-    -1,
-    VKID_USER,
+    token = ACCESS_TOKEN_VALUE,
+    idToken = ID_TOKEN_VALUE,
+    userID = USER_ID,
+    expireTime = -1,
+    userData = VKID_USER,
 )
 
 @OptIn(ExperimentalStdlibApi::class, ExperimentalCoroutinesApi::class)

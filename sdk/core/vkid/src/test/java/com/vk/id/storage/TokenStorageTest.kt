@@ -15,6 +15,7 @@ import io.mockk.verify
 private const val ACCESS_TOKEN_KEY = "ACCESS_TOKEN_KEY"
 private val ACCESS_TOKEN = AccessToken(
     token = "token",
+    idToken = "id token",
     userID = 10,
     expireTime = 100,
     userData = VKIDUser(
@@ -29,6 +30,7 @@ private val ACCESS_TOKEN = AccessToken(
 )
 private val TOKEN_JSON = """{
     |"token":"token",
+    |"idToken":"id token",
     |"userID":10,
     |"expireTime":100,
     |"userData":{
@@ -45,6 +47,9 @@ private val TOKEN_JSON = """{
 
 private const val REFRESH_TOKEN_KEY = "REFRESH_TOKEN_KEY"
 private const val REFRESH_TOKEN = "refresh token"
+
+private const val ID_TOKEN_KEY = "ID_TOKEN_KEY"
+private const val ID_TOKEN = "id token"
 
 internal class TokenStorageTest : BehaviorSpec({
     isolationMode = IsolationMode.InstancePerLeaf
@@ -86,24 +91,46 @@ internal class TokenStorageTest : BehaviorSpec({
         }
         When("Requests empty refresh token") {
             every { prefs.getString(REFRESH_TOKEN_KEY) } returns null
-            Then("Access token is null") {
+            Then("Refresh token is null") {
                 storage.refreshToken.shouldBeNull()
             }
         }
         When("Requests refresh token") {
             every { prefs.getString(REFRESH_TOKEN_KEY) } returns REFRESH_TOKEN
-            Then("Access token is deserialized") {
+            Then("Refresh token is deserialized") {
                 storage.refreshToken shouldBe REFRESH_TOKEN
+            }
+        }
+
+        When("Saves id token") {
+            every { prefs.set(ID_TOKEN_KEY, ID_TOKEN) } just runs
+            storage.idToken = ID_TOKEN
+            Then("Saves serialized token to prefs") {
+                verify { prefs.set(ID_TOKEN_KEY, ID_TOKEN) }
+            }
+        }
+        When("Requests empty id token") {
+            every { prefs.getString(ID_TOKEN_KEY) } returns null
+            Then("id token is null") {
+                storage.idToken.shouldBeNull()
+            }
+        }
+        When("Requests id token") {
+            every { prefs.getString(ID_TOKEN_KEY) } returns ID_TOKEN
+            Then("id token is deserialized") {
+                storage.idToken shouldBe ID_TOKEN
             }
         }
 
         When("Storage is cleared") {
             every { prefs.set(ACCESS_TOKEN_KEY, null) } just runs
             every { prefs.set(REFRESH_TOKEN_KEY, null) } just runs
+            every { prefs.set(ID_TOKEN_KEY, null) } just runs
             storage.clear()
             Then("Prefs for all keys are cleared") {
                 verify { prefs.set(ACCESS_TOKEN_KEY, null) }
                 verify { prefs.set(REFRESH_TOKEN_KEY, null) }
+                verify { prefs.set(ID_TOKEN_KEY, null) }
             }
         }
     }

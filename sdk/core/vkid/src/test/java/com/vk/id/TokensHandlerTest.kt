@@ -15,6 +15,7 @@ import io.mockk.verify
 
 private const val ACCESS_TOKEN_VALUE = "access token"
 private const val REFRESH_TOKEN = "refresh token"
+private const val ID_TOKEN = "id token"
 private const val EXPIRES_IN = 0L
 private const val USER_ID = 100L
 private const val FIRST_NAME = "first"
@@ -33,16 +34,18 @@ private val VKID_USER = VKIDUser(
     email = EMAIL,
 )
 private val ACCESS_TOKEN = AccessToken(
-    ACCESS_TOKEN_VALUE,
-    USER_ID,
-    -1,
-    VKID_USER,
+    token = ACCESS_TOKEN_VALUE,
+    idToken = ID_TOKEN,
+    userID = USER_ID,
+    expireTime = -1,
+    userData = VKID_USER,
 )
 private val TOKEN_PAYLOAD = VKIDTokenPayload(
-    ACCESS_TOKEN_VALUE,
-    REFRESH_TOKEN,
-    EXPIRES_IN,
-    USER_ID,
+    accessToken = ACCESS_TOKEN_VALUE,
+    refreshToken = REFRESH_TOKEN,
+    idToken = ID_TOKEN,
+    expiresIn = EXPIRES_IN,
+    userId = USER_ID,
 )
 
 internal class TokensHandlerTest : BehaviorSpec({
@@ -68,6 +71,7 @@ internal class TokensHandlerTest : BehaviorSpec({
             } just runs
             every { tokenStorage.accessToken = ACCESS_TOKEN } just runs
             every { tokenStorage.refreshToken = REFRESH_TOKEN } just runs
+            every { tokenStorage.idToken = ID_TOKEN } just runs
             every { onSuccess(ACCESS_TOKEN) } just runs
             handler.handle(
                 payload = TOKEN_PAYLOAD,
