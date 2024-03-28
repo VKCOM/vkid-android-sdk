@@ -15,7 +15,7 @@ internal class StatEventJson(
 ) {
     val json: JSONObject = actionJson(
         "type_registration_item",
-        eventJson(name, params.toMap()),
+        eventJson(name, params.associate { it.name to it.value }),
         eventId,
         prevEventId
     )
@@ -84,12 +84,4 @@ internal class StatEventJson(
             }
         )
     }
-}
-
-private fun Array<out VKIDAnalytics.EventParam>.toMap(): Map<String, String> {
-    val result = mutableMapOf<String, String>()
-    forEach {
-        result[it.name] = it.value
-    }
-    return result
 }
