@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
 import com.vk.id.OAuth
+import com.vk.id.common.InternalVKIDApi
 
 /**
  * Create [VKIDAuthParams].
@@ -28,7 +29,7 @@ public class VKIDAuthParams private constructor(
     public val theme: Theme? = null,
     public val useOAuthProviderIfPossible: Boolean = true,
     public val oAuth: OAuth? = null,
-    public val extraParams: Map<String, String>? = null
+    internal val extraParams: Map<String, String>? = null
 ) {
     /**
      * Represents a locale that user prefers during authorization.
@@ -152,11 +153,13 @@ public class VKIDAuthParams private constructor(
         /**
          * Extra params that should be send to auth provider
          */
+        @InternalVKIDApi
         public var extraParams: Map<String, String>? = null
 
         /**
          * Constructs [VKIDAuthParams] object with provided values.
          */
+        @OptIn(InternalVKIDApi::class)
         public fun build(): VKIDAuthParams = VKIDAuthParams(
             locale,
             theme,
