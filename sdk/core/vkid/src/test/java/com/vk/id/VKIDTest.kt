@@ -78,7 +78,8 @@ internal class VKIDTest : BehaviorSpec({
             locale = "locale",
             theme = "theme",
             webAuthPhoneScreen = false,
-            oAuth = null
+            oAuth = null,
+            prompt = ""
         )
         val expireTime = System.currentTimeMillis() + 1000
         coEvery { authProvidersChooser.chooseBest(authParams) } returns authProvider

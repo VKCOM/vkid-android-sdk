@@ -1,8 +1,12 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id
 
 import android.content.Context
 import android.util.Base64
+import com.vk.id.auth.Prompt
 import com.vk.id.auth.VKIDAuthParams
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.auth.AuthOptions
 import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.auth.device.DeviceIdProvider
@@ -45,6 +49,7 @@ internal class AuthOptionsCreator(
             // To not show "Log in as..." screen in web view
             webAuthPhoneScreen = !authParams.useOAuthProviderIfPossible,
             oAuth = authParams.oAuth,
+            prompt = if (authParams.prompt == Prompt.LOGIN) "login" else "",
         )
     }
 

@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
+import com.vk.id.auth.Prompt
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.multibranding.OAuthListWidget
@@ -137,6 +138,7 @@ public fun OneTap(
                             VKIDAuthParams {
                                 useOAuthProviderIfPossible = false
                                 theme = style.toProviderTheme()
+                                prompt = Prompt.LOGIN
                             }
                         )
                     },

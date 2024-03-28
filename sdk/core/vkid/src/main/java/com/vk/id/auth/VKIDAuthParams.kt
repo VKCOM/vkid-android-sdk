@@ -1,9 +1,12 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.auth
 
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
 import com.vk.id.OAuth
+import com.vk.id.common.InternalVKIDApi
 
 /**
  * Create [VKIDAuthParams].
@@ -27,6 +30,7 @@ public class VKIDAuthParams private constructor(
     public val theme: Theme? = null,
     public val useOAuthProviderIfPossible: Boolean = true,
     public val oAuth: OAuth? = null,
+    internal val prompt: Prompt = Prompt.BLANK,
 ) {
     /**
      * Represents a locale that user prefers during authorization.
@@ -148,6 +152,12 @@ public class VKIDAuthParams private constructor(
         public var oAuth: OAuth? = null
 
         /**
+         * A [Prompt] parameter to be passed to /authorize.
+         */
+        @InternalVKIDApi
+        public var prompt: Prompt = Prompt.BLANK
+
+        /**
          * Constructs [VKIDAuthParams] object with provided values.
          */
         public fun build(): VKIDAuthParams = VKIDAuthParams(
@@ -155,6 +165,7 @@ public class VKIDAuthParams private constructor(
             theme,
             useOAuthProviderIfPossible,
             oAuth,
+            prompt,
         )
     }
 }
