@@ -147,7 +147,6 @@ public final class com/vk/id/VKIDUser$Creator : android/os/Parcelable$Creator {
 public final class com/vk/id/auth/VKIDAuthParams {
 	public static final field $stable I
 	public synthetic fun <init> (Lcom/vk/id/auth/VKIDAuthParams$Locale;Lcom/vk/id/auth/VKIDAuthParams$Theme;ZLcom/vk/id/OAuth;Ljava/util/Map;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getExtraParams ()Ljava/util/Map;
 	public final fun getLocale ()Lcom/vk/id/auth/VKIDAuthParams$Locale;
 	public final fun getOAuth ()Lcom/vk/id/OAuth;
 	public final fun getTheme ()Lcom/vk/id/auth/VKIDAuthParams$Theme;
@@ -158,12 +157,10 @@ public final class com/vk/id/auth/VKIDAuthParams$Builder {
 	public static final field $stable I
 	public fun <init> ()V
 	public final fun build ()Lcom/vk/id/auth/VKIDAuthParams;
-	public final fun getExtraParams ()Ljava/util/Map;
 	public final fun getLocale ()Lcom/vk/id/auth/VKIDAuthParams$Locale;
 	public final fun getOAuth ()Lcom/vk/id/OAuth;
 	public final fun getTheme ()Lcom/vk/id/auth/VKIDAuthParams$Theme;
 	public final fun getUseOAuthProviderIfPossible ()Z
-	public final fun setExtraParams (Ljava/util/Map;)V
 	public final fun setLocale (Lcom/vk/id/auth/VKIDAuthParams$Locale;)V
 	public final fun setOAuth (Lcom/vk/id/OAuth;)V
 	public final fun setTheme (Lcom/vk/id/auth/VKIDAuthParams$Theme;)V
