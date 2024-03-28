@@ -104,7 +104,7 @@ public fun OneTap(
     if (style is OneTapStyle.Icon) {
         OneTapAnalytics.OneTapIconShown()
         VKIDButtonSmall(style = style.vkidButtonStyle, vkid = vkid, onClick = {
-            OneTapAnalytics.oneTapPressedIcon(user)
+            val extraAuthParams = OneTapAnalytics.oneTapPressedIcon(user)
             startAuth(
                 coroutineScope,
                 useVKID,
@@ -115,6 +115,9 @@ public fun OneTap(
                 {
                     OneTapAnalytics.authErrorIcon(user)
                     onFail(null, it)
+                },
+                VKIDAuthParams {
+                    extraParams = extraAuthParams
                 }
             )
         }, onUserFetched = {
@@ -139,7 +142,7 @@ public fun OneTap(
                     signInAnotherAccountButtonEnabled = signInAnotherAccountButtonEnabled,
                     vkidButtonTextProvider = null,
                     onVKIDButtonClick = {
-                        OneTapAnalytics.oneTapPressed(user)
+                        val extraAuthParams = OneTapAnalytics.oneTapPressed(user)
                         startAuth(
                             coroutineScope,
                             useVKID,
@@ -153,11 +156,12 @@ public fun OneTap(
                             },
                             VKIDAuthParams {
                                 theme = style.toProviderTheme()
+                                extraParams = extraAuthParams
                             }
                         )
                     },
                     onAlternateButtonClick = {
-                        OneTapAnalytics.alternatePressed()
+                        val extraAuthParams = OneTapAnalytics.alternatePressed()
                         startAuth(
                             coroutineScope,
                             useVKID,
@@ -166,6 +170,7 @@ public fun OneTap(
                             VKIDAuthParams {
                                 useOAuthProviderIfPossible = false
                                 theme = style.toProviderTheme()
+                                extraParams = extraAuthParams
                             }
                         )
                     },
@@ -184,7 +189,7 @@ public fun OneTap(
             fallback = {
                 OneTapAnalytics.OneTapIconShown()
                 VKIDButtonSmall(style = style.vkidButtonStyle, vkid = useVKID, onClick = {
-                    OneTapAnalytics.oneTapPressedIcon(user)
+                    val extraAuthParams = OneTapAnalytics.oneTapPressedIcon(user)
                     startAuth(
                         coroutineScope,
                         useVKID,
@@ -195,6 +200,9 @@ public fun OneTap(
                         {
                             OneTapAnalytics.authErrorIcon(user)
                             onFail(null, it)
+                        },
+                        VKIDAuthParams {
+                            extraParams = extraAuthParams
                         }
                     )
                 }, onUserFetched = {

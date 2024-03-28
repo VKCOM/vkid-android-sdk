@@ -11,6 +11,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import com.vk.id.VKIDUser
 import com.vk.id.analytics.VKIDAnalytics
 import com.vk.id.common.InternalVKIDApi
+import java.util.UUID
 
 @Suppress("TooManyFunctions")
 internal object OneTapAnalytics {
@@ -61,20 +62,24 @@ internal object OneTapAnalytics {
         }
     }
 
-    internal fun oneTapPressedIcon(user: VKIDUser?) {
-        oneTapPressed(user, icon = true)
+    internal fun oneTapPressedIcon(user: VKIDUser?): Map<String, String> {
+        return oneTapPressed(user, icon = true)
     }
 
-    internal fun oneTapPressed(user: VKIDUser?, icon: Boolean = false) {
+    internal fun oneTapPressed(user: VKIDUser?, icon: Boolean = false): Map<String, String> {
+        val uuid = UUID.randomUUID().toString()
         if (user != null) {
-            track("onetap_button_tap", iconParam(icon))
+            track("onetap_button_tap", iconParam(icon), uuidParam(uuid))
         } else {
-            track("onetap_button_no_user_tap", iconParam(icon))
+            track("onetap_button_no_user_tap", iconParam(icon), uuidParam(uuid))
         }
+        return mapOf(UNIQUE_SESSION_PARAM_NAME to uuid)
     }
 
-    internal fun alternatePressed() {
-        track("onetap_button_alternative_sign_in_tap")
+    internal fun alternatePressed(): Map<String, String> {
+        val uuid = UUID.randomUUID().toString()
+        track("onetap_button_alternative_sign_in_tap", uuidParam(uuid))
+        return mapOf(UNIQUE_SESSION_PARAM_NAME to uuid)
     }
 
     internal fun authSuccessIcon() {
@@ -117,6 +122,8 @@ internal object OneTapAnalytics {
             }
         )
 
+    private fun uuidParam(uuid: String) = VKIDAnalytics.EventParam(UNIQUE_SESSION_PARAM_NAME, uuid)
+
     private fun track(name: String, vararg params: VKIDAnalytics.EventParam) {
         VKIDAnalytics.trackEvent(
             name,
@@ -124,4 +131,6 @@ internal object OneTapAnalytics {
             *params
         )
     }
+
+    private const val UNIQUE_SESSION_PARAM_NAME = "unique_session_id"
 }
