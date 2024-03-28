@@ -12,6 +12,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.json.JSONArray
+import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
 import java.util.concurrent.LinkedBlockingQueue
@@ -31,28 +32,36 @@ public class StatTracker(
     private val trackerScope = CoroutineScope(dispatcher + SupervisorJob())
     private val logger = createLoggerForClass()
     private val batchEvents = LinkedBlockingQueue<JSONObject>()
+    private val eventCounter = EventCounter()
 
     override fun trackEvent(name: String, vararg params: VKIDAnalytics.EventParam) {
-        val eventJson = actionJson("type_registration_item", statEventJson(name, params.toMap()))
-        batchEvents.add(eventJson)
+        val eventJson = StatEventJson(name, params, eventCounter.eventId, eventCounter.prevEventId)
+        eventCounter.increment()
+        batchEvents.add(eventJson.json)
         trackerScope.launch {
             delay(1.seconds)
             val events = mutableListOf<JSONObject>()
             batchEvents.drainTo(events)
             if (events.isNotEmpty()) {
                 val eventsJson = JSONArray(events)
-                try {
+                val response = try {
                     val response = api.value.sendStatEventsAnonymously(clientId, clientSecret, eventsJson).execute()
                     logger.debug("Send events to stat '$eventsJson': ${response.code}")
-                    response.body?.string()?.let {
+                    response.body?.string()
+                } catch (ioe: IOException) {
+                    logger.error("Network exception while sending events $eventsJson", ioe)
+                    null
+                }
+                response?.let {
+                    try {
                         if (JSONObject(it).has("error")) {
                             logger.error(it, null)
                         } else {
                             logger.debug(it)
                         }
+                    } catch (@Suppress("SwallowedException") jse: JSONException) {
+                        logger.debug(it)
                     }
-                } catch (ioe: IOException) {
-                    logger.error("Network exception while sending events $eventsJson", ioe)
                 }
             }
         }
@@ -65,56 +74,4 @@ public class StatTracker(
     override fun hashCode(): Int {
         return clientSecret.hashCode()
     }
-
-    @Suppress("SameParameterValue")
-    /**
-     *    {
-     *       "type_action":{
-     *          "type":"type_registration_item",
-     *          "type_registration_item":{
-     *             "event_type":"onetap_button_user_found",
-     *             "sdk_type":"vkid",
-     *             "alternative_sign_in_availability":"not_available",
-     *             "button_type":"icon"
-     *          }
-     *       }
-     *    }
-     */
-    private fun actionJson(typeAction: String, data: JSONObject): JSONObject =
-        JSONObject().apply {
-            put("screen", "nowhere")
-            put("timestamp", System.currentTimeMillis().toString())
-            put("type", "type_action")
-            put(
-                "type_action",
-                JSONObject().apply {
-                    put("type", typeAction)
-                    put(typeAction, data)
-                }
-            )
-        }
-
-    private fun statEventJson(eventName: String, eventParams: Map<String, String>) = JSONObject().apply {
-        put("event_type", eventName)
-        put(
-            "fields",
-            JSONArray().apply {
-                eventParams.forEach {
-                    put(
-                        JSONObject().apply {
-                            put(it.key, it.value)
-                        }
-                    )
-                }
-            }
-        )
-    }
-}
-
-private fun Array<out VKIDAnalytics.EventParam>.toMap(): Map<String, String> {
-    val result = mutableMapOf<String, String>()
-    forEach {
-        result[it.name] = it.value
-    }
-    return result
 }
