@@ -30,7 +30,8 @@ package com.vk.id.internal.auth
 internal sealed class AuthResult {
     data class Success(
         val expireTime: Long,
-        val oauth: OAuth?
+        val oauth: OAuth?,
+        val deviceId: String,
     ) : AuthResult()
 
     data class Canceled(val message: String) : AuthResult()

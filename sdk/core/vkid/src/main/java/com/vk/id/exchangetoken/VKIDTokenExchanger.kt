@@ -1,6 +1,5 @@
 package com.vk.id.exchangetoken
 
-import android.content.Context
 import com.vk.id.TokensHandler
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.ServiceCredentials
@@ -11,7 +10,6 @@ import kotlinx.coroutines.withContext
 
 @Suppress("LongParameterList")
 internal class VKIDTokenExchanger(
-    private val context: Context,
     private val api: VKIDApiService,
     private val deviceIdProvider: DeviceIdProvider,
     private val serviceCredentials: ServiceCredentials,
@@ -20,7 +18,7 @@ internal class VKIDTokenExchanger(
     private val dispatchers: CoroutinesDispatchers,
 ) {
     suspend fun exchange(v1Token: String, callback: VKIDExchangeTokenToV2Callback) {
-        val deviceId = deviceIdProvider.getDeviceId(context)
+        val deviceId = deviceIdProvider.getDeviceId()
         val clientId = serviceCredentials.clientID
         val state = stateGenerator.regenerateState()
         val result = withContext(dispatchers.io) {

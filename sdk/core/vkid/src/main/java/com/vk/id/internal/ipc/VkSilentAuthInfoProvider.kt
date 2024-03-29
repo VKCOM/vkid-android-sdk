@@ -131,7 +131,7 @@ internal class VkSilentAuthInfoProvider(
                     SilentAuthInfoUtils.calculateDigestBase64(signature),
                     UUID.randomUUID().toString(),
                     apiVersion,
-                    deviceIdProvider.getDeviceId(appContext),
+                    deviceIdProvider.getDeviceId(),
                     null
                 )
                     .map { infoItem ->

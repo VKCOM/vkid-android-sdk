@@ -1,6 +1,5 @@
 package com.vk.id.fetchuser
 
-import android.content.Context
 import com.vk.id.VKIDUser
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.ServiceCredentials
@@ -10,7 +9,6 @@ import com.vk.id.internal.state.StateGenerator
 import kotlinx.coroutines.withContext
 
 internal class VKIDUserInfoFetcher(
-    private val context: Context,
     private val api: VKIDApiService,
     private val stateGenerator: StateGenerator,
     private val deviceIdProvider: DeviceIdProvider,
@@ -24,7 +22,7 @@ internal class VKIDUserInfoFetcher(
         onFailedOAuthState: () -> Unit,
     ) {
         val clientId = serviceCredentials.clientID
-        val deviceId = deviceIdProvider.getDeviceId(context)
+        val deviceId = deviceIdProvider.getDeviceId()
         val userInfoState = stateGenerator.regenerateState()
         val userInfoResult = withContext(dispatchers.io) {
             api.getUserInfo(

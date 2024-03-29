@@ -1,6 +1,5 @@
 package com.vk.id
 
-import android.content.Context
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthResult
@@ -14,7 +13,6 @@ import kotlinx.coroutines.withContext
 
 @Suppress("LongParameterList")
 internal class AuthResultHandler(
-    private val appContext: Context,
     private val dispatchers: CoroutinesDispatchers,
     private val callbacksHolder: AuthCallbacksHolder,
     private val deviceIdProvider: DeviceIdProvider,
@@ -47,12 +45,9 @@ internal class AuthResultHandler(
     }
 
     private suspend fun handleOauth(oauth: AuthResult.Success) {
-        val (realUuid, realState, codeVerifier) = withContext(dispatchers.io) {
-            listOf(
-                deviceIdProvider.getDeviceId(appContext),
-                prefsStore.state,
-                prefsStore.codeVerifier,
-            )
+        deviceIdProvider.setDeviceId(oauth.deviceId)
+        val (realState, codeVerifier) = withContext(dispatchers.io) {
+            prefsStore.state to prefsStore.codeVerifier
         }
 
         if (realState != oauth.oauth?.state) {
@@ -70,7 +65,7 @@ internal class AuthResultHandler(
                 code = oauth.oauth.code,
                 codeVerifier = codeVerifier,
                 clientId = serviceCredentials.clientID,
-                deviceId = realUuid,
+                deviceId = oauth.deviceId,
                 redirectUri = serviceCredentials.redirectUri,
                 state = realState,
             ).execute()

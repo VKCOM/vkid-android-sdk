@@ -1,6 +1,5 @@
 package com.vk.id.logout
 
-import android.content.Context
 import com.vk.id.AccessToken
 import com.vk.id.VKIDUser
 import com.vk.id.internal.api.VKIDApiService
@@ -56,11 +55,10 @@ internal class VKIDLoggerOutTest : BehaviorSpec({
     coroutineTestScope = true
 
     Given("Logger out") {
-        val context = mockk<Context>()
         val api = mockk<VKIDApiService>()
         val tokenStorage = mockk<TokenStorage>()
         val deviceIdProvider = mockk<DeviceIdProvider>()
-        every { deviceIdProvider.getDeviceId(context) } returns DEVICE_ID
+        every { deviceIdProvider.getDeviceId() } returns DEVICE_ID
         val serviceCredentials = ServiceCredentials(
             clientID = CLIENT_ID,
             clientSecret = CLIENT_SECRET,
@@ -71,7 +69,6 @@ internal class VKIDLoggerOutTest : BehaviorSpec({
         val testDispatcher = StandardTestDispatcher(scheduler)
         every { dispatchers.io } returns testDispatcher
         val loggerOut = VKIDLoggerOut(
-            context = context,
             api = api,
             tokenStorage = tokenStorage,
             deviceIdProvider = deviceIdProvider,

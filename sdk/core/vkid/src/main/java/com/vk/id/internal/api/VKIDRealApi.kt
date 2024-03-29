@@ -71,12 +71,11 @@ internal class VKIDRealApi(
     ): Call {
         val formBody = FormBody.Builder()
             .add(FIELD_ID_TOKEN, accessToken)
-            .add(FIELD_CLIENT_ID, clientId)
             .add(FIELD_DEVICE_ID, deviceId)
             .add(FIELD_STATE, state)
             .build()
 
-        return createRequest(HOST_VK_ID, PATH_AUTH, formBody)
+        return createRequest(HOST_VK_ID, PATH_USER_INFO, formBody, query = mapOf(FIELD_CLIENT_ID to clientId))
     }
 
     override fun exchangeToken(
@@ -111,8 +110,18 @@ internal class VKIDRealApi(
         return createRequest(HOST_VK_ID, PATH_LOGOUT, formBody)
     }
 
-    private fun createRequest(host: String, path: String, requestBody: RequestBody): Call {
+    private fun createRequest(
+        host: String,
+        path: String,
+        requestBody: RequestBody,
+        query: Map<String, String> = emptyMap(),
+    ): Call {
         val url = host.toHttpUrl().newBuilder()
+            .apply {
+                query.forEach { (name, value) ->
+                    addQueryParameter(name, value)
+                }
+            }
             .addPathSegments(path)
             .build()
         val request = Request.Builder()

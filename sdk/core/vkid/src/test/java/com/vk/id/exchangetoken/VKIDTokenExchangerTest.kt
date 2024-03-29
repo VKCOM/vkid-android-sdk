@@ -1,6 +1,5 @@
 package com.vk.id.exchangetoken
 
-import android.content.Context
 import com.vk.id.AccessToken
 import com.vk.id.TokensHandler
 import com.vk.id.VKIDUser
@@ -69,10 +68,9 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
     coroutineTestScope = true
 
     Given("User info fetcher") {
-        val context = mockk<Context>()
         val api = mockk<VKIDApiService>()
         val deviceIdProvider = mockk<DeviceIdProvider>()
-        every { deviceIdProvider.getDeviceId(context) } returns DEVICE_ID
+        every { deviceIdProvider.getDeviceId() } returns DEVICE_ID
         val serviceCredentials = ServiceCredentials(
             clientID = CLIENT_ID,
             clientSecret = CLIENT_SECRET,
@@ -85,7 +83,6 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
         val testDispatcher = StandardTestDispatcher(scheduler)
         every { dispatchers.io } returns testDispatcher
         val exchanger = VKIDTokenExchanger(
-            context = context,
             api = api,
             deviceIdProvider = deviceIdProvider,
             serviceCredentials = serviceCredentials,

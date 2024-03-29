@@ -35,7 +35,10 @@ import android.text.TextUtils
 import com.vk.id.internal.log.createLoggerForClass
 import com.vk.id.internal.util.MD5
 
-internal class DeviceIdProvider(private val deviceIdStorage: DeviceIdStorage) {
+internal class DeviceIdProvider(
+    private val context: Context,
+    private val deviceIdStorage: DeviceIdStorage
+) {
     private val logger = createLoggerForClass()
     private var nextDeviceId = String()
 
@@ -51,7 +54,11 @@ internal class DeviceIdProvider(private val deviceIdStorage: DeviceIdStorage) {
         fun clearDeviceToken(memberId: Long)
     }
 
-    fun getDeviceId(context: Context): String {
+    fun setDeviceId(deviceId: String) {
+        deviceIdStorage.setDeviceId(deviceId)
+    }
+
+    fun getDeviceId(): String {
         if (nextDeviceId.isNotEmpty()) {
             return nextDeviceId
         }

@@ -10,7 +10,6 @@ internal data class AuthOptions(
     val clientSecret: String,
     val codeChallenge: String,
     val codeChallengeMethod: String,
-    val deviceId: String,
     val redirectUri: String,
     val state: String,
     val locale: String?,
@@ -36,7 +35,6 @@ private const val RESPONSE_TYPE_CODE = "code"
 private const val SCHEME_BROWSER = "https"
 private const val STATE = "state"
 private const val UUID = "uuid"
-private const val DEVICE_ID = "device_id"
 private const val PROMPT = "prompt"
 private const val ACTION = "action"
 private const val LOCALE = "lang_id"
@@ -57,7 +55,6 @@ internal fun AuthOptions.toAuthUriBrowser(): Uri {
         .appendQueryParameter(CODE_CHALLENGE_METHOD, CODE_CHALLENGE_METHOD_VALUE)
         .appendQueryParameter(CODE_CHALLENGE, codeChallenge)
         .appendQueryParameter(STATE, state)
-        .appendQueryParameter(DEVICE_ID, deviceId)
         .appendQueryParameter(PROMPT, prompt)
 
     if (oAuth != null) {
@@ -86,7 +83,7 @@ internal fun AuthOptions.toAuthUriCodeFlow(appPackage: String): Uri {
         .appendQueryParameter(CODE_CHALLENGE_METHOD, codeChallengeMethod)
         .appendQueryParameter(CODE_CHALLENGE, codeChallenge)
         .appendQueryParameter(STATE, state)
-        .appendQueryParameter(UUID, deviceId)
+        .appendQueryParameter(UUID, state)
 
     if (oAuth != null) {
         builder.appendQueryParameter(ACTION, oAuth.toQueryParam())

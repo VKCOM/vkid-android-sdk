@@ -1,6 +1,5 @@
 package com.vk.id.refreshuser
 
-import android.content.Context
 import com.vk.id.AccessToken
 import com.vk.id.VKIDUser
 import com.vk.id.internal.api.VKIDApiService
@@ -67,11 +66,10 @@ internal class VKIDUserRefresherTest : BehaviorSpec({
     coroutineTestScope = true
 
     Given("User info fetcher") {
-        val context = mockk<Context>()
         val api = mockk<VKIDApiService>()
         val tokenStorage = mockk<TokenStorage>()
         val deviceIdProvider = mockk<DeviceIdProvider>()
-        every { deviceIdProvider.getDeviceId(context) } returns DEVICE_ID
+        every { deviceIdProvider.getDeviceId() } returns DEVICE_ID
         val serviceCredentials = ServiceCredentials(
             clientID = CLIENT_ID,
             clientSecret = CLIENT_SECRET,
@@ -83,7 +81,6 @@ internal class VKIDUserRefresherTest : BehaviorSpec({
         val testDispatcher = StandardTestDispatcher(scheduler)
         every { dispatchers.io } returns testDispatcher
         val refresher = VKIDUserRefresher(
-            context = context,
             api = api,
             tokenStorage = tokenStorage,
             stateGenerator = stateGenerator,
