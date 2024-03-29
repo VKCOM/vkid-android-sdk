@@ -156,9 +156,17 @@ public final class com/vk/id/VKIDUser$Creator : android/os/Parcelable$Creator {
 	public synthetic fun newArray (I)[Ljava/lang/Object;
 }
 
+public final class com/vk/id/auth/Prompt : java/lang/Enum {
+	public static final field BLANK Lcom/vk/id/auth/Prompt;
+	public static final field LOGIN Lcom/vk/id/auth/Prompt;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/vk/id/auth/Prompt;
+	public static fun values ()[Lcom/vk/id/auth/Prompt;
+}
+
 public final class com/vk/id/auth/VKIDAuthParams {
 	public static final field $stable I
-	public synthetic fun <init> (Lcom/vk/id/auth/VKIDAuthParams$Locale;Lcom/vk/id/auth/VKIDAuthParams$Theme;ZLcom/vk/id/OAuth;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Lcom/vk/id/auth/VKIDAuthParams$Locale;Lcom/vk/id/auth/VKIDAuthParams$Theme;ZLcom/vk/id/OAuth;Lcom/vk/id/auth/Prompt;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getLocale ()Lcom/vk/id/auth/VKIDAuthParams$Locale;
 	public final fun getOAuth ()Lcom/vk/id/OAuth;
 	public final fun getTheme ()Lcom/vk/id/auth/VKIDAuthParams$Theme;
@@ -171,10 +179,12 @@ public final class com/vk/id/auth/VKIDAuthParams$Builder {
 	public final fun build ()Lcom/vk/id/auth/VKIDAuthParams;
 	public final fun getLocale ()Lcom/vk/id/auth/VKIDAuthParams$Locale;
 	public final fun getOAuth ()Lcom/vk/id/OAuth;
+	public final fun getPrompt ()Lcom/vk/id/auth/Prompt;
 	public final fun getTheme ()Lcom/vk/id/auth/VKIDAuthParams$Theme;
 	public final fun getUseOAuthProviderIfPossible ()Z
 	public final fun setLocale (Lcom/vk/id/auth/VKIDAuthParams$Locale;)V
 	public final fun setOAuth (Lcom/vk/id/OAuth;)V
+	public final fun setPrompt (Lcom/vk/id/auth/Prompt;)V
 	public final fun setTheme (Lcom/vk/id/auth/VKIDAuthParams$Theme;)V
 	public final fun setUseOAuthProviderIfPossible (Z)V
 }

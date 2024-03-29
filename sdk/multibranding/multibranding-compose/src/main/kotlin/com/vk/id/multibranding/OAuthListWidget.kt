@@ -42,6 +42,7 @@ import com.vk.id.AccessToken
 import com.vk.id.OAuth
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
+import com.vk.id.auth.Prompt
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.auth.VKIDAuthParams.Theme
 import com.vk.id.common.InternalVKIDApi
@@ -187,6 +188,7 @@ private fun OAuthButton(
                             VKIDAuthParams {
                                 oAuth = item
                                 theme = style.toProviderTheme()
+                                prompt = Prompt.LOGIN
                             }
                         )
                     }

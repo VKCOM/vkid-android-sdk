@@ -17,6 +17,7 @@ internal data class AuthOptions(
     val theme: String?,
     val webAuthPhoneScreen: Boolean,
     val oAuth: OAuth?,
+    val prompt: String,
 )
 
 private const val APP_ID = "app_id"
@@ -36,6 +37,7 @@ private const val SCHEME_BROWSER = "https"
 private const val STATE = "state"
 private const val UUID = "uuid"
 private const val DEVICE_ID = "device_id"
+private const val PROMPT = "prompt"
 private const val ACTION = "action"
 private const val LOCALE = "lang_id"
 private const val THEME = "scheme"
@@ -56,6 +58,7 @@ internal fun AuthOptions.toAuthUriBrowser(): Uri {
         .appendQueryParameter(CODE_CHALLENGE, codeChallenge)
         .appendQueryParameter(STATE, state)
         .appendQueryParameter(DEVICE_ID, deviceId)
+        .appendQueryParameter(PROMPT, prompt)
 
     if (oAuth != null) {
         builder.appendQueryParameter(ACTION, oAuth.toQueryParam())

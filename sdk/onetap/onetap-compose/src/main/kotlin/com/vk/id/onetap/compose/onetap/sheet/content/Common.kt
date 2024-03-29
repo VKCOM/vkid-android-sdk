@@ -1,4 +1,5 @@
 @file:Suppress("MatchingDeclarationName")
+@file:OptIn(InternalVKIDApi::class)
 
 package com.vk.id.onetap.compose.onetap.sheet.content
 
@@ -7,7 +8,9 @@ import androidx.compose.runtime.MutableState
 import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
+import com.vk.id.auth.Prompt
 import com.vk.id.auth.VKIDAuthParams
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.compose.button.startAuth
 import com.vk.id.onetap.compose.onetap.sheet.style.OneTapBottomSheetStyle
@@ -81,6 +84,7 @@ internal fun startAlternateAuth(
         VKIDAuthParams {
             useOAuthProviderIfPossible = false
             theme = style.toProviderTheme()
+            prompt = Prompt.LOGIN
         }
     )
 }
