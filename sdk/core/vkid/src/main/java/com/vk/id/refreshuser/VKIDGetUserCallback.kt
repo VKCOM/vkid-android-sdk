@@ -5,11 +5,11 @@ import com.vk.id.VKIDUser
 /**
  * Callback interface for refreshing user data.
  */
-public interface VKIDRefreshUserCallback {
+public interface VKIDGetUserCallback {
     /**
      * Called upon successful user refreshing.
      *
-     * @param user Up-to-date user data.
+     * @param user Up-to-date user data. Might not contain all fields if the user didn't accept necessary scopes.
      */
     public fun onSuccess(user: VKIDUser)
 
@@ -18,5 +18,5 @@ public interface VKIDRefreshUserCallback {
      *
      * @param fail Information about a failure.
      */
-    public fun onFail(fail: VKIDRefreshUserFail)
+    public fun onFail(fail: VKIDGetUserFail)
 }

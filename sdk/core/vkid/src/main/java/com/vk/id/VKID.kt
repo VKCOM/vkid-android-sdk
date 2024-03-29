@@ -28,7 +28,7 @@ import com.vk.id.logout.VKIDLoggerOut
 import com.vk.id.logout.VKIDLogoutCallback
 import com.vk.id.refresh.VKIDRefreshTokenCallback
 import com.vk.id.refresh.VKIDTokenRefresher
-import com.vk.id.refreshuser.VKIDRefreshUserCallback
+import com.vk.id.refreshuser.VKIDGetUserCallback
 import com.vk.id.refreshuser.VKIDUserRefresher
 import com.vk.id.storage.TokenStorage
 import com.vk.id.test.ImmediateVKIDApi
@@ -244,22 +244,22 @@ public class VKID {
      * Fetches up-to-data user data using token from previous auth.
      *
      * @param lifecycleOwner The [LifecycleOwner] in which the user data refreshing should be handled.
-     * @param callback [VKIDRefreshUserCallback] to handle the result of the user data refreshing.
+     * @param callback [VKIDGetUserCallback] to handle the result of the user data refreshing.
      */
-    public fun refreshUserData(
+    public fun getUserData(
         lifecycleOwner: LifecycleOwner,
-        callback: VKIDRefreshUserCallback,
+        callback: VKIDGetUserCallback,
     ) {
-        lifecycleOwner.lifecycleScope.launch { refreshUserData(callback = callback) }
+        lifecycleOwner.lifecycleScope.launch { getUserData(callback = callback) }
     }
 
     /**
      * Fetches up-to-data user data using token from previous auth.
      *
-     * @param callback [VKIDRefreshUserCallback] to handle the result of the user data refreshing.
+     * @param callback [VKIDGetUserCallback] to handle the result of the user data refreshing.
      */
-    public suspend fun refreshUserData(
-        callback: VKIDRefreshUserCallback,
+    public suspend fun getUserData(
+        callback: VKIDGetUserCallback,
     ) {
         requestMutex.withLock {
             userRefresher.value.refresh(callback = callback)

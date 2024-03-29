@@ -43,9 +43,6 @@ internal class VKIDTokenExchanger(
                         VKIDExchangeTokenFail.FailedApiCall("Failed to fetch user data due to ${it.message}", it)
                     )
                 },
-                onFailedOAuthState = {
-                    callback.onFail(VKIDExchangeTokenFail.FailedOAuthState("Wrong state for getting user info"))
-                }
             )
         }
     }

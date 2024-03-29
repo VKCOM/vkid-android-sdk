@@ -85,9 +85,6 @@ internal class AuthResultHandler(
                 onFailedApiCall = {
                     emitAuthFail(VKIDAuthFail.FailedApiCall("Failed to fetch user data", it))
                 },
-                onFailedOAuthState = {
-                    emitAuthFail(VKIDAuthFail.FailedOAuthState("Wrong state for getting user info"))
-                }
             )
         }
     }

@@ -8,6 +8,7 @@ internal data class VKIDTokenPayload(
     val idToken: String,
     val expiresIn: Long,
     val userId: Long,
+    val state: String,
 )
 
 /**

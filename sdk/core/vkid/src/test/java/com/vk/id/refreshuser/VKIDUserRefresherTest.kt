@@ -57,7 +57,6 @@ private val USER_INFO_PAYLOAD = VKIDUserInfoPayload(
     phone = PHONE,
     email = EMAIL,
     avatar = AVATAR,
-    state = STATE,
 )
 
 @OptIn(ExperimentalStdlibApi::class, ExperimentalCoroutinesApi::class)
@@ -91,8 +90,8 @@ internal class VKIDUserRefresherTest : BehaviorSpec({
         every { stateGenerator.regenerateState() } returns STATE
         When("Token is not available") {
             every { tokenStorage.accessToken } returns null
-            val fail = VKIDRefreshUserFail.Unauthorized("Not authorized")
-            val callback = mockk<VKIDRefreshUserCallback>()
+            val fail = VKIDGetUserFail.NotAuthenticated("Not authorized")
+            val callback = mockk<VKIDGetUserCallback>()
             every { callback.onFail(fail) } just runs
             runTest(scheduler) { refresher.refresh(callback) }
             Then("Calls onFail with unauthorized fail") {
@@ -113,31 +112,11 @@ internal class VKIDUserRefresherTest : BehaviorSpec({
                     state = STATE
                 )
             } returns call
-            val fail = VKIDRefreshUserFail.FailedApiCall("Failed to fetch user data due to message", exception)
-            val callback = mockk<VKIDRefreshUserCallback>()
+            val fail = VKIDGetUserFail.FailedApiCall("Failed to fetch user data due to message", exception)
+            val callback = mockk<VKIDGetUserCallback>()
             every { callback.onFail(fail) } just runs
             runTest(scheduler) { refresher.refresh(callback) }
             Then("Calls onFail with api fail") {
-                verify(exactly = 0) { callback.onSuccess(any()) }
-                verify { callback.onFail(fail) }
-            }
-        }
-        When("Api returns wrong state") {
-            val call = mockk<VKIDCall<VKIDUserInfoPayload>>()
-            every { call.execute() } returns Result.success(USER_INFO_PAYLOAD.copy(state = "wrong state"))
-            coEvery {
-                api.getUserInfo(
-                    accessToken = ACCESS_TOKEN_VALUE,
-                    clientId = CLIENT_ID,
-                    deviceId = DEVICE_ID,
-                    state = STATE
-                )
-            } returns call
-            val fail = VKIDRefreshUserFail.FailedOAuthState("Wrong state for getting user info")
-            val callback = mockk<VKIDRefreshUserCallback>()
-            every { callback.onFail(fail) } just runs
-            runTest(scheduler) { refresher.refresh(callback) }
-            Then("Calls onFailedOAuthState") {
                 verify(exactly = 0) { callback.onSuccess(any()) }
                 verify { callback.onFail(fail) }
             }
@@ -153,7 +132,7 @@ internal class VKIDUserRefresherTest : BehaviorSpec({
                     state = STATE
                 )
             } returns call
-            val callback = mockk<VKIDRefreshUserCallback>()
+            val callback = mockk<VKIDGetUserCallback>()
             every { callback.onSuccess(VKID_USER) } just runs
             runTest(scheduler) { refresher.refresh(callback) }
             Then("Calls onSuccess") {

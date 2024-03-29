@@ -234,7 +234,7 @@ internal open class VKIDDepsProd(
                 }
             }
         })
-        logging.level = HttpLoggingInterceptor.Level.BASIC
+        logging.level = HttpLoggingInterceptor.Level.BODY
         return logging
     }
 

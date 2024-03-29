@@ -78,7 +78,7 @@ internal class VKIDLoggerOutTest : BehaviorSpec({
         When("Token is not available") {
             every { tokenStorage.accessToken } returns null
             every { tokenStorage.clear() } just runs
-            val fail = VKIDLogoutFail.Unauthorized("Not authorized, can't logout")
+            val fail = VKIDLogoutFail.NotAuthenticated("Not authorized, can't logout")
             val callback = mockk<VKIDLogoutCallback>()
             every { callback.onFail(fail) } just runs
             runTest(scheduler) { loggerOut.logout(callback) }

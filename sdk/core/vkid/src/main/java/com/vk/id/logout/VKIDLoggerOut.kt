@@ -17,7 +17,7 @@ internal class VKIDLoggerOut(
     suspend fun logout(callback: VKIDLogoutCallback) {
         val token = tokenStorage.accessToken?.token ?: run {
             tokenStorage.clear()
-            callback.onFail(VKIDLogoutFail.Unauthorized("Not authorized, can't logout"))
+            callback.onFail(VKIDLogoutFail.NotAuthenticated("Not authorized, can't logout"))
             return
         }
         val deviceId = deviceIdProvider.getDeviceId()

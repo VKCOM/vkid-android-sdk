@@ -70,7 +70,7 @@ internal class VKIDRealApi(
         state: String
     ): Call {
         val formBody = FormBody.Builder()
-            .add(FIELD_ID_TOKEN, accessToken)
+            .add(FIELD_ACCESS_TOKEN, accessToken)
             .add(FIELD_DEVICE_ID, deviceId)
             .add(FIELD_STATE, state)
             .build()
@@ -151,7 +151,6 @@ internal class VKIDRealApi(
         private const val FIELD_GRANT_TYPE = "grant_type"
         private const val FIELD_STATE = "state"
         private const val FIELD_REFRESH_TOKEN = "refresh_token"
-        private const val FIELD_ID_TOKEN = "id_token"
         private const val FIELD_ACCESS_TOKEN = "access_token"
         private const val FIELD_RESPONSE_TYPE = "response_type"
 

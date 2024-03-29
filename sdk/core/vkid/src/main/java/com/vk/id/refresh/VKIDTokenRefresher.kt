@@ -34,6 +34,9 @@ internal class VKIDTokenRefresher(
             ).execute()
         }
         result.onSuccess { payload ->
+            if (payload.state != refreshTokenState) {
+                callback.onFail(VKIDRefreshTokenFail.FailedOAuthState("Wrong state for getting user info"))
+            }
             tokensHandler.handle(
                 payload = payload,
                 onSuccess = callback::onSuccess,
@@ -42,9 +45,6 @@ internal class VKIDTokenRefresher(
                         VKIDRefreshTokenFail.FailedApiCall("Failed to fetch user data due to ${it.message}", it)
                     )
                 },
-                onFailedOAuthState = {
-                    callback.onFail(VKIDRefreshTokenFail.FailedOAuthState("Wrong state for getting user info"))
-                }
             )
         }
         result.onFailure {
@@ -56,5 +56,5 @@ internal class VKIDTokenRefresher(
 
     private fun emitUnauthorizedFail(
         callback: VKIDRefreshTokenCallback
-    ) = callback.onFail(VKIDRefreshTokenFail.Unauthorized("You must login before refreshing token"))
+    ) = callback.onFail(VKIDRefreshTokenFail.NotAuthenticated("You must login before refreshing token"))
 }

@@ -6,5 +6,4 @@ internal data class VKIDUserInfoPayload(
     val phone: String,
     val avatar: String,
     val email: String,
-    val state: String,
 )

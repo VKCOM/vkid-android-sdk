@@ -55,12 +55,12 @@ public final class com/vk/id/VKID {
 	public final fun exchangeTokenToV2 (Ljava/lang/String;Lcom/vk/id/exchangetoken/VKIDExchangeTokenToV2Callback;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun fetchUserData-IoAF18A (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun getAccessToken ()Lcom/vk/id/AccessToken;
+	public final fun getUserData (Landroidx/lifecycle/LifecycleOwner;Lcom/vk/id/refreshuser/VKIDGetUserCallback;)V
+	public final fun getUserData (Lcom/vk/id/refreshuser/VKIDGetUserCallback;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun logout (Lcom/vk/id/logout/VKIDLogoutCallback;Landroidx/lifecycle/LifecycleOwner;)V
 	public final fun logout (Lcom/vk/id/logout/VKIDLogoutCallback;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun refreshToken (Landroidx/lifecycle/LifecycleOwner;Lcom/vk/id/refresh/VKIDRefreshTokenCallback;)V
 	public final fun refreshToken (Lcom/vk/id/refresh/VKIDRefreshTokenCallback;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public final fun refreshUserData (Landroidx/lifecycle/LifecycleOwner;Lcom/vk/id/refreshuser/VKIDRefreshUserCallback;)V
-	public final fun refreshUserData (Lcom/vk/id/refreshuser/VKIDRefreshUserCallback;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public abstract interface class com/vk/id/VKID$AuthCallback {
@@ -229,13 +229,6 @@ public final class com/vk/id/exchangetoken/VKIDExchangeTokenFail$FailedApiCall :
 	public fun hashCode ()I
 }
 
-public final class com/vk/id/exchangetoken/VKIDExchangeTokenFail$FailedOAuthState : com/vk/id/exchangetoken/VKIDExchangeTokenFail {
-	public static final field $stable I
-	public fun <init> (Ljava/lang/String;)V
-	public fun equals (Ljava/lang/Object;)Z
-	public fun hashCode ()I
-}
-
 public abstract interface class com/vk/id/exchangetoken/VKIDExchangeTokenToV2Callback {
 	public abstract fun onFail (Lcom/vk/id/exchangetoken/VKIDExchangeTokenFail;)V
 	public abstract fun onSuccess (Lcom/vk/id/AccessToken;)V
@@ -280,7 +273,7 @@ public final class com/vk/id/logout/VKIDLogoutFail$FailedApiCall : com/vk/id/log
 	public fun hashCode ()I
 }
 
-public final class com/vk/id/logout/VKIDLogoutFail$Unauthorized : com/vk/id/logout/VKIDLogoutFail {
+public final class com/vk/id/logout/VKIDLogoutFail$NotAuthenticated : com/vk/id/logout/VKIDLogoutFail {
 	public static final field $stable I
 	public fun <init> (Ljava/lang/String;)V
 	public fun equals (Ljava/lang/Object;)Z
@@ -313,6 +306,13 @@ public final class com/vk/id/refresh/VKIDRefreshTokenFail$FailedOAuthState : com
 	public fun hashCode ()I
 }
 
+public final class com/vk/id/refresh/VKIDRefreshTokenFail$NotAuthenticated : com/vk/id/refresh/VKIDRefreshTokenFail {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+}
+
 public final class com/vk/id/refresh/VKIDRefreshTokenFail$RefreshTokenExpired : com/vk/id/refresh/VKIDRefreshTokenFail {
 	public static final field $stable I
 	public fun <init> (Ljava/lang/String;)V
@@ -320,25 +320,18 @@ public final class com/vk/id/refresh/VKIDRefreshTokenFail$RefreshTokenExpired : 
 	public fun hashCode ()I
 }
 
-public final class com/vk/id/refresh/VKIDRefreshTokenFail$Unauthorized : com/vk/id/refresh/VKIDRefreshTokenFail {
-	public static final field $stable I
-	public fun <init> (Ljava/lang/String;)V
-	public fun equals (Ljava/lang/Object;)Z
-	public fun hashCode ()I
-}
-
-public abstract interface class com/vk/id/refreshuser/VKIDRefreshUserCallback {
-	public abstract fun onFail (Lcom/vk/id/refreshuser/VKIDRefreshUserFail;)V
+public abstract interface class com/vk/id/refreshuser/VKIDGetUserCallback {
+	public abstract fun onFail (Lcom/vk/id/refreshuser/VKIDGetUserFail;)V
 	public abstract fun onSuccess (Lcom/vk/id/VKIDUser;)V
 }
 
-public abstract class com/vk/id/refreshuser/VKIDRefreshUserFail {
+public abstract class com/vk/id/refreshuser/VKIDGetUserFail {
 	public static final field $stable I
 	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getDescription ()Ljava/lang/String;
 }
 
-public final class com/vk/id/refreshuser/VKIDRefreshUserFail$FailedApiCall : com/vk/id/refreshuser/VKIDRefreshUserFail {
+public final class com/vk/id/refreshuser/VKIDGetUserFail$FailedApiCall : com/vk/id/refreshuser/VKIDGetUserFail {
 	public static final field $stable I
 	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
 	public fun equals (Ljava/lang/Object;)Z
@@ -346,21 +339,14 @@ public final class com/vk/id/refreshuser/VKIDRefreshUserFail$FailedApiCall : com
 	public fun hashCode ()I
 }
 
-public final class com/vk/id/refreshuser/VKIDRefreshUserFail$FailedOAuthState : com/vk/id/refreshuser/VKIDRefreshUserFail {
+public final class com/vk/id/refreshuser/VKIDGetUserFail$IdTokenTokenExpired : com/vk/id/refreshuser/VKIDGetUserFail {
 	public static final field $stable I
 	public fun <init> (Ljava/lang/String;)V
 	public fun equals (Ljava/lang/Object;)Z
 	public fun hashCode ()I
 }
 
-public final class com/vk/id/refreshuser/VKIDRefreshUserFail$IdTokenTokenExpired : com/vk/id/refreshuser/VKIDRefreshUserFail {
-	public static final field $stable I
-	public fun <init> (Ljava/lang/String;)V
-	public fun equals (Ljava/lang/Object;)Z
-	public fun hashCode ()I
-}
-
-public final class com/vk/id/refreshuser/VKIDRefreshUserFail$Unauthorized : com/vk/id/refreshuser/VKIDRefreshUserFail {
+public final class com/vk/id/refreshuser/VKIDGetUserFail$NotAuthenticated : com/vk/id/refreshuser/VKIDGetUserFail {
 	public static final field $stable I
 	public fun <init> (Ljava/lang/String;)V
 	public fun equals (Ljava/lang/Object;)Z

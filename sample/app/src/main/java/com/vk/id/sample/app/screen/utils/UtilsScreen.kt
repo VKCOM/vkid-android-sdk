@@ -29,8 +29,8 @@ import com.vk.id.logout.VKIDLogoutCallback
 import com.vk.id.logout.VKIDLogoutFail
 import com.vk.id.refresh.VKIDRefreshTokenCallback
 import com.vk.id.refresh.VKIDRefreshTokenFail
-import com.vk.id.refreshuser.VKIDRefreshUserCallback
-import com.vk.id.refreshuser.VKIDRefreshUserFail
+import com.vk.id.refreshuser.VKIDGetUserCallback
+import com.vk.id.refreshuser.VKIDGetUserFail
 import com.vk.id.sample.app.screen.Button
 import com.vk.id.sample.app.screen.UseToken
 import com.vk.id.sample.xml.uikit.common.onVKIDAuthSuccess
@@ -150,12 +150,12 @@ private fun RefreshUserUtil() {
     }
     Button(text = "Refresh user data") {
         coroutineScope.launch {
-            context.vkid.refreshUserData(object : VKIDRefreshUserCallback {
+            context.vkid.getUserData(object : VKIDGetUserCallback {
                 override fun onSuccess(user: VKIDUser) {
                     currentUser = user
                 }
 
-                override fun onFail(fail: VKIDRefreshUserFail) {
+                override fun onFail(fail: VKIDGetUserFail) {
                     showToast(context, "User refresh failed with: ${fail.description}")
                 }
             })

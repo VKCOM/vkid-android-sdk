@@ -3,29 +3,12 @@ package com.vk.id.refreshuser
 /**
  * Represents the failure cases for VK ID user refreshing.
  */
-public sealed class VKIDRefreshUserFail(
+public sealed class VKIDGetUserFail(
     /**
      * Text description of the failure.
      */
     public val description: String
 ) {
-    /**
-     * Represents a failure due to an invalid OAuth state.
-     *
-     * @param description Description of the OAuth state failure.
-     */
-    public class FailedOAuthState(description: String) : VKIDRefreshUserFail(description) {
-        /** @suppress */
-        override fun equals(other: Any?): Boolean {
-            return other is FailedOAuthState && description == other.description
-        }
-
-        /** @suppress */
-        override fun hashCode(): Int {
-            return description.hashCode()
-        }
-    }
-
     /**
      * Represents a failure due to an VK ID API call error.
      *
@@ -35,7 +18,7 @@ public sealed class VKIDRefreshUserFail(
     public class FailedApiCall(
         description: String,
         public val throwable: Throwable
-    ) : VKIDRefreshUserFail(description) {
+    ) : VKIDGetUserFail(description) {
         /** @suppress */
         override fun equals(other: Any?): Boolean {
             return other is FailedApiCall && description == other.description && throwable == other.throwable
@@ -56,7 +39,7 @@ public sealed class VKIDRefreshUserFail(
      */
     public class IdTokenTokenExpired(
         description: String
-    ) : VKIDRefreshUserFail(description) {
+    ) : VKIDGetUserFail(description) {
         /** @suppress */
         override fun equals(other: Any?): Boolean {
             return other is IdTokenTokenExpired && description == other.description
@@ -73,12 +56,12 @@ public sealed class VKIDRefreshUserFail(
      *
      * @param description Description of the failure.
      */
-    public class Unauthorized(
+    public class NotAuthenticated(
         description: String
-    ) : VKIDRefreshUserFail(description) {
+    ) : VKIDGetUserFail(description) {
         /** @suppress */
         override fun equals(other: Any?): Boolean {
-            return other is VKIDRefreshUserFail && description == other.description
+            return other is VKIDGetUserFail && description == other.description
         }
 
         /** @suppress */
