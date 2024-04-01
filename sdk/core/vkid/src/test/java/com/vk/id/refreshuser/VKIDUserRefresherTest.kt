@@ -1,6 +1,7 @@
 package com.vk.id.refreshuser
 
 import com.vk.id.AccessToken
+import com.vk.id.VKIDInvalidTokenException
 import com.vk.id.VKIDUser
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.api.VKIDCall
@@ -9,7 +10,10 @@ import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.auth.device.DeviceIdProvider
 import com.vk.id.internal.concurrent.CoroutinesDispatchers
 import com.vk.id.internal.state.StateGenerator
+import com.vk.id.refresh.VKIDRefreshTokenCallback
+import com.vk.id.refresh.VKIDTokenRefresher
 import com.vk.id.storage.TokenStorage
+import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.testCoroutineScheduler
 import io.mockk.coEvery
@@ -17,6 +21,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
+import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -63,6 +68,7 @@ private val USER_INFO_PAYLOAD = VKIDUserInfoPayload(
 internal class VKIDUserRefresherTest : BehaviorSpec({
 
     coroutineTestScope = true
+    isolationMode = IsolationMode.InstancePerLeaf
 
     Given("User info fetcher") {
         val api = mockk<VKIDApiService>()
@@ -79,6 +85,8 @@ internal class VKIDUserRefresherTest : BehaviorSpec({
         val scheduler = testCoroutineScheduler
         val testDispatcher = StandardTestDispatcher(scheduler)
         every { dispatchers.io } returns testDispatcher
+        every { dispatchers.main } returns testDispatcher
+        val tokenRefresher = mockk<VKIDTokenRefresher>()
         val refresher = VKIDUserRefresher(
             api = api,
             tokenStorage = tokenStorage,
@@ -86,6 +94,7 @@ internal class VKIDUserRefresherTest : BehaviorSpec({
             deviceIdProvider = deviceIdProvider,
             serviceCredentials = serviceCredentials,
             dispatchers = dispatchers,
+            refresher = tokenRefresher,
         )
         every { stateGenerator.regenerateState() } returns STATE
         When("Token is not available") {
@@ -121,7 +130,61 @@ internal class VKIDUserRefresherTest : BehaviorSpec({
                 verify { callback.onFail(fail) }
             }
         }
+        When("Api returns invalid token error and refresh fails") {
+            every { tokenStorage.accessToken } returns ACCESS_TOKEN
+            val call = mockk<VKIDCall<VKIDUserInfoPayload>>()
+            val exception = VKIDInvalidTokenException()
+            every { call.execute() } returns Result.failure(exception)
+            coEvery {
+                api.getUserInfo(
+                    accessToken = ACCESS_TOKEN_VALUE,
+                    clientId = CLIENT_ID,
+                    deviceId = DEVICE_ID,
+                    state = STATE
+                )
+            } returns call
+            val refreshTokenCallback = slot<VKIDRefreshTokenCallback>()
+            coEvery { tokenRefresher.refresh(capture(refreshTokenCallback)) } just runs
+            val fail = VKIDGetUserFail.FailedApiCall("Failed to fetch user data due to null", exception)
+            val callback = mockk<VKIDGetUserCallback>()
+            every { callback.onFail(fail) } just runs
+            runTest(scheduler) { refresher.refresh(callback) }
+            refreshTokenCallback.captured.onSuccess(ACCESS_TOKEN)
+            scheduler.advanceUntilIdle()
+            Then("Calls onFail with api fail") {
+                verify(exactly = 0) { callback.onSuccess(any()) }
+                verify { callback.onFail(fail) }
+            }
+        }
+        When("Api returns invalid token error and refresh fails") {
+            every { tokenStorage.accessToken } returns ACCESS_TOKEN
+            val firstCall = mockk<VKIDCall<VKIDUserInfoPayload>>()
+            val secondCall = mockk<VKIDCall<VKIDUserInfoPayload>>()
+            val exception = VKIDInvalidTokenException()
+            every { firstCall.execute() } returns Result.failure(exception)
+            every { secondCall.execute() } returns Result.success(USER_INFO_PAYLOAD)
+            coEvery {
+                api.getUserInfo(
+                    accessToken = ACCESS_TOKEN_VALUE,
+                    clientId = CLIENT_ID,
+                    deviceId = DEVICE_ID,
+                    state = STATE
+                )
+            } returnsMany listOf(firstCall, secondCall)
+            val refreshTokenCallback = slot<VKIDRefreshTokenCallback>()
+            coEvery { tokenRefresher.refresh(capture(refreshTokenCallback)) } just runs
+            val callback = mockk<VKIDGetUserCallback>()
+            every { callback.onSuccess(VKID_USER) } just runs
+            runTest(scheduler) { refresher.refresh(callback) }
+            refreshTokenCallback.captured.onSuccess(ACCESS_TOKEN)
+            scheduler.advanceUntilIdle()
+            Then("Calls onFail with api fail") {
+                verify { callback.onSuccess(VKID_USER) }
+                verify(exactly = 0) { callback.onFail(any()) }
+            }
+        }
         When("Api returns user") {
+            every { tokenStorage.accessToken } returns ACCESS_TOKEN
             val call = mockk<VKIDCall<VKIDUserInfoPayload>>()
             every { call.execute() } returns Result.success(USER_INFO_PAYLOAD)
             coEvery {

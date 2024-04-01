@@ -1,9 +1,9 @@
 package com.vk.id.internal.api
 
+import com.vk.id.VKIDInvalidTokenException
 import com.vk.id.internal.api.dto.VKIDUserInfoPayload
 import com.vk.id.internal.auth.VKIDTokenPayload
 import com.vk.id.internal.auth.app.VkAuthSilentAuthProvider
-import com.vk.id.logout.VKIDInvalidTokenException
 import okhttp3.Call
 import okhttp3.Response
 import org.json.JSONArray
@@ -40,21 +40,37 @@ internal class VKIDApiService(
         deviceId: String,
         state: String,
     ): VKIDCall<VKIDUserInfoPayload> {
-        return api.getUser(
+        val call = api.getUser(
             accessToken = accessToken,
             clientId = clientId,
             deviceId = deviceId,
             state = state,
-        ).wrapToVKIDCall { response ->
-            val body = JSONObject(requireNotNull(response.body).string())
-            val user = body.getJSONObject("user")
-            VKIDUserInfoPayload(
-                firstName = user.getString("first_name"),
-                lastName = user.getString("last_name"),
-                phone = user.optString("phone"),
-                avatar = user.getString("avatar"),
-                email = user.optString("email"),
-            )
+        )
+        return object : VKIDCall<VKIDUserInfoPayload> {
+            override fun execute(): Result<VKIDUserInfoPayload> {
+                val result = call.execute()
+                val body = JSONObject(requireNotNull(result.body).string())
+                return when {
+                    body.isNull("error") -> {
+                        val user = body.getJSONObject("user")
+                        Result.success(
+                            VKIDUserInfoPayload(
+                                firstName = user.getString("first_name"),
+                                lastName = user.getString("last_name"),
+                                phone = user.optString("phone"),
+                                avatar = user.getString("avatar"),
+                                email = user.optString("email"),
+                            )
+                        )
+                    }
+                    body.getString("error") == "invalid_token" -> Result.failure(VKIDInvalidTokenException())
+                    else -> Result.failure(IOException())
+                }
+            }
+
+            override fun cancel() {
+                call.cancel()
+            }
         }
     }
 
