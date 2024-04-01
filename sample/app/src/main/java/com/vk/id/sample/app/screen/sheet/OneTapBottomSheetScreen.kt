@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,6 +44,9 @@ import com.vk.id.sample.app.uikit.selector.EnumStateCheckboxSelector
 import com.vk.id.sample.app.uikit.selector.styleConstructors
 import com.vk.id.sample.xml.uikit.common.getOneTapFailCallback
 import com.vk.id.sample.xml.uikit.common.getOneTapSuccessCallback
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlin.reflect.KCallable
 
 @Preview
 @Composable
@@ -55,6 +59,12 @@ internal fun OneTapBottomSheetScreen() {
     val autoHideSheetOnSuccess = rememberSaveable { mutableStateOf(true) }
     val selectedOAuths = rememberSaveable { mutableStateOf(setOf(OneTapOAuth.OK, OneTapOAuth.MAIL)) }
     val shouldUseXml = remember { mutableStateOf(false) }
+    var styleConstructors by remember { mutableStateOf<Map<String, KCallable<OneTapBottomSheetStyle>>>(emptyMap()) }
+    LaunchedEffect(Unit) {
+        withContext(Dispatchers.IO) {
+            styleConstructors = OneTapBottomSheetStyle::class.styleConstructors(context)
+        }
+    }
     Column(
         modifier = Modifier
             .padding(16.dp)
@@ -98,7 +108,7 @@ internal fun OneTapBottomSheetScreen() {
             onValueSelected = { selectedScenario.value = it }
         )
         DropdownSelector(
-            values = OneTapBottomSheetStyle::class.styleConstructors(context),
+            values = styleConstructors,
             selectedValue = selectedStyle.value::class.simpleName ?: error("Can get simple style"),
             onValueSelected = {
                 selectedStyle.value = it.call(

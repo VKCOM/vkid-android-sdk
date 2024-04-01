@@ -16,6 +16,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -47,6 +48,9 @@ import com.vk.id.sample.app.util.carrying.carry
 import com.vk.id.sample.xml.uikit.common.dpToPixels
 import com.vk.id.sample.xml.uikit.common.getOneTapFailCallback
 import com.vk.id.sample.xml.uikit.common.getOneTapSuccessCallback
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlin.reflect.KCallable
 
 private const val TOTAL_WIDTH_PADDING_DP = 16
 private const val MIN_WIDTH_DP = 48f
@@ -66,14 +70,36 @@ internal fun OnetapStylingComposeScreen() {
     val selectedSize = remember { mutableStateOf(OneTapButtonSizeStyle.DEFAULT) }
     val selectedElevationStyle = remember { mutableFloatStateOf(0f) }
     val selectedOAuths = remember { mutableStateOf(emptySet<OneTapOAuth>()) }
-    val styleConstructor = remember { mutableStateOf(OneTapStyle.Companion::system.carry(context)) }
+    val styleConstructor = remember<MutableState<KCallable<OneTapStyle>?>> { mutableStateOf(null) }
+    LaunchedEffect(Unit) {
+        withContext(Dispatchers.IO) {
+            styleConstructor.value = OneTapStyle.Companion::system.carry(context)
+        }
+    }
     val shouldUseXml = remember { mutableStateOf(false) }
     val signInToAnotherAccountEnabled = remember { mutableStateOf(true) }
-    val selectedStyle = styleConstructor.value.call(
-        OneTapButtonCornersStyle.Custom(MAX_RADIUS_DP * cornersStylePercent.floatValue),
-        selectedSize.value,
-        OneTapButtonElevationStyle.Custom(MAX_ELEVATION_DP * selectedElevationStyle.floatValue),
-    )
+    var selectedStyle by remember { mutableStateOf(OneTapStyle.system(context)) }
+    LaunchedEffect(
+        styleConstructor.value to cornersStylePercent.floatValue,
+        selectedSize.value to selectedElevationStyle.floatValue
+    ) {
+        withContext(Dispatchers.IO) {
+            styleConstructor.value?.let {
+                selectedStyle = it.call(
+                    OneTapButtonCornersStyle.Custom(MAX_RADIUS_DP * cornersStylePercent.floatValue),
+                    selectedSize.value,
+                    OneTapButtonElevationStyle.Custom(MAX_ELEVATION_DP * selectedElevationStyle.floatValue),
+                )
+            }
+        }
+    }
+
+    var styleConstructors by remember { mutableStateOf<Map<String, KCallable<OneTapStyle>>>(emptyMap()) }
+    LaunchedEffect(Unit) {
+        withContext(Dispatchers.IO) {
+            styleConstructors = OneTapStyle::class.styleConstructors(context)
+        }
+    }
 
     val useDarkTheme = selectedStyle is OneTapStyle.Dark ||
         selectedStyle is OneTapStyle.TransparentDark
@@ -140,7 +166,7 @@ internal fun OnetapStylingComposeScreen() {
             EnumStateCheckboxSelector(state = selectedOAuths)
             DropdownSelector(
                 modifier = Modifier.padding(vertical = 16.dp),
-                values = OneTapStyle::class.styleConstructors(context),
+                values = styleConstructors,
                 selectedValue = selectedStyle::class.simpleName ?: error("Can get simple style"),
                 onValueSelected = {
                     styleConstructor.value = it
