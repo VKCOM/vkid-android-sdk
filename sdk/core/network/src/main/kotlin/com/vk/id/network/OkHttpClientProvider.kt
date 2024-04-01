@@ -55,7 +55,7 @@ internal class OkHttpClientProvider(
                 logger.debug(message)
             }
         })
-        logging.level = HttpLoggingInterceptor.Level.BASIC
+        logging.level = HttpLoggingInterceptor.Level.BODY
         return logging
     }
 
