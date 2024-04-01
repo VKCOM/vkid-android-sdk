@@ -127,7 +127,7 @@ public class VKIDAuthParams private constructor(
     }
 
     /**
-     * Builder for [VKIDAuthParams]
+     * Builder for [VKIDAuthParams].
      */
     @Suppress("MemberVisibilityCanBePrivate")
     public class Builder {
