@@ -38,7 +38,9 @@ internal class SslPinningTest : BehaviorSpec({
             When("Request is made without proxy") {
                 val client = builder.build()
                 val response = client.newCall(request).execute()
-                response.code shouldBe 200
+                Then("Responce should have code 200") {
+                    response.code shouldBe 200
+                }
             }
         } else {
             When("Request is made with proxy") {
@@ -53,7 +55,9 @@ internal class SslPinningTest : BehaviorSpec({
                 } catch (e: SSLHandshakeException) {
                     e
                 }
-                exception.shouldNotBeNull()
+                Then("Should fail with exception") {
+                    exception.shouldNotBeNull()
+                }
             }
         }
     }
