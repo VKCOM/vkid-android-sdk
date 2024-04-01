@@ -31,6 +31,7 @@ public class VKIDAuthParams private constructor(
     public val useOAuthProviderIfPossible: Boolean = true,
     public val oAuth: OAuth? = null,
     internal val prompt: Prompt = Prompt.BLANK,
+    internal val token: String? = null,
 ) {
     /**
      * Represents a locale that user prefers during authorization.
@@ -158,14 +159,21 @@ public class VKIDAuthParams private constructor(
         public var prompt: Prompt = Prompt.BLANK
 
         /**
+         * A token to be passes /authorize.
+         */
+        @InternalVKIDApi
+        public var token: String? = null
+
+        /**
          * Constructs [VKIDAuthParams] object with provided values.
          */
         public fun build(): VKIDAuthParams = VKIDAuthParams(
-            locale,
-            theme,
-            useOAuthProviderIfPossible,
-            oAuth,
-            prompt,
+            locale = locale,
+            theme = theme,
+            useOAuthProviderIfPossible = useOAuthProviderIfPossible,
+            oAuth = oAuth,
+            prompt = prompt,
+            token = token,
         )
     }
 }

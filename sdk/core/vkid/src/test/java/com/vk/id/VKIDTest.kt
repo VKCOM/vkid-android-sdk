@@ -1,7 +1,6 @@
 package com.vk.id
 
 import com.vk.id.auth.VKIDAuthParams
-import com.vk.id.exchangetoken.VKIDTokenExchanger
 import com.vk.id.internal.api.VKIDApi
 import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthEventBridge
@@ -59,7 +58,6 @@ internal class VKIDTest : BehaviorSpec({
                 override val userDataFetcher: Lazy<UserDataFetcher> = lazy { userDataFetcher }
                 override val api: Lazy<VKIDApi> = lazy { mockk() }
                 override val tokenRefresher: Lazy<VKIDTokenRefresher> = lazy { mockk() }
-                override val tokenExchanger: Lazy<VKIDTokenExchanger> = lazy { mockk() }
                 override val userRefresher: Lazy<VKIDUserRefresher> = lazy { mockk() }
                 override val loggerOut: Lazy<VKIDLoggerOut> = lazy { mockk() }
                 override val tokenStorage: TokenStorage = mockk()
@@ -78,7 +76,8 @@ internal class VKIDTest : BehaviorSpec({
             theme = "theme",
             webAuthPhoneScreen = false,
             oAuth = null,
-            prompt = ""
+            prompt = "",
+            token = null,
         )
         val expireTime = System.currentTimeMillis() + 1000
         coEvery { authProvidersChooser.chooseBest(authParams) } returns authProvider
