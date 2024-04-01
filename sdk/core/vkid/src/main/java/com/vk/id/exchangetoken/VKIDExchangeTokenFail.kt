@@ -31,21 +31,4 @@ public sealed class VKIDExchangeTokenFail(
             return result
         }
     }
-
-    /**
-     * Represents a failure due to an invalid OAuth state.
-     *
-     * @param description Description of the OAuth state failure.
-     */
-    public class FailedOAuthState(description: String) : VKIDExchangeTokenFail(description) {
-        /** @suppress */
-        override fun equals(other: Any?): Boolean {
-            return other is FailedOAuthState && description == other.description
-        }
-
-        /** @suppress */
-        override fun hashCode(): Int {
-            return description.hashCode()
-        }
-    }
 }

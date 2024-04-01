@@ -184,7 +184,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             val authResult = authResultSuccess
             val callback = mockk<VKID.AuthCallback>()
             val call = mockk<VKIDCall<VKIDTokenPayload>>()
-            val payload = VKIDTokenPayload(ACCESS_TOKEN, REFRESH_TOKEN, ID_TOKEN, 0, USER_ID)
+            val payload = VKIDTokenPayload(ACCESS_TOKEN, REFRESH_TOKEN, ID_TOKEN, 0, USER_ID, STATE)
             every { callbacksHolder.getAll() } returns setOf(callback)
             every { callback.onSuccess(any()) } just runs
             every { callbacksHolder.clear() } just runs
@@ -196,13 +196,13 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             every { serviceCredentials.redirectUri } returns REDIRECT_URI
             every { api.getToken(CODE, CODE_VERIFIER, CLIENT_ID, DEVICE_ID, REDIRECT_URI, STATE) } returns call
             every { call.execute() } returns Result.success(payload)
-            coEvery { tokensHandler.handle(any(), any(), any(), any()) } just runs
+            coEvery { tokensHandler.handle(any(), any(), any()) } just runs
             runTest(scheduler) { handler.handle(authResult) }
             Then("Device id is saved") {
                 verify { deviceIdProvider.setDeviceId(DEVICE_ID) }
             }
             Then("User info fetcher is called") {
-                coVerify { tokensHandler.handle(payload, any(), any(), any()) }
+                coVerify { tokensHandler.handle(payload, any(), any()) }
             }
         }
     }

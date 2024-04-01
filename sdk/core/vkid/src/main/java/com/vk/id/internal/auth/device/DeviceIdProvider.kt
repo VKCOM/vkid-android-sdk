@@ -34,13 +34,15 @@ import android.provider.Settings
 import android.text.TextUtils
 import com.vk.id.internal.log.createLoggerForClass
 import com.vk.id.internal.util.MD5
+import java.util.concurrent.locks.ReentrantLock
+import kotlin.concurrent.withLock
 
 internal class DeviceIdProvider(
     private val context: Context,
     private val deviceIdStorage: DeviceIdStorage
 ) {
+    private val mutex = ReentrantLock()
     private val logger = createLoggerForClass()
-    private var nextDeviceId = String()
 
     interface DeviceIdStorage {
         fun getDeviceId(): String
@@ -59,31 +61,30 @@ internal class DeviceIdProvider(
     }
 
     fun getDeviceId(): String {
-        if (nextDeviceId.isNotEmpty()) {
-            return nextDeviceId
-        }
-        logger.debug("nextDeviceId is null or empty: $nextDeviceId")
-        nextDeviceId = deviceIdStorage.getDeviceId()
-        if (TextUtils.isEmpty(nextDeviceId)) {
-            val androidId = findDeviceIdByAndroidId(context)
-            val deviceId = getDeviceId()
+        mutex.withLock {
+            val deviceId = deviceIdStorage.getDeviceId()
+            return if (TextUtils.isEmpty(deviceId)) {
+                logger.debug("nextDeviceId is null or empty: $deviceId")
+                val androidId = findDeviceIdByAndroidId(context)
 
-            val ids = ArrayList<String?>()
-            ids.add(if (!TextUtils.isEmpty(androidId)) androidId else DEFAULT_ID)
-            ids.add(if (!TextUtils.isEmpty(deviceId)) deviceId else DEFAULT_ID)
+                val ids = ArrayList<String?>()
+                ids.add(if (!TextUtils.isEmpty(androidId)) androidId else DEFAULT_ID)
 
-            val sb = StringBuilder()
-            for (i in ids.indices) {
-                sb.append(ids[i])
-                if (i < ids.size - 1) {
-                    sb.append(":")
+                val sb = StringBuilder()
+                for (i in ids.indices) {
+                    sb.append(ids[i])
+                    if (i < ids.size - 1) {
+                        sb.append(":")
+                    }
                 }
+                val nextDeviceId = sb.toString()
+                logger.debug("new nextDeviceId: $nextDeviceId")
+                deviceIdStorage.setDeviceId(nextDeviceId)
+                nextDeviceId
+            } else {
+                deviceId
             }
-            nextDeviceId = sb.toString()
-            deviceIdStorage.setDeviceId(nextDeviceId)
         }
-        logger.debug("new nextDeviceId: $nextDeviceId")
-        return nextDeviceId
     }
 
     companion object {

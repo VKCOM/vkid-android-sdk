@@ -13,7 +13,6 @@ internal class TokensHandler(
         payload: VKIDTokenPayload,
         onSuccess: (AccessToken) -> Unit,
         onFailedApiCall: (Throwable) -> Unit,
-        onFailedOAuthState: () -> Unit,
     ) {
         userInfoFetcher.fetch(
             accessToken = payload.accessToken,
@@ -31,7 +30,6 @@ internal class TokensHandler(
                 onSuccess(accessToken)
             },
             onFailedApiCall = onFailedApiCall,
-            onFailedOAuthState = onFailedOAuthState
         )
     }
 }

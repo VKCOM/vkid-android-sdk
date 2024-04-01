@@ -18,9 +18,9 @@ internal class VKIDUserRefresher(
     private val serviceCredentials: ServiceCredentials,
     private val dispatchers: CoroutinesDispatchers,
 ) {
-    suspend fun refresh(callback: VKIDRefreshUserCallback) {
+    suspend fun refresh(callback: VKIDGetUserCallback) {
         val accessToken = tokenStorage.accessToken?.token ?: run {
-            callback.onFail(VKIDRefreshUserFail.Unauthorized("Not authorized"))
+            callback.onFail(VKIDGetUserFail.NotAuthenticated("Not authorized"))
             return
         }
         val deviceId = deviceIdProvider.getDeviceId()
@@ -34,21 +34,17 @@ internal class VKIDUserRefresher(
                 state = state
             ).execute()
         }.onFailure {
-            callback.onFail(VKIDRefreshUserFail.FailedApiCall("Failed to fetch user data due to ${it.message}", it))
+            callback.onFail(VKIDGetUserFail.FailedApiCall("Failed to fetch user data due to ${it.message}", it))
         }.onSuccess {
-            if (it.state != state) {
-                callback.onFail(VKIDRefreshUserFail.FailedOAuthState("Wrong state for getting user info"))
-            } else {
-                callback.onSuccess(
-                    VKIDUser(
-                        firstName = it.firstName,
-                        lastName = it.lastName,
-                        photo200 = it.avatar,
-                        phone = it.phone,
-                        email = it.email,
-                    )
+            callback.onSuccess(
+                VKIDUser(
+                    firstName = it.firstName,
+                    lastName = it.lastName,
+                    photo200 = it.avatar,
+                    phone = it.phone,
+                    email = it.email,
                 )
-            }
+            )
         }
     }
 }

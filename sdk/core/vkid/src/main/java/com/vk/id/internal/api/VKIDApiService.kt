@@ -51,10 +51,9 @@ internal class VKIDApiService(
             VKIDUserInfoPayload(
                 firstName = user.getString("first_name"),
                 lastName = user.getString("last_name"),
-                phone = user.getString("phone"),
+                phone = user.optString("phone"),
                 avatar = user.getString("avatar"),
-                email = user.getString("email"),
-                state = body.getString("state"),
+                email = user.optString("email"),
             )
         }
     }
@@ -148,9 +147,10 @@ internal class VKIDApiService(
                 VKIDTokenPayload(
                     accessToken = jsonObject.getString("access_token"),
                     refreshToken = jsonObject.getString("refresh_token"),
-                    idToken = jsonObject.getString("id_token"),
+                    idToken = jsonObject.optString("id_token"),
                     userId = jsonObject.getLong("user_id"),
                     expiresIn = jsonObject.optLong("expires_in"),
+                    state = jsonObject.optString("state"),
                 )
             } catch (@Suppress("SwallowedException") e: JSONException) {
                 val error = e.message

@@ -38,7 +38,6 @@ private val USER_INFO_PAYLOAD = VKIDUserInfoPayload(
     phone = PHONE,
     avatar = AVATAR,
     email = EMAIL,
-    state = STATE,
 )
 private val VKID_USER = VKIDUser(
     firstName = FIRST_NAME,
@@ -90,7 +89,6 @@ internal class VKIDUserInfoFetcherTest : BehaviorSpec({
                 )
             } returns call
             val onSuccess = mockk<(VKIDUser) -> Unit>()
-            val onFailedOAuthState = mockk<() -> Unit>()
             val onFailedApiCall = mockk<(Throwable) -> Unit>()
             every { onFailedApiCall(exception) } just runs
             runTest(scheduler) {
@@ -98,42 +96,11 @@ internal class VKIDUserInfoFetcherTest : BehaviorSpec({
                     accessToken = ACCESS_TOKEN,
                     onSuccess = onSuccess,
                     onFailedApiCall = onFailedApiCall,
-                    onFailedOAuthState = onFailedOAuthState,
                 )
             }
             Then("Calls onFailedApiCall") {
                 verify { onSuccess wasNot called }
-                verify { onFailedOAuthState wasNot called }
                 verify { onFailedApiCall(exception) }
-            }
-        }
-        When("Api returns wrong state") {
-            val call = mockk<VKIDCall<VKIDUserInfoPayload>>()
-            every { call.execute() } returns Result.success(USER_INFO_PAYLOAD.copy(state = "wrong state"))
-            coEvery {
-                api.getUserInfo(
-                    accessToken = ACCESS_TOKEN,
-                    clientId = CLIENT_ID,
-                    deviceId = DEVICE_ID,
-                    state = STATE
-                )
-            } returns call
-            val onSuccess = mockk<(VKIDUser) -> Unit>()
-            val onFailedApiCall = mockk<(Throwable) -> Unit>()
-            val onFailedOAuthState = mockk<() -> Unit>()
-            every { onFailedOAuthState() } just runs
-            runTest(scheduler) {
-                fetcher.fetch(
-                    accessToken = ACCESS_TOKEN,
-                    onSuccess = onSuccess,
-                    onFailedApiCall = onFailedApiCall,
-                    onFailedOAuthState = onFailedOAuthState,
-                )
-            }
-            Then("Calls onFailedOAuthState") {
-                verify { onSuccess wasNot called }
-                verify { onFailedApiCall wasNot called }
-                verify { onFailedOAuthState() }
             }
         }
         When("Api returns user") {
@@ -148,7 +115,6 @@ internal class VKIDUserInfoFetcherTest : BehaviorSpec({
                 )
             } returns call
             val onFailedApiCall = mockk<(Throwable) -> Unit>()
-            val onFailedOAuthState = mockk<() -> Unit>()
             val onSuccess = mockk<(VKIDUser) -> Unit>()
             every { onSuccess(VKID_USER) } just runs
             runTest(scheduler) {
@@ -156,13 +122,11 @@ internal class VKIDUserInfoFetcherTest : BehaviorSpec({
                     accessToken = ACCESS_TOKEN,
                     onSuccess = onSuccess,
                     onFailedApiCall = onFailedApiCall,
-                    onFailedOAuthState = onFailedOAuthState,
                 )
             }
             Then("Calls onFailedOAuthState") {
                 verify { onSuccess(VKID_USER) }
                 verify { onFailedApiCall wasNot called }
-                verify { onFailedOAuthState wasNot called }
             }
         }
     }

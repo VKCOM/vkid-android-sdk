@@ -23,6 +23,7 @@ private const val LAST_NAME = "last"
 private const val PHONE = "phone"
 private const val AVATAR = "avatar"
 private const val EMAIL = "email"
+private const val STATE = "state"
 
 private val VKID_USER = VKIDUser(
     firstName = FIRST_NAME,
@@ -46,6 +47,7 @@ private val TOKEN_PAYLOAD = VKIDTokenPayload(
     idToken = ID_TOKEN,
     expiresIn = EXPIRES_IN,
     userId = USER_ID,
+    state = STATE,
 )
 
 internal class TokensHandlerTest : BehaviorSpec({
@@ -59,14 +61,12 @@ internal class TokensHandlerTest : BehaviorSpec({
         When("Handles token payload") {
             val onSuccess = mockk<(AccessToken) -> Unit>()
             val onFailedApiCall = mockk<(Throwable) -> Unit>()
-            val onFailedOAuthState = mockk<() -> Unit>()
             val capturedOnSuccess = slot<(VKIDUser) -> Unit>()
             coEvery {
                 userInfoFetcher.fetch(
                     ACCESS_TOKEN_VALUE,
                     capture(capturedOnSuccess),
                     onFailedApiCall,
-                    onFailedOAuthState,
                 )
             } just runs
             every { tokenStorage.accessToken = ACCESS_TOKEN } just runs
@@ -77,7 +77,6 @@ internal class TokensHandlerTest : BehaviorSpec({
                 payload = TOKEN_PAYLOAD,
                 onSuccess = onSuccess,
                 onFailedApiCall = onFailedApiCall,
-                onFailedOAuthState = onFailedOAuthState,
             )
             Then("Call user info fetcher") {
                 coVerify {
@@ -85,7 +84,6 @@ internal class TokensHandlerTest : BehaviorSpec({
                         ACCESS_TOKEN_VALUE,
                         capture(capturedOnSuccess),
                         onFailedApiCall,
-                        onFailedOAuthState,
                     )
                 }
                 capturedOnSuccess.captured(VKID_USER)

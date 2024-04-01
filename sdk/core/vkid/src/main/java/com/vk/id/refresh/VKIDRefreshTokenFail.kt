@@ -73,7 +73,7 @@ public sealed class VKIDRefreshTokenFail(
      *
      * @param description Description of the failure.
      */
-    public class Unauthorized(
+    public class NotAuthenticated(
         description: String
     ) : VKIDRefreshTokenFail(description) {
         /** @suppress */

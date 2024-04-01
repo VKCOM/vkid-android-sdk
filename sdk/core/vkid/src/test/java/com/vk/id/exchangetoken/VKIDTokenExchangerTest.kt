@@ -60,6 +60,7 @@ private val TOKEN_PAYLOAD = VKIDTokenPayload(
     idToken = ID_TOKEN,
     expiresIn = -1,
     userId = USER_ID,
+    state = STATE,
 )
 
 @OptIn(ExperimentalStdlibApi::class, ExperimentalCoroutinesApi::class)
@@ -128,21 +129,17 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
                 )
             } returns call
             val onFailedApiCall = slot<(Throwable) -> Unit>()
-            val onFailedOAuthState = slot<() -> Unit>()
             val onSuccess = slot<(AccessToken) -> Unit>()
             val callback = mockk<VKIDExchangeTokenToV2Callback>()
             every { callback.onSuccess(ACCESS_TOKEN) } just runs
             val failedApiCallException = Exception("message")
             val failedApiCallFail = VKIDExchangeTokenFail.FailedApiCall("Failed to fetch user data due to message", failedApiCallException)
             every { callback.onFail(failedApiCallFail) } just runs
-            val failedOAuthStateFail = VKIDExchangeTokenFail.FailedOAuthState("Wrong state for getting user info")
-            every { callback.onFail(failedOAuthStateFail) } just runs
             coEvery {
                 tokensHandler.handle(
                     TOKEN_PAYLOAD,
                     capture(onSuccess),
                     capture(onFailedApiCall),
-                    capture(onFailedOAuthState),
                 )
             } just runs
             runTest(scheduler) {
@@ -156,8 +153,6 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
                 verify { callback.onSuccess(ACCESS_TOKEN) }
                 onFailedApiCall.captured(failedApiCallException)
                 verify { callback.onFail(failedApiCallFail) }
-                onFailedOAuthState.captured()
-                verify { callback.onFail(failedOAuthStateFail) }
             }
         }
     }

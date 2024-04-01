@@ -19,7 +19,6 @@ internal class VKIDUserInfoFetcher(
         accessToken: String,
         onSuccess: (VKIDUser) -> Unit,
         onFailedApiCall: (Throwable) -> Unit,
-        onFailedOAuthState: () -> Unit,
     ) {
         val clientId = serviceCredentials.clientID
         val deviceId = deviceIdProvider.getDeviceId()
@@ -34,10 +33,6 @@ internal class VKIDUserInfoFetcher(
         }
         userInfoResult.onFailure(onFailedApiCall)
         userInfoResult.onSuccess {
-            if (it.state != userInfoState) {
-                onFailedOAuthState()
-                return
-            }
             onSuccess(
                 VKIDUser(
                     firstName = it.firstName,
