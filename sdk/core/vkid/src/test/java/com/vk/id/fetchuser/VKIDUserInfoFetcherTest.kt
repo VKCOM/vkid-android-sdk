@@ -1,6 +1,5 @@
 package com.vk.id.fetchuser
 
-import android.content.Context
 import com.vk.id.VKIDUser
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.api.VKIDCall
@@ -57,9 +56,8 @@ internal class VKIDUserInfoFetcherTest : BehaviorSpec({
     coroutineTestScope = true
 
     Given("User info fetcher") {
-        val context = mockk<Context>()
         val deviceIdProvider = mockk<DeviceIdProvider>()
-        every { deviceIdProvider.getDeviceId(context) } returns DEVICE_ID
+        every { deviceIdProvider.getDeviceId() } returns DEVICE_ID
         val api = mockk<VKIDApiService>()
         val stateGenerator = mockk<StateGenerator>()
         val serviceCredentials = ServiceCredentials(
@@ -72,7 +70,6 @@ internal class VKIDUserInfoFetcherTest : BehaviorSpec({
         val testDispatcher = StandardTestDispatcher(scheduler)
         every { dispatchers.io } returns testDispatcher
         val fetcher = VKIDUserInfoFetcher(
-            context = context,
             api = api,
             stateGenerator = stateGenerator,
             serviceCredentials = serviceCredentials,

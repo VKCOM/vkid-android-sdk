@@ -1,6 +1,5 @@
 package com.vk.id
 
-import android.content.Context
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.api.VKIDCall
 import com.vk.id.internal.auth.AuthCallbacksHolder
@@ -31,17 +30,18 @@ private const val REFRESH_TOKEN = "refresh token"
 private const val ID_TOKEN = "id token"
 private const val USER_ID = 0L
 private const val EXPIRE_TIME = 0L
-private const val UUID = "uuid"
 private const val STATE = "state"
 private const val DIFFERENT_STATE = "differentstate"
 private const val CODE_VERIFIER = "code verifier"
 private const val CODE = "code"
+private const val DEVICE_ID = "device id"
 private const val CLIENT_ID = "client id"
 private const val CLIENT_SECRET = "client secret"
 private const val REDIRECT_URI = "redirect uri"
 private val authResultSuccess = AuthResult.Success(
     expireTime = EXPIRE_TIME,
     oauth = AuthResult.OAuth(CODE, STATE, CODE_VERIFIER),
+    deviceId = DEVICE_ID
 )
 
 @OptIn(ExperimentalStdlibApi::class, ExperimentalCoroutinesApi::class)
@@ -53,7 +53,6 @@ internal class AuthResultHandlerTest : BehaviorSpec({
         val callbacksHolder = mockk<AuthCallbacksHolder>()
         val deviceIdProvider = mockk<DeviceIdProvider>()
         val prefsStore = mockk<PrefsStore>()
-        val context = mockk<Context>()
         val scheduler = testCoroutineScheduler
         val testDispatcher = StandardTestDispatcher(scheduler)
         val dispatchers = mockk<CoroutinesDispatchers>()
@@ -62,7 +61,6 @@ internal class AuthResultHandlerTest : BehaviorSpec({
         val serviceCredentials = mockk<ServiceCredentials>()
         val tokensHandler = mockk<TokensHandler>()
         val handler = AuthResultHandler(
-            appContext = context,
             dispatchers = dispatchers,
             callbacksHolder = callbacksHolder,
             deviceIdProvider = deviceIdProvider,
@@ -130,11 +128,14 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             every { callbacksHolder.getAll() } returns setOf(callback)
             every { callback.onFail(any()) } just runs
             every { callbacksHolder.clear() } just runs
-            every { deviceIdProvider.getDeviceId(context) } returns UUID
+            every { deviceIdProvider.setDeviceId(DEVICE_ID) } just runs
             every { prefsStore.state } returns DIFFERENT_STATE
             every { prefsStore.codeVerifier } returns CODE_VERIFIER
             runTest(scheduler) { handler.handle(authResult) }
             scheduler.advanceUntilIdle()
+            Then("Device id is saved") {
+                verify { deviceIdProvider.setDeviceId(DEVICE_ID) }
+            }
             Then("Callbacks are requested from holder") {
                 verify { callbacksHolder.getAll() }
             }
@@ -152,16 +153,19 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             every { callbacksHolder.getAll() } returns setOf(callback)
             every { callback.onFail(any()) } just runs
             every { callbacksHolder.clear() } just runs
-            every { deviceIdProvider.getDeviceId(context) } returns UUID
+            every { deviceIdProvider.setDeviceId(DEVICE_ID) } just runs
             every { prefsStore.state } returns STATE
             every { prefsStore.codeVerifier } returns CODE_VERIFIER
             every { serviceCredentials.clientID } returns CLIENT_ID
             every { serviceCredentials.clientSecret } returns CLIENT_SECRET
             every { serviceCredentials.redirectUri } returns REDIRECT_URI
-            every { api.getToken(CODE, CODE_VERIFIER, CLIENT_ID, UUID, REDIRECT_URI, STATE) } returns call
+            every { api.getToken(CODE, CODE_VERIFIER, CLIENT_ID, DEVICE_ID, REDIRECT_URI, STATE) } returns call
             every { call.execute() } returns Result.failure(error)
             runTest(scheduler) { handler.handle(authResult) }
             scheduler.advanceUntilIdle()
+            Then("Device id is saved") {
+                verify { deviceIdProvider.setDeviceId(DEVICE_ID) }
+            }
             Then("Callbacks are requested from holder") {
                 verify { callbacksHolder.getAll() }
             }
@@ -184,16 +188,19 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             every { callbacksHolder.getAll() } returns setOf(callback)
             every { callback.onSuccess(any()) } just runs
             every { callbacksHolder.clear() } just runs
-            every { deviceIdProvider.getDeviceId(context) } returns UUID
+            every { deviceIdProvider.setDeviceId(DEVICE_ID) } just runs
             every { prefsStore.state } returns STATE
             every { prefsStore.codeVerifier } returns CODE_VERIFIER
             every { serviceCredentials.clientID } returns CLIENT_ID
             every { serviceCredentials.clientSecret } returns CLIENT_SECRET
             every { serviceCredentials.redirectUri } returns REDIRECT_URI
-            every { api.getToken(CODE, CODE_VERIFIER, CLIENT_ID, UUID, REDIRECT_URI, STATE) } returns call
+            every { api.getToken(CODE, CODE_VERIFIER, CLIENT_ID, DEVICE_ID, REDIRECT_URI, STATE) } returns call
             every { call.execute() } returns Result.success(payload)
             coEvery { tokensHandler.handle(any(), any(), any(), any()) } just runs
             runTest(scheduler) { handler.handle(authResult) }
+            Then("Device id is saved") {
+                verify { deviceIdProvider.setDeviceId(DEVICE_ID) }
+            }
             Then("User info fetcher is called") {
                 coVerify { tokensHandler.handle(payload, any(), any(), any()) }
             }

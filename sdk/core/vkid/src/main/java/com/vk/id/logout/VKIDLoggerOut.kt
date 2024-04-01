@@ -1,6 +1,5 @@
 package com.vk.id.logout
 
-import android.content.Context
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.auth.device.DeviceIdProvider
@@ -9,7 +8,6 @@ import com.vk.id.storage.TokenStorage
 import kotlinx.coroutines.withContext
 
 internal class VKIDLoggerOut(
-    private val context: Context,
     private val api: VKIDApiService,
     private val tokenStorage: TokenStorage,
     private val deviceIdProvider: DeviceIdProvider,
@@ -22,7 +20,7 @@ internal class VKIDLoggerOut(
             callback.onFail(VKIDLogoutFail.Unauthorized("Not authorized, can't logout"))
             return
         }
-        val deviceId = deviceIdProvider.getDeviceId(context)
+        val deviceId = deviceIdProvider.getDeviceId()
         val clientId = serviceCredentials.clientID
         withContext(dispatchers.io) {
             api.logout(

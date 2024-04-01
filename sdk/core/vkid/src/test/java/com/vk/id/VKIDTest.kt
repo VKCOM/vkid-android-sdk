@@ -72,7 +72,6 @@ internal class VKIDTest : BehaviorSpec({
             clientSecret = "client secret",
             codeChallenge = "code challenge",
             codeChallengeMethod = "code challenge method",
-            deviceId = "device id",
             redirectUri = "redirect uri",
             state = "state",
             locale = "locale",
@@ -98,6 +97,7 @@ internal class VKIDTest : BehaviorSpec({
                     AuthResult.Success(
                         expireTime = expireTime,
                         oauth = null,
+                        "device id"
                     )
                 )
             }

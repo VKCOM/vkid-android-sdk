@@ -1,6 +1,5 @@
 package com.vk.id.refreshuser
 
-import android.content.Context
 import com.vk.id.VKIDUser
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.ServiceCredentials
@@ -12,7 +11,6 @@ import kotlinx.coroutines.withContext
 
 @Suppress("LongParameterList")
 internal class VKIDUserRefresher(
-    private val context: Context,
     private val api: VKIDApiService,
     private val tokenStorage: TokenStorage,
     private val stateGenerator: StateGenerator,
@@ -25,7 +23,7 @@ internal class VKIDUserRefresher(
             callback.onFail(VKIDRefreshUserFail.Unauthorized("Not authorized"))
             return
         }
-        val deviceId = deviceIdProvider.getDeviceId(context)
+        val deviceId = deviceIdProvider.getDeviceId()
         val clientId = serviceCredentials.clientID
         val state = stateGenerator.regenerateState()
         withContext(dispatchers.io) {

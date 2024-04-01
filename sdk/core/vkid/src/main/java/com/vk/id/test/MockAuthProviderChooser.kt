@@ -45,7 +45,6 @@ internal class MockAuthProviderChooser(
         intent.putExtra("clientSecret", options.clientSecret)
         intent.putExtra("codeChallenge", options.codeChallenge)
         intent.putExtra("codeChallengeMethod", options.codeChallengeMethod)
-        intent.putExtra("deviceId", config.overrideUuid ?: options.deviceId)
         intent.putExtra("redirectUri", options.redirectUri)
         intent.putExtra("state", config.overrideState ?: options.state)
         intent.putExtra("locale", options.locale)

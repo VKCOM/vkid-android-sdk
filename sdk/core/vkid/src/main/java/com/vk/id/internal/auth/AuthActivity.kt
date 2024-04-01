@@ -105,6 +105,7 @@ internal class AuthActivity : Activity() {
     private fun handlePayload(uri: Uri): AuthResult {
         val code = uri.getQueryParameter("code")
         val state = uri.getQueryParameter("state")
+        val deviceId = uri.getQueryParameter("device_id") ?: return AuthResult.AuthActiviyResultFailed("No device id", null)
         val oauth = if (code != null && state != null) {
             AuthResult.OAuth(code, state, "")
         } else {
@@ -112,7 +113,8 @@ internal class AuthActivity : Activity() {
         }
         return AuthResult.Success(
             expireTime = System.currentTimeMillis() + 10000000, // skip verification
-            oauth = oauth
+            oauth = oauth,
+            deviceId = deviceId,
         )
     }
 

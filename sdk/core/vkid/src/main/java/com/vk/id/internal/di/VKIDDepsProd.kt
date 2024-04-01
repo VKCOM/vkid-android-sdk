@@ -131,7 +131,6 @@ internal open class VKIDDepsProd(
             pkceGenerator = pkceGenerator,
             prefsStore = prefsStore,
             serviceCredentials = serviceCredentials,
-            deviceIdProvider = deviceIdProvider,
             stateGenerator = stateGenerator
         )
     }
@@ -140,7 +139,6 @@ internal open class VKIDDepsProd(
 
     override val authResultHandler: Lazy<AuthResultHandler> = lazy {
         AuthResultHandler(
-            appContext = appContext,
             dispatchers = dispatchers,
             callbacksHolder = authCallbacksHolder,
             deviceIdProvider = deviceIdProvider.value,
@@ -152,7 +150,6 @@ internal open class VKIDDepsProd(
     }
     override val tokenRefresher: Lazy<VKIDTokenRefresher> = lazy {
         VKIDTokenRefresher(
-            context = appContext,
             api = apiService.value,
             tokenStorage = tokenStorage,
             deviceIdProvider = deviceIdProvider.value,
@@ -164,7 +161,6 @@ internal open class VKIDDepsProd(
     }
     override val tokenExchanger: Lazy<VKIDTokenExchanger> = lazy {
         VKIDTokenExchanger(
-            context = appContext,
             api = apiService.value,
             deviceIdProvider = deviceIdProvider.value,
             serviceCredentials = serviceCredentials.value,
@@ -175,7 +171,6 @@ internal open class VKIDDepsProd(
     }
     override val userRefresher: Lazy<VKIDUserRefresher> = lazy {
         VKIDUserRefresher(
-            context = appContext,
             api = apiService.value,
             tokenStorage = tokenStorage,
             stateGenerator = stateGenerator,
@@ -186,7 +181,6 @@ internal open class VKIDDepsProd(
     }
     override val loggerOut: Lazy<VKIDLoggerOut> = lazy {
         VKIDLoggerOut(
-            context = appContext,
             api = apiService.value,
             tokenStorage = tokenStorage,
             deviceIdProvider = deviceIdProvider.value,
@@ -199,7 +193,6 @@ internal open class VKIDDepsProd(
 
     private val userInfoFetcher: Lazy<VKIDUserInfoFetcher> = lazy {
         VKIDUserInfoFetcher(
-            context = appContext,
             api = apiService.value,
             stateGenerator = stateGenerator,
             serviceCredentials = serviceCredentials.value,
@@ -222,7 +215,7 @@ internal open class VKIDDepsProd(
     }
 
     private val deviceIdProvider: Lazy<DeviceIdProvider> = lazy {
-        DeviceIdProvider(DeviceIdPrefs(appContext))
+        DeviceIdProvider(appContext, DeviceIdPrefs(appContext))
     }
 
     private val pkceGenerator: Lazy<PkceGeneratorSHA256> = lazy {
