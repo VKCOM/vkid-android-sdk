@@ -8,6 +8,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.common.InternalVKIDApi
+import com.vk.id.exchangetoken.VKIDExchangeTokenParams
 import com.vk.id.exchangetoken.VKIDExchangeTokenToV2Callback
 import com.vk.id.exchangetoken.VKIDTokenExchanger
 import com.vk.id.internal.auth.AuthCallbacksHolder
@@ -26,9 +27,12 @@ import com.vk.id.internal.log.createLoggerForClass
 import com.vk.id.internal.user.UserDataFetcher
 import com.vk.id.logout.VKIDLoggerOut
 import com.vk.id.logout.VKIDLogoutCallback
+import com.vk.id.logout.VKIDLogoutParams
 import com.vk.id.refresh.VKIDRefreshTokenCallback
+import com.vk.id.refresh.VKIDRefreshTokenParams
 import com.vk.id.refresh.VKIDTokenRefresher
 import com.vk.id.refreshuser.VKIDGetUserCallback
+import com.vk.id.refreshuser.VKIDGetUserParams
 import com.vk.id.refreshuser.VKIDUserRefresher
 import com.vk.id.storage.TokenStorage
 import com.vk.id.test.ImmediateVKIDApi
@@ -191,20 +195,27 @@ public class VKID {
      *
      * @param lifecycleOwner The [LifecycleOwner] in which the authorization process should be handled.
      * @param callback [VKIDRefreshTokenCallback] to handle the result of the token refreshing.
+     * @param params Optional parameters.
      */
     public fun refreshToken(
         lifecycleOwner: LifecycleOwner,
         callback: VKIDRefreshTokenCallback,
+        params: VKIDRefreshTokenParams = VKIDRefreshTokenParams.Builder().build()
     ) {
-        lifecycleOwner.lifecycleScope.launch { refreshToken(callback) }
+        lifecycleOwner.lifecycleScope.launch { refreshToken(callback = callback, params = params) }
     }
 
     /**
      * Initiates token refreshing.
      *
      * @param callback [VKIDRefreshTokenCallback] to handle the result of the token refreshing.
+     * @param params Optional parameters.
      */
-    public suspend fun refreshToken(callback: VKIDRefreshTokenCallback) {
+    public suspend fun refreshToken(
+        callback: VKIDRefreshTokenCallback,
+        @Suppress("UnusedParameter")
+        params: VKIDRefreshTokenParams = VKIDRefreshTokenParams.Builder().build()
+    ) {
         requestMutex.withLock {
             tokenRefresher.value.refresh(callback)
         }
@@ -216,13 +227,15 @@ public class VKID {
      * @param lifecycleOwner The [LifecycleOwner] in which the authorization process should be handled.
      * @param v1Token The token to exchange.
      * @param callback [VKIDExchangeTokenToV2Callback] to handle the result of the token exchange.
+     * @param params Optional parameters.
      */
     public fun exchangeTokenToV2(
         lifecycleOwner: LifecycleOwner,
         v1Token: String,
-        callback: VKIDExchangeTokenToV2Callback
+        callback: VKIDExchangeTokenToV2Callback,
+        params: VKIDExchangeTokenParams = VKIDExchangeTokenParams.Builder().build(),
     ) {
-        lifecycleOwner.lifecycleScope.launch { exchangeTokenToV2(v1Token = v1Token, callback = callback) }
+        lifecycleOwner.lifecycleScope.launch { exchangeTokenToV2(v1Token = v1Token, callback = callback, params = params) }
     }
 
     /**
@@ -230,10 +243,13 @@ public class VKID {
      *
      * @param v1Token The token to exchange.
      * @param callback [VKIDExchangeTokenToV2Callback] to handle the result of the token exchange.
+     * @param params Optional parameters.
      */
     public suspend fun exchangeTokenToV2(
         v1Token: String,
-        callback: VKIDExchangeTokenToV2Callback
+        callback: VKIDExchangeTokenToV2Callback,
+        @Suppress("UnusedParameter")
+        params: VKIDExchangeTokenParams = VKIDExchangeTokenParams.Builder().build(),
     ) {
         requestMutex.withLock {
             tokenExchanger.value.exchange(v1Token = v1Token, callback = callback)
@@ -245,21 +261,26 @@ public class VKID {
      *
      * @param lifecycleOwner The [LifecycleOwner] in which the user data refreshing should be handled.
      * @param callback [VKIDGetUserCallback] to handle the result of the user data refreshing.
+     * @param params Optional parameters.
      */
     public fun getUserData(
         lifecycleOwner: LifecycleOwner,
         callback: VKIDGetUserCallback,
+        params: VKIDGetUserParams = VKIDGetUserParams.Builder().build(),
     ) {
-        lifecycleOwner.lifecycleScope.launch { getUserData(callback = callback) }
+        lifecycleOwner.lifecycleScope.launch { getUserData(callback = callback, params = params) }
     }
 
     /**
      * Fetches up-to-data user data using token from previous auth.
      *
      * @param callback [VKIDGetUserCallback] to handle the result of the user data refreshing.
+     * @param params Optional parameters.
      */
     public suspend fun getUserData(
         callback: VKIDGetUserCallback,
+        @Suppress("UnusedParameter")
+        params: VKIDGetUserParams = VKIDGetUserParams.Builder().build(),
     ) {
         requestMutex.withLock {
             userRefresher.value.refresh(callback = callback)
@@ -271,21 +292,26 @@ public class VKID {
      *
      * @param lifecycleOwner The [LifecycleOwner] in which the logging out should be handled.
      * @param callback [VKIDLogoutCallback] to handle the result of logging out.
+     * @param params Optional parameters.
      */
     public fun logout(
         callback: VKIDLogoutCallback,
         lifecycleOwner: LifecycleOwner,
+        params: VKIDLogoutParams = VKIDLogoutParams.Builder().build(),
     ) {
-        lifecycleOwner.lifecycleScope.launch { logout(callback = callback) }
+        lifecycleOwner.lifecycleScope.launch { logout(callback = callback, params = params) }
     }
 
     /**
      * Logs out user and invalidates the access token.
      *
      * @param callback [VKIDLogoutCallback] to handle the result of logging out.
+     * @param params Optional parameters.
      */
     public suspend fun logout(
         callback: VKIDLogoutCallback,
+        @Suppress("UnusedParameter")
+        params: VKIDLogoutParams = VKIDLogoutParams.Builder().build(),
     ) {
         requestMutex.withLock {
             loggerOut.value.logout(callback = callback)
