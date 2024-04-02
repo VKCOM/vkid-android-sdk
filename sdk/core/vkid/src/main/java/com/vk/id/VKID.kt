@@ -6,6 +6,8 @@ import android.content.Context
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import com.vk.id.auth.AuthCodeData
+import com.vk.id.auth.VKIDAuthCallback
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.exchangetoken.VKIDExchangeTokenFail
@@ -145,12 +147,12 @@ public class VKID {
      * Initiates the authorization process.
      *
      * @param lifecycleOwner The [LifecycleOwner] in which the authorization process should be handled.
-     * @param authCallback [AuthCallback] to handle the result of the authorization process.
+     * @param authCallback [VKIDAuthCallback] to handle the result of the authorization process.
      * @param authParams Optional [VKIDAuthParams] for the authentication process.
      */
     public fun authorize(
         lifecycleOwner: LifecycleOwner,
-        authCallback: AuthCallback,
+        authCallback: VKIDAuthCallback,
         authParams: VKIDAuthParams = VKIDAuthParams {},
     ) {
         lifecycleOwner.lifecycleScope.launch {
@@ -161,11 +163,11 @@ public class VKID {
     /**
      * Initiates the authorization process in a coroutine scope.
      *
-     * @param authCallback [AuthCallback] to handle the result of the authorization process.
+     * @param authCallback [VKIDAuthCallback] to handle the result of the authorization process.
      * @param authParams Optional [VKIDAuthParams] for the authentication process.
      */
     public suspend fun authorize(
-        authCallback: AuthCallback,
+        authCallback: VKIDAuthCallback,
         authParams: VKIDAuthParams = VKIDAuthParams {}
     ) {
         authCallbacksHolder.add(authCallback)
@@ -198,7 +200,7 @@ public class VKID {
     public fun refreshToken(
         lifecycleOwner: LifecycleOwner,
         callback: VKIDRefreshTokenCallback,
-        params: VKIDRefreshTokenParams = VKIDRefreshTokenParams.Builder().build()
+        params: VKIDRefreshTokenParams = VKIDRefreshTokenParams {},
     ) {
         lifecycleOwner.lifecycleScope.launch { refreshToken(callback = callback, params = params) }
     }
@@ -211,11 +213,10 @@ public class VKID {
      */
     public suspend fun refreshToken(
         callback: VKIDRefreshTokenCallback,
-        @Suppress("UnusedParameter")
-        params: VKIDRefreshTokenParams = VKIDRefreshTokenParams.Builder().build()
+        params: VKIDRefreshTokenParams = VKIDRefreshTokenParams {},
     ) {
         requestMutex.withLock {
-            tokenRefresher.value.refresh(callback)
+            tokenRefresher.value.refresh(callback, params)
         }
     }
 
@@ -231,7 +232,7 @@ public class VKID {
         lifecycleOwner: LifecycleOwner,
         v1Token: String,
         callback: VKIDExchangeTokenToV2Callback,
-        params: VKIDExchangeTokenParams = VKIDExchangeTokenParams.Builder().build(),
+        params: VKIDExchangeTokenParams = VKIDExchangeTokenParams {},
     ) {
         lifecycleOwner.lifecycleScope.launch { exchangeTokenToV2(v1Token = v1Token, callback = callback, params = params) }
     }
@@ -246,14 +247,11 @@ public class VKID {
     public suspend fun exchangeTokenToV2(
         v1Token: String,
         callback: VKIDExchangeTokenToV2Callback,
-        @Suppress("UnusedParameter")
-        params: VKIDExchangeTokenParams = VKIDExchangeTokenParams.Builder().build(),
+        params: VKIDExchangeTokenParams = VKIDExchangeTokenParams {},
     ) {
         authorize(
-            authCallback = object : AuthCallback {
-                override fun onSuccess(accessToken: AccessToken) {
-                    callback.onSuccess(accessToken)
-                }
+            authCallback = object : VKIDAuthCallback {
+                override fun onSuccess(accessToken: AccessToken) = callback.onSuccess(accessToken)
 
                 override fun onFail(fail: VKIDAuthFail) {
                     val exchangeFail = when (fail) {
@@ -266,9 +264,13 @@ public class VKID {
                     }
                     callback.onFail(exchangeFail)
                 }
+
+                override fun onAuthCode(data: AuthCodeData) = callback.onAuthCode(data)
             },
             authParams = VKIDAuthParams {
                 token = v1Token
+                state = params.state
+                codeChallenge = params.codeChallenge
             }
         )
     }
@@ -283,7 +285,7 @@ public class VKID {
     public fun getUserData(
         lifecycleOwner: LifecycleOwner,
         callback: VKIDGetUserCallback,
-        params: VKIDGetUserParams = VKIDGetUserParams.Builder().build(),
+        params: VKIDGetUserParams = VKIDGetUserParams {},
     ) {
         lifecycleOwner.lifecycleScope.launch { getUserData(callback = callback, params = params) }
     }
@@ -296,11 +298,10 @@ public class VKID {
      */
     public suspend fun getUserData(
         callback: VKIDGetUserCallback,
-        @Suppress("UnusedParameter")
-        params: VKIDGetUserParams = VKIDGetUserParams.Builder().build(),
+        params: VKIDGetUserParams = VKIDGetUserParams {},
     ) {
         requestMutex.withLock {
-            userRefresher.value.refresh(callback = callback)
+            userRefresher.value.refresh(callback = callback, params = params)
         }
     }
 
@@ -314,7 +315,7 @@ public class VKID {
     public fun logout(
         callback: VKIDLogoutCallback,
         lifecycleOwner: LifecycleOwner,
-        params: VKIDLogoutParams = VKIDLogoutParams.Builder().build(),
+        params: VKIDLogoutParams = VKIDLogoutParams {},
     ) {
         lifecycleOwner.lifecycleScope.launch { logout(callback = callback, params = params) }
     }
@@ -327,11 +328,10 @@ public class VKID {
      */
     public suspend fun logout(
         callback: VKIDLogoutCallback,
-        @Suppress("UnusedParameter")
-        params: VKIDLogoutParams = VKIDLogoutParams.Builder().build(),
+        params: VKIDLogoutParams = VKIDLogoutParams {},
     ) {
         requestMutex.withLock {
-            loggerOut.value.logout(callback = callback)
+            loggerOut.value.logout(callback = callback, params = params)
         }
     }
 
@@ -348,20 +348,5 @@ public class VKID {
      */
     public suspend fun fetchUserData(): Result<VKIDUser?> {
         return Result.success(userDataFetcher.value.fetchUserData())
-    }
-
-    /**
-     * Callback interface for handling the authentication result.
-     */
-    public interface AuthCallback {
-        /**
-         * Called upon successful auth.
-         */
-        public fun onSuccess(accessToken: AccessToken)
-
-        /**
-         * Called upon any failure during auth.
-         */
-        public fun onFail(fail: VKIDAuthFail)
     }
 }

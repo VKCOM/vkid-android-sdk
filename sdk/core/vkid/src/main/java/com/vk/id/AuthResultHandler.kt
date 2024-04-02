@@ -1,5 +1,6 @@
 package com.vk.id
 
+import com.vk.id.auth.AuthCodeData
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthResult
@@ -47,7 +48,7 @@ internal class AuthResultHandler(
     private suspend fun handleOauth(oauth: AuthResult.Success) {
         deviceIdProvider.setDeviceId(oauth.deviceId)
         val (realState, codeVerifier) = withContext(dispatchers.io) {
-            prefsStore.state to prefsStore.codeVerifier
+            (prefsStore.state to prefsStore.codeVerifier).also { prefsStore.clear() }
         }
 
         if (realState != oauth.oauth?.state) {
@@ -56,6 +57,11 @@ internal class AuthResultHandler(
                 null
             )
             emitAuthFail(VKIDAuthFail.FailedOAuthState("Invalid state"))
+            return
+        }
+
+        callbacksHolder.getAll().forEach { it.onAuthCode(AuthCodeData(oauth.oauth.code)) }
+        if (codeVerifier.isBlank()) {
             return
         }
 

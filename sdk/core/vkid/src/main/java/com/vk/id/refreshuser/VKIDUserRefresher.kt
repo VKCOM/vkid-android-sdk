@@ -11,6 +11,7 @@ import com.vk.id.internal.concurrent.CoroutinesDispatchers
 import com.vk.id.internal.state.StateGenerator
 import com.vk.id.refresh.VKIDRefreshTokenCallback
 import com.vk.id.refresh.VKIDRefreshTokenFail
+import com.vk.id.refresh.VKIDRefreshTokenParams
 import com.vk.id.refresh.VKIDTokenRefresher
 import com.vk.id.storage.TokenStorage
 import kotlinx.coroutines.CoroutineScope
@@ -29,14 +30,17 @@ internal class VKIDUserRefresher(
     private val dispatchers: CoroutinesDispatchers,
     private val refresher: VKIDTokenRefresher,
 ) {
-    suspend fun refresh(callback: VKIDGetUserCallback) {
+    suspend fun refresh(
+        callback: VKIDGetUserCallback,
+        params: VKIDGetUserParams = VKIDGetUserParams {},
+    ) {
         val accessToken = tokenStorage.accessToken?.token ?: run {
             callback.onFail(VKIDGetUserFail.NotAuthenticated("Not authorized"))
             return
         }
         val deviceId = deviceIdProvider.getDeviceId()
         val clientId = serviceCredentials.clientID
-        val state = stateGenerator.regenerateState()
+        val state = params.state ?: stateGenerator.regenerateState()
         val coroutineContext = currentCoroutineContext()
         withContext(dispatchers.io) {
             api.getUserInfo(
@@ -47,31 +51,36 @@ internal class VKIDUserRefresher(
             ).execute()
         }.onFailure {
             if (it is VKIDInvalidTokenException) {
-                refresher.refresh(object : VKIDRefreshTokenCallback {
-                    override fun onSuccess(token: AccessToken) {
-                        CoroutineScope(coroutineContext + Job()).launch {
-                            val call = withContext(dispatchers.io) {
-                                api.getUserInfo(
-                                    accessToken = token.token,
-                                    clientId = clientId,
-                                    deviceId = deviceId,
-                                    state = state
-                                ).execute()
-                            }
-                            withContext(dispatchers.main) {
-                                call.onFailure {
-                                    onFail(callback, it)
-                                }.onSuccess {
-                                    onSuccess(callback, it)
+                refresher.refresh(
+                    callback = object : VKIDRefreshTokenCallback {
+                        override fun onSuccess(token: AccessToken) {
+                            CoroutineScope(coroutineContext + Job()).launch {
+                                val call = withContext(dispatchers.io) {
+                                    api.getUserInfo(
+                                        accessToken = token.token,
+                                        clientId = clientId,
+                                        deviceId = deviceId,
+                                        state = state
+                                    ).execute()
+                                }
+                                withContext(dispatchers.main) {
+                                    call.onFailure {
+                                        onFail(callback, it)
+                                    }.onSuccess {
+                                        onSuccess(callback, it)
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    override fun onFail(fail: VKIDRefreshTokenFail) {
-                        callback.onFail(VKIDGetUserFail.FailedApiCall("Failed to fetch user data due to ${it.message}", it))
+                        override fun onFail(fail: VKIDRefreshTokenFail) {
+                            callback.onFail(VKIDGetUserFail.FailedApiCall("Failed to fetch user data due to ${it.message}", it))
+                        }
+                    },
+                    params = VKIDRefreshTokenParams {
+                        this.state = params.refreshTokenState
                     }
-                })
+                )
             } else {
                 onFail(callback, it)
             }

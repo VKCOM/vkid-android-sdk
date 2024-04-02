@@ -19,10 +19,13 @@ internal class VKIDTokenRefresher(
     private val tokensHandler: TokensHandler,
     private val dispatchers: CoroutinesDispatchers,
 ) {
-    suspend fun refresh(callback: VKIDRefreshTokenCallback) {
+    suspend fun refresh(
+        callback: VKIDRefreshTokenCallback,
+        params: VKIDRefreshTokenParams = VKIDRefreshTokenParams {},
+    ) {
         val deviceId = deviceIdProvider.getDeviceId()
         val clientId = serviceCredentials.clientID
-        val refreshTokenState = stateGenerator.regenerateState()
+        val refreshTokenState = params.state ?: stateGenerator.regenerateState()
         val refreshToken = tokenStorage.refreshToken ?: return emitUnauthorizedFail(callback)
 
         val result = withContext(dispatchers.io) {

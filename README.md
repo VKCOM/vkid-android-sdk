@@ -81,9 +81,9 @@ fun onCreate() {
 }
 ```
 ### Авторизация
-Результат авторизации передается в коллбэк `VKID.AuthCallback`, поэтому его нужно объявить:
+Результат авторизации передается в коллбэк `VKIDAuthCallback`, поэтому его нужно объявить:
 ```kotlin
-private val vkAuthCallback = object : VKID.AuthCallback {
+private val vkAuthCallback = object : VKIDAuthCallback {
     override fun onSuccess(accessToken: AccessToken) {     
         val token = accessToken.token
         //...

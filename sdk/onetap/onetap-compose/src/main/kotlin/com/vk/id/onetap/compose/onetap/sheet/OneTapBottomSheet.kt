@@ -22,6 +22,7 @@ import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.Prompt
+import com.vk.id.auth.VKIDAuthCallback
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.onetap.common.OneTapOAuth
@@ -218,7 +219,7 @@ private fun OneTapBottomSheetInternal(
                 ) {
                     coroutineScope.launch {
                         vkid.authorize(
-                            object : VKID.AuthCallback {
+                            object : VKIDAuthCallback {
                                 override fun onSuccess(accessToken: AccessToken) = onAuth(status.oAuth, accessToken)
                                 override fun onFail(fail: VKIDAuthFail) = onFail(status.oAuth, fail)
                             },
