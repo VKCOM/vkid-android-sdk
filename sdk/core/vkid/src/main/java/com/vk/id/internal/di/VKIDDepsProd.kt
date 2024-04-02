@@ -177,6 +177,7 @@ internal open class VKIDDepsProd(
             deviceIdProvider = deviceIdProvider.value,
             serviceCredentials = serviceCredentials.value,
             dispatchers = dispatchers,
+            refresher = tokenRefresher.value,
         )
     }
     override val loggerOut: Lazy<VKIDLoggerOut> = lazy {

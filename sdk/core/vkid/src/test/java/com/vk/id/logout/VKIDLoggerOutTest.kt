@@ -1,6 +1,7 @@
 package com.vk.id.logout
 
 import com.vk.id.AccessToken
+import com.vk.id.VKIDInvalidTokenException
 import com.vk.id.VKIDUser
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.api.VKIDCall
