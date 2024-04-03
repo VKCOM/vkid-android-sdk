@@ -62,12 +62,16 @@ implementation("com.vk.id:vkid:${sdkVersion}")
 ```kotlin
 android {
     //...
-    addManifestPlaceholders(mapOf(
-        "VKIDClientID" to "1233445", // ID вашего приложения (app_id).
-        "VKIDClientSecret" to "000000000000", // Ваш защищенный ключ (client_secret).
-        "VKIDRedirectHost" to "vk.com", // Обычно используется vk.com.
-        "VKIDRedirectScheme" to "vk1233445", // Обычно используется vk{ID приложения}.
-    ))
+    defeaultConfig {
+        addManifestPlaceholders(
+            mapOf(
+                "VKIDClientID" to "1233445", // ID вашего приложения (app_id).
+                "VKIDClientSecret" to "000000000000", // Ваш защищенный ключ (client_secret).
+                "VKIDRedirectHost" to "vk.com", // Обычно используется vk.com.
+                "VKIDRedirectScheme" to "vk1233445", // Обычно используется vk{ID приложения}.
+            )
+        )
+    }
 }
 ```
 
