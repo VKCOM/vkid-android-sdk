@@ -10,17 +10,20 @@ public class VKIDAnalytics private constructor() {
     /**
      * Interface to implement to add to [VKIDAnalytics] with [addTracker]
      */
+    @InternalVKIDApi
     public interface Tracker {
         public fun trackEvent(name: String, vararg params: EventParam)
     }
 
     /** Parameter for event **/
+    @InternalVKIDApi
     public class EventParam(
         public val name: String,
         public val strValue: String? = null,
         public val intValue: Int? = null
     )
 
+    @InternalVKIDApi
     public companion object Trackers : Tracker {
 
         /** Track event to all trackers, added with [addTracker] */
