@@ -18,6 +18,7 @@ internal class PrefsStore(private val context: Context) {
 
     fun clear() {
         state = DEFAULT_STATE
+        codeVerifier = DEFAULT_CODE_VERIFIER
     }
 
     companion object {

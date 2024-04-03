@@ -212,7 +212,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             every { serviceCredentials.redirectUri } returns REDIRECT_URI
             every { api.getToken(CODE, CODE_VERIFIER, CLIENT_ID, DEVICE_ID, REDIRECT_URI, STATE) } returns call
             every { call.execute() } returns Result.success(payload)
-            coEvery { tokensHandler.handle(any(), any(), any()) } just runs
+            coEvery { tokensHandler.handle(any(), null, any(), any()) } just runs
             runTest(scheduler) { handler.handle(authResult) }
             Then("state is cleared") {
                 verify { prefsStore.clear() }
@@ -227,7 +227,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
                 verify { callback.onAuthCode(AuthCodeData(CODE)) }
             }
             Then("User info fetcher is called") {
-                coVerify { tokensHandler.handle(payload, any(), any()) }
+                coVerify { tokensHandler.handle(payload, null, any(), any()) }
             }
         }
     }
