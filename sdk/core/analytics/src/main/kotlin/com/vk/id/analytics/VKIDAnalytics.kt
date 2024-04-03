@@ -15,7 +15,11 @@ public class VKIDAnalytics private constructor() {
     }
 
     /** Parameter for event **/
-    public class EventParam(public val name: String, public val value: String)
+    public class EventParam(
+        public val name: String,
+        public val strValue: String? = null,
+        public val intValue: Int? = null
+    )
 
     public companion object Trackers : Tracker {
 

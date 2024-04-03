@@ -1,0 +1,116 @@
+@file:OptIn(InternalVKIDApi::class)
+
+package com.vk.id.onetap.compose.onetap.sheet
+
+import android.content.Context
+import android.os.Build
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import com.vk.id.analytics.VKIDAnalytics
+import com.vk.id.auth.VKIDAuthParams
+import com.vk.id.common.InternalVKIDApi
+
+@Suppress("TooManyFunctions")
+internal object OneTapBottomSheetAnalytics {
+
+    @Composable
+    internal fun OneTapBottomSheetShown(theme: VKIDAuthParams.Theme, scenario: OneTapScenario) {
+        val lifecycleOwner = rememberUpdatedState(LocalLifecycleOwner.current)
+        val context = LocalContext.current
+        DisposableEffect(lifecycleOwner.value) {
+            val lifecycle = lifecycleOwner.value.lifecycle
+            val observer = LifecycleEventObserver { _, event ->
+                when (event) {
+                    Lifecycle.Event.ON_RESUME -> {
+                        track(
+                            "screen_proceed",
+                            screenParam("floating_one_tap"),
+                            VKIDAnalytics.EventParam("screen_current", "nowhere"),
+                            VKIDAnalytics.EventParam("screen_to", "floating_one_tap"),
+                            theme.toAnalyticsParam(),
+                            scenario.toAnalyticsParam(),
+                            langParam(context)
+                        )
+                    }
+                    else -> {}
+                }
+            }
+
+            lifecycle.addObserver(observer)
+            onDispose {
+                lifecycle.removeObserver(observer)
+            }
+        }
+    }
+
+    private fun screenParam(screen: String) = VKIDAnalytics.EventParam("screen", screen)
+    private fun langParam(context: Context): VKIDAnalytics.EventParam {
+        val systemLocale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            context.resources.configuration.locales.get(0)
+        } else {
+            @Suppress("DEPRECATION")
+            context.resources.configuration.locale
+        }
+        val vkidLocale = when (systemLocale.language) {
+            "ru" -> VKIDAuthParams.Locale.RUS
+            "uk" -> VKIDAuthParams.Locale.UKR
+            "en" -> VKIDAuthParams.Locale.ENG
+            "es" -> VKIDAuthParams.Locale.SPA
+            "de" -> VKIDAuthParams.Locale.GERMAN
+            "pl" -> VKIDAuthParams.Locale.POL
+            "fr" -> VKIDAuthParams.Locale.FRA
+            "tr" -> VKIDAuthParams.Locale.TURKEY
+            else -> VKIDAuthParams.Locale.ENG
+        }
+        return vkidLocale.toAnalyticsParam()
+    }
+
+    private fun track(name: String, vararg params: VKIDAnalytics.EventParam) {
+        VKIDAnalytics.trackEvent(
+            name,
+            VKIDAnalytics.EventParam("sdk_type", "vkid"),
+            *params
+        )
+    }
+}
+
+@Suppress("MagicNumber")
+private fun VKIDAuthParams.Locale.toAnalyticsParam(): VKIDAnalytics.EventParam {
+    val langCode = when (this) {
+        VKIDAuthParams.Locale.RUS -> 0
+        VKIDAuthParams.Locale.UKR -> 1
+        VKIDAuthParams.Locale.ENG -> 3
+        VKIDAuthParams.Locale.SPA -> 4
+        VKIDAuthParams.Locale.GERMAN -> 6
+        VKIDAuthParams.Locale.POL -> 15
+        VKIDAuthParams.Locale.FRA -> 16
+        VKIDAuthParams.Locale.TURKEY -> 82
+    }
+    return VKIDAnalytics.EventParam("language", intValue = langCode)
+}
+
+private fun OneTapScenario.toAnalyticsParam(): VKIDAnalytics.EventParam {
+    val scenarioParam = when (this) {
+        OneTapScenario.EnterService -> "service_sign_in"
+        OneTapScenario.RegistrationForTheEvent -> "event_reg"
+        OneTapScenario.Application -> "request"
+        OneTapScenario.OrderInService -> "service_order_placing"
+        OneTapScenario.Order -> "vkid_order_placing"
+        OneTapScenario.EnterToAccount -> "account_sign_in"
+    }
+    return VKIDAnalytics.EventParam("text_type", scenarioParam)
+}
+
+private fun VKIDAuthParams.Theme.toAnalyticsParam(): VKIDAnalytics.EventParam {
+    val themeParam = if (this == VKIDAuthParams.Theme.Light) {
+        "light"
+    } else {
+        "dark"
+    }
+    return VKIDAnalytics.EventParam("theme_type", themeParam)
+}

@@ -19,7 +19,7 @@ internal class AuthProvidersChooserDefault(
     private val logger = createLoggerForClass()
     override suspend fun chooseBest(params: VKIDAuthParams): VKIDAuthProvider {
         if (!params.useOAuthProviderIfPossible || params.oAuth != null) {
-            VKIDAnalytics.trackEvent("no_auth_provider", EventParam(name = "sdk_type", value = "vkid"))
+            VKIDAnalytics.trackEvent("no_auth_provider", EventParam(name = "sdk_type", strValue = "vkid"))
             return WebAuthProvider(appContext)
         }
         val authProvider = silentAuthServicesProvider.getSilentAuthServices()
@@ -31,10 +31,10 @@ internal class AuthProvidersChooserDefault(
                 AppAuthProvider(appContext, it)
             }
         return if (authProvider == null) {
-            VKIDAnalytics.trackEvent("no_auth_provider", EventParam(name = "sdk_type", value = "vkid"))
+            VKIDAnalytics.trackEvent("no_auth_provider", EventParam(name = "sdk_type", strValue = "vkid"))
             WebAuthProvider(appContext)
         } else {
-            VKIDAnalytics.trackEvent("auth_provider_used", EventParam(name = "sdk_type", value = "vkid"))
+            VKIDAnalytics.trackEvent("auth_provider_used", EventParam(name = "sdk_type", strValue = "vkid"))
             authProvider
         }
     }
