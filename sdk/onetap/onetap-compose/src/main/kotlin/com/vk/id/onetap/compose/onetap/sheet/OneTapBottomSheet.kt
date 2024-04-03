@@ -115,6 +115,7 @@ public fun OneTapBottomSheet(
     val useVKID = vkid ?: remember {
         VKID(context)
     }
+    OneTapBottomSheetAnalytics.OneTapBottomSheetShown(style.toProviderTheme(), scenario)
     OneTapBottomSheetInternal(
         modifier = modifier,
         state = state,

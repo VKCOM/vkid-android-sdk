@@ -18,8 +18,14 @@ public class LogcatTracker(private val tag: String = "VKID Analytics") : VKIDAna
             }
             first = false
             paramsString += p.name
-            paramsString += ": "
-            paramsString += p.value
+            if (p.strValue != null) {
+                paramsString += ": "
+                paramsString += p.strValue
+            }
+            if (p.intValue != null) {
+                paramsString += ": "
+                paramsString += p.intValue
+            }
         }
         paramsString += " }"
         Log.d(tag, "$name $paramsString")

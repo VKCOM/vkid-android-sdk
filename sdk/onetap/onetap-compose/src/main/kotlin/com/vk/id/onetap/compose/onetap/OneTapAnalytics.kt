@@ -16,8 +16,6 @@ import java.util.UUID
 @Suppress("TooManyFunctions")
 internal object OneTapAnalytics {
 
-    private var userWasFound = false
-
     internal fun userWasFoundIcon() {
         userWasFound(signInAnotherAccountButton = false, icon = true)
     }
@@ -28,7 +26,6 @@ internal object OneTapAnalytics {
             alternateParam(signInAnotherAccountButton),
             iconParam(icon)
         )
-        userWasFound = true
     }
 
     @Composable

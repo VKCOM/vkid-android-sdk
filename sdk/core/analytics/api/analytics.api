@@ -9,19 +9,3 @@ public final class com/vk/id/analytics/BuildConfig {
 	public fun <init> ()V
 }
 
-public final class com/vk/id/analytics/VKIDAnalytics$EventParam {
-	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
-	public final fun getName ()Ljava/lang/String;
-	public final fun getValue ()Ljava/lang/String;
-}
-
-public abstract interface class com/vk/id/analytics/VKIDAnalytics$Tracker {
-	public abstract fun trackEvent (Ljava/lang/String;[Lcom/vk/id/analytics/VKIDAnalytics$EventParam;)V
-}
-
-public final class com/vk/id/analytics/VKIDAnalytics$Trackers : com/vk/id/analytics/VKIDAnalytics$Tracker {
-	public final fun addTracker (Lcom/vk/id/analytics/VKIDAnalytics$Tracker;)V
-	public final fun removeTracker (Lcom/vk/id/analytics/VKIDAnalytics$Tracker;)V
-	public fun trackEvent (Ljava/lang/String;[Lcom/vk/id/analytics/VKIDAnalytics$EventParam;)V
-}
-
