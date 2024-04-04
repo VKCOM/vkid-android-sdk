@@ -64,6 +64,7 @@ import kotlinx.coroutines.launch
  * @param oAuths A set of [OAuth]s the should be displayed to the user.
  * @param vkid An optional [VKID] instance to use for authentication.
  *  If instance of VKID is not provided, it will be created on first composition.
+ * @param authParams Optional params to be passed to auth. See [VKIDAuthUiParams.Builder] for more info.
  */
 @Composable
 public fun OAuthListWidget(

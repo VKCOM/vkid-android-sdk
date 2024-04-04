@@ -9,12 +9,14 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
 import com.vk.id.sample.app.util.carrying.carry
 import java.util.Locale
 import kotlin.reflect.KClass
@@ -50,6 +52,7 @@ internal fun <T : Any> DropdownSelector(
     values: Map<String, T>,
     selectedValue: String,
     onValueSelected: (T) -> Unit,
+    shape: Shape = TextFieldDefaults.shape,
 ) {
     var expanded by remember { mutableStateOf(false) }
     ExposedDropdownMenuBox(
@@ -70,7 +73,8 @@ internal fun <T : Any> DropdownSelector(
             },
             modifier = Modifier
                 .menuAnchor()
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            shape = shape,
         )
 
         ExposedDropdownMenu(

@@ -53,6 +53,7 @@ import com.vk.id.onetap.compose.util.PlaceComposableIfFitsWidth
  *  If instance of VKID is not provided, it will be created on first composition.
  * @param signInAnotherAccountButtonEnabled Flag to enable a button for signing into another account.
  *  Note that if text doesn't fit the available width the view will be hidden regardless of the flag.
+ * @param authParams Optional params to be passed to auth. See [VKIDAuthUiParams.Builder] for more info.
  */
 @Composable
 @Suppress("LongMethod")

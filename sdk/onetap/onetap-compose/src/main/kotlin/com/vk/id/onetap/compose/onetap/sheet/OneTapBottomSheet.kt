@@ -59,6 +59,8 @@ public fun rememberOneTapBottomSheetState(): OneTapBottomSheetState {
  * @param serviceName The name of the service for authentication. Will be displayed as title of sheet.
  * @param scenario The [OneTapScenario] under which the authentication is being performed. It reflects on the texts of the button and sheet.
  * @param autoHideOnSuccess Automatically hide the sheet on successful authentication.
+ * Note: The dialog won't be dismissed if you pass [VKIDAuthUiParams.codeChallenge] in [authParams] and auth succeeds because [onAuth] won't be called.
+ *       You should hide bottom sheet manually after you exchange auth code to an access token.
  * @param onAuth Callback function invoked on successful authentication with an [OneTapOAuth] and an [AccessToken].
  * The first parameter is the OAuth which was used for authorization or null if the main flow with OneTap was used.
  * The second parameter is the access token to be used for working with VK API.
@@ -69,6 +71,7 @@ public fun rememberOneTapBottomSheetState(): OneTapBottomSheetState {
  * The second parameter is the error which happened during authorization.
  * @param style The [OneTapBottomSheetStyle] of the bottom sheet. Default is [OneTapBottomSheetStyle.Light]
  * @param vkid An optional VKID instance to use for authentication. If instance of VKID is not provided, it will be created on first composition.
+ * @param authParams Optional params to be passed to auth. See [VKIDAuthUiParams.Builder] for more info.
  */
 @Composable
 public fun OneTapBottomSheet(
