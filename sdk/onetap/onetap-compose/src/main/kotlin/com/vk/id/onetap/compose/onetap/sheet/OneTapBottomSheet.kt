@@ -115,7 +115,6 @@ public fun OneTapBottomSheet(
     val useVKID = vkid ?: remember {
         VKID(context)
     }
-    OneTapBottomSheetAnalytics.OneTapBottomSheetShown(style.toProviderTheme(), scenario)
     OneTapBottomSheetInternal(
         modifier = modifier,
         state = state,
@@ -205,7 +204,8 @@ private fun OneTapBottomSheetInternal(
                     style,
                     dismissSheet
                 ) {
-                    startVKIDAuth(coroutineScope, vkid, style, { onAuth(null, it) }, { onFail(null, it) }, authStatus)
+                    val extraAuthParams = OneTapBottomSheetAnalytics.retryAuthTap()
+                    startVKIDAuth(coroutineScope, vkid, style, { onAuth(null, it) }, { onFail(null, it) }, authStatus, extraAuthParams)
                 }
 
                 is OneTapBottomSheetAuthStatus.AuthFailedMultibranding -> SheetContentAuthFailed(

@@ -109,7 +109,7 @@ internal object OneTapAnalytics {
             }
         )
 
-    private fun alternateParam(signInAnotherAccountButton: Boolean): VKIDAnalytics.EventParam =
+    internal fun alternateParam(signInAnotherAccountButton: Boolean): VKIDAnalytics.EventParam =
         VKIDAnalytics.EventParam(
             "alternative_sign_in_availability",
             if (signInAnotherAccountButton) {
@@ -119,9 +119,9 @@ internal object OneTapAnalytics {
             }
         )
 
-    private fun uuidParam(uuid: String) = VKIDAnalytics.EventParam(UNIQUE_SESSION_PARAM_NAME, uuid)
+    internal fun uuidParam(uuid: String) = VKIDAnalytics.EventParam(UNIQUE_SESSION_PARAM_NAME, uuid)
 
-    private fun track(name: String, vararg params: VKIDAnalytics.EventParam) {
+    internal fun track(name: String, vararg params: VKIDAnalytics.EventParam) {
         VKIDAnalytics.trackEvent(
             name,
             VKIDAnalytics.EventParam("sdk_type", "vkid"),
@@ -129,5 +129,5 @@ internal object OneTapAnalytics {
         )
     }
 
-    private const val UNIQUE_SESSION_PARAM_NAME = "unique_session_id"
+    internal const val UNIQUE_SESSION_PARAM_NAME = "unique_session_id"
 }
