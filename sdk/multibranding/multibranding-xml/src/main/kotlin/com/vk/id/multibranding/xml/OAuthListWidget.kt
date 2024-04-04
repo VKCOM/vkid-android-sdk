@@ -16,6 +16,8 @@ import com.vk.id.AccessToken
 import com.vk.id.OAuth
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
+import com.vk.id.auth.AuthCodeData
+import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.multibranding.OAuthListWidget
 import com.vk.id.multibranding.common.callback.OAuthListWidgetAuthCallback
 import com.vk.id.multibranding.common.style.OAuthListWidgetCornersStyle
@@ -48,9 +50,20 @@ public class OAuthListWidget @JvmOverloads constructor(
             onOAuthsChange(value)
         }
     private var onOAuthsChange: (Set<OAuth>) -> Unit = {}
+
+    /**
+     * Optional params to be passed to auth. See [VKIDAuthUiParams.Builder] for more info.
+     */
+    public var authParams: VKIDAuthUiParams = VKIDAuthUiParams { }
+        set(value) {
+            field = value
+            onAuthParamsChange(value)
+        }
+    private var onAuthParamsChange: (VKIDAuthUiParams) -> Unit = {}
     private var onAuth: OAuthListWidgetAuthCallback = OAuthListWidgetAuthCallback.JustToken {
         error("No onAuth callback for OAuthListWidget. Set it with setCallbacks method.")
     }
+    private var onAuthCode: (AuthCodeData) -> Unit = {}
     private var onFail: (OAuth, VKIDAuthFail) -> Unit = { _, _ -> }
     private var vkid: VKID? = null
         set(value) {
@@ -74,6 +87,8 @@ public class OAuthListWidget @JvmOverloads constructor(
         onStyleChange = { style.value = it }
         val oAuths = remember { mutableStateOf(oAuths) }
         onOAuthsChange = { oAuths.value = it }
+        val authParams = remember { mutableStateOf(authParams) }
+        onAuthParamsChange = { authParams.value = it }
         val vkid = remember { mutableStateOf(vkid) }
         onVKIDChange = { vkid.value = it }
         OAuthListWidget(
@@ -85,9 +100,11 @@ public class OAuthListWidget @JvmOverloads constructor(
                     is OAuthListWidgetAuthCallback.JustToken -> callback(token)
                 }
             },
+            onAuthCode = { onAuthCode(it) },
             onFail = { oAuth, fail -> onFail(oAuth, fail) },
             oAuths = oAuths.value,
             vkid = vkid.value,
+            authParams = authParams.value,
         )
     }
 
@@ -95,13 +112,17 @@ public class OAuthListWidget @JvmOverloads constructor(
      * Sets callbacks for the authorization
      *
      * @param onAuth A callback to be invoked upon a successful auth.
+     * @param onAuthCode A callback to be invoked upon successful first step of auth - receiving auth code
+     * which can later be exchanged to access token.
      * @param onFail A callback to be invoked upon an error during auth.
      */
     public fun setCallbacks(
         onAuth: OAuthListWidgetAuthCallback,
+        onAuthCode: (AuthCodeData) -> Unit = {},
         onFail: (OAuth, VKIDAuthFail) -> Unit = { _, _ -> },
     ) {
         this.onAuth = onAuth
+        this.onAuthCode = onAuthCode
         this.onFail = onFail
     }
 

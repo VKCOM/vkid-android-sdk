@@ -27,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.vk.id.AccessToken
+import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
@@ -76,38 +77,44 @@ internal fun OneTapBottomSheetScreen() {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
+            val onAuthCode = { data: AuthCodeData ->
+                code = data.code
+                token.value = null
+                showToast(context, "Received auth code")
+            }
+            val authParams = VKIDAuthUiParams {
+                this.state = state.takeIf { it.isNotBlank() }
+                this.codeChallenge = codeChallenge.takeIf { it.isNotBlank() }
+            }
             if (shouldUseXml.value) {
                 AndroidView(factory = { context ->
                     OneTapBottomSheet(context).apply {
                         setVKID(context.vkid)
                         setCallbacks(
                             onAuth = getOneTapSuccessCallback(context) { token.value = it },
+                            onAuthCode = onAuthCode,
                             onFail = getOneTapFailCallback(context),
                         )
                         bottomSheetView = this
                     }
                 })
-                bottomSheetView?.oAuths = selectedOAuths.value
+                bottomSheetView?.apply {
+                    this.oAuths = selectedOAuths.value
+                    this.authParams = authParams
+                }
             } else {
                 OneTapBottomSheet(
                     vkid = context.vkid,
                     style = selectedStyle.value,
                     onAuth = getOneTapSuccessCallback(context) { token.value = it },
-                    onAuthCode = {
-                        code = it.code
-                        token.value = null
-                        showToast(context, "Received auth code")
-                    },
+                    onAuthCode = onAuthCode,
                     onFail = getOneTapFailCallback(context),
                     state = bottomSheetState,
                     scenario = selectedScenario.value,
                     autoHideOnSuccess = autoHideSheetOnSuccess.value,
                     serviceName = "VKID Sample",
                     oAuths = selectedOAuths.value,
-                    authParams = VKIDAuthUiParams {
-                        this.state = state.takeIf { it.isNotBlank() }
-                        this.codeChallenge = codeChallenge.takeIf { it.isNotBlank() }
-                    }
+                    authParams = authParams,
                 )
             }
         }

@@ -31,6 +31,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.vk.id.AccessToken
+import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.common.OneTapStyle
@@ -103,6 +104,15 @@ internal fun OnetapStylingComposeScreen() {
                 horizontalArrangement = Arrangement.Center
             ) {
                 val width = maxOf(MIN_WIDTH_DP, (screenWidth * widthPercent.floatValue))
+                val onAuthCode = { data: AuthCodeData ->
+                    code = data.code
+                    token.value = null
+                    showToast(context, "Received auth code")
+                }
+                val authParams = VKIDAuthUiParams {
+                    this.state = state.takeIf { it.isNotBlank() }
+                    this.codeChallenge = codeChallenge.takeIf { it.isNotBlank() }
+                }
                 if (shouldUseXml.value) {
                     var oneTapView: OneTap? by remember { mutableStateOf(null) }
                     AndroidView(factory = { context ->
@@ -110,37 +120,32 @@ internal fun OnetapStylingComposeScreen() {
                             setVKID(context.vkid)
                             setCallbacks(
                                 onAuth = getOneTapSuccessCallback(context) { token.value = it },
+                                onAuthCode = onAuthCode,
                                 onFail = getOneTapFailCallback(context),
                             )
                             oneTapView = this
                         }
                     })
                     oneTapView?.apply {
-                        layoutParams = LayoutParams(
+                        this.layoutParams = LayoutParams(
                             if (selectedStyle is OneTapStyle.Icon) WRAP_CONTENT else context.dpToPixels(width.toInt()),
                             WRAP_CONTENT,
                         )
-                        style = selectedStyle
-                        oAuths = selectedOAuths.value
-                        isSignInToAnotherAccountEnabled = signInToAnotherAccountEnabled.value
+                        this.style = selectedStyle
+                        this.oAuths = selectedOAuths.value
+                        this.isSignInToAnotherAccountEnabled = signInToAnotherAccountEnabled.value
+                        this.authParams = authParams
                     }
                 } else {
                     OneTap(
                         modifier = Modifier.width(width.dp),
                         style = selectedStyle,
                         onAuth = getOneTapSuccessCallback(context) { token.value = it },
-                        onAuthCode = {
-                            code = it.code
-                            token.value = null
-                            showToast(context, "Received auth code")
-                        },
+                        onAuthCode = onAuthCode,
                         onFail = getOneTapFailCallback(context),
                         oAuths = selectedOAuths.value,
                         signInAnotherAccountButtonEnabled = signInToAnotherAccountEnabled.value,
-                        authParams = VKIDAuthUiParams {
-                            this.state = state.takeIf { it.isNotBlank() }
-                            this.codeChallenge = codeChallenge.takeIf { it.isNotBlank() }
-                        }
+                        authParams = authParams,
                     )
                 }
             }
