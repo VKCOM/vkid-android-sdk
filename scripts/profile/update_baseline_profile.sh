@@ -12,10 +12,12 @@ generateBaselineProfile() {
     ./gradlew generateBaselineProfiles
 }
 
+RELEASE_VERSION=$1
+
 set -ex
 importCommon
 assertWorkdirIsClean
-if [ "$1" == ""]; then 
+if [[ -z $RELEASE_VERSION ]]; then 
     checkoutDevelop
     generateBaselineProfile
     if nothingToCommit; then
@@ -28,12 +30,11 @@ if [ "$1" == ""]; then
     commitCurrent "VKIDSDK-0: Update baseline profile"
     createMergeRequest $BRANCH_NAME
 else 
-    BRANCH_NAME="release/$1"
     generateBaselineProfile
     if nothingToCommit; then
         echo "Baseline profile generated nothing"
         exit 0
     fi
-    commitCurrent "VKIDSDK-$1: Update baseline profile"
-    git push origin $BRANCH_NAME HEAD
+    commitCurrent "VKIDSDK-0: Update baseline profile"
+    git push origin HEAD
 fi
