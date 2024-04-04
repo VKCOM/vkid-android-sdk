@@ -44,40 +44,13 @@ import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.Prompt
 import com.vk.id.auth.VKIDAuthCallback
-import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.auth.VKIDAuthParams.Theme
+import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.multibranding.common.callback.OAuthListWidgetAuthCallback
 import com.vk.id.multibranding.common.style.OAuthListWidgetStyle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-
-/**
- * Constructs a multibranding widget that supports auth with multiple [OAuth]s.
- *
- * @param modifier Layout configuration for the widget.
- * @param style Styling widget configuration.
- * @param onAuth A callback to be invoked upon a successful auth.
- * @param onFail A callback to be invoked upon an error during auth.
- * @param oAuths A set of [OAuth]s the should be displayed to the user.
- */
-@Composable
-public fun OAuthListWidget(
-    modifier: Modifier = Modifier,
-    style: OAuthListWidgetStyle = OAuthListWidgetStyle.Dark(),
-    onAuth: OAuthListWidgetAuthCallback,
-    onFail: (OAuth, VKIDAuthFail) -> Unit,
-    oAuths: Set<OAuth> = OAuth.entries.toSet(),
-) {
-    OAuthListWidget(
-        modifier = modifier,
-        style = style,
-        onAuth = onAuth,
-        onFail = onFail,
-        oAuths = oAuths,
-        vkid = null
-    )
-}
 
 /**
  * Constructs a multibranding widget that supports auth with multiple [OAuth]s.
@@ -98,6 +71,7 @@ public fun OAuthListWidget(
     onFail: (OAuth, VKIDAuthFail) -> Unit,
     oAuths: Set<OAuth> = OAuth.entries.toSet(),
     vkid: VKID? = null,
+    authParams: VKIDAuthUiParams = VKIDAuthUiParams {},
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -125,6 +99,7 @@ public fun OAuthListWidget(
                     vkid = useVKID,
                     onAuth = onAuth,
                     onFail = { onFail(item, it) },
+                    authParams = authParams,
                 )
                 if (index != oAuths.size - 1) {
                     Spacer(modifier = Modifier.width(12.dp))
@@ -158,7 +133,8 @@ private fun OAuthButton(
     coroutineScope: CoroutineScope,
     vkid: VKID,
     onAuth: OAuthListWidgetAuthCallback,
-    onFail: (VKIDAuthFail) -> Unit
+    onFail: (VKIDAuthFail) -> Unit,
+    authParams: VKIDAuthUiParams,
 ) {
     Row(
         modifier = modifier
@@ -186,7 +162,7 @@ private fun OAuthButton(
                                     onFail(fail)
                                 }
                             },
-                            VKIDAuthParams {
+                            authParams.asParamsBuilder {
                                 oAuth = item
                                 theme = style.toProviderTheme()
                                 prompt = Prompt.LOGIN

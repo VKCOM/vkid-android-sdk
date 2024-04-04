@@ -19,6 +19,7 @@ import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.Prompt
 import com.vk.id.auth.VKIDAuthParams
+import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.multibranding.OAuthListWidget
 import com.vk.id.multibranding.common.callback.OAuthListWidgetAuthCallback
@@ -31,37 +32,6 @@ import com.vk.id.onetap.compose.button.auth.VKIDButtonTextProvider
 import com.vk.id.onetap.compose.button.auth.rememberVKIDButtonState
 import com.vk.id.onetap.compose.button.startAuth
 import com.vk.id.onetap.compose.util.PlaceComposableIfFitsWidth
-
-/**
- * Composable function to display a VKID One Tap login interface.
- * For more information how to integrate VK ID Authentication check docs https://id.vk.com/business/go/docs/ru/vkid/latest/vk-id/intro/plan
- *
- * @param modifier Modifier for this composable.
- * @param style The styling for the One Tap interface, default is [OneTapStyle.Light]
- * @param onAuth Callback function invoked on successful authentication with an [AccessToken].
- * @param onFail Callback function invoked on authentication failure with a [VKIDAuthFail] object.
- * @param vkid An optional [VKID] instance to use for authentication.
- *  If instance of VKID is not provided, it will be created on first composition.
- * @param signInAnotherAccountButtonEnabled Flag to enable a button for signing into another account.
- *  Note that if text doesn't fit the available width the view will be hidden regardless of the flag.
- */
-@Composable
-public fun OneTap(
-    modifier: Modifier = Modifier,
-    style: OneTapStyle = OneTapStyle.Light(),
-    onAuth: (AccessToken) -> Unit,
-    onFail: (VKIDAuthFail) -> Unit = { },
-    vkid: VKID? = null,
-    signInAnotherAccountButtonEnabled: Boolean = false
-): Unit = OneTap(
-    modifier = modifier,
-    style = style,
-    onAuth = { _, accessToken -> onAuth(accessToken) },
-    onFail = { _, fail -> onFail(fail) },
-    oAuths = emptySet(),
-    vkid = vkid,
-    signInAnotherAccountButtonEnabled = signInAnotherAccountButtonEnabled
-)
 
 /**
  * Composable function to display a VKID One Tap login interface with multibranding.
@@ -90,7 +60,8 @@ public fun OneTap(
     onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit = { _, _ -> },
     oAuths: Set<OneTapOAuth> = emptySet(),
     vkid: VKID? = null,
-    signInAnotherAccountButtonEnabled: Boolean = false
+    signInAnotherAccountButtonEnabled: Boolean = false,
+    authParams: VKIDAuthUiParams = VKIDAuthUiParams {},
 ) {
     val context = LocalContext.current
     val useVKID = vkid ?: remember {
@@ -103,7 +74,8 @@ public fun OneTap(
                 coroutineScope,
                 useVKID,
                 { onAuth(null, it) },
-                { onFail(null, it) }
+                { onFail(null, it) },
+                params = authParams.asParamsBuilder {},
             )
         })
     } else {
@@ -124,7 +96,7 @@ public fun OneTap(
                             useVKID,
                             { onAuth(null, it) },
                             { onFail(null, it) },
-                            VKIDAuthParams {
+                            authParams.asParamsBuilder {
                                 theme = style.toProviderTheme()
                             }
                         )
@@ -135,7 +107,7 @@ public fun OneTap(
                             useVKID,
                             { onAuth(null, it) },
                             { onFail(null, it) },
-                            VKIDAuthParams {
+                            authParams.asParamsBuilder {
                                 useOAuthProviderIfPossible = false
                                 theme = style.toProviderTheme()
                                 prompt = Prompt.LOGIN
@@ -152,7 +124,8 @@ public fun OneTap(
                         coroutineScope,
                         useVKID,
                         { onAuth(null, it) },
-                        { onFail(null, it) }
+                        { onFail(null, it) },
+                        params = authParams.asParamsBuilder {},
                     )
                 })
             }
@@ -173,6 +146,7 @@ internal fun OneTap(
     onAlternateButtonClick: () -> Unit,
     onAuth: (OneTapOAuth?, AccessToken) -> Unit,
     onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit,
+    authParams: VKIDAuthUiParams = VKIDAuthUiParams {},
 ) {
     val vkidButtonState = rememberVKIDButtonState()
     Column(modifier = modifier) {
@@ -201,6 +175,7 @@ internal fun OneTap(
                 onFail = { oAuth, fail -> onFail(OneTapOAuth.fromOAuth(oAuth), fail) },
                 style = style.oAuthListWidgetStyle,
                 oAuths = oAuths.map { it.toOAuth() }.toSet(),
+                authParams = authParams,
             )
         }
     }
