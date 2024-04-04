@@ -8,6 +8,7 @@ import androidx.compose.runtime.MutableState
 import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
+import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.Prompt
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.auth.VKIDAuthUiParams
@@ -40,6 +41,7 @@ internal fun startVKIDAuth(
     vkid: VKID,
     style: OneTapBottomSheetStyle,
     onAuth: (AccessToken) -> Unit,
+    onAuthCode: (AuthCodeData) -> Unit,
     onFail: (VKIDAuthFail) -> Unit,
     authStatus: MutableState<OneTapBottomSheetAuthStatus>,
     authParams: VKIDAuthUiParams,
@@ -52,6 +54,7 @@ internal fun startVKIDAuth(
             authStatus.value = OneTapBottomSheetAuthStatus.AuthSuccess
             onAuth(it)
         },
+        onAuthCode = onAuthCode,
         onFail = {
             authStatus.value = OneTapBottomSheetAuthStatus.AuthFailedVKID
             onFail(it)
@@ -68,6 +71,7 @@ internal fun startAlternateAuth(
     vkid: VKID,
     style: OneTapBottomSheetStyle,
     onAuth: (AccessToken) -> Unit,
+    onAuthCode: (AuthCodeData) -> Unit,
     onFail: (VKIDAuthFail) -> Unit,
     authStatus: MutableState<OneTapBottomSheetAuthStatus>,
     authParams: VKIDAuthUiParams,
@@ -80,6 +84,7 @@ internal fun startAlternateAuth(
             authStatus.value = OneTapBottomSheetAuthStatus.AuthSuccess
             onAuth(it)
         },
+        onAuthCode = onAuthCode,
         onFail = {
             authStatus.value = OneTapBottomSheetAuthStatus.AuthFailedAlternate
             onFail(it)

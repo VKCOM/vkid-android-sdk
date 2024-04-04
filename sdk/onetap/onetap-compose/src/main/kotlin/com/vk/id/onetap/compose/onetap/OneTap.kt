@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
+import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.Prompt
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.auth.VKIDAuthUiParams
@@ -42,6 +43,8 @@ import com.vk.id.onetap.compose.util.PlaceComposableIfFitsWidth
  * @param onAuth Callback function invoked on successful authentication with an [OneTapOAuth] and an [AccessToken].
  * The first parameter is the OAuth which was used for authorization or null if the main flow with OneTap was used.
  * The second parameter is the access token to be used for working with VK API.
+ * @param onAuthCode A callback to be invoked upon successful first step of auth - receiving auth code
+ * which can later be exchanged to access token.
  * @param onFail Callback function invoked on authentication failure with on [OneTapOAuth] and a [VKIDAuthFail] object.
  * The first parameter is the OAuth which was used for authorization or null if the main flow with OneTap was used.
  * The second parameter is the error which happened during authorization.
@@ -57,6 +60,7 @@ public fun OneTap(
     modifier: Modifier = Modifier,
     style: OneTapStyle = OneTapStyle.Light(),
     onAuth: (OneTapOAuth?, AccessToken) -> Unit,
+    onAuthCode: (AuthCodeData) -> Unit = {},
     onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit = { _, _ -> },
     oAuths: Set<OneTapOAuth> = emptySet(),
     vkid: VKID? = null,
@@ -74,6 +78,7 @@ public fun OneTap(
                 coroutineScope,
                 useVKID,
                 { onAuth(null, it) },
+                onAuthCode,
                 { onFail(null, it) },
                 params = authParams.asParamsBuilder {},
             )
@@ -95,6 +100,7 @@ public fun OneTap(
                             coroutineScope,
                             useVKID,
                             { onAuth(null, it) },
+                            onAuthCode,
                             { onFail(null, it) },
                             authParams.asParamsBuilder {
                                 theme = style.toProviderTheme()
@@ -106,6 +112,7 @@ public fun OneTap(
                             coroutineScope,
                             useVKID,
                             { onAuth(null, it) },
+                            onAuthCode,
                             { onFail(null, it) },
                             authParams.asParamsBuilder {
                                 useOAuthProviderIfPossible = false
@@ -115,6 +122,7 @@ public fun OneTap(
                         )
                     },
                     onAuth = onAuth,
+                    onAuthCode = onAuthCode,
                     onFail = onFail,
                 )
             },
@@ -124,6 +132,7 @@ public fun OneTap(
                         coroutineScope,
                         useVKID,
                         { onAuth(null, it) },
+                        onAuthCode,
                         { onFail(null, it) },
                         params = authParams.asParamsBuilder {},
                     )
@@ -145,6 +154,7 @@ internal fun OneTap(
     onVKIDButtonClick: () -> Unit,
     onAlternateButtonClick: () -> Unit,
     onAuth: (OneTapOAuth?, AccessToken) -> Unit,
+    onAuthCode: (AuthCodeData) -> Unit,
     onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit,
     authParams: VKIDAuthUiParams = VKIDAuthUiParams {},
 ) {
@@ -172,6 +182,7 @@ internal fun OneTap(
                 onAuth = OAuthListWidgetAuthCallback.WithOAuth { oAuth, accessToken ->
                     onAuth(OneTapOAuth.fromOAuth(oAuth), accessToken)
                 },
+                onAuthCode = onAuthCode,
                 onFail = { oAuth, fail -> onFail(OneTapOAuth.fromOAuth(oAuth), fail) },
                 style = style.oAuthListWidgetStyle,
                 oAuths = oAuths.map { it.toOAuth() }.toSet(),

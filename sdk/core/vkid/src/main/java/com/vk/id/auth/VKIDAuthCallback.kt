@@ -16,7 +16,7 @@ public interface VKIDAuthCallback {
     public fun onSuccess(accessToken: AccessToken)
 
     /**
-     * Call upon successful first step of auth - receiving auth code which can later be exchanged to access token.
+     * Called upon successful first step of auth - receiving auth code which can later be exchanged to access token.
      */
     public fun onAuthCode(data: AuthCodeData): Unit = Unit
 
