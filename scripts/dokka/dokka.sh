@@ -16,10 +16,12 @@ publishDokkaSkipPlugin() {
     ./gradlew :build-logic:dokka-skip:publishToMavenLocal
 }
 
+RELEASE_VERSION=$1
+
 set -ex
 importCommon
 assertWorkdirIsClean
-if [ "$1" == ""]; then 
+if [[ -z $RELEASE_VERSION ]]; then  
     checkoutDevelop
     publishDokkaSkipPlugin
     runDokka
@@ -33,13 +35,12 @@ if [ "$1" == ""]; then
     commitCurrent "VKIDSDK-0: Update documentation"
     createMergeRequest $BRANCH_NAME
 else 
-    BRANCH_NAME="release/$1"
     publishDokkaSkipPlugin
     runDokka
     if nothingToCommit; then
         echo "Dokka has nothing to add"
         exit 0
     fi
-    commitCurrent "VKIDSDK-$1: Update documentation"
-    git push origin $BRANCH_NAME HEAD
+    commitCurrent "VKIDSDK-0: Update documentation"
+    git push origin HEAD
 fi
