@@ -43,6 +43,7 @@ import com.vk.id.OAuth
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.Prompt
+import com.vk.id.auth.VKIDAuthCallback
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.auth.VKIDAuthParams.Theme
 import com.vk.id.common.InternalVKIDApi
@@ -173,7 +174,7 @@ private fun OAuthButton(
                 onClick = {
                     coroutineScope.launch {
                         vkid.authorize(
-                            object : VKID.AuthCallback {
+                            object : VKIDAuthCallback {
                                 override fun onSuccess(accessToken: AccessToken) {
                                     when (onAuth) {
                                         is OAuthListWidgetAuthCallback.WithOAuth -> onAuth(item, accessToken)

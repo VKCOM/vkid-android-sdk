@@ -15,7 +15,11 @@ internal class VKIDLoggerOut(
     private val serviceCredentials: ServiceCredentials,
     private val dispatchers: CoroutinesDispatchers,
 ) {
-    suspend fun logout(callback: VKIDLogoutCallback) {
+    suspend fun logout(
+        callback: VKIDLogoutCallback,
+        @Suppress("UnusedParameter")
+        params: VKIDLogoutParams = VKIDLogoutParams {},
+    ) {
         val token = tokenStorage.accessToken?.token ?: run {
             tokenStorage.clear()
             callback.onFail(VKIDLogoutFail.NotAuthenticated("Not authorized, can't logout"))

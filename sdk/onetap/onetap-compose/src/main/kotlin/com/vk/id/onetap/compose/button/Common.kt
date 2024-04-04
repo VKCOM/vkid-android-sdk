@@ -24,6 +24,7 @@ import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.VKIDUser
+import com.vk.id.auth.VKIDAuthCallback
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.onetap.common.auth.style.VKIDButtonStyle
@@ -56,7 +57,7 @@ internal fun startAuth(
 ) {
     coroutineScope.launch {
         vkid.authorize(
-            object : VKID.AuthCallback {
+            object : VKIDAuthCallback {
                 override fun onSuccess(accessToken: AccessToken) {
                     onAuth(accessToken)
                 }

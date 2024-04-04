@@ -1,8 +1,9 @@
 package com.vk.id.internal.auth
 
 import com.vk.id.AccessToken
-import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
+import com.vk.id.auth.AuthCodeData
+import com.vk.id.auth.VKIDAuthCallback
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
@@ -39,7 +40,8 @@ internal class AuthCallbacksHolderTest : BehaviorSpec({
     }
 })
 
-private fun createCallback() = object : VKID.AuthCallback {
+private fun createCallback() = object : VKIDAuthCallback {
     override fun onSuccess(accessToken: AccessToken) = Unit
     override fun onFail(fail: VKIDAuthFail) = Unit
+    override fun onAuthCode(data: AuthCodeData) = Unit
 }

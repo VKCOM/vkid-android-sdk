@@ -24,9 +24,11 @@ internal class AuthOptionsCreator(
     internal fun create(
         authParams: VKIDAuthParams
     ): AuthOptions {
-        val codeVerifier = pkceGenerator.value.generateRandomCodeVerifier(SecureRandom())
-        val codeChallenge = pkceGenerator.value.deriveCodeVerifierChallenge(codeVerifier)
-        prefsStore.value.codeVerifier = codeVerifier
+        val codeChallenge = authParams.codeChallenge ?: run {
+            val codeVerifier = pkceGenerator.value.generateRandomCodeVerifier(SecureRandom())
+            prefsStore.value.codeVerifier = codeVerifier
+            pkceGenerator.value.deriveCodeVerifierChallenge(codeVerifier)
+        }
         val state = stateGenerator.regenerateState()
         val locale = authParams.locale ?: VKIDAuthParams.Locale.systemLocale(appContext)
         val theme = authParams.theme ?: VKIDAuthParams.Theme.systemTheme(appContext)

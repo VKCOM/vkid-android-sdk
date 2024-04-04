@@ -1,5 +1,7 @@
 package com.vk.id
 
+import com.vk.id.auth.AuthCodeData
+import com.vk.id.auth.VKIDAuthCallback
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.api.VKIDCall
 import com.vk.id.internal.auth.AuthCallbacksHolder
@@ -74,7 +76,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             authResult: AuthResult,
             authFail: VKIDAuthFail
         ) = When("Handle is called with ${authResult::class.simpleName}") {
-            val callback = mockk<VKID.AuthCallback>()
+            val callback = mockk<VKIDAuthCallback>()
             every { callbacksHolder.getAll() } returns setOf(callback)
             every { callback.onFail(any()) } just runs
             every { callbacksHolder.clear() } just runs
@@ -104,7 +106,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
 
         When("Auth result doesn't have oAuth") {
             val authResult = authResultSuccess.copy(oauth = null)
-            val callback = mockk<VKID.AuthCallback>()
+            val callback = mockk<VKIDAuthCallback>()
             every { callbacksHolder.getAll() } returns setOf(callback)
             every { callback.onFail(any()) } just runs
             every { callbacksHolder.clear() } just runs
@@ -124,15 +126,19 @@ internal class AuthResultHandlerTest : BehaviorSpec({
 
         When("Handle is called with wrong state") {
             val authResult = authResultSuccess
-            val callback = mockk<VKID.AuthCallback>()
+            val callback = mockk<VKIDAuthCallback>()
             every { callbacksHolder.getAll() } returns setOf(callback)
             every { callback.onFail(any()) } just runs
             every { callbacksHolder.clear() } just runs
             every { deviceIdProvider.setDeviceId(DEVICE_ID) } just runs
             every { prefsStore.state } returns DIFFERENT_STATE
+            every { prefsStore.clear() } just runs
             every { prefsStore.codeVerifier } returns CODE_VERIFIER
             runTest(scheduler) { handler.handle(authResult) }
             scheduler.advanceUntilIdle()
+            Then("state is cleared") {
+                verify { prefsStore.clear() }
+            }
             Then("Device id is saved") {
                 verify { deviceIdProvider.setDeviceId(DEVICE_ID) }
             }
@@ -148,13 +154,15 @@ internal class AuthResultHandlerTest : BehaviorSpec({
         }
         When("Handle is called and api returns an error") {
             val authResult = authResultSuccess
-            val callback = mockk<VKID.AuthCallback>()
+            val callback = mockk<VKIDAuthCallback>()
             val call = mockk<VKIDCall<VKIDTokenPayload>>()
             every { callbacksHolder.getAll() } returns setOf(callback)
+            every { callback.onAuthCode(any()) } just runs
             every { callback.onFail(any()) } just runs
             every { callbacksHolder.clear() } just runs
             every { deviceIdProvider.setDeviceId(DEVICE_ID) } just runs
             every { prefsStore.state } returns STATE
+            every { prefsStore.clear() } just runs
             every { prefsStore.codeVerifier } returns CODE_VERIFIER
             every { serviceCredentials.clientID } returns CLIENT_ID
             every { serviceCredentials.clientSecret } returns CLIENT_SECRET
@@ -166,8 +174,14 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             Then("Device id is saved") {
                 verify { deviceIdProvider.setDeviceId(DEVICE_ID) }
             }
+            Then("state is cleared") {
+                verify { prefsStore.clear() }
+            }
             Then("Callbacks are requested from holder") {
                 verify { callbacksHolder.getAll() }
+            }
+            Then("Auth code is emitted") {
+                verify { callback.onAuthCode(AuthCodeData(CODE)) }
             }
             Then("It is emitted") {
                 verify {
@@ -182,14 +196,16 @@ internal class AuthResultHandlerTest : BehaviorSpec({
         }
         When("Handle is called and api returns success") {
             val authResult = authResultSuccess
-            val callback = mockk<VKID.AuthCallback>()
+            val callback = mockk<VKIDAuthCallback>()
             val call = mockk<VKIDCall<VKIDTokenPayload>>()
             val payload = VKIDTokenPayload(ACCESS_TOKEN, REFRESH_TOKEN, ID_TOKEN, 0, USER_ID, STATE)
             every { callbacksHolder.getAll() } returns setOf(callback)
+            every { callback.onAuthCode(any()) } just runs
             every { callback.onSuccess(any()) } just runs
             every { callbacksHolder.clear() } just runs
             every { deviceIdProvider.setDeviceId(DEVICE_ID) } just runs
             every { prefsStore.state } returns STATE
+            every { prefsStore.clear() } just runs
             every { prefsStore.codeVerifier } returns CODE_VERIFIER
             every { serviceCredentials.clientID } returns CLIENT_ID
             every { serviceCredentials.clientSecret } returns CLIENT_SECRET
@@ -198,8 +214,17 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             every { call.execute() } returns Result.success(payload)
             coEvery { tokensHandler.handle(any(), any(), any()) } just runs
             runTest(scheduler) { handler.handle(authResult) }
+            Then("state is cleared") {
+                verify { prefsStore.clear() }
+            }
             Then("Device id is saved") {
                 verify { deviceIdProvider.setDeviceId(DEVICE_ID) }
+            }
+            Then("Callbacks are requested from holder") {
+                verify { callbacksHolder.getAll() }
+            }
+            Then("Auth code is emitted") {
+                verify { callback.onAuthCode(AuthCodeData(CODE)) }
             }
             Then("User info fetcher is called") {
                 coVerify { tokensHandler.handle(payload, any(), any()) }

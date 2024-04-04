@@ -144,7 +144,7 @@ internal class VKIDUserRefresherTest : BehaviorSpec({
                 )
             } returns call
             val refreshTokenCallback = slot<VKIDRefreshTokenCallback>()
-            coEvery { tokenRefresher.refresh(capture(refreshTokenCallback)) } just runs
+            coEvery { tokenRefresher.refresh(capture(refreshTokenCallback), any()) } just runs
             val fail = VKIDGetUserFail.FailedApiCall("Failed to fetch user data due to null", exception)
             val callback = mockk<VKIDGetUserCallback>()
             every { callback.onFail(fail) } just runs
@@ -172,7 +172,7 @@ internal class VKIDUserRefresherTest : BehaviorSpec({
                 )
             } returnsMany listOf(firstCall, secondCall)
             val refreshTokenCallback = slot<VKIDRefreshTokenCallback>()
-            coEvery { tokenRefresher.refresh(capture(refreshTokenCallback)) } just runs
+            coEvery { tokenRefresher.refresh(capture(refreshTokenCallback), any()) } just runs
             val callback = mockk<VKIDGetUserCallback>()
             every { callback.onSuccess(VKID_USER) } just runs
             runTest(scheduler) { refresher.refresh(callback) }

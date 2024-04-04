@@ -32,6 +32,8 @@ public class VKIDAuthParams private constructor(
     public val oAuth: OAuth? = null,
     internal val prompt: Prompt = Prompt.BLANK,
     internal val token: String? = null,
+    internal val state: String? = null,
+    internal val codeChallenge: String? = null,
 ) {
     /**
      * Represents a locale that user prefers during authorization.
@@ -165,6 +167,17 @@ public class VKIDAuthParams private constructor(
         public var token: String? = null
 
         /**
+         * An optional state to be passed to auth.
+         */
+        public var state: String? = null
+
+        /**
+         * An optional code challenge to be passed to auth.
+         * See https://datatracker.ietf.org/doc/html/rfc7636#section-4.2 for more information.
+         */
+        public var codeChallenge: String? = null
+
+        /**
          * Constructs [VKIDAuthParams] object with provided values.
          */
         public fun build(): VKIDAuthParams = VKIDAuthParams(
@@ -174,6 +187,8 @@ public class VKIDAuthParams private constructor(
             oAuth = oAuth,
             prompt = prompt,
             token = token,
+            state = state,
+            codeChallenge = codeChallenge,
         )
     }
 }
