@@ -28,22 +28,23 @@ internal class StatEventJson(
                 "screen" -> {
                     screen = p.strValue ?: ""
                 }
+
                 in specialParams -> {
                     topLevelParams[p.name] = p.strValue ?: ""
                 }
+
                 else -> {
                     filteredParams.add(p)
                 }
             }
         }
-        val eventJson = eventJson(name, filteredParams)
+        val eventJson = eventJson(name, filteredParams, topLevelParams)
         json = actionJson(
             typeAction = "type_registration_item",
             screen = screen,
             data = eventJson,
             eventId = eventId,
             prevEventId = prevEventId,
-            topLevelParams = topLevelParams
         )
     }
 
@@ -84,7 +85,6 @@ internal class StatEventJson(
         data: JSONObject,
         eventId: Int,
         prevEventId: Int,
-        topLevelParams: Map<String, String>
     ): JSONObject =
         JSONObject().apply {
             put("id", eventId)
@@ -100,12 +100,9 @@ internal class StatEventJson(
                     put(typeAction, data)
                 }
             )
-            for (p in topLevelParams) {
-                put(p.key, p.value)
-            }
         }
 
-    private fun eventJson(eventName: String, eventParams: List<VKIDAnalytics.EventParam>) = JSONObject().apply {
+    private fun eventJson(eventName: String, eventParams: List<VKIDAnalytics.EventParam>, topLevelParams: Map<String, String>) = JSONObject().apply {
         put("event_type", eventName)
         put(
             "fields",
@@ -124,5 +121,8 @@ internal class StatEventJson(
                 }
             }
         )
+        for (p in topLevelParams) {
+            put(p.key, p.value)
+        }
     }
 }

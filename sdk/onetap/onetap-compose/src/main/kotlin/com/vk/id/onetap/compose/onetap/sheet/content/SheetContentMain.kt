@@ -8,8 +8,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -22,9 +25,11 @@ import androidx.compose.ui.unit.sp
 import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
+import com.vk.id.VKIDUser
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.compose.R
 import com.vk.id.onetap.compose.onetap.OneTap
+import com.vk.id.onetap.compose.onetap.sheet.OneTapBottomSheetAnalytics
 import com.vk.id.onetap.compose.onetap.sheet.OneTapScenario
 import com.vk.id.onetap.compose.onetap.sheet.scenarioTitle
 import com.vk.id.onetap.compose.onetap.sheet.style.OneTapBottomSheetStyle
@@ -48,6 +53,8 @@ internal fun SheetContentMain(
         style = style,
         dismissSheet = dismissSheet,
     ) {
+        var user by remember { mutableStateOf<VKIDUser?>(null) }
+        OneTapBottomSheetAnalytics.OneTapBottomSheetShown(style.toProviderTheme(), scenario)
         val resources = LocalContext.current.resources
         Column(
             Modifier.padding(horizontal = 32.dp, vertical = 36.dp)
@@ -67,7 +74,8 @@ internal fun SheetContentMain(
             vkid = vkid,
             vkidButtonTextProvider = remember(scenario) { scenario.vkidButtonTextProvider(resources) },
             onVKIDButtonClick = {
-                startVKIDAuth(coroutineScope, vkid, style, { onAuth(null, it) }, { onFail(null, it) }, authStatus)
+                val extraAuthParams = OneTapBottomSheetAnalytics.oneTapPressed(user)
+                startVKIDAuth(coroutineScope, vkid, style, { onAuth(null, it) }, { onFail(null, it) }, authStatus, extraAuthParams)
             },
             onAlternateButtonClick = {
                 startAlternateAuth(coroutineScope, vkid, style, { onAuth(null, it) }, { onFail(null, it) }, authStatus)
@@ -78,7 +86,15 @@ internal fun SheetContentMain(
                 authStatus.value = OneTapBottomSheetAuthStatus.AuthFailedMultibranding(oAuth)
                 onFail(oAuth, fail)
             },
-            onUserFetched = {}
+            onUserFetched = {
+                user = it
+                if (it == null) {
+                    OneTapBottomSheetAnalytics.noActiveSession()
+                    OneTapBottomSheetAnalytics.noUserButtonShown()
+                } else {
+                    OneTapBottomSheetAnalytics.userWasFound(true)
+                }
+            }
         )
     }
 }

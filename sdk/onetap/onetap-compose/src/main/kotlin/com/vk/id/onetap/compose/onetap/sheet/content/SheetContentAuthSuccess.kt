@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vk.id.onetap.compose.R
+import com.vk.id.onetap.compose.onetap.sheet.OneTapBottomSheetAnalytics
 import com.vk.id.onetap.compose.onetap.sheet.style.OneTapBottomSheetStyle
 
 @Composable
@@ -24,6 +25,7 @@ internal fun SheetContentAuthSuccess(
     style: OneTapBottomSheetStyle,
     dismissSheet: () -> Unit,
 ) {
+    OneTapBottomSheetAnalytics.BottomSheetSuccessShown()
     SheetContentBox(
         serviceName,
         style,
