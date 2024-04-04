@@ -8,9 +8,9 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.common.InternalVKIDApi
+import com.vk.id.exchangetoken.VKIDExchangeTokenFail
 import com.vk.id.exchangetoken.VKIDExchangeTokenParams
 import com.vk.id.exchangetoken.VKIDExchangeTokenToV2Callback
-import com.vk.id.exchangetoken.VKIDTokenExchanger
 import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthEventBridge
 import com.vk.id.internal.auth.AuthProvidersChooser
@@ -117,7 +117,6 @@ public class VKID {
         this.vkSilentAuthInfoProvider = deps.vkSilentAuthInfoProvider
         this.userDataFetcher = deps.userDataFetcher
         this.tokenRefresher = deps.tokenRefresher
-        this.tokenExchanger = deps.tokenExchanger
         this.userRefresher = deps.userRefresher
         this.loggerOut = deps.loggerOut
         this.tokenStorage = deps.tokenStorage
@@ -138,7 +137,6 @@ public class VKID {
     private val vkSilentAuthInfoProvider: Lazy<SilentAuthInfoProvider>
     private val userDataFetcher: Lazy<UserDataFetcher>
     private val tokenRefresher: Lazy<VKIDTokenRefresher>
-    private val tokenExchanger: Lazy<VKIDTokenExchanger>
     private val userRefresher: Lazy<VKIDUserRefresher>
     private val loggerOut: Lazy<VKIDLoggerOut>
     private val tokenStorage: TokenStorage
@@ -251,9 +249,28 @@ public class VKID {
         @Suppress("UnusedParameter")
         params: VKIDExchangeTokenParams = VKIDExchangeTokenParams.Builder().build(),
     ) {
-        requestMutex.withLock {
-            tokenExchanger.value.exchange(v1Token = v1Token, callback = callback)
-        }
+        authorize(
+            authCallback = object : AuthCallback {
+                override fun onSuccess(accessToken: AccessToken) {
+                    callback.onSuccess(accessToken)
+                }
+
+                override fun onFail(fail: VKIDAuthFail) {
+                    val exchangeFail = when (fail) {
+                        is VKIDAuthFail.Canceled -> VKIDExchangeTokenFail.Canceled(fail.description)
+                        is VKIDAuthFail.FailedApiCall -> VKIDExchangeTokenFail.FailedApiCall(fail.description, fail.throwable)
+                        is VKIDAuthFail.FailedOAuth -> VKIDExchangeTokenFail.FailedOAuth(fail.description)
+                        is VKIDAuthFail.FailedOAuthState -> VKIDExchangeTokenFail.FailedOAuthState(fail.description)
+                        is VKIDAuthFail.FailedRedirectActivity -> VKIDExchangeTokenFail.FailedRedirectActivity(fail.description, fail.throwable)
+                        is VKIDAuthFail.NoBrowserAvailable -> VKIDExchangeTokenFail.NoBrowserAvailable(fail.description, fail.throwable)
+                    }
+                    callback.onFail(exchangeFail)
+                }
+            },
+            authParams = VKIDAuthParams {
+                token = v1Token
+            }
+        )
     }
 
     /**
