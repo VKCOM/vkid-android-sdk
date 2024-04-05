@@ -147,30 +147,30 @@ public class VKID {
      * Initiates the authorization process.
      *
      * @param lifecycleOwner The [LifecycleOwner] in which the authorization process should be handled.
-     * @param authCallback [VKIDAuthCallback] to handle the result of the authorization process.
-     * @param authParams Optional [VKIDAuthParams] for the authentication process.
+     * @param callback [VKIDAuthCallback] to handle the result of the authorization process.
+     * @param params Optional [VKIDAuthParams] for the authentication process.
      */
     public fun authorize(
         lifecycleOwner: LifecycleOwner,
-        authCallback: VKIDAuthCallback,
-        authParams: VKIDAuthParams = VKIDAuthParams {},
+        callback: VKIDAuthCallback,
+        params: VKIDAuthParams = VKIDAuthParams {},
     ) {
         lifecycleOwner.lifecycleScope.launch {
-            authorize(authCallback, authParams)
+            authorize(callback, params)
         }
     }
 
     /**
      * Initiates the authorization process in a coroutine scope.
      *
-     * @param authCallback [VKIDAuthCallback] to handle the result of the authorization process.
-     * @param authParams Optional [VKIDAuthParams] for the authentication process.
+     * @param callback [VKIDAuthCallback] to handle the result of the authorization process.
+     * @param params Optional [VKIDAuthParams] for the authentication process.
      */
     public suspend fun authorize(
-        authCallback: VKIDAuthCallback,
-        authParams: VKIDAuthParams = VKIDAuthParams {}
+        callback: VKIDAuthCallback,
+        params: VKIDAuthParams = VKIDAuthParams {}
     ) {
-        authCallbacksHolder.add(authCallback)
+        authCallbacksHolder.add(callback)
         val authContext = currentCoroutineContext()
 
         AuthEventBridge.listener = object : AuthEventBridge.Listener {
@@ -184,8 +184,8 @@ public class VKID {
 
         withContext(dispatchers.io) {
             requestMutex.lock()
-            val bestAuthProvider = authProvidersChooser.value.chooseBest(authParams)
-            val fullAuthOptions = authOptionsCreator.create(authParams)
+            val bestAuthProvider = authProvidersChooser.value.chooseBest(params)
+            val fullAuthOptions = authOptionsCreator.create(params)
             bestAuthProvider.auth(fullAuthOptions)
         }
     }
@@ -250,7 +250,7 @@ public class VKID {
         params: VKIDExchangeTokenParams = VKIDExchangeTokenParams {},
     ) {
         authorize(
-            authCallback = object : VKIDAuthCallback {
+            callback = object : VKIDAuthCallback {
                 override fun onSuccess(accessToken: AccessToken) = callback.onSuccess(accessToken)
 
                 override fun onFail(fail: VKIDAuthFail) {
@@ -267,7 +267,7 @@ public class VKID {
 
                 override fun onAuthCode(data: AuthCodeData) = callback.onAuthCode(data)
             },
-            authParams = VKIDAuthParams {
+            params = VKIDAuthParams {
                 token = v1Token
                 state = params.state
                 codeChallenge = params.codeChallenge

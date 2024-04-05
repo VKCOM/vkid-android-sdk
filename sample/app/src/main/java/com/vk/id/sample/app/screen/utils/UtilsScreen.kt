@@ -94,7 +94,7 @@ private fun AuthUtil() {
         Button("Auth") {
             coroutineScope.launch {
                 context.vkid.authorize(
-                    authCallback = object : VKIDAuthCallback {
+                    callback = object : VKIDAuthCallback {
                         override fun onSuccess(accessToken: AccessToken) {
                             currentToken = accessToken
                             onVKIDAuthSuccess(context, null, accessToken)
@@ -108,7 +108,7 @@ private fun AuthUtil() {
                             showToast(context, "Refreshing failed with: ${fail.description}")
                         }
                     },
-                    authParams = VKIDAuthParams {
+                    params = VKIDAuthParams {
                         this.state = state.takeIf { it.isNotBlank() }
                         this.codeChallenge = codeChallenge.takeIf { it.isNotBlank() }
                     }

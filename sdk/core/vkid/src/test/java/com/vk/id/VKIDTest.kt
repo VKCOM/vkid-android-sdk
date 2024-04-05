@@ -86,7 +86,7 @@ internal class VKIDTest : BehaviorSpec({
         every { authCallbacksHolder.add(any()) } just runs
         coEvery { authResultHandler.handle(any()) } just runs
         TestScope(scheduler).launch {
-            vkid.authorize(authCallback = mockk(), authParams = authParams)
+            vkid.authorize(callback = mockk(), params = authParams)
         }
         scheduler.advanceUntilIdle()
 
