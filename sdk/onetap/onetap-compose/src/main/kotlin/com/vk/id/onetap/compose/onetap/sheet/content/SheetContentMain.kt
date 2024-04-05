@@ -22,6 +22,8 @@ import androidx.compose.ui.unit.sp
 import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
+import com.vk.id.auth.AuthCodeData
+import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.compose.R
 import com.vk.id.onetap.compose.onetap.OneTap
@@ -35,13 +37,15 @@ import com.vk.id.onetap.compose.onetap.sheet.vkidButtonTextProvider
 internal fun SheetContentMain(
     vkid: VKID,
     onAuth: (OneTapOAuth?, AccessToken) -> Unit,
+    onAuthCode: (AuthCodeData) -> Unit,
     onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit,
     oAuths: Set<OneTapOAuth>,
     serviceName: String,
     scenario: OneTapScenario,
     style: OneTapBottomSheetStyle,
     dismissSheet: () -> Unit,
-    authStatus: MutableState<OneTapBottomSheetAuthStatus>
+    authStatus: MutableState<OneTapBottomSheetAuthStatus>,
+    authParams: VKIDAuthUiParams,
 ) {
     SheetContentBox(
         serviceName = serviceName,
@@ -67,17 +71,37 @@ internal fun SheetContentMain(
             vkid = vkid,
             vkidButtonTextProvider = remember(scenario) { scenario.vkidButtonTextProvider(resources) },
             onVKIDButtonClick = {
-                startVKIDAuth(coroutineScope, vkid, style, { onAuth(null, it) }, { onFail(null, it) }, authStatus)
+                startVKIDAuth(
+                    coroutineScope = coroutineScope,
+                    vkid = vkid,
+                    style = style,
+                    onAuth = { onAuth(null, it) },
+                    onAuthCode = onAuthCode,
+                    onFail = { onFail(null, it) },
+                    authStatus = authStatus,
+                    authParams = authParams,
+                )
             },
             onAlternateButtonClick = {
-                startAlternateAuth(coroutineScope, vkid, style, { onAuth(null, it) }, { onFail(null, it) }, authStatus)
+                startAlternateAuth(
+                    coroutineScope = coroutineScope,
+                    vkid = vkid,
+                    style = style,
+                    onAuth = { onAuth(null, it) },
+                    onAuthCode = onAuthCode,
+                    onFail = { onFail(null, it) },
+                    authStatus = authStatus,
+                    authParams = authParams,
+                )
             },
             onAuth = onAuth,
+            onAuthCode = onAuthCode,
             onFail = { oAuth, fail ->
                 check(oAuth != null) { error("oAuth is not provided in a multibranding flow error") }
                 authStatus.value = OneTapBottomSheetAuthStatus.AuthFailedMultibranding(oAuth)
                 onFail(oAuth, fail)
-            }
+            },
+            authParams = authParams,
         )
     }
 }

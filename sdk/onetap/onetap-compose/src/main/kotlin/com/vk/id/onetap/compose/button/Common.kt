@@ -24,6 +24,7 @@ import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.VKIDUser
+import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthCallback
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.common.InternalVKIDApi
@@ -52,19 +53,16 @@ internal fun startAuth(
     coroutineScope: CoroutineScope,
     vkid: VKID,
     onAuth: (AccessToken) -> Unit,
+    onAuthCode: (AuthCodeData) -> Unit,
     onFail: (VKIDAuthFail) -> Unit,
     params: VKIDAuthParams = VKIDAuthParams {}
 ) {
     coroutineScope.launch {
         vkid.authorize(
             object : VKIDAuthCallback {
-                override fun onSuccess(accessToken: AccessToken) {
-                    onAuth(accessToken)
-                }
-
-                override fun onFail(fail: VKIDAuthFail) {
-                    onFail(fail)
-                }
+                override fun onSuccess(accessToken: AccessToken) = onAuth(accessToken)
+                override fun onAuthCode(data: AuthCodeData) = onAuthCode(data)
+                override fun onFail(fail: VKIDAuthFail) = onFail(fail)
             },
             params
         )
