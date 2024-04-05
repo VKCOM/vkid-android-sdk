@@ -95,7 +95,7 @@ private fun AuthUtil() {
             coroutineScope.launch {
                 context.vkid.authorize(
                     callback = object : VKIDAuthCallback {
-                        override fun onSuccess(accessToken: AccessToken) {
+                        override fun onAuth(accessToken: AccessToken) {
                             currentToken = accessToken
                             onVKIDAuthSuccess(context, null, accessToken)
                         }

@@ -60,7 +60,7 @@ internal fun startAuth(
     coroutineScope.launch {
         vkid.authorize(
             object : VKIDAuthCallback {
-                override fun onSuccess(accessToken: AccessToken) = onAuth(accessToken)
+                override fun onAuth(accessToken: AccessToken) = onAuth(accessToken)
                 override fun onAuthCode(data: AuthCodeData, isCompletion: Boolean) = onAuthCode(data, isCompletion)
                 override fun onFail(fail: VKIDAuthFail) = onFail(fail)
             },

@@ -201,7 +201,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             val payload = VKIDTokenPayload(ACCESS_TOKEN, REFRESH_TOKEN, ID_TOKEN, 0, USER_ID, STATE)
             every { callbacksHolder.getAll() } returns setOf(callback)
             every { callback.onAuthCode(any(), any()) } just runs
-            every { callback.onSuccess(any()) } just runs
+            every { callback.onAuth(any()) } just runs
             every { callbacksHolder.clear() } just runs
             every { deviceIdProvider.setDeviceId(DEVICE_ID) } just runs
             every { prefsStore.state } returns STATE

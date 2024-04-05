@@ -157,7 +157,7 @@ private fun OAuthButton(
                     coroutineScope.launch {
                         vkid.authorize(
                             object : VKIDAuthCallback {
-                                override fun onSuccess(accessToken: AccessToken) {
+                                override fun onAuth(accessToken: AccessToken) {
                                     when (onAuth) {
                                         is OAuthListWidgetAuthCallback.WithOAuth -> onAuth(item, accessToken)
                                         is OAuthListWidgetAuthCallback.JustToken -> onAuth(accessToken)

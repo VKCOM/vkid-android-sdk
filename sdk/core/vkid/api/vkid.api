@@ -176,9 +176,9 @@ public final class com/vk/id/auth/Prompt : java/lang/Enum {
 }
 
 public abstract interface class com/vk/id/auth/VKIDAuthCallback {
+	public abstract fun onAuth (Lcom/vk/id/AccessToken;)V
 	public abstract fun onAuthCode (Lcom/vk/id/auth/AuthCodeData;Z)V
 	public abstract fun onFail (Lcom/vk/id/VKIDAuthFail;)V
-	public abstract fun onSuccess (Lcom/vk/id/AccessToken;)V
 }
 
 public final class com/vk/id/auth/VKIDAuthCallback$DefaultImpls {
