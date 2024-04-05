@@ -5,7 +5,6 @@ import android.widget.Toast
 import com.vk.id.AccessToken
 import com.vk.id.OAuth
 import com.vk.id.VKIDAuthFail
-import com.vk.id.multibranding.common.callback.OAuthListWidgetAuthCallback
 import com.vk.id.onetap.common.OneTapOAuth
 
 private const val TOKEN_VISIBLE_CHARACTERS = 10
@@ -43,7 +42,7 @@ public fun onVKIDAuthSuccess(
 public fun getMultibrandingSuccessCallback(
     context: Context,
     onToken: (AccessToken) -> Unit,
-): OAuthListWidgetAuthCallback.WithOAuth = OAuthListWidgetAuthCallback.WithOAuth { oAuth, token ->
+): (OAuth, AccessToken) -> Unit = { oAuth, token ->
     onToken(token)
     onVKIDAuthSuccess(context, oAuth, token)
 }

@@ -23,7 +23,6 @@ import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.multibranding.OAuthListWidget
-import com.vk.id.multibranding.common.callback.OAuthListWidgetAuthCallback
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.compose.button.alternate.AdaptiveAlternateAccountButton
@@ -183,9 +182,7 @@ internal fun OneTap(
             Spacer(modifier = Modifier.height(16.dp))
             OAuthListWidget(
                 vkid = vkid,
-                onAuth = OAuthListWidgetAuthCallback.WithOAuth { oAuth, accessToken ->
-                    onAuth(OneTapOAuth.fromOAuth(oAuth), accessToken)
-                },
+                onAuth = { oAuth, accessToken -> onAuth(OneTapOAuth.fromOAuth(oAuth), accessToken) },
                 onAuthCode = onAuthCode,
                 onFail = { oAuth, fail -> onFail(OneTapOAuth.fromOAuth(oAuth), fail) },
                 style = style.oAuthListWidgetStyle,

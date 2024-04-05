@@ -6,7 +6,6 @@ import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.multibranding.OAuthListWidget
 import com.vk.id.multibranding.base.MultibrandingTest
-import com.vk.id.multibranding.common.callback.OAuthListWidgetAuthCallback
 import io.qameta.allure.kotlin.junit4.DisplayName
 
 @DisplayName("Compose multibranding auth")
@@ -22,7 +21,7 @@ public class MultibrandingComposeTest(
         composeTestRule.setContent {
             OAuthListWidget(
                 vkid = vkid,
-                onAuth = OAuthListWidgetAuthCallback.WithOAuth { oAuth, accessToken -> onAuth(oAuth, accessToken) },
+                onAuth = onAuth,
                 onFail = onFail
             )
         }

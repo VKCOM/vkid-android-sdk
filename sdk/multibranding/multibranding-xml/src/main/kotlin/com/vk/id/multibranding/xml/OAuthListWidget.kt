@@ -19,7 +19,6 @@ import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.multibranding.OAuthListWidget
-import com.vk.id.multibranding.common.callback.OAuthListWidgetAuthCallback
 import com.vk.id.multibranding.common.style.OAuthListWidgetCornersStyle
 import com.vk.id.multibranding.common.style.OAuthListWidgetSizeStyle
 import com.vk.id.multibranding.common.style.OAuthListWidgetStyle
@@ -60,7 +59,7 @@ public class OAuthListWidget @JvmOverloads constructor(
             onAuthParamsChange(value)
         }
     private var onAuthParamsChange: (VKIDAuthUiParams) -> Unit = {}
-    private var onAuth: OAuthListWidgetAuthCallback = OAuthListWidgetAuthCallback.JustToken {
+    private var onAuth: (oAuth: OAuth, accessToken: AccessToken) -> Unit = { _, _ ->
         error("No onAuth callback for OAuthListWidget. Set it with setCallbacks method.")
     }
     private var onAuthCode: (AuthCodeData, Boolean) -> Unit = { _, _ -> }
@@ -94,12 +93,7 @@ public class OAuthListWidget @JvmOverloads constructor(
         OAuthListWidget(
             modifier = Modifier,
             style = style.value,
-            onAuth = OAuthListWidgetAuthCallback.WithOAuth { oAuth: OAuth, token: AccessToken ->
-                when (val callback = onAuth) {
-                    is OAuthListWidgetAuthCallback.WithOAuth -> callback(oAuth, token)
-                    is OAuthListWidgetAuthCallback.JustToken -> callback(token)
-                }
-            },
+            onAuth = { oAuth, accessToken -> onAuth(oAuth, accessToken) },
             onAuthCode = { data, isCompletion -> onAuthCode(data, isCompletion) },
             onFail = { oAuth, fail -> onFail(oAuth, fail) },
             oAuths = oAuths.value,
@@ -119,7 +113,7 @@ public class OAuthListWidget @JvmOverloads constructor(
      * @param onFail A callback to be invoked upon an error during auth.
      */
     public fun setCallbacks(
-        onAuth: OAuthListWidgetAuthCallback,
+        onAuth: (oAuth: OAuth, accessToken: AccessToken) -> Unit,
         onAuthCode: (data: AuthCodeData, isCompletion: Boolean) -> Unit = { _, _ -> },
         onFail: (oAuth: OAuth, fail: VKIDAuthFail) -> Unit = { _, _ -> },
     ) {
