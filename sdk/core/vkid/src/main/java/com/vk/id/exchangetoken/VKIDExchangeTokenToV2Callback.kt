@@ -10,9 +10,9 @@ public interface VKIDExchangeTokenToV2Callback {
     /**
      * Called upon successful token exchange.
      *
-     * @param token access token and other useful data.
+     * @param accessToken access token and other useful data.
      */
-    public fun onSuccess(token: AccessToken)
+    public fun onSuccess(accessToken: AccessToken)
 
     /**
      * Called upon any failure during token exchanging.
