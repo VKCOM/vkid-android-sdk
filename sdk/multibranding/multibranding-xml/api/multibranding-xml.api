@@ -15,10 +15,12 @@ public final class com/vk/id/multibranding/xml/OAuthListWidget : android/widget/
 	public fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;)V
 	public fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;I)V
 	public synthetic fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getAuthParams ()Lcom/vk/id/auth/VKIDAuthUiParams;
 	public final fun getOAuths ()Ljava/util/Set;
 	public final fun getStyle ()Lcom/vk/id/multibranding/common/style/OAuthListWidgetStyle;
-	public final fun setCallbacks (Lcom/vk/id/multibranding/common/callback/OAuthListWidgetAuthCallback;Lkotlin/jvm/functions/Function2;)V
-	public static synthetic fun setCallbacks$default (Lcom/vk/id/multibranding/xml/OAuthListWidget;Lcom/vk/id/multibranding/common/callback/OAuthListWidgetAuthCallback;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)V
+	public final fun setAuthParams (Lcom/vk/id/auth/VKIDAuthUiParams;)V
+	public final fun setCallbacks (Lcom/vk/id/multibranding/common/callback/OAuthListWidgetAuthCallback;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function2;)V
+	public static synthetic fun setCallbacks$default (Lcom/vk/id/multibranding/xml/OAuthListWidget;Lcom/vk/id/multibranding/common/callback/OAuthListWidgetAuthCallback;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)V
 	public final fun setOAuths (Ljava/util/Set;)V
 	public final fun setStyle (Lcom/vk/id/multibranding/common/style/OAuthListWidgetStyle;)V
 	public final fun setVKID (Lcom/vk/id/VKID;)V

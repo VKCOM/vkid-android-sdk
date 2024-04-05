@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.vk.id.AccessToken
 import com.vk.id.OAuth
+import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.multibranding.OAuthListWidget
 import com.vk.id.multibranding.common.style.OAuthListWidgetCornersStyle
@@ -95,6 +96,15 @@ internal fun MultibrandingComposeScreen() {
                     horizontalArrangement = Arrangement.Center
                 ) {
                     val width = maxOf(MIN_WIDTH_DP, (screenWidth * widthPercent.floatValue))
+                    val onAuthCode = { data: AuthCodeData ->
+                        code = data.code
+                        token.value = null
+                        showToast(context, "Received auth code")
+                    }
+                    val authParams = VKIDAuthUiParams {
+                        this.state = state.takeIf { it.isNotBlank() }
+                        this.codeChallenge = codeChallenge.takeIf { it.isNotBlank() }
+                    }
                     if (shouldUseXml.value) {
                         var oAuthListWidget: OAuthListWidget? by remember { mutableStateOf(null) }
                         AndroidView(factory = { context ->
@@ -102,35 +112,30 @@ internal fun MultibrandingComposeScreen() {
                                 setVKID(context.vkid)
                                 setCallbacks(
                                     onAuth = getMultibrandingSuccessCallback(context) {},
+                                    onAuthCode = onAuthCode,
                                     onFail = getMultibrandingFailCallback(context),
                                 )
                                 oAuthListWidget = this
                             }
                         })
                         oAuthListWidget?.apply {
-                            layoutParams = ViewGroup.LayoutParams(
+                            this.layoutParams = ViewGroup.LayoutParams(
                                 context.dpToPixels(width.toInt()),
                                 ViewGroup.LayoutParams.WRAP_CONTENT,
                             )
-                            style = selectedStyle
-                            oAuths = selectedOAuths.value
+                            this.style = selectedStyle
+                            this.oAuths = selectedOAuths.value
+                            this.authParams = authParams
                         }
                     } else {
                         OAuthListWidget(
                             modifier = Modifier.width(width.dp),
                             style = selectedStyle,
                             onAuth = getMultibrandingSuccessCallback(context) { token.value = it },
-                            onAuthCode = {
-                                code = it.code
-                                token.value = null
-                                showToast(context, "Received auth code")
-                            },
+                            onAuthCode = onAuthCode,
                             onFail = getMultibrandingFailCallback(context),
                             oAuths = selectedOAuths.value,
-                            authParams = VKIDAuthUiParams {
-                                this.state = state.takeIf { it.isNotBlank() }
-                                this.codeChallenge = codeChallenge.takeIf { it.isNotBlank() }
-                            }
+                            authParams = authParams,
                         )
                     }
                 }
