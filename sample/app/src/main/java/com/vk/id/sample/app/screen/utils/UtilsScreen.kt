@@ -100,8 +100,11 @@ private fun AuthUtil() {
                             onVKIDAuthSuccess(context, null, accessToken)
                         }
 
-                        override fun onAuthCode(data: AuthCodeData) {
+                        override fun onAuthCode(data: AuthCodeData, isCompletion: Boolean) {
                             currentAuthCode = data
+                            if (isCompletion) {
+                                showToast(context, "Received auth code")
+                            }
                         }
 
                         override fun onFail(fail: VKIDAuthFail) {
@@ -210,8 +213,11 @@ private fun ExchangeTokenUtil() {
                             onVKIDAuthSuccess(context, null, token)
                         }
 
-                        override fun onAuthCode(data: AuthCodeData) {
+                        override fun onAuthCode(data: AuthCodeData, isCompletion: Boolean) {
                             currentAuthCode = data
+                            if (isCompletion) {
+                                showToast(context, "Received auth code")
+                            }
                         }
 
                         override fun onFail(fail: VKIDExchangeTokenFail) {

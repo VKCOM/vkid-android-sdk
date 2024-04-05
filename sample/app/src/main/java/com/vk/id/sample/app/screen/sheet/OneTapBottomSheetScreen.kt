@@ -77,10 +77,12 @@ internal fun OneTapBottomSheetScreen() {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
-            val onAuthCode = { data: AuthCodeData ->
+            val onAuthCode = { data: AuthCodeData, isCompletion: Boolean ->
                 code = data.code
                 token.value = null
-                showToast(context, "Received auth code")
+                if (isCompletion) {
+                    showToast(context, "Received auth code")
+                }
             }
             val authParams = VKIDAuthUiParams {
                 this.state = state.takeIf { it.isNotBlank() }

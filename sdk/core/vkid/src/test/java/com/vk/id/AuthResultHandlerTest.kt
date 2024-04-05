@@ -157,7 +157,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             val callback = mockk<VKIDAuthCallback>()
             val call = mockk<VKIDCall<VKIDTokenPayload>>()
             every { callbacksHolder.getAll() } returns setOf(callback)
-            every { callback.onAuthCode(any()) } just runs
+            every { callback.onAuthCode(any(), any()) } just runs
             every { callback.onFail(any()) } just runs
             every { callbacksHolder.clear() } just runs
             every { deviceIdProvider.setDeviceId(DEVICE_ID) } just runs
@@ -181,7 +181,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
                 verify { callbacksHolder.getAll() }
             }
             Then("Auth code is emitted") {
-                verify { callback.onAuthCode(AuthCodeData(CODE)) }
+                verify { callback.onAuthCode(AuthCodeData(CODE), false) }
             }
             Then("It is emitted") {
                 verify {
@@ -200,7 +200,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             val call = mockk<VKIDCall<VKIDTokenPayload>>()
             val payload = VKIDTokenPayload(ACCESS_TOKEN, REFRESH_TOKEN, ID_TOKEN, 0, USER_ID, STATE)
             every { callbacksHolder.getAll() } returns setOf(callback)
-            every { callback.onAuthCode(any()) } just runs
+            every { callback.onAuthCode(any(), any()) } just runs
             every { callback.onSuccess(any()) } just runs
             every { callbacksHolder.clear() } just runs
             every { deviceIdProvider.setDeviceId(DEVICE_ID) } just runs
@@ -224,7 +224,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
                 verify { callbacksHolder.getAll() }
             }
             Then("Auth code is emitted") {
-                verify { callback.onAuthCode(AuthCodeData(CODE)) }
+                verify { callback.onAuthCode(AuthCodeData(CODE), false) }
             }
             Then("User info fetcher is called") {
                 coVerify { tokensHandler.handle(payload, null, any(), any()) }

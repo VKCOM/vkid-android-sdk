@@ -63,7 +63,7 @@ public class OAuthListWidget @JvmOverloads constructor(
     private var onAuth: OAuthListWidgetAuthCallback = OAuthListWidgetAuthCallback.JustToken {
         error("No onAuth callback for OAuthListWidget. Set it with setCallbacks method.")
     }
-    private var onAuthCode: (AuthCodeData) -> Unit = {}
+    private var onAuthCode: (AuthCodeData, Boolean) -> Unit = { _, _ -> }
     private var onFail: (OAuth, VKIDAuthFail) -> Unit = { _, _ -> }
     private var vkid: VKID? = null
         set(value) {
@@ -100,7 +100,7 @@ public class OAuthListWidget @JvmOverloads constructor(
                     is OAuthListWidgetAuthCallback.JustToken -> callback(token)
                 }
             },
-            onAuthCode = { onAuthCode(it) },
+            onAuthCode = { data, isCompletion -> onAuthCode(data, isCompletion) },
             onFail = { oAuth, fail -> onFail(oAuth, fail) },
             oAuths = oAuths.value,
             vkid = vkid.value,
@@ -112,14 +112,16 @@ public class OAuthListWidget @JvmOverloads constructor(
      * Sets callbacks for the authorization
      *
      * @param onAuth A callback to be invoked upon a successful auth.
-     * @param onAuthCode A callback to be invoked upon successful first step of auth - receiving auth code
-     * which can later be exchanged to access token.
+     * @param onAuthCode A callback to be invoked upon successful first step of auth - receiving auth code.
+     * isCompletion is true if [onSuccess] won't be called.
+     * This will happen if you passed auth parameters and implement their validation yourself.
+     * In that case we can't exchange auth code for access token and you should do this yourself.
      * @param onFail A callback to be invoked upon an error during auth.
      */
     public fun setCallbacks(
         onAuth: OAuthListWidgetAuthCallback,
-        onAuthCode: (AuthCodeData) -> Unit = {},
-        onFail: (OAuth, VKIDAuthFail) -> Unit = { _, _ -> },
+        onAuthCode: (data: AuthCodeData, isCompletion: Boolean) -> Unit = { _, _ -> },
+        onFail: (oAuth: OAuth, fail: VKIDAuthFail) -> Unit = { _, _ -> },
     ) {
         this.onAuth = onAuth
         this.onAuthCode = onAuthCode

@@ -71,8 +71,8 @@ public fun OAuthListWidget(
     modifier: Modifier = Modifier,
     style: OAuthListWidgetStyle = OAuthListWidgetStyle.Dark(),
     onAuth: OAuthListWidgetAuthCallback,
-    onAuthCode: (AuthCodeData) -> Unit = {},
-    onFail: (OAuth, VKIDAuthFail) -> Unit,
+    onAuthCode: (data: AuthCodeData, isCompletion: Boolean) -> Unit = { _, _ -> },
+    onFail: (oAuth: OAuth, fail: VKIDAuthFail) -> Unit,
     oAuths: Set<OAuth> = OAuth.entries.toSet(),
     vkid: VKID? = null,
     authParams: VKIDAuthUiParams = VKIDAuthUiParams {},
@@ -138,7 +138,7 @@ private fun OAuthButton(
     coroutineScope: CoroutineScope,
     vkid: VKID,
     onAuth: OAuthListWidgetAuthCallback,
-    onAuthCode: (AuthCodeData) -> Unit,
+    onAuthCode: (AuthCodeData, Boolean) -> Unit,
     onFail: (VKIDAuthFail) -> Unit,
     authParams: VKIDAuthUiParams,
 ) {
@@ -164,7 +164,7 @@ private fun OAuthButton(
                                     }
                                 }
 
-                                override fun onAuthCode(data: AuthCodeData) = onAuthCode(data)
+                                override fun onAuthCode(data: AuthCodeData, isCompletion: Boolean) = onAuthCode(data, isCompletion)
 
                                 override fun onFail(fail: VKIDAuthFail) = onFail(fail)
                             },

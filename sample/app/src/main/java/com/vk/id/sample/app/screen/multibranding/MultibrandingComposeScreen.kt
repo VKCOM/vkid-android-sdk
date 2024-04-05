@@ -96,10 +96,12 @@ internal fun MultibrandingComposeScreen() {
                     horizontalArrangement = Arrangement.Center
                 ) {
                     val width = maxOf(MIN_WIDTH_DP, (screenWidth * widthPercent.floatValue))
-                    val onAuthCode = { data: AuthCodeData ->
+                    val onAuthCode = { data: AuthCodeData, isCompletion: Boolean ->
                         code = data.code
                         token.value = null
-                        showToast(context, "Received auth code")
+                        if (isCompletion) {
+                            showToast(context, "Received auth code")
+                        }
                     }
                     val authParams = VKIDAuthUiParams {
                         this.state = state.takeIf { it.isNotBlank() }

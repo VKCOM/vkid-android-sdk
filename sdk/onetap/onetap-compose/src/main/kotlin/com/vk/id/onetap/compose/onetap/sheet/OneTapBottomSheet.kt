@@ -59,13 +59,14 @@ public fun rememberOneTapBottomSheetState(): OneTapBottomSheetState {
  * @param serviceName The name of the service for authentication. Will be displayed as title of sheet.
  * @param scenario The [OneTapScenario] under which the authentication is being performed. It reflects on the texts of the button and sheet.
  * @param autoHideOnSuccess Automatically hide the sheet on successful authentication.
- * Note: The dialog won't be dismissed if you pass [VKIDAuthUiParams.codeChallenge] in [authParams] and auth succeeds because [onAuth] won't be called.
- *       You should hide bottom sheet manually after you exchange auth code to an access token.
  * @param onAuth Callback function invoked on successful authentication with an [OneTapOAuth] and an [AccessToken].
  * The first parameter is the OAuth which was used for authorization or null if the main flow with OneTap was used.
  * The second parameter is the access token to be used for working with VK API.
  * @param onAuthCode A callback to be invoked upon successful first step of auth - receiving auth code
  * which can later be exchanged to access token.
+ * isCompletion is true if [onAuth] won't be called.
+ * This will happen if you passed auth parameters and implement their validation yourself.
+ * In that case we can't exchange auth code for access token and you should do this yourself.
  * @param onFail Callback function invoked on authentication failure with an [OneTapOAuth] and a [VKIDAuthFail] object.
  * The first parameter is the OAuth which was used for authorization or null if the main flow with OneTap was used.
  * The second parameter is the error which happened during authorization.
@@ -80,9 +81,9 @@ public fun OneTapBottomSheet(
     serviceName: String,
     scenario: OneTapScenario = OneTapScenario.EnterService,
     autoHideOnSuccess: Boolean = true,
-    onAuth: (OneTapOAuth?, AccessToken) -> Unit,
-    onAuthCode: (AuthCodeData) -> Unit = {},
-    onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit = { _, _ -> },
+    onAuth: (oAuth: OneTapOAuth?, accessToken: AccessToken) -> Unit,
+    onAuthCode: (data: AuthCodeData, isCompletion: Boolean) -> Unit = { _, _ -> },
+    onFail: (oAuth: OneTapOAuth?, fail: VKIDAuthFail) -> Unit = { _, _ -> },
     oAuths: Set<OneTapOAuth> = emptySet(),
     style: OneTapBottomSheetStyle = OneTapBottomSheetStyle.Light(),
     vkid: VKID? = null,
@@ -118,7 +119,7 @@ private fun OneTapBottomSheetInternal(
     scenario: OneTapScenario,
     autoHideOnSuccess: Boolean,
     onAuth: (OneTapOAuth?, AccessToken) -> Unit,
-    onAuthCode: (AuthCodeData) -> Unit,
+    onAuthCode: (AuthCodeData, Boolean) -> Unit,
     onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit,
     style: OneTapBottomSheetStyle,
     oAuths: Set<OneTapOAuth> = emptySet(),
@@ -210,7 +211,10 @@ private fun OneTapBottomSheetInternal(
                         vkid.authorize(
                             object : VKIDAuthCallback {
                                 override fun onSuccess(accessToken: AccessToken) = onAuth(status.oAuth, accessToken)
-                                override fun onAuthCode(data: AuthCodeData) = onAuthCode(data)
+                                override fun onAuthCode(
+                                    data: AuthCodeData,
+                                    isCompletion: Boolean
+                                ) = onAuthCode(data, isCompletion)
                                 override fun onFail(fail: VKIDAuthFail) = onFail(status.oAuth, fail)
                             },
                             authParams.asParamsBuilder {
@@ -321,7 +325,7 @@ private fun OneTapBottomSheetPreview() {
     SheetContentMain(
         vkid = vkid,
         onAuth = { _, _ -> },
-        onAuthCode = {},
+        onAuthCode = { _, _ -> },
         onFail = { _, _ -> },
         oAuths = emptySet(),
         serviceName = "<Название сервиса>",

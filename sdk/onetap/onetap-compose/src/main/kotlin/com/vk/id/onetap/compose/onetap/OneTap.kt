@@ -45,6 +45,9 @@ import com.vk.id.onetap.compose.util.PlaceComposableIfFitsWidth
  * The second parameter is the access token to be used for working with VK API.
  * @param onAuthCode A callback to be invoked upon successful first step of auth - receiving auth code
  * which can later be exchanged to access token.
+ * isCompletion is true if [onAuth] won't be called.
+ * This will happen if you passed auth parameters and implement their validation yourself.
+ * In that case we can't exchange auth code for access token and you should do this yourself.
  * @param onFail Callback function invoked on authentication failure with on [OneTapOAuth] and a [VKIDAuthFail] object.
  * The first parameter is the OAuth which was used for authorization or null if the main flow with OneTap was used.
  * The second parameter is the error which happened during authorization.
@@ -60,9 +63,9 @@ import com.vk.id.onetap.compose.util.PlaceComposableIfFitsWidth
 public fun OneTap(
     modifier: Modifier = Modifier,
     style: OneTapStyle = OneTapStyle.Light(),
-    onAuth: (OneTapOAuth?, AccessToken) -> Unit,
-    onAuthCode: (AuthCodeData) -> Unit = {},
-    onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit = { _, _ -> },
+    onAuth: (oAuth: OneTapOAuth?, accessToken: AccessToken) -> Unit,
+    onAuthCode: (data: AuthCodeData, isCompletion: Boolean) -> Unit = { _, _ -> },
+    onFail: (oAuth: OneTapOAuth?, fail: VKIDAuthFail) -> Unit = { _, _ -> },
     oAuths: Set<OneTapOAuth> = emptySet(),
     vkid: VKID? = null,
     signInAnotherAccountButtonEnabled: Boolean = false,
@@ -155,7 +158,7 @@ internal fun OneTap(
     onVKIDButtonClick: () -> Unit,
     onAlternateButtonClick: () -> Unit,
     onAuth: (OneTapOAuth?, AccessToken) -> Unit,
-    onAuthCode: (AuthCodeData) -> Unit,
+    onAuthCode: (AuthCodeData, Boolean) -> Unit,
     onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit,
     authParams: VKIDAuthUiParams = VKIDAuthUiParams {},
 ) {

@@ -64,7 +64,7 @@ public class OneTap @JvmOverloads constructor(
     private var onAuth: (OneTapOAuth?, AccessToken) -> Unit = { _, _ ->
         throw IllegalStateException("No onAuth callback for VKID OneTap Button. Set it with setCallbacks method.")
     }
-    private var onAuthCode: (AuthCodeData) -> Unit = {}
+    private var onAuthCode: (AuthCodeData, Boolean) -> Unit = { _, _ -> }
     private var onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit = { _, _ -> }
 
     /**
@@ -112,7 +112,7 @@ public class OneTap @JvmOverloads constructor(
             modifier = Modifier,
             style = style.value,
             onAuth = { oAuth, accessToken -> onAuth(oAuth, accessToken) },
-            onAuthCode = { onAuthCode(it) },
+            onAuthCode = { data, isCompletion -> onAuthCode(data, isCompletion) },
             onFail = { oAuth, fail -> onFail(oAuth, fail) },
             oAuths = oAuths.value,
             signInAnotherAccountButtonEnabled = isSignInToAnotherAccountEnabled.value,
@@ -127,12 +127,15 @@ public class OneTap @JvmOverloads constructor(
      * @param onAuth A callback to be invoked upon a successful auth.
      * @param onAuthCode A callback to be invoked upon successful first step of auth - receiving auth code
      * which can later be exchanged to access token.
+     * isCompletion is true if [onSuccess] won't be called.
+     * This will happen if you passed auth parameters and implement their validation yourself.
+     * In that case we can't exchange auth code for access token and you should do this yourself.
      * @param onFail A callback to be invoked upon an error during auth.
      */
     public fun setCallbacks(
-        onAuth: (OneTapOAuth?, AccessToken) -> Unit,
-        onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit = { _, _ -> },
-        onAuthCode: (AuthCodeData) -> Unit = {},
+        onAuth: (oAuth: OneTapOAuth?, accessToken: AccessToken) -> Unit,
+        onFail: (oAuth: OneTapOAuth?, fail: VKIDAuthFail) -> Unit = { _, _ -> },
+        onAuthCode: (data: AuthCodeData, isCompletion: Boolean) -> Unit = { _, _ -> },
     ) {
         this.onAuth = onAuth
         this.onAuthCode = onAuthCode
