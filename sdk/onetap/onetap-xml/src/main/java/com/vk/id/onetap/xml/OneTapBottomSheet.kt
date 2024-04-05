@@ -4,8 +4,10 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.FrameLayout
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
 import com.vk.id.AccessToken
 import com.vk.id.VKID
@@ -80,12 +82,12 @@ public class OneTapBottomSheet @JvmOverloads constructor(
     @Suppress("NonSkippableComposable")
     @Composable
     private fun Content(sheetSettings: OneTapBottomSheetAttributeSettings) {
-        val vkid = remember { mutableStateOf(vkid) }
-        onVKIDChange = { vkid.value = it }
-        val oAuths = remember { mutableStateOf(oAuths) }
-        onOAuthsChange = { oAuths.value = it }
-        val authParams = remember { mutableStateOf(authParams) }
-        onAuthParamsChange = { authParams.value = it }
+        var vkid by remember { mutableStateOf(vkid) }
+        onVKIDChange = { vkid = it }
+        var oAuths by remember { mutableStateOf(oAuths) }
+        onOAuthsChange = { oAuths = it }
+        var authParams by remember { mutableStateOf(authParams) }
+        onAuthParamsChange = { authParams = it }
         OneTapBottomSheet(
             state = rememberOneTapBottomSheetState().also {
                 state = it
@@ -97,9 +99,9 @@ public class OneTapBottomSheet @JvmOverloads constructor(
             onAuthCode = { data, isCompletion -> onAuthCode(data, isCompletion) },
             onFail = { oAuth, fail -> onFail(oAuth, fail) },
             autoHideOnSuccess = sheetSettings.autoHideOnSuccess,
-            oAuths = oAuths.value,
-            vkid = vkid.value,
-            authParams = authParams.value
+            oAuths = oAuths,
+            vkid = vkid,
+            authParams = authParams,
         )
     }
 
