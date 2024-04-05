@@ -20,8 +20,8 @@ public final class com/vk/id/onetap/xml/OneTap : android/widget/FrameLayout {
 	public final fun getStyle ()Lcom/vk/id/onetap/common/OneTapStyle;
 	public final fun isSignInToAnotherAccountEnabled ()Z
 	public final fun setAuthParams (Lcom/vk/id/auth/VKIDAuthUiParams;)V
-	public final fun setCallbacks (Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;)V
-	public static synthetic fun setCallbacks$default (Lcom/vk/id/onetap/xml/OneTap;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public final fun setCallbacks (Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;)V
+	public static synthetic fun setCallbacks$default (Lcom/vk/id/onetap/xml/OneTap;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)V
 	public final fun setOAuths (Ljava/util/Set;)V
 	public final fun setSignInToAnotherAccountEnabled (Z)V
 	public final fun setStyle (Lcom/vk/id/onetap/common/OneTapStyle;)V
@@ -39,8 +39,8 @@ public final class com/vk/id/onetap/xml/OneTapBottomSheet : android/widget/Frame
 	public final fun hide ()V
 	public final fun isVisible ()Z
 	public final fun setAuthParams (Lcom/vk/id/auth/VKIDAuthUiParams;)V
-	public final fun setCallbacks (Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function2;)V
-	public static synthetic fun setCallbacks$default (Lcom/vk/id/onetap/xml/OneTapBottomSheet;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)V
+	public final fun setCallbacks (Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;)V
+	public static synthetic fun setCallbacks$default (Lcom/vk/id/onetap/xml/OneTapBottomSheet;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)V
 	public final fun setOAuths (Ljava/util/Set;)V
 	public final fun setVKID (Lcom/vk/id/VKID;)V
 	public final fun show ()V

@@ -265,7 +265,7 @@ public class VKID {
                     callback.onFail(exchangeFail)
                 }
 
-                override fun onAuthCode(data: AuthCodeData) = callback.onAuthCode(data)
+                override fun onAuthCode(data: AuthCodeData, isCompletion: Boolean) = callback.onAuthCode(data, isCompletion)
             },
             params = VKIDAuthParams {
                 token = v1Token

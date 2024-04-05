@@ -176,13 +176,13 @@ public final class com/vk/id/auth/Prompt : java/lang/Enum {
 }
 
 public abstract interface class com/vk/id/auth/VKIDAuthCallback {
-	public abstract fun onAuthCode (Lcom/vk/id/auth/AuthCodeData;)V
+	public abstract fun onAuthCode (Lcom/vk/id/auth/AuthCodeData;Z)V
 	public abstract fun onFail (Lcom/vk/id/VKIDAuthFail;)V
 	public abstract fun onSuccess (Lcom/vk/id/AccessToken;)V
 }
 
 public final class com/vk/id/auth/VKIDAuthCallback$DefaultImpls {
-	public static fun onAuthCode (Lcom/vk/id/auth/VKIDAuthCallback;Lcom/vk/id/auth/AuthCodeData;)V
+	public static fun onAuthCode (Lcom/vk/id/auth/VKIDAuthCallback;Lcom/vk/id/auth/AuthCodeData;Z)V
 }
 
 public final class com/vk/id/auth/VKIDAuthParams {
@@ -331,13 +331,13 @@ public final class com/vk/id/exchangetoken/VKIDExchangeTokenParamsKt {
 }
 
 public abstract interface class com/vk/id/exchangetoken/VKIDExchangeTokenToV2Callback {
-	public abstract fun onAuthCode (Lcom/vk/id/auth/AuthCodeData;)V
+	public abstract fun onAuthCode (Lcom/vk/id/auth/AuthCodeData;Z)V
 	public abstract fun onFail (Lcom/vk/id/exchangetoken/VKIDExchangeTokenFail;)V
 	public abstract fun onSuccess (Lcom/vk/id/AccessToken;)V
 }
 
 public final class com/vk/id/exchangetoken/VKIDExchangeTokenToV2Callback$DefaultImpls {
-	public static fun onAuthCode (Lcom/vk/id/exchangetoken/VKIDExchangeTokenToV2Callback;Lcom/vk/id/auth/AuthCodeData;)V
+	public static fun onAuthCode (Lcom/vk/id/exchangetoken/VKIDExchangeTokenToV2Callback;Lcom/vk/id/auth/AuthCodeData;Z)V
 }
 
 public abstract interface class com/vk/id/internal/log/LogEngine {

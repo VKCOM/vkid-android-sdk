@@ -60,7 +60,9 @@ internal class AuthResultHandler(
             return
         }
 
-        callbacksHolder.getAll().forEach { it.onAuthCode(AuthCodeData(oauth.oauth.code)) }
+        callbacksHolder.getAll().forEach {
+            it.onAuthCode(AuthCodeData(oauth.oauth.code), isCompletion = codeVerifier.isBlank())
+        }
         if (codeVerifier.isBlank()) {
             return
         }

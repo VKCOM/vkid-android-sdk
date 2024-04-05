@@ -10,7 +10,7 @@ public interface VKIDExchangeTokenToV2Callback {
     /**
      * Called upon successful token exchange.
      *
-     * @param token New token
+     * @param token access token and other useful data.
      */
     public fun onSuccess(token: AccessToken)
 
@@ -23,6 +23,11 @@ public interface VKIDExchangeTokenToV2Callback {
 
     /**
      * Call upon successful first step of auth for token exchange - receiving auth code which can later be exchanged to access token.
+     *
+     * @param data auth code that can be exchanged for access token
+     * @param isCompletion true if [onSuccess] won't be called.
+     * This will happen if you passed auth parameters and implement their validation yourself.
+     * In that case we can't exchange auth code for access token and you should do this yourself.
      */
-    public fun onAuthCode(data: AuthCodeData): Unit = Unit
+    public fun onAuthCode(data: AuthCodeData, isCompletion: Boolean): Unit = Unit
 }

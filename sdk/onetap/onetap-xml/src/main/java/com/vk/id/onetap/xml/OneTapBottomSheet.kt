@@ -57,7 +57,7 @@ public class OneTapBottomSheet @JvmOverloads constructor(
     private var onAuth: (OneTapOAuth?, AccessToken) -> Unit = { _, _ ->
         throw IllegalStateException("No onAuth callback for VKID OneTap Button. Set it with setCallbacks method.")
     }
-    private var onAuthCode: (AuthCodeData) -> Unit = {}
+    private var onAuthCode: (AuthCodeData, Boolean) -> Unit = { _, _ -> }
     private var onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit = { _, _ -> }
     private var vkid: VKID? = null
         set(value) {
@@ -94,7 +94,7 @@ public class OneTapBottomSheet @JvmOverloads constructor(
             serviceName = sheetSettings.serviceName,
             scenario = sheetSettings.scenario,
             onAuth = { oAuth, accessToken -> onAuth(oAuth, accessToken) },
-            onAuthCode = { onAuthCode(it) },
+            onAuthCode = { data, isCompletion -> onAuthCode(data, isCompletion) },
             onFail = { oAuth, fail -> onFail(oAuth, fail) },
             autoHideOnSuccess = sheetSettings.autoHideOnSuccess,
             oAuths = oAuths.value,
@@ -112,9 +112,9 @@ public class OneTapBottomSheet @JvmOverloads constructor(
      * @param onFail A callback to be invoked upon an error during auth.
      */
     public fun setCallbacks(
-        onAuth: (OneTapOAuth?, AccessToken) -> Unit,
-        onAuthCode: (AuthCodeData) -> Unit = {},
-        onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit = { _, _ -> },
+        onAuth: (oAuth: OneTapOAuth?, accessToken: AccessToken) -> Unit,
+        onAuthCode: (data: AuthCodeData, isCompletion: Boolean) -> Unit = { _, _ -> },
+        onFail: (oAuth: OneTapOAuth?, fail: VKIDAuthFail) -> Unit = { _, _ -> },
     ) {
         this.onAuth = onAuth
         this.onAuthCode = onAuthCode

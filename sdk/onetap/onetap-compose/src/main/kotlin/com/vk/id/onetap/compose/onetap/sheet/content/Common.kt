@@ -41,7 +41,7 @@ internal fun startVKIDAuth(
     vkid: VKID,
     style: OneTapBottomSheetStyle,
     onAuth: (AccessToken) -> Unit,
-    onAuthCode: (AuthCodeData) -> Unit,
+    onAuthCode: (AuthCodeData, Boolean) -> Unit,
     onFail: (VKIDAuthFail) -> Unit,
     authStatus: MutableState<OneTapBottomSheetAuthStatus>,
     authParams: VKIDAuthUiParams,
@@ -54,7 +54,10 @@ internal fun startVKIDAuth(
             authStatus.value = OneTapBottomSheetAuthStatus.AuthSuccess
             onAuth(it)
         },
-        onAuthCode = onAuthCode,
+        onAuthCode = { data, isCompletion ->
+            if (isCompletion) authStatus.value = OneTapBottomSheetAuthStatus.AuthSuccess
+            onAuthCode(data, isCompletion)
+        },
         onFail = {
             authStatus.value = OneTapBottomSheetAuthStatus.AuthFailedVKID
             onFail(it)
@@ -71,7 +74,7 @@ internal fun startAlternateAuth(
     vkid: VKID,
     style: OneTapBottomSheetStyle,
     onAuth: (AccessToken) -> Unit,
-    onAuthCode: (AuthCodeData) -> Unit,
+    onAuthCode: (AuthCodeData, Boolean) -> Unit,
     onFail: (VKIDAuthFail) -> Unit,
     authStatus: MutableState<OneTapBottomSheetAuthStatus>,
     authParams: VKIDAuthUiParams,

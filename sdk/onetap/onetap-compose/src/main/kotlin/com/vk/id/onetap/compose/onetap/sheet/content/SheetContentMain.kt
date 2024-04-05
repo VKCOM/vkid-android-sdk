@@ -37,7 +37,7 @@ import com.vk.id.onetap.compose.onetap.sheet.vkidButtonTextProvider
 internal fun SheetContentMain(
     vkid: VKID,
     onAuth: (OneTapOAuth?, AccessToken) -> Unit,
-    onAuthCode: (AuthCodeData) -> Unit,
+    onAuthCode: (AuthCodeData, Boolean) -> Unit,
     onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit,
     oAuths: Set<OneTapOAuth>,
     serviceName: String,
