@@ -14,8 +14,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -23,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.vk.id.AccessToken
 import com.vk.id.OAuth
+import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.multibranding.OAuthListWidget
 import com.vk.id.multibranding.common.style.OAuthListWidgetCornersStyle
 import com.vk.id.multibranding.common.style.OAuthListWidgetSizeStyle
@@ -46,6 +49,7 @@ import com.vk.id.sample.app.util.carrying.carry
 import com.vk.id.sample.xml.uikit.common.dpToPixels
 import com.vk.id.sample.xml.uikit.common.getMultibrandingFailCallback
 import com.vk.id.sample.xml.uikit.common.getMultibrandingSuccessCallback
+import com.vk.id.sample.xml.uikit.common.showToast
 import com.vk.id.sample.xml.vkid
 
 private const val MIN_WIDTH_DP = 100f
@@ -57,7 +61,8 @@ private const val MAX_RADIUS_DP = 30
 @Suppress("LongMethod")
 internal fun MultibrandingComposeScreen() {
     val context = LocalContext.current
-    val token: MutableState<AccessToken?> = remember { mutableStateOf(null) }
+    val token = remember { mutableStateOf<AccessToken?>(null) }
+    var code by remember { mutableStateOf<String?>(null) }
     val screenWidth = LocalConfiguration.current.screenWidthDp - TOTAL_WIDTH_PADDING_DP
     val widthPercent = remember { mutableFloatStateOf(1f) }
     val cornersStylePercent = remember { mutableFloatStateOf(0f) }
@@ -69,10 +74,11 @@ internal fun MultibrandingComposeScreen() {
         OAuthListWidgetCornersStyle.Custom(MAX_RADIUS_DP * cornersStylePercent.floatValue),
         selectedSize.value,
     )
+    var state by remember { mutableStateOf("") }
+    var codeChallenge by remember { mutableStateOf("") }
     AppTheme(
         useDarkTheme = selectedStyle is OAuthListWidgetStyle.Dark
     ) {
-        Spacer(modifier = Modifier.height(16.dp))
         Column(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.background)
@@ -83,6 +89,7 @@ internal fun MultibrandingComposeScreen() {
             horizontalAlignment = Alignment.Start,
         ) {
             if (selectedOAuths.value.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(16.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center
@@ -107,18 +114,39 @@ internal fun MultibrandingComposeScreen() {
                             )
                             style = selectedStyle
                             oAuths = selectedOAuths.value
-                            setVKID(context.vkid)
                         }
                     } else {
                         OAuthListWidget(
                             modifier = Modifier.width(width.dp),
                             style = selectedStyle,
                             onAuth = getMultibrandingSuccessCallback(context) { token.value = it },
+                            onAuthCode = {
+                                code = it.code
+                                token.value = null
+                                showToast(context, "Received auth code")
+                            },
                             onFail = getMultibrandingFailCallback(context),
-                            oAuths = selectedOAuths.value
+                            oAuths = selectedOAuths.value,
+                            authParams = VKIDAuthUiParams {
+                                this.state = state.takeIf { it.isNotBlank() }
+                                this.codeChallenge = codeChallenge.takeIf { it.isNotBlank() }
+                            }
                         )
                     }
                 }
+            }
+            code?.let { value ->
+                Spacer(modifier = Modifier.height(8.dp))
+                TextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = value,
+                    onValueChange = { code = it },
+                    label = { Text("Resulting auth code") },
+                    maxLines = 1,
+                )
+            }
+            token.value?.let {
+                UseToken(accessToken = it)
             }
             Spacer(modifier = Modifier.height(16.dp))
             CheckboxSelector(
@@ -140,9 +168,21 @@ internal fun MultibrandingComposeScreen() {
                 selectedValue = selectedSize.value.name,
                 onValueSelected = { selectedSize.value = it }
             )
-            token.value?.let {
-                UseToken(accessToken = it)
-            }
+
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = state,
+                onValueChange = { state = it },
+                label = { Text("State (Optional)") },
+                shape = RectangleShape,
+            )
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = codeChallenge,
+                onValueChange = { codeChallenge = it },
+                label = { Text("Code challenge (Optional)") },
+                shape = RectangleShape,
+            )
             Spacer(modifier = Modifier.height(16.dp))
         }
     }

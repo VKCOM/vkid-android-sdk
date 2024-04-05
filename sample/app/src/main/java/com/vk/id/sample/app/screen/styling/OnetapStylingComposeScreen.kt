@@ -15,8 +15,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -24,11 +25,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.vk.id.AccessToken
+import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
@@ -47,6 +50,7 @@ import com.vk.id.sample.app.util.carrying.carry
 import com.vk.id.sample.xml.uikit.common.dpToPixels
 import com.vk.id.sample.xml.uikit.common.getOneTapFailCallback
 import com.vk.id.sample.xml.uikit.common.getOneTapSuccessCallback
+import com.vk.id.sample.xml.uikit.common.showToast
 import com.vk.id.sample.xml.vkid
 
 private const val TOTAL_WIDTH_PADDING_DP = 16
@@ -57,7 +61,8 @@ private const val MAX_ELEVATION_DP = 20
 @Suppress("LongMethod")
 @Composable
 internal fun OnetapStylingComposeScreen() {
-    val token: MutableState<AccessToken?> = remember { mutableStateOf(null) }
+    val token = remember { mutableStateOf<AccessToken?>(null) }
+    var code by remember { mutableStateOf<String?>(null) }
     val context = LocalContext.current
 
     val screenWidth = LocalConfiguration.current.screenWidthDp - TOTAL_WIDTH_PADDING_DP
@@ -75,6 +80,8 @@ internal fun OnetapStylingComposeScreen() {
         selectedSize.value,
         OneTapButtonElevationStyle.Custom(MAX_ELEVATION_DP * selectedElevationStyle.floatValue),
     )
+    var state by remember { mutableStateOf("") }
+    var codeChallenge by remember { mutableStateOf("") }
 
     val useDarkTheme = selectedStyle is OneTapStyle.Dark ||
         selectedStyle is OneTapStyle.TransparentDark
@@ -109,7 +116,6 @@ internal fun OnetapStylingComposeScreen() {
                         }
                     })
                     oneTapView?.apply {
-                        setVKID(context.vkid)
                         layoutParams = LayoutParams(
                             if (selectedStyle is OneTapStyle.Icon) WRAP_CONTENT else context.dpToPixels(width.toInt()),
                             WRAP_CONTENT,
@@ -123,11 +129,33 @@ internal fun OnetapStylingComposeScreen() {
                         modifier = Modifier.width(width.dp),
                         style = selectedStyle,
                         onAuth = getOneTapSuccessCallback(context) { token.value = it },
+                        onAuthCode = {
+                            code = it.code
+                            token.value = null
+                            showToast(context, "Received auth code")
+                        },
                         onFail = getOneTapFailCallback(context),
                         oAuths = selectedOAuths.value,
-                        signInAnotherAccountButtonEnabled = signInToAnotherAccountEnabled.value
+                        signInAnotherAccountButtonEnabled = signInToAnotherAccountEnabled.value,
+                        authParams = VKIDAuthUiParams {
+                            this.state = state.takeIf { it.isNotBlank() }
+                            this.codeChallenge = codeChallenge.takeIf { it.isNotBlank() }
+                        }
                     )
                 }
+            }
+            code?.let { value ->
+                Spacer(modifier = Modifier.height(8.dp))
+                TextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = value,
+                    onValueChange = { code = it },
+                    label = { Text("Resulting auth code") },
+                    maxLines = 1,
+                )
+            }
+            token.value?.let {
+                UseToken(accessToken = it)
             }
             Spacer(modifier = Modifier.height(16.dp))
             CheckboxSelector(
@@ -157,9 +185,21 @@ internal fun OnetapStylingComposeScreen() {
                 selectedValue = selectedSize.value.name,
                 onValueSelected = { selectedSize.value = it }
             )
-            token.value?.let {
-                UseToken(accessToken = it)
-            }
+
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = state,
+                onValueChange = { state = it },
+                label = { Text("State (Optional)") },
+                shape = RectangleShape,
+            )
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = codeChallenge,
+                onValueChange = { codeChallenge = it },
+                label = { Text("Code challenge (Optional)") },
+                shape = RectangleShape,
+            )
             Spacer(modifier = Modifier.height(16.dp))
         }
     }
