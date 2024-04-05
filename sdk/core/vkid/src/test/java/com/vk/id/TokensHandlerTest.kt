@@ -65,6 +65,7 @@ internal class TokensHandlerTest : BehaviorSpec({
             coEvery {
                 userInfoFetcher.fetch(
                     ACCESS_TOKEN_VALUE,
+                    STATE,
                     capture(capturedOnSuccess),
                     onFailedApiCall,
                 )
@@ -75,6 +76,7 @@ internal class TokensHandlerTest : BehaviorSpec({
             every { onSuccess(ACCESS_TOKEN) } just runs
             handler.handle(
                 payload = TOKEN_PAYLOAD,
+                state = STATE,
                 onSuccess = onSuccess,
                 onFailedApiCall = onFailedApiCall,
             )
@@ -82,6 +84,7 @@ internal class TokensHandlerTest : BehaviorSpec({
                 coVerify {
                     userInfoFetcher.fetch(
                         ACCESS_TOKEN_VALUE,
+                        STATE,
                         capture(capturedOnSuccess),
                         onFailedApiCall,
                     )

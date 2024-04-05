@@ -16,6 +16,7 @@ public inline fun VKIDRefreshTokenParams(
  */
 public class VKIDRefreshTokenParams private constructor(
     internal val state: String? = null,
+    internal val userFetchingState: String? = null,
 ) {
     /**
      * A builder for [VKIDRefreshTokenParams].
@@ -28,10 +29,16 @@ public class VKIDRefreshTokenParams private constructor(
         public var state: String? = null
 
         /**
+         * An optional state to be passed to user data fetching.
+         */
+        public var userFetchingState: String? = null
+
+        /**
          * Constructs [VKIDRefreshTokenParams] with provided values.
          */
         public fun build(): VKIDRefreshTokenParams = VKIDRefreshTokenParams(
             state = state,
+            userFetchingState = userFetchingState,
         )
     }
 }

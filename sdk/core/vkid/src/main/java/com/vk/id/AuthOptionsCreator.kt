@@ -29,7 +29,7 @@ internal class AuthOptionsCreator(
             prefsStore.value.codeVerifier = codeVerifier
             pkceGenerator.value.deriveCodeVerifierChallenge(codeVerifier)
         }
-        val state = stateGenerator.regenerateState()
+        val state = authParams.state?.also { prefsStore.value.state = it } ?: stateGenerator.regenerateState()
         val locale = authParams.locale ?: VKIDAuthParams.Locale.systemLocale(appContext)
         val theme = authParams.theme ?: VKIDAuthParams.Theme.systemTheme(appContext)
         val credentials = serviceCredentials.value

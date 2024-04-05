@@ -94,6 +94,7 @@ internal class VKIDUserInfoFetcherTest : BehaviorSpec({
             runTest(scheduler) {
                 fetcher.fetch(
                     accessToken = ACCESS_TOKEN,
+                    state = null,
                     onSuccess = onSuccess,
                     onFailedApiCall = onFailedApiCall,
                 )
@@ -120,6 +121,7 @@ internal class VKIDUserInfoFetcherTest : BehaviorSpec({
             runTest(scheduler) {
                 fetcher.fetch(
                     accessToken = ACCESS_TOKEN,
+                    state = STATE,
                     onSuccess = onSuccess,
                     onFailedApiCall = onFailedApiCall,
                 )

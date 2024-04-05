@@ -17,12 +17,13 @@ internal class VKIDUserInfoFetcher(
 ) {
     suspend fun fetch(
         accessToken: String,
+        state: String?,
         onSuccess: (VKIDUser) -> Unit,
         onFailedApiCall: (Throwable) -> Unit,
     ) {
         val clientId = serviceCredentials.clientID
         val deviceId = deviceIdProvider.getDeviceId()
-        val userInfoState = stateGenerator.regenerateState()
+        val userInfoState = state ?: stateGenerator.regenerateState()
         val userInfoResult = withContext(dispatchers.io) {
             api.getUserInfo(
                 accessToken = accessToken,

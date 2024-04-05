@@ -42,6 +42,7 @@ internal class VKIDTokenRefresher(
             }
             tokensHandler.handle(
                 payload = payload,
+                state = params.userFetchingState,
                 onSuccess = callback::onSuccess,
                 onFailedApiCall = {
                     callback.onFail(
