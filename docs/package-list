@@ -1,6 +1,7 @@
 $dokka.format:html-v1
 $dokka.linkExtension:html
 $dokka.location:com.vk.id.common.util////PointingToDeclaration/common/com.vk.id.common.util.html
+$dokka.location:com.vk.id.network////PointingToDeclaration/network/com.vk.id.network.html
 $dokka.location:com.vk.id.onetap.common.alternate.style////PointingToDeclaration/onetap-common/com.vk.id.onetap.common.alternate.style.html
 $dokka.location:com.vk.id.onetap.common.auth.style////PointingToDeclaration/onetap-common/com.vk.id.onetap.common.auth.style.html
 $dokka.location:com.vk.id.onetap.common.icon.style////PointingToDeclaration/onetap-common/com.vk.id.onetap.common.icon.style.html
@@ -9,6 +10,8 @@ $dokka.location:com.vk.id.test////PointingToDeclaration/vkid/com.vk.id.test.htm
 module:common
 com.vk.id.common
 com.vk.id.common.util
+module:logger
+com.vk.id.logger
 module:multibranding-common
 com.vk.id.multibranding.common.callback
 com.vk.id.multibranding.common.style
@@ -16,6 +19,8 @@ module:multibranding-compose
 com.vk.id.multibranding
 module:multibranding-xml
 com.vk.id.multibranding.xml
+module:network
+com.vk.id.network
 module:onetap-common
 com.vk.id.onetap.common
 com.vk.id.onetap.common.alternate.style
@@ -32,6 +37,9 @@ com.vk.id.onetap.xml
 module:vkid
 com.vk.id
 com.vk.id.auth
+<<<<<<< HEAD
 com.vk.id.internal.log
 com.vk.id.refresh
+=======
+>>>>>>> develop
 com.vk.id.test

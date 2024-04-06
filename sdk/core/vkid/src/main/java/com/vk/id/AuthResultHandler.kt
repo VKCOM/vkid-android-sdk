@@ -1,15 +1,18 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id
 
 import com.vk.id.auth.AuthCodeData
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthResult
 import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.auth.device.DeviceIdProvider
 import com.vk.id.internal.concurrent.CoroutinesDispatchers
-import com.vk.id.internal.log.createLoggerForClass
 import com.vk.id.internal.store.PrefsStore
 import com.vk.id.internal.util.currentTime
+import com.vk.id.logger.createLoggerForClass
 import kotlinx.coroutines.withContext
 
 @Suppress("LongParameterList")

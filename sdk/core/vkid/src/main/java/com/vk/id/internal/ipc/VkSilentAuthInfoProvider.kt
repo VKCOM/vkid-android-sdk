@@ -26,16 +26,19 @@
  * THIRD PARTIES FOR ANY DAMAGE IN CONNECTION WITH USE OF THE SOFTWARE.
  */
 
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.internal.ipc
 
 import android.content.Context
 import android.os.IBinder
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.auth.app.SilentAuthInfoUtils
 import com.vk.id.internal.auth.app.SilentAuthProviderData
 import com.vk.id.internal.auth.app.SilentAuthServicesProvider
 import com.vk.id.internal.auth.device.DeviceIdProvider
 import com.vk.id.internal.ipc.VkSilentInfoItemsGrouper.groupByWeightAndUserHash
-import com.vk.id.internal.log.createLoggerForClass
+import com.vk.id.logger.createLoggerForClass
 import com.vk.silentauth.ISilentAuthInfoProvider
 import com.vk.silentauth.SilentAuthInfo
 import com.vk.silentauth.SilentAuthInfoWithProviderWeight

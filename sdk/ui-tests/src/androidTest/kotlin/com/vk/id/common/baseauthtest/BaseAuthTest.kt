@@ -10,6 +10,8 @@ import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.common.activity.AutoTestActivityRule
+import com.vk.id.common.allure.Platform
+import com.vk.id.common.allure.Product
 import com.vk.id.common.basetest.BaseUiTest
 import com.vk.id.common.mockapi.MockApi
 import com.vk.id.common.mockapi.mockApiError
@@ -18,10 +20,12 @@ import com.vk.id.common.mockprovider.ContinueAuthScenario
 import com.vk.id.test.VKIDTestBuilder
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
-import io.qameta.allure.kotlin.junit4.DisplayName
+import io.qameta.allure.kotlin.Allure
+import org.junit.Before
 import org.junit.Rule
-import org.junit.Test
 
+@Platform("Android Manual")
+@Product("VK ID SDK")
 @Suppress("TooManyFunctions")
 public abstract class BaseAuthTest(
     private val oAuth: OAuth?,
@@ -31,9 +35,14 @@ public abstract class BaseAuthTest(
     @get:Rule
     public val composeTestRule: AutoTestActivityRule = createAndroidComposeRule()
 
-    @DisplayName("Test that token is received")
-    @Test
-    public fun tokenIsReceived(): Unit = runIfShouldNotSkip {
+    @Before
+    public fun setAllureParam() {
+        if (!skipTest) {
+            oAuth?.let { Allure.parameter("oauth", it.name) }
+        }
+    }
+
+    public open fun tokenIsReceived(): Unit = runIfShouldNotSkip {
         var accessToken: AccessToken? = null
         var receivedOAuth: OAuth? = null
         before {
@@ -52,12 +61,12 @@ public abstract class BaseAuthTest(
         }.run {
             startAuth()
             continueAuth()
-            step("OAuth is received") {
+            step("Получен OAuth") {
                 flakySafely {
                     receivedOAuth shouldBe oAuth
                 }
             }
-            step("Token is received") {
+            step("Получен токен") {
                 flakySafely {
                     accessToken?.token shouldBe MockApi.ACCESS_TOKEN
                     accessToken?.userID shouldBe MockApi.USER_ID
@@ -67,9 +76,7 @@ public abstract class BaseAuthTest(
         }
     }
 
-    @DisplayName("Test that failed redirect activity is received")
-    @Test
-    public fun failedRedirectActivityIsReceived(): Unit = runIfShouldNotSkip {
+    public open fun failedRedirectActivityIsReceived(): Unit = runIfShouldNotSkip {
         var receivedFail: VKIDAuthFail? = null
         var receivedOAuth: OAuth? = null
         before {
@@ -86,7 +93,8 @@ public abstract class BaseAuthTest(
         }.after {
         }.run {
             startAuth()
-            step("Fail is received") {
+            continueAuth()
+            step("Получена ошибка") {
                 flakySafely {
                     receivedFail.shouldBeInstanceOf<VKIDAuthFail.FailedRedirectActivity>()
                     receivedOAuth shouldBe oAuth
@@ -95,9 +103,7 @@ public abstract class BaseAuthTest(
         }
     }
 
-    @DisplayName("Test that no browser available is received")
-    @Test
-    public fun noBrowserAvailableIsReceived(): Unit = runIfShouldNotSkip {
+    public open fun noBrowserAvailableIsReceived(): Unit = runIfShouldNotSkip {
         var receivedFail: VKIDAuthFail? = null
         var receivedOAuth: OAuth? = null
         before {
@@ -114,7 +120,8 @@ public abstract class BaseAuthTest(
         }.after {
         }.run {
             startAuth()
-            step("Fail is received") {
+            continueAuth()
+            step("Получена ошибка") {
                 flakySafely {
                     receivedFail.shouldBeInstanceOf<VKIDAuthFail.NoBrowserAvailable>()
                     receivedOAuth shouldBe oAuth
@@ -123,9 +130,7 @@ public abstract class BaseAuthTest(
         }
     }
 
-    @DisplayName("Test that failed api call is received")
-    @Test
-    public fun failedApiCallIsReceived(): Unit = runIfShouldNotSkip {
+    public open fun failedApiCallIsReceived(): Unit = runIfShouldNotSkip {
         var receivedFail: VKIDAuthFail? = null
         var receivedOAuth: OAuth? = null
         before {
@@ -143,7 +148,7 @@ public abstract class BaseAuthTest(
         }.run {
             startAuth()
             continueAuth()
-            step("Fail is received") {
+            step("Получена ошибка") {
                 flakySafely {
                     receivedFail.shouldBeInstanceOf<VKIDAuthFail.FailedApiCall>()
                     receivedOAuth shouldBe oAuth
@@ -152,9 +157,7 @@ public abstract class BaseAuthTest(
         }
     }
 
-    @DisplayName("Test that cancellation is received")
-    @Test
-    public fun cancellationIsReceived(): Unit = runIfShouldNotSkip {
+    public open fun cancellationIsReceived(): Unit = runIfShouldNotSkip {
         var receivedFail: VKIDAuthFail? = null
         var receivedOAuth: OAuth? = null
         before {
@@ -171,10 +174,10 @@ public abstract class BaseAuthTest(
         }.after {
         }.run {
             startAuth()
-            step("Press back") {
+            step("Нажатие кнопки 'назад'") {
                 device.uiDevice.pressBack()
             }
-            step("Fail is received") {
+            step("Получена ошибка") {
                 flakySafely {
                     receivedFail.shouldBeInstanceOf<VKIDAuthFail.Canceled>()
                     receivedOAuth shouldBe oAuth
@@ -183,9 +186,7 @@ public abstract class BaseAuthTest(
         }
     }
 
-    @DisplayName("Test that failed oauth is received")
-    @Test
-    public fun failedOAuthIsReceived(): Unit = runIfShouldNotSkip {
+    public open fun failedOAuthIsReceived(): Unit = runIfShouldNotSkip {
         var receivedFail: VKIDAuthFail? = null
         var receivedOAuth: OAuth? = null
         before {
@@ -204,7 +205,7 @@ public abstract class BaseAuthTest(
         }.run {
             startAuth()
             continueAuth()
-            step("Fail is received") {
+            step("Получена ошибка") {
                 flakySafely {
                     receivedFail.shouldBeInstanceOf<VKIDAuthFail.FailedOAuth>()
                     receivedOAuth shouldBe oAuth
@@ -213,9 +214,35 @@ public abstract class BaseAuthTest(
         }
     }
 
-    @DisplayName("Test that invalid state is received")
-    @Test
-    public fun invalidStateIsReceived(): Unit = runIfShouldNotSkip {
+    public open fun invalidUuidIsReceived(): Unit = runIfShouldNotSkip {
+        var receivedFail: VKIDAuthFail? = null
+        var receivedOAuth: OAuth? = null
+        before {
+            val vkid = vkidBuilder()
+                .mockApiSuccess()
+                .overrideUuid("wrong uuid")
+                .build()
+            setContent(
+                vkid = vkid,
+                onFail = { oAuth, fail ->
+                    receivedFail = fail
+                    receivedOAuth = oAuth
+                }
+            )
+        }.after {
+        }.run {
+            startAuth()
+            continueAuth()
+            step("Получена ошибка") {
+                flakySafely {
+                    receivedFail shouldBe VKIDAuthFail.FailedOAuthState("Invalid uuid")
+                    receivedOAuth shouldBe oAuth
+                }
+            }
+        }
+    }
+
+    public open fun invalidStateIsReceived(): Unit = runIfShouldNotSkip {
         var receivedFail: VKIDAuthFail? = null
         var receivedOAuth: OAuth? = null
         before {
@@ -234,7 +261,7 @@ public abstract class BaseAuthTest(
         }.run {
             startAuth()
             continueAuth()
-            step("Fail is received") {
+            step("Получена ошибка") {
                 flakySafely {
                     receivedFail shouldBe VKIDAuthFail.FailedOAuthState("Invalid state")
                     receivedOAuth shouldBe oAuth

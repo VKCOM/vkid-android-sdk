@@ -17,6 +17,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -52,6 +54,9 @@ import com.vk.id.sample.xml.uikit.common.getMultibrandingFailCallback
 import com.vk.id.sample.xml.uikit.common.getMultibrandingSuccessCallback
 import com.vk.id.sample.xml.uikit.common.showToast
 import com.vk.id.sample.xml.vkid
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlin.reflect.KCallable
 
 private const val MIN_WIDTH_DP = 100f
 private const val TOTAL_WIDTH_PADDING_DP = 16
@@ -69,12 +74,35 @@ internal fun MultibrandingComposeScreen() {
     val cornersStylePercent = remember { mutableFloatStateOf(0f) }
     val selectedSize = remember { mutableStateOf(OAuthListWidgetSizeStyle.DEFAULT) }
     val selectedOAuths = remember { mutableStateOf(OAuth.entries.toSet()) }
-    val styleConstructor = remember { mutableStateOf(OAuthListWidgetStyle.Companion::system.carry(context)) }
+    val styleConstructor = remember<MutableState<KCallable<OAuthListWidgetStyle>?>> { mutableStateOf(null) }
+    LaunchedEffect(Unit) {
+        withContext(Dispatchers.IO) {
+            styleConstructor.value = OAuthListWidgetStyle.Companion::system.carry(context)
+        }
+    }
     val shouldUseXml = remember { mutableStateOf(false) }
-    val selectedStyle = styleConstructor.value.call(
-        OAuthListWidgetCornersStyle.Custom(MAX_RADIUS_DP * cornersStylePercent.floatValue),
+    var selectedStyle by remember { mutableStateOf(OAuthListWidgetStyle.system(context)) }
+    LaunchedEffect(
+        styleConstructor.value,
+        cornersStylePercent.floatValue,
         selectedSize.value,
-    )
+    ) {
+        withContext(Dispatchers.IO) {
+            styleConstructor.value?.let {
+                selectedStyle = it.call(
+                    OAuthListWidgetCornersStyle.Custom(MAX_RADIUS_DP * cornersStylePercent.floatValue),
+                    selectedSize.value,
+                )
+            }
+        }
+    }
+
+    var styleConstructors by remember { mutableStateOf<Map<String, KCallable<OAuthListWidgetStyle>>>(emptyMap()) }
+    LaunchedEffect(Unit) {
+        withContext(Dispatchers.IO) {
+            styleConstructors = OAuthListWidgetStyle::class.styleConstructors(context)
+        }
+    }
     var state by remember { mutableStateOf("") }
     var codeChallenge by remember { mutableStateOf("") }
     AppTheme(
@@ -164,7 +192,7 @@ internal fun MultibrandingComposeScreen() {
             EnumStateCheckboxSelector(state = selectedOAuths)
             DropdownSelector(
                 modifier = Modifier.padding(vertical = 16.dp),
-                values = OAuthListWidgetStyle::class.styleConstructors(context),
+                values = styleConstructors,
                 selectedValue = selectedStyle::class.simpleName ?: error("Can get simple style"),
                 onValueSelected = { styleConstructor.value = it }
             )

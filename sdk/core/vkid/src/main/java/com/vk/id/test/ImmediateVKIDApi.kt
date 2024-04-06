@@ -1,13 +1,14 @@
 package com.vk.id.test
 
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.internal.api.VKIDApi
 import com.vk.id.internal.auth.VKIDTokenPayload
+import com.vk.id.network.VKIDApi
 
 @InternalVKIDApi
 internal class ImmediateVKIDApi(
     private val mockApi: OverrideVKIDApi
 ) : VKIDApi {
+
     override fun getToken(
         code: String,
         codeVerifier: String,

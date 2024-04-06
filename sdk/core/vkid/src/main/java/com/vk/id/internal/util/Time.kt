@@ -1,8 +1,11 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.internal.util
 
 import android.os.Build
 import android.os.SystemClock
-import com.vk.id.internal.log.VKIDLog
+import com.vk.id.common.InternalVKIDApi
+import com.vk.id.logger.VKIDLog
 
 @Suppress("TooGenericExceptionCaught")
 internal fun currentTime(): Long {
