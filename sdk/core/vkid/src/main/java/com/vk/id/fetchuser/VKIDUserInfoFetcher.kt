@@ -5,31 +5,26 @@ import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.auth.device.DeviceIdProvider
 import com.vk.id.internal.concurrent.CoroutinesDispatchers
-import com.vk.id.internal.state.StateGenerator
 import kotlinx.coroutines.withContext
 
 internal class VKIDUserInfoFetcher(
     private val api: VKIDApiService,
-    private val stateGenerator: StateGenerator,
     private val deviceIdProvider: DeviceIdProvider,
     private val serviceCredentials: ServiceCredentials,
     private val dispatchers: CoroutinesDispatchers,
 ) {
     suspend fun fetch(
         accessToken: String,
-        state: String?,
         onSuccess: (VKIDUser) -> Unit,
         onFailedApiCall: (Throwable) -> Unit,
     ) {
         val clientId = serviceCredentials.clientID
         val deviceId = deviceIdProvider.getDeviceId()
-        val userInfoState = state ?: stateGenerator.regenerateState()
         val userInfoResult = withContext(dispatchers.io) {
             api.getUserInfo(
                 accessToken = accessToken,
                 clientId = clientId,
                 deviceId = deviceId,
-                state = userInfoState
             ).execute()
         }
         userInfoResult.onFailure(onFailedApiCall)

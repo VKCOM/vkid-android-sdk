@@ -144,13 +144,6 @@ private fun RefreshTokenUtil() {
             onValueChange = { state = it },
             label = { Text("State (Optional)") },
         )
-        var userFetchingState by remember { mutableStateOf("") }
-        TextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = userFetchingState,
-            onValueChange = { userFetchingState = it },
-            label = { Text("User fetching state (Optional)") },
-        )
         Button("Refresh") {
             coroutineScope.launch {
                 context.vkid.refreshToken(
@@ -166,7 +159,6 @@ private fun RefreshTokenUtil() {
                     },
                     params = VKIDRefreshTokenParams {
                         this.state = state.takeIf { it.isNotBlank() }
-                        this.userFetchingState = userFetchingState.takeIf { it.isNotBlank() }
                     }
                 )
             }
@@ -274,13 +266,6 @@ private fun RefreshUserUtil() {
         val context = LocalContext.current
         val coroutineScope = rememberCoroutineScope()
         var currentUser: VKIDUser? by remember { mutableStateOf(null) }
-        var state by remember { mutableStateOf("") }
-        TextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = state,
-            onValueChange = { state = it },
-            label = { Text("State (Optional)") },
-        )
         var refreshTokenState by remember { mutableStateOf("") }
         TextField(
             modifier = Modifier.fillMaxWidth(),
@@ -301,7 +286,6 @@ private fun RefreshUserUtil() {
                         }
                     },
                     params = VKIDGetUserParams {
-                        this.state = state.takeIf { it.isNotBlank() }
                         this.refreshTokenState = refreshTokenState.takeIf { it.isNotBlank() }
                     },
                 )

@@ -21,7 +21,6 @@ public interface OverrideVKIDApi {
         accessToken: String,
         clientId: String,
         deviceId: String,
-        state: String,
     ): Result<VKIDUserInfoPayloadResponse>
 }
 

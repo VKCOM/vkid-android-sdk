@@ -7,7 +7,6 @@ import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.auth.device.DeviceIdProvider
 import com.vk.id.internal.concurrent.CoroutinesDispatchers
-import com.vk.id.internal.state.StateGenerator
 import com.vk.id.refresh.VKIDRefreshTokenCallback
 import com.vk.id.refresh.VKIDRefreshTokenFail
 import com.vk.id.refresh.VKIDRefreshTokenParams
@@ -19,7 +18,6 @@ import kotlinx.coroutines.withContext
 internal class VKIDUserRefresher(
     private val api: VKIDApiService,
     private val tokenStorage: TokenStorage,
-    private val stateGenerator: StateGenerator,
     private val deviceIdProvider: DeviceIdProvider,
     private val serviceCredentials: ServiceCredentials,
     private val dispatchers: CoroutinesDispatchers,
@@ -35,13 +33,11 @@ internal class VKIDUserRefresher(
         }
         val deviceId = deviceIdProvider.getDeviceId()
         val clientId = serviceCredentials.clientID
-        val state = params.state ?: stateGenerator.regenerateState()
         withContext(dispatchers.io) {
             api.getUserInfo(
                 accessToken = accessToken,
                 clientId = clientId,
                 deviceId = deviceId,
-                state = state
             ).execute()
         }.onFailure {
             if (it is VKIDInvalidTokenException) {
@@ -57,7 +53,6 @@ internal class VKIDUserRefresher(
                     },
                     params = VKIDRefreshTokenParams {
                         this.state = params.refreshTokenState
-                        this.userFetchingState = state
                     }
                 )
             } else {

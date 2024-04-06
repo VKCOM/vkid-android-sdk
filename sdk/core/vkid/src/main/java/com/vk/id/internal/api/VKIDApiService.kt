@@ -38,13 +38,11 @@ internal class VKIDApiService(
         accessToken: String,
         clientId: String,
         deviceId: String,
-        state: String,
     ): VKIDCall<VKIDUserInfoPayload> {
         val call = api.getUser(
             accessToken = accessToken,
             clientId = clientId,
             deviceId = deviceId,
-            state = state,
         )
         return object : VKIDCall<VKIDUserInfoPayload> {
             override fun execute(): Result<VKIDUserInfoPayload> {
@@ -55,10 +53,10 @@ internal class VKIDApiService(
                         val user = body.getJSONObject("user")
                         Result.success(
                             VKIDUserInfoPayload(
-                                firstName = user.getString("first_name"),
-                                lastName = user.getString("last_name"),
+                                firstName = user.optString("first_name"),
+                                lastName = user.optString("last_name"),
                                 phone = user.optString("phone"),
-                                avatar = user.getString("avatar"),
+                                avatar = user.optString("avatar"),
                                 email = user.optString("email"),
                             )
                         )

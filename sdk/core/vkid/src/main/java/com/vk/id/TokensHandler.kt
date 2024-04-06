@@ -11,13 +11,11 @@ internal class TokensHandler(
 ) {
     suspend fun handle(
         payload: VKIDTokenPayload,
-        state: String?,
         onSuccess: (AccessToken) -> Unit,
         onFailedApiCall: (Throwable) -> Unit,
     ) {
         userInfoFetcher.fetch(
             accessToken = payload.accessToken,
-            state = state,
             onSuccess = {
                 val accessToken = AccessToken(
                     token = payload.accessToken,

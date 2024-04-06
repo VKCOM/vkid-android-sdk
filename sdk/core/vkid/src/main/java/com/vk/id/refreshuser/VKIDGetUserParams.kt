@@ -15,18 +15,12 @@ public inline fun VKIDGetUserParams(
  * Encapsulated parameters for user data receiving.
  */
 public class VKIDGetUserParams private constructor(
-    internal val state: String? = null,
     internal val refreshTokenState: String? = null,
 ) {
     /**
      * A builder for [VKIDGetUserParams].
      */
     public class Builder {
-
-        /**
-         * An optional state to be passed to user data fetching.
-         */
-        public var state: String? = null
 
         /**
          * An optional state to be passed to token refreshing.
@@ -39,7 +33,6 @@ public class VKIDGetUserParams private constructor(
          * Constructs [VKIDGetUserParams] with provided values.
          */
         public fun build(): VKIDGetUserParams = VKIDGetUserParams(
-            state = state,
             refreshTokenState = refreshTokenState,
         )
     }

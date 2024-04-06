@@ -89,7 +89,6 @@ internal class AuthResultHandler(
         callResult.onSuccess { payload ->
             tokensHandler.handle(
                 payload = payload,
-                state = null,
                 onSuccess = ::emitAuthSuccess,
                 onFailedApiCall = {
                     emitAuthFail(VKIDAuthFail.FailedApiCall("Failed to fetch user data", it))

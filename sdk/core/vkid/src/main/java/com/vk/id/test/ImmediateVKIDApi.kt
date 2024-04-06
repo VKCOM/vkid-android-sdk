@@ -42,13 +42,11 @@ internal class ImmediateVKIDApi(
         accessToken: String,
         clientId: String,
         deviceId: String,
-        state: String
     ) = MockVKIDCall(
         mockApi.getUserInfo(
             accessToken = accessToken,
             clientId = clientId,
             deviceId = deviceId,
-            state = state
         )
     )
 

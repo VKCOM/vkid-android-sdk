@@ -162,7 +162,6 @@ internal open class VKIDDepsProd(
         VKIDUserRefresher(
             api = apiService.value,
             tokenStorage = tokenStorage,
-            stateGenerator = stateGenerator,
             deviceIdProvider = deviceIdProvider.value,
             serviceCredentials = serviceCredentials.value,
             dispatchers = dispatchers,
@@ -184,7 +183,6 @@ internal open class VKIDDepsProd(
     private val userInfoFetcher: Lazy<VKIDUserInfoFetcher> = lazy {
         VKIDUserInfoFetcher(
             api = apiService.value,
-            stateGenerator = stateGenerator,
             serviceCredentials = serviceCredentials.value,
             dispatchers = dispatchers,
             deviceIdProvider = deviceIdProvider.value,

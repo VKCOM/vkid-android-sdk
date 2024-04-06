@@ -30,7 +30,6 @@ internal interface VKIDApi {
         accessToken: String,
         clientId: String,
         deviceId: String,
-        state: String,
     ): Call
 
     fun exchangeToken(

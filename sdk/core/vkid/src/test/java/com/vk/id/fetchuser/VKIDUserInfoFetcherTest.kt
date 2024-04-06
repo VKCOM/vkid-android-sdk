@@ -7,7 +7,6 @@ import com.vk.id.internal.api.dto.VKIDUserInfoPayload
 import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.auth.device.DeviceIdProvider
 import com.vk.id.internal.concurrent.CoroutinesDispatchers
-import com.vk.id.internal.state.StateGenerator
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.testCoroutineScheduler
 import io.mockk.called
@@ -26,7 +25,6 @@ private const val CLIENT_SECRET = "client secret"
 private const val REDIRECT_URI = "redirect uri"
 private const val ACCESS_TOKEN = "access token"
 private const val DEVICE_ID = "device id"
-private const val STATE = "state"
 private const val FIRST_NAME = "first"
 private const val LAST_NAME = "last"
 private const val PHONE = "phone"
@@ -58,7 +56,6 @@ internal class VKIDUserInfoFetcherTest : BehaviorSpec({
         val deviceIdProvider = mockk<DeviceIdProvider>()
         every { deviceIdProvider.getDeviceId() } returns DEVICE_ID
         val api = mockk<VKIDApiService>()
-        val stateGenerator = mockk<StateGenerator>()
         val serviceCredentials = ServiceCredentials(
             clientID = CLIENT_ID,
             clientSecret = CLIENT_SECRET,
@@ -70,12 +67,10 @@ internal class VKIDUserInfoFetcherTest : BehaviorSpec({
         every { dispatchers.io } returns testDispatcher
         val fetcher = VKIDUserInfoFetcher(
             api = api,
-            stateGenerator = stateGenerator,
             serviceCredentials = serviceCredentials,
             dispatchers = dispatchers,
             deviceIdProvider = deviceIdProvider,
         )
-        every { stateGenerator.regenerateState() } returns STATE
         When("Api returns an error") {
             val call = mockk<VKIDCall<VKIDUserInfoPayload>>()
             val exception = Exception()
@@ -85,7 +80,6 @@ internal class VKIDUserInfoFetcherTest : BehaviorSpec({
                     accessToken = ACCESS_TOKEN,
                     clientId = CLIENT_ID,
                     deviceId = DEVICE_ID,
-                    state = STATE
                 )
             } returns call
             val onSuccess = mockk<(VKIDUser) -> Unit>()
@@ -94,7 +88,6 @@ internal class VKIDUserInfoFetcherTest : BehaviorSpec({
             runTest(scheduler) {
                 fetcher.fetch(
                     accessToken = ACCESS_TOKEN,
-                    state = null,
                     onSuccess = onSuccess,
                     onFailedApiCall = onFailedApiCall,
                 )
@@ -112,7 +105,6 @@ internal class VKIDUserInfoFetcherTest : BehaviorSpec({
                     accessToken = ACCESS_TOKEN,
                     clientId = CLIENT_ID,
                     deviceId = DEVICE_ID,
-                    state = STATE
                 )
             } returns call
             val onFailedApiCall = mockk<(Throwable) -> Unit>()
@@ -121,7 +113,6 @@ internal class VKIDUserInfoFetcherTest : BehaviorSpec({
             runTest(scheduler) {
                 fetcher.fetch(
                     accessToken = ACCESS_TOKEN,
-                    state = STATE,
                     onSuccess = onSuccess,
                     onFailedApiCall = onFailedApiCall,
                 )
