@@ -11,14 +11,20 @@ import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.auth.device.DeviceIdProvider
 import com.vk.id.internal.concurrent.CoroutinesDispatchers
 import com.vk.id.network.VKIDCall
+import com.vk.id.refresh.VKIDRefreshTokenCallback
+import com.vk.id.refresh.VKIDRefreshTokenFail
+import com.vk.id.refresh.VKIDRefreshTokenParams
+import com.vk.id.refresh.VKIDTokenRefresher
 import com.vk.id.storage.TokenStorage
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.testCoroutineScheduler
+import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
+import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -36,6 +42,7 @@ private const val PHONE = "phone"
 private const val AVATAR = "avatar"
 private const val EMAIL = "email"
 private const val USER_ID = 100L
+private const val REFRESH_TOKEN_STATE = "refresh token state"
 private val VKID_USER = VKIDUser(
     firstName = FIRST_NAME,
     lastName = LAST_NAME,
@@ -72,12 +79,14 @@ internal class VKIDLoggerOutTest : BehaviorSpec({
         val scheduler = testCoroutineScheduler
         val testDispatcher = StandardTestDispatcher(scheduler)
         every { dispatchers.io } returns testDispatcher
+        val tokenRefresher = mockk<VKIDTokenRefresher>()
         val loggerOut = VKIDLoggerOut(
             api = api,
             tokenStorage = tokenStorage,
             deviceIdProvider = deviceIdProvider,
             serviceCredentials = serviceCredentials,
             dispatchers = dispatchers,
+            tokenRefresher = tokenRefresher,
         )
         When("Token is not available") {
             every { tokenStorage.accessToken } returns null
@@ -133,10 +142,24 @@ internal class VKIDLoggerOutTest : BehaviorSpec({
                     deviceId = DEVICE_ID,
                 )
             } returns call
-            val fail = VKIDLogoutFail.AccessTokenTokenExpired("Access token is expired, no need to logout")
+            val fail = VKIDLogoutFail.FailedApiCall("Failed to logout and refresh token", VKIDInvalidTokenException())
+            val callbackSlot = slot<VKIDRefreshTokenCallback>()
+            val paramsSlot = slot<VKIDRefreshTokenParams>()
+            coEvery {
+                tokenRefresher.refresh(
+                    capture(callbackSlot),
+                    capture(paramsSlot)
+                )
+            } just runs
             val callback = mockk<VKIDLogoutCallback>()
             every { callback.onFail(fail) } just runs
-            runTest(scheduler) { loggerOut.logout(callback) }
+            runTest(scheduler) { loggerOut.logout(callback, params = VKIDLogoutParams { refreshTokenState = REFRESH_TOKEN_STATE }) }
+            And("Refreshing tokens fails") {
+                callbackSlot.captured.onFail(VKIDRefreshTokenFail.NotAuthenticated("some error"))
+            }
+            Then("Refreshes token with state from params") {
+                paramsSlot.captured.state shouldBe REFRESH_TOKEN_STATE
+            }
             Then("Clears token storage") {
                 verify { tokenStorage.clear() }
             }

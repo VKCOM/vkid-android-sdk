@@ -362,12 +362,15 @@ public final class com/vk/id/logout/VKIDLogoutFail$NotAuthenticated : com/vk/id/
 
 public final class com/vk/id/logout/VKIDLogoutParams {
 	public static final field $stable I
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 }
 
 public final class com/vk/id/logout/VKIDLogoutParams$Builder {
 	public static final field $stable I
 	public fun <init> ()V
 	public final fun build ()Lcom/vk/id/logout/VKIDLogoutParams;
+	public final fun getRefreshTokenState ()Ljava/lang/String;
+	public final fun setRefreshTokenState (Ljava/lang/String;)V
 }
 
 public final class com/vk/id/logout/VKIDLogoutParamsKt {
