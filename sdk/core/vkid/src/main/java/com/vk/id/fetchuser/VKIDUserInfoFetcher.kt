@@ -18,7 +18,7 @@ internal class VKIDUserInfoFetcher(
 ) {
     suspend fun fetch(
         accessToken: String,
-        onSuccess: (VKIDUser) -> Unit,
+        onSuccess: suspend (VKIDUser) -> Unit,
         onFailedApiCall: (Throwable) -> Unit,
     ) {
         val clientId = serviceCredentials.clientID

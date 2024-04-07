@@ -124,6 +124,7 @@ private fun AuthUtil() {
                 value = currentAuthCode?.code.orEmpty(),
                 onValueChange = {},
                 label = { Text("Auth code") },
+                maxLines = 1,
             )
             Spacer(modifier = Modifier.height(16.dp))
         }
@@ -229,6 +230,7 @@ private fun ExchangeTokenUtil() {
                 value = currentAuthCode?.code.orEmpty(),
                 onValueChange = {},
                 label = { Text("Auth code") },
+                maxLines = 1,
             )
         }
         Spacer(modifier = Modifier.height(8.dp))
