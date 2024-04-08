@@ -26,10 +26,10 @@ public inline fun VKIDAuthParams(initializer: VKIDAuthParams.Builder.() -> Unit)
  * @property oAuth The [OAuth] provider to be used for authentication. Optional.
  */
 public class VKIDAuthParams private constructor(
-    public val locale: Locale? = null,
-    public val theme: Theme? = null,
-    public val useOAuthProviderIfPossible: Boolean = true,
-    public val oAuth: OAuth? = null,
+    internal val locale: Locale? = null,
+    internal val theme: Theme? = null,
+    internal val useOAuthProviderIfPossible: Boolean = true,
+    internal val oAuth: OAuth? = null,
     internal val prompt: Prompt = Prompt.BLANK,
     internal val token: String? = null,
     internal val state: String? = null,
