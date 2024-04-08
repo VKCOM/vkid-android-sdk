@@ -41,7 +41,7 @@ internal class AuthCallbacksHolderTest : BehaviorSpec({
 })
 
 private fun createCallback() = object : VKIDAuthCallback {
-    override fun onSuccess(accessToken: AccessToken) = Unit
+    override fun onAuth(accessToken: AccessToken) = Unit
     override fun onFail(fail: VKIDAuthFail) = Unit
     override fun onAuthCode(data: AuthCodeData, isCompletion: Boolean) = Unit
 }

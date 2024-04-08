@@ -210,7 +210,7 @@ private fun OneTapBottomSheetInternal(
                     coroutineScope.launch {
                         vkid.authorize(
                             object : VKIDAuthCallback {
-                                override fun onSuccess(accessToken: AccessToken) = onAuth(status.oAuth, accessToken)
+                                override fun onAuth(accessToken: AccessToken) = onAuth(status.oAuth, accessToken)
                                 override fun onAuthCode(
                                     data: AuthCodeData,
                                     isCompletion: Boolean

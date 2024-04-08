@@ -4,8 +4,10 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.FrameLayout
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import com.vk.id.AccessToken
@@ -98,26 +100,26 @@ public class OneTap @JvmOverloads constructor(
     @Suppress("NonSkippableComposable")
     @Composable
     private fun Content() {
-        val style = remember { mutableStateOf(style) }
-        onStyleChange = { style.value = it }
-        val isSignInToAnotherAccountEnabled = remember { mutableStateOf(isSignInToAnotherAccountEnabled) }
-        onSignInToAnotherAccountEnabledChange = { isSignInToAnotherAccountEnabled.value = it }
-        val authParams = remember { mutableStateOf(authParams) }
-        onAuthParamsChange = { authParams.value = it }
-        val oAuths = remember { mutableStateOf(oAuths) }
-        onOAuthsChange = { oAuths.value = it }
-        val vkid = remember { mutableStateOf(vkid) }
-        onVKIDChange = { vkid.value = it }
+        var style by remember { mutableStateOf(style) }
+        onStyleChange = { style = it }
+        var isSignInToAnotherAccountEnabled by remember { mutableStateOf(isSignInToAnotherAccountEnabled) }
+        onSignInToAnotherAccountEnabledChange = { isSignInToAnotherAccountEnabled = it }
+        var authParams by remember { mutableStateOf(authParams) }
+        onAuthParamsChange = { authParams = it }
+        var oAuths by remember { mutableStateOf(oAuths) }
+        onOAuthsChange = { oAuths = it }
+        var vkid by remember { mutableStateOf(vkid) }
+        onVKIDChange = { vkid = it }
         OneTap(
             modifier = Modifier,
-            style = style.value,
+            style = style,
             onAuth = { oAuth, accessToken -> onAuth(oAuth, accessToken) },
             onAuthCode = { data, isCompletion -> onAuthCode(data, isCompletion) },
             onFail = { oAuth, fail -> onFail(oAuth, fail) },
-            oAuths = oAuths.value,
-            signInAnotherAccountButtonEnabled = isSignInToAnotherAccountEnabled.value,
-            vkid = vkid.value,
-            authParams = authParams.value,
+            oAuths = oAuths,
+            signInAnotherAccountButtonEnabled = isSignInToAnotherAccountEnabled,
+            vkid = vkid,
+            authParams = authParams,
         )
     }
 

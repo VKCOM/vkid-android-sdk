@@ -48,7 +48,6 @@ import com.vk.id.auth.VKIDAuthCallback
 import com.vk.id.auth.VKIDAuthParams.Theme
 import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.multibranding.common.callback.OAuthListWidgetAuthCallback
 import com.vk.id.multibranding.common.style.OAuthListWidgetStyle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -70,7 +69,7 @@ import kotlinx.coroutines.launch
 public fun OAuthListWidget(
     modifier: Modifier = Modifier,
     style: OAuthListWidgetStyle = OAuthListWidgetStyle.Dark(),
-    onAuth: OAuthListWidgetAuthCallback,
+    onAuth: (oAuth: OAuth, accessToken: AccessToken) -> Unit,
     onAuthCode: (data: AuthCodeData, isCompletion: Boolean) -> Unit = { _, _ -> },
     onFail: (oAuth: OAuth, fail: VKIDAuthFail) -> Unit,
     oAuths: Set<OAuth> = OAuth.entries.toSet(),
@@ -137,7 +136,7 @@ private fun OAuthButton(
     showText: Boolean,
     coroutineScope: CoroutineScope,
     vkid: VKID,
-    onAuth: OAuthListWidgetAuthCallback,
+    onAuth: (oAuth: OAuth, accessToken: AccessToken) -> Unit,
     onAuthCode: (AuthCodeData, Boolean) -> Unit,
     onFail: (VKIDAuthFail) -> Unit,
     authParams: VKIDAuthUiParams,
@@ -157,15 +156,11 @@ private fun OAuthButton(
                     coroutineScope.launch {
                         vkid.authorize(
                             object : VKIDAuthCallback {
-                                override fun onSuccess(accessToken: AccessToken) {
-                                    when (onAuth) {
-                                        is OAuthListWidgetAuthCallback.WithOAuth -> onAuth(item, accessToken)
-                                        is OAuthListWidgetAuthCallback.JustToken -> onAuth(accessToken)
-                                    }
-                                }
-
-                                override fun onAuthCode(data: AuthCodeData, isCompletion: Boolean) = onAuthCode(data, isCompletion)
-
+                                override fun onAuth(accessToken: AccessToken) = onAuth(item, accessToken)
+                                override fun onAuthCode(
+                                    data: AuthCodeData,
+                                    isCompletion: Boolean
+                                ) = onAuthCode(data, isCompletion)
                                 override fun onFail(fail: VKIDAuthFail) = onFail(fail)
                             },
                             authParams.asParamsBuilder {
@@ -326,7 +321,7 @@ private fun OAuthListWidgetStyle.toProviderTheme() = when (this) {
 private fun OAuthListWidgetWithOneItem() {
     OAuthListWidget(
         oAuths = setOf(OAuth.OK),
-        onAuth = OAuthListWidgetAuthCallback.WithOAuth { _, _ -> },
+        onAuth = { _, _ -> },
         onFail = { _, _ -> },
     )
 }
@@ -336,7 +331,7 @@ private fun OAuthListWidgetWithOneItem() {
 private fun OAuthListWidgetWithTwoItems() {
     OAuthListWidget(
         oAuths = setOf(OAuth.VK, OAuth.OK),
-        onAuth = OAuthListWidgetAuthCallback.WithOAuth { _, _ -> },
+        onAuth = { _, _ -> },
         onFail = { _, _ -> },
     )
 }
@@ -346,7 +341,7 @@ private fun OAuthListWidgetWithTwoItems() {
 private fun OAuthListWidgetLight() {
     OAuthListWidget(
         style = OAuthListWidgetStyle.Dark(),
-        onAuth = OAuthListWidgetAuthCallback.WithOAuth { _, _ -> },
+        onAuth = { _, _ -> },
         onFail = { _, _ -> },
     )
 }
@@ -358,7 +353,7 @@ private fun OAuthListWidgetDark() {
         modifier = Modifier.background(Color.White),
         style = OAuthListWidgetStyle.Light(),
         oAuths = setOf(OAuth.VK),
-        onAuth = OAuthListWidgetAuthCallback.WithOAuth { _, _ -> },
+        onAuth = { _, _ -> },
         onFail = { _, _ -> },
     )
 }

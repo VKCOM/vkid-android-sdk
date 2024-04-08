@@ -115,7 +115,7 @@ internal class AuthResultHandler(
 
     private fun emitAuthSuccess(token: AccessToken) {
         callbacksHolder.getAll().forEach {
-            it.onSuccess(token)
+            it.onAuth(token)
         }
         callbacksHolder.clear()
     }

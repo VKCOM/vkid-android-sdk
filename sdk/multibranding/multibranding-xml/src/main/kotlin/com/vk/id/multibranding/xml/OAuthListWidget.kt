@@ -8,8 +8,10 @@ import android.util.TypedValue
 import android.util.TypedValue.COMPLEX_UNIT_DIP
 import android.widget.FrameLayout
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import com.vk.id.AccessToken
@@ -19,7 +21,6 @@ import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.multibranding.OAuthListWidget
-import com.vk.id.multibranding.common.callback.OAuthListWidgetAuthCallback
 import com.vk.id.multibranding.common.style.OAuthListWidgetCornersStyle
 import com.vk.id.multibranding.common.style.OAuthListWidgetSizeStyle
 import com.vk.id.multibranding.common.style.OAuthListWidgetStyle
@@ -60,7 +61,7 @@ public class OAuthListWidget @JvmOverloads constructor(
             onAuthParamsChange(value)
         }
     private var onAuthParamsChange: (VKIDAuthUiParams) -> Unit = {}
-    private var onAuth: OAuthListWidgetAuthCallback = OAuthListWidgetAuthCallback.JustToken {
+    private var onAuth: (oAuth: OAuth, accessToken: AccessToken) -> Unit = { _, _ ->
         error("No onAuth callback for OAuthListWidget. Set it with setCallbacks method.")
     }
     private var onAuthCode: (AuthCodeData, Boolean) -> Unit = { _, _ -> }
@@ -83,28 +84,23 @@ public class OAuthListWidget @JvmOverloads constructor(
     @Suppress("NonSkippableComposable")
     @Composable
     private fun Content() {
-        val style = remember { mutableStateOf(style) }
-        onStyleChange = { style.value = it }
-        val oAuths = remember { mutableStateOf(oAuths) }
-        onOAuthsChange = { oAuths.value = it }
-        val authParams = remember { mutableStateOf(authParams) }
-        onAuthParamsChange = { authParams.value = it }
-        val vkid = remember { mutableStateOf(vkid) }
-        onVKIDChange = { vkid.value = it }
+        var style by remember { mutableStateOf(style) }
+        onStyleChange = { style = it }
+        var oAuths by remember { mutableStateOf(oAuths) }
+        onOAuthsChange = { oAuths = it }
+        var authParams by remember { mutableStateOf(authParams) }
+        onAuthParamsChange = { authParams = it }
+        var vkid by remember { mutableStateOf(vkid) }
+        onVKIDChange = { vkid = it }
         OAuthListWidget(
             modifier = Modifier,
-            style = style.value,
-            onAuth = OAuthListWidgetAuthCallback.WithOAuth { oAuth: OAuth, token: AccessToken ->
-                when (val callback = onAuth) {
-                    is OAuthListWidgetAuthCallback.WithOAuth -> callback(oAuth, token)
-                    is OAuthListWidgetAuthCallback.JustToken -> callback(token)
-                }
-            },
+            style = style,
+            onAuth = { oAuth, accessToken -> onAuth(oAuth, accessToken) },
             onAuthCode = { data, isCompletion -> onAuthCode(data, isCompletion) },
             onFail = { oAuth, fail -> onFail(oAuth, fail) },
-            oAuths = oAuths.value,
-            vkid = vkid.value,
-            authParams = authParams.value,
+            oAuths = oAuths,
+            vkid = vkid,
+            authParams = authParams,
         )
     }
 
@@ -119,7 +115,7 @@ public class OAuthListWidget @JvmOverloads constructor(
      * @param onFail A callback to be invoked upon an error during auth.
      */
     public fun setCallbacks(
-        onAuth: OAuthListWidgetAuthCallback,
+        onAuth: (oAuth: OAuth, accessToken: AccessToken) -> Unit,
         onAuthCode: (data: AuthCodeData, isCompletion: Boolean) -> Unit = { _, _ -> },
         onFail: (oAuth: OAuth, fail: VKIDAuthFail) -> Unit = { _, _ -> },
     ) {

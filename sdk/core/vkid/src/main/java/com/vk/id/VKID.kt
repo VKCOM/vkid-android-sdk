@@ -251,7 +251,7 @@ public class VKID {
     ) {
         authorize(
             callback = object : VKIDAuthCallback {
-                override fun onSuccess(accessToken: AccessToken) = callback.onSuccess(accessToken)
+                override fun onAuth(accessToken: AccessToken) = callback.onSuccess(accessToken)
 
                 override fun onFail(fail: VKIDAuthFail) {
                     val exchangeFail = when (fail) {

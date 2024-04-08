@@ -9,15 +9,6 @@ public final class com/vk/id/multibranding/common/BuildConfig {
 	public fun <init> ()V
 }
 
-public abstract interface class com/vk/id/multibranding/common/callback/OAuthListWidgetAuthCallback {
-}
-
-public abstract interface class com/vk/id/multibranding/common/callback/OAuthListWidgetAuthCallback$JustToken : com/vk/id/multibranding/common/callback/OAuthListWidgetAuthCallback, kotlin/jvm/functions/Function1 {
-}
-
-public abstract interface class com/vk/id/multibranding/common/callback/OAuthListWidgetAuthCallback$WithOAuth : com/vk/id/multibranding/common/callback/OAuthListWidgetAuthCallback, kotlin/jvm/functions/Function2 {
-}
-
 public final class com/vk/id/multibranding/common/style/OAuthListWidgetBorderStyle : java/lang/Enum {
 	public static final field DARK Lcom/vk/id/multibranding/common/style/OAuthListWidgetBorderStyle;
 	public static final field LIGHT Lcom/vk/id/multibranding/common/style/OAuthListWidgetBorderStyle;
