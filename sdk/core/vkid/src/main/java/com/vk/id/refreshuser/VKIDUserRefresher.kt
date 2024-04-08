@@ -30,12 +30,14 @@ internal class VKIDUserRefresher(
         callback: VKIDGetUserCallback,
         params: VKIDGetUserParams = VKIDGetUserParams {},
     ) {
-        val accessToken = tokenStorage.accessToken?.token ?: run {
+        val clientId = serviceCredentials.clientID
+        val (accessToken, deviceId) = withContext(dispatchers.io) {
+            tokenStorage.accessToken?.token to deviceIdProvider.getDeviceId()
+        }
+        accessToken ?: run {
             callback.onFail(VKIDGetUserFail.NotAuthenticated("Not authorized"))
             return
         }
-        val deviceId = deviceIdProvider.getDeviceId()
-        val clientId = serviceCredentials.clientID
         withContext(dispatchers.io) {
             api.getUserInfo(
                 accessToken = accessToken,

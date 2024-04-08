@@ -26,10 +26,15 @@ internal class VKIDTokenRefresher(
         callback: VKIDRefreshTokenCallback,
         params: VKIDRefreshTokenParams = VKIDRefreshTokenParams {},
     ) {
-        val deviceId = deviceIdProvider.getDeviceId()
         val clientId = serviceCredentials.clientID
-        val refreshTokenState = params.state ?: stateGenerator.regenerateState()
-        val refreshToken = withContext(dispatchers.io) { tokenStorage.refreshToken } ?: return emitUnauthorizedFail(callback)
+        val (refreshToken, refreshTokenState, deviceId) = withContext(dispatchers.io) {
+            Triple(
+                tokenStorage.refreshToken,
+                params.state ?: stateGenerator.regenerateState(),
+                deviceIdProvider.getDeviceId()
+            )
+        }
+        refreshToken ?: return emitUnauthorizedFail(callback)
 
         val result = withContext(dispatchers.io) {
             api.refreshToken(

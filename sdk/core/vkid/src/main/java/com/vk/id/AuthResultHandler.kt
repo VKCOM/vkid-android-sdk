@@ -49,8 +49,8 @@ internal class AuthResultHandler(
     }
 
     private suspend fun handleOauth(oauth: AuthResult.Success) {
-        deviceIdProvider.setDeviceId(oauth.deviceId)
         val (realState, codeVerifier) = withContext(dispatchers.io) {
+            deviceIdProvider.setDeviceId(oauth.deviceId)
             (prefsStore.state to prefsStore.codeVerifier).also { prefsStore.clear() }
         }
 

@@ -22,7 +22,7 @@ internal class VKIDUserInfoFetcher(
         onFailedApiCall: (Throwable) -> Unit,
     ) {
         val clientId = serviceCredentials.clientID
-        val deviceId = deviceIdProvider.getDeviceId()
+        val deviceId = withContext(dispatchers.io) { deviceIdProvider.getDeviceId() }
         val userInfoResult = withContext(dispatchers.io) {
             api.getUserInfo(
                 accessToken = accessToken,
