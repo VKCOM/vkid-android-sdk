@@ -13,7 +13,13 @@ import com.vk.id.internal.auth.VKIDTokenPayload
 import com.vk.id.internal.auth.device.DeviceIdProvider
 import com.vk.id.internal.concurrent.CoroutinesDispatchers
 import com.vk.id.internal.store.PrefsStore
+import com.vk.id.logout.VKIDLoggerOut
+import com.vk.id.logout.VKIDLogoutCallback
+import com.vk.id.logout.VKIDLogoutFail
+import com.vk.id.logout.VKIDLogoutParams
 import com.vk.id.network.VKIDCall
+import com.vk.id.storage.TokenStorage
+import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.spec.style.scopes.BehaviorSpecGivenContainerScope
 import io.kotest.core.test.testCoroutineScheduler
@@ -23,6 +29,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
+import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -30,7 +37,7 @@ import kotlinx.coroutines.test.runTest
 
 private const val ERROR_MESSAGE = "Error message"
 private val error = IllegalStateException("Error")
-private const val ACCESS_TOKEN = "access token"
+private const val ACCESS_TOKEN_VALUE = "access token"
 private const val REFRESH_TOKEN = "refresh token"
 private const val ID_TOKEN = "id token"
 private const val USER_ID = 0L
@@ -48,10 +55,26 @@ private val authResultSuccess = AuthResult.Success(
     oauth = AuthResult.OAuth(CODE, STATE, CODE_VERIFIER),
     deviceId = DEVICE_ID
 )
+private val ACCESS_TOKEN = AccessToken(
+    token = ACCESS_TOKEN_VALUE,
+    idToken = ID_TOKEN,
+    userID = USER_ID,
+    expireTime = -1,
+    userData = VKIDUser(
+        firstName = "first",
+        lastName = "last",
+        phone = "phone",
+        photo50 = "50",
+        photo100 = "100",
+        photo200 = "200",
+        email = "email"
+    )
+)
 
 @OptIn(ExperimentalStdlibApi::class, ExperimentalCoroutinesApi::class)
 internal class AuthResultHandlerTest : BehaviorSpec({
 
+    isolationMode = IsolationMode.InstancePerLeaf
     coroutineTestScope = true
 
     Given("An AuthResultHandler") {
@@ -65,6 +88,8 @@ internal class AuthResultHandlerTest : BehaviorSpec({
         val api = mockk<VKIDApiService>()
         val serviceCredentials = mockk<ServiceCredentials>()
         val tokensHandler = mockk<TokensHandler>()
+        val loggerOut = mockk<VKIDLoggerOut>()
+        val tokenStorage = mockk<TokenStorage>()
         val handler = AuthResultHandler(
             dispatchers = dispatchers,
             callbacksHolder = callbacksHolder,
@@ -72,7 +97,9 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             prefsStore = prefsStore,
             serviceCredentials = serviceCredentials,
             api = api,
-            tokensHandler = tokensHandler
+            tokensHandler = tokensHandler,
+            loggerOut = loggerOut,
+            tokenStorage = tokenStorage,
         )
 
         suspend fun BehaviorSpecGivenContainerScope.whenHandleIsCalledWithFail(
@@ -172,6 +199,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             every { serviceCredentials.redirectUri } returns REDIRECT_URI
             every { api.getToken(CODE, CODE_VERIFIER, CLIENT_ID, DEVICE_ID, REDIRECT_URI, STATE) } returns call
             every { call.execute() } returns Result.failure(error)
+            every { tokenStorage.accessToken } returns null
             runTest(scheduler) { handler.handle(authResult) }
             scheduler.advanceUntilIdle()
             Then("Device id is saved") {
@@ -201,7 +229,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             val authResult = authResultSuccess
             val callback = mockk<VKIDAuthCallback>()
             val call = mockk<VKIDCall<VKIDTokenPayload>>()
-            val payload = VKIDTokenPayload(ACCESS_TOKEN, REFRESH_TOKEN, ID_TOKEN, 0, USER_ID, STATE)
+            val payload = VKIDTokenPayload(ACCESS_TOKEN_VALUE, REFRESH_TOKEN, ID_TOKEN, 0, USER_ID, STATE)
             every { callbacksHolder.getAll() } returns setOf(callback)
             every { callback.onAuthCode(any(), any()) } just runs
             every { callback.onAuth(any()) } just runs
@@ -215,22 +243,127 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             every { serviceCredentials.redirectUri } returns REDIRECT_URI
             every { api.getToken(CODE, CODE_VERIFIER, CLIENT_ID, DEVICE_ID, REDIRECT_URI, STATE) } returns call
             every { call.execute() } returns Result.success(payload)
-            coEvery { tokensHandler.handle(any(), any(), any()) } just runs
-            runTest(scheduler) { handler.handle(authResult) }
-            Then("state is cleared") {
-                verify { prefsStore.clear() }
+            And("Doesn't have previous account") {
+                every { tokenStorage.accessToken } returns null
+
+                coEvery { tokensHandler.handle(any(), any(), any()) } just runs
+                runTest(scheduler) { handler.handle(authResult) }
+                Then("state is cleared") {
+                    verify { prefsStore.clear() }
+                }
+                Then("Device id is saved") {
+                    verify { deviceIdProvider.setDeviceId(DEVICE_ID) }
+                }
+                Then("Callbacks are requested from holder") {
+                    verify { callbacksHolder.getAll() }
+                }
+                Then("Auth code is emitted") {
+                    verify { callback.onAuthCode(AuthCodeData(CODE), false) }
+                }
+                Then("User info fetcher is called") {
+                    coVerify { tokensHandler.handle(payload, any(), any()) }
+                }
             }
-            Then("Device id is saved") {
-                verify { deviceIdProvider.setDeviceId(DEVICE_ID) }
+        }
+        When("Handle is called and api returns success") {
+            val authResult = authResultSuccess
+            val callback = mockk<VKIDAuthCallback>()
+            val call = mockk<VKIDCall<VKIDTokenPayload>>()
+            val payload = VKIDTokenPayload(ACCESS_TOKEN_VALUE, REFRESH_TOKEN, ID_TOKEN, 0, USER_ID, STATE)
+            every { callbacksHolder.getAll() } returns setOf(callback)
+            every { callback.onAuthCode(any(), any()) } just runs
+            every { callback.onAuth(any()) } just runs
+            every { callbacksHolder.clear() } just runs
+            every { deviceIdProvider.setDeviceId(DEVICE_ID) } just runs
+            every { prefsStore.state } returns STATE
+            every { prefsStore.clear() } just runs
+            every { prefsStore.codeVerifier } returns CODE_VERIFIER
+            every { serviceCredentials.clientID } returns CLIENT_ID
+            every { serviceCredentials.clientSecret } returns CLIENT_SECRET
+            every { serviceCredentials.redirectUri } returns REDIRECT_URI
+            every { api.getToken(CODE, CODE_VERIFIER, CLIENT_ID, DEVICE_ID, REDIRECT_URI, STATE) } returns call
+            every { call.execute() } returns Result.success(payload)
+            And("Has previous account and logout succeds") {
+                every { tokenStorage.accessToken } returns ACCESS_TOKEN
+
+                val callbackSlot = slot<VKIDLogoutCallback>()
+                val paramsSlot = slot<VKIDLogoutParams>()
+                coEvery { loggerOut.logout(capture(callbackSlot), any(), any(), capture(paramsSlot)) } just runs
+                val onSuccessSlot = slot<suspend (AccessToken) -> Unit>()
+                coEvery { tokensHandler.handle(any(), capture(onSuccessSlot), any()) } just runs
+                runTest(scheduler) { handler.handle(authResult) }
+                Then("state is cleared") {
+                    verify { prefsStore.clear() }
+                }
+                Then("Device id is saved") {
+                    verify { deviceIdProvider.setDeviceId(DEVICE_ID) }
+                }
+
+                runTest(scheduler) {
+                    onSuccessSlot.captured(ACCESS_TOKEN)
+                }
+                Then("Logger out is called") {
+                    coVerify { loggerOut.logout(capture(callbackSlot), ACCESS_TOKEN_VALUE, false, capture(paramsSlot)) }
+                }
+                scheduler.advanceUntilIdle()
+                callbackSlot.captured.onSuccess()
+                Then("Callbacks are requested from holder") {
+                    verify { callbacksHolder.getAll() }
+                }
+                Then("Auth code is emitted") {
+                    verify { callback.onAuthCode(AuthCodeData(CODE), false) }
+                }
             }
-            Then("Callbacks are requested from holder") {
-                verify { callbacksHolder.getAll() }
-            }
-            Then("Auth code is emitted") {
-                verify { callback.onAuthCode(AuthCodeData(CODE), false) }
-            }
-            Then("User info fetcher is called") {
-                coVerify { tokensHandler.handle(payload, any(), any()) }
+        }
+
+        When("Handle is called and api returns success") {
+            val authResult = authResultSuccess
+            val callback = mockk<VKIDAuthCallback>()
+            val call = mockk<VKIDCall<VKIDTokenPayload>>()
+            val payload = VKIDTokenPayload(ACCESS_TOKEN_VALUE, REFRESH_TOKEN, ID_TOKEN, 0, USER_ID, STATE)
+            every { callbacksHolder.getAll() } returns setOf(callback)
+            every { callback.onAuthCode(any(), any()) } just runs
+            every { callback.onAuth(any()) } just runs
+            every { callbacksHolder.clear() } just runs
+            every { deviceIdProvider.setDeviceId(DEVICE_ID) } just runs
+            every { prefsStore.state } returns STATE
+            every { prefsStore.clear() } just runs
+            every { prefsStore.codeVerifier } returns CODE_VERIFIER
+            every { serviceCredentials.clientID } returns CLIENT_ID
+            every { serviceCredentials.clientSecret } returns CLIENT_SECRET
+            every { serviceCredentials.redirectUri } returns REDIRECT_URI
+            every { api.getToken(CODE, CODE_VERIFIER, CLIENT_ID, DEVICE_ID, REDIRECT_URI, STATE) } returns call
+            every { call.execute() } returns Result.success(payload)
+            And("Has previous account and logout fails") {
+                every { tokenStorage.accessToken } returns ACCESS_TOKEN
+
+                val callbackSlot = slot<VKIDLogoutCallback>()
+                val paramsSlot = slot<VKIDLogoutParams>()
+                coEvery { loggerOut.logout(capture(callbackSlot), any(), any(), capture(paramsSlot)) } just runs
+                val onSuccessSlot = slot<suspend (AccessToken) -> Unit>()
+                coEvery { tokensHandler.handle(any(), capture(onSuccessSlot), any()) } just runs
+                runTest(scheduler) { handler.handle(authResult) }
+                Then("state is cleared") {
+                    verify { prefsStore.clear() }
+                }
+                Then("Device id is saved") {
+                    verify { deviceIdProvider.setDeviceId(DEVICE_ID) }
+                }
+
+                runTest(scheduler) {
+                    onSuccessSlot.captured(ACCESS_TOKEN)
+                }
+                Then("Logger out is called") {
+                    coVerify { loggerOut.logout(capture(callbackSlot), ACCESS_TOKEN_VALUE, false, capture(paramsSlot)) }
+                }
+                scheduler.advanceUntilIdle()
+                callbackSlot.captured.onFail(VKIDLogoutFail.NotAuthenticated(""))
+                Then("Callbacks are requested from holder") {
+                    verify { callbacksHolder.getAll() }
+                }
+                Then("Auth code is emitted") {
+                    verify { callback.onAuthCode(AuthCodeData(CODE), false) }
+                }
             }
         }
     }

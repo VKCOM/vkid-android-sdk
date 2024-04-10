@@ -130,6 +130,8 @@ internal open class VKIDDepsProd(
             serviceCredentials = serviceCredentials.value,
             api = apiService.value,
             tokensHandler = tokensHandler.value,
+            loggerOut = loggerOut.value,
+            tokenStorage = tokenStorage,
         )
     }
     override val tokenRefresher: Lazy<VKIDTokenRefresher> = lazy {
@@ -160,7 +162,6 @@ internal open class VKIDDepsProd(
             deviceIdProvider = deviceIdProvider.value,
             serviceCredentials = serviceCredentials.value,
             dispatchers = dispatchers,
-            tokenRefresher = tokenRefresher.value,
         )
     }
 

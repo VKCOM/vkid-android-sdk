@@ -14,26 +14,15 @@ public inline fun VKIDLogoutParams(
 /**
  * Encapsulated parameters for logout.
  */
-public class VKIDLogoutParams private constructor(
-    internal val refreshTokenState: String? = null,
-) {
+public class VKIDLogoutParams private constructor() {
     /**
      * A builder for [VKIDLogoutParams].
      */
     public class Builder {
 
         /**
-         * An optional state to be passed to token refreshing.
-         * Token refreshing might happen under the hood while logging out.
-         * If you want to pass an external state to this process you may do so in this property.
-         */
-        public var refreshTokenState: String? = null
-
-        /**
          * Constructs [VKIDLogoutParams] with provided values.
          */
-        public fun build(): VKIDLogoutParams = VKIDLogoutParams(
-            refreshTokenState = refreshTokenState,
-        )
+        public fun build(): VKIDLogoutParams = VKIDLogoutParams()
     }
 }

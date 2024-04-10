@@ -74,7 +74,6 @@ internal class MainActivity : ComponentActivity() {
                 .detectLeakedSqlLiteObjects()
                 .detectLeakedClosableObjects()
                 .penaltyLog()
-                .penaltyDeath()
                 .build()
         )
     }
