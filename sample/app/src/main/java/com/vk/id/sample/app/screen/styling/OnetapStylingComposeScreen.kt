@@ -209,7 +209,8 @@ internal fun OnetapStylingComposeScreen() {
                 selectedValue = selectedStyle::class.simpleName ?: error("Can get simple style"),
                 onValueSelected = {
                     styleConstructor.value = it
-                }
+                },
+                label = { Text("style") },
             )
             SliderSelector(title = "Width", selectedState = widthPercent)
             SliderSelector(title = "Corners", selectedState = cornersStylePercent)
@@ -217,7 +218,8 @@ internal fun OnetapStylingComposeScreen() {
             DropdownSelector(
                 values = OneTapButtonSizeStyle.entries.associateBy { it.name },
                 selectedValue = selectedSize.value.name,
-                onValueSelected = { selectedSize.value = it }
+                onValueSelected = { selectedSize.value = it },
+                label = { Text("size") },
             )
 
             TextField(

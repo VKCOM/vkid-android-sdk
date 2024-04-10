@@ -194,14 +194,16 @@ internal fun MultibrandingComposeScreen() {
                 modifier = Modifier.padding(vertical = 16.dp),
                 values = styleConstructors,
                 selectedValue = selectedStyle::class.simpleName ?: error("Can get simple style"),
-                onValueSelected = { styleConstructor.value = it }
+                onValueSelected = { styleConstructor.value = it },
+                label = { Text("style") },
             )
             SliderSelector(title = "Width", selectedState = widthPercent)
             SliderSelector(title = "Corners", selectedState = cornersStylePercent)
             DropdownSelector(
                 values = OAuthListWidgetSizeStyle.entries.associateBy { it.name },
                 selectedValue = selectedSize.value.name,
-                onValueSelected = { selectedSize.value = it }
+                onValueSelected = { selectedSize.value = it },
+                label = { Text("size") },
             )
 
             TextField(

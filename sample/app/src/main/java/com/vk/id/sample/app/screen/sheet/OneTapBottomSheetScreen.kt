@@ -169,7 +169,8 @@ internal fun OneTapBottomSheetScreen() {
         DropdownSelector(
             values = enumValues<OneTapScenario>().associateBy { it.name },
             selectedValue = selectedScenario.value.name,
-            onValueSelected = { selectedScenario.value = it }
+            onValueSelected = { selectedScenario.value = it },
+            label = { Text("scenario") },
         )
         DropdownSelector(
             values = styleConstructors,
@@ -182,6 +183,7 @@ internal fun OneTapBottomSheetScreen() {
                 )
             },
             shape = RectangleShape,
+            label = { Text("style") },
         )
         TextField(
             modifier = Modifier.fillMaxWidth(),
