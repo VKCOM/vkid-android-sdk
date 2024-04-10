@@ -156,8 +156,8 @@ public class VKIDAuthParams private constructor(
 
         /**
          * A [Prompt] parameter to be passed to /authorize.
+         * Note: Changing it only works for auth view browser (not auth provider). Add [useOAuthProviderIfPossible] = false for this to work.
          */
-        @InternalVKIDApi
         public var prompt: Prompt = Prompt.BLANK
 
         /**

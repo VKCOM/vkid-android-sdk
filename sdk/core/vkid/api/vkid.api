@@ -167,6 +167,14 @@ public final class com/vk/id/auth/AuthCodeData {
 	public fun hashCode ()I
 }
 
+public final class com/vk/id/auth/Prompt : java/lang/Enum {
+	public static final field BLANK Lcom/vk/id/auth/Prompt;
+	public static final field LOGIN Lcom/vk/id/auth/Prompt;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/vk/id/auth/Prompt;
+	public static fun values ()[Lcom/vk/id/auth/Prompt;
+}
+
 public abstract interface class com/vk/id/auth/VKIDAuthCallback {
 	public abstract fun onAuth (Lcom/vk/id/AccessToken;)V
 	public abstract fun onAuthCode (Lcom/vk/id/auth/AuthCodeData;Z)V
@@ -189,12 +197,14 @@ public final class com/vk/id/auth/VKIDAuthParams$Builder {
 	public final fun getCodeChallenge ()Ljava/lang/String;
 	public final fun getLocale ()Lcom/vk/id/auth/VKIDAuthParams$Locale;
 	public final fun getOAuth ()Lcom/vk/id/OAuth;
+	public final fun getPrompt ()Lcom/vk/id/auth/Prompt;
 	public final fun getState ()Ljava/lang/String;
 	public final fun getTheme ()Lcom/vk/id/auth/VKIDAuthParams$Theme;
 	public final fun getUseOAuthProviderIfPossible ()Z
 	public final fun setCodeChallenge (Ljava/lang/String;)V
 	public final fun setLocale (Lcom/vk/id/auth/VKIDAuthParams$Locale;)V
 	public final fun setOAuth (Lcom/vk/id/OAuth;)V
+	public final fun setPrompt (Lcom/vk/id/auth/Prompt;)V
 	public final fun setState (Ljava/lang/String;)V
 	public final fun setTheme (Lcom/vk/id/auth/VKIDAuthParams$Theme;)V
 	public final fun setUseOAuthProviderIfPossible (Z)V

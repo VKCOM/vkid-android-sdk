@@ -47,12 +47,13 @@ private fun <T : Any> KClass<T>.systemStyleConstructors(context: Context) = comp
 @Suppress("NonSkippableComposable")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun <T : Any> DropdownSelector(
+internal fun <T> DropdownSelector(
     modifier: Modifier = Modifier,
     values: Map<String, T>,
     selectedValue: String,
     onValueSelected: (T) -> Unit,
     shape: Shape = TextFieldDefaults.shape,
+    label: @Composable (() -> Unit)? = null,
 ) {
     var expanded by remember { mutableStateOf(false) }
     ExposedDropdownMenuBox(
@@ -64,6 +65,7 @@ internal fun <T : Any> DropdownSelector(
     ) {
         TextField(
             value = selectedValue,
+            label = label,
             onValueChange = {},
             readOnly = true,
             trailingIcon = {
