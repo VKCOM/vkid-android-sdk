@@ -31,7 +31,6 @@ public class VKIDAuthParams private constructor(
     internal val useOAuthProviderIfPossible: Boolean = true,
     internal val oAuth: OAuth? = null,
     internal val prompt: Prompt = Prompt.BLANK,
-    internal val token: String? = null,
     internal val state: String? = null,
     internal val codeChallenge: String? = null,
 ) {
@@ -186,7 +185,6 @@ public class VKIDAuthParams private constructor(
             useOAuthProviderIfPossible = useOAuthProviderIfPossible,
             oAuth = oAuth,
             prompt = prompt,
-            token = token,
             state = state,
             codeChallenge = codeChallenge,
         )

@@ -6,7 +6,7 @@ import com.vk.id.auth.AuthCodeData
 /**
  * Callback interface for handling result of exchanging v1 token to v2.
  */
-public interface VKIDExchangeTokenToV2Callback {
+public interface VKIDExchangeTokenCallback {
     /**
      * Called upon successful token exchange.
      *
