@@ -4,6 +4,7 @@ import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.AuthCodeData
+import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.allure.Feature
 import com.vk.id.common.feature.TestFeature
 import com.vk.id.onetap.base.ChangeAccountTest
@@ -72,11 +73,19 @@ public class OneTapChangeAccountXmlTest : ChangeAccountTest() {
         super.invalidStateIsReceived()
     }
 
+    @Test
+    @AllureId("")
+    @DisplayName("Успешное получение кода при схеме с бекендом в XML OneTap Мультибрендинге")
+    override fun authCodeIsReceived() {
+        super.authCodeIsReceived()
+    }
+
     override fun setOneTapContent(
         vkid: VKID,
         onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit,
         onAuthCode: (AuthCodeData, Boolean) -> Unit,
         onAuth: (OneTapOAuth?, AccessToken) -> Unit,
+        authParams: VKIDAuthUiParams,
     ) {
         composeTestRule.activity.setContent(
             OneTap(composeTestRule.activity).apply {
@@ -87,6 +96,7 @@ public class OneTapChangeAccountXmlTest : ChangeAccountTest() {
                 )
                 setVKID(vkid)
                 isSignInToAnotherAccountEnabled = true
+                this.authParams = authParams
             }
         )
     }

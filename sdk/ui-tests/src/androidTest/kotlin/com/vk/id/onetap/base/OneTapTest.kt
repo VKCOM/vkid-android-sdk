@@ -7,6 +7,7 @@ import com.vk.id.OAuth
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.AuthCodeData
+import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.baseauthtest.BaseAuthTest
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.screen.OneTapScreen
@@ -24,11 +25,13 @@ public abstract class OneTapTest : BaseAuthTest(
         onAuth: (OAuth?, AccessToken) -> Unit,
         onAuthCode: (AuthCodeData, Boolean) -> Unit,
         onFail: (OAuth?, VKIDAuthFail) -> Unit,
+        authParams: VKIDAuthUiParams,
     ): Unit = setOneTapContent(
         vkid = vkid,
         onAuth = { oAuth, token -> onAuth(oAuth?.toOAuth(), token) },
         onAuthCode = onAuthCode,
-        onFail = { oAuth, fail -> onFail(oAuth?.toOAuth(), fail) }
+        onFail = { oAuth, fail -> onFail(oAuth?.toOAuth(), fail) },
+        authParams = authParams,
     )
 
     public abstract fun setOneTapContent(
@@ -36,6 +39,7 @@ public abstract class OneTapTest : BaseAuthTest(
         onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit = { _, _ -> },
         onAuthCode: (AuthCodeData, Boolean) -> Unit,
         onAuth: (OneTapOAuth?, AccessToken) -> Unit = { _, _ -> },
+        authParams: VKIDAuthUiParams,
     )
 
     protected override fun TestContext<Unit>.startAuth(): Unit = step("Начало авторизации") {

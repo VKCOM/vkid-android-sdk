@@ -7,6 +7,7 @@ import com.vk.id.OAuth
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.AuthCodeData
+import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.allure.Feature
 import com.vk.id.common.feature.TestFeature
 import com.vk.id.multibranding.base.MultibrandingTest
@@ -77,11 +78,19 @@ public class BottomSheetMultibrandingXmlTest(
         super.invalidStateIsReceived()
     }
 
+    @Test
+    @AllureId("")
+    @DisplayName("Успешное получение кода при схеме с бекендом в XML OneTap Мультибрендинге")
+    override fun authCodeIsReceived() {
+        super.authCodeIsReceived()
+    }
+
     override fun setContent(
         vkid: VKID,
         onAuth: (OAuth?, AccessToken) -> Unit,
         onAuthCode: (AuthCodeData, Boolean) -> Unit,
         onFail: (OAuth?, VKIDAuthFail) -> Unit,
+        authParams: VKIDAuthUiParams,
     ) {
         val view = OneTapBottomSheet(composeTestRule.activity).apply {
             setCallbacks(
@@ -90,6 +99,7 @@ public class BottomSheetMultibrandingXmlTest(
                 onFail = { oAuth, fail -> onFail(oAuth?.toOAuth(), fail) },
             )
             setVKID(vkid)
+            this.authParams = authParams
             oAuths = setOfNotNull(OneTapOAuth.fromOAuth(oAuth))
         }
         composeTestRule.activity.setContent(view)

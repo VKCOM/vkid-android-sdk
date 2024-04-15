@@ -9,6 +9,7 @@ import com.vk.id.OAuth
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.AuthCodeData
+import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.common.activity.AutoTestActivityRule
 import com.vk.id.common.allure.Owners
@@ -28,6 +29,7 @@ import io.qameta.allure.kotlin.Allure
 import io.qameta.allure.kotlin.Owner
 import org.junit.Before
 import org.junit.Rule
+import java.util.UUID
 
 @Platform("Android Manual")
 @Product("VK ID SDK")
@@ -78,15 +80,15 @@ public abstract class BaseAuthTest(
         }.run {
             startAuth()
             continueAuth()
-            step("Получен OAuth") {
-                flakySafely {
-                    receivedOAuth shouldBe oAuth
-                }
-            }
             step("Получен auth code") {
                 flakySafely {
                     receivedAuthCode shouldBe AUTH_CODE
                     receivedAuthCodeSuccess = false
+                }
+            }
+            step("Получен OAuth") {
+                flakySafely {
+                    receivedOAuth shouldBe oAuth
                 }
             }
             step("Получен токен") {
@@ -94,6 +96,53 @@ public abstract class BaseAuthTest(
                     accessToken?.token shouldBe MockApi.ACCESS_TOKEN
                     accessToken?.userID shouldBe MockApi.USER_ID
                     accessToken?.userData shouldBe MockApi.mockReturnedUser()
+                }
+            }
+        }
+    }
+
+    public open fun authCodeIsReceived(): Unit = runIfShouldNotSkip {
+        var accessToken: AccessToken? = null
+        var receivedOAuth: OAuth? = null
+        var receivedAuthCode: AuthCodeData? = null
+        var receivedAuthCodeSuccess: Boolean? = null
+        before {
+            val vkid = vkidBuilder()
+                .mockApiSuccess()
+                .user(MockApi.mockApiUser())
+                .build()
+            setContent(
+                vkid = vkid,
+                onAuth = { oAuth, token ->
+                    receivedOAuth = oAuth
+                    accessToken = token
+                },
+                onAuthCode = { authCode, isSuccess ->
+                    receivedAuthCode = authCode
+                    receivedAuthCodeSuccess = isSuccess
+                },
+                authParams = VKIDAuthUiParams {
+                    codeChallenge = UUID.randomUUID().toString()
+                },
+            )
+        }.after {
+        }.run {
+            startAuth()
+            continueAuth()
+            step("Получен auth code") {
+                flakySafely {
+                    receivedAuthCode shouldBe AUTH_CODE
+                    receivedAuthCodeSuccess = true
+                }
+            }
+            step("Не получен OAuth") {
+                flakySafely {
+                    receivedOAuth.shouldBeNull()
+                }
+            }
+            step("Не получен токен") {
+                flakySafely {
+                    accessToken.shouldBeNull()
                 }
             }
         }
@@ -376,6 +425,7 @@ public abstract class BaseAuthTest(
         onAuth: (OAuth?, AccessToken) -> Unit = { _, _ -> },
         onAuthCode: (AuthCodeData, Boolean) -> Unit = { _, _, -> },
         onFail: (OAuth?, VKIDAuthFail) -> Unit = { _, _ -> },
+        authParams: VKIDAuthUiParams = VKIDAuthUiParams {},
     )
 
     private fun TestContext<Unit>.continueAuth() = scenario(ContinueAuthScenario(composeTestRule))
