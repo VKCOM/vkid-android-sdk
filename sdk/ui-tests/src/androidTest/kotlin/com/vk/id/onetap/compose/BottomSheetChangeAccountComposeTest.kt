@@ -63,9 +63,9 @@ public class BottomSheetChangeAccountComposeTest : ChangeAccountTest() {
 
     @Test
     @AllureId("2289864")
-    @DisplayName("Получение ошибки неверного uuid в Compose BottomSheet смене аккаунта")
-    override fun invalidUuidIsReceived() {
-        super.invalidUuidIsReceived()
+    @DisplayName("Получение ошибки отсутствия deviceId в Compose BottomSheet смене аккаунта")
+    override fun invalidDeviceIdIsReceived() {
+        super.invalidDeviceIdIsReceived()
     }
 
     @Test

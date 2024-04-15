@@ -63,9 +63,9 @@ public class OneTapMultibrandingComposeTest(
 
     @Test
     @AllureId("2290798")
-    @DisplayName("Получение ошибки неверного uuid в Compose OneTap Мультибрендинге")
-    override fun invalidUuidIsReceived() {
-        super.invalidUuidIsReceived()
+    @DisplayName("Получение ошибки отсутствия deviceId в Compose OneTap Мультибрендинге")
+    override fun invalidDeviceIdIsReceived() {
+        super.invalidDeviceIdIsReceived()
     }
 
     @Test

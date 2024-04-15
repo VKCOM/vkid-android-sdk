@@ -62,5 +62,5 @@ internal class ImmediateVKIDApi(
         accessToken: String,
         clientId: String,
         deviceId: String
-    ) = MockVKIDCall(Result.failure<Unit>(RuntimeException("Not supported")))
+    ) = MockVKIDCall(Result.success(Unit))
 }

@@ -59,9 +59,9 @@ public class OneTapXmlTest : OneTapTest() {
 
     @Test
     @AllureId("2289551")
-    @DisplayName("Получение ошибки неверного uuid в XML OneTap")
-    override fun invalidUuidIsReceived() {
-        super.invalidUuidIsReceived()
+    @DisplayName("Получение ошибки отсутствия deviceId в XML OneTap")
+    override fun invalidDeviceIdIsReceived() {
+        super.invalidDeviceIdIsReceived()
     }
 
     @Test

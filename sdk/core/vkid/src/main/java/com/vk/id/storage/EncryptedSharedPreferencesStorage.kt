@@ -11,7 +11,7 @@ internal class EncryptedSharedPreferencesStorage(
     private val sharedPreferences: SharedPreferences by lazy {
         EncryptedSharedPreferences.create(
             context,
-            "secret_shared_prefs",
+            "encrypted_shared_prefs",
             MasterKey.Builder(context).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build(),
             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM

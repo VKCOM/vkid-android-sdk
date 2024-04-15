@@ -66,9 +66,9 @@ public class BottomSheetMultibrandingComposeTest(
 
     @Test
     @AllureId("2290678")
-    @DisplayName("Получение ошибки неверного uuid в Compose BottomSheet Мультибрендинге")
-    override fun invalidUuidIsReceived() {
-        super.invalidUuidIsReceived()
+    @DisplayName("Получение ошибки отсутствия deviceId в Compose BottomSheet Мультибрендинге")
+    override fun invalidDeviceIdIsReceived() {
+        super.invalidDeviceIdIsReceived()
     }
 
     @Test

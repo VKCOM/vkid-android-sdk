@@ -61,9 +61,9 @@ public class IconOneTapComposeTest : OneTapTest() {
 
     @Test
     @AllureId("2289922")
-    @DisplayName("Получение ошибки неверного uuid в Compose OneTap Icon")
-    override fun invalidUuidIsReceived() {
-        super.invalidUuidIsReceived()
+    @DisplayName("Получение ошибки отсутствия deviceId в Compose OneTap Icon")
+    override fun invalidDeviceIdIsReceived() {
+        super.invalidDeviceIdIsReceived()
     }
 
     @Test

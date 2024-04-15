@@ -61,9 +61,9 @@ public class BottomSheetChangeAccountXmlTest : ChangeAccountTest() {
 
     @Test
     @AllureId("2289900")
-    @DisplayName("Получение ошибки неверного uuid в XML BottomSheet смене аккаунта")
-    override fun invalidUuidIsReceived() {
-        super.invalidUuidIsReceived()
+    @DisplayName("Получение ошибки отсутствия deviceId в XML BottomSheet смене аккаунта")
+    override fun invalidDeviceIdIsReceived() {
+        super.invalidDeviceIdIsReceived()
     }
 
     @Test

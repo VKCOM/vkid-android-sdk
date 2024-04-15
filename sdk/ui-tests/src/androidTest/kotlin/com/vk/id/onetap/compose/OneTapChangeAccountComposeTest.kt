@@ -60,9 +60,9 @@ public class OneTapChangeAccountComposeTest : ChangeAccountTest() {
 
     @Test
     @AllureId("2289981")
-    @DisplayName("Получение ошибки неверного uuid в Compose OneTap смене аккаунта")
-    override fun invalidUuidIsReceived() {
-        super.invalidUuidIsReceived()
+    @DisplayName("Получение ошибки отсутствия deviceId в Compose OneTap смене аккаунта")
+    override fun invalidDeviceIdIsReceived() {
+        super.invalidDeviceIdIsReceived()
     }
 
     @Test

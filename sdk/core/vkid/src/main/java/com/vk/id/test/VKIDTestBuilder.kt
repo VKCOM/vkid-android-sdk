@@ -37,7 +37,7 @@ public class VKIDTestBuilder(
     public fun getUserInfoResponse(response: Result<VKIDUserInfoPayloadResponse>): VKIDTestBuilder = apply {
         this.getUserInfoResponse = response
     }
-    public fun overrideUuid(uuid: String): VKIDTestBuilder = updateConfig { copy(overrideUuid = uuid) }
+    public fun overrideDeviceIdToNull(): VKIDTestBuilder = updateConfig { copy(overrideDeviceIdToNull = true) }
     public fun overrideState(state: String): VKIDTestBuilder = updateConfig { copy(overrideState = state) }
     public fun overrideOAuthToNull(): VKIDTestBuilder = updateConfig { copy(overrideOAuthToNull = true) }
     public fun user(user: VKIDUser): VKIDTestBuilder = updateConfig { copy(user = user) }

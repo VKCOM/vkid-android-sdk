@@ -62,9 +62,9 @@ public class OneTapMultibrandingXmlTest(
 
     @Test
     @AllureId("2290765")
-    @DisplayName("Получение ошибки неверного uuid в XML OneTap Мультибрендинге")
-    override fun invalidUuidIsReceived() {
-        super.invalidUuidIsReceived()
+    @DisplayName("Получение ошибки отсутствия deviceId в XML OneTap Мультибрендинге")
+    override fun invalidDeviceIdIsReceived() {
+        super.invalidDeviceIdIsReceived()
     }
 
     @Test
