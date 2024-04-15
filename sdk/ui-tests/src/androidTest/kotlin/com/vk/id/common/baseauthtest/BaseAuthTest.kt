@@ -20,6 +20,8 @@ import com.vk.id.common.basetest.BaseUiTest
 import com.vk.id.common.mockapi.MockApi
 import com.vk.id.common.mockapi.mockApiError
 import com.vk.id.common.mockapi.mockApiSuccess
+import com.vk.id.common.mockapi.mockGetTokenSuccess
+import com.vk.id.common.mockapi.mockUserInfoError
 import com.vk.id.common.mockprovider.ContinueAuthScenario
 import com.vk.id.test.VKIDTestBuilder
 import io.kotest.matchers.nulls.shouldBeNull
@@ -228,6 +230,46 @@ public abstract class BaseAuthTest(
         before {
             val vkid = vkidBuilder()
                 .mockApiError()
+                .build()
+            setContent(
+                vkid = vkid,
+                onFail = { oAuth, fail ->
+                    receivedFail = fail
+                    receivedOAuth = oAuth
+                },
+                onAuthCode = { authCode, isSuccess ->
+                    receivedAuthCode = authCode
+                    receivedAuthCodeSuccess = isSuccess
+                },
+            )
+        }.after {
+        }.run {
+            startAuth()
+            continueAuth()
+            step("Получен auth code") {
+                flakySafely {
+                    receivedAuthCode shouldBe AUTH_CODE
+                    receivedAuthCodeSuccess = false
+                }
+            }
+            step("Получена ошибка") {
+                flakySafely {
+                    receivedFail.shouldBeInstanceOf<VKIDAuthFail.FailedApiCall>()
+                    receivedOAuth shouldBe oAuth
+                }
+            }
+        }
+    }
+
+    public open fun failedUserCallIsReceived(): Unit = runIfShouldNotSkip {
+        var receivedFail: VKIDAuthFail? = null
+        var receivedOAuth: OAuth? = null
+        var receivedAuthCode: AuthCodeData? = null
+        var receivedAuthCodeSuccess: Boolean? = null
+        before {
+            val vkid = vkidBuilder()
+                .mockGetTokenSuccess()
+                .mockUserInfoError()
                 .build()
             setContent(
                 vkid = vkid,

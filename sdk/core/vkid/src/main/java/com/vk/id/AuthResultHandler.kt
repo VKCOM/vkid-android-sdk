@@ -38,6 +38,7 @@ internal class AuthResultHandler(
     ) {
         if (authResult !is AuthResult.Success) {
             emitAuthFail(authResult.toVKIDAuthFail())
+            prefsStore.clear()
             return
         }
 

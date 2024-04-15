@@ -40,11 +40,7 @@ public object MockApi {
     )
 }
 
-public fun VKIDTestBuilder.mockApiError(): VKIDTestBuilder = this
-    .getTokenResponse(Result.failure(UnsupportedOperationException("fake error")))
-    .getUserInfoResponse(Result.failure(UnsupportedOperationException("fake error")))
-
-public fun VKIDTestBuilder.mockApiSuccess(): VKIDTestBuilder = this
+public fun VKIDTestBuilder.mockGetTokenSuccess(): VKIDTestBuilder = this
     .getTokenResponse(
         Result.success(
             VKIDTokenPayloadResponse(
@@ -56,6 +52,16 @@ public fun VKIDTestBuilder.mockApiSuccess(): VKIDTestBuilder = this
             )
         )
     )
+
+public fun VKIDTestBuilder.mockUserInfoError(): VKIDTestBuilder = this
+    .getUserInfoResponse(Result.success(VKIDUserInfoPayloadResponse(error = "mock error")))
+
+public fun VKIDTestBuilder.mockApiError(): VKIDTestBuilder = this
+    .getTokenResponse(Result.failure(UnsupportedOperationException("fake error")))
+    .mockUserInfoError()
+
+public fun VKIDTestBuilder.mockApiSuccess(): VKIDTestBuilder = this
+    .mockGetTokenSuccess()
     .getUserInfoResponse(
         Result.success(
             VKIDUserInfoPayloadResponse(

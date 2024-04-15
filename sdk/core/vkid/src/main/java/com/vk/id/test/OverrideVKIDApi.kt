@@ -40,8 +40,9 @@ public data class VKIDTokenPayloadResponse(
 
 @InternalVKIDApi
 public data class VKIDUserInfoPayloadResponse(
-    val user: VKIDUserPayloadResponse,
-    val state: String,
+    val error: String? = null,
+    val user: VKIDUserPayloadResponse? = null,
+    val state: String? = null,
 )
 
 @InternalVKIDApi

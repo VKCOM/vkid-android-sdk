@@ -84,6 +84,13 @@ public class BottomSheetChangeAccountComposeTest : ChangeAccountTest() {
         super.authCodeIsReceived()
     }
 
+    @Test
+    @AllureId("")
+    @DisplayName("Получение ошибки загрузки пользовательских данных в Compose OneTap")
+    override fun failedUserCallIsReceived() {
+        super.failedUserCallIsReceived()
+    }
+
     override fun setOneTapContent(
         vkid: VKID,
         onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit,
