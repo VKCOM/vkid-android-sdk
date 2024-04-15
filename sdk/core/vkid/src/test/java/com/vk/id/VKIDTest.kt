@@ -83,7 +83,6 @@ internal class VKIDTest : BehaviorSpec({
             oAuth = null,
             prompt = "",
         )
-        val expireTime = System.currentTimeMillis() + 1000
         coEvery { authProvidersChooser.chooseBest(authParams) } returns authProvider
         every { authOptionsCreator.create(authParams) } returns authOptions
         every { authProvider.auth(authOptions) } just runs
@@ -98,7 +97,6 @@ internal class VKIDTest : BehaviorSpec({
             TestScope(scheduler).launch {
                 AuthEventBridge.listener?.onAuthResult(
                     AuthResult.Success(
-                        expireTime = expireTime,
                         oauth = null,
                         "device id"
                     )

@@ -41,7 +41,6 @@ private const val ACCESS_TOKEN_VALUE = "access token"
 private const val REFRESH_TOKEN = "refresh token"
 private const val ID_TOKEN = "id token"
 private const val USER_ID = 0L
-private const val EXPIRE_TIME = 0L
 private const val STATE = "state"
 private const val DIFFERENT_STATE = "differentstate"
 private const val CODE_VERIFIER = "code verifier"
@@ -51,7 +50,6 @@ private const val CLIENT_ID = "client id"
 private const val CLIENT_SECRET = "client secret"
 private const val REDIRECT_URI = "redirect uri"
 private val authResultSuccess = AuthResult.Success(
-    expireTime = EXPIRE_TIME,
     oauth = AuthResult.OAuth(CODE, STATE, CODE_VERIFIER),
     deviceId = DEVICE_ID
 )

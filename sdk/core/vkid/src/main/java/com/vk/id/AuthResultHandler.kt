@@ -11,7 +11,6 @@ import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.auth.device.DeviceIdProvider
 import com.vk.id.internal.concurrent.CoroutinesDispatchers
 import com.vk.id.internal.store.PrefsStore
-import com.vk.id.internal.util.currentTime
 import com.vk.id.logger.createLoggerForClass
 import com.vk.id.logout.VKIDLoggerOut
 import com.vk.id.logout.VKIDLogoutCallback
@@ -40,11 +39,6 @@ internal class AuthResultHandler(
         if (authResult !is AuthResult.Success) {
             emitAuthFail(authResult.toVKIDAuthFail())
             return
-        }
-        // We do not stop auth here in hope that it still be success,
-        // but if not there will be error response from backend
-        if (authResult.expireTime < currentTime()) {
-            logger.error("OAuth code is old, there is a big chance auth will fail", null)
         }
 
         if (authResult.oauth != null) {
