@@ -27,6 +27,13 @@ public class IconOneTapComposeTest : OneTapTest() {
     }
 
     @Test
+    @AllureId("")
+    @DisplayName("Успешное получение токена после логаута в Compose OneTap")
+    override fun tokenIsReceivedAfterFailedLogout() {
+        super.tokenIsReceivedAfterFailedLogout()
+    }
+
+    @Test
     @AllureId("2289931")
     @DisplayName("Получение ошибочного редиректа в Activity в Compose OneTap Icon")
     override fun failedRedirectActivityIsReceived() {

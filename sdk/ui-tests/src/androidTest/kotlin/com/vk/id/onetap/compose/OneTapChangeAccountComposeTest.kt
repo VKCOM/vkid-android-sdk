@@ -26,6 +26,13 @@ public class OneTapChangeAccountComposeTest : ChangeAccountTest() {
     }
 
     @Test
+    @AllureId("")
+    @DisplayName("Успешное получение токена после логаута в Compose OneTap")
+    override fun tokenIsReceivedAfterFailedLogout() {
+        super.tokenIsReceivedAfterFailedLogout()
+    }
+
+    @Test
     @AllureId("2289870")
     @DisplayName("Получение ошибочного редиректа в Activity в Compose OneTap смене аккаунта")
     override fun failedRedirectActivityIsReceived() {

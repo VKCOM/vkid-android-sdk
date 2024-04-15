@@ -62,5 +62,11 @@ internal class ImmediateVKIDApi(
         accessToken: String,
         clientId: String,
         deviceId: String
-    ) = MockVKIDCall(Result.success(Unit))
+    ) = MockVKIDCall(
+        mockApi.logout(
+            accessToken = accessToken,
+            clientId = clientId,
+            deviceId = deviceId,
+        )
+    )
 }

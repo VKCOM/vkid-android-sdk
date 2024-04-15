@@ -22,6 +22,12 @@ public interface OverrideVKIDApi {
         clientId: String,
         deviceId: String,
     ): Result<VKIDUserInfoPayloadResponse>
+
+    public fun logout(
+        accessToken: String,
+        clientId: String,
+        deviceId: String,
+    ): Result<VKIDLogoutPayloadResponse>
 }
 
 @InternalVKIDApi
@@ -43,6 +49,11 @@ public data class VKIDUserInfoPayloadResponse(
     val error: String? = null,
     val user: VKIDUserPayloadResponse? = null,
     val state: String? = null,
+)
+
+@InternalVKIDApi
+public data class VKIDLogoutPayloadResponse(
+    val error: String? = null,
 )
 
 @InternalVKIDApi

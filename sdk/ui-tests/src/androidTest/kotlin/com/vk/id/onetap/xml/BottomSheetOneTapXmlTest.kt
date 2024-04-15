@@ -27,6 +27,13 @@ public class BottomSheetOneTapXmlTest : OneTapTest() {
     }
 
     @Test
+    @AllureId("")
+    @DisplayName("Успешное получение токена после логаута в Compose OneTap")
+    override fun tokenIsReceivedAfterFailedLogout() {
+        super.tokenIsReceivedAfterFailedLogout()
+    }
+
+    @Test
     @AllureId("2289575")
     @DisplayName("Получение ошибочного редиректа в Activity в XML BottomSheet")
     override fun failedRedirectActivityIsReceived() {

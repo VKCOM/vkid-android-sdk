@@ -27,6 +27,13 @@ public class MultibrandingXmlTest(
     }
 
     @Test
+    @AllureId("")
+    @DisplayName("Успешное получение токена после логаута в Compose OneTap")
+    override fun tokenIsReceivedAfterFailedLogout() {
+        super.tokenIsReceivedAfterFailedLogout()
+    }
+
+    @Test
     @AllureId("2290762")
     @DisplayName("Получение ошибочного редиректа в Activity в XML Мультибрендинге")
     override fun failedRedirectActivityIsReceived() {

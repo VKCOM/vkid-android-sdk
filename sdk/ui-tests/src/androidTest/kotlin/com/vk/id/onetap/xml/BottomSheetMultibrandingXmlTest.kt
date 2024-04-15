@@ -30,6 +30,13 @@ public class BottomSheetMultibrandingXmlTest(
     }
 
     @Test
+    @AllureId("")
+    @DisplayName("Успешное получение токена после логаута в Compose OneTap")
+    override fun tokenIsReceivedAfterFailedLogout() {
+        super.tokenIsReceivedAfterFailedLogout()
+    }
+
+    @Test
     @AllureId("2290730")
     @DisplayName("Получение ошибочного редиректа в Activity в XML BottomSheet Мультибрендинге")
     override fun failedRedirectActivityIsReceived() {

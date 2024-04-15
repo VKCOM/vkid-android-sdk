@@ -29,6 +29,13 @@ public class BottomSheetChangeAccountComposeTest : ChangeAccountTest() {
     }
 
     @Test
+    @AllureId("")
+    @DisplayName("Успешное получение токена после логаута в Compose OneTap")
+    override fun tokenIsReceivedAfterFailedLogout() {
+        super.tokenIsReceivedAfterFailedLogout()
+    }
+
+    @Test
     @AllureId("2289885")
     @DisplayName("Получение ошибочного редиректа в Activity в Compose BottomSheet смене аккаунта")
     override fun failedRedirectActivityIsReceived() {
