@@ -5,6 +5,7 @@ import android.os.Looper
 import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
+import com.vk.id.auth.AuthCodeData
 import com.vk.id.common.feature.TestFeature
 import com.vk.id.onetap.base.ChangeAccountTest
 import com.vk.id.onetap.common.OneTapOAuth
@@ -76,11 +77,13 @@ public class BottomSheetChangeAccountXmlTest : ChangeAccountTest() {
     override fun setOneTapContent(
         vkid: VKID,
         onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit,
+        onAuthCode: (AuthCodeData, Boolean) -> Unit,
         onAuth: (OneTapOAuth?, AccessToken) -> Unit,
     ) {
         val view = OneTapBottomSheet(composeTestRule.activity).apply {
             setCallbacks(
                 onAuth = onAuth,
+                onAuthCode = onAuthCode,
                 onFail = onFail
             )
             setVKID(vkid)

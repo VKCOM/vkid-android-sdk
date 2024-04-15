@@ -67,6 +67,7 @@ internal class AuthResultHandler(
             it.onAuthCode(AuthCodeData(oauth.oauth.code), isCompletion = codeVerifier.isBlank())
         }
         if (codeVerifier.isBlank()) {
+            callbacksHolder.clear()
             return
         }
 
@@ -82,12 +83,7 @@ internal class AuthResultHandler(
             ).execute()
         }
         callResult.onFailure {
-            emitAuthFail(
-                VKIDAuthFail.FailedApiCall(
-                    "Failed code to token exchange api call: ${it.message}",
-                    it
-                )
-            )
+            emitAuthFail(VKIDAuthFail.FailedApiCall("Failed code to token exchange api call: ${it.message}", it))
         }
         val accessToken = withContext(dispatchers.io) { tokenStorage.accessToken }
         callResult.onSuccess { payload ->
@@ -116,16 +112,8 @@ internal class AuthResultHandler(
 
     private fun AuthResult.toVKIDAuthFail() = when (this) {
         is AuthResult.Canceled -> VKIDAuthFail.Canceled(message)
-        is AuthResult.NoBrowserAvailable -> VKIDAuthFail.NoBrowserAvailable(
-            message,
-            error
-        )
-
-        is AuthResult.AuthActiviyResultFailed -> VKIDAuthFail.FailedRedirectActivity(
-            message,
-            error
-        )
-
+        is AuthResult.NoBrowserAvailable -> VKIDAuthFail.NoBrowserAvailable(message, error)
+        is AuthResult.AuthActiviyResultFailed -> VKIDAuthFail.FailedRedirectActivity(message, error)
         is AuthResult.Success -> error("AuthResult is Success and cannot be converted to fail!")
     }
 

@@ -3,6 +3,7 @@ package com.vk.id.onetap.xml
 import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
+import com.vk.id.auth.AuthCodeData
 import com.vk.id.common.allure.Feature
 import com.vk.id.common.feature.TestFeature
 import com.vk.id.onetap.base.ChangeAccountTest
@@ -74,12 +75,14 @@ public class OneTapChangeAccountXmlTest : ChangeAccountTest() {
     override fun setOneTapContent(
         vkid: VKID,
         onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit,
+        onAuthCode: (AuthCodeData, Boolean) -> Unit,
         onAuth: (OneTapOAuth?, AccessToken) -> Unit,
     ) {
         composeTestRule.activity.setContent(
             OneTap(composeTestRule.activity).apply {
                 setCallbacks(
                     onAuth = onAuth,
+                    onAuthCode = onAuthCode,
                     onFail = onFail
                 )
                 setVKID(vkid)

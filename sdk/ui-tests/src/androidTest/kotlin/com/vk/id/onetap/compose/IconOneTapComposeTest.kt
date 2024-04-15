@@ -3,6 +3,7 @@ package com.vk.id.onetap.compose
 import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
+import com.vk.id.auth.AuthCodeData
 import com.vk.id.common.allure.Feature
 import com.vk.id.common.feature.TestFeature
 import com.vk.id.onetap.base.OneTapTest
@@ -76,12 +77,14 @@ public class IconOneTapComposeTest : OneTapTest() {
     override fun setOneTapContent(
         vkid: VKID,
         onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit,
+        onAuthCode: (AuthCodeData, Boolean) -> Unit,
         onAuth: (OneTapOAuth?, AccessToken) -> Unit,
     ) {
         composeTestRule.setContent {
             OneTap(
                 vkid = vkid,
                 onAuth = onAuth,
+                onAuthCode = onAuthCode,
                 onFail = onFail,
                 style = OneTapStyle.Icon()
             )

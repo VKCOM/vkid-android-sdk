@@ -4,6 +4,7 @@ import com.vk.id.AccessToken
 import com.vk.id.OAuth
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
+import com.vk.id.auth.AuthCodeData
 import com.vk.id.common.allure.Feature
 import com.vk.id.common.feature.TestFeature
 import com.vk.id.multibranding.base.MultibrandingTest
@@ -77,12 +78,14 @@ public class OneTapMultibrandingXmlTest(
     override fun setContent(
         vkid: VKID,
         onAuth: (OAuth?, AccessToken) -> Unit,
+        onAuthCode: (AuthCodeData, Boolean) -> Unit,
         onFail: (OAuth?, VKIDAuthFail) -> Unit,
     ) {
         composeTestRule.activity.setContent(
             OneTap(composeTestRule.activity).apply {
                 setCallbacks(
                     onAuth = { oAuth, accessToken -> onAuth(oAuth?.toOAuth(), accessToken) },
+                    onAuthCode = onAuthCode,
                     onFail = { oAuth, fail -> onFail(oAuth?.toOAuth(), fail) },
                 )
                 setVKID(vkid)

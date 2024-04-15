@@ -6,6 +6,7 @@ import com.vk.id.AccessToken
 import com.vk.id.OAuth
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
+import com.vk.id.auth.AuthCodeData
 import com.vk.id.common.feature.TestFeature
 import com.vk.id.multibranding.base.MultibrandingTest
 import com.vk.id.onetap.common.OneTapOAuth
@@ -81,6 +82,7 @@ public class BottomSheetMultibrandingComposeTest(
     override fun setContent(
         vkid: VKID,
         onAuth: (OAuth?, AccessToken) -> Unit,
+        onAuthCode: (AuthCodeData, Boolean) -> Unit,
         onFail: (OAuth?, VKIDAuthFail) -> Unit,
     ) {
         composeTestRule.setContent {
@@ -90,6 +92,7 @@ public class BottomSheetMultibrandingComposeTest(
                 state = state,
                 serviceName = "VK",
                 onAuth = { oAuth, accessToken -> onAuth(oAuth?.toOAuth(), accessToken) },
+                onAuthCode = onAuthCode,
                 onFail = { oAuth, fail -> onFail(oAuth?.toOAuth(), fail) },
                 oAuths = setOfNotNull(OneTapOAuth.fromOAuth(oAuth))
             )
