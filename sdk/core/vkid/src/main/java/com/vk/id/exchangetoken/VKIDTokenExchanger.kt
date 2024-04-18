@@ -9,6 +9,7 @@ import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.auth.device.DeviceIdProvider
 import com.vk.id.internal.concurrent.CoroutinesDispatchers
 import com.vk.id.internal.state.StateGenerator
+import com.vk.id.internal.store.PrefsStore
 import kotlinx.coroutines.withContext
 
 @Suppress("LongParameterList")
@@ -19,6 +20,7 @@ internal class VKIDTokenExchanger(
     private val stateGenerator: StateGenerator,
     private val tokensHandler: TokensHandler,
     private val dispatchers: CoroutinesDispatchers,
+    private val prefsStore: PrefsStore,
 ) {
     suspend fun exchange(
         v1Token: String,
@@ -37,11 +39,13 @@ internal class VKIDTokenExchanger(
             ).execute()
         }
         result.onFailure {
+            prefsStore.clear()
             callback.onFail(
                 VKIDExchangeTokenFail.FailedApiCall("Failed code to refresh token due to: ${it.message}", it)
             )
         }
         result.onSuccess { payload ->
+            prefsStore.clear()
             if (payload.state != state) {
                 callback.onFail(VKIDExchangeTokenFail.FailedOAuthState("Invalid state"))
                 return

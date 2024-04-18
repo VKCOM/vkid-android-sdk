@@ -155,6 +155,7 @@ internal open class VKIDDepsProd(
             stateGenerator = stateGenerator,
             tokensHandler = tokensHandler.value,
             dispatchers = dispatchers,
+            prefsStore = prefsStore.value,
         )
     }
     override val userRefresher: Lazy<VKIDUserRefresher> = lazy {

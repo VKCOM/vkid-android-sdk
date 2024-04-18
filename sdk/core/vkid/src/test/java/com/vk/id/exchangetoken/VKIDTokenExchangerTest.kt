@@ -12,6 +12,7 @@ import com.vk.id.internal.auth.VKIDTokenPayload
 import com.vk.id.internal.auth.device.DeviceIdProvider
 import com.vk.id.internal.concurrent.CoroutinesDispatchers
 import com.vk.id.internal.state.StateGenerator
+import com.vk.id.internal.store.PrefsStore
 import com.vk.id.network.VKIDCall
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.testCoroutineScheduler
@@ -86,6 +87,7 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
         val scheduler = testCoroutineScheduler
         val testDispatcher = StandardTestDispatcher(scheduler)
         every { dispatchers.io } returns testDispatcher
+        val prefsStore = mockk<PrefsStore>()
         val exchanger = VKIDTokenExchanger(
             api = api,
             deviceIdProvider = deviceIdProvider,
@@ -93,9 +95,11 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
             stateGenerator = stateGenerator,
             tokensHandler = tokensHandler,
             dispatchers = dispatchers,
+            prefsStore = prefsStore,
         )
         every { stateGenerator.regenerateState() } returns STATE
         When("Api returns an error") {
+            every { prefsStore.clear() } just runs
             val call = mockk<VKIDCall<VKIDTokenPayload>>()
             val exception = Exception("message")
             every { call.execute() } returns Result.failure(exception)
@@ -117,11 +121,15 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
                     params = VKIDExchangeTokenParams {}
                 )
             }
+            Then("Clears prefs store") {
+                verify { prefsStore.clear() }
+            }
             Then("Calls callback's onFail") {
                 verify { callback.onFail(fail) }
             }
         }
         When("Api returns wrong state") {
+            every { prefsStore.clear() } just runs
             val call = mockk<VKIDCall<VKIDTokenPayload>>()
             every { call.execute() } returns Result.success(TOKEN_PAYLOAD.copy(state = "wrong state"))
             coEvery {
@@ -142,11 +150,15 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
                     params = VKIDExchangeTokenParams {}
                 )
             }
+            Then("Clears prefs store") {
+                verify { prefsStore.clear() }
+            }
             Then("Calls callback's onFail") {
                 verify { callback.onFail(fail) }
             }
         }
         When("Api returns token") {
+            every { prefsStore.clear() } just runs
             val call = mockk<VKIDCall<VKIDTokenPayload>>()
             every { call.execute() } returns Result.success(TOKEN_PAYLOAD)
             coEvery {
@@ -177,6 +189,9 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
                     callback = callback,
                     params = VKIDExchangeTokenParams {}
                 )
+            }
+            Then("Clears prefs store") {
+                verify { prefsStore.clear() }
             }
             Then("Calls on callback.onSuccess") {
                 onSuccess.captured(ACCESS_TOKEN)
