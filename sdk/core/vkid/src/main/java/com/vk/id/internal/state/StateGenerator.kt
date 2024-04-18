@@ -1,5 +1,8 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.internal.state
 
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.store.PrefsStore
 
 internal class StateGenerator(

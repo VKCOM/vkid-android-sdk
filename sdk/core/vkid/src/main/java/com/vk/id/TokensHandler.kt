@@ -1,5 +1,8 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id
 
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.fetchuser.VKIDUserInfoFetcher
 import com.vk.id.internal.auth.VKIDTokenPayload
 import com.vk.id.internal.auth.toExpireTime

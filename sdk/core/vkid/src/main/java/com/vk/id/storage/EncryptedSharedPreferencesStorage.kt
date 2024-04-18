@@ -4,8 +4,10 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
+import com.vk.id.common.InternalVKIDApi
 
-internal class EncryptedSharedPreferencesStorage(
+@InternalVKIDApi
+public class EncryptedSharedPreferencesStorage internal constructor(
     context: Context
 ) {
     private val sharedPreferences: SharedPreferences by lazy {
@@ -18,7 +20,7 @@ internal class EncryptedSharedPreferencesStorage(
         )
     }
 
-    fun set(key: String, value: String?) = sharedPreferences.edit().putString(key, value).apply()
+    public fun set(key: String, value: String?): Unit = sharedPreferences.edit().putString(key, value).apply()
 
-    fun getString(key: String) = sharedPreferences.getString(key, null)
+    public fun getString(key: String): String? = sharedPreferences.getString(key, null)
 }

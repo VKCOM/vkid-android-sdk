@@ -40,30 +40,32 @@ import com.vk.id.logger.createLoggerForClass
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
-internal class DeviceIdProvider(
+@InternalVKIDApi
+public class DeviceIdProvider internal constructor(
     private val context: Context,
     private val deviceIdStorage: DeviceIdStorage
 ) {
     private val mutex = ReentrantLock()
     private val logger = createLoggerForClass()
 
-    interface DeviceIdStorage {
-        fun getDeviceId(): String
-        fun setDeviceId(deviceId: String)
+    @InternalVKIDApi
+    public interface DeviceIdStorage {
+        public fun getDeviceId(): String
+        public fun setDeviceId(deviceId: String)
 
-        fun getSystemDeviceId(): String
-        fun setSystemDeviceId(systemDeviceId: String)
+        public fun getSystemDeviceId(): String
+        public fun setSystemDeviceId(systemDeviceId: String)
 
-        fun getDeviceToken(memberId: Long): String
-        fun setDeviceToken(memberId: Long, deviceToken: String)
-        fun clearDeviceToken(memberId: Long)
+        public fun getDeviceToken(memberId: Long): String
+        public fun setDeviceToken(memberId: Long, deviceToken: String)
+        public fun clearDeviceToken(memberId: Long)
     }
 
-    fun setDeviceId(deviceId: String) {
+    internal fun setDeviceId(deviceId: String) {
         deviceIdStorage.setDeviceId(deviceId)
     }
 
-    fun getDeviceId(): String {
+    internal fun getDeviceId(): String {
         mutex.withLock {
             val deviceId = deviceIdStorage.getDeviceId()
             return if (TextUtils.isEmpty(deviceId)) {
@@ -90,7 +92,7 @@ internal class DeviceIdProvider(
         }
     }
 
-    companion object {
+    internal companion object {
         @SuppressLint("HardwareIds")
         private fun findDeviceIdByAndroidId(context: Context): String? {
             return Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)

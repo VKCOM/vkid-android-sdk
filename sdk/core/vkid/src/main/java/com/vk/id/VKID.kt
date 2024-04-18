@@ -16,10 +16,12 @@ import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthEventBridge
 import com.vk.id.internal.auth.AuthProvidersChooser
 import com.vk.id.internal.auth.AuthResult
+import com.vk.id.internal.auth.device.DeviceIdProvider
 import com.vk.id.internal.concurrent.CoroutinesDispatchers
 import com.vk.id.internal.di.VKIDDeps
 import com.vk.id.internal.di.VKIDDepsProd
 import com.vk.id.internal.ipc.SilentAuthInfoProvider
+import com.vk.id.internal.store.PrefsStore
 import com.vk.id.internal.user.UserDataFetcher
 import com.vk.id.logger.AndroidLogcatLogEngine
 import com.vk.id.logger.FakeLogEngine
@@ -35,6 +37,7 @@ import com.vk.id.refresh.VKIDTokenRefresher
 import com.vk.id.refreshuser.VKIDGetUserCallback
 import com.vk.id.refreshuser.VKIDGetUserParams
 import com.vk.id.refreshuser.VKIDUserRefresher
+import com.vk.id.storage.EncryptedSharedPreferencesStorage
 import com.vk.id.storage.TokenStorage
 import com.vk.id.test.ImmediateVKIDApi
 import com.vk.id.test.MockAuthProviderChooser
@@ -65,11 +68,18 @@ public class VKID {
     internal constructor(
         context: Context,
         mockApi: OverrideVKIDApi,
-        mockAuthProviderConfig: MockAuthProviderConfig
+        mockAuthProviderConfig: MockAuthProviderConfig,
+        deviceIdStorage: DeviceIdProvider.DeviceIdStorage?,
+        prefsStore: PrefsStore?,
+        encryptedSharedPreferencesStorage: EncryptedSharedPreferencesStorage?,
     ) : this(object : VKIDDepsProd(context) {
         override val authProvidersChooser = lazy { MockAuthProviderChooser(context, mockAuthProviderConfig) }
         override val api = lazy { ImmediateVKIDApi(mockApi) }
         override val vkSilentAuthInfoProvider = lazy { TestSilentAuthInfoProvider() }
+        override val deviceIdStorage = lazy { deviceIdStorage ?: super.deviceIdStorage.value }
+        override val prefsStore = lazy { prefsStore ?: super.prefsStore.value }
+        override val encryptedSharedPreferencesStorage =
+            lazy { encryptedSharedPreferencesStorage ?: super.encryptedSharedPreferencesStorage.value }
     })
 
     /** @suppress */

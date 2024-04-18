@@ -7,6 +7,14 @@ import com.vk.id.common.InternalVKIDApi
 
 @InternalVKIDApi
 public interface OverrideVKIDApi {
+
+    public fun refreshToken(
+        refreshToken: String,
+        clientId: String,
+        deviceId: String,
+        state: String
+    ): Result<VKIDTokenPayloadResponse>
+
     @Suppress("LongParameterList")
     public fun getToken(
         code: String,
@@ -33,15 +41,19 @@ public interface OverrideVKIDApi {
 @InternalVKIDApi
 public data class VKIDTokenPayloadResponse(
     @SerializedName("access_token")
-    val accessToken: String,
+    val accessToken: String? = null,
     @SerializedName("refresh_token")
-    val refreshToken: String,
+    val refreshToken: String? = null,
     @SerializedName("id_token")
-    val idToken: String,
+    val idToken: String? = null,
     @SerializedName("expires_in")
-    val expiresIn: Long,
+    val expiresIn: Long? = null,
     @SerializedName("user_id")
-    val userId: Long,
+    val userId: Long? = null,
+    @SerializedName("state")
+    val state: String? = null,
+    @SerializedName("error")
+    val error: String? = null,
 )
 
 @InternalVKIDApi

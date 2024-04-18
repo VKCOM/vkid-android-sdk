@@ -1,7 +1,8 @@
-@file:OptIn(ExperimentalStdlibApi::class, ExperimentalCoroutinesApi::class)
+@file:OptIn(ExperimentalStdlibApi::class, ExperimentalCoroutinesApi::class, InternalVKIDApi::class)
 
 package com.vk.id
 
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.fetchuser.VKIDUserInfoFetcher
 import com.vk.id.internal.auth.VKIDTokenPayload
 import com.vk.id.internal.concurrent.CoroutinesDispatchers
