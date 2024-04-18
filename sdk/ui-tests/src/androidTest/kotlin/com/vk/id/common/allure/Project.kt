@@ -15,4 +15,8 @@ import java.lang.annotation.Inherited
     AnnotationTarget.CLASS
 )
 @LabelAnnotation(name = "Project")
-internal annotation class Project(val value: String)
+internal annotation class Project(val value: String) {
+    companion object {
+        const val VKID_SDK = "VKIDSDK"
+    }
+}

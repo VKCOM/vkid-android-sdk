@@ -97,9 +97,9 @@ private val ACCESS_TOKEN = AccessToken(
     )
 )
 
-@Platform("Android Manual")
-@Product("VK ID SDK")
-@Project("VKIDSDK")
+@Platform(Platform.ANDROID_MANUAL)
+@Product(Product.VKID_SDK)
+@Project(Project.VKID_SDK)
 @Owner(Owners.DANIIL_KLIMCHUK)
 @Feature(TestFeature.OAUTH_2_1)
 @RunWith(AndroidJUnit4::class)

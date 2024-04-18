@@ -14,4 +14,8 @@ import java.lang.annotation.Inherited
     AnnotationTarget.CLASS
 )
 @LabelAnnotation(name = "Project")
-internal annotation class Platform(val value: String)
+internal annotation class Platform(val value: String) {
+    companion object {
+        const val ANDROID_MANUAL = "Android Manual"
+    }
+}
