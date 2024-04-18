@@ -26,7 +26,7 @@ public class OneTapComposeTest : OneTapTest() {
     }
 
     @Test
-    @AllureId("")
+    @AllureId("2302952")
     @DisplayName("Успешное получение токена после логаута в Compose OneTap")
     override fun tokenIsReceivedAfterFailedLogout() {
         super.tokenIsReceivedAfterFailedLogout()
@@ -82,14 +82,14 @@ public class OneTapComposeTest : OneTapTest() {
     }
 
     @Test
-    @AllureId("")
+    @AllureId("2302976")
     @DisplayName("Успешное получение кода при схеме с бекендом в XML OneTap Мультибрендинге")
     override fun authCodeIsReceived() {
         super.authCodeIsReceived()
     }
 
     @Test
-    @AllureId("")
+    @AllureId("2303016")
     @DisplayName("Получение ошибки загрузки пользовательских данных в Compose OneTap")
     override fun failedUserCallIsReceived() {
         super.failedUserCallIsReceived()
