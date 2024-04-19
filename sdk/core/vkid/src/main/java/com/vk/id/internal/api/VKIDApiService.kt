@@ -5,6 +5,7 @@ package com.vk.id.internal.api
 import com.vk.id.VKIDInvalidTokenException
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.api.dto.VKIDUserInfoPayload
+import com.vk.id.internal.auth.VKIDCodePayload
 import com.vk.id.internal.auth.VKIDTokenPayload
 import com.vk.id.internal.auth.app.VkAuthSilentAuthProvider
 import com.vk.id.network.VKIDApi
@@ -106,18 +107,38 @@ internal class VKIDApiService(
         ).wrapTokenToVKIDCall()
     }
 
+    @Suppress("ThrowsCount")
     fun exchangeToken(
         v1Token: String,
         clientId: String,
         deviceId: String,
         state: String,
-    ): VKIDCall<VKIDTokenPayload> {
+        codeChallenge: String,
+    ): VKIDCall<VKIDCodePayload> {
         return api.exchangeToken(
             v1Token = v1Token,
             clientId = clientId,
             deviceId = deviceId,
             state = state,
-        ).wrapTokenToVKIDCall()
+            codeChallenge = codeChallenge,
+        ).wrapToVKIDCall {
+            if (it.body == null) throw IOException("Empty body ${it.code} $it")
+            val body = requireNotNull(it.body).string()
+            val jsonObject = JSONObject(body)
+            if (jsonObject.has("error")) {
+                throw IOException("Api error: ${it.code} $body")
+            }
+            try {
+                VKIDCodePayload(
+                    code = jsonObject.getString("code"),
+                    state = jsonObject.optString("state"),
+                    deviceId = jsonObject.optString("device_id"),
+                )
+            } catch (@Suppress("SwallowedException") e: JSONException) {
+                val error = e.message
+                throw JSONException("$error: ${it.code} $body")
+            }
+        }
     }
 
     fun logout(

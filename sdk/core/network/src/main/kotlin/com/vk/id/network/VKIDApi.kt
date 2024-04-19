@@ -39,6 +39,7 @@ public interface VKIDApi {
         clientId: String,
         deviceId: String,
         state: String,
+        codeChallenge: String,
     ): Call
 
     public fun logout(

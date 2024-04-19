@@ -61,13 +61,15 @@ internal class ImmediateVKIDApi(
         v1Token: String,
         clientId: String,
         deviceId: String,
-        state: String
+        state: String,
+        codeChallenge: String,
     ) = MockVKIDCall(
         mockApi.exchangeToken(
             v1Token = v1Token,
             clientId = clientId,
             deviceId = deviceId,
             state = state,
+            codeChallenge = codeChallenge,
         )
     )
 

@@ -5,15 +5,19 @@ package com.vk.id.exchangetoken
 import com.vk.id.AccessToken
 import com.vk.id.TokensHandler
 import com.vk.id.VKIDUser
+import com.vk.id.auth.AuthCodeData
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.ServiceCredentials
+import com.vk.id.internal.auth.VKIDCodePayload
 import com.vk.id.internal.auth.VKIDTokenPayload
 import com.vk.id.internal.auth.device.DeviceIdProvider
+import com.vk.id.internal.auth.pkce.PkceGeneratorSHA256
 import com.vk.id.internal.concurrent.CoroutinesDispatchers
 import com.vk.id.internal.state.StateGenerator
 import com.vk.id.internal.store.PrefsStore
 import com.vk.id.network.VKIDCall
+import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.testCoroutineScheduler
 import io.mockk.coEvery
@@ -35,6 +39,8 @@ private const val REFRESH_TOKEN = "refresh token"
 private const val ID_TOKEN = "id token"
 private const val DEVICE_ID = "device id"
 private const val STATE = "state"
+private const val CODE_EXTERNAL_STATE = "code exchange state"
+private const val CODE_STATE = "code state"
 private const val FIRST_NAME = "first"
 private const val LAST_NAME = "last"
 private const val PHONE = "phone"
@@ -42,6 +48,9 @@ private const val AVATAR = "avatar"
 private const val EMAIL = "email"
 private const val V1_TOKEN = "V1_TOKEN"
 private const val USER_ID = 100L
+private const val CODE_CHALLENGE = "code challenge"
+private const val CODE_VERIFIER = "code verifier"
+private const val CODE = "authorization code"
 private val VKID_USER = VKIDUser(
     firstName = FIRST_NAME,
     lastName = LAST_NAME,
@@ -58,6 +67,11 @@ private val ACCESS_TOKEN = AccessToken(
     expireTime = -1,
     userData = VKID_USER,
 )
+private val CODE_PAYLOAD = VKIDCodePayload(
+    code = CODE,
+    state = CODE_STATE,
+    deviceId = DEVICE_ID,
+)
 private val TOKEN_PAYLOAD = VKIDTokenPayload(
     accessToken = ACCESS_TOKEN_VALUE,
     refreshToken = REFRESH_TOKEN,
@@ -71,6 +85,7 @@ private val TOKEN_PAYLOAD = VKIDTokenPayload(
 internal class VKIDTokenExchangerTest : BehaviorSpec({
 
     coroutineTestScope = true
+    isolationMode = IsolationMode.InstancePerLeaf
 
     Given("User info fetcher") {
         val api = mockk<VKIDApiService>()
@@ -88,6 +103,7 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
         val testDispatcher = StandardTestDispatcher(scheduler)
         every { dispatchers.io } returns testDispatcher
         val prefsStore = mockk<PrefsStore>()
+        val pkceGenerator = mockk<PkceGeneratorSHA256>()
         val exchanger = VKIDTokenExchanger(
             api = api,
             deviceIdProvider = deviceIdProvider,
@@ -96,11 +112,14 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
             tokensHandler = tokensHandler,
             dispatchers = dispatchers,
             prefsStore = prefsStore,
+            pkceGenerator = pkceGenerator,
         )
-        every { stateGenerator.regenerateState() } returns STATE
+        every { stateGenerator.regenerateState() } returns CODE_STATE andThen STATE
         When("Api returns an error") {
+            every { pkceGenerator.generateRandomCodeVerifier(any()) } returns CODE_VERIFIER
+            every { pkceGenerator.deriveCodeVerifierChallenge(CODE_VERIFIER) } returns CODE_CHALLENGE
             every { prefsStore.clear() } just runs
-            val call = mockk<VKIDCall<VKIDTokenPayload>>()
+            val call = mockk<VKIDCall<VKIDCodePayload>>()
             val exception = Exception("message")
             every { call.execute() } returns Result.failure(exception)
             coEvery {
@@ -108,11 +127,12 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
                     v1Token = V1_TOKEN,
                     clientId = CLIENT_ID,
                     deviceId = DEVICE_ID,
-                    state = STATE,
+                    state = CODE_STATE,
+                    codeChallenge = CODE_CHALLENGE,
                 )
             } returns call
             val callback = mockk<VKIDExchangeTokenCallback>()
-            val fail = VKIDExchangeTokenFail.FailedApiCall("Failed code to refresh token due to: message", exception)
+            val fail = VKIDExchangeTokenFail.FailedApiCall("Failed to exchange token due to: message", exception)
             every { callback.onFail(fail) } just runs
             runTest(scheduler) {
                 exchanger.exchange(
@@ -130,19 +150,104 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
         }
         When("Api returns wrong state") {
             every { prefsStore.clear() } just runs
-            val call = mockk<VKIDCall<VKIDTokenPayload>>()
-            every { call.execute() } returns Result.success(TOKEN_PAYLOAD.copy(state = "wrong state"))
+            val call = mockk<VKIDCall<VKIDCodePayload>>()
+            every { call.execute() } returns Result.success(CODE_PAYLOAD.copy(state = "wrong state"))
             coEvery {
                 api.exchangeToken(
                     v1Token = V1_TOKEN,
                     clientId = CLIENT_ID,
                     deviceId = DEVICE_ID,
-                    state = STATE,
+                    state = CODE_STATE,
+                    codeChallenge = CODE_CHALLENGE,
                 )
             } returns call
             val callback = mockk<VKIDExchangeTokenCallback>()
-            val fail = VKIDExchangeTokenFail.FailedOAuthState("Invalid state")
+            val fail = VKIDExchangeTokenFail.FailedOAuthState("Invalid state during code receiving")
             every { callback.onFail(fail) } just runs
+            runTest(scheduler) {
+                exchanger.exchange(
+                    v1Token = V1_TOKEN,
+                    callback = callback,
+                    params = VKIDExchangeTokenParams {
+                        codeChallenge = CODE_CHALLENGE
+                    }
+                )
+            }
+            Then("Clears prefs store") {
+                verify { prefsStore.clear() }
+            }
+            Then("Calls callback's onFail") {
+                verify { callback.onFail(fail) }
+            }
+        }
+        When("Api returns code and code challenge is provided") {
+            every { prefsStore.clear() } just runs
+            val call = mockk<VKIDCall<VKIDCodePayload>>()
+            every { call.execute() } returns Result.success(CODE_PAYLOAD)
+            coEvery {
+                api.exchangeToken(
+                    v1Token = V1_TOKEN,
+                    clientId = CLIENT_ID,
+                    deviceId = DEVICE_ID,
+                    state = CODE_STATE,
+                    codeChallenge = CODE_CHALLENGE,
+                )
+            } returns call
+            val callback = mockk<VKIDExchangeTokenCallback>()
+            every { callback.onAuthCode(AuthCodeData(CODE), true) } just runs
+            every { deviceIdProvider.setDeviceId(DEVICE_ID) } just runs
+            runTest(scheduler) {
+                exchanger.exchange(
+                    v1Token = V1_TOKEN,
+                    callback = callback,
+                    params = VKIDExchangeTokenParams {
+                        codeChallenge = CODE_CHALLENGE
+                    }
+                )
+            }
+            Then("Clears prefs store") {
+                verify { prefsStore.clear() }
+            }
+            Then("Saves device id") {
+                verify { deviceIdProvider.setDeviceId(DEVICE_ID) }
+            }
+            Then("Calls callback.onAuthCode") {
+                verify { callback.onAuthCode(AuthCodeData(CODE), true) }
+            }
+        }
+        When("Api returns code and token getting fails") {
+            every { pkceGenerator.generateRandomCodeVerifier(any()) } returns CODE_VERIFIER
+            every { pkceGenerator.deriveCodeVerifierChallenge(CODE_VERIFIER) } returns CODE_CHALLENGE
+            every { prefsStore.clear() } just runs
+            every { deviceIdProvider.setDeviceId(DEVICE_ID) } just runs
+            val call = mockk<VKIDCall<VKIDCodePayload>>()
+            every { call.execute() } returns Result.success(CODE_PAYLOAD)
+            coEvery {
+                api.exchangeToken(
+                    v1Token = V1_TOKEN,
+                    clientId = CLIENT_ID,
+                    deviceId = DEVICE_ID,
+                    state = CODE_STATE,
+                    codeChallenge = CODE_CHALLENGE,
+                )
+            } returns call
+            val getTokenCall = mockk<VKIDCall<VKIDTokenPayload>>()
+            val failedApiCallException = Exception("message")
+            every { getTokenCall.execute() } returns Result.failure(failedApiCallException)
+            coEvery {
+                api.getToken(
+                    code = CODE,
+                    codeVerifier = CODE_VERIFIER,
+                    clientId = CLIENT_ID,
+                    deviceId = DEVICE_ID,
+                    state = STATE,
+                    redirectUri = REDIRECT_URI,
+                )
+            } returns getTokenCall
+            val callback = mockk<VKIDExchangeTokenCallback>()
+            val fail = VKIDExchangeTokenFail.FailedApiCall("Failed to exchange code due to: message", failedApiCallException)
+            every { callback.onFail(fail) } just runs
+            every { callback.onAuthCode(AuthCodeData(CODE), false) } just runs
             runTest(scheduler) {
                 exchanger.exchange(
                     v1Token = V1_TOKEN,
@@ -153,29 +258,105 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
             Then("Clears prefs store") {
                 verify { prefsStore.clear() }
             }
+            Then("Saves device id") {
+                verify { deviceIdProvider.setDeviceId(DEVICE_ID) }
+            }
+            Then("Calls callback.onAuthCode") {
+                verify { callback.onAuthCode(AuthCodeData(CODE), false) }
+            }
             Then("Calls callback's onFail") {
                 verify { callback.onFail(fail) }
             }
         }
-        When("Api returns token") {
+        When("Api returns code and token getting returns wrong state") {
+            every { pkceGenerator.generateRandomCodeVerifier(any()) } returns CODE_VERIFIER
+            every { pkceGenerator.deriveCodeVerifierChallenge(CODE_VERIFIER) } returns CODE_CHALLENGE
             every { prefsStore.clear() } just runs
-            val call = mockk<VKIDCall<VKIDTokenPayload>>()
-            every { call.execute() } returns Result.success(TOKEN_PAYLOAD)
+            every { deviceIdProvider.setDeviceId(DEVICE_ID) } just runs
+            val call = mockk<VKIDCall<VKIDCodePayload>>()
+            every { call.execute() } returns Result.success(CODE_PAYLOAD)
             coEvery {
                 api.exchangeToken(
                     v1Token = V1_TOKEN,
                     clientId = CLIENT_ID,
                     deviceId = DEVICE_ID,
-                    state = STATE,
+                    state = CODE_STATE,
+                    codeChallenge = CODE_CHALLENGE,
                 )
             } returns call
+            val getTokenCall = mockk<VKIDCall<VKIDTokenPayload>>()
+            every { getTokenCall.execute() } returns Result.success(TOKEN_PAYLOAD.copy(state = "wrong state"))
+            coEvery {
+                api.getToken(
+                    code = CODE,
+                    codeVerifier = CODE_VERIFIER,
+                    clientId = CLIENT_ID,
+                    deviceId = DEVICE_ID,
+                    state = CODE_EXTERNAL_STATE,
+                    redirectUri = REDIRECT_URI,
+                )
+            } returns getTokenCall
+            val callback = mockk<VKIDExchangeTokenCallback>()
+            every { callback.onAuthCode(AuthCodeData(CODE), false) } just runs
+            val fail = VKIDExchangeTokenFail.FailedOAuthState("Invalid state during code exchange")
+            every { callback.onFail(fail) } just runs
+            runTest(scheduler) {
+                exchanger.exchange(
+                    v1Token = V1_TOKEN,
+                    callback = callback,
+                    params = VKIDExchangeTokenParams {
+                        codeExchangeState = CODE_EXTERNAL_STATE
+                    }
+                )
+            }
+            Then("Clears prefs store") {
+                verify { prefsStore.clear() }
+            }
+            Then("Saves device id") {
+                verify { deviceIdProvider.setDeviceId(DEVICE_ID) }
+            }
+            Then("Calls callback.onAuthCode") {
+                verify { callback.onAuthCode(AuthCodeData(CODE), false) }
+            }
+            Then("Calls callback's onFail") {
+                verify { callback.onFail(fail) }
+            }
+        }
+        When("Api returns code and token getting fails") {
+            every { pkceGenerator.generateRandomCodeVerifier(any()) } returns CODE_VERIFIER
+            every { pkceGenerator.deriveCodeVerifierChallenge(CODE_VERIFIER) } returns CODE_CHALLENGE
+            every { prefsStore.clear() } just runs
+            every { deviceIdProvider.setDeviceId(DEVICE_ID) } just runs
+            val call = mockk<VKIDCall<VKIDCodePayload>>()
+            every { call.execute() } returns Result.success(CODE_PAYLOAD)
+            coEvery {
+                api.exchangeToken(
+                    v1Token = V1_TOKEN,
+                    clientId = CLIENT_ID,
+                    deviceId = DEVICE_ID,
+                    state = CODE_STATE,
+                    codeChallenge = CODE_CHALLENGE,
+                )
+            } returns call
+            val getTokenCall = mockk<VKIDCall<VKIDTokenPayload>>()
+            val failedApiCallException = Exception("message")
+            every { getTokenCall.execute() } returns Result.success(TOKEN_PAYLOAD)
+            coEvery {
+                api.getToken(
+                    code = CODE,
+                    codeVerifier = CODE_VERIFIER,
+                    clientId = CLIENT_ID,
+                    deviceId = DEVICE_ID,
+                    state = STATE,
+                    redirectUri = REDIRECT_URI,
+                )
+            } returns getTokenCall
             val onFailedApiCall = slot<(Throwable) -> Unit>()
             val onSuccess = slot<suspend (AccessToken) -> Unit>()
             val callback = mockk<VKIDExchangeTokenCallback>()
-            every { callback.onSuccess(ACCESS_TOKEN) } just runs
-            val failedApiCallException = Exception("message")
-            val failedApiCallFail = VKIDExchangeTokenFail.FailedApiCall("Failed to fetch user data due to message", failedApiCallException)
-            every { callback.onFail(failedApiCallFail) } just runs
+            every { callback.onAuthCode(AuthCodeData(CODE), false) } just runs
+            val fail = VKIDExchangeTokenFail.FailedApiCall("Failed to fetch user data", failedApiCallException)
+            every { callback.onFail(fail) } just runs
             coEvery {
                 tokensHandler.handle(
                     TOKEN_PAYLOAD,
@@ -193,11 +374,76 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
             Then("Clears prefs store") {
                 verify { prefsStore.clear() }
             }
-            Then("Calls on callback.onSuccess") {
+            Then("Saves device id") {
+                verify { deviceIdProvider.setDeviceId(DEVICE_ID) }
+            }
+            Then("Calls callback.onAuthCode") {
+                verify { callback.onAuthCode(AuthCodeData(CODE), false) }
+            }
+            Then("Calls callback's onFail") {
+                onFailedApiCall.captured(failedApiCallException)
+                verify { callback.onFail(fail) }
+            }
+        }
+        When("Api returns code and token getting succeeds") {
+            every { pkceGenerator.generateRandomCodeVerifier(any()) } returns CODE_VERIFIER
+            every { pkceGenerator.deriveCodeVerifierChallenge(CODE_VERIFIER) } returns CODE_CHALLENGE
+            every { prefsStore.clear() } just runs
+            every { deviceIdProvider.setDeviceId(DEVICE_ID) } just runs
+            val call = mockk<VKIDCall<VKIDCodePayload>>()
+            every { call.execute() } returns Result.success(CODE_PAYLOAD)
+            coEvery {
+                api.exchangeToken(
+                    v1Token = V1_TOKEN,
+                    clientId = CLIENT_ID,
+                    deviceId = DEVICE_ID,
+                    state = CODE_STATE,
+                    codeChallenge = CODE_CHALLENGE,
+                )
+            } returns call
+            val getTokenCall = mockk<VKIDCall<VKIDTokenPayload>>()
+            every { getTokenCall.execute() } returns Result.success(TOKEN_PAYLOAD)
+            coEvery {
+                api.getToken(
+                    code = CODE,
+                    codeVerifier = CODE_VERIFIER,
+                    clientId = CLIENT_ID,
+                    deviceId = DEVICE_ID,
+                    state = STATE,
+                    redirectUri = REDIRECT_URI,
+                )
+            } returns getTokenCall
+            val onFailedApiCall = slot<(Throwable) -> Unit>()
+            val onSuccess = slot<suspend (AccessToken) -> Unit>()
+            val callback = mockk<VKIDExchangeTokenCallback>()
+            every { callback.onSuccess(ACCESS_TOKEN) } just runs
+            every { callback.onAuthCode(AuthCodeData(CODE), false) } just runs
+            coEvery {
+                tokensHandler.handle(
+                    TOKEN_PAYLOAD,
+                    capture(onSuccess),
+                    capture(onFailedApiCall),
+                )
+            } just runs
+            runTest(scheduler) {
+                exchanger.exchange(
+                    v1Token = V1_TOKEN,
+                    callback = callback,
+                    params = VKIDExchangeTokenParams {}
+                )
+            }
+            Then("Clears prefs store") {
+                verify { prefsStore.clear() }
+            }
+            Then("Saves device id") {
+                verify { deviceIdProvider.setDeviceId(DEVICE_ID) }
+            }
+            Then("Calls callback.onAuthCode") {
+                verify { callback.onAuthCode(AuthCodeData(CODE), false) }
+            }
+            Then("Calls callback's onFail") {
                 onSuccess.captured(ACCESS_TOKEN)
                 verify { callback.onSuccess(ACCESS_TOKEN) }
-                onFailedApiCall.captured(failedApiCallException)
-                verify { callback.onFail(failedApiCallFail) }
             }
         }
     }

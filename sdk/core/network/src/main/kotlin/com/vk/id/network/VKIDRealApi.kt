@@ -84,7 +84,8 @@ public class VKIDRealApi private constructor(
         v1Token: String,
         clientId: String,
         deviceId: String,
-        state: String
+        state: String,
+        codeChallenge: String,
     ): Call {
         val formBody = FormBody.Builder()
             .add(FIELD_RESPONSE_TYPE, VALUE_CODE)
@@ -93,6 +94,8 @@ public class VKIDRealApi private constructor(
             .add(FIELD_CLIENT_ID, clientId)
             .add(FIELD_DEVICE_ID, deviceId)
             .add(FIELD_STATE, state)
+            .add(FIELD_CODE_CHALLENGE, codeChallenge)
+            .add(FIELD_CODE_CHALLENGE_METHOD, VALUE_CODE_CHALLENGE_METHOD)
             .build()
 
         return createRequest(HOST_VK_ID, PATH_AUTH, formBody)
@@ -158,6 +161,8 @@ public class VKIDRealApi private constructor(
         private const val FIELD_CLIENT_SECRET = "client_secret"
         private const val FIELD_CODE = "code"
         private const val FIELD_CODE_VERIFIER = "code_verifier"
+        private const val FIELD_CODE_CHALLENGE = "code_challenge"
+        private const val FIELD_CODE_CHALLENGE_METHOD = "code_challenge_method"
         private const val FIELD_DEVICE_ID = "device_id"
         private const val FIELD_REDIRECT_URI = "redirect_uri"
         private const val FIELD_GRANT_TYPE = "grant_type"
@@ -172,5 +177,6 @@ public class VKIDRealApi private constructor(
         private const val VALUE_REFRESH_TOKEN = "refresh_token"
         private const val VALUE_CODE = "code"
         private const val VALUE_ACCESS_TOKEN = "access_token"
+        private const val VALUE_CODE_CHALLENGE_METHOD = "s256"
     }
 }

@@ -19,8 +19,9 @@ public interface OverrideVKIDApi {
         v1Token: String,
         clientId: String,
         deviceId: String,
-        state: String
-    ): Result<VKIDTokenPayloadResponse>
+        state: String,
+        codeChallenge: String,
+    ): Result<VKIDCodePayloadResponse>
 
     @Suppress("LongParameterList")
     public fun getToken(
@@ -57,6 +58,16 @@ public data class VKIDTokenPayloadResponse(
     val expiresIn: Long? = null,
     @SerializedName("user_id")
     val userId: Long? = null,
+    @SerializedName("state")
+    val state: String? = null,
+    @SerializedName("error")
+    val error: String? = null,
+)
+
+@InternalVKIDApi
+public data class VKIDCodePayloadResponse(
+    @SerializedName("code")
+    val code: String? = null,
     @SerializedName("state")
     val state: String? = null,
     @SerializedName("error")

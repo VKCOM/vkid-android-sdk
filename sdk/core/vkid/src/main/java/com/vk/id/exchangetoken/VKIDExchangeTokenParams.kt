@@ -16,6 +16,8 @@ public inline fun VKIDExchangeTokenParams(
  */
 public class VKIDExchangeTokenParams private constructor(
     internal val state: String? = null,
+    internal val codeExchangeState: String? = null,
+    internal val codeChallenge: String? = null,
 ) {
     /**
      * A builder for [VKIDExchangeTokenParams].
@@ -28,10 +30,23 @@ public class VKIDExchangeTokenParams private constructor(
         public var state: String? = null
 
         /**
+         * An optional state to be passed to exchanging code for access token.
+         */
+        public var codeExchangeState: String? = null
+
+        /**
+         * An optional code challenge to be passed to auth.
+         * See https://datatracker.ietf.org/doc/html/rfc7636#section-4.2 for more information.
+         */
+        public var codeChallenge: String? = null
+
+        /**
          * Constructs [VKIDExchangeTokenParams] with provided values.
          */
         public fun build(): VKIDExchangeTokenParams = VKIDExchangeTokenParams(
             state = state,
+            codeExchangeState = codeExchangeState,
+            codeChallenge = codeChallenge,
         )
     }
 }

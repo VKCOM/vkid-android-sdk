@@ -165,6 +165,7 @@ public final class com/vk/id/auth/AuthCodeData {
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getCode ()Ljava/lang/String;
 	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class com/vk/id/auth/Prompt : java/lang/Enum {
@@ -277,6 +278,7 @@ public final class com/vk/id/exchangetoken/VKIDExchangeTokenFail$FailedApiCall :
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getThrowable ()Ljava/lang/Throwable;
 	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class com/vk/id/exchangetoken/VKIDExchangeTokenFail$FailedOAuthState : com/vk/id/exchangetoken/VKIDExchangeTokenFail {
@@ -288,14 +290,18 @@ public final class com/vk/id/exchangetoken/VKIDExchangeTokenFail$FailedOAuthStat
 
 public final class com/vk/id/exchangetoken/VKIDExchangeTokenParams {
 	public static final field $stable I
-	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 }
 
 public final class com/vk/id/exchangetoken/VKIDExchangeTokenParams$Builder {
 	public static final field $stable I
 	public fun <init> ()V
 	public final fun build ()Lcom/vk/id/exchangetoken/VKIDExchangeTokenParams;
+	public final fun getCodeChallenge ()Ljava/lang/String;
+	public final fun getCodeExchangeState ()Ljava/lang/String;
 	public final fun getState ()Ljava/lang/String;
+	public final fun setCodeChallenge (Ljava/lang/String;)V
+	public final fun setCodeExchangeState (Ljava/lang/String;)V
 	public final fun setState (Ljava/lang/String;)V
 }
 

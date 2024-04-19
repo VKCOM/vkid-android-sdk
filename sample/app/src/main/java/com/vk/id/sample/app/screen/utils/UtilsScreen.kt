@@ -193,6 +193,7 @@ private fun RefreshTokenUtil() {
 }
 
 @Composable
+@Suppress("LongMethod")
 private fun ExchangeTokenUtil() {
     ExpandableCard(title = "Exchange v1 token to v2") {
         val context = LocalContext.current
@@ -212,6 +213,20 @@ private fun ExchangeTokenUtil() {
             value = state,
             onValueChange = { state = it },
             label = { Text("State (Optional)") },
+        )
+        var codeExchangeState by remember { mutableStateOf("") }
+        TextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = codeExchangeState,
+            onValueChange = { codeExchangeState = it },
+            label = { Text("State for code exchanging (Optional)") },
+        )
+        var codeChallenge by remember { mutableStateOf("") }
+        TextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = codeChallenge,
+            onValueChange = { codeChallenge = it },
+            label = { Text("Code challenge (Optional)") },
         )
         Button(text = "Exchange") {
             coroutineScope.launch {
@@ -236,6 +251,8 @@ private fun ExchangeTokenUtil() {
                     },
                     params = VKIDExchangeTokenParams {
                         this.state = state.takeIf { it.isNotBlank() }
+                        this.codeExchangeState = codeExchangeState.takeIf { it.isNotBlank() }
+                        this.codeChallenge = codeChallenge.takeIf { it.isNotBlank() }
                     }
                 )
             }
