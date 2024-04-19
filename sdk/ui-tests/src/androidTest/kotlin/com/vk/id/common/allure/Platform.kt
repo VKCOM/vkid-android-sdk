@@ -13,7 +13,7 @@ import java.lang.annotation.Inherited
     AnnotationTarget.ANNOTATION_CLASS,
     AnnotationTarget.CLASS
 )
-@LabelAnnotation(name = "Project")
+@LabelAnnotation(name = "Platform")
 internal annotation class Platform(val value: String) {
     companion object {
         const val ANDROID_MANUAL = "Android Manual"
