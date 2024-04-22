@@ -53,12 +53,14 @@ public class VKIDRealApi private constructor(
     override fun sendStatEventsAnonymously(
         clientId: String,
         clientSecret: String,
+        sakVersion: String,
         events: JSONArray,
     ): Call {
         val formBody = FormBody.Builder()
             .add(FIELD_API_VERSION, API_VERSION_VALUE)
             .add(FIELD_CLIENT_ID, clientId)
             .add(FIELD_CLIENT_SECRET, clientSecret)
+            .add("sak_version", sakVersion)
             .add("events", events.toString())
             .build()
 

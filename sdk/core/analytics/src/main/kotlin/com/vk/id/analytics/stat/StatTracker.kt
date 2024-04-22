@@ -2,6 +2,7 @@
 
 package com.vk.id.analytics.stat
 
+import com.vk.id.analytics.BuildConfig
 import com.vk.id.analytics.VKIDAnalytics
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.logger.createLoggerForClass
@@ -45,7 +46,7 @@ public class StatTracker(
             if (events.isNotEmpty()) {
                 val eventsJson = JSONArray(events)
                 val response = try {
-                    val response = api.value.sendStatEventsAnonymously(clientId, clientSecret, eventsJson).execute()
+                    val response = api.value.sendStatEventsAnonymously(clientId, clientSecret, BuildConfig.VKID_VERSION_NAME, eventsJson).execute()
                     logger.debug("Send events to stat '$eventsJson': ${response.code}")
                     response.body?.string()
                 } catch (ioe: IOException) {
