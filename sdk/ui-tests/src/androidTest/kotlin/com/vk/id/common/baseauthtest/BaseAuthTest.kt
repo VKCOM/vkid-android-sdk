@@ -34,7 +34,7 @@ import org.junit.Before
 import org.junit.Rule
 import java.util.UUID
 
-@Platform(Platform.ANDROID_MANUAL)
+@Platform(Platform.ANDROID_AUTO)
 @Product(Product.VKID_SDK)
 @Project(Project.VKID_SDK)
 @Owner(Owners.DANIIL_KLIMCHUK)

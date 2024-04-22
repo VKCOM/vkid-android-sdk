@@ -90,7 +90,7 @@ private val USER = VKIDUser(
     email = MockApi.EMAIL,
 )
 
-@Platform(Platform.ANDROID_MANUAL)
+@Platform(Platform.ANDROID_AUTO)
 @Product(Product.VKID_SDK)
 @Project(Project.VKID_SDK)
 @Owner(Owners.DANIIL_KLIMCHUK)
