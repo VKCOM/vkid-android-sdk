@@ -17,6 +17,7 @@ internal data class AuthOptions(
     val webAuthPhoneScreen: Boolean,
     val oAuth: OAuth?,
     val prompt: String,
+    val scopes: Set<String>,
 )
 
 private const val APP_ID = "app_id"
@@ -41,6 +42,7 @@ private const val LOCALE = "lang_id"
 private const val THEME = "scheme"
 private const val SCREEN_PARAM = "screen"
 private const val SCREEN_PHONE = "phone"
+private const val SCOPES = "scope"
 
 internal fun basicCodeFlowUri(appPackage: String) = Uri.Builder()
     .scheme(appPackage)
@@ -56,6 +58,7 @@ internal fun AuthOptions.toAuthUriBrowser(): Uri {
         .appendQueryParameter(CODE_CHALLENGE, codeChallenge)
         .appendQueryParameter(STATE, state)
         .appendQueryParameter(PROMPT, prompt)
+        .appendQueryParameter(SCOPES, scopes.joinToString(separator = " "))
 
     if (oAuth != null) {
         builder.appendQueryParameter(ACTION, oAuth.toQueryParam())
@@ -84,6 +87,7 @@ internal fun AuthOptions.toAuthUriCodeFlow(appPackage: String): Uri {
         .appendQueryParameter(CODE_CHALLENGE, codeChallenge)
         .appendQueryParameter(STATE, state)
         .appendQueryParameter(UUID, state)
+        .appendQueryParameter(SCOPES, scopes.joinToString(separator = " "))
 
     if (oAuth != null) {
         builder.appendQueryParameter(ACTION, oAuth.toQueryParam())

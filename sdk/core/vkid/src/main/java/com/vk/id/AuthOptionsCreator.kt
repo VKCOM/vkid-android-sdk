@@ -47,6 +47,7 @@ internal class AuthOptionsCreator(
             webAuthPhoneScreen = !authParams.useOAuthProviderIfPossible,
             oAuth = authParams.oAuth,
             prompt = if (authParams.prompt == Prompt.LOGIN) "login" else "",
+            scopes = authParams.scopes,
         )
     }
 }

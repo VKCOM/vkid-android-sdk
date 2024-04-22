@@ -1,5 +1,3 @@
-@file:OptIn(InternalVKIDApi::class)
-
 package com.vk.id.auth
 
 import android.content.Context
@@ -25,14 +23,16 @@ public inline fun VKIDAuthParams(initializer: VKIDAuthParams.Builder.() -> Unit)
  * @property useOAuthProviderIfPossible Flag to use OAuth provider installed on device if possible. Defaults to true.
  * @property oAuth The [OAuth] provider to be used for authentication. Optional.
  */
+@Suppress("LongParameterList")
 public class VKIDAuthParams private constructor(
-    internal val locale: Locale? = null,
-    internal val theme: Theme? = null,
-    internal val useOAuthProviderIfPossible: Boolean = true,
-    internal val oAuth: OAuth? = null,
-    internal val prompt: Prompt = Prompt.BLANK,
-    internal val state: String? = null,
-    internal val codeChallenge: String? = null,
+    internal val locale: Locale?,
+    internal val theme: Theme?,
+    internal val useOAuthProviderIfPossible: Boolean,
+    internal val oAuth: OAuth?,
+    internal val prompt: Prompt,
+    internal val state: String?,
+    internal val codeChallenge: String?,
+    internal val scopes: Set<String>,
 ) {
     /**
      * Represents a locale that user prefers during authorization.
@@ -177,6 +177,13 @@ public class VKIDAuthParams private constructor(
         public var codeChallenge: String? = null
 
         /**
+         * A required parameter with a list of requested scopes for the access token.
+         * You can view the list of available scopes here: https://dev.vk.com/ru/reference/access-rights.
+         * The user will see a screen where he may grant some of this scopes during authorization process.
+         */
+        public var scopes: Set<String> = emptySet()
+
+        /**
          * Constructs [VKIDAuthParams] object with provided values.
          */
         public fun build(): VKIDAuthParams = VKIDAuthParams(
@@ -187,6 +194,7 @@ public class VKIDAuthParams private constructor(
             prompt = prompt,
             state = state,
             codeChallenge = codeChallenge,
+            scopes = scopes,
         )
     }
 }

@@ -18,8 +18,9 @@ public inline fun VKIDAuthUiParams(initializer: VKIDAuthUiParams.Builder.() -> U
  * @property codeChallenge an optional code challenge to be passed to auth.
  */
 public class VKIDAuthUiParams private constructor(
-    internal val state: String? = null,
-    internal val codeChallenge: String? = null,
+    internal val state: String?,
+    internal val codeChallenge: String?,
+    internal val scopes: Set<String>,
 ) {
     /**
      * Builder for [VKIDAuthUiParams].
@@ -37,11 +38,19 @@ public class VKIDAuthUiParams private constructor(
         public var codeChallenge: String? = null
 
         /**
+         * A required parameter with a list of requested scopes for the access token.
+         * You can view the list of available scopes here: https://dev.vk.com/ru/reference/access-rights.
+         * The user will see a screen where he may grant some of this scopes during authorization process.
+         */
+        public var scopes: Set<String> = emptySet()
+
+        /**
          * Constructs [VKIDAuthUiParams] object with provided values.
          */
         public fun build(): VKIDAuthUiParams = VKIDAuthUiParams(
             state = state,
             codeChallenge = codeChallenge,
+            scopes = scopes,
         )
     }
 
@@ -51,6 +60,7 @@ public class VKIDAuthUiParams private constructor(
         return VKIDAuthParams {
             state = params.state
             codeChallenge = params.codeChallenge
+            scopes = params.scopes
             initializer()
         }
     }
