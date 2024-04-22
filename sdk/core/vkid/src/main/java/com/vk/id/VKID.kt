@@ -102,6 +102,7 @@ public class VKID {
     /**
      * Only for tests, to provide mocked dependencies
      */
+    @InternalVKIDApi
     @VisibleForTesting
     internal constructor(deps: VKIDDeps) {
         this.authProvidersChooser = deps.authProvidersChooser
