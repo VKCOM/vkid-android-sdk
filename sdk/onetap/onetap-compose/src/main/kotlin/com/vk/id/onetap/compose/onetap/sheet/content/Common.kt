@@ -69,6 +69,7 @@ internal fun startAlternateAuth(
     onAuth: (AccessToken) -> Unit,
     onFail: (VKIDAuthFail) -> Unit,
     authStatus: MutableState<OneTapBottomSheetAuthStatus>,
+    extraAuthParams: Map<String, String>
 ) {
     authStatus.value = OneTapBottomSheetAuthStatus.AuthStarted
     startAuth(
@@ -85,6 +86,7 @@ internal fun startAlternateAuth(
         VKIDAuthParams {
             useOAuthProviderIfPossible = false
             theme = style.toProviderTheme()
+            extraParams = extraAuthParams
         }
     )
 }
