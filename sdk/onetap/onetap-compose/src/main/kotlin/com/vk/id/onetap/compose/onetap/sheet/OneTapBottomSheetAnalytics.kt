@@ -108,6 +108,12 @@ internal object OneTapBottomSheetAnalytics {
         return mapOf(OneTapAnalytics.UNIQUE_SESSION_PARAM_NAME to uuid)
     }
 
+    internal fun alternatePressed(): Map<String, String> {
+        val uuid = UUID.randomUUID().toString()
+        track("alternative_sign_in_tap", OneTapAnalytics.uuidParam(uuid), screenParam)
+        return mapOf(OneTapAnalytics.UNIQUE_SESSION_PARAM_NAME to uuid)
+    }
+
     internal fun userWasFound(signInAnotherAccountButton: Boolean) {
         track(
             "continue_as_show",

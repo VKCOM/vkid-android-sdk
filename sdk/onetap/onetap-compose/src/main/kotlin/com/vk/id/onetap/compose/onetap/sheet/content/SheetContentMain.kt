@@ -78,7 +78,8 @@ internal fun SheetContentMain(
                 startVKIDAuth(coroutineScope, vkid, style, { onAuth(null, it) }, { onFail(null, it) }, authStatus, extraAuthParams)
             },
             onAlternateButtonClick = {
-                startAlternateAuth(coroutineScope, vkid, style, { onAuth(null, it) }, { onFail(null, it) }, authStatus)
+                val extraAuthParams = OneTapBottomSheetAnalytics.alternatePressed()
+                startAlternateAuth(coroutineScope, vkid, style, { onAuth(null, it) }, { onFail(null, it) }, authStatus, extraAuthParams)
             },
             onAuth = onAuth,
             onFail = { oAuth, fail ->
