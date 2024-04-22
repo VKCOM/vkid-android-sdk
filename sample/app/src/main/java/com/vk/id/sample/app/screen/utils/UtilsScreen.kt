@@ -243,6 +243,13 @@ private fun LogoutUtil() {
     ExpandableCard(title = "Logout") {
         val context = LocalContext.current
         val coroutineScope = rememberCoroutineScope()
+        var refreshTokenState by remember { mutableStateOf("") }
+        TextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = refreshTokenState,
+            onValueChange = { refreshTokenState = it },
+            label = { Text("Refresh token state (Optional)") },
+        )
         Button(text = "Logout") {
             coroutineScope.launch {
                 context.vkid.logout(
@@ -255,7 +262,9 @@ private fun LogoutUtil() {
                             showToast(context, "Logout failed with: ${fail.description}")
                         }
                     },
-                    params = VKIDLogoutParams {}
+                    params = VKIDLogoutParams {
+                        this.refreshTokenState = refreshTokenState
+                    }
                 )
             }
         }

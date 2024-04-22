@@ -160,6 +160,7 @@ internal open class VKIDDepsProd(
             deviceIdProvider = deviceIdProvider.value,
             serviceCredentials = serviceCredentials.value,
             dispatchers = dispatchers,
+            tokenRefresher = tokenRefresher.value,
         )
     }
 
