@@ -11,6 +11,8 @@
  * express or implied. See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.internal.auth.web
 
 import android.annotation.SuppressLint
@@ -22,7 +24,8 @@ import android.net.Uri
 import android.os.Build
 import android.os.Build.VERSION_CODES
 import androidx.annotation.VisibleForTesting
-import com.vk.id.internal.log.createLoggerForClass
+import com.vk.id.common.InternalVKIDApi
+import com.vk.id.logger.createLoggerForClass
 
 /**
  * Utility class to obtain the browser package name to be used for

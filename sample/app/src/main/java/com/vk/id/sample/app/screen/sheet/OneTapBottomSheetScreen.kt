@@ -14,6 +14,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,6 +50,9 @@ import com.vk.id.sample.xml.uikit.common.getOneTapFailCallback
 import com.vk.id.sample.xml.uikit.common.getOneTapSuccessCallback
 import com.vk.id.sample.xml.uikit.common.showToast
 import com.vk.id.sample.xml.vkid
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlin.reflect.KCallable
 
 @Preview
 @Composable
@@ -64,6 +68,12 @@ internal fun OneTapBottomSheetScreen() {
     val shouldUseXml = remember { mutableStateOf(false) }
     var state by remember { mutableStateOf("") }
     var codeChallenge by remember { mutableStateOf("") }
+    var styleConstructors by remember { mutableStateOf<Map<String, KCallable<OneTapBottomSheetStyle>>>(emptyMap()) }
+    LaunchedEffect(Unit) {
+        withContext(Dispatchers.IO) {
+            styleConstructors = OneTapBottomSheetStyle::class.styleConstructors(context)
+        }
+    }
     Column(
         modifier = Modifier
             .padding(horizontal = 8.dp)
@@ -162,7 +172,7 @@ internal fun OneTapBottomSheetScreen() {
             onValueSelected = { selectedScenario.value = it }
         )
         DropdownSelector(
-            values = OneTapBottomSheetStyle::class.styleConstructors(context),
+            values = styleConstructors,
             selectedValue = selectedStyle.value::class.simpleName ?: error("Can get simple style"),
             onValueSelected = {
                 selectedStyle.value = it.call(

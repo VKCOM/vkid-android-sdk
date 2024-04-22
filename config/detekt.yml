@@ -5,6 +5,19 @@ build:
 config:
   validation: true
   warningsAsErrors: true
+  excludes: "ui-tests"
+
+ui-tests:
+  active: true
+  RestrictedKeywordRule:
+    active: true
+    includes: "**/androidTest/**"
+  TestClassNamingRule:
+    active: true
+    includes: "**/androidTest/**"
+  TestMethodNamingRule:
+    active: true
+    includes: "**/androidTest/**"
 
 complexity:
   active: true
@@ -25,5 +38,8 @@ formatting:
     active: true
     maxLineLength: 150
   ArgumentListWrapping:
+    active: true
+    maxLineLength: 150
+  Wrapping:
     active: true
     maxLineLength: 150

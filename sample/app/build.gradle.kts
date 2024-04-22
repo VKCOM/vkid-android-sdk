@@ -62,6 +62,17 @@ dependencies {
     implementation(libs.androidx.profileinstaller)
     baselineProfile(project(":baseline-profile"))
     debugImplementation(libs.androidx.compose.ui.tooling)
+
+    /* For testing intersections with https://github.com/VKCOM/vk-android-sdk:
+        - set VERSION_NAME in gradle.properties to something like 999-SNAPSHOT
+        - publish vkid artifacts to maven local: ./gradlew publishToMavenLocal
+        - set SUBSTITUTE_SAMPLE_PROJECTS_WITH_MODULES=true
+        - Uncomment following com.vk:android-sdk dependencies
+        - run ./gradlew allDependencies --write-locks
+        - build sample
+     */
+    //implementation(libs.vk.sdk.core)
+    //implementation(libs.vk.sdk.api)
 }
 
 fun generateVersionCode(): Int {

@@ -25,10 +25,13 @@
  * UNDER NO CIRCUMSTANCES LLC “V KONTAKTE” BEAR LIABILITY TO THE LICENSEE OR ANY
  * THIRD PARTIES FOR ANY DAMAGE IN CONNECTION WITH USE OF THE SOFTWARE.
  */
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.internal.auth.pkce
 
 import android.util.Base64
-import com.vk.id.internal.log.createLoggerForClass
+import com.vk.id.common.InternalVKIDApi
+import com.vk.id.logger.createLoggerForClass
 import java.io.UnsupportedEncodingException
 import java.nio.charset.Charset
 import java.security.MessageDigest

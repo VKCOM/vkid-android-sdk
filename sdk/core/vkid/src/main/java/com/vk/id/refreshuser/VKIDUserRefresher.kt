@@ -1,8 +1,11 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.refreshuser
 
 import com.vk.id.AccessToken
 import com.vk.id.VKIDInvalidTokenException
 import com.vk.id.VKIDUser
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.auth.device.DeviceIdProvider

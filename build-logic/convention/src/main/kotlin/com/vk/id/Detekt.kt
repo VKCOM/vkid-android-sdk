@@ -28,12 +28,22 @@ fun Project.configureDetekt(isCompose: Boolean = false) {
         )
         config.setFrom(configs)
         autoCorrect = true
-
+        setSource(
+            project.files(
+                "src/main/kotlin",
+                "src/main/java",
+                "src/test/kotlin",
+                "src/test/java",
+                "src/androidTest/kotlin",
+                "src/androidTest/java",
+            )
+        )
     }
     tasks.withType<DetektCreateBaselineTask>().configureEach {
         jvmTarget = "1.8"
     }
     dependencies {
         "detektPlugins"(libs.findLibrary("detekt-formatting").get())
+        add("detekt", project(":detekt-rules"))
     }
 }

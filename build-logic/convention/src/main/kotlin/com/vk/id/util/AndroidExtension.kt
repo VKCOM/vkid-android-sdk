@@ -4,7 +4,7 @@ import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.plugins.ExtensionContainer
 
 fun ExtensionContainer.android(
-    configuration: CommonExtension<*, *, *, *, *>.() -> Unit
+    configuration: CommonExtension<*, *, *, *, *, *>.() -> Unit
 ) = android.apply(configuration)
 
-val ExtensionContainer.android get() = getByName("android") as CommonExtension<*, *, *, *, *>
+val ExtensionContainer.android get() = getByName("android") as CommonExtension<*, *, *, *, *, *>

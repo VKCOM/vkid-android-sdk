@@ -1,7 +1,9 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id
 
 import com.vk.id.auth.VKIDAuthParams
-import com.vk.id.internal.api.VKIDApi
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthEventBridge
 import com.vk.id.internal.auth.AuthOptions
@@ -13,6 +15,7 @@ import com.vk.id.internal.di.VKIDDeps
 import com.vk.id.internal.ipc.VkSilentAuthInfoProvider
 import com.vk.id.internal.user.UserDataFetcher
 import com.vk.id.logout.VKIDLoggerOut
+import com.vk.id.network.VKIDApi
 import com.vk.id.refresh.VKIDTokenRefresher
 import com.vk.id.refreshuser.VKIDUserRefresher
 import com.vk.id.storage.TokenStorage

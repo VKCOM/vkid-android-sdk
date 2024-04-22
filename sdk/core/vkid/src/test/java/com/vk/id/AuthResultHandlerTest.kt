@@ -1,9 +1,11 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id
 
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthCallback
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.api.VKIDApiService
-import com.vk.id.internal.api.VKIDCall
 import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthResult
 import com.vk.id.internal.auth.ServiceCredentials
@@ -11,6 +13,7 @@ import com.vk.id.internal.auth.VKIDTokenPayload
 import com.vk.id.internal.auth.device.DeviceIdProvider
 import com.vk.id.internal.concurrent.CoroutinesDispatchers
 import com.vk.id.internal.store.PrefsStore
+import com.vk.id.network.VKIDCall
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.spec.style.scopes.BehaviorSpecGivenContainerScope
 import io.kotest.core.test.testCoroutineScheduler

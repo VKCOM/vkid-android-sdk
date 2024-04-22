@@ -1,16 +1,19 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.internal.auth.web
 
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import androidx.browser.customtabs.CustomTabsIntent
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.auth.AuthActivity
 import com.vk.id.internal.auth.AuthEventBridge
 import com.vk.id.internal.auth.AuthOptions
 import com.vk.id.internal.auth.AuthResult
 import com.vk.id.internal.auth.VKIDAuthProvider
 import com.vk.id.internal.auth.toAuthUriBrowser
-import com.vk.id.internal.log.createLoggerForClass
+import com.vk.id.logger.createLoggerForClass
 
 internal class WebAuthProvider(
     private val context: Context,

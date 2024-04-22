@@ -21,12 +21,12 @@ import com.vk.id.internal.concurrent.CoroutinesDispatchers
 import com.vk.id.internal.di.VKIDDeps
 import com.vk.id.internal.di.VKIDDepsProd
 import com.vk.id.internal.ipc.SilentAuthInfoProvider
-import com.vk.id.internal.log.AndroidLogcatLogEngine
-import com.vk.id.internal.log.FakeLogEngine
-import com.vk.id.internal.log.LogEngine
-import com.vk.id.internal.log.VKIDLog
-import com.vk.id.internal.log.createLoggerForClass
 import com.vk.id.internal.user.UserDataFetcher
+import com.vk.id.logger.AndroidLogcatLogEngine
+import com.vk.id.logger.FakeLogEngine
+import com.vk.id.logger.LogEngine
+import com.vk.id.logger.VKIDLog
+import com.vk.id.logger.createLoggerForClass
 import com.vk.id.logout.VKIDLoggerOut
 import com.vk.id.logout.VKIDLogoutCallback
 import com.vk.id.logout.VKIDLogoutParams

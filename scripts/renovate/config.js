@@ -1,5 +1,5 @@
 module.exports = {
-    endpoint: 'https://gitlab.mvk.com/api/v4/',
+    endpoint: 'https://' + process.env.VKID_GITLAB_HOST + '/api/v4/',
     gitAuthor: 'Klimchuk Daniil <daniil.klimchuk@vk.team>',
     hostRules: [
         {
@@ -7,7 +7,7 @@ module.exports = {
             token: process.env.VKID_GITHUB_TOKEN,
         },
         {
-            matchHost: 'gitlab.mvk.com',
+            matchHost: process.env.VKID_GITLAB_HOST,
             token: process.env.VKID_GITLAB_TOKEN,
         },
     ],
