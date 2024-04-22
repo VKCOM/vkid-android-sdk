@@ -56,12 +56,12 @@ public final class com/vk/id/multibranding/common/style/OAuthListWidgetSizeStyle
 
 public abstract class com/vk/id/multibranding/common/style/OAuthListWidgetStyle {
 	public static final field Companion Lcom/vk/id/multibranding/common/style/OAuthListWidgetStyle$Companion;
-	public synthetic fun <init> (Lcom/vk/id/multibranding/common/style/OAuthListWidgetCornersStyle;Lcom/vk/id/multibranding/common/style/OAuthListWidgetRippleStyle;Lcom/vk/id/multibranding/common/style/OAuthListWidgetBorderStyle;Lcom/vk/id/multibranding/common/style/OAuthListWidgetTextStyle;Lcom/vk/id/multibranding/common/style/OAuthListWidgetSizeStyle;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getBorderStyle ()Lcom/vk/id/multibranding/common/style/OAuthListWidgetBorderStyle;
+	public synthetic fun <init> (Lcom/vk/id/multibranding/common/style/OAuthListWidgetCornersStyle;Lcom/vk/id/multibranding/common/style/VKIDOAuthListWidgetRippleStyle;Lcom/vk/id/multibranding/common/style/VKIDOAuthListWidgetBorderStyle;Lcom/vk/id/multibranding/common/style/VKIDOAuthListWidgetTextStyle;Lcom/vk/id/multibranding/common/style/OAuthListWidgetSizeStyle;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getBorderStyle ()Lcom/vk/id/multibranding/common/style/VKIDOAuthListWidgetBorderStyle;
 	public final fun getCornersStyle ()Lcom/vk/id/multibranding/common/style/OAuthListWidgetCornersStyle;
-	public final fun getRippleStyle ()Lcom/vk/id/multibranding/common/style/OAuthListWidgetRippleStyle;
+	public final fun getRippleStyle ()Lcom/vk/id/multibranding/common/style/VKIDOAuthListWidgetRippleStyle;
 	public final fun getSizeStyle ()Lcom/vk/id/multibranding/common/style/OAuthListWidgetSizeStyle;
-	public final fun getTextStyle ()Lcom/vk/id/multibranding/common/style/OAuthListWidgetTextStyle;
+	public final fun getTextStyle ()Lcom/vk/id/multibranding/common/style/VKIDOAuthListWidgetTextStyle;
 }
 
 public final class com/vk/id/multibranding/common/style/OAuthListWidgetStyle$Companion {

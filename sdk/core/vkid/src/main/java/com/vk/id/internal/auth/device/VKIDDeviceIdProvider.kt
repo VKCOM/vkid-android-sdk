@@ -41,7 +41,7 @@ import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 @InternalVKIDApi
-public class DeviceIdProvider internal constructor(
+public class VKIDDeviceIdProvider internal constructor(
     private val context: Context,
     private val deviceIdStorage: DeviceIdStorage
 ) {

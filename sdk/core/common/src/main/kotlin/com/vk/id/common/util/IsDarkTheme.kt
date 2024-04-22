@@ -5,5 +5,5 @@ import android.content.res.Configuration
 import com.vk.id.common.InternalVKIDApi
 
 @InternalVKIDApi
-public val Context.isDarkTheme: Boolean
+public val Context.vkidIsDarkTheme: Boolean
     get() = resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES

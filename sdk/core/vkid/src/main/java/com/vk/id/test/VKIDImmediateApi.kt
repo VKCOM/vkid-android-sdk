@@ -4,8 +4,8 @@ import com.vk.id.common.InternalVKIDApi
 import com.vk.id.network.VKIDApi
 
 @InternalVKIDApi
-internal class ImmediateVKIDApi(
-    private val mockApi: OverrideVKIDApi
+internal class VKIDImmediateApi(
+    private val mockApi: VKIDOverrideApi
 ) : VKIDApi {
 
     override fun getToken(
@@ -15,7 +15,7 @@ internal class ImmediateVKIDApi(
         deviceId: String,
         redirectUri: String,
         state: String,
-    ) = MockVKIDCall(
+    ) = VKIDMockCall(
         mockApi.getToken(
             code = code,
             codeVerifier = codeVerifier,
@@ -29,14 +29,14 @@ internal class ImmediateVKIDApi(
     override fun getSilentAuthProviders(
         clientId: String,
         clientSecret: String
-    ) = MockVKIDCall(Result.success(VKIDSilentAuthProvidersResponse("null")))
+    ) = VKIDMockCall(Result.success(VKIDSilentAuthProvidersResponse("null")))
 
     override fun refreshToken(
         refreshToken: String,
         clientId: String,
         deviceId: String,
         state: String
-    ) = MockVKIDCall(
+    ) = VKIDMockCall(
         mockApi.refreshToken(
             refreshToken = refreshToken,
             clientId = clientId,
@@ -49,7 +49,7 @@ internal class ImmediateVKIDApi(
         accessToken: String,
         clientId: String,
         deviceId: String,
-    ) = MockVKIDCall(
+    ) = VKIDMockCall(
         mockApi.getUserInfo(
             accessToken = accessToken,
             clientId = clientId,
@@ -63,7 +63,7 @@ internal class ImmediateVKIDApi(
         deviceId: String,
         state: String,
         codeChallenge: String,
-    ) = MockVKIDCall(
+    ) = VKIDMockCall(
         mockApi.exchangeToken(
             v1Token = v1Token,
             clientId = clientId,
@@ -77,7 +77,7 @@ internal class ImmediateVKIDApi(
         accessToken: String,
         clientId: String,
         deviceId: String
-    ) = MockVKIDCall(
+    ) = VKIDMockCall(
         mockApi.logout(
             accessToken = accessToken,
             clientId = clientId,

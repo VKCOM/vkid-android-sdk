@@ -12,7 +12,7 @@ import okhttp3.ResponseBody.Companion.toResponseBody
 import okio.Timeout
 
 @InternalVKIDApi
-internal class MockVKIDCall<T>(
+internal class VKIDMockCall<T>(
     private val result: Result<T>
 ) : Call {
     companion object {
@@ -22,7 +22,7 @@ internal class MockVKIDCall<T>(
     private var isExecuted = false
     override fun cancel() = Unit
 
-    override fun clone(): Call = MockVKIDCall(result)
+    override fun clone(): Call = VKIDMockCall(result)
 
     override fun enqueue(responseCallback: Callback) = responseCallback.onResponse(this, execute())
     override fun execute(): Response {

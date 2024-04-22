@@ -16,16 +16,16 @@ import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthEventBridge
 import com.vk.id.internal.auth.AuthProvidersChooser
 import com.vk.id.internal.auth.AuthResult
-import com.vk.id.internal.auth.device.DeviceIdProvider
-import com.vk.id.internal.concurrent.CoroutinesDispatchers
+import com.vk.id.internal.auth.device.VKIDDeviceIdProvider
+import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
 import com.vk.id.internal.di.VKIDDeps
 import com.vk.id.internal.di.VKIDDepsProd
 import com.vk.id.internal.ipc.SilentAuthInfoProvider
-import com.vk.id.internal.store.PrefsStore
+import com.vk.id.internal.store.VKIDPrefsStore
 import com.vk.id.internal.user.UserDataFetcher
-import com.vk.id.logger.AndroidLogcatLogEngine
-import com.vk.id.logger.FakeLogEngine
 import com.vk.id.logger.LogEngine
+import com.vk.id.logger.VKIDAndroidLogcatLogEngine
+import com.vk.id.logger.VKIDFakeLogEngine
 import com.vk.id.logger.VKIDLog
 import com.vk.id.logger.createLoggerForClass
 import com.vk.id.logout.VKIDLoggerOut
@@ -37,13 +37,13 @@ import com.vk.id.refresh.VKIDTokenRefresher
 import com.vk.id.refreshuser.VKIDGetUserCallback
 import com.vk.id.refreshuser.VKIDGetUserParams
 import com.vk.id.refreshuser.VKIDUserRefresher
-import com.vk.id.storage.EncryptedSharedPreferencesStorage
 import com.vk.id.storage.TokenStorage
-import com.vk.id.test.ImmediateVKIDApi
+import com.vk.id.storage.VKIDEncryptedSharedPreferencesStorage
 import com.vk.id.test.MockAuthProviderChooser
 import com.vk.id.test.MockAuthProviderConfig
-import com.vk.id.test.OverrideVKIDApi
 import com.vk.id.test.TestSilentAuthInfoProvider
+import com.vk.id.test.VKIDImmediateApi
+import com.vk.id.test.VKIDOverrideApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.currentCoroutineContext
@@ -67,14 +67,14 @@ public class VKID {
 
     internal constructor(
         context: Context,
-        mockApi: OverrideVKIDApi,
+        mockApi: VKIDOverrideApi,
         mockAuthProviderConfig: MockAuthProviderConfig,
-        deviceIdStorage: DeviceIdProvider.DeviceIdStorage?,
-        prefsStore: PrefsStore?,
-        encryptedSharedPreferencesStorage: EncryptedSharedPreferencesStorage?,
+        deviceIdStorage: VKIDDeviceIdProvider.DeviceIdStorage?,
+        prefsStore: VKIDPrefsStore?,
+        encryptedSharedPreferencesStorage: VKIDEncryptedSharedPreferencesStorage?,
     ) : this(object : VKIDDepsProd(context) {
         override val authProvidersChooser = lazy { MockAuthProviderChooser(context, mockAuthProviderConfig) }
-        override val api = lazy { ImmediateVKIDApi(mockApi) }
+        override val api = lazy { VKIDImmediateApi(mockApi) }
         override val vkSilentAuthInfoProvider = lazy { TestSilentAuthInfoProvider() }
         override val deviceIdStorage = lazy { deviceIdStorage ?: super.deviceIdStorage.value }
         override val prefsStore = lazy { prefsStore ?: super.prefsStore.value }
@@ -91,7 +91,7 @@ public class VKID {
          * @property logEngine Instance of [LogEngine] to be used for logging.
          */
         @Suppress("MemberVisibilityCanBePrivate")
-        public var logEngine: LogEngine = AndroidLogcatLogEngine()
+        public var logEngine: LogEngine = VKIDAndroidLogcatLogEngine()
             set(value) {
                 field = value
                 VKIDLog.setLogEngine(value)
@@ -110,7 +110,7 @@ public class VKID {
                 if (value) {
                     VKIDLog.setLogEngine(logEngine)
                 } else {
-                    VKIDLog.setLogEngine(FakeLogEngine())
+                    VKIDLog.setLogEngine(VKIDFakeLogEngine())
                 }
             }
     }
@@ -145,7 +145,7 @@ public class VKID {
     private val authOptionsCreator: AuthOptionsCreator
     private val authCallbacksHolder: AuthCallbacksHolder
     private val authResultHandler: Lazy<AuthResultHandler>
-    private val dispatchers: CoroutinesDispatchers
+    private val dispatchers: VKIDCoroutinesDispatchers
     private val vkSilentAuthInfoProvider: Lazy<SilentAuthInfoProvider>
     private val userDataFetcher: Lazy<UserDataFetcher>
     private val tokenRefresher: Lazy<VKIDTokenRefresher>

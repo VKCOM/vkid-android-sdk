@@ -11,18 +11,18 @@ import com.vk.id.internal.auth.AuthOptions
 import com.vk.id.internal.auth.AuthProvidersChooser
 import com.vk.id.internal.auth.AuthResult
 import com.vk.id.internal.auth.VKIDAuthProvider
-import com.vk.id.internal.auth.device.DeviceIdProvider
-import com.vk.id.internal.concurrent.CoroutinesDispatchers
+import com.vk.id.internal.auth.device.VKIDDeviceIdProvider
+import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
 import com.vk.id.internal.di.VKIDDeps
 import com.vk.id.internal.ipc.VkSilentAuthInfoProvider
-import com.vk.id.internal.store.PrefsStore
+import com.vk.id.internal.store.VKIDPrefsStore
 import com.vk.id.internal.user.UserDataFetcher
 import com.vk.id.logout.VKIDLoggerOut
 import com.vk.id.network.VKIDApi
 import com.vk.id.refresh.VKIDTokenRefresher
 import com.vk.id.refreshuser.VKIDUserRefresher
-import com.vk.id.storage.EncryptedSharedPreferencesStorage
 import com.vk.id.storage.TokenStorage
+import com.vk.id.storage.VKIDEncryptedSharedPreferencesStorage
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.testCoroutineScheduler
 import io.kotest.matchers.shouldBe
@@ -52,7 +52,7 @@ internal class VKIDTest : BehaviorSpec({
         val scheduler = testCoroutineScheduler
         val testDispatcher = StandardTestDispatcher(scheduler)
         val userDataFetcher = mockk<UserDataFetcher>()
-        val dispatchers = mockk<CoroutinesDispatchers>()
+        val dispatchers = mockk<VKIDCoroutinesDispatchers>()
         every { dispatchers.io } returns testDispatcher
         val vkid = VKID(
             object : VKIDDeps {
@@ -60,7 +60,7 @@ internal class VKIDTest : BehaviorSpec({
                 override val authOptionsCreator: AuthOptionsCreator = authOptionsCreator
                 override val authCallbacksHolder: AuthCallbacksHolder = authCallbacksHolder
                 override val authResultHandler: Lazy<AuthResultHandler> = lazy { authResultHandler }
-                override val dispatchers: CoroutinesDispatchers = dispatchers
+                override val dispatchers: VKIDCoroutinesDispatchers = dispatchers
                 override val vkSilentAuthInfoProvider: Lazy<VkSilentAuthInfoProvider> = mockk()
                 override val userDataFetcher: Lazy<UserDataFetcher> = lazy { userDataFetcher }
                 override val api: Lazy<VKIDApi> = lazy { mockk() }
@@ -69,9 +69,9 @@ internal class VKIDTest : BehaviorSpec({
                 override val userRefresher: Lazy<VKIDUserRefresher> = lazy { mockk() }
                 override val loggerOut: Lazy<VKIDLoggerOut> = lazy { mockk() }
                 override val tokenStorage: TokenStorage = mockk()
-                override val deviceIdStorage: Lazy<DeviceIdProvider.DeviceIdStorage> = lazy { mockk() }
-                override val prefsStore: Lazy<PrefsStore> = lazy { mockk() }
-                override val encryptedSharedPreferencesStorage: Lazy<EncryptedSharedPreferencesStorage> =
+                override val deviceIdStorage: Lazy<VKIDDeviceIdProvider.DeviceIdStorage> = lazy { mockk() }
+                override val prefsStore: Lazy<VKIDPrefsStore> = lazy { mockk() }
+                override val encryptedSharedPreferencesStorage: Lazy<VKIDEncryptedSharedPreferencesStorage> =
                     lazy { mockk() }
             }
         )

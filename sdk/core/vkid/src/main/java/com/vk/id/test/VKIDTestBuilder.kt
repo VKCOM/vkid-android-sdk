@@ -4,18 +4,18 @@ import android.content.Context
 import com.vk.id.VKID
 import com.vk.id.VKIDUser
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.internal.auth.device.DeviceIdProvider
-import com.vk.id.internal.store.PrefsStore
-import com.vk.id.storage.EncryptedSharedPreferencesStorage
+import com.vk.id.internal.auth.device.VKIDDeviceIdProvider
+import com.vk.id.internal.store.VKIDPrefsStore
+import com.vk.id.storage.VKIDEncryptedSharedPreferencesStorage
 import java.util.concurrent.atomic.AtomicInteger
 
 @InternalVKIDApi
 public class VKIDTestBuilder(
     private val context: Context,
 ) {
-    private var deviceIdStorage: DeviceIdProvider.DeviceIdStorage? = null
-    private var prefsStore: PrefsStore? = null
-    private var encryptedSharedPreferencesStorage: EncryptedSharedPreferencesStorage? = null
+    private var deviceIdStorage: VKIDDeviceIdProvider.DeviceIdStorage? = null
+    private var prefsStore: VKIDPrefsStore? = null
+    private var encryptedSharedPreferencesStorage: VKIDEncryptedSharedPreferencesStorage? = null
     private var getTokenResponse = Result
         .failure<VKIDTokenPayloadResponse>(UnsupportedOperationException("Not supported"))
     private var refreshTokenResponse = Result
@@ -26,7 +26,7 @@ public class VKIDTestBuilder(
         Result.failure<VKIDUserInfoPayloadResponse>(UnsupportedOperationException("Not supported"))
     )
     private var logoutResponse = Result.success(VKIDLogoutPayloadResponse())
-    private var mockApi: OverrideVKIDApi = object : OverrideVKIDApi {
+    private var mockApi: VKIDOverrideApi = object : VKIDOverrideApi {
         override fun refreshToken(
             refreshToken: String,
             clientId: String,
@@ -110,15 +110,15 @@ public class VKIDTestBuilder(
         authProviderConfig = authProviderConfig.update()
     }
 
-    public fun deviceIdStorage(storage: DeviceIdProvider.DeviceIdStorage?): VKIDTestBuilder = apply {
+    public fun deviceIdStorage(storage: VKIDDeviceIdProvider.DeviceIdStorage?): VKIDTestBuilder = apply {
         this.deviceIdStorage = storage
     }
 
-    public fun prefsStore(store: PrefsStore?): VKIDTestBuilder = apply {
+    public fun prefsStore(store: VKIDPrefsStore?): VKIDTestBuilder = apply {
         this.prefsStore = store
     }
 
-    public fun encryptedSharedPreferencesStorage(storage: EncryptedSharedPreferencesStorage?): VKIDTestBuilder = apply {
+    public fun encryptedSharedPreferencesStorage(storage: VKIDEncryptedSharedPreferencesStorage?): VKIDTestBuilder = apply {
         this.encryptedSharedPreferencesStorage = storage
     }
 

@@ -24,7 +24,7 @@ internal class OkHttpClientProvider(
         .connectTimeout(OKHTTP_TIMEOUT_SECONDS, TimeUnit.SECONDS)
         .addInterceptor(loggingInterceptor())
         .addInterceptor(UserAgentInterceptor(UserAgentProvider(context)))
-        .apply { AdditionalInterceptors.getInterceptor()?.let(::addNetworkInterceptor) }
+        .apply { VKIDAdditionalInterceptors.getInterceptor()?.let(::addNetworkInterceptor) }
         .build()
 
     @VisibleForTesting

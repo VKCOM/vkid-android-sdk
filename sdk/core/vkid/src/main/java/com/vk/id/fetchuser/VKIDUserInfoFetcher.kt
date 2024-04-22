@@ -6,15 +6,15 @@ import com.vk.id.VKIDUser
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.ServiceCredentials
-import com.vk.id.internal.auth.device.DeviceIdProvider
-import com.vk.id.internal.concurrent.CoroutinesDispatchers
+import com.vk.id.internal.auth.device.VKIDDeviceIdProvider
+import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
 import kotlinx.coroutines.withContext
 
 internal class VKIDUserInfoFetcher(
     private val api: VKIDApiService,
-    private val deviceIdProvider: DeviceIdProvider,
+    private val deviceIdProvider: VKIDDeviceIdProvider,
     private val serviceCredentials: ServiceCredentials,
-    private val dispatchers: CoroutinesDispatchers,
+    private val dispatchers: VKIDCoroutinesDispatchers,
 ) {
     suspend fun fetch(
         accessToken: String,

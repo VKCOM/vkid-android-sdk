@@ -12,13 +12,13 @@ import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.auth.pkce.PkceGeneratorSHA256
 import com.vk.id.internal.auth.toQueryParam
 import com.vk.id.internal.state.StateGenerator
-import com.vk.id.internal.store.PrefsStore
+import com.vk.id.internal.store.VKIDPrefsStore
 import java.security.SecureRandom
 
 internal class AuthOptionsCreator(
     private val appContext: Context,
     private val pkceGenerator: Lazy<PkceGeneratorSHA256>,
-    private val prefsStore: Lazy<PrefsStore>,
+    private val prefsStore: Lazy<VKIDPrefsStore>,
     private val serviceCredentials: Lazy<ServiceCredentials>,
     private val stateGenerator: StateGenerator,
 ) {

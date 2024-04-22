@@ -9,21 +9,21 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.multibranding.common.style.OAuthListWidgetBorderStyle
 import com.vk.id.multibranding.common.style.OAuthListWidgetCornersStyle
+import com.vk.id.multibranding.common.style.VKIDOAuthListWidgetBorderStyle
 
 @OptIn(InternalVKIDApi::class)
 internal fun Modifier.border(
-    style: OAuthListWidgetBorderStyle,
+    style: VKIDOAuthListWidgetBorderStyle,
     cornersStyle: OAuthListWidgetCornersStyle,
 ) = composed {
     when (style) {
-        OAuthListWidgetBorderStyle.DARK -> border(
+        VKIDOAuthListWidgetBorderStyle.DARK -> border(
             width = 1.dp,
             color = colorResource(id = R.color.vkid_black_alpha12),
             shape = RoundedCornerShape(size = cornersStyle.radiusDp.dp)
         )
-        OAuthListWidgetBorderStyle.LIGHT -> border(
+        VKIDOAuthListWidgetBorderStyle.LIGHT -> border(
             width = 1.dp,
             color = colorResource(id = R.color.vkid_white_alpha12),
             shape = RoundedCornerShape(size = cornersStyle.radiusDp.dp)

@@ -6,7 +6,7 @@ import com.vk.id.common.InternalVKIDApi
  * OAuthListWidget's text style.
  */
 @InternalVKIDApi
-public enum class OAuthListWidgetTextStyle {
+public enum class VKIDOAuthListWidgetTextStyle {
     /**
      * Light version, should be used for the dark layout.
      */

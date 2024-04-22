@@ -11,11 +11,11 @@ import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.auth.VKIDCodePayload
 import com.vk.id.internal.auth.VKIDTokenPayload
-import com.vk.id.internal.auth.device.DeviceIdProvider
+import com.vk.id.internal.auth.device.VKIDDeviceIdProvider
 import com.vk.id.internal.auth.pkce.PkceGeneratorSHA256
-import com.vk.id.internal.concurrent.CoroutinesDispatchers
+import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
 import com.vk.id.internal.state.StateGenerator
-import com.vk.id.internal.store.PrefsStore
+import com.vk.id.internal.store.VKIDPrefsStore
 import com.vk.id.network.VKIDCall
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
@@ -89,7 +89,7 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
 
     Given("User info fetcher") {
         val api = mockk<VKIDApiService>()
-        val deviceIdProvider = mockk<DeviceIdProvider>()
+        val deviceIdProvider = mockk<VKIDDeviceIdProvider>()
         every { deviceIdProvider.getDeviceId() } returns DEVICE_ID
         val serviceCredentials = ServiceCredentials(
             clientID = CLIENT_ID,
@@ -98,11 +98,11 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
         )
         val stateGenerator = mockk<StateGenerator>()
         val tokensHandler = mockk<TokensHandler>()
-        val dispatchers = mockk<CoroutinesDispatchers>()
+        val dispatchers = mockk<VKIDCoroutinesDispatchers>()
         val scheduler = testCoroutineScheduler
         val testDispatcher = StandardTestDispatcher(scheduler)
         every { dispatchers.io } returns testDispatcher
-        val prefsStore = mockk<PrefsStore>()
+        val prefsStore = mockk<VKIDPrefsStore>()
         val pkceGenerator = mockk<PkceGeneratorSHA256>()
         val exchanger = VKIDTokenExchanger(
             api = api,

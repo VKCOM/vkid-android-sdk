@@ -6,7 +6,7 @@ import com.vk.id.common.InternalVKIDApi
  * [LogEngine] implementation that doesn't perform any logging.
  */
 @InternalVKIDApi
-public class FakeLogEngine : LogEngine {
+public class VKIDFakeLogEngine : LogEngine {
     override fun log(
         logLevel: LogEngine.LogLevel,
         tag: String,

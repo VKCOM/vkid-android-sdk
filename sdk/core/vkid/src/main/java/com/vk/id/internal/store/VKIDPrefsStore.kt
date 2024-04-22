@@ -5,7 +5,7 @@ import androidx.preference.PreferenceManager
 import com.vk.id.common.InternalVKIDApi
 
 @InternalVKIDApi
-public class PrefsStore internal constructor(private val context: Context) {
+public class VKIDPrefsStore internal constructor(private val context: Context) {
 
     private val prefs
         get() = PreferenceManager.getDefaultSharedPreferences(context)

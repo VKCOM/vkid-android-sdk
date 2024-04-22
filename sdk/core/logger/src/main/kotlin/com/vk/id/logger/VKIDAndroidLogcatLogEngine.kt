@@ -7,7 +7,7 @@ import com.vk.id.common.InternalVKIDApi
  * [LogEngine] implementation that logs to Android's Logcat.
  */
 @InternalVKIDApi
-public class AndroidLogcatLogEngine : LogEngine {
+public class VKIDAndroidLogcatLogEngine : LogEngine {
     override fun log(
         logLevel: LogEngine.LogLevel,
         tag: String,

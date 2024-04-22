@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
 import com.vk.id.common.InternalVKIDApi
 
 @InternalVKIDApi
-public interface OverrideVKIDApi {
+public interface VKIDOverrideApi {
 
     public fun refreshToken(
         refreshToken: String,

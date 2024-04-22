@@ -3,10 +3,10 @@
 package com.vk.id.internal.state
 
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.internal.store.PrefsStore
+import com.vk.id.internal.store.VKIDPrefsStore
 
 internal class StateGenerator(
-    private val prefsStore: PrefsStore
+    private val prefsStore: VKIDPrefsStore
 ) {
 
     companion object {

@@ -14,12 +14,12 @@ import com.vk.id.common.allure.Project
 import com.vk.id.common.basetest.BaseUiTest
 import com.vk.id.common.feature.TestFeature
 import com.vk.id.common.mockapi.MockApi
-import com.vk.id.internal.auth.device.DeviceIdProvider
-import com.vk.id.internal.store.PrefsStore
+import com.vk.id.internal.auth.device.VKIDDeviceIdProvider
+import com.vk.id.internal.store.VKIDPrefsStore
 import com.vk.id.refreshuser.VKIDGetUserCallback
 import com.vk.id.refreshuser.VKIDGetUserFail
 import com.vk.id.refreshuser.VKIDGetUserParams
-import com.vk.id.storage.EncryptedSharedPreferencesStorage
+import com.vk.id.storage.VKIDEncryptedSharedPreferencesStorage
 import com.vk.id.test.VKIDTestBuilder
 import com.vk.id.test.VKIDTokenPayloadResponse
 import com.vk.id.test.VKIDUserInfoPayloadResponse
@@ -103,9 +103,9 @@ internal class VKIDGetUserDataIntegrationTest : BaseUiTest() {
     @AllureId("2303048")
     @DisplayName("Успешное получение пользовательских данных")
     fun getUserSuccess() = run {
-        val deviceIdStorage = mockk<DeviceIdProvider.DeviceIdStorage>()
-        val prefsStore = mockk<PrefsStore>()
-        val encryptedStorage = mockk<EncryptedSharedPreferencesStorage>()
+        val deviceIdStorage = mockk<VKIDDeviceIdProvider.DeviceIdStorage>()
+        val prefsStore = mockk<VKIDPrefsStore>()
+        val encryptedStorage = mockk<VKIDEncryptedSharedPreferencesStorage>()
         val vkid = VKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
@@ -136,9 +136,9 @@ internal class VKIDGetUserDataIntegrationTest : BaseUiTest() {
     @AllureId("2303046")
     @DisplayName("Успешное получение пользовательских данных после рефреша токена")
     fun getUserWithRefreshSuccess() = run {
-        val deviceIdStorage = mockk<DeviceIdProvider.DeviceIdStorage>()
-        val prefsStore = mockk<PrefsStore>()
-        val encryptedStorage = mockk<EncryptedSharedPreferencesStorage>()
+        val deviceIdStorage = mockk<VKIDDeviceIdProvider.DeviceIdStorage>()
+        val prefsStore = mockk<VKIDPrefsStore>()
+        val encryptedStorage = mockk<VKIDEncryptedSharedPreferencesStorage>()
         val vkid = VKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
@@ -174,9 +174,9 @@ internal class VKIDGetUserDataIntegrationTest : BaseUiTest() {
     @AllureId("2303049")
     @DisplayName("Ошибка получения пользовательских данных из-за ошибки рефреша токена")
     fun getUserWithRefreshFail() = run {
-        val deviceIdStorage = mockk<DeviceIdProvider.DeviceIdStorage>()
-        val prefsStore = mockk<PrefsStore>()
-        val encryptedStorage = mockk<EncryptedSharedPreferencesStorage>()
+        val deviceIdStorage = mockk<VKIDDeviceIdProvider.DeviceIdStorage>()
+        val prefsStore = mockk<VKIDPrefsStore>()
+        val encryptedStorage = mockk<VKIDEncryptedSharedPreferencesStorage>()
         val vkid = VKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
@@ -206,9 +206,9 @@ internal class VKIDGetUserDataIntegrationTest : BaseUiTest() {
     @AllureId("2303050")
     @DisplayName("Ошибка получения пользовательских данных из-за ошибки апи")
     fun apiCallFail() = run {
-        val deviceIdStorage = mockk<DeviceIdProvider.DeviceIdStorage>()
-        val prefsStore = mockk<PrefsStore>()
-        val encryptedStorage = mockk<EncryptedSharedPreferencesStorage>()
+        val deviceIdStorage = mockk<VKIDDeviceIdProvider.DeviceIdStorage>()
+        val prefsStore = mockk<VKIDPrefsStore>()
+        val encryptedStorage = mockk<VKIDEncryptedSharedPreferencesStorage>()
         val vkid = VKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
@@ -235,9 +235,9 @@ internal class VKIDGetUserDataIntegrationTest : BaseUiTest() {
     @AllureId("2303047")
     @DisplayName("Ошибка получения пользовательских данных из-за отсутствия авторизации")
     fun notAuthorizedFail() = run {
-        val deviceIdStorage = mockk<DeviceIdProvider.DeviceIdStorage>()
-        val prefsStore = mockk<PrefsStore>()
-        val encryptedStorage = mockk<EncryptedSharedPreferencesStorage>()
+        val deviceIdStorage = mockk<VKIDDeviceIdProvider.DeviceIdStorage>()
+        val prefsStore = mockk<VKIDPrefsStore>()
+        val encryptedStorage = mockk<VKIDEncryptedSharedPreferencesStorage>()
         val vkid = VKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)

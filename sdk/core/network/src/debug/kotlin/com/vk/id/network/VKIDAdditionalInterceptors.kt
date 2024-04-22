@@ -6,7 +6,7 @@ import com.vk.id.common.InternalVKIDApi
 import okhttp3.Interceptor
 
 @InternalVKIDApi
-public object AdditionalInterceptors {
+public object VKIDAdditionalInterceptors {
     public val networkFlipperPlugin: NetworkFlipperPlugin by lazy { NetworkFlipperPlugin() }
     public fun getInterceptor(): Interceptor? = FlipperOkhttpInterceptor(networkFlipperPlugin)
 }

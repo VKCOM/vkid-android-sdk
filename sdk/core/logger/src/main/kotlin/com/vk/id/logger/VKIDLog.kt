@@ -13,7 +13,7 @@ import com.vk.id.common.InternalVKIDApi
  */
 @InternalVKIDApi
 public object VKIDLog : LogEngine {
-    private var logEngine: LogEngine = FakeLogEngine()
+    private var logEngine: LogEngine = VKIDFakeLogEngine()
 
     @InternalVKIDApi
     public fun setLogEngine(logEngine: LogEngine) {
@@ -21,8 +21,8 @@ public object VKIDLog : LogEngine {
     }
 
     @InternalVKIDApi
-    public fun createLoggerForTag(tag: String): Logger {
-        return LoggerWithTag(tag, this)
+    public fun createLoggerForTag(tag: String): VKIDLogger {
+        return VKIDLoggerWithTag(tag, this)
     }
 
     override fun log(
@@ -36,6 +36,6 @@ public object VKIDLog : LogEngine {
 }
 
 @InternalVKIDApi
-public inline fun <reified T> T.createLoggerForClass(): Logger {
+public inline fun <reified T> T.createLoggerForClass(): VKIDLogger {
     return VKIDLog.createLoggerForTag(T::class.java.simpleName)
 }

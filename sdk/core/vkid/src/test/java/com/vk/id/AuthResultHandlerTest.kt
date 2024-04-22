@@ -10,9 +10,9 @@ import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthResult
 import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.auth.VKIDTokenPayload
-import com.vk.id.internal.auth.device.DeviceIdProvider
-import com.vk.id.internal.concurrent.CoroutinesDispatchers
-import com.vk.id.internal.store.PrefsStore
+import com.vk.id.internal.auth.device.VKIDDeviceIdProvider
+import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
+import com.vk.id.internal.store.VKIDPrefsStore
 import com.vk.id.logout.VKIDLoggerOut
 import com.vk.id.logout.VKIDLogoutCallback
 import com.vk.id.logout.VKIDLogoutFail
@@ -77,11 +77,11 @@ internal class AuthResultHandlerTest : BehaviorSpec({
 
     Given("An AuthResultHandler") {
         val callbacksHolder = mockk<AuthCallbacksHolder>()
-        val deviceIdProvider = mockk<DeviceIdProvider>()
-        val prefsStore = mockk<PrefsStore>()
+        val deviceIdProvider = mockk<VKIDDeviceIdProvider>()
+        val prefsStore = mockk<VKIDPrefsStore>()
         val scheduler = testCoroutineScheduler
         val testDispatcher = StandardTestDispatcher(scheduler)
-        val dispatchers = mockk<CoroutinesDispatchers>()
+        val dispatchers = mockk<VKIDCoroutinesDispatchers>()
         every { dispatchers.io } returns testDispatcher
         val api = mockk<VKIDApiService>()
         val serviceCredentials = mockk<ServiceCredentials>()

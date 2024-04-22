@@ -21,7 +21,7 @@ public class AndroidLogcatLogEngineTest : BehaviorSpec({
     }
 
     Given("test AndroidLogcatLogEngine") {
-        val androidLogcatLogEngine = AndroidLogcatLogEngine()
+        val androidLogcatLogEngine = VKIDAndroidLogcatLogEngine()
 
         When("logs to info Logcat") {
             androidLogcatLogEngine.log(LogEngine.LogLevel.INFO, "TestTag", "TestMessage", null)

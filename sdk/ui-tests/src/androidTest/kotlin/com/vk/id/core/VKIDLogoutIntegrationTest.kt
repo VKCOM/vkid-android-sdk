@@ -12,11 +12,11 @@ import com.vk.id.common.allure.Product
 import com.vk.id.common.allure.Project
 import com.vk.id.common.basetest.BaseUiTest
 import com.vk.id.common.feature.TestFeature
-import com.vk.id.internal.auth.device.DeviceIdProvider
-import com.vk.id.internal.store.PrefsStore
+import com.vk.id.internal.auth.device.VKIDDeviceIdProvider
+import com.vk.id.internal.store.VKIDPrefsStore
 import com.vk.id.logout.VKIDLogoutCallback
 import com.vk.id.logout.VKIDLogoutFail
-import com.vk.id.storage.EncryptedSharedPreferencesStorage
+import com.vk.id.storage.VKIDEncryptedSharedPreferencesStorage
 import com.vk.id.test.VKIDLogoutPayloadResponse
 import com.vk.id.test.VKIDTestBuilder
 import io.kotest.matchers.nulls.shouldBeNull
@@ -67,9 +67,9 @@ internal class VKIDLogoutIntegrationTest : BaseUiTest() {
     @AllureId("2303051")
     @DisplayName("Успешный логаут")
     fun logoutSuccess() = run {
-        val deviceIdStorage = mockk<DeviceIdProvider.DeviceIdStorage>()
-        val prefsStore = mockk<PrefsStore>()
-        val encryptedStorage = mockk<EncryptedSharedPreferencesStorage>()
+        val deviceIdStorage = mockk<VKIDDeviceIdProvider.DeviceIdStorage>()
+        val prefsStore = mockk<VKIDPrefsStore>()
+        val encryptedStorage = mockk<VKIDEncryptedSharedPreferencesStorage>()
         val vkid = VKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
@@ -99,9 +99,9 @@ internal class VKIDLogoutIntegrationTest : BaseUiTest() {
     @AllureId("2303054")
     @DisplayName("Ошибка логаута из-за отсутствия авторизации")
     fun notAuthenticatedFail() = run {
-        val deviceIdStorage = mockk<DeviceIdProvider.DeviceIdStorage>()
-        val prefsStore = mockk<PrefsStore>()
-        val encryptedStorage = mockk<EncryptedSharedPreferencesStorage>()
+        val deviceIdStorage = mockk<VKIDDeviceIdProvider.DeviceIdStorage>()
+        val prefsStore = mockk<VKIDPrefsStore>()
+        val encryptedStorage = mockk<VKIDEncryptedSharedPreferencesStorage>()
         val vkid = VKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
@@ -130,9 +130,9 @@ internal class VKIDLogoutIntegrationTest : BaseUiTest() {
     @AllureId("2303053")
     @DisplayName("Ошибка при логауте из-за ошибки апи запроса")
     fun apiCalFail() = run {
-        val deviceIdStorage = mockk<DeviceIdProvider.DeviceIdStorage>()
-        val prefsStore = mockk<PrefsStore>()
-        val encryptedStorage = mockk<EncryptedSharedPreferencesStorage>()
+        val deviceIdStorage = mockk<VKIDDeviceIdProvider.DeviceIdStorage>()
+        val prefsStore = mockk<VKIDPrefsStore>()
+        val encryptedStorage = mockk<VKIDEncryptedSharedPreferencesStorage>()
         val vkid = VKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
@@ -162,9 +162,9 @@ internal class VKIDLogoutIntegrationTest : BaseUiTest() {
     @AllureId("2303052")
     @DisplayName("Успешный логаут из-за просроченного токена")
     fun logoutSuccessAfterInvalidToken() = run {
-        val deviceIdStorage = mockk<DeviceIdProvider.DeviceIdStorage>()
-        val prefsStore = mockk<PrefsStore>()
-        val encryptedStorage = mockk<EncryptedSharedPreferencesStorage>()
+        val deviceIdStorage = mockk<VKIDDeviceIdProvider.DeviceIdStorage>()
+        val prefsStore = mockk<VKIDPrefsStore>()
+        val encryptedStorage = mockk<VKIDEncryptedSharedPreferencesStorage>()
         val vkid = VKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)

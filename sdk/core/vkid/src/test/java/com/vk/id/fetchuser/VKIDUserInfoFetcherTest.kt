@@ -7,8 +7,8 @@ import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.api.dto.VKIDUserInfoPayload
 import com.vk.id.internal.auth.ServiceCredentials
-import com.vk.id.internal.auth.device.DeviceIdProvider
-import com.vk.id.internal.concurrent.CoroutinesDispatchers
+import com.vk.id.internal.auth.device.VKIDDeviceIdProvider
+import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
 import com.vk.id.network.VKIDCall
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.testCoroutineScheduler
@@ -56,7 +56,7 @@ internal class VKIDUserInfoFetcherTest : BehaviorSpec({
     coroutineTestScope = true
 
     Given("User info fetcher") {
-        val deviceIdProvider = mockk<DeviceIdProvider>()
+        val deviceIdProvider = mockk<VKIDDeviceIdProvider>()
         every { deviceIdProvider.getDeviceId() } returns DEVICE_ID
         val api = mockk<VKIDApiService>()
         val serviceCredentials = ServiceCredentials(
@@ -64,7 +64,7 @@ internal class VKIDUserInfoFetcherTest : BehaviorSpec({
             clientSecret = CLIENT_SECRET,
             redirectUri = REDIRECT_URI,
         )
-        val dispatchers = mockk<CoroutinesDispatchers>()
+        val dispatchers = mockk<VKIDCoroutinesDispatchers>()
         val scheduler = testCoroutineScheduler
         val testDispatcher = StandardTestDispatcher(scheduler)
         every { dispatchers.io } returns testDispatcher

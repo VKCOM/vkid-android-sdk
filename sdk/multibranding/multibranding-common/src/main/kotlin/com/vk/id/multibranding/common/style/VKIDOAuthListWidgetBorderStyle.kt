@@ -3,10 +3,10 @@ package com.vk.id.multibranding.common.style
 import com.vk.id.common.InternalVKIDApi
 
 /**
- * OAuthListWidget's ripple style.
+ * OAuthListWidget's border style.
  */
 @InternalVKIDApi
-public enum class OAuthListWidgetRippleStyle {
+public enum class VKIDOAuthListWidgetBorderStyle {
     /**
      * Dark version, should be used for the light layout.
      */

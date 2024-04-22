@@ -8,8 +8,8 @@ import com.vk.id.VKIDUser
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.ServiceCredentials
-import com.vk.id.internal.auth.device.DeviceIdProvider
-import com.vk.id.internal.concurrent.CoroutinesDispatchers
+import com.vk.id.internal.auth.device.VKIDDeviceIdProvider
+import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
 import com.vk.id.network.VKIDCall
 import com.vk.id.storage.TokenStorage
 import io.kotest.core.spec.IsolationMode
@@ -63,14 +63,14 @@ internal class VKIDLoggerOutTest : BehaviorSpec({
     Given("Logger out") {
         val api = mockk<VKIDApiService>()
         val tokenStorage = mockk<TokenStorage>()
-        val deviceIdProvider = mockk<DeviceIdProvider>()
+        val deviceIdProvider = mockk<VKIDDeviceIdProvider>()
         every { deviceIdProvider.getDeviceId() } returns DEVICE_ID
         val serviceCredentials = ServiceCredentials(
             clientID = CLIENT_ID,
             clientSecret = CLIENT_SECRET,
             redirectUri = REDIRECT_URI,
         )
-        val dispatchers = mockk<CoroutinesDispatchers>()
+        val dispatchers = mockk<VKIDCoroutinesDispatchers>()
         val scheduler = testCoroutineScheduler
         val testDispatcher = StandardTestDispatcher(scheduler)
         every { dispatchers.io } returns testDispatcher
