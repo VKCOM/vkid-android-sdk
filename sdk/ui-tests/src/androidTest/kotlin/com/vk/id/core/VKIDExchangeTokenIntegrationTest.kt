@@ -63,6 +63,7 @@ private const val REFRESH_TOKEN_NEW_VALUE = "refresh token new"
 private const val ID_TOKEN_VALUE = "id token"
 private const val USER_ID = 123L
 private const val STATE = "state"
+private const val NEW_DEVICE_ID = "new device id"
 private const val ACCESS_TOKEN_KEY = "ACCESS_TOKEN_KEY"
 private const val REFRESH_TOKEN_KEY = "REFRESH_TOKEN_KEY"
 private const val ID_TOKEN_KEY = "ID_TOKEN_KEY"
@@ -78,6 +79,7 @@ private val GET_TOKEN_RESPONSE = InternalVKIDTokenPayloadResponse(
 private val EXCHANGE_TOKEN_RESPONSE = InternalVKIDCodePayloadResponse(
     code = CODE,
     state = STATE,
+    deviceId = NEW_DEVICE_ID,
 )
 private val USER_INFO_RESPONSE = InternalVKIDUserInfoPayloadResponse(
     user = InternalVKIDUserPayloadResponse(
@@ -132,6 +134,7 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
         every { encryptedStorage.set(ID_TOKEN_KEY, ID_TOKEN_VALUE) } just runs
         every { prefsStore.clear() } just runs
         every { deviceIdStorage.getDeviceId() } returns "device id"
+        every { deviceIdStorage.setDeviceId(NEW_DEVICE_ID) } just runs
         var result: Any? = null
         step("Обменивается токен") {
             runBlocking {
@@ -197,6 +200,7 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
             .build()
         every { prefsStore.clear() } just runs
         every { deviceIdStorage.getDeviceId() } returns "device id"
+        every { deviceIdStorage.setDeviceId(NEW_DEVICE_ID) } just runs
         var result: Any? = null
         step("Обменивается токен") {
             runBlocking {
@@ -233,6 +237,7 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
             .build()
         every { prefsStore.clear() } just runs
         every { deviceIdStorage.getDeviceId() } returns "device id"
+        every { deviceIdStorage.setDeviceId(NEW_DEVICE_ID) } just runs
         var result: Any? = null
         step("Обменивается токен") {
             runBlocking {
@@ -270,6 +275,7 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
             .build()
         every { prefsStore.clear() } just runs
         every { deviceIdStorage.getDeviceId() } returns "device id"
+        every { deviceIdStorage.setDeviceId(NEW_DEVICE_ID) } just runs
         var result: Any? = null
         step("Обменивается токен") {
             runBlocking {
@@ -301,7 +307,6 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
             .encryptedSharedPreferencesStorage(encryptedStorage)
-            .getUserInfoResponse(Result.success(USER_INFO_RESPONSE))
             .exchangeTokenResponse(Result.success(EXCHANGE_TOKEN_RESPONSE.copy(state = "wrong state")))
             .build()
         every { prefsStore.clear() } just runs
