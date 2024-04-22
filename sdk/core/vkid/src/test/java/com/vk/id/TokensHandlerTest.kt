@@ -1,9 +1,13 @@
+@file:OptIn(ExperimentalStdlibApi::class, ExperimentalCoroutinesApi::class)
+
 package com.vk.id
 
 import com.vk.id.fetchuser.VKIDUserInfoFetcher
 import com.vk.id.internal.auth.VKIDTokenPayload
+import com.vk.id.internal.concurrent.CoroutinesDispatchers
 import com.vk.id.storage.TokenStorage
 import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.core.test.testCoroutineScheduler
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -12,6 +16,9 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.slot
 import io.mockk.verify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.runTest
 
 private const val ACCESS_TOKEN_VALUE = "access token"
 private const val REFRESH_TOKEN = "refresh token"
@@ -51,17 +58,25 @@ private val TOKEN_PAYLOAD = VKIDTokenPayload(
 )
 
 internal class TokensHandlerTest : BehaviorSpec({
+
+    coroutineTestScope = true
+
     Given("Tokens handler") {
         val userInfoFetcher = mockk<VKIDUserInfoFetcher>()
         val tokenStorage = mockk<TokenStorage>()
+        val scheduler = testCoroutineScheduler
+        val dispatchers = mockk<CoroutinesDispatchers>()
+        val testDispatcher = StandardTestDispatcher(scheduler)
+        every { dispatchers.io } returns testDispatcher
         val handler = TokensHandler(
             userInfoFetcher = userInfoFetcher,
             tokenStorage = tokenStorage,
+            dispatchers = dispatchers,
         )
         When("Handles token payload") {
             val onSuccess = mockk<(AccessToken) -> Unit>()
             val onFailedApiCall = mockk<(Throwable) -> Unit>()
-            val capturedOnSuccess = slot<(VKIDUser) -> Unit>()
+            val capturedOnSuccess = slot<suspend (VKIDUser) -> Unit>()
             coEvery {
                 userInfoFetcher.fetch(
                     ACCESS_TOKEN_VALUE,
@@ -73,11 +88,13 @@ internal class TokensHandlerTest : BehaviorSpec({
             every { tokenStorage.refreshToken = REFRESH_TOKEN } just runs
             every { tokenStorage.idToken = ID_TOKEN } just runs
             every { onSuccess(ACCESS_TOKEN) } just runs
-            handler.handle(
-                payload = TOKEN_PAYLOAD,
-                onSuccess = onSuccess,
-                onFailedApiCall = onFailedApiCall,
-            )
+            runTest(scheduler) {
+                handler.handle(
+                    payload = TOKEN_PAYLOAD,
+                    onSuccess = onSuccess,
+                    onFailedApiCall = onFailedApiCall,
+                )
+            }
             Then("Call user info fetcher") {
                 coVerify {
                     userInfoFetcher.fetch(
@@ -86,7 +103,9 @@ internal class TokensHandlerTest : BehaviorSpec({
                         onFailedApiCall,
                     )
                 }
-                capturedOnSuccess.captured(VKID_USER)
+                runTest(scheduler) {
+                    capturedOnSuccess.captured(VKID_USER)
+                }
                 verify { tokenStorage.accessToken = ACCESS_TOKEN }
                 verify { tokenStorage.refreshToken = REFRESH_TOKEN }
                 verify { onSuccess(ACCESS_TOKEN) }

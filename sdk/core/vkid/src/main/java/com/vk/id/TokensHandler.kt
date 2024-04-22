@@ -3,11 +3,14 @@ package com.vk.id
 import com.vk.id.fetchuser.VKIDUserInfoFetcher
 import com.vk.id.internal.auth.VKIDTokenPayload
 import com.vk.id.internal.auth.toExpireTime
+import com.vk.id.internal.concurrent.CoroutinesDispatchers
 import com.vk.id.storage.TokenStorage
+import kotlinx.coroutines.withContext
 
 internal class TokensHandler(
     private val userInfoFetcher: VKIDUserInfoFetcher,
     private val tokenStorage: TokenStorage,
+    private val dispatchers: CoroutinesDispatchers,
 ) {
     suspend fun handle(
         payload: VKIDTokenPayload,
@@ -24,9 +27,11 @@ internal class TokensHandler(
                     expireTime = payload.expiresIn.toExpireTime,
                     userData = it
                 )
-                tokenStorage.accessToken = accessToken
-                tokenStorage.idToken = payload.idToken
-                tokenStorage.refreshToken = payload.refreshToken
+                withContext(dispatchers.io) {
+                    tokenStorage.accessToken = accessToken
+                    tokenStorage.idToken = payload.idToken
+                    tokenStorage.refreshToken = payload.refreshToken
+                }
                 onSuccess(accessToken)
             },
             onFailedApiCall = onFailedApiCall,

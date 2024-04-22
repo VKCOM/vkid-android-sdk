@@ -177,7 +177,8 @@ internal open class VKIDDepsProd(
     private val tokensHandler = lazy {
         TokensHandler(
             userInfoFetcher.value,
-            tokenStorage
+            tokenStorage,
+            dispatchers,
         )
     }
 
