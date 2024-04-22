@@ -1,3 +1,5 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.onetap.xml
 
 import android.content.Context
@@ -15,6 +17,7 @@ import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthUiParams
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.compose.onetap.OneTap
@@ -87,10 +90,11 @@ public class OneTap @JvmOverloads constructor(
     private var onVKIDChange: (VKID?) -> Unit = {}
 
     init {
-        val (style, isSignInToAnotherAccountEnabled, oAuths) = parseOneTapAttrs(context, attrs)
-        this.style = style
-        this.isSignInToAnotherAccountEnabled = isSignInToAnotherAccountEnabled
-        this.oAuths = oAuths
+        val params = parseOneTapAttrs(context, attrs)
+        this.style = params.style
+        this.isSignInToAnotherAccountEnabled = params.isSignInToAnotherAccountEnabled
+        this.oAuths = params.oAuths
+        this.authParams = authParams.newBuilder { scopes = params.scopes }
         addView(composeView)
         composeView.setContent { Content() }
         clipChildren = false

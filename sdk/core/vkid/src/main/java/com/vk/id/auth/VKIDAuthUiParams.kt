@@ -55,6 +55,17 @@ public class VKIDAuthUiParams private constructor(
     }
 
     @InternalVKIDApi
+    public fun newBuilder(initializer: Builder.() -> Unit): VKIDAuthUiParams {
+        val params = this
+        return VKIDAuthUiParams {
+            state = params.state
+            codeChallenge = params.codeChallenge
+            scopes = params.scopes
+            initializer()
+        }
+    }
+
+    @InternalVKIDApi
     public fun asParamsBuilder(initializer: VKIDAuthParams.Builder.() -> Unit): VKIDAuthParams {
         val params = this
         return VKIDAuthParams {
