@@ -9,7 +9,6 @@ import com.vk.id.internal.api.dto.VKIDUserInfoPayload
 import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.auth.device.DeviceIdProvider
 import com.vk.id.internal.concurrent.CoroutinesDispatchers
-import com.vk.id.internal.state.StateGenerator
 import com.vk.id.refresh.VKIDRefreshTokenCallback
 import com.vk.id.refresh.VKIDRefreshTokenFail
 import com.vk.id.refresh.VKIDTokenRefresher
@@ -34,7 +33,6 @@ private const val REDIRECT_URI = "redirect uri"
 private const val ACCESS_TOKEN_VALUE = "access token"
 private const val ID_TOKEN_VALUE = "id token"
 private const val DEVICE_ID = "device id"
-private const val STATE = "state"
 private const val FIRST_NAME = "first"
 private const val LAST_NAME = "last"
 private const val PHONE = "phone"
@@ -81,7 +79,6 @@ internal class VKIDUserRefresherTest : BehaviorSpec({
             clientSecret = CLIENT_SECRET,
             redirectUri = REDIRECT_URI,
         )
-        val stateGenerator = mockk<StateGenerator>()
         val dispatchers = mockk<CoroutinesDispatchers>()
         val scheduler = testCoroutineScheduler
         val testDispatcher = StandardTestDispatcher(scheduler)
@@ -91,13 +88,11 @@ internal class VKIDUserRefresherTest : BehaviorSpec({
         val refresher = VKIDUserRefresher(
             api = api,
             tokenStorage = tokenStorage,
-            stateGenerator = stateGenerator,
             deviceIdProvider = deviceIdProvider,
             serviceCredentials = serviceCredentials,
             dispatchers = dispatchers,
             refresher = tokenRefresher,
         )
-        every { stateGenerator.regenerateState() } returns STATE
         When("Token is not available") {
             every { tokenStorage.accessToken } returns null
             val fail = VKIDGetUserFail.NotAuthenticated("Not authorized")
@@ -119,7 +114,6 @@ internal class VKIDUserRefresherTest : BehaviorSpec({
                     accessToken = ACCESS_TOKEN_VALUE,
                     clientId = CLIENT_ID,
                     deviceId = DEVICE_ID,
-                    state = STATE
                 )
             } returns call
             val fail = VKIDGetUserFail.FailedApiCall("Failed to fetch user data due to message", exception)
@@ -141,7 +135,6 @@ internal class VKIDUserRefresherTest : BehaviorSpec({
                     accessToken = ACCESS_TOKEN_VALUE,
                     clientId = CLIENT_ID,
                     deviceId = DEVICE_ID,
-                    state = STATE
                 )
             } returns call
             val refreshTokenCallback = slot<VKIDRefreshTokenCallback>()
@@ -167,7 +160,6 @@ internal class VKIDUserRefresherTest : BehaviorSpec({
                     accessToken = ACCESS_TOKEN_VALUE,
                     clientId = CLIENT_ID,
                     deviceId = DEVICE_ID,
-                    state = STATE
                 )
             } returns call
             val refreshTokenCallback = slot<VKIDRefreshTokenCallback>()
@@ -191,7 +183,6 @@ internal class VKIDUserRefresherTest : BehaviorSpec({
                     accessToken = ACCESS_TOKEN_VALUE,
                     clientId = CLIENT_ID,
                     deviceId = DEVICE_ID,
-                    state = STATE
                 )
             } returns call
             val callback = mockk<VKIDGetUserCallback>()

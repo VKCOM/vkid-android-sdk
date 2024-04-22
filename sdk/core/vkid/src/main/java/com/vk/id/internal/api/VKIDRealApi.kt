@@ -67,12 +67,10 @@ internal class VKIDRealApi(
         accessToken: String,
         clientId: String,
         deviceId: String,
-        state: String
     ): Call {
         val formBody = FormBody.Builder()
             .add(FIELD_ACCESS_TOKEN, accessToken)
             .add(FIELD_DEVICE_ID, deviceId)
-            .add(FIELD_STATE, state)
             .build()
 
         return createRequest(HOST_VK_ID, PATH_USER_INFO, formBody, query = mapOf(FIELD_CLIENT_ID to clientId))
