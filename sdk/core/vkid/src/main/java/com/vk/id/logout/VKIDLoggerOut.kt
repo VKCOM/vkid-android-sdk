@@ -38,7 +38,7 @@ internal class VKIDLoggerOut(
             tokenStorage.accessToken?.token to deviceIdProvider.getDeviceId()
         }
         token ?: run {
-            tokenStorage.clear()
+            withContext(dispatchers.io) { tokenStorage.clear() }
             callback.onFail(VKIDLogoutFail.NotAuthenticated("Not authorized, can't logout"))
             return
         }
@@ -58,7 +58,7 @@ internal class VKIDLoggerOut(
                 throwable = it,
             )
         }.onSuccess {
-            tokenStorage.clear()
+            withContext(dispatchers.io) { tokenStorage.clear() }
             callback.onSuccess()
         }
     }
@@ -85,7 +85,7 @@ internal class VKIDLoggerOut(
                     }
 
                     override fun onFail(fail: VKIDRefreshTokenFail) {
-                        tokenStorage.clear()
+                        CoroutineScope(Job() + coroutinesContext).launch(dispatchers.io) { tokenStorage.clear() }
                         callback.onFail(VKIDLogoutFail.FailedApiCall("Failed to logout and refresh token", throwable))
                     }
                 },
@@ -113,10 +113,10 @@ internal class VKIDLoggerOut(
                     clientId = clientId,
                 ).execute()
             }.onFailure {
-                tokenStorage.clear()
+                withContext(dispatchers.io) { tokenStorage.clear() }
                 callback.onFail(VKIDLogoutFail.FailedApiCall("Failed to logout due to ${it.message}", it))
             }.onSuccess {
-                tokenStorage.clear()
+                withContext(dispatchers.io) { tokenStorage.clear() }
                 callback.onSuccess()
             }
         }
