@@ -180,10 +180,6 @@ public final class com/vk/id/auth/VKIDAuthCallback$DefaultImpls {
 public final class com/vk/id/auth/VKIDAuthParams {
 	public static final field $stable I
 	public synthetic fun <init> (Lcom/vk/id/auth/VKIDAuthParams$Locale;Lcom/vk/id/auth/VKIDAuthParams$Theme;ZLcom/vk/id/OAuth;Lcom/vk/id/auth/Prompt;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getLocale ()Lcom/vk/id/auth/VKIDAuthParams$Locale;
-	public final fun getOAuth ()Lcom/vk/id/OAuth;
-	public final fun getTheme ()Lcom/vk/id/auth/VKIDAuthParams$Theme;
-	public final fun getUseOAuthProviderIfPossible ()Z
 }
 
 public final class com/vk/id/auth/VKIDAuthParams$Builder {
