@@ -34,6 +34,7 @@ internal class ImmediateVKIDApi(
     override fun sendStatEventsAnonymously(
         clientId: String,
         clientSecret: String,
+        sakVersion: String,
         events: JSONArray,
     ) = MockVKIDCall(Result.success(VKIDSilentAuthProvidersResponse("null")))
 }

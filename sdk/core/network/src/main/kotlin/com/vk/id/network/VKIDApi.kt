@@ -25,6 +25,7 @@ public interface VKIDApi {
     public fun sendStatEventsAnonymously(
         clientId: String,
         clientSecret: String,
+        sakVersion: String,
         events: JSONArray
     ): Call
 }
