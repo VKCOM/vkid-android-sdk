@@ -14,6 +14,7 @@ dependencies {
     api(project(":multibranding-compose"))
     api(project(":onetap-common"))
     implementation(project(":common"))
+    implementation(project(":analytics"))
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.material.ripple)

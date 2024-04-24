@@ -2,6 +2,7 @@ package com.vk.id.network
 
 import com.vk.id.common.InternalVKIDApi
 import okhttp3.Call
+import org.json.JSONArray
 
 @InternalVKIDApi
 public interface VKIDApi {
@@ -19,5 +20,11 @@ public interface VKIDApi {
     public fun getSilentAuthProviders(
         clientId: String,
         clientSecret: String,
+    ): Call
+
+    public fun sendStatEventsAnonymously(
+        clientId: String,
+        clientSecret: String,
+        events: JSONArray
     ): Call
 }

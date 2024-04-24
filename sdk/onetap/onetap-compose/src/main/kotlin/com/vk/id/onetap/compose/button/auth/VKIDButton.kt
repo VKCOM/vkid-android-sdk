@@ -67,7 +67,8 @@ internal fun VKIDButton(
     state: VKIDButtonState = rememberVKIDButtonState(),
     vkid: VKID? = null,
     textProvider: VKIDButtonTextProvider? = null,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onUserFetched: (VKIDUser?) -> Unit = {},
 ) {
     val useTextProvider = textProvider ?: defaultTextProvider(LocalContext.current.resources)
     // Runs only on initial composition
@@ -82,7 +83,7 @@ internal fun VKIDButton(
     val useVKID = vkid ?: remember {
         VKID(context)
     }
-    FetchUserDataWithAnimation(coroutineScope, state, useVKID, useTextProvider)
+    FetchUserDataWithAnimation(coroutineScope, state, useVKID, useTextProvider, onUserFetched)
     Box(
         modifier = modifier
             .shadow(style)
@@ -148,7 +149,8 @@ private fun FetchUserDataWithAnimation(
     coroutineScope: CoroutineScope,
     state: VKIDButtonState,
     vkid: VKID,
-    buttonTextProvider: VKIDButtonTextProvider
+    buttonTextProvider: VKIDButtonTextProvider,
+    onUserFetched: (VKIDUser?) -> Unit,
 ) {
     FetchUserData(
         coroutineScope,
@@ -164,6 +166,7 @@ private fun FetchUserDataWithAnimation(
             override suspend fun onFetched(user: VKIDUser?) {
                 // For testing comment all other stuff and uncomment this function
                 // foreverAnimationTest(user!!, state, resources)
+                onUserFetched(user)
                 if (user != null) {
                     val newText = buttonTextProvider.userFoundText(user)
                     val newShortText = buttonTextProvider.userFoundShortText(user)

@@ -2,6 +2,7 @@
 
 package com.vk.id
 
+import com.vk.id.analytics.stat.StatTracker
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.auth.AuthCallbacksHolder
@@ -45,6 +46,7 @@ internal class VKIDTest : BehaviorSpec({
         val testDispatcher = StandardTestDispatcher(scheduler)
         val userDataFetcher = mockk<UserDataFetcher>()
         val dispatchers = mockk<CoroutinesDispatchers>()
+        val statTracker = mockk<StatTracker>(relaxed = true)
         every { dispatchers.io } returns testDispatcher
         val vkid = VKID(
             object : VKIDDeps {
@@ -53,11 +55,23 @@ internal class VKIDTest : BehaviorSpec({
                 override val authCallbacksHolder: AuthCallbacksHolder = authCallbacksHolder
                 override val authResultHandler: Lazy<AuthResultHandler> = lazy { authResultHandler }
                 override val dispatchers: CoroutinesDispatchers = dispatchers
+                override val statTracker: StatTracker = statTracker
                 override val vkSilentAuthInfoProvider: Lazy<VkSilentAuthInfoProvider> = mockk()
                 override val userDataFetcher: Lazy<UserDataFetcher> = lazy { userDataFetcher }
                 override val api: Lazy<VKIDApi> = lazy { mockk() }
             }
         )
+
+        When("VKID initialized") {
+            Then("Analytics vkid_init event is send") {
+                verify {
+                    statTracker.trackEvent(
+                        "sdk_init",
+                        match { it.name == "sdk_type" && it.strValue == "vkid" }
+                    )
+                }
+            }
+        }
 
         val authParams = VKIDAuthParams { oAuth = OAuth.VK }
         val authOptions = AuthOptions(
@@ -71,7 +85,8 @@ internal class VKIDTest : BehaviorSpec({
             locale = "locale",
             theme = "theme",
             webAuthPhoneScreen = false,
-            oAuth = null
+            oAuth = null,
+            extraParams = null
         )
         val expireTime = System.currentTimeMillis() + 1000
         coEvery { authProvidersChooser.chooseBest(authParams) } returns authProvider

@@ -1,4 +1,5 @@
 @file:Suppress("MatchingDeclarationName")
+@file:OptIn(InternalVKIDApi::class)
 
 package com.vk.id.onetap.compose.onetap.sheet.content
 
@@ -8,6 +9,7 @@ import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.VKIDAuthParams
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.compose.button.startAuth
 import com.vk.id.onetap.compose.onetap.sheet.style.OneTapBottomSheetStyle
@@ -38,6 +40,7 @@ internal fun startVKIDAuth(
     onAuth: (AccessToken) -> Unit,
     onFail: (VKIDAuthFail) -> Unit,
     authStatus: MutableState<OneTapBottomSheetAuthStatus>,
+    extraAuthParams: Map<String, String>
 ) {
     authStatus.value = OneTapBottomSheetAuthStatus.AuthStarted
     startAuth(
@@ -53,6 +56,7 @@ internal fun startVKIDAuth(
         },
         VKIDAuthParams {
             theme = style.toProviderTheme()
+            extraParams = extraAuthParams
         }
     )
 }
@@ -65,6 +69,7 @@ internal fun startAlternateAuth(
     onAuth: (AccessToken) -> Unit,
     onFail: (VKIDAuthFail) -> Unit,
     authStatus: MutableState<OneTapBottomSheetAuthStatus>,
+    extraAuthParams: Map<String, String>
 ) {
     authStatus.value = OneTapBottomSheetAuthStatus.AuthStarted
     startAuth(
@@ -81,6 +86,7 @@ internal fun startAlternateAuth(
         VKIDAuthParams {
             useOAuthProviderIfPossible = false
             theme = style.toProviderTheme()
+            extraParams = extraAuthParams
         }
     )
 }
