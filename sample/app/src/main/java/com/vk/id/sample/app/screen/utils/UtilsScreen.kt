@@ -25,6 +25,7 @@ import com.vk.id.AccessToken
 import com.vk.id.VKIDAuthFail
 import com.vk.id.VKIDUser
 import com.vk.id.auth.AuthCodeData
+import com.vk.id.auth.Prompt
 import com.vk.id.auth.VKIDAuthCallback
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.exchangetoken.VKIDExchangeTokenFail
@@ -42,6 +43,7 @@ import com.vk.id.refreshuser.VKIDGetUserParams
 import com.vk.id.sample.app.screen.Button
 import com.vk.id.sample.app.screen.UseToken
 import com.vk.id.sample.app.uikit.expandablecard.ExpandableCard
+import com.vk.id.sample.app.uikit.selector.DropdownSelector
 import com.vk.id.sample.xml.uikit.common.onVKIDAuthSuccess
 import com.vk.id.sample.xml.uikit.common.showToast
 import com.vk.id.sample.xml.vkid
@@ -91,6 +93,13 @@ private fun AuthUtil() {
             onValueChange = { codeChallenge = it },
             label = { Text("Code challenge (Optional)") },
         )
+        var prompt by remember { mutableStateOf(Prompt.BLANK) }
+        DropdownSelector(
+            values = Prompt.entries.associateBy { it.name },
+            selectedValue = prompt.name,
+            onValueSelected = { prompt = it },
+            label = { Text("prompt") },
+        )
         Button("Auth") {
             coroutineScope.launch {
                 context.vkid.authorize(
@@ -112,6 +121,8 @@ private fun AuthUtil() {
                         }
                     },
                     params = VKIDAuthParams {
+                        this.prompt = prompt
+                        if (prompt != Prompt.BLANK) this.useOAuthProviderIfPossible = false
                         this.state = state.takeIf { it.isNotBlank() }
                         this.codeChallenge = codeChallenge.takeIf { it.isNotBlank() }
                     }
