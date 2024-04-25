@@ -86,7 +86,6 @@ internal class VKIDUserRefresherTest : BehaviorSpec({
         val scheduler = testCoroutineScheduler
         val testDispatcher = StandardTestDispatcher(scheduler)
         every { dispatchers.io } returns testDispatcher
-        every { dispatchers.main } returns testDispatcher
         val tokenRefresher = mockk<VKIDTokenRefresher>()
         val refresher = VKIDUserRefresher(
             api = api,

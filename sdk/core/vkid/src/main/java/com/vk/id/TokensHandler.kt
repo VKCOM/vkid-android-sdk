@@ -14,7 +14,7 @@ internal class TokensHandler(
 ) {
     suspend fun handle(
         payload: VKIDTokenPayload,
-        onSuccess: (AccessToken) -> Unit,
+        onSuccess: suspend (AccessToken) -> Unit,
         onFailedApiCall: (Throwable) -> Unit,
     ) {
         userInfoFetcher.fetch(

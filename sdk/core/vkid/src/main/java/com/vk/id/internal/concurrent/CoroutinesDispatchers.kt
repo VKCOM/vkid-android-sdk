@@ -4,5 +4,4 @@ import kotlinx.coroutines.CoroutineDispatcher
 
 internal interface CoroutinesDispatchers {
     val io: CoroutineDispatcher
-    val main: CoroutineDispatcher
 }

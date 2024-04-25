@@ -13,6 +13,10 @@ import com.vk.id.internal.concurrent.CoroutinesDispatchers
 import com.vk.id.internal.store.PrefsStore
 import com.vk.id.internal.util.currentTime
 import com.vk.id.logger.createLoggerForClass
+import com.vk.id.logout.VKIDLoggerOut
+import com.vk.id.logout.VKIDLogoutCallback
+import com.vk.id.logout.VKIDLogoutFail
+import com.vk.id.storage.TokenStorage
 import kotlinx.coroutines.withContext
 
 @Suppress("LongParameterList")
@@ -23,7 +27,9 @@ internal class AuthResultHandler(
     private val prefsStore: PrefsStore,
     private val serviceCredentials: ServiceCredentials,
     private val api: VKIDApiService,
-    private val tokensHandler: TokensHandler
+    private val tokensHandler: TokensHandler,
+    private val loggerOut: VKIDLoggerOut,
+    private val tokenStorage: TokenStorage,
 ) {
 
     private val logger = createLoggerForClass()
@@ -89,10 +95,24 @@ internal class AuthResultHandler(
                 )
             )
         }
+        val accessToken = withContext(dispatchers.io) { tokenStorage.accessToken }
         callResult.onSuccess { payload ->
             tokensHandler.handle(
                 payload = payload,
-                onSuccess = ::emitAuthSuccess,
+                onSuccess = {
+                    if (accessToken != null) {
+                        loggerOut.logout(
+                            callback = object : VKIDLogoutCallback {
+                                override fun onSuccess() = emitAuthSuccess(it)
+                                override fun onFail(fail: VKIDLogoutFail) = emitAuthSuccess(it)
+                            },
+                            clearTokenStorage = false,
+                            accessToken = accessToken.token,
+                        )
+                    } else {
+                        emitAuthSuccess(it)
+                    }
+                },
                 onFailedApiCall = {
                     emitAuthFail(VKIDAuthFail.FailedApiCall("Failed to fetch user data", it))
                 },
