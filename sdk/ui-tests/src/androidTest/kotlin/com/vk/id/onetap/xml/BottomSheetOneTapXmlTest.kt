@@ -61,9 +61,9 @@ public class BottomSheetOneTapXmlTest : OneTapTest() {
 
     @Test
     @AllureId("2289677")
-    @DisplayName("Получение ошибки неверного uuid в XML BottomSheet")
-    override fun invalidUuidIsReceived() {
-        super.invalidUuidIsReceived()
+    @DisplayName("Получение ошибки отсутствия deviceId в XML BottomSheet")
+    override fun invalidDeviceIdIsReceived() {
+        super.invalidDeviceIdIsReceived()
     }
 
     @Test

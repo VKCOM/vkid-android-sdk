@@ -59,9 +59,9 @@ public class OneTapChangeAccountXmlTest : ChangeAccountTest() {
 
     @Test
     @AllureId("2289901")
-    @DisplayName("Получение ошибки неверного uuid в XML OneTap смене аккаунта")
-    override fun invalidUuidIsReceived() {
-        super.invalidUuidIsReceived()
+    @DisplayName("Получение ошибки отсутствия deviceId в XML OneTap смене аккаунта")
+    override fun invalidDeviceIdIsReceived() {
+        super.invalidDeviceIdIsReceived()
     }
 
     @Test

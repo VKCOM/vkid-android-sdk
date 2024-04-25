@@ -62,9 +62,9 @@ public class MultibrandingComposeTest(
 
     @Test
     @AllureId("2290797")
-    @DisplayName("Получение ошибки неверного uuid в Compose Мультибрендинге")
-    override fun invalidUuidIsReceived() {
-        super.invalidUuidIsReceived()
+    @DisplayName("Получение ошибки отсутствия deviceId в Compose Мультибрендинге")
+    override fun invalidDeviceIdIsReceived() {
+        super.invalidDeviceIdIsReceived()
     }
 
     @Test

@@ -63,9 +63,9 @@ public class BottomSheetOneTapComposeTest : OneTapTest() {
 
     @Test
     @AllureId("2289894")
-    @DisplayName("Получение ошибки неверного uuid в Compose BottomSheet")
-    override fun invalidUuidIsReceived() {
-        super.invalidUuidIsReceived()
+    @DisplayName("Получение ошибки отсутствия deviceId в Compose BottomSheet")
+    override fun invalidDeviceIdIsReceived() {
+        super.invalidDeviceIdIsReceived()
     }
 
     @Test

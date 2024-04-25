@@ -1,12 +1,9 @@
-@file:OptIn(InternalVKIDApi::class, InternalVKIDApi::class)
-
 package com.vk.id.test
 
 import android.content.Context
 import android.content.Intent
 import com.vk.id.VKIDUser
 import com.vk.id.auth.VKIDAuthParams
-import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.auth.AuthActivity
 import com.vk.id.internal.auth.AuthEventBridge
 import com.vk.id.internal.auth.AuthOptions
@@ -52,13 +49,14 @@ internal class MockAuthProviderChooser(
         intent.putExtra("webAuthPhoneScreen", options.webAuthPhoneScreen)
         intent.putExtra("oAuth", options.oAuth)
         intent.putExtra("overrideOAuthToNull", config.overrideOAuthToNull)
+        intent.putExtra("overrideDeviceIdToNull", config.overrideDeviceIdToNull)
         intent.putExtra("user", config.user)
         AuthActivity.startForAuth(context, intent)
     }
 }
 
 internal data class MockAuthProviderConfig(
-    val overrideUuid: String? = null,
+    val overrideDeviceIdToNull: Boolean = false,
     val overrideState: String? = null,
     val overrideOAuthToNull: Boolean = false,
     val user: VKIDUser? = null,

@@ -61,9 +61,9 @@ public class MultibrandingXmlTest(
 
     @Test
     @AllureId("2290747")
-    @DisplayName("Получение ошибки неверного uuid в XML Мультибрендинге")
-    override fun invalidUuidIsReceived() {
-        super.invalidUuidIsReceived()
+    @DisplayName("Получение ошибки отсутствия deviceId в XML Мультибрендинге")
+    override fun invalidDeviceIdIsReceived() {
+        super.invalidDeviceIdIsReceived()
     }
 
     @Test

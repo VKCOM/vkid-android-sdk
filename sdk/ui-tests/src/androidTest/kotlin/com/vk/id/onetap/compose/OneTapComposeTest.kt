@@ -60,9 +60,9 @@ public class OneTapComposeTest : OneTapTest() {
 
     @Test
     @AllureId("2289844")
-    @DisplayName("Получение ошибки неверного uuid в Compose OneTap")
-    override fun invalidUuidIsReceived() {
-        super.invalidUuidIsReceived()
+    @DisplayName("Получение ошибки отсутствия deviceId в Compose OneTap")
+    override fun invalidDeviceIdIsReceived() {
+        super.invalidDeviceIdIsReceived()
     }
 
     @Test

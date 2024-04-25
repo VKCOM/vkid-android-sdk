@@ -93,7 +93,6 @@ public abstract class BaseAuthTest(
         }.after {
         }.run {
             startAuth()
-            continueAuth()
             step("Получена ошибка") {
                 flakySafely {
                     receivedFail.shouldBeInstanceOf<VKIDAuthFail.FailedRedirectActivity>()
@@ -120,7 +119,6 @@ public abstract class BaseAuthTest(
         }.after {
         }.run {
             startAuth()
-            continueAuth()
             step("Получена ошибка") {
                 flakySafely {
                     receivedFail.shouldBeInstanceOf<VKIDAuthFail.NoBrowserAvailable>()
@@ -214,13 +212,13 @@ public abstract class BaseAuthTest(
         }
     }
 
-    public open fun invalidUuidIsReceived(): Unit = runIfShouldNotSkip {
+    public open fun invalidDeviceIdIsReceived(): Unit = runIfShouldNotSkip {
         var receivedFail: VKIDAuthFail? = null
         var receivedOAuth: OAuth? = null
         before {
             val vkid = vkidBuilder()
                 .mockApiSuccess()
-                .overrideUuid("wrong uuid")
+                .overrideDeviceIdToNull()
                 .build()
             setContent(
                 vkid = vkid,
@@ -235,7 +233,7 @@ public abstract class BaseAuthTest(
             continueAuth()
             step("Получена ошибка") {
                 flakySafely {
-                    receivedFail shouldBe VKIDAuthFail.FailedOAuthState("Invalid uuid")
+                    receivedFail shouldBe VKIDAuthFail.FailedRedirectActivity("No device id", null)
                     receivedOAuth shouldBe oAuth
                 }
             }
