@@ -34,9 +34,9 @@ import org.junit.Before
 import org.junit.Rule
 import java.util.UUID
 
-@Platform("Android Manual")
-@Product("VK ID SDK")
-@Project("VKIDSDK")
+@Platform(Platform.ANDROID_MANUAL)
+@Product(Product.VKID_SDK)
+@Project(Project.VKID_SDK)
 @Owner(Owners.DANIIL_KLIMCHUK)
 @Suppress("TooManyFunctions")
 public abstract class BaseAuthTest(
