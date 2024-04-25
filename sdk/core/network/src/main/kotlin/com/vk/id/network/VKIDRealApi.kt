@@ -87,7 +87,7 @@ public class VKIDRealApi private constructor(
         state: String
     ): Call {
         val formBody = FormBody.Builder()
-            .add(FIELD_RESPONSE_TYPE, VALUE_TOKEN)
+            .add(FIELD_RESPONSE_TYPE, VALUE_CODE)
             .add(FIELD_GRANT_TYPE, VALUE_ACCESS_TOKEN)
             .add(FIELD_ACCESS_TOKEN, v1Token)
             .add(FIELD_CLIENT_ID, clientId)
@@ -95,7 +95,7 @@ public class VKIDRealApi private constructor(
             .add(FIELD_STATE, state)
             .build()
 
-        return createRequest(HOST_VK_ID, PATH_USER_INFO, formBody)
+        return createRequest(HOST_VK_ID, PATH_AUTH, formBody)
     }
 
     override fun logout(
@@ -170,7 +170,7 @@ public class VKIDRealApi private constructor(
         private const val API_VERSION_VALUE = "5.220"
         private const val VALUE_AUTHORIZATION_CODE = "authorization_code"
         private const val VALUE_REFRESH_TOKEN = "refresh_token"
-        private const val VALUE_TOKEN = "token"
+        private const val VALUE_CODE = "code"
         private const val VALUE_ACCESS_TOKEN = "access_token"
     }
 }

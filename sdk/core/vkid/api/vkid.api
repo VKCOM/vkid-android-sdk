@@ -51,10 +51,10 @@ public final class com/vk/id/VKID {
 	public final fun authorize (Lcom/vk/id/auth/VKIDAuthCallback;Lcom/vk/id/auth/VKIDAuthParams;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun authorize$default (Lcom/vk/id/VKID;Landroidx/lifecycle/LifecycleOwner;Lcom/vk/id/auth/VKIDAuthCallback;Lcom/vk/id/auth/VKIDAuthParams;ILjava/lang/Object;)V
 	public static synthetic fun authorize$default (Lcom/vk/id/VKID;Lcom/vk/id/auth/VKIDAuthCallback;Lcom/vk/id/auth/VKIDAuthParams;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
-	public final fun exchangeTokenToV2 (Landroidx/lifecycle/LifecycleOwner;Ljava/lang/String;Lcom/vk/id/exchangetoken/VKIDExchangeTokenToV2Callback;Lcom/vk/id/exchangetoken/VKIDExchangeTokenParams;)V
-	public final fun exchangeTokenToV2 (Ljava/lang/String;Lcom/vk/id/exchangetoken/VKIDExchangeTokenToV2Callback;Lcom/vk/id/exchangetoken/VKIDExchangeTokenParams;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun exchangeTokenToV2$default (Lcom/vk/id/VKID;Landroidx/lifecycle/LifecycleOwner;Ljava/lang/String;Lcom/vk/id/exchangetoken/VKIDExchangeTokenToV2Callback;Lcom/vk/id/exchangetoken/VKIDExchangeTokenParams;ILjava/lang/Object;)V
-	public static synthetic fun exchangeTokenToV2$default (Lcom/vk/id/VKID;Ljava/lang/String;Lcom/vk/id/exchangetoken/VKIDExchangeTokenToV2Callback;Lcom/vk/id/exchangetoken/VKIDExchangeTokenParams;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public final fun exchangeTokenToV2 (Landroidx/lifecycle/LifecycleOwner;Ljava/lang/String;Lcom/vk/id/exchangetoken/VKIDExchangeTokenCallback;Lcom/vk/id/exchangetoken/VKIDExchangeTokenParams;)V
+	public final fun exchangeTokenToV2 (Ljava/lang/String;Lcom/vk/id/exchangetoken/VKIDExchangeTokenCallback;Lcom/vk/id/exchangetoken/VKIDExchangeTokenParams;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun exchangeTokenToV2$default (Lcom/vk/id/VKID;Landroidx/lifecycle/LifecycleOwner;Ljava/lang/String;Lcom/vk/id/exchangetoken/VKIDExchangeTokenCallback;Lcom/vk/id/exchangetoken/VKIDExchangeTokenParams;ILjava/lang/Object;)V
+	public static synthetic fun exchangeTokenToV2$default (Lcom/vk/id/VKID;Ljava/lang/String;Lcom/vk/id/exchangetoken/VKIDExchangeTokenCallback;Lcom/vk/id/exchangetoken/VKIDExchangeTokenParams;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public final fun fetchUserData-IoAF18A (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun getAccessToken ()Lcom/vk/id/AccessToken;
 	public final fun getUserData (Landroidx/lifecycle/LifecycleOwner;Lcom/vk/id/refreshuser/VKIDGetUserCallback;Lcom/vk/id/refreshuser/VKIDGetUserParams;)V
@@ -187,7 +187,7 @@ public final class com/vk/id/auth/VKIDAuthCallback$DefaultImpls {
 
 public final class com/vk/id/auth/VKIDAuthParams {
 	public static final field $stable I
-	public synthetic fun <init> (Lcom/vk/id/auth/VKIDAuthParams$Locale;Lcom/vk/id/auth/VKIDAuthParams$Theme;ZLcom/vk/id/OAuth;Lcom/vk/id/auth/Prompt;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Lcom/vk/id/auth/VKIDAuthParams$Locale;Lcom/vk/id/auth/VKIDAuthParams$Theme;ZLcom/vk/id/OAuth;Lcom/vk/id/auth/Prompt;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 }
 
 public final class com/vk/id/auth/VKIDAuthParams$Builder {
@@ -255,17 +255,20 @@ public final class com/vk/id/auth/VKIDAuthUiParamsKt {
 	public static final fun VKIDAuthUiParams (Lkotlin/jvm/functions/Function1;)Lcom/vk/id/auth/VKIDAuthUiParams;
 }
 
+public abstract interface class com/vk/id/exchangetoken/VKIDExchangeTokenCallback {
+	public abstract fun onAuthCode (Lcom/vk/id/auth/AuthCodeData;Z)V
+	public abstract fun onFail (Lcom/vk/id/exchangetoken/VKIDExchangeTokenFail;)V
+	public abstract fun onSuccess (Lcom/vk/id/AccessToken;)V
+}
+
+public final class com/vk/id/exchangetoken/VKIDExchangeTokenCallback$DefaultImpls {
+	public static fun onAuthCode (Lcom/vk/id/exchangetoken/VKIDExchangeTokenCallback;Lcom/vk/id/auth/AuthCodeData;Z)V
+}
+
 public abstract class com/vk/id/exchangetoken/VKIDExchangeTokenFail {
 	public static final field $stable I
 	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getDescription ()Ljava/lang/String;
-}
-
-public final class com/vk/id/exchangetoken/VKIDExchangeTokenFail$Canceled : com/vk/id/exchangetoken/VKIDExchangeTokenFail {
-	public static final field $stable I
-	public fun <init> (Ljava/lang/String;)V
-	public fun equals (Ljava/lang/Object;)Z
-	public fun hashCode ()I
 }
 
 public final class com/vk/id/exchangetoken/VKIDExchangeTokenFail$FailedApiCall : com/vk/id/exchangetoken/VKIDExchangeTokenFail {
@@ -276,11 +279,6 @@ public final class com/vk/id/exchangetoken/VKIDExchangeTokenFail$FailedApiCall :
 	public fun hashCode ()I
 }
 
-public final class com/vk/id/exchangetoken/VKIDExchangeTokenFail$FailedOAuth : com/vk/id/exchangetoken/VKIDExchangeTokenFail {
-	public static final field $stable I
-	public fun <init> (Ljava/lang/String;)V
-}
-
 public final class com/vk/id/exchangetoken/VKIDExchangeTokenFail$FailedOAuthState : com/vk/id/exchangetoken/VKIDExchangeTokenFail {
 	public static final field $stable I
 	public fun <init> (Ljava/lang/String;)V
@@ -288,49 +286,21 @@ public final class com/vk/id/exchangetoken/VKIDExchangeTokenFail$FailedOAuthStat
 	public fun hashCode ()I
 }
 
-public final class com/vk/id/exchangetoken/VKIDExchangeTokenFail$FailedRedirectActivity : com/vk/id/exchangetoken/VKIDExchangeTokenFail {
-	public static final field $stable I
-	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getThrowable ()Ljava/lang/Throwable;
-	public fun hashCode ()I
-}
-
-public final class com/vk/id/exchangetoken/VKIDExchangeTokenFail$NoBrowserAvailable : com/vk/id/exchangetoken/VKIDExchangeTokenFail {
-	public static final field $stable I
-	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getThrowable ()Ljava/lang/Throwable;
-	public fun hashCode ()I
-}
-
 public final class com/vk/id/exchangetoken/VKIDExchangeTokenParams {
 	public static final field $stable I
-	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 }
 
 public final class com/vk/id/exchangetoken/VKIDExchangeTokenParams$Builder {
 	public static final field $stable I
 	public fun <init> ()V
 	public final fun build ()Lcom/vk/id/exchangetoken/VKIDExchangeTokenParams;
-	public final fun getCodeChallenge ()Ljava/lang/String;
 	public final fun getState ()Ljava/lang/String;
-	public final fun setCodeChallenge (Ljava/lang/String;)V
 	public final fun setState (Ljava/lang/String;)V
 }
 
 public final class com/vk/id/exchangetoken/VKIDExchangeTokenParamsKt {
 	public static final fun VKIDExchangeTokenParams (Lkotlin/jvm/functions/Function1;)Lcom/vk/id/exchangetoken/VKIDExchangeTokenParams;
-}
-
-public abstract interface class com/vk/id/exchangetoken/VKIDExchangeTokenToV2Callback {
-	public abstract fun onAuthCode (Lcom/vk/id/auth/AuthCodeData;Z)V
-	public abstract fun onFail (Lcom/vk/id/exchangetoken/VKIDExchangeTokenFail;)V
-	public abstract fun onSuccess (Lcom/vk/id/AccessToken;)V
-}
-
-public final class com/vk/id/exchangetoken/VKIDExchangeTokenToV2Callback$DefaultImpls {
-	public static fun onAuthCode (Lcom/vk/id/exchangetoken/VKIDExchangeTokenToV2Callback;Lcom/vk/id/auth/AuthCodeData;Z)V
 }
 
 public abstract interface class com/vk/id/logout/VKIDLogoutCallback {

@@ -33,9 +33,9 @@ import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.Prompt
 import com.vk.id.auth.VKIDAuthCallback
 import com.vk.id.auth.VKIDAuthParams
+import com.vk.id.exchangetoken.VKIDExchangeTokenCallback
 import com.vk.id.exchangetoken.VKIDExchangeTokenFail
 import com.vk.id.exchangetoken.VKIDExchangeTokenParams
-import com.vk.id.exchangetoken.VKIDExchangeTokenToV2Callback
 import com.vk.id.logout.VKIDLogoutCallback
 import com.vk.id.logout.VKIDLogoutFail
 import com.vk.id.refresh.VKIDRefreshTokenCallback
@@ -213,18 +213,11 @@ private fun ExchangeTokenUtil() {
             onValueChange = { state = it },
             label = { Text("State (Optional)") },
         )
-        var codeChallenge by remember { mutableStateOf("") }
-        TextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = codeChallenge,
-            onValueChange = { codeChallenge = it },
-            label = { Text("Code challenge (Optional)") },
-        )
         Button(text = "Exchange") {
             coroutineScope.launch {
                 context.vkid.exchangeTokenToV2(
                     v1Token = v1Token,
-                    callback = object : VKIDExchangeTokenToV2Callback {
+                    callback = object : VKIDExchangeTokenCallback {
                         override fun onSuccess(accessToken: AccessToken) {
                             currentToken = accessToken
                             onVKIDAuthSuccess(context, null, accessToken)
@@ -243,7 +236,6 @@ private fun ExchangeTokenUtil() {
                     },
                     params = VKIDExchangeTokenParams {
                         this.state = state.takeIf { it.isNotBlank() }
-                        this.codeChallenge = codeChallenge.takeIf { it.isNotBlank() }
                     }
                 )
             }

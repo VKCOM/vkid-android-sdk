@@ -12,6 +12,7 @@ import com.vk.id.AuthOptionsCreator
 import com.vk.id.AuthResultHandler
 import com.vk.id.TokensHandler
 import com.vk.id.common.InternalVKIDApi
+import com.vk.id.exchangetoken.VKIDTokenExchanger
 import com.vk.id.fetchuser.VKIDUserInfoFetcher
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.AuthActivity
@@ -138,6 +139,16 @@ internal open class VKIDDepsProd(
         VKIDTokenRefresher(
             api = apiService.value,
             tokenStorage = tokenStorage,
+            deviceIdProvider = deviceIdProvider.value,
+            serviceCredentials = serviceCredentials.value,
+            stateGenerator = stateGenerator,
+            tokensHandler = tokensHandler.value,
+            dispatchers = dispatchers,
+        )
+    }
+    override val tokenExchanger: Lazy<VKIDTokenExchanger> = lazy {
+        VKIDTokenExchanger(
+            api = apiService.value,
             deviceIdProvider = deviceIdProvider.value,
             serviceCredentials = serviceCredentials.value,
             stateGenerator = stateGenerator,

@@ -6,13 +6,12 @@ import android.content.Context
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthCallback
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.exchangetoken.VKIDExchangeTokenFail
+import com.vk.id.exchangetoken.VKIDExchangeTokenCallback
 import com.vk.id.exchangetoken.VKIDExchangeTokenParams
-import com.vk.id.exchangetoken.VKIDExchangeTokenToV2Callback
+import com.vk.id.exchangetoken.VKIDTokenExchanger
 import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthEventBridge
 import com.vk.id.internal.auth.AuthProvidersChooser
@@ -119,6 +118,7 @@ public class VKID {
         this.vkSilentAuthInfoProvider = deps.vkSilentAuthInfoProvider
         this.userDataFetcher = deps.userDataFetcher
         this.tokenRefresher = deps.tokenRefresher
+        this.tokenExchanger = deps.tokenExchanger
         this.userRefresher = deps.userRefresher
         this.loggerOut = deps.loggerOut
         this.tokenStorage = deps.tokenStorage
@@ -139,6 +139,7 @@ public class VKID {
     private val vkSilentAuthInfoProvider: Lazy<SilentAuthInfoProvider>
     private val userDataFetcher: Lazy<UserDataFetcher>
     private val tokenRefresher: Lazy<VKIDTokenRefresher>
+    private val tokenExchanger: Lazy<VKIDTokenExchanger>
     private val userRefresher: Lazy<VKIDUserRefresher>
     private val loggerOut: Lazy<VKIDLoggerOut>
     private val tokenStorage: TokenStorage
@@ -225,13 +226,13 @@ public class VKID {
      *
      * @param lifecycleOwner The [LifecycleOwner] in which the authorization process should be handled.
      * @param v1Token The token to exchange.
-     * @param callback [VKIDExchangeTokenToV2Callback] to handle the result of the token exchange.
+     * @param callback [VKIDExchangeTokenCallback] to handle the result of the token exchange.
      * @param params Optional parameters.
      */
     public fun exchangeTokenToV2(
         lifecycleOwner: LifecycleOwner,
         v1Token: String,
-        callback: VKIDExchangeTokenToV2Callback,
+        callback: VKIDExchangeTokenCallback,
         params: VKIDExchangeTokenParams = VKIDExchangeTokenParams {},
     ) {
         lifecycleOwner.lifecycleScope.launch { exchangeTokenToV2(v1Token = v1Token, callback = callback, params = params) }
@@ -241,38 +242,17 @@ public class VKID {
      * Exchanges v1 access token to v2 access token.
      *
      * @param v1Token The token to exchange.
-     * @param callback [VKIDExchangeTokenToV2Callback] to handle the result of the token exchange.
+     * @param callback [VKIDExchangeTokenCallback] to handle the result of the token exchange.
      * @param params Optional parameters.
      */
     public suspend fun exchangeTokenToV2(
         v1Token: String,
-        callback: VKIDExchangeTokenToV2Callback,
+        callback: VKIDExchangeTokenCallback,
         params: VKIDExchangeTokenParams = VKIDExchangeTokenParams {},
     ) {
-        authorize(
-            callback = object : VKIDAuthCallback {
-                override fun onAuth(accessToken: AccessToken) = callback.onSuccess(accessToken)
-
-                override fun onFail(fail: VKIDAuthFail) {
-                    val exchangeFail = when (fail) {
-                        is VKIDAuthFail.Canceled -> VKIDExchangeTokenFail.Canceled(fail.description)
-                        is VKIDAuthFail.FailedApiCall -> VKIDExchangeTokenFail.FailedApiCall(fail.description, fail.throwable)
-                        is VKIDAuthFail.FailedOAuth -> VKIDExchangeTokenFail.FailedOAuth(fail.description)
-                        is VKIDAuthFail.FailedOAuthState -> VKIDExchangeTokenFail.FailedOAuthState(fail.description)
-                        is VKIDAuthFail.FailedRedirectActivity -> VKIDExchangeTokenFail.FailedRedirectActivity(fail.description, fail.throwable)
-                        is VKIDAuthFail.NoBrowserAvailable -> VKIDExchangeTokenFail.NoBrowserAvailable(fail.description, fail.throwable)
-                    }
-                    callback.onFail(exchangeFail)
-                }
-
-                override fun onAuthCode(data: AuthCodeData, isCompletion: Boolean) = callback.onAuthCode(data, isCompletion)
-            },
-            params = VKIDAuthParams {
-                token = v1Token
-                state = params.state
-                codeChallenge = params.codeChallenge
-            }
-        )
+        requestMutex.withLock {
+            tokenExchanger.value.exchange(v1Token = v1Token, params = params, callback = callback)
+        }
     }
 
     /**
