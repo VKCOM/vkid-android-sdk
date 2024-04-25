@@ -1,7 +1,6 @@
 package com.vk.id.test
 
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.internal.auth.VKIDTokenPayload
 import com.vk.id.network.VKIDApi
 
 @InternalVKIDApi
@@ -37,7 +36,14 @@ internal class ImmediateVKIDApi(
         clientId: String,
         deviceId: String,
         state: String
-    ) = MockVKIDCall(Result.failure<VKIDTokenPayload>(RuntimeException("Not supported")))
+    ) = MockVKIDCall(
+        mockApi.refreshToken(
+            refreshToken = refreshToken,
+            clientId = clientId,
+            deviceId = deviceId,
+            state = state,
+        )
+    )
 
     override fun getUser(
         accessToken: String,

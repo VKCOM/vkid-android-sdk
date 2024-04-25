@@ -144,6 +144,7 @@ internal open class VKIDDepsProd(
             stateGenerator = stateGenerator,
             tokensHandler = tokensHandler.value,
             dispatchers = dispatchers,
+            prefsStore = prefsStore.value,
         )
     }
     override val tokenExchanger: Lazy<VKIDTokenExchanger> = lazy {
@@ -176,7 +177,11 @@ internal open class VKIDDepsProd(
         )
     }
 
-    override val tokenStorage by lazy { TokenStorage(EncryptedSharedPreferencesStorage(appContext)) }
+    override val encryptedSharedPreferencesStorage: Lazy<EncryptedSharedPreferencesStorage> = lazy {
+        EncryptedSharedPreferencesStorage(appContext)
+    }
+
+    override val tokenStorage by lazy { TokenStorage(encryptedSharedPreferencesStorage.value) }
 
     private val userInfoFetcher: Lazy<VKIDUserInfoFetcher> = lazy {
         VKIDUserInfoFetcher(
@@ -197,12 +202,16 @@ internal open class VKIDDepsProd(
 
     private val stateGenerator by lazy { StateGenerator(prefsStore.value) }
 
-    private val prefsStore: Lazy<PrefsStore> = lazy {
+    override val prefsStore: Lazy<PrefsStore> = lazy {
         PrefsStore(appContext)
     }
 
+    override val deviceIdStorage: Lazy<DeviceIdProvider.DeviceIdStorage> = lazy {
+        DeviceIdPrefs(appContext)
+    }
+
     private val deviceIdProvider: Lazy<DeviceIdProvider> = lazy {
-        DeviceIdProvider(appContext, DeviceIdPrefs(appContext))
+        DeviceIdProvider(appContext, deviceIdStorage.value)
     }
 
     private val pkceGenerator: Lazy<PkceGeneratorSHA256> = lazy {

@@ -9,6 +9,7 @@ import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.auth.device.DeviceIdProvider
 import com.vk.id.internal.concurrent.CoroutinesDispatchers
 import com.vk.id.internal.state.StateGenerator
+import com.vk.id.internal.store.PrefsStore
 import com.vk.id.storage.TokenStorage
 import kotlinx.coroutines.withContext
 
@@ -21,20 +22,19 @@ internal class VKIDTokenRefresher(
     private val stateGenerator: StateGenerator,
     private val tokensHandler: TokensHandler,
     private val dispatchers: CoroutinesDispatchers,
+    private val prefsStore: PrefsStore,
 ) {
     suspend fun refresh(
         callback: VKIDRefreshTokenCallback,
         params: VKIDRefreshTokenParams = VKIDRefreshTokenParams {},
     ) {
         val clientId = serviceCredentials.clientID
-        val (refreshToken, refreshTokenState, deviceId) = withContext(dispatchers.io) {
-            Triple(
-                tokenStorage.refreshToken,
-                params.state ?: stateGenerator.regenerateState(),
-                deviceIdProvider.getDeviceId()
-            )
+        val refreshToken = withContext(dispatchers.io) {
+            tokenStorage.refreshToken
+        } ?: return emitUnauthorizedFail(callback)
+        val (refreshTokenState, deviceId) = withContext(dispatchers.io) {
+            (params.state ?: stateGenerator.regenerateState()) to deviceIdProvider.getDeviceId()
         }
-        refreshToken ?: return emitUnauthorizedFail(callback)
 
         val result = withContext(dispatchers.io) {
             api.refreshToken(
@@ -46,12 +46,18 @@ internal class VKIDTokenRefresher(
         }
         result.onSuccess { payload ->
             if (payload.state != refreshTokenState) {
+                prefsStore.clear()
                 callback.onFail(VKIDRefreshTokenFail.FailedOAuthState("Wrong state for getting user info"))
+                return
             }
             tokensHandler.handle(
                 payload = payload,
-                onSuccess = callback::onSuccess,
+                onSuccess = {
+                    prefsStore.clear()
+                    callback.onSuccess(it)
+                },
                 onFailedApiCall = {
+                    prefsStore.clear()
                     callback.onFail(
                         VKIDRefreshTokenFail.FailedApiCall("Failed to fetch user data due to ${it.message}", it)
                     )
@@ -59,6 +65,7 @@ internal class VKIDTokenRefresher(
             )
         }
         result.onFailure {
+            prefsStore.clear()
             callback.onFail(
                 VKIDRefreshTokenFail.FailedApiCall("Failed code to refresh token due to: ${it.message}", it)
             )

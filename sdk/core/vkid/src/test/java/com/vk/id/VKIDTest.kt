@@ -11,14 +11,17 @@ import com.vk.id.internal.auth.AuthOptions
 import com.vk.id.internal.auth.AuthProvidersChooser
 import com.vk.id.internal.auth.AuthResult
 import com.vk.id.internal.auth.VKIDAuthProvider
+import com.vk.id.internal.auth.device.DeviceIdProvider
 import com.vk.id.internal.concurrent.CoroutinesDispatchers
 import com.vk.id.internal.di.VKIDDeps
 import com.vk.id.internal.ipc.VkSilentAuthInfoProvider
+import com.vk.id.internal.store.PrefsStore
 import com.vk.id.internal.user.UserDataFetcher
 import com.vk.id.logout.VKIDLoggerOut
 import com.vk.id.network.VKIDApi
 import com.vk.id.refresh.VKIDTokenRefresher
 import com.vk.id.refreshuser.VKIDUserRefresher
+import com.vk.id.storage.EncryptedSharedPreferencesStorage
 import com.vk.id.storage.TokenStorage
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.testCoroutineScheduler
@@ -66,6 +69,10 @@ internal class VKIDTest : BehaviorSpec({
                 override val userRefresher: Lazy<VKIDUserRefresher> = lazy { mockk() }
                 override val loggerOut: Lazy<VKIDLoggerOut> = lazy { mockk() }
                 override val tokenStorage: TokenStorage = mockk()
+                override val deviceIdStorage: Lazy<DeviceIdProvider.DeviceIdStorage> = lazy { mockk() }
+                override val prefsStore: Lazy<PrefsStore> = lazy { mockk() }
+                override val encryptedSharedPreferencesStorage: Lazy<EncryptedSharedPreferencesStorage> =
+                    lazy { mockk() }
             }
         )
 

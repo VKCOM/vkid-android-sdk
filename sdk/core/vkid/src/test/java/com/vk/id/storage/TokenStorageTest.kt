@@ -1,7 +1,10 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.storage
 
 import com.vk.id.AccessToken
 import com.vk.id.VKIDUser
+import com.vk.id.common.InternalVKIDApi
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.nulls.shouldBeNull

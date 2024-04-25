@@ -4,17 +4,32 @@ import android.content.Context
 import com.vk.id.VKID
 import com.vk.id.VKIDUser
 import com.vk.id.common.InternalVKIDApi
+import com.vk.id.internal.auth.device.DeviceIdProvider
+import com.vk.id.internal.store.PrefsStore
+import com.vk.id.storage.EncryptedSharedPreferencesStorage
 
 @InternalVKIDApi
 public class VKIDTestBuilder(
-    private val context: Context
+    private val context: Context,
 ) {
+    private var deviceIdStorage: DeviceIdProvider.DeviceIdStorage? = null
+    private var prefsStore: PrefsStore? = null
+    private var encryptedSharedPreferencesStorage: EncryptedSharedPreferencesStorage? = null
     private var getTokenResponse = Result
+        .failure<VKIDTokenPayloadResponse>(UnsupportedOperationException("Not supported"))
+    private var refreshTokenResponse = Result
         .failure<VKIDTokenPayloadResponse>(UnsupportedOperationException("Not supported"))
     private var getUserInfoResponse = Result
         .failure<VKIDUserInfoPayloadResponse>(UnsupportedOperationException("Not supported"))
     private var logoutResponse = Result.success(VKIDLogoutPayloadResponse())
     private var mockApi: OverrideVKIDApi = object : OverrideVKIDApi {
+        override fun refreshToken(
+            refreshToken: String,
+            clientId: String,
+            deviceId: String,
+            state: String
+        ) = refreshTokenResponse
+
         override fun getToken(
             code: String,
             codeVerifier: String,
@@ -38,6 +53,9 @@ public class VKIDTestBuilder(
     }
     private var authProviderConfig: MockAuthProviderConfig = MockAuthProviderConfig()
 
+    public fun refreshTokenResponse(response: Result<VKIDTokenPayloadResponse>): VKIDTestBuilder = apply {
+        this.refreshTokenResponse = response
+    }
     public fun getTokenResponse(response: Result<VKIDTokenPayloadResponse>): VKIDTestBuilder = apply {
         this.getTokenResponse = response
     }
@@ -62,10 +80,22 @@ public class VKIDTestBuilder(
     private fun updateConfig(update: MockAuthProviderConfig.() -> MockAuthProviderConfig): VKIDTestBuilder = apply {
         authProviderConfig = authProviderConfig.update()
     }
+    public fun deviceIdStorage(storage: DeviceIdProvider.DeviceIdStorage?): VKIDTestBuilder = apply {
+        this.deviceIdStorage = storage
+    }
+    public fun prefsStore(store: PrefsStore?): VKIDTestBuilder = apply {
+        this.prefsStore = store
+    }
+    public fun encryptedSharedPreferencesStorage(storage: EncryptedSharedPreferencesStorage?): VKIDTestBuilder = apply {
+        this.encryptedSharedPreferencesStorage = storage
+    }
 
     public fun build(): VKID = VKID(
         context = context,
         mockApi = mockApi,
-        mockAuthProviderConfig = authProviderConfig
+        mockAuthProviderConfig = authProviderConfig,
+        deviceIdStorage = deviceIdStorage,
+        prefsStore = prefsStore,
+        encryptedSharedPreferencesStorage = encryptedSharedPreferencesStorage,
     )
 }

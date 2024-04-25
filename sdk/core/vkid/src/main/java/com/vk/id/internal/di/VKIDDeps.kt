@@ -8,13 +8,16 @@ import com.vk.id.common.InternalVKIDApi
 import com.vk.id.exchangetoken.VKIDTokenExchanger
 import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthProvidersChooser
+import com.vk.id.internal.auth.device.DeviceIdProvider
 import com.vk.id.internal.concurrent.CoroutinesDispatchers
 import com.vk.id.internal.ipc.SilentAuthInfoProvider
+import com.vk.id.internal.store.PrefsStore
 import com.vk.id.internal.user.UserDataFetcher
 import com.vk.id.logout.VKIDLoggerOut
 import com.vk.id.network.VKIDApi
 import com.vk.id.refresh.VKIDTokenRefresher
 import com.vk.id.refreshuser.VKIDUserRefresher
+import com.vk.id.storage.EncryptedSharedPreferencesStorage
 import com.vk.id.storage.TokenStorage
 
 internal interface VKIDDeps {
@@ -31,4 +34,7 @@ internal interface VKIDDeps {
     val userRefresher: Lazy<VKIDUserRefresher>
     val loggerOut: Lazy<VKIDLoggerOut>
     val tokenStorage: TokenStorage
+    val deviceIdStorage: Lazy<DeviceIdProvider.DeviceIdStorage>
+    val prefsStore: Lazy<PrefsStore>
+    val encryptedSharedPreferencesStorage: Lazy<EncryptedSharedPreferencesStorage>
 }

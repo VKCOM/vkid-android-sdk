@@ -78,7 +78,7 @@ public sealed class VKIDRefreshTokenFail(
     ) : VKIDRefreshTokenFail(description) {
         /** @suppress */
         override fun equals(other: Any?): Boolean {
-            return other is RefreshTokenExpired && description == other.description
+            return other is NotAuthenticated && description == other.description
         }
 
         /** @suppress */

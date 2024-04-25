@@ -1,8 +1,11 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.storage
 
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.vk.id.AccessToken
+import com.vk.id.common.InternalVKIDApi
 
 internal class TokenStorage(
     private val preferences: EncryptedSharedPreferencesStorage

@@ -1,7 +1,9 @@
 package com.vk.id.internal.concurrent
 
+import com.vk.id.common.InternalVKIDApi
 import kotlinx.coroutines.CoroutineDispatcher
 
-internal interface CoroutinesDispatchers {
-    val io: CoroutineDispatcher
+@InternalVKIDApi
+public interface CoroutinesDispatchers {
+    public val io: CoroutineDispatcher
 }
