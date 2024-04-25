@@ -21,6 +21,7 @@ import com.vk.id.exchangetoken.VKIDExchangeTokenParams
 import com.vk.id.internal.auth.device.DeviceIdProvider
 import com.vk.id.internal.store.PrefsStore
 import com.vk.id.storage.EncryptedSharedPreferencesStorage
+import com.vk.id.test.VKIDCodePayloadResponse
 import com.vk.id.test.VKIDTestBuilder
 import com.vk.id.test.VKIDTokenPayloadResponse
 import com.vk.id.test.VKIDUserInfoPayloadResponse
@@ -65,12 +66,17 @@ private const val STATE = "state"
 private const val ACCESS_TOKEN_KEY = "ACCESS_TOKEN_KEY"
 private const val REFRESH_TOKEN_KEY = "REFRESH_TOKEN_KEY"
 private const val ID_TOKEN_KEY = "ID_TOKEN_KEY"
-private val REFRESH_TOKEN_RESPONSE = VKIDTokenPayloadResponse(
+private const val CODE = "code"
+private val GET_TOKEN_RESPONSE = VKIDTokenPayloadResponse(
     accessToken = ACCESS_TOKEN_VALUE,
     refreshToken = REFRESH_TOKEN_NEW_VALUE,
     idToken = ID_TOKEN_VALUE,
     expiresIn = 0,
     userId = USER_ID,
+    state = STATE,
+)
+private val EXCHANGE_TOKEN_RESPONSE = VKIDCodePayloadResponse(
+    code = CODE,
     state = STATE,
 )
 private val USER_INFO_RESPONSE = VKIDUserInfoPayloadResponse(
@@ -118,7 +124,8 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
             .prefsStore(prefsStore)
             .encryptedSharedPreferencesStorage(encryptedStorage)
             .getUserInfoResponse(Result.success(USER_INFO_RESPONSE))
-            .exchangeTokenResponse(Result.success(REFRESH_TOKEN_RESPONSE))
+            .exchangeTokenResponse(Result.success(EXCHANGE_TOKEN_RESPONSE))
+            .getTokenResponse(Result.success(GET_TOKEN_RESPONSE))
             .build()
         every { encryptedStorage.set(REFRESH_TOKEN_KEY, REFRESH_TOKEN_NEW_VALUE) } just runs
         every { encryptedStorage.set(ACCESS_TOKEN_KEY, ACCESS_TOKEN_JSON) } just runs
@@ -128,7 +135,13 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Обменивается токен") {
             runBlocking {
-                result = vkid.exchangeToken(v1Token = V1_TOKEN, params = VKIDExchangeTokenParams { state = STATE })
+                result = vkid.exchangeToken(
+                    v1Token = V1_TOKEN,
+                    params = VKIDExchangeTokenParams {
+                        state = STATE
+                        codeExchangeState = STATE
+                    }
+                )
             }
         }
         step("Получен AT") {
@@ -150,7 +163,7 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
             .encryptedSharedPreferencesStorage(encryptedStorage)
-            .exchangeTokenResponse(Result.success(VKIDTokenPayloadResponse(error = "some error")))
+            .exchangeTokenResponse(Result.success(VKIDCodePayloadResponse(error = "some error")))
             .build()
         every { prefsStore.clear() } just runs
         every { deviceIdStorage.getDeviceId() } returns "device id"
@@ -169,6 +182,78 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
     }
 
     @Test
+    @AllureId("2303129")
+    @DisplayName("Ошибка получения токена при обмене v1 токена на v2")
+    fun getTokenApiCallFail() = run {
+        val deviceIdStorage = mockk<DeviceIdProvider.DeviceIdStorage>()
+        val prefsStore = mockk<PrefsStore>()
+        val encryptedStorage = mockk<EncryptedSharedPreferencesStorage>()
+        val vkid = VKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
+            .deviceIdStorage(deviceIdStorage)
+            .prefsStore(prefsStore)
+            .encryptedSharedPreferencesStorage(encryptedStorage)
+            .getUserInfoResponse(Result.success(VKIDUserInfoPayloadResponse(error = "some error")))
+            .exchangeTokenResponse(Result.success(EXCHANGE_TOKEN_RESPONSE))
+            .build()
+        every { prefsStore.clear() } just runs
+        every { deviceIdStorage.getDeviceId() } returns "device id"
+        var result: Any? = null
+        step("Обменивается токен") {
+            runBlocking {
+                result = vkid.exchangeToken(
+                    v1Token = V1_TOKEN,
+                    params = VKIDExchangeTokenParams {
+                        state = STATE
+                        codeExchangeState = STATE
+                    }
+                )
+            }
+        }
+        step("Не получен AT") {
+            (result as? AccessToken?).shouldBeNull()
+        }
+        step("Получена ошибка") {
+            (result as? VKIDExchangeTokenFail?).shouldBeInstanceOf<VKIDExchangeTokenFail.FailedApiCall>()
+        }
+    }
+
+    @Test
+    @AllureId("2303128z")
+    @DisplayName("Ошибка стейта получения токена при обмене v1 токена на v2")
+    fun getTokenStateFail() = run {
+        val deviceIdStorage = mockk<DeviceIdProvider.DeviceIdStorage>()
+        val prefsStore = mockk<PrefsStore>()
+        val encryptedStorage = mockk<EncryptedSharedPreferencesStorage>()
+        val vkid = VKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
+            .deviceIdStorage(deviceIdStorage)
+            .prefsStore(prefsStore)
+            .encryptedSharedPreferencesStorage(encryptedStorage)
+            .exchangeTokenResponse(Result.success(EXCHANGE_TOKEN_RESPONSE))
+            .getTokenResponse(Result.success(GET_TOKEN_RESPONSE.copy(state = "wrong state")))
+            .build()
+        every { prefsStore.clear() } just runs
+        every { deviceIdStorage.getDeviceId() } returns "device id"
+        var result: Any? = null
+        step("Обменивается токен") {
+            runBlocking {
+                result = vkid.exchangeToken(
+                    v1Token = V1_TOKEN,
+                    params = VKIDExchangeTokenParams {
+                        state = STATE
+                        codeExchangeState = STATE
+                    }
+                )
+            }
+        }
+        step("Не получен AT") {
+            (result as? AccessToken?).shouldBeNull()
+        }
+        step("Получена ошибка") {
+            (result as? VKIDExchangeTokenFail?) shouldBe VKIDExchangeTokenFail.FailedOAuthState("Invalid state during code exchange")
+        }
+    }
+
+    @Test
     @AllureId("2303043")
     @DisplayName("Ошибка получения пользовательских данных при обмене v1 токена на v2")
     fun userDataApiCallFail() = run {
@@ -180,14 +265,21 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
             .prefsStore(prefsStore)
             .encryptedSharedPreferencesStorage(encryptedStorage)
             .getUserInfoResponse(Result.success(VKIDUserInfoPayloadResponse(error = "some error")))
-            .exchangeTokenResponse(Result.success(REFRESH_TOKEN_RESPONSE))
+            .exchangeTokenResponse(Result.success(EXCHANGE_TOKEN_RESPONSE))
+            .getTokenResponse(Result.success(GET_TOKEN_RESPONSE))
             .build()
         every { prefsStore.clear() } just runs
         every { deviceIdStorage.getDeviceId() } returns "device id"
         var result: Any? = null
         step("Обменивается токен") {
             runBlocking {
-                result = vkid.exchangeToken(v1Token = V1_TOKEN, params = VKIDExchangeTokenParams { state = STATE })
+                result = vkid.exchangeToken(
+                    v1Token = V1_TOKEN,
+                    params = VKIDExchangeTokenParams {
+                        state = STATE
+                        codeExchangeState = STATE
+                    }
+                )
             }
         }
         step("Не получен AT") {
@@ -210,7 +302,7 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
             .prefsStore(prefsStore)
             .encryptedSharedPreferencesStorage(encryptedStorage)
             .getUserInfoResponse(Result.success(USER_INFO_RESPONSE))
-            .exchangeTokenResponse(Result.success(REFRESH_TOKEN_RESPONSE.copy(state = "wrong state")))
+            .exchangeTokenResponse(Result.success(EXCHANGE_TOKEN_RESPONSE.copy(state = "wrong state")))
             .build()
         every { prefsStore.clear() } just runs
         every { deviceIdStorage.getDeviceId() } returns "device id"
@@ -224,7 +316,7 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
             (result as? AccessToken?).shouldBeNull()
         }
         step("Получена ошибка") {
-            (result as? VKIDExchangeTokenFail?) shouldBe VKIDExchangeTokenFail.FailedOAuthState("Invalid state")
+            (result as? VKIDExchangeTokenFail?) shouldBe VKIDExchangeTokenFail.FailedOAuthState("Invalid state during code receiving")
         }
     }
 

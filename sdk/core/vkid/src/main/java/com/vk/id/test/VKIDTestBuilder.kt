@@ -21,7 +21,7 @@ public class VKIDTestBuilder(
     private var refreshTokenResponse = Result
         .failure<VKIDTokenPayloadResponse>(UnsupportedOperationException("Not supported"))
     private var exchangeTokenResponse = Result
-        .failure<VKIDTokenPayloadResponse>(UnsupportedOperationException("Not supported"))
+        .failure<VKIDCodePayloadResponse>(UnsupportedOperationException("Not supported"))
     private var getUserInfoResponses = listOf(
         Result.failure<VKIDUserInfoPayloadResponse>(UnsupportedOperationException("Not supported"))
     )
@@ -39,6 +39,7 @@ public class VKIDTestBuilder(
             clientId: String,
             deviceId: String,
             state: String,
+            codeChallenge: String,
         ) = exchangeTokenResponse
 
         override fun getToken(
@@ -91,7 +92,7 @@ public class VKIDTestBuilder(
         this.logoutResponse = response
     }
 
-    public fun exchangeTokenResponse(response: Result<VKIDTokenPayloadResponse>): VKIDTestBuilder = apply {
+    public fun exchangeTokenResponse(response: Result<VKIDCodePayloadResponse>): VKIDTestBuilder = apply {
         this.exchangeTokenResponse = response
     }
 

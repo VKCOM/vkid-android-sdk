@@ -23,4 +23,9 @@ public class AuthCodeData(
     override fun hashCode(): Int {
         return code.hashCode()
     }
+
+    /** @suppress */
+    override fun toString(): String {
+        return "AuthCodeData(code='$code')"
+    }
 }
