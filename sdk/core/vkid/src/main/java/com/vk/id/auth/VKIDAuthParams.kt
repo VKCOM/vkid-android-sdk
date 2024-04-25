@@ -178,6 +178,8 @@ public class VKIDAuthParams private constructor(
 
         /**
          * A required parameter with a list of requested scopes for the access token.
+         * You have to specify a subset a scopes that you request for your app in Self Service.
+         * If you keep the scopes empty, only the default scope will be requested from user.
          * You can view the list of available scopes here: https://dev.vk.com/ru/reference/access-rights.
          * The user will see a screen where he may grant some of this scopes during authorization process.
          */
