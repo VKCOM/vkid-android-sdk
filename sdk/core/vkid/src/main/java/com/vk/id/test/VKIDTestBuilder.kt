@@ -7,6 +7,7 @@ import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.auth.device.DeviceIdProvider
 import com.vk.id.internal.store.PrefsStore
 import com.vk.id.storage.EncryptedSharedPreferencesStorage
+import java.util.concurrent.atomic.AtomicInteger
 
 @InternalVKIDApi
 public class VKIDTestBuilder(
@@ -21,8 +22,9 @@ public class VKIDTestBuilder(
         .failure<VKIDTokenPayloadResponse>(UnsupportedOperationException("Not supported"))
     private var exchangeTokenResponse = Result
         .failure<VKIDTokenPayloadResponse>(UnsupportedOperationException("Not supported"))
-    private var getUserInfoResponse = Result
-        .failure<VKIDUserInfoPayloadResponse>(UnsupportedOperationException("Not supported"))
+    private var getUserInfoResponses = listOf(
+        Result.failure<VKIDUserInfoPayloadResponse>(UnsupportedOperationException("Not supported"))
+    )
     private var logoutResponse = Result.success(VKIDLogoutPayloadResponse())
     private var mockApi: OverrideVKIDApi = object : OverrideVKIDApi {
         override fun refreshToken(
@@ -48,11 +50,13 @@ public class VKIDTestBuilder(
             state: String,
         ) = getTokenResponse
 
+        private val userInfoResponseIndex = AtomicInteger(0)
+
         override fun getUserInfo(
             accessToken: String,
             clientId: String,
             deviceId: String,
-        ) = getUserInfoResponse
+        ) = getUserInfoResponses[userInfoResponseIndex.getAndIncrement()]
 
         override fun logout(
             accessToken: String,
@@ -71,7 +75,16 @@ public class VKIDTestBuilder(
     }
 
     public fun getUserInfoResponse(response: Result<VKIDUserInfoPayloadResponse>): VKIDTestBuilder = apply {
-        this.getUserInfoResponse = response
+        getUserInfoResponses(listOf(response))
+    }
+
+    public fun getUserInfoResponses(
+        response1: Result<VKIDUserInfoPayloadResponse>,
+        response2: Result<VKIDUserInfoPayloadResponse>,
+    ): VKIDTestBuilder = getUserInfoResponses(listOf(response1, response2))
+
+    private fun getUserInfoResponses(responses: List<Result<VKIDUserInfoPayloadResponse>>): VKIDTestBuilder = apply {
+        this.getUserInfoResponses = responses
     }
 
     public fun logoutResponse(response: Result<VKIDLogoutPayloadResponse>): VKIDTestBuilder = apply {
