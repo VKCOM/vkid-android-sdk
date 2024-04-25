@@ -144,7 +144,7 @@ public class VKIDRealApi private constructor(
             }
         }
 
-        private const val HOST_API = "https://api.vk.com"
+        private const val HOST_API = "https://tk-training.api.cs7777.vk.com"
 
         // todo: Change to actual host after oauth2 completion
         private const val HOST_VK_ID = "https://tk-training.id.cs7777.vk.com"
