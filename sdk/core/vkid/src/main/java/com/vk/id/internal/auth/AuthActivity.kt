@@ -115,7 +115,6 @@ internal class AuthActivity : Activity() {
             null
         }
         return AuthResult.Success(
-            expireTime = System.currentTimeMillis() + 10000000, // skip verification
             oauth = oauth,
             deviceId = deviceId,
         )
