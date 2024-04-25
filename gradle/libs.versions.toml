@@ -23,6 +23,7 @@ binary-compatibility-validator = "0.14.0"
 coil = "2.6.0"
 detekt = "1.23.5"
 dokka = "1.9.20"
+flipper = "0.250.0"
 gson = "2.10.1"
 kaspresso = "1.5.5"
 kotlin = "1.9.22"
@@ -33,6 +34,7 @@ lifecycle-runtime-compose = "2.7.0"
 mockk = "1.13.10"
 okHttpVersion = "4.12.0"
 preference = "1.2.1"
+soLoader = "0.10.5"
 junit = "1.1.5"
 benchmarkMacroJunit4 = "1.2.3"
 baselineprofile = "1.2.3"
@@ -73,6 +75,9 @@ androidx-test-orchestrator = { group = "androidx.test", name = "orchestrator", v
 androidx-test-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "androidxTestJunitKtx" }
 coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+flipper = { group = "com.facebook.flipper", name = "flipper", version.ref = "flipper" }
+flipper-network = { group = "com.facebook.flipper", name = "flipper-network-plugin", version.ref = "flipper" }
+flipper-noop = { group = "com.facebook.flipper", name = "flipper-noop", version.ref = "flipper" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 kaspresso = { group = "com.kaspersky.android-components", name = "kaspresso", version.ref = "kaspresso" }
 kaspresso-compose = { group = "com.kaspersky.android-components", name = "kaspresso-compose-support", version.ref = "kaspresso" }
@@ -85,6 +90,7 @@ kotest-assertions = { group = "io.kotest", name = "kotest-assertions-core", vers
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 okhttp3-okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okHttpVersion" }
 okhttp3-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okHttpVersion" }
+soloader = { group = "com.facebook.soloader", name = "soloader", version.ref = "soLoader" }
 vk-userid = { group = "com.vk", name = "android-sdk-id", version.ref = "vkUserIdVersion" }
 vk-sdk-core = { group = "com.vk", name = "android-sdk-core", version.ref = "vkSdkVersion" }
 vk-sdk-api = { group = "com.vk", name = "android-sdk-api", version.ref = "vkSdkVersion" }
