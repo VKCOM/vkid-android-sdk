@@ -10,8 +10,10 @@ import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.common.activity.AutoTestActivityRule
+import com.vk.id.common.allure.Owners
 import com.vk.id.common.allure.Platform
 import com.vk.id.common.allure.Product
+import com.vk.id.common.allure.Project
 import com.vk.id.common.basetest.BaseUiTest
 import com.vk.id.common.mockapi.MockApi
 import com.vk.id.common.mockapi.mockApiError
@@ -21,11 +23,14 @@ import com.vk.id.test.VKIDTestBuilder
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import io.qameta.allure.kotlin.Allure
+import io.qameta.allure.kotlin.Owner
 import org.junit.Before
 import org.junit.Rule
 
 @Platform("Android Manual")
 @Product("VK ID SDK")
+@Project("VKIDSDK")
+@Owner(Owners.DANIIL_KLIMCHUK)
 @Suppress("TooManyFunctions")
 public abstract class BaseAuthTest(
     private val oAuth: OAuth?,
