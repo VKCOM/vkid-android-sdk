@@ -5,6 +5,8 @@ import android.os.Looper
 import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
+import com.vk.id.auth.AuthCodeData
+import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.feature.TestFeature
 import com.vk.id.onetap.base.ChangeAccountTest
 import com.vk.id.onetap.common.OneTapOAuth
@@ -22,6 +24,13 @@ public class BottomSheetChangeAccountXmlTest : ChangeAccountTest() {
     @DisplayName("Успешное получение токена в XML BottomSheet смене аккаунта")
     override fun tokenIsReceived() {
         super.tokenIsReceived()
+    }
+
+    @Test
+    @AllureId("2303022")
+    @DisplayName("Успешное получение токена после логаута в Compose OneTap")
+    override fun tokenIsReceivedAfterFailedLogout() {
+        super.tokenIsReceivedAfterFailedLogout()
     }
 
     @Test
@@ -73,17 +82,35 @@ public class BottomSheetChangeAccountXmlTest : ChangeAccountTest() {
         super.invalidStateIsReceived()
     }
 
+    @Test
+    @AllureId("2302980")
+    @DisplayName("Успешное получение кода при схеме с бекендом в XML OneTap Мультибрендинге")
+    override fun authCodeIsReceived() {
+        super.authCodeIsReceived()
+    }
+
+    @Test
+    @AllureId("2302995")
+    @DisplayName("Получение ошибки загрузки пользовательских данных в Compose OneTap")
+    override fun failedUserCallIsReceived() {
+        super.failedUserCallIsReceived()
+    }
+
     override fun setOneTapContent(
         vkid: VKID,
         onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit,
+        onAuthCode: (AuthCodeData, Boolean) -> Unit,
         onAuth: (OneTapOAuth?, AccessToken) -> Unit,
+        authParams: VKIDAuthUiParams,
     ) {
         val view = OneTapBottomSheet(composeTestRule.activity).apply {
             setCallbacks(
                 onAuth = onAuth,
+                onAuthCode = onAuthCode,
                 onFail = onFail
             )
             setVKID(vkid)
+            this.authParams = authParams
         }
         composeTestRule.activity.setContent(view)
         Handler(Looper.getMainLooper()).post { view.show() }

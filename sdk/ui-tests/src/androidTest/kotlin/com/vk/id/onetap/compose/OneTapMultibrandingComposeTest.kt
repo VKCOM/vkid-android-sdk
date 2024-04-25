@@ -4,6 +4,8 @@ import com.vk.id.AccessToken
 import com.vk.id.OAuth
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
+import com.vk.id.auth.AuthCodeData
+import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.allure.Feature
 import com.vk.id.common.feature.TestFeature
 import com.vk.id.multibranding.base.MultibrandingTest
@@ -24,6 +26,13 @@ public class OneTapMultibrandingComposeTest(
     @DisplayName("Успешное получение токена в Compose OneTap Мультибрендинге")
     override fun tokenIsReceived() {
         super.tokenIsReceived()
+    }
+
+    @Test
+    @AllureId("2302957")
+    @DisplayName("Успешное получение токена после логаута в Compose OneTap")
+    override fun tokenIsReceivedAfterFailedLogout() {
+        super.tokenIsReceivedAfterFailedLogout()
     }
 
     @Test
@@ -75,17 +84,35 @@ public class OneTapMultibrandingComposeTest(
         super.invalidStateIsReceived()
     }
 
+    @Test
+    @AllureId("2302993")
+    @DisplayName("Успешное получение кода при схеме с бекендом в XML OneTap Мультибрендинге")
+    override fun authCodeIsReceived() {
+        super.authCodeIsReceived()
+    }
+
+    @Test
+    @AllureId("2302949")
+    @DisplayName("Получение ошибки загрузки пользовательских данных в Compose OneTap")
+    override fun failedUserCallIsReceived() {
+        super.failedUserCallIsReceived()
+    }
+
     override fun setContent(
         vkid: VKID,
         onAuth: (OAuth?, AccessToken) -> Unit,
+        onAuthCode: (AuthCodeData, Boolean) -> Unit,
         onFail: (OAuth?, VKIDAuthFail) -> Unit,
+        authParams: VKIDAuthUiParams,
     ) {
         composeTestRule.setContent {
             OneTap(
                 vkid = vkid,
                 onAuth = { oAuth, accessToken -> onAuth(oAuth?.toOAuth(), accessToken) },
+                onAuthCode = onAuthCode,
                 onFail = { oAuth, fail -> onFail(oAuth?.toOAuth(), fail) },
-                oAuths = setOfNotNull(OneTapOAuth.fromOAuth(oAuth))
+                oAuths = setOfNotNull(OneTapOAuth.fromOAuth(oAuth)),
+                authParams = authParams,
             )
         }
     }

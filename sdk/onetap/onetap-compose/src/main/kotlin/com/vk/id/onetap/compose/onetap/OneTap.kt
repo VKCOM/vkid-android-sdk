@@ -127,6 +127,7 @@ public fun OneTap(
                     onAuth = onAuth,
                     onAuthCode = onAuthCode,
                     onFail = onFail,
+                    authParams = authParams,
                 )
             },
             fallback = {

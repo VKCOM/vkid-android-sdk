@@ -3,6 +3,8 @@ package com.vk.id.onetap.xml
 import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
+import com.vk.id.auth.AuthCodeData
+import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.allure.Feature
 import com.vk.id.common.feature.TestFeature
 import com.vk.id.onetap.base.OneTapTest
@@ -20,6 +22,13 @@ public class OneTapXmlTest : OneTapTest() {
     @DisplayName("Успешное получение токена в XML OneTap")
     override fun tokenIsReceived() {
         super.tokenIsReceived()
+    }
+
+    @Test
+    @AllureId("2302987")
+    @DisplayName("Успешное получение токена после логаута в Compose OneTap")
+    override fun tokenIsReceivedAfterFailedLogout() {
+        super.tokenIsReceivedAfterFailedLogout()
     }
 
     @Test
@@ -71,18 +80,36 @@ public class OneTapXmlTest : OneTapTest() {
         super.invalidStateIsReceived()
     }
 
+    @Test
+    @AllureId("2303009")
+    @DisplayName("Успешное получение кода при схеме с бекендом в XML OneTap Мультибрендинге")
+    override fun authCodeIsReceived() {
+        super.authCodeIsReceived()
+    }
+
+    @Test
+    @AllureId("2302951")
+    @DisplayName("Получение ошибки загрузки пользовательских данных в Compose OneTap")
+    override fun failedUserCallIsReceived() {
+        super.failedUserCallIsReceived()
+    }
+
     override fun setOneTapContent(
         vkid: VKID,
         onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit,
+        onAuthCode: (AuthCodeData, Boolean) -> Unit,
         onAuth: (OneTapOAuth?, AccessToken) -> Unit,
+        authParams: VKIDAuthUiParams,
     ) {
         composeTestRule.activity.setContent(
             OneTap(composeTestRule.activity).apply {
                 setCallbacks(
                     onAuth = onAuth,
+                    onAuthCode = onAuthCode,
                     onFail = onFail
                 )
                 setVKID(vkid)
+                this.authParams = authParams
             }
         )
     }

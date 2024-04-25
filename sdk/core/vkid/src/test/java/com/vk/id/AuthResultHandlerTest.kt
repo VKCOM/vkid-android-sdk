@@ -108,7 +108,11 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             every { callbacksHolder.getAll() } returns setOf(callback)
             every { callback.onFail(any()) } just runs
             every { callbacksHolder.clear() } just runs
+            every { prefsStore.clear() } just runs
             handler.handle(authResult)
+            Then("state is cleared") {
+                verify { prefsStore.clear() }
+            }
             Then("Callbacks are requested from holder") {
                 verify { callbacksHolder.getAll() }
             }

@@ -13,6 +13,7 @@ public class VKIDTestBuilder(
         .failure<VKIDTokenPayloadResponse>(UnsupportedOperationException("Not supported"))
     private var getUserInfoResponse = Result
         .failure<VKIDUserInfoPayloadResponse>(UnsupportedOperationException("Not supported"))
+    private var logoutResponse = Result.success(VKIDLogoutPayloadResponse())
     private var mockApi: OverrideVKIDApi = object : OverrideVKIDApi {
         override fun getToken(
             code: String,
@@ -28,6 +29,12 @@ public class VKIDTestBuilder(
             clientId: String,
             deviceId: String,
         ) = getUserInfoResponse
+
+        override fun logout(
+            accessToken: String,
+            clientId: String,
+            deviceId: String
+        ) = logoutResponse
     }
     private var authProviderConfig: MockAuthProviderConfig = MockAuthProviderConfig()
 
@@ -36,6 +43,9 @@ public class VKIDTestBuilder(
     }
     public fun getUserInfoResponse(response: Result<VKIDUserInfoPayloadResponse>): VKIDTestBuilder = apply {
         this.getUserInfoResponse = response
+    }
+    public fun logoutResponse(response: Result<VKIDLogoutPayloadResponse>): VKIDTestBuilder = apply {
+        this.logoutResponse = response
     }
     public fun overrideDeviceIdToNull(): VKIDTestBuilder = updateConfig { copy(overrideDeviceIdToNull = true) }
     public fun overrideState(state: String): VKIDTestBuilder = updateConfig { copy(overrideState = state) }

@@ -4,6 +4,8 @@ import com.vk.id.AccessToken
 import com.vk.id.OAuth
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
+import com.vk.id.auth.AuthCodeData
+import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.allure.Feature
 import com.vk.id.common.feature.TestFeature
 import com.vk.id.multibranding.base.MultibrandingTest
@@ -23,6 +25,13 @@ public class OneTapMultibrandingXmlTest(
     @DisplayName("Успешное получение токена в XML OneTap Мультибрендинге")
     override fun tokenIsReceived() {
         super.tokenIsReceived()
+    }
+
+    @Test
+    @AllureId("2303019")
+    @DisplayName("Успешное получение токена после логаута в Compose OneTap")
+    override fun tokenIsReceivedAfterFailedLogout() {
+        super.tokenIsReceivedAfterFailedLogout()
     }
 
     @Test
@@ -74,19 +83,37 @@ public class OneTapMultibrandingXmlTest(
         super.invalidStateIsReceived()
     }
 
+    @Test
+    @AllureId("2303021")
+    @DisplayName("Успешное получение кода при схеме с бекендом в XML OneTap Мультибрендинге")
+    override fun authCodeIsReceived() {
+        super.authCodeIsReceived()
+    }
+
+    @Test
+    @AllureId("2302949")
+    @DisplayName("Получение ошибки загрузки пользовательских данных в Compose OneTap")
+    override fun failedUserCallIsReceived() {
+        super.failedUserCallIsReceived()
+    }
+
     override fun setContent(
         vkid: VKID,
         onAuth: (OAuth?, AccessToken) -> Unit,
+        onAuthCode: (AuthCodeData, Boolean) -> Unit,
         onFail: (OAuth?, VKIDAuthFail) -> Unit,
+        authParams: VKIDAuthUiParams,
     ) {
         composeTestRule.activity.setContent(
             OneTap(composeTestRule.activity).apply {
                 setCallbacks(
                     onAuth = { oAuth, accessToken -> onAuth(oAuth?.toOAuth(), accessToken) },
+                    onAuthCode = onAuthCode,
                     onFail = { oAuth, fail -> onFail(oAuth?.toOAuth(), fail) },
                 )
                 setVKID(vkid)
                 oAuths = setOfNotNull(OneTapOAuth.fromOAuth(oAuth))
+                this.authParams = authParams
             }
         )
     }

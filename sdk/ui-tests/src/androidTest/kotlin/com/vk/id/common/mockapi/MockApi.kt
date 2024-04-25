@@ -4,6 +4,7 @@ package com.vk.id.common.mockapi
 
 import com.vk.id.VKIDUser
 import com.vk.id.common.InternalVKIDApi
+import com.vk.id.test.VKIDLogoutPayloadResponse
 import com.vk.id.test.VKIDTestBuilder
 import com.vk.id.test.VKIDTokenPayloadResponse
 import com.vk.id.test.VKIDUserInfoPayloadResponse
@@ -40,11 +41,7 @@ public object MockApi {
     )
 }
 
-public fun VKIDTestBuilder.mockApiError(): VKIDTestBuilder = this
-    .getTokenResponse(Result.failure(UnsupportedOperationException("fake error")))
-    .getUserInfoResponse(Result.failure(UnsupportedOperationException("fake error")))
-
-public fun VKIDTestBuilder.mockApiSuccess(): VKIDTestBuilder = this
+public fun VKIDTestBuilder.mockGetTokenSuccess(): VKIDTestBuilder = this
     .getTokenResponse(
         Result.success(
             VKIDTokenPayloadResponse(
@@ -56,6 +53,19 @@ public fun VKIDTestBuilder.mockApiSuccess(): VKIDTestBuilder = this
             )
         )
     )
+
+public fun VKIDTestBuilder.mockUserInfoError(): VKIDTestBuilder = this
+    .getUserInfoResponse(Result.success(VKIDUserInfoPayloadResponse(error = "mock error")))
+
+public fun VKIDTestBuilder.mockLogoutError(): VKIDTestBuilder = this
+    .logoutResponse(Result.success(VKIDLogoutPayloadResponse(error = "error")))
+
+public fun VKIDTestBuilder.mockApiError(): VKIDTestBuilder = this
+    .getTokenResponse(Result.failure(UnsupportedOperationException("fake error")))
+    .mockUserInfoError()
+
+public fun VKIDTestBuilder.mockApiSuccess(): VKIDTestBuilder = this
+    .mockGetTokenSuccess()
     .getUserInfoResponse(
         Result.success(
             VKIDUserInfoPayloadResponse(
