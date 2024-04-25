@@ -19,6 +19,8 @@ public class VKIDTestBuilder(
         .failure<VKIDTokenPayloadResponse>(UnsupportedOperationException("Not supported"))
     private var refreshTokenResponse = Result
         .failure<VKIDTokenPayloadResponse>(UnsupportedOperationException("Not supported"))
+    private var exchangeTokenResponse = Result
+        .failure<VKIDTokenPayloadResponse>(UnsupportedOperationException("Not supported"))
     private var getUserInfoResponse = Result
         .failure<VKIDUserInfoPayloadResponse>(UnsupportedOperationException("Not supported"))
     private var logoutResponse = Result.success(VKIDLogoutPayloadResponse())
@@ -27,8 +29,15 @@ public class VKIDTestBuilder(
             refreshToken: String,
             clientId: String,
             deviceId: String,
-            state: String
+            state: String,
         ) = refreshTokenResponse
+
+        override fun exchangeToken(
+            v1Token: String,
+            clientId: String,
+            deviceId: String,
+            state: String,
+        ) = exchangeTokenResponse
 
         override fun getToken(
             code: String,
@@ -48,7 +57,7 @@ public class VKIDTestBuilder(
         override fun logout(
             accessToken: String,
             clientId: String,
-            deviceId: String
+            deviceId: String,
         ) = logoutResponse
     }
     private var authProviderConfig: MockAuthProviderConfig = MockAuthProviderConfig()
@@ -56,15 +65,23 @@ public class VKIDTestBuilder(
     public fun refreshTokenResponse(response: Result<VKIDTokenPayloadResponse>): VKIDTestBuilder = apply {
         this.refreshTokenResponse = response
     }
+
     public fun getTokenResponse(response: Result<VKIDTokenPayloadResponse>): VKIDTestBuilder = apply {
         this.getTokenResponse = response
     }
+
     public fun getUserInfoResponse(response: Result<VKIDUserInfoPayloadResponse>): VKIDTestBuilder = apply {
         this.getUserInfoResponse = response
     }
+
     public fun logoutResponse(response: Result<VKIDLogoutPayloadResponse>): VKIDTestBuilder = apply {
         this.logoutResponse = response
     }
+
+    public fun exchangeTokenResponse(response: Result<VKIDTokenPayloadResponse>): VKIDTestBuilder = apply {
+        this.exchangeTokenResponse = response
+    }
+
     public fun overrideDeviceIdToNull(): VKIDTestBuilder = updateConfig { copy(overrideDeviceIdToNull = true) }
     public fun overrideState(state: String): VKIDTestBuilder = updateConfig { copy(overrideState = state) }
     public fun overrideOAuthToNull(): VKIDTestBuilder = updateConfig { copy(overrideOAuthToNull = true) }
@@ -72,20 +89,21 @@ public class VKIDTestBuilder(
     public fun notifyNoBrowserAvailable(): VKIDTestBuilder = updateConfig { copy(notifyNoBrowserAvailable = true) }
     public fun notifyFailedRedirect(): VKIDTestBuilder = updateConfig { copy(notifyFailedRedirectActivity = true) }
     public fun requireUnsetUseAuthProviderIfPossible(): VKIDTestBuilder = updateConfig {
-        copy(
-            requireUnsetUseAuthProviderIfPossible = true
-        )
+        copy(requireUnsetUseAuthProviderIfPossible = true)
     }
 
     private fun updateConfig(update: MockAuthProviderConfig.() -> MockAuthProviderConfig): VKIDTestBuilder = apply {
         authProviderConfig = authProviderConfig.update()
     }
+
     public fun deviceIdStorage(storage: DeviceIdProvider.DeviceIdStorage?): VKIDTestBuilder = apply {
         this.deviceIdStorage = storage
     }
+
     public fun prefsStore(store: PrefsStore?): VKIDTestBuilder = apply {
         this.prefsStore = store
     }
+
     public fun encryptedSharedPreferencesStorage(storage: EncryptedSharedPreferencesStorage?): VKIDTestBuilder = apply {
         this.encryptedSharedPreferencesStorage = storage
     }

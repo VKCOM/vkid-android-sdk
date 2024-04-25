@@ -15,6 +15,13 @@ public interface OverrideVKIDApi {
         state: String
     ): Result<VKIDTokenPayloadResponse>
 
+    public fun exchangeToken(
+        v1Token: String,
+        clientId: String,
+        deviceId: String,
+        state: String
+    ): Result<VKIDTokenPayloadResponse>
+
     @Suppress("LongParameterList")
     public fun getToken(
         code: String,

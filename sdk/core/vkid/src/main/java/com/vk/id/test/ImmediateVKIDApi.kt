@@ -62,7 +62,14 @@ internal class ImmediateVKIDApi(
         clientId: String,
         deviceId: String,
         state: String
-    ) = MockVKIDCall(Result.failure<Unit>(RuntimeException("Not supported")))
+    ) = MockVKIDCall(
+        mockApi.exchangeToken(
+            v1Token = v1Token,
+            clientId = clientId,
+            deviceId = deviceId,
+            state = state,
+        )
+    )
 
     override fun logout(
         accessToken: String,
