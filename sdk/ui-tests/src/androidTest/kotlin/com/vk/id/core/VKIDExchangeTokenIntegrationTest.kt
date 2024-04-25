@@ -333,7 +333,7 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
             exchangeTokenToV2(
                 v1Token = v1Token,
                 callback = object : VKIDExchangeTokenCallback {
-                    override fun onSuccess(accessToken: AccessToken) = it.resume(accessToken)
+                    override fun onAuth(accessToken: AccessToken) = it.resume(accessToken)
                     override fun onFail(fail: VKIDExchangeTokenFail) = it.resume(fail)
                 },
                 params = params

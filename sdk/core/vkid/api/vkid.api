@@ -261,9 +261,9 @@ public final class com/vk/id/auth/VKIDAuthUiParamsKt {
 }
 
 public abstract interface class com/vk/id/exchangetoken/VKIDExchangeTokenCallback {
+	public abstract fun onAuth (Lcom/vk/id/AccessToken;)V
 	public abstract fun onAuthCode (Lcom/vk/id/auth/AuthCodeData;Z)V
 	public abstract fun onFail (Lcom/vk/id/exchangetoken/VKIDExchangeTokenFail;)V
-	public abstract fun onSuccess (Lcom/vk/id/AccessToken;)V
 }
 
 public final class com/vk/id/exchangetoken/VKIDExchangeTokenCallback$DefaultImpls {

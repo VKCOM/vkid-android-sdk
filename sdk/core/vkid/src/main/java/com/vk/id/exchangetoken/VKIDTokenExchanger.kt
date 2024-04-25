@@ -100,7 +100,7 @@ internal class VKIDTokenExchanger(
             }
             tokensHandler.handle(
                 payload = payload,
-                onSuccess = callback::onSuccess,
+                onSuccess = callback::onAuth,
                 onFailedApiCall = {
                     callback.onFail(VKIDExchangeTokenFail.FailedApiCall("Failed to fetch user data", it))
                 },
