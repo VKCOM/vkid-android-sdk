@@ -1,5 +1,10 @@
 package com.vk.id.sample.app.screen.utils
 
+import android.content.ComponentName
+import android.content.pm.ActivityInfo
+import android.content.pm.PackageManager
+import android.content.pm.PackageManager.ComponentInfoFlags
+import android.os.Build
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -40,6 +45,7 @@ import com.vk.id.refresh.VKIDRefreshTokenParams
 import com.vk.id.refreshuser.VKIDGetUserCallback
 import com.vk.id.refreshuser.VKIDGetUserFail
 import com.vk.id.refreshuser.VKIDGetUserParams
+import com.vk.id.sample.app.MainActivity
 import com.vk.id.sample.app.screen.Button
 import com.vk.id.sample.app.screen.UseToken
 import com.vk.id.sample.app.uikit.expandablecard.ExpandableCard
@@ -47,7 +53,13 @@ import com.vk.id.sample.app.uikit.selector.DropdownSelector
 import com.vk.id.sample.xml.uikit.common.onVKIDAuthSuccess
 import com.vk.id.sample.xml.uikit.common.showToast
 import com.vk.id.sample.xml.vkid
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.FormBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import org.json.JSONObject
 
 @Composable
 internal fun UtilsScreen() {
@@ -68,6 +80,8 @@ internal fun UtilsScreen() {
         LogoutUtil()
         Spacer(modifier = Modifier.height(8.dp))
         RefreshUserUtil()
+        Spacer(modifier = Modifier.height(8.dp))
+        GetPublicInfoUtil()
         Spacer(modifier = Modifier.height(8.dp))
     }
 }
@@ -323,6 +337,69 @@ private fun RefreshUserUtil() {
                     |Last name: ${it.lastName}
                     |Phone: ${it.phone}
                     |Email: ${it.email}
+                    """.trimMargin()
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+            }
+        }
+    }
+}
+
+@Composable
+private fun GetPublicInfoUtil() {
+    ExpandableCard(title = "Get public info") {
+        val context = LocalContext.current
+        val coroutineScope = rememberCoroutineScope()
+        var currentUser: VKIDUser? by remember { mutableStateOf(null) }
+        Button(text = "Get") {
+            coroutineScope.launch {
+                currentUser = withContext(Dispatchers.IO) {
+                    val idToken = context.vkid.accessToken?.idToken ?: return@withContext null
+                    val api = OkHttpClient.Builder().build()
+
+                    val componentName = ComponentName(context, MainActivity::class.java)
+                    val flags = PackageManager.GET_META_DATA or PackageManager.GET_ACTIVITIES
+                    val ai: ActivityInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        context.packageManager.getActivityInfo(componentName, ComponentInfoFlags.of(flags.toLong()))
+                    } else {
+                        context.packageManager.getActivityInfo(componentName, flags)
+                    }
+                    val clientId = ai.metaData.getInt("VKIDClientID").toString()
+//                    val endpoint = "id.vk.com"
+                    val endpoint = "tk-training.id.cs7777.vk.com"
+                    val formBody = FormBody.Builder()
+                        .add("id_token", idToken)
+                        .add("client_id", clientId)
+                        .build()
+                    val url = "https://$endpoint/oauth2/public_info"
+                    val request = Request.Builder()
+                        .url(url)
+                        .post(formBody)
+                        .build()
+                    val response = api.newCall(request).execute()
+                    val body = requireNotNull(response.body).string()
+                    val user = JSONObject(body).getJSONObject("user")
+                    VKIDUser(
+                        firstName = user.optString("first_name"),
+                        lastName = user.optString("last_name"),
+                        phone = user.optString("phone"),
+                        photo200 = user.optString("avatar"),
+                        email = user.optString("email"),
+                    )
+                }
+            }
+        }
+        currentUser?.let {
+            Column(horizontalAlignment = Alignment.Start) {
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(
+                    color = MaterialTheme.colorScheme.onBackground,
+                    text = """
+                    |First name: ${it.firstName}
+                    |Last name: ${it.lastName}
+                    |Phone: ${it.phone}
+                    |Email: ${it.email}
+                    |Avatar: ${it.photo200}
                     """.trimMargin()
                 )
                 Spacer(modifier = Modifier.height(12.dp))

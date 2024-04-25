@@ -336,7 +336,7 @@ public class VKID {
     }
 
     /**
-     * Returns current access token or null if auth wasn't passed
+     * Returns current access token or null if auth wasn't passed.
      */
     public val accessToken: AccessToken?
         get() = tokenStorage.accessToken
