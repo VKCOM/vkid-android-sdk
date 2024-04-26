@@ -6,7 +6,7 @@ import com.vk.id.common.InternalVKIDApi
  * OAuthListWidget's border style.
  */
 @InternalVKIDApi
-public enum class VKIDOAuthListWidgetBorderStyle {
+public enum class InternalVKIDOAuthListWidgetBorderStyle {
     /**
      * Dark version, should be used for the light layout.
      */

@@ -28,7 +28,7 @@ import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthCallback
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.onetap.common.auth.style.VKIDButtonStyle
+import com.vk.id.onetap.common.auth.style.InternalVKIDButtonStyle
 import com.vk.id.onetap.compose.button.auth.style.asColor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -36,7 +36,7 @@ import kotlinx.coroutines.launch
 
 @Suppress("LongParameterList")
 internal fun Modifier.clickable(
-    style: VKIDButtonStyle,
+    style: InternalVKIDButtonStyle,
     onClick: () -> Unit
 ): Modifier = composed {
     clickable(

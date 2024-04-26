@@ -31,7 +31,7 @@ package com.vk.id.internal.auth.pkce
 
 import android.util.Base64
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.logger.createLoggerForClass
+import com.vk.id.logger.internalVKIDCreateLoggerForClass
 import java.io.UnsupportedEncodingException
 import java.nio.charset.Charset
 import java.security.MessageDigest
@@ -40,7 +40,7 @@ import java.security.SecureRandom
 
 internal class PkceGeneratorSHA256 {
 
-    private val logger = createLoggerForClass()
+    private val logger = internalVKIDCreateLoggerForClass()
 
     fun generateRandomCodeVerifier(entropySource: SecureRandom): String {
         val randomBytes = ByteArray(MIN_CODE_VERIFIER_ENTROPY)

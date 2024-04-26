@@ -6,14 +6,14 @@ import com.google.gson.annotations.SerializedName
 import com.vk.id.common.InternalVKIDApi
 
 @InternalVKIDApi
-public interface VKIDOverrideApi {
+public interface InternalVKIDOverrideApi {
 
     public fun refreshToken(
         refreshToken: String,
         clientId: String,
         deviceId: String,
         state: String
-    ): Result<VKIDTokenPayloadResponse>
+    ): Result<InternalVKIDTokenPayloadResponse>
 
     public fun exchangeToken(
         v1Token: String,
@@ -21,7 +21,7 @@ public interface VKIDOverrideApi {
         deviceId: String,
         state: String,
         codeChallenge: String,
-    ): Result<VKIDCodePayloadResponse>
+    ): Result<InternalVKIDCodePayloadResponse>
 
     @Suppress("LongParameterList")
     public fun getToken(
@@ -31,23 +31,23 @@ public interface VKIDOverrideApi {
         deviceId: String,
         redirectUri: String,
         state: String,
-    ): Result<VKIDTokenPayloadResponse>
+    ): Result<InternalVKIDTokenPayloadResponse>
 
     public fun getUserInfo(
         accessToken: String,
         clientId: String,
         deviceId: String,
-    ): Result<VKIDUserInfoPayloadResponse>
+    ): Result<InternalVKIDUserInfoPayloadResponse>
 
     public fun logout(
         accessToken: String,
         clientId: String,
         deviceId: String,
-    ): Result<VKIDLogoutPayloadResponse>
+    ): Result<InternalVKIDLogoutPayloadResponse>
 }
 
 @InternalVKIDApi
-public data class VKIDTokenPayloadResponse(
+public data class InternalVKIDTokenPayloadResponse(
     @SerializedName("access_token")
     val accessToken: String? = null,
     @SerializedName("refresh_token")
@@ -65,7 +65,7 @@ public data class VKIDTokenPayloadResponse(
 )
 
 @InternalVKIDApi
-public data class VKIDCodePayloadResponse(
+public data class InternalVKIDCodePayloadResponse(
     @SerializedName("code")
     val code: String? = null,
     @SerializedName("state")
@@ -75,19 +75,19 @@ public data class VKIDCodePayloadResponse(
 )
 
 @InternalVKIDApi
-public data class VKIDUserInfoPayloadResponse(
+public data class InternalVKIDUserInfoPayloadResponse(
     val error: String? = null,
-    val user: VKIDUserPayloadResponse? = null,
+    val user: InternalVKIDUserPayloadResponse? = null,
     val state: String? = null,
 )
 
 @InternalVKIDApi
-public data class VKIDLogoutPayloadResponse(
+public data class InternalVKIDLogoutPayloadResponse(
     val error: String? = null,
 )
 
 @InternalVKIDApi
-public data class VKIDUserPayloadResponse(
+public data class InternalVKIDUserPayloadResponse(
     @SerializedName("first_name")
     val firstName: String,
     @SerializedName("last_name")
@@ -101,7 +101,7 @@ public data class VKIDUserPayloadResponse(
 )
 
 @InternalVKIDApi
-public data class VKIDSilentAuthProvidersResponse(
+public data class InternalVKIDSilentAuthProvidersResponse(
     @SerializedName("response")
     val response: String
 )

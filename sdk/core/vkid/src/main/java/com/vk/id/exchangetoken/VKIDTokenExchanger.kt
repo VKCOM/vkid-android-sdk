@@ -7,23 +7,23 @@ import com.vk.id.auth.AuthCodeData
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.ServiceCredentials
-import com.vk.id.internal.auth.device.VKIDDeviceIdProvider
+import com.vk.id.internal.auth.device.InternalVKIDDeviceIdProvider
 import com.vk.id.internal.auth.pkce.PkceGeneratorSHA256
 import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
 import com.vk.id.internal.state.StateGenerator
-import com.vk.id.internal.store.VKIDPrefsStore
+import com.vk.id.internal.store.InternalVKIDPrefsStore
 import kotlinx.coroutines.withContext
 import java.security.SecureRandom
 
 @Suppress("LongParameterList")
 internal class VKIDTokenExchanger(
     private val api: VKIDApiService,
-    private val deviceIdProvider: VKIDDeviceIdProvider,
+    private val deviceIdProvider: InternalVKIDDeviceIdProvider,
     private val serviceCredentials: ServiceCredentials,
     private val stateGenerator: StateGenerator,
     private val tokensHandler: TokensHandler,
     private val dispatchers: VKIDCoroutinesDispatchers,
-    private val prefsStore: VKIDPrefsStore,
+    private val prefsStore: InternalVKIDPrefsStore,
     private val pkceGenerator: PkceGeneratorSHA256,
 ) {
     suspend fun exchange(

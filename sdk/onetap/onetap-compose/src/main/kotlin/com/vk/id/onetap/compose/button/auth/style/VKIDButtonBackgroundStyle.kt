@@ -7,13 +7,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.res.colorResource
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.onetap.common.auth.style.VKIDButtonBackgroundStyle
+import com.vk.id.onetap.common.auth.style.InternalVKIDButtonBackgroundStyle
 import com.vk.id.onetap.compose.R
 
-internal fun Modifier.background(style: VKIDButtonBackgroundStyle) = composed {
+internal fun Modifier.background(style: InternalVKIDButtonBackgroundStyle) = composed {
     val backgroundResource = when (style) {
-        VKIDButtonBackgroundStyle.BLUE -> R.color.vkid_azure_A100
-        VKIDButtonBackgroundStyle.TRANSPARENT -> R.color.vkid_transparent
+        InternalVKIDButtonBackgroundStyle.BLUE -> R.color.vkid_azure_A100
+        InternalVKIDButtonBackgroundStyle.TRANSPARENT -> R.color.vkid_transparent
     }
     background(colorResource(backgroundResource))
 }

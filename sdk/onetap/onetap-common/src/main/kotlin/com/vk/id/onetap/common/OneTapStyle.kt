@@ -5,10 +5,10 @@ package com.vk.id.onetap.common
 import android.content.Context
 import androidx.compose.runtime.Immutable
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.common.util.vkidIsDarkTheme
+import com.vk.id.common.util.internalVkIdIsDarkTheme
 import com.vk.id.multibranding.common.style.OAuthListWidgetStyle
-import com.vk.id.onetap.common.alternate.style.VKIDAlternateAccountButtonStyle
-import com.vk.id.onetap.common.auth.style.VKIDButtonStyle
+import com.vk.id.onetap.common.alternate.style.InternalVKIDAlternateAccountButtonStyle
+import com.vk.id.onetap.common.auth.style.InternalVKIDButtonStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonElevationStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonSizeStyle
@@ -25,11 +25,11 @@ import com.vk.id.onetap.common.mutlibranding.style.toOAuthListWidgetStyle
  */
 @Immutable
 public sealed class OneTapStyle(
-    public val cornersStyle: OneTapButtonCornersStyle,
-    public val sizeStyle: OneTapButtonSizeStyle,
-    public val elevationStyle: OneTapButtonElevationStyle,
-    public val vkidButtonStyle: VKIDButtonStyle,
-    public val alternateAccountButtonStyle: VKIDAlternateAccountButtonStyle,
+    @InternalVKIDApi public val cornersStyle: OneTapButtonCornersStyle,
+    @InternalVKIDApi public val sizeStyle: OneTapButtonSizeStyle,
+    @InternalVKIDApi public val elevationStyle: OneTapButtonElevationStyle,
+    @InternalVKIDApi public val vkidButtonStyle: InternalVKIDButtonStyle,
+    @InternalVKIDApi public val alternateAccountButtonStyle: InternalVKIDAlternateAccountButtonStyle,
 ) {
     @InternalVKIDApi
     public val oAuthListWidgetStyle: OAuthListWidgetStyle
@@ -63,8 +63,8 @@ public sealed class OneTapStyle(
         cornersStyle = cornersStyle,
         sizeStyle = sizeStyle,
         elevationStyle = elevationStyle,
-        vkidButtonStyle = VKIDButtonStyle.Light(cornersStyle, sizeStyle, elevationStyle),
-        alternateAccountButtonStyle = VKIDAlternateAccountButtonStyle.Light(cornersStyle, sizeStyle),
+        vkidButtonStyle = InternalVKIDButtonStyle.Light(cornersStyle, sizeStyle, elevationStyle),
+        alternateAccountButtonStyle = InternalVKIDAlternateAccountButtonStyle.Light(cornersStyle, sizeStyle),
     )
 
     /**
@@ -82,8 +82,8 @@ public sealed class OneTapStyle(
         cornersStyle = cornersStyle,
         sizeStyle = sizeStyle,
         elevationStyle = elevationStyle,
-        vkidButtonStyle = VKIDButtonStyle.Dark(cornersStyle, sizeStyle, elevationStyle),
-        alternateAccountButtonStyle = VKIDAlternateAccountButtonStyle.Dark(cornersStyle, sizeStyle),
+        vkidButtonStyle = InternalVKIDButtonStyle.Dark(cornersStyle, sizeStyle, elevationStyle),
+        alternateAccountButtonStyle = InternalVKIDAlternateAccountButtonStyle.Dark(cornersStyle, sizeStyle),
     )
 
     /**
@@ -101,8 +101,8 @@ public sealed class OneTapStyle(
         cornersStyle = cornersStyle,
         sizeStyle = sizeStyle,
         elevationStyle = elevationStyle,
-        vkidButtonStyle = VKIDButtonStyle.TransparentLight(cornersStyle, sizeStyle, elevationStyle),
-        alternateAccountButtonStyle = VKIDAlternateAccountButtonStyle.TransparentLight(cornersStyle, sizeStyle),
+        vkidButtonStyle = InternalVKIDButtonStyle.TransparentLight(cornersStyle, sizeStyle, elevationStyle),
+        alternateAccountButtonStyle = InternalVKIDAlternateAccountButtonStyle.TransparentLight(cornersStyle, sizeStyle),
     )
 
     /**
@@ -120,8 +120,8 @@ public sealed class OneTapStyle(
         cornersStyle = cornersStyle,
         sizeStyle = sizeStyle,
         elevationStyle = elevationStyle,
-        vkidButtonStyle = VKIDButtonStyle.TransparentDark(cornersStyle, sizeStyle, elevationStyle),
-        alternateAccountButtonStyle = VKIDAlternateAccountButtonStyle.TransparentDark(cornersStyle, sizeStyle),
+        vkidButtonStyle = InternalVKIDButtonStyle.TransparentDark(cornersStyle, sizeStyle, elevationStyle),
+        alternateAccountButtonStyle = InternalVKIDAlternateAccountButtonStyle.TransparentDark(cornersStyle, sizeStyle),
     )
 
     /**
@@ -139,8 +139,8 @@ public sealed class OneTapStyle(
         cornersStyle = cornersStyle,
         sizeStyle = sizeStyle,
         elevationStyle = elevationStyle,
-        vkidButtonStyle = VKIDButtonStyle.Light(cornersStyle, sizeStyle, elevationStyle),
-        alternateAccountButtonStyle = VKIDAlternateAccountButtonStyle.Light(cornersStyle, sizeStyle),
+        vkidButtonStyle = InternalVKIDButtonStyle.Light(cornersStyle, sizeStyle, elevationStyle),
+        alternateAccountButtonStyle = InternalVKIDAlternateAccountButtonStyle.Light(cornersStyle, sizeStyle),
     )
 
     /** @suppress */
@@ -159,7 +159,7 @@ public sealed class OneTapStyle(
             cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
             sizeStyle: OneTapButtonSizeStyle = OneTapButtonSizeStyle.DEFAULT,
             elevationStyle: OneTapButtonElevationStyle = OneTapButtonElevationStyle.Default,
-        ): OneTapStyle = (if (context.vkidIsDarkTheme) ::Dark else ::Light)(
+        ): OneTapStyle = (if (context.internalVkIdIsDarkTheme) ::Dark else ::Light)(
             cornersStyle,
             sizeStyle,
             elevationStyle,
@@ -179,7 +179,7 @@ public sealed class OneTapStyle(
             cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
             sizeStyle: OneTapButtonSizeStyle = OneTapButtonSizeStyle.DEFAULT,
             elevationStyle: OneTapButtonElevationStyle = OneTapButtonElevationStyle.Default,
-        ): OneTapStyle = (if (context.vkidIsDarkTheme) ::TransparentDark else ::TransparentLight)(
+        ): OneTapStyle = (if (context.internalVkIdIsDarkTheme) ::TransparentDark else ::TransparentLight)(
             cornersStyle,
             sizeStyle,
             elevationStyle,

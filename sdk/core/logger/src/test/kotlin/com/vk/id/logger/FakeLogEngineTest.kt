@@ -21,7 +21,7 @@ public class FakeLogEngineTest : BehaviorSpec({
     }
 
     Given("Fake log engine") {
-        val fakeLogEngine = VKIDFakeLogEngine()
+        val fakeLogEngine = InternalVKIDFakeLogEngine()
         When("It is asked to log") {
             fakeLogEngine.log(
                 LogEngine.LogLevel.DEBUG,

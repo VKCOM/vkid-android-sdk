@@ -1,7 +1,6 @@
 package com.vk.id.test
 
 import com.google.gson.Gson
-import com.vk.id.common.InternalVKIDApi
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaType
@@ -11,7 +10,6 @@ import okhttp3.Response
 import okhttp3.ResponseBody.Companion.toResponseBody
 import okio.Timeout
 
-@InternalVKIDApi
 internal class VKIDMockCall<T>(
     private val result: Result<T>
 ) : Call {

@@ -3,7 +3,7 @@ package com.vk.id.logger
 /**
  * Interface defining a logging engine.
  * Implement this interface to create a concrete logging platform.
- * For an example, see [VKIDAndroidLogcatLogEngine].
+ * For an example, see [InternalVKIDAndroidLogcatLogEngine].
  *
  * @property LogLevel The log level (INFO, DEBUG, ERROR).
  * @function log Logs a message with a specified log level, tag, message, and optional throwable.

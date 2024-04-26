@@ -5,7 +5,7 @@ import com.vk.id.common.InternalVKIDApi
 
 @Immutable
 @InternalVKIDApi
-public data class VKIconStyle(
-    public val colorStyle: VKIconColorStyle,
-    public val sizeStyle: VKIconSizeStyle,
+public data class InternalVKIconStyle(
+    public val colorStyle: InternalVKIconColorStyle,
+    public val sizeStyle: InternalVKIconSizeStyle,
 )

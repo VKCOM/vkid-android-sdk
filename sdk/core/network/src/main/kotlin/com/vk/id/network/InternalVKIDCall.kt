@@ -8,24 +8,24 @@ import org.json.JSONException
 import java.io.IOException
 
 @InternalVKIDApi
-public interface VKIDCall<out T> {
+public interface InternalVKIDCall<out T> {
     @WorkerThread
     public fun execute(): Result<T>
 
     /**
-     * Function to cancel [VKIDCall]
+     * Function to cancel [InternalVKIDCall]
      */
     public fun cancel()
 }
 
 @InternalVKIDApi
-public fun <T> Call.wrapToVKIDCall(
+public fun <T> Call.internalVKIDWrapToVKIDCall(
     responseMapping: (response: Response) -> T,
-): VKIDCall<T> {
-    return object : VKIDCall<T> {
+): InternalVKIDCall<T> {
+    return object : InternalVKIDCall<T> {
         override fun execute(): Result<T> {
             return try {
-                val response = this@wrapToVKIDCall.execute()
+                val response = this@internalVKIDWrapToVKIDCall.execute()
                 Result.success(responseMapping(response))
             } catch (ioe: IOException) {
                 Result.failure(ioe)
@@ -34,6 +34,6 @@ public fun <T> Call.wrapToVKIDCall(
             }
         }
 
-        override fun cancel() = this@wrapToVKIDCall.cancel()
+        override fun cancel() = this@internalVKIDWrapToVKIDCall.cancel()
     }
 }

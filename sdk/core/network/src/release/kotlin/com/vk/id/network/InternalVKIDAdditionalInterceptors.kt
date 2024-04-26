@@ -4,7 +4,7 @@ import com.vk.id.common.InternalVKIDApi
 import okhttp3.Interceptor
 
 @InternalVKIDApi
-public object VKIDAdditionalInterceptors {
+public object InternalVKIDAdditionalInterceptors {
     public fun getInterceptor(): Interceptor? = null
     public fun tmp(): Int = 1
 }

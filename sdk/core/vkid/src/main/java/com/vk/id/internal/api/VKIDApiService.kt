@@ -8,9 +8,9 @@ import com.vk.id.internal.api.dto.VKIDUserInfoPayload
 import com.vk.id.internal.auth.VKIDCodePayload
 import com.vk.id.internal.auth.VKIDTokenPayload
 import com.vk.id.internal.auth.app.VkAuthSilentAuthProvider
-import com.vk.id.network.VKIDApi
-import com.vk.id.network.VKIDCall
-import com.vk.id.network.wrapToVKIDCall
+import com.vk.id.network.InternalVKIDApiContract
+import com.vk.id.network.InternalVKIDCall
+import com.vk.id.network.internalVKIDWrapToVKIDCall
 import okhttp3.Call
 import org.json.JSONArray
 import org.json.JSONException
@@ -19,7 +19,7 @@ import java.io.IOException
 
 @Suppress("LongParameterList")
 internal class VKIDApiService(
-    private val api: VKIDApi,
+    private val api: InternalVKIDApiContract,
 ) {
 
     fun getToken(
@@ -29,7 +29,7 @@ internal class VKIDApiService(
         deviceId: String,
         redirectUri: String,
         state: String,
-    ): VKIDCall<VKIDTokenPayload> {
+    ): InternalVKIDCall<VKIDTokenPayload> {
         return api.getToken(
             code = code,
             codeVerifier = codeVerifier,
@@ -44,13 +44,13 @@ internal class VKIDApiService(
         accessToken: String,
         clientId: String,
         deviceId: String,
-    ): VKIDCall<VKIDUserInfoPayload> {
+    ): InternalVKIDCall<VKIDUserInfoPayload> {
         val call = api.getUser(
             accessToken = accessToken,
             clientId = clientId,
             deviceId = deviceId,
         )
-        return object : VKIDCall<VKIDUserInfoPayload> {
+        return object : InternalVKIDCall<VKIDUserInfoPayload> {
             override fun execute(): Result<VKIDUserInfoPayload> {
                 val result = call.execute()
                 val body = JSONObject(requireNotNull(result.body).string())
@@ -81,11 +81,11 @@ internal class VKIDApiService(
     fun getSilentAuthProviders(
         clientId: String,
         clientSecret: String,
-    ): VKIDCall<List<VkAuthSilentAuthProvider>> {
+    ): InternalVKIDCall<List<VkAuthSilentAuthProvider>> {
         return api.getSilentAuthProviders(
             clientId = clientId,
             clientSecret = clientSecret
-        ).wrapToVKIDCall {
+        ).internalVKIDWrapToVKIDCall {
             JSONObject(requireNotNull(it.body).string())
                 .getJSONArray("response")
                 .parseList(VkAuthSilentAuthProvider.Companion::parse)
@@ -98,7 +98,7 @@ internal class VKIDApiService(
         clientId: String,
         deviceId: String,
         state: String,
-    ): VKIDCall<VKIDTokenPayload> {
+    ): InternalVKIDCall<VKIDTokenPayload> {
         return api.refreshToken(
             refreshToken = refreshToken,
             clientId = clientId,
@@ -114,14 +114,14 @@ internal class VKIDApiService(
         deviceId: String,
         state: String,
         codeChallenge: String,
-    ): VKIDCall<VKIDCodePayload> {
+    ): InternalVKIDCall<VKIDCodePayload> {
         return api.exchangeToken(
             v1Token = v1Token,
             clientId = clientId,
             deviceId = deviceId,
             state = state,
             codeChallenge = codeChallenge,
-        ).wrapToVKIDCall {
+        ).internalVKIDWrapToVKIDCall {
             if (it.body == null) throw IOException("Empty body ${it.code} $it")
             val body = requireNotNull(it.body).string()
             val jsonObject = JSONObject(body)
@@ -145,13 +145,13 @@ internal class VKIDApiService(
         accessToken: String,
         clientId: String,
         deviceId: String,
-    ): VKIDCall<Unit> {
+    ): InternalVKIDCall<Unit> {
         val call = api.logout(
             accessToken = accessToken,
             clientId = clientId,
             deviceId = deviceId,
         )
-        return object : VKIDCall<Unit> {
+        return object : InternalVKIDCall<Unit> {
             override fun execute(): Result<Unit> {
                 val result = call.execute()
                 val body = JSONObject(requireNotNull(result.body).string())
@@ -175,8 +175,8 @@ internal class VKIDApiService(
     }
 
     @Suppress("ThrowsCount")
-    private fun Call.wrapTokenToVKIDCall(): VKIDCall<VKIDTokenPayload> {
-        return wrapToVKIDCall {
+    private fun Call.wrapTokenToVKIDCall(): InternalVKIDCall<VKIDTokenPayload> {
+        return internalVKIDWrapToVKIDCall {
             if (it.body == null) throw IOException("Empty body ${it.code} $it")
             val body = requireNotNull(it.body).string()
             val jsonObject = JSONObject(body)

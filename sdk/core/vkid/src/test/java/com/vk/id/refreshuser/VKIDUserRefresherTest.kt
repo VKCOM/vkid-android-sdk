@@ -9,9 +9,9 @@ import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.api.dto.VKIDUserInfoPayload
 import com.vk.id.internal.auth.ServiceCredentials
-import com.vk.id.internal.auth.device.VKIDDeviceIdProvider
+import com.vk.id.internal.auth.device.InternalVKIDDeviceIdProvider
 import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
-import com.vk.id.network.VKIDCall
+import com.vk.id.network.InternalVKIDCall
 import com.vk.id.refresh.VKIDRefreshTokenCallback
 import com.vk.id.refresh.VKIDRefreshTokenFail
 import com.vk.id.refresh.VKIDTokenRefresher
@@ -75,7 +75,7 @@ internal class VKIDUserRefresherTest : BehaviorSpec({
     Given("User info fetcher") {
         val api = mockk<VKIDApiService>()
         val tokenStorage = mockk<TokenStorage>()
-        val deviceIdProvider = mockk<VKIDDeviceIdProvider>()
+        val deviceIdProvider = mockk<InternalVKIDDeviceIdProvider>()
         every { deviceIdProvider.getDeviceId() } returns DEVICE_ID
         val serviceCredentials = ServiceCredentials(
             clientID = CLIENT_ID,
@@ -108,7 +108,7 @@ internal class VKIDUserRefresherTest : BehaviorSpec({
         }
         When("Api returns an error") {
             every { tokenStorage.accessToken } returns ACCESS_TOKEN
-            val call = mockk<VKIDCall<VKIDUserInfoPayload>>()
+            val call = mockk<InternalVKIDCall<VKIDUserInfoPayload>>()
             val exception = Exception("message")
             every { call.execute() } returns Result.failure(exception)
             coEvery {
@@ -129,7 +129,7 @@ internal class VKIDUserRefresherTest : BehaviorSpec({
         }
         When("Api returns invalid token error and refresh fails") {
             every { tokenStorage.accessToken } returns ACCESS_TOKEN
-            val call = mockk<VKIDCall<VKIDUserInfoPayload>>()
+            val call = mockk<InternalVKIDCall<VKIDUserInfoPayload>>()
             val exception = VKIDInvalidTokenException()
             every { call.execute() } returns Result.failure(exception)
             coEvery {
@@ -154,7 +154,7 @@ internal class VKIDUserRefresherTest : BehaviorSpec({
         }
         When("Api returns invalid token error and refresh succeeds") {
             every { tokenStorage.accessToken } returns ACCESS_TOKEN
-            val call = mockk<VKIDCall<VKIDUserInfoPayload>>()
+            val call = mockk<InternalVKIDCall<VKIDUserInfoPayload>>()
             val exception = VKIDInvalidTokenException()
             every { call.execute() } returns Result.failure(exception)
             coEvery {
@@ -178,7 +178,7 @@ internal class VKIDUserRefresherTest : BehaviorSpec({
         }
         When("Api returns user") {
             every { tokenStorage.accessToken } returns ACCESS_TOKEN
-            val call = mockk<VKIDCall<VKIDUserInfoPayload>>()
+            val call = mockk<InternalVKIDCall<VKIDUserInfoPayload>>()
             every { call.execute() } returns Result.success(USER_INFO_PAYLOAD)
             coEvery {
                 api.getUserInfo(

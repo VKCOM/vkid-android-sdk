@@ -7,7 +7,7 @@ import androidx.security.crypto.MasterKey
 import com.vk.id.common.InternalVKIDApi
 
 @InternalVKIDApi
-public class VKIDEncryptedSharedPreferencesStorage internal constructor(
+public class InternalVKIDEncryptedSharedPreferencesStorage internal constructor(
     context: Context
 ) {
     private val sharedPreferences: SharedPreferences by lazy {

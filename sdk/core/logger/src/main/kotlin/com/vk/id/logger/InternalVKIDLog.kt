@@ -12,17 +12,17 @@ import com.vk.id.common.InternalVKIDApi
  * Nothing is logged by default, to start actual logging you need to set the LogEngine with [setLogEngine].
  */
 @InternalVKIDApi
-public object VKIDLog : LogEngine {
-    private var logEngine: LogEngine = VKIDFakeLogEngine()
+public object InternalVKIDLog : LogEngine {
+    private var logEngine: LogEngine = InternalVKIDFakeLogEngine()
 
     @InternalVKIDApi
     public fun setLogEngine(logEngine: LogEngine) {
-        VKIDLog.logEngine = logEngine
+        InternalVKIDLog.logEngine = logEngine
     }
 
     @InternalVKIDApi
-    public fun createLoggerForTag(tag: String): VKIDLogger {
-        return VKIDLoggerWithTag(tag, this)
+    public fun createLoggerForTag(tag: String): InternalVKIDLogger {
+        return InternalVKIDLoggerWithTag(tag, this)
     }
 
     override fun log(
@@ -36,6 +36,6 @@ public object VKIDLog : LogEngine {
 }
 
 @InternalVKIDApi
-public inline fun <reified T> T.createLoggerForClass(): VKIDLogger {
-    return VKIDLog.createLoggerForTag(T::class.java.simpleName)
+public inline fun <reified T> T.internalVKIDCreateLoggerForClass(): InternalVKIDLogger {
+    return InternalVKIDLog.createLoggerForTag(T::class.java.simpleName)
 }

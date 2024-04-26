@@ -34,7 +34,7 @@ import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
 import com.vk.id.common.InternalVKIDApi
 
-internal class DeviceIdPrefs(private val context: Context) : VKIDDeviceIdProvider.DeviceIdStorage {
+internal class DeviceIdPrefs(private val context: Context) : InternalVKIDDeviceIdProvider.DeviceIdStorage {
     override fun getDeviceId(): String = getPrefs(context).getString(DEVICE_ID, "") ?: ""
 
     override fun setDeviceId(deviceId: String) {

@@ -10,14 +10,14 @@ import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthResult
 import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.auth.VKIDTokenPayload
-import com.vk.id.internal.auth.device.VKIDDeviceIdProvider
+import com.vk.id.internal.auth.device.InternalVKIDDeviceIdProvider
 import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
-import com.vk.id.internal.store.VKIDPrefsStore
+import com.vk.id.internal.store.InternalVKIDPrefsStore
 import com.vk.id.logout.VKIDLoggerOut
 import com.vk.id.logout.VKIDLogoutCallback
 import com.vk.id.logout.VKIDLogoutFail
 import com.vk.id.logout.VKIDLogoutParams
-import com.vk.id.network.VKIDCall
+import com.vk.id.network.InternalVKIDCall
 import com.vk.id.storage.TokenStorage
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
@@ -77,8 +77,8 @@ internal class AuthResultHandlerTest : BehaviorSpec({
 
     Given("An AuthResultHandler") {
         val callbacksHolder = mockk<AuthCallbacksHolder>()
-        val deviceIdProvider = mockk<VKIDDeviceIdProvider>()
-        val prefsStore = mockk<VKIDPrefsStore>()
+        val deviceIdProvider = mockk<InternalVKIDDeviceIdProvider>()
+        val prefsStore = mockk<InternalVKIDPrefsStore>()
         val scheduler = testCoroutineScheduler
         val testDispatcher = StandardTestDispatcher(scheduler)
         val dispatchers = mockk<VKIDCoroutinesDispatchers>()
@@ -187,7 +187,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
         When("Handle is called and api returns an error") {
             val authResult = authResultSuccess
             val callback = mockk<VKIDAuthCallback>()
-            val call = mockk<VKIDCall<VKIDTokenPayload>>()
+            val call = mockk<InternalVKIDCall<VKIDTokenPayload>>()
             every { callbacksHolder.getAll() } returns setOf(callback)
             every { callback.onAuthCode(any(), any()) } just runs
             every { callback.onFail(any()) } just runs
@@ -230,7 +230,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
         When("Handle is called and api returns success") {
             val authResult = authResultSuccess
             val callback = mockk<VKIDAuthCallback>()
-            val call = mockk<VKIDCall<VKIDTokenPayload>>()
+            val call = mockk<InternalVKIDCall<VKIDTokenPayload>>()
             val payload = VKIDTokenPayload(ACCESS_TOKEN_VALUE, REFRESH_TOKEN, ID_TOKEN, 0, USER_ID, STATE)
             every { callbacksHolder.getAll() } returns setOf(callback)
             every { callback.onAuthCode(any(), any()) } just runs
@@ -270,7 +270,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
         When("Handle is called and api returns success") {
             val authResult = authResultSuccess
             val callback = mockk<VKIDAuthCallback>()
-            val call = mockk<VKIDCall<VKIDTokenPayload>>()
+            val call = mockk<InternalVKIDCall<VKIDTokenPayload>>()
             val payload = VKIDTokenPayload(ACCESS_TOKEN_VALUE, REFRESH_TOKEN, ID_TOKEN, 0, USER_ID, STATE)
             every { callbacksHolder.getAll() } returns setOf(callback)
             every { callback.onAuthCode(any(), any()) } just runs
@@ -321,7 +321,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
         When("Handle is called and api returns success") {
             val authResult = authResultSuccess
             val callback = mockk<VKIDAuthCallback>()
-            val call = mockk<VKIDCall<VKIDTokenPayload>>()
+            val call = mockk<InternalVKIDCall<VKIDTokenPayload>>()
             val payload = VKIDTokenPayload(ACCESS_TOKEN_VALUE, REFRESH_TOKEN, ID_TOKEN, 0, USER_ID, STATE)
             every { callbacksHolder.getAll() } returns setOf(callback)
             every { callback.onAuthCode(any(), any()) } just runs

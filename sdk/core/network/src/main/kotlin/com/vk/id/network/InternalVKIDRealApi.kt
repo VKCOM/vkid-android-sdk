@@ -12,9 +12,9 @@ import okhttp3.RequestBody
 @Suppress("LongParameterList")
 @InternalVKIDApi
 /** Singleton **/
-public class VKIDRealApi private constructor(
+public class InternalVKIDRealApi private constructor(
     private val client: OkHttpClient,
-) : VKIDApi {
+) : InternalVKIDApiContract {
 
     override fun getToken(
         code: String,
@@ -139,11 +139,11 @@ public class VKIDRealApi private constructor(
     @InternalVKIDApi
     public companion object {
         @Volatile
-        private var instance: VKIDRealApi? = null
+        private var instance: InternalVKIDRealApi? = null
 
-        public fun getInstance(context: Context): VKIDRealApi {
+        public fun getInstance(context: Context): InternalVKIDRealApi {
             return instance ?: synchronized(this) {
-                instance ?: VKIDRealApi(OkHttpClientProvider(context).provide()).also { instance = it }
+                instance ?: InternalVKIDRealApi(OkHttpClientProvider(context).provide()).also { instance = it }
             }
         }
 

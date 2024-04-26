@@ -11,12 +11,12 @@ import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.auth.VKIDCodePayload
 import com.vk.id.internal.auth.VKIDTokenPayload
-import com.vk.id.internal.auth.device.VKIDDeviceIdProvider
+import com.vk.id.internal.auth.device.InternalVKIDDeviceIdProvider
 import com.vk.id.internal.auth.pkce.PkceGeneratorSHA256
 import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
 import com.vk.id.internal.state.StateGenerator
-import com.vk.id.internal.store.VKIDPrefsStore
-import com.vk.id.network.VKIDCall
+import com.vk.id.internal.store.InternalVKIDPrefsStore
+import com.vk.id.network.InternalVKIDCall
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.testCoroutineScheduler
@@ -89,7 +89,7 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
 
     Given("User info fetcher") {
         val api = mockk<VKIDApiService>()
-        val deviceIdProvider = mockk<VKIDDeviceIdProvider>()
+        val deviceIdProvider = mockk<InternalVKIDDeviceIdProvider>()
         every { deviceIdProvider.getDeviceId() } returns DEVICE_ID
         val serviceCredentials = ServiceCredentials(
             clientID = CLIENT_ID,
@@ -102,7 +102,7 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
         val scheduler = testCoroutineScheduler
         val testDispatcher = StandardTestDispatcher(scheduler)
         every { dispatchers.io } returns testDispatcher
-        val prefsStore = mockk<VKIDPrefsStore>()
+        val prefsStore = mockk<InternalVKIDPrefsStore>()
         val pkceGenerator = mockk<PkceGeneratorSHA256>()
         val exchanger = VKIDTokenExchanger(
             api = api,
@@ -119,7 +119,7 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
             every { pkceGenerator.generateRandomCodeVerifier(any()) } returns CODE_VERIFIER
             every { pkceGenerator.deriveCodeVerifierChallenge(CODE_VERIFIER) } returns CODE_CHALLENGE
             every { prefsStore.clear() } just runs
-            val call = mockk<VKIDCall<VKIDCodePayload>>()
+            val call = mockk<InternalVKIDCall<VKIDCodePayload>>()
             val exception = Exception("message")
             every { call.execute() } returns Result.failure(exception)
             coEvery {
@@ -150,7 +150,7 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
         }
         When("Api returns wrong state") {
             every { prefsStore.clear() } just runs
-            val call = mockk<VKIDCall<VKIDCodePayload>>()
+            val call = mockk<InternalVKIDCall<VKIDCodePayload>>()
             every { call.execute() } returns Result.success(CODE_PAYLOAD.copy(state = "wrong state"))
             coEvery {
                 api.exchangeToken(
@@ -182,7 +182,7 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
         }
         When("Api returns code and code challenge is provided") {
             every { prefsStore.clear() } just runs
-            val call = mockk<VKIDCall<VKIDCodePayload>>()
+            val call = mockk<InternalVKIDCall<VKIDCodePayload>>()
             every { call.execute() } returns Result.success(CODE_PAYLOAD)
             coEvery {
                 api.exchangeToken(
@@ -220,7 +220,7 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
             every { pkceGenerator.deriveCodeVerifierChallenge(CODE_VERIFIER) } returns CODE_CHALLENGE
             every { prefsStore.clear() } just runs
             every { deviceIdProvider.setDeviceId(DEVICE_ID) } just runs
-            val call = mockk<VKIDCall<VKIDCodePayload>>()
+            val call = mockk<InternalVKIDCall<VKIDCodePayload>>()
             every { call.execute() } returns Result.success(CODE_PAYLOAD)
             coEvery {
                 api.exchangeToken(
@@ -231,7 +231,7 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
                     codeChallenge = CODE_CHALLENGE,
                 )
             } returns call
-            val getTokenCall = mockk<VKIDCall<VKIDTokenPayload>>()
+            val getTokenCall = mockk<InternalVKIDCall<VKIDTokenPayload>>()
             val failedApiCallException = Exception("message")
             every { getTokenCall.execute() } returns Result.failure(failedApiCallException)
             coEvery {
@@ -273,7 +273,7 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
             every { pkceGenerator.deriveCodeVerifierChallenge(CODE_VERIFIER) } returns CODE_CHALLENGE
             every { prefsStore.clear() } just runs
             every { deviceIdProvider.setDeviceId(DEVICE_ID) } just runs
-            val call = mockk<VKIDCall<VKIDCodePayload>>()
+            val call = mockk<InternalVKIDCall<VKIDCodePayload>>()
             every { call.execute() } returns Result.success(CODE_PAYLOAD)
             coEvery {
                 api.exchangeToken(
@@ -284,7 +284,7 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
                     codeChallenge = CODE_CHALLENGE,
                 )
             } returns call
-            val getTokenCall = mockk<VKIDCall<VKIDTokenPayload>>()
+            val getTokenCall = mockk<InternalVKIDCall<VKIDTokenPayload>>()
             every { getTokenCall.execute() } returns Result.success(TOKEN_PAYLOAD.copy(state = "wrong state"))
             coEvery {
                 api.getToken(
@@ -327,7 +327,7 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
             every { pkceGenerator.deriveCodeVerifierChallenge(CODE_VERIFIER) } returns CODE_CHALLENGE
             every { prefsStore.clear() } just runs
             every { deviceIdProvider.setDeviceId(DEVICE_ID) } just runs
-            val call = mockk<VKIDCall<VKIDCodePayload>>()
+            val call = mockk<InternalVKIDCall<VKIDCodePayload>>()
             every { call.execute() } returns Result.success(CODE_PAYLOAD)
             coEvery {
                 api.exchangeToken(
@@ -338,7 +338,7 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
                     codeChallenge = CODE_CHALLENGE,
                 )
             } returns call
-            val getTokenCall = mockk<VKIDCall<VKIDTokenPayload>>()
+            val getTokenCall = mockk<InternalVKIDCall<VKIDTokenPayload>>()
             val failedApiCallException = Exception("message")
             every { getTokenCall.execute() } returns Result.success(TOKEN_PAYLOAD)
             coEvery {
@@ -390,7 +390,7 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
             every { pkceGenerator.deriveCodeVerifierChallenge(CODE_VERIFIER) } returns CODE_CHALLENGE
             every { prefsStore.clear() } just runs
             every { deviceIdProvider.setDeviceId(DEVICE_ID) } just runs
-            val call = mockk<VKIDCall<VKIDCodePayload>>()
+            val call = mockk<InternalVKIDCall<VKIDCodePayload>>()
             every { call.execute() } returns Result.success(CODE_PAYLOAD)
             coEvery {
                 api.exchangeToken(
@@ -401,7 +401,7 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
                     codeChallenge = CODE_CHALLENGE,
                 )
             } returns call
-            val getTokenCall = mockk<VKIDCall<VKIDTokenPayload>>()
+            val getTokenCall = mockk<InternalVKIDCall<VKIDTokenPayload>>()
             every { getTokenCall.execute() } returns Result.success(TOKEN_PAYLOAD)
             coEvery {
                 api.getToken(

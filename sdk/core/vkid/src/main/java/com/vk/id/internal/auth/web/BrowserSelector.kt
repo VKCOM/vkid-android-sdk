@@ -25,7 +25,7 @@ import android.os.Build
 import android.os.Build.VERSION_CODES
 import androidx.annotation.VisibleForTesting
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.logger.createLoggerForClass
+import com.vk.id.logger.internalVKIDCreateLoggerForClass
 
 /**
  * Utility class to obtain the browser package name to be used for
@@ -39,7 +39,7 @@ internal object BrowserSelector {
     private const val SCHEME_HTTP = "http"
     private const val SCHEME_HTTPS = "https"
 
-    private val logger = createLoggerForClass()
+    private val logger = internalVKIDCreateLoggerForClass()
 
     /**
      * The service we expect to find on a web browser that indicates it supports custom tabs.

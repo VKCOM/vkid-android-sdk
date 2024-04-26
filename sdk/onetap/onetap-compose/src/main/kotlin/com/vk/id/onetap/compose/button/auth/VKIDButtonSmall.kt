@@ -33,7 +33,7 @@ import coil.decode.DataSource
 import com.vk.id.VKID
 import com.vk.id.VKIDUser
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.onetap.common.auth.style.VKIDButtonStyle
+import com.vk.id.onetap.common.auth.style.InternalVKIDButtonStyle
 import com.vk.id.onetap.compose.button.FetchUserData
 import com.vk.id.onetap.compose.button.OnFetchingProgress
 import com.vk.id.onetap.compose.button.auth.style.background
@@ -51,7 +51,7 @@ import kotlinx.coroutines.launch
 @Composable
 internal fun VKIDButtonSmall(
     state: VKIDSmallButtonState = remember { VKIDSmallButtonState(inProgress = false, userIconLoaded = false) },
-    style: VKIDButtonStyle = VKIDButtonStyle.Light(),
+    style: InternalVKIDButtonStyle = InternalVKIDButtonStyle.Light(),
     vkid: VKID? = null,
     onClick: () -> Unit
 ) {
@@ -138,7 +138,7 @@ private fun SmallButtonAnimation(
 @Composable
 private fun SmallButtonContent(
     state: VKIDSmallButtonState,
-    style: VKIDButtonStyle,
+    style: InternalVKIDButtonStyle,
     animatedOffsetXVkIcon: Animatable<Float, AnimationVector1D>,
     animatedOffsetXUserIcon: Animatable<Float, AnimationVector1D>
 ) {

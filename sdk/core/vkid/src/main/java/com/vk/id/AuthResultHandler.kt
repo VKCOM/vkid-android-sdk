@@ -8,10 +8,10 @@ import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthResult
 import com.vk.id.internal.auth.ServiceCredentials
-import com.vk.id.internal.auth.device.VKIDDeviceIdProvider
+import com.vk.id.internal.auth.device.InternalVKIDDeviceIdProvider
 import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
-import com.vk.id.internal.store.VKIDPrefsStore
-import com.vk.id.logger.createLoggerForClass
+import com.vk.id.internal.store.InternalVKIDPrefsStore
+import com.vk.id.logger.internalVKIDCreateLoggerForClass
 import com.vk.id.logout.VKIDLoggerOut
 import com.vk.id.logout.VKIDLogoutCallback
 import com.vk.id.logout.VKIDLogoutFail
@@ -22,8 +22,8 @@ import kotlinx.coroutines.withContext
 internal class AuthResultHandler(
     private val dispatchers: VKIDCoroutinesDispatchers,
     private val callbacksHolder: AuthCallbacksHolder,
-    private val deviceIdProvider: VKIDDeviceIdProvider,
-    private val prefsStore: VKIDPrefsStore,
+    private val deviceIdProvider: InternalVKIDDeviceIdProvider,
+    private val prefsStore: InternalVKIDPrefsStore,
     private val serviceCredentials: ServiceCredentials,
     private val api: VKIDApiService,
     private val tokensHandler: TokensHandler,
@@ -31,7 +31,7 @@ internal class AuthResultHandler(
     private val tokenStorage: TokenStorage,
 ) {
 
-    private val logger = createLoggerForClass()
+    private val logger = internalVKIDCreateLoggerForClass()
 
     internal suspend fun handle(
         authResult: AuthResult

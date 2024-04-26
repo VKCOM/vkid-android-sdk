@@ -6,7 +6,7 @@ import com.vk.id.common.InternalVKIDApi
  * OAuthListWidget's ripple style.
  */
 @InternalVKIDApi
-public enum class VKIDOAuthListWidgetRippleStyle {
+public enum class InternalVKIDOAuthListWidgetRippleStyle {
     /**
      * Dark version, should be used for the light layout.
      */

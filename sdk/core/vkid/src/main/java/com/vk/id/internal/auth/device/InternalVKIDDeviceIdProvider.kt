@@ -36,17 +36,17 @@ import android.provider.Settings
 import android.text.TextUtils
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.util.MD5
-import com.vk.id.logger.createLoggerForClass
+import com.vk.id.logger.internalVKIDCreateLoggerForClass
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 @InternalVKIDApi
-public class VKIDDeviceIdProvider internal constructor(
+public class InternalVKIDDeviceIdProvider internal constructor(
     private val context: Context,
     private val deviceIdStorage: DeviceIdStorage
 ) {
     private val mutex = ReentrantLock()
-    private val logger = createLoggerForClass()
+    private val logger = internalVKIDCreateLoggerForClass()
 
     @InternalVKIDApi
     public interface DeviceIdStorage {

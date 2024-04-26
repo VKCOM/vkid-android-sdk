@@ -4,7 +4,7 @@ import com.vk.id.common.InternalVKIDApi
 import okhttp3.Call
 
 @InternalVKIDApi
-public interface VKIDApi {
+public interface InternalVKIDApiContract {
 
     @Suppress("LongParameterList")
     public fun getToken(

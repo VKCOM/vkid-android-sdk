@@ -6,7 +6,7 @@ import com.vk.id.VKIDInvalidTokenException
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.ServiceCredentials
-import com.vk.id.internal.auth.device.VKIDDeviceIdProvider
+import com.vk.id.internal.auth.device.InternalVKIDDeviceIdProvider
 import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
 import com.vk.id.storage.TokenStorage
 import kotlinx.coroutines.withContext
@@ -14,7 +14,7 @@ import kotlinx.coroutines.withContext
 internal class VKIDLoggerOut(
     private val api: VKIDApiService,
     private val tokenStorage: TokenStorage,
-    private val deviceIdProvider: VKIDDeviceIdProvider,
+    private val deviceIdProvider: InternalVKIDDeviceIdProvider,
     private val serviceCredentials: ServiceCredentials,
     private val dispatchers: VKIDCoroutinesDispatchers,
 ) {

@@ -1,12 +1,12 @@
 package com.vk.id.test
 
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.network.VKIDApi
+import com.vk.id.network.InternalVKIDApiContract
 
 @InternalVKIDApi
-internal class VKIDImmediateApi(
-    private val mockApi: VKIDOverrideApi
-) : VKIDApi {
+internal class InternalVKIDImmediateApi(
+    private val mockApi: InternalVKIDOverrideApi
+) : InternalVKIDApiContract {
 
     override fun getToken(
         code: String,
@@ -29,7 +29,7 @@ internal class VKIDImmediateApi(
     override fun getSilentAuthProviders(
         clientId: String,
         clientSecret: String
-    ) = VKIDMockCall(Result.success(VKIDSilentAuthProvidersResponse("null")))
+    ) = VKIDMockCall(Result.success(InternalVKIDSilentAuthProvidersResponse("null")))
 
     override fun refreshToken(
         refreshToken: String,
