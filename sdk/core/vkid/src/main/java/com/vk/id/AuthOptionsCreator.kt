@@ -34,7 +34,7 @@ internal class AuthOptionsCreator(
         val locale = authParams.locale ?: VKIDAuthParams.Locale.systemLocale(appContext)
         val theme = authParams.theme ?: VKIDAuthParams.Theme.systemTheme(appContext)
         val credentials = serviceCredentials.value
-        val redirectUri = "${credentials.redirectUri}?oauth2_params=${getOAuth2Params(authParams.scopes)}"
+        val redirectUri = "${credentials.redirectUri}/blank.html?oauth2_params=${getOAuth2Params(authParams.scopes)}"
         return AuthOptions(
             appId = credentials.clientID,
             clientSecret = credentials.clientSecret,
