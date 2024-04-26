@@ -23,6 +23,5 @@ public final class com/vk/id/multibranding/xml/OAuthListWidget : android/widget/
 	public static synthetic fun setCallbacks$default (Lcom/vk/id/multibranding/xml/OAuthListWidget;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)V
 	public final fun setOAuths (Ljava/util/Set;)V
 	public final fun setStyle (Lcom/vk/id/multibranding/common/style/OAuthListWidgetStyle;)V
-	public final fun setVKID (Lcom/vk/id/VKID;)V
 }
 

@@ -63,8 +63,6 @@ import kotlinx.coroutines.launch
  * @param onAuthCode A callback to be invoked upon successful first step of auth - receiving auth code which can later be exchanged to access token.
  * @param onFail A callback to be invoked upon an error during auth.
  * @param oAuths A set of [OAuth]s the should be displayed to the user.
- * @param vkid An optional [VKID] instance to use for authentication.
- *  If instance of VKID is not provided, it will be created on first composition.
  * @param authParams Optional params to be passed to auth. See [VKIDAuthUiParams.Builder] for more info.
  */
 @Composable
@@ -75,12 +73,10 @@ public fun OAuthListWidget(
     onAuthCode: (data: AuthCodeData, isCompletion: Boolean) -> Unit = { _, _ -> },
     onFail: (oAuth: OAuth, fail: VKIDAuthFail) -> Unit,
     oAuths: Set<OAuth> = OAuth.entries.toSet(),
-    vkid: VKID? = null,
     authParams: VKIDAuthUiParams = VKIDAuthUiParams {},
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
-    val useVKID = vkid ?: remember { VKID(context) }
     if (oAuths.isEmpty()) {
         error("You need to add at least one oAuth to display the widget")
     }
@@ -101,7 +97,6 @@ public fun OAuthListWidget(
                     item = item,
                     showText = oAuths.size == 1,
                     coroutineScope = coroutineScope,
-                    vkid = useVKID,
                     onAuth = onAuth,
                     onAuthCode = onAuthCode,
                     onFail = { onFail(item, it) },
@@ -137,7 +132,6 @@ private fun OAuthButton(
     item: OAuth,
     showText: Boolean,
     coroutineScope: CoroutineScope,
-    vkid: VKID,
     onAuth: (oAuth: OAuth, accessToken: AccessToken) -> Unit,
     onAuthCode: (AuthCodeData, Boolean) -> Unit,
     onFail: (VKIDAuthFail) -> Unit,
@@ -156,7 +150,7 @@ private fun OAuthButton(
                 role = Role.Button,
                 onClick = {
                     coroutineScope.launch {
-                        vkid.authorize(
+                        VKID.getInstance().authorize(
                             object : VKIDAuthCallback {
                                 override fun onAuth(accessToken: AccessToken) = onAuth(item, accessToken)
                                 override fun onAuthCode(

@@ -58,32 +58,54 @@ import kotlinx.coroutines.withContext
  */
 @Suppress("TooManyFunctions")
 public class VKID {
-    /**
-     * Constructs a new instance of VKID.
-     *
-     * @param context The context of the application.
-     */
-    public constructor(context: Context) : this(VKIDDepsProd(context))
-
-    internal constructor(
-        context: Context,
-        mockApi: InternalVKIDOverrideApi,
-        mockAuthProviderConfig: MockAuthProviderConfig,
-        deviceIdStorage: InternalVKIDDeviceIdProvider.DeviceIdStorage?,
-        prefsStore: InternalVKIDPrefsStore?,
-        encryptedSharedPreferencesStorage: InternalVKIDEncryptedSharedPreferencesStorage?,
-    ) : this(object : VKIDDepsProd(context) {
-        override val authProvidersChooser = lazy { MockAuthProviderChooser(context, mockAuthProviderConfig) }
-        override val api = lazy { InternalVKIDImmediateApi(mockApi) }
-        override val vkSilentAuthInfoProvider = lazy { TestSilentAuthInfoProvider() }
-        override val deviceIdStorage = lazy { deviceIdStorage ?: super.deviceIdStorage.value }
-        override val prefsStore = lazy { prefsStore ?: super.prefsStore.value }
-        override val encryptedSharedPreferencesStorage =
-            lazy { encryptedSharedPreferencesStorage ?: super.encryptedSharedPreferencesStorage.value }
-    })
 
     /** @suppress */
     public companion object {
+
+        @Volatile
+        private var instance: VKID? = null
+
+        private fun init(vkid: VKID) {
+            synchronized(this) {
+                check(BuildConfig.DEBUG || instance == null) { "You've already initialized VKID" }
+                instance = vkid
+            }
+        }
+
+        /**
+         * Initializes a new instance of VKID.
+         * You must not call this method twice.
+         *
+         * @param context The context of the application.
+         */
+        public fun init(context: Context): Unit = init(VKID(VKIDDepsProd(context)))
+
+        @Suppress("LongParameterList")
+        internal fun init(
+            context: Context,
+            mockApi: InternalVKIDOverrideApi,
+            mockAuthProviderConfig: MockAuthProviderConfig,
+            deviceIdStorage: InternalVKIDDeviceIdProvider.DeviceIdStorage?,
+            prefsStore: InternalVKIDPrefsStore?,
+            encryptedSharedPreferencesStorage: InternalVKIDEncryptedSharedPreferencesStorage?,
+        ): Unit = init(
+            VKID(object : VKIDDepsProd(context) {
+                override val authProvidersChooser = lazy { MockAuthProviderChooser(context, mockAuthProviderConfig) }
+                override val api = lazy { InternalVKIDImmediateApi(mockApi) }
+                override val vkSilentAuthInfoProvider = lazy { TestSilentAuthInfoProvider() }
+                override val deviceIdStorage = lazy { deviceIdStorage ?: super.deviceIdStorage.value }
+                override val prefsStore = lazy { prefsStore ?: super.prefsStore.value }
+                override val encryptedSharedPreferencesStorage =
+                    lazy { encryptedSharedPreferencesStorage ?: super.encryptedSharedPreferencesStorage.value }
+            })
+        )
+
+        /**
+         * Returns a VKID Instance.
+         * You must call [init] before calling this method.
+         */
+        public fun getInstance(): VKID = instance ?: synchronized(this) { instance } ?: error("VKID is not initialized")
+
         /**
          * The logging engine used by VKID.
          * Set this property to change the logging implementation.

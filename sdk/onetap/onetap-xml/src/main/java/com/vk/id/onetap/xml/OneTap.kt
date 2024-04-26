@@ -13,7 +13,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import com.vk.id.AccessToken
-import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthUiParams
@@ -82,12 +81,6 @@ public class OneTap @JvmOverloads constructor(
             onOAuthsChange(value)
         }
     private var onOAuthsChange: (Set<OneTapOAuth>) -> Unit = {}
-    private var vkid: VKID? = null
-        set(value) {
-            field = value
-            onVKIDChange(value)
-        }
-    private var onVKIDChange: (VKID?) -> Unit = {}
 
     init {
         val params = parseOneTapAttrs(context, attrs)
@@ -112,8 +105,6 @@ public class OneTap @JvmOverloads constructor(
         onAuthParamsChange = { authParams = it }
         var oAuths by remember { mutableStateOf(oAuths) }
         onOAuthsChange = { oAuths = it }
-        var vkid by remember { mutableStateOf(vkid) }
-        onVKIDChange = { vkid = it }
         OneTap(
             modifier = Modifier,
             style = style,
@@ -122,7 +113,6 @@ public class OneTap @JvmOverloads constructor(
             onFail = { oAuth, fail -> onFail(oAuth, fail) },
             oAuths = oAuths,
             signInAnotherAccountButtonEnabled = isSignInToAnotherAccountEnabled,
-            vkid = vkid,
             authParams = authParams,
         )
     }
@@ -146,17 +136,5 @@ public class OneTap @JvmOverloads constructor(
         this.onAuth = onAuth
         this.onAuthCode = onAuthCode
         this.onFail = onFail
-    }
-
-    /**
-     * Set an optional [VKID] instance to use for authentication.
-     *  If instance of VKID is not provided, it will be created.
-     *  Note that you can't change the [VKID] instance after view was added to layout.
-     */
-    public fun setVKID(
-        vkid: VKID,
-    ) {
-        check(!composeView.isAttachedToWindow) { "You're not allowed to change VKID instance after it was attached" }
-        this.vkid = vkid
     }
 }

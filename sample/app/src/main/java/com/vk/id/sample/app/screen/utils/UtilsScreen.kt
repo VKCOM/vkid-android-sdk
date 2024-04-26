@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.vk.id.AccessToken
+import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.VKIDUser
 import com.vk.id.auth.AuthCodeData
@@ -61,7 +62,6 @@ import com.vk.id.sample.app.uikit.selector.DropdownSelector
 import com.vk.id.sample.xml.sctrictmode.StrictModeHandler
 import com.vk.id.sample.xml.uikit.common.onVKIDAuthSuccess
 import com.vk.id.sample.xml.uikit.common.showToast
-import com.vk.id.sample.xml.vkid
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -135,7 +135,7 @@ private fun AuthUtil() {
         )
         Button("Auth") {
             coroutineScope.launch {
-                context.vkid.authorize(
+                VKID.getInstance().authorize(
                     callback = object : VKIDAuthCallback {
                         override fun onAuth(accessToken: AccessToken) {
                             currentToken = accessToken
@@ -199,7 +199,7 @@ private fun RefreshTokenUtil() {
         )
         Button("Refresh") {
             coroutineScope.launch {
-                context.vkid.refreshToken(
+                VKID.getInstance().refreshToken(
                     callback = object : VKIDRefreshTokenCallback {
                         override fun onSuccess(token: AccessToken) {
                             currentToken = token
@@ -259,7 +259,7 @@ private fun ExchangeTokenUtil() {
         )
         Button(text = "Exchange") {
             coroutineScope.launch {
-                context.vkid.exchangeTokenToV2(
+                VKID.getInstance().exchangeTokenToV2(
                     v1Token = v1Token,
                     callback = object : VKIDExchangeTokenCallback {
                         override fun onAuth(accessToken: AccessToken) {
@@ -307,7 +307,7 @@ private fun LogoutUtil() {
         val coroutineScope = rememberCoroutineScope()
         Button(text = "Logout") {
             coroutineScope.launch {
-                context.vkid.logout(
+                VKID.getInstance().logout(
                     callback = object : VKIDLogoutCallback {
                         override fun onSuccess() {
                             showToast(context, "Logged out")
@@ -338,7 +338,7 @@ private fun RefreshUserUtil() {
         )
         Button(text = "Refresh") {
             coroutineScope.launch {
-                context.vkid.getUserData(
+                VKID.getInstance().getUserData(
                     callback = object : VKIDGetUserCallback {
                         override fun onSuccess(user: VKIDUser) {
                             currentUser = user
@@ -381,7 +381,7 @@ private fun GetPublicInfoUtil() {
         Button(text = "Get") {
             coroutineScope.launch {
                 currentUser = withContext(Dispatchers.IO) {
-                    val idToken = context.vkid.accessToken?.idToken ?: return@withContext null
+                    val idToken = VKID.getInstance().accessToken?.idToken ?: return@withContext null
                     val api = OkHttpClient.Builder().build()
 
                     val componentName = ComponentName(context, MainActivity::class.java)

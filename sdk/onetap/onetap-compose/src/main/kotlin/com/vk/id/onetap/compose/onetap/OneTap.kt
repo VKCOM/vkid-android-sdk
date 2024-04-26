@@ -7,15 +7,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.vk.id.AccessToken
-import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.Prompt
@@ -51,8 +48,6 @@ import com.vk.id.onetap.compose.util.PlaceComposableIfFitsWidth
  * The first parameter is the OAuth which was used for authorization or null if the main flow with OneTap was used.
  * The second parameter is the error which happened during authorization.
  * @param oAuths A set of OAuths to be displayed.
- * @param vkid An optional [VKID] instance to use for authentication.
- *  If instance of VKID is not provided, it will be created on first composition.
  * @param signInAnotherAccountButtonEnabled Flag to enable a button for signing into another account.
  *  Note that if text doesn't fit the available width the view will be hidden regardless of the flag.
  * @param authParams Optional params to be passed to auth. See [VKIDAuthUiParams.Builder] for more info.
@@ -66,20 +61,14 @@ public fun OneTap(
     onAuthCode: (data: AuthCodeData, isCompletion: Boolean) -> Unit = { _, _ -> },
     onFail: (oAuth: OneTapOAuth?, fail: VKIDAuthFail) -> Unit = { _, _ -> },
     oAuths: Set<OneTapOAuth> = emptySet(),
-    vkid: VKID? = null,
     signInAnotherAccountButtonEnabled: Boolean = false,
     authParams: VKIDAuthUiParams = VKIDAuthUiParams {},
 ) {
-    val context = LocalContext.current
-    val useVKID = vkid ?: remember {
-        VKID(context)
-    }
     val coroutineScope = rememberCoroutineScope()
     if (style is OneTapStyle.Icon) {
-        VKIDButtonSmall(style = style.vkidButtonStyle, vkid = vkid, onClick = {
+        VKIDButtonSmall(style = style.vkidButtonStyle, onClick = {
             startAuth(
                 coroutineScope,
-                useVKID,
                 { onAuth(null, it) },
                 onAuthCode,
                 { onFail(null, it) },
@@ -95,13 +84,11 @@ public fun OneTap(
                     modifier = it,
                     style = style,
                     oAuths = oAuths,
-                    vkid = useVKID,
                     signInAnotherAccountButtonEnabled = signInAnotherAccountButtonEnabled,
                     vkidButtonTextProvider = null,
                     onVKIDButtonClick = {
                         startAuth(
                             coroutineScope,
-                            useVKID,
                             { onAuth(null, it) },
                             onAuthCode,
                             { onFail(null, it) },
@@ -113,7 +100,6 @@ public fun OneTap(
                     onAlternateButtonClick = {
                         startAuth(
                             coroutineScope,
-                            useVKID,
                             { onAuth(null, it) },
                             onAuthCode,
                             { onFail(null, it) },
@@ -131,10 +117,9 @@ public fun OneTap(
                 )
             },
             fallback = {
-                VKIDButtonSmall(style = style.vkidButtonStyle, vkid = useVKID, onClick = {
+                VKIDButtonSmall(style = style.vkidButtonStyle, onClick = {
                     startAuth(
                         coroutineScope,
-                        useVKID,
                         { onAuth(null, it) },
                         onAuthCode,
                         { onFail(null, it) },
@@ -152,7 +137,6 @@ internal fun OneTap(
     modifier: Modifier = Modifier,
     style: OneTapStyle = OneTapStyle.Light(),
     oAuths: Set<OneTapOAuth>,
-    vkid: VKID,
     signInAnotherAccountButtonEnabled: Boolean = false,
     vkidButtonTextProvider: VKIDButtonTextProvider?,
     onVKIDButtonClick: () -> Unit,
@@ -168,7 +152,6 @@ internal fun OneTap(
             modifier = Modifier.testTag("vkid_button"),
             style = style.vkidButtonStyle,
             state = vkidButtonState,
-            vkid = vkid,
             textProvider = vkidButtonTextProvider,
             onClick = onVKIDButtonClick
         )
@@ -182,7 +165,6 @@ internal fun OneTap(
         if (oAuths.isNotEmpty()) {
             Spacer(modifier = Modifier.height(16.dp))
             OAuthListWidget(
-                vkid = vkid,
                 onAuth = { oAuth, accessToken -> onAuth(OneTapOAuth.fromOAuth(oAuth), accessToken) },
                 onAuthCode = onAuthCode,
                 onFail = { oAuth, fail -> onFail(OneTapOAuth.fromOAuth(oAuth), fail) },

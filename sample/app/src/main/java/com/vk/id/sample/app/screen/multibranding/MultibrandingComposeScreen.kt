@@ -53,7 +53,6 @@ import com.vk.id.sample.xml.uikit.common.dpToPixels
 import com.vk.id.sample.xml.uikit.common.getMultibrandingFailCallback
 import com.vk.id.sample.xml.uikit.common.getMultibrandingSuccessCallback
 import com.vk.id.sample.xml.uikit.common.showToast
-import com.vk.id.sample.xml.vkid
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlin.reflect.KCallable
@@ -141,7 +140,6 @@ internal fun MultibrandingComposeScreen() {
                         var oAuthListWidget: OAuthListWidget? by remember { mutableStateOf(null) }
                         AndroidView(factory = { context ->
                             OAuthListWidget(context).apply {
-                                setVKID(context.vkid)
                                 setCallbacks(
                                     onAuth = getMultibrandingSuccessCallback(context) {},
                                     onAuthCode = onAuthCode,

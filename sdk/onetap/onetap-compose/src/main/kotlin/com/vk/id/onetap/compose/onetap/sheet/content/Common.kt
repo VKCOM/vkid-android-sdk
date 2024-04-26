@@ -6,7 +6,6 @@ package com.vk.id.onetap.compose.onetap.sheet.content
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.MutableState
 import com.vk.id.AccessToken
-import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.Prompt
@@ -38,7 +37,6 @@ internal sealed class OneTapBottomSheetAuthStatus : Serializable {
 @Suppress("LongParameterList")
 internal fun startVKIDAuth(
     coroutineScope: CoroutineScope,
-    vkid: VKID,
     style: OneTapBottomSheetStyle,
     onAuth: (AccessToken) -> Unit,
     onAuthCode: (AuthCodeData, Boolean) -> Unit,
@@ -49,7 +47,6 @@ internal fun startVKIDAuth(
     authStatus.value = OneTapBottomSheetAuthStatus.AuthStarted
     startAuth(
         coroutineScope,
-        vkid,
         onAuth = {
             authStatus.value = OneTapBottomSheetAuthStatus.AuthSuccess
             onAuth(it)
@@ -71,7 +68,6 @@ internal fun startVKIDAuth(
 @Suppress("LongParameterList")
 internal fun startAlternateAuth(
     coroutineScope: CoroutineScope,
-    vkid: VKID,
     style: OneTapBottomSheetStyle,
     onAuth: (AccessToken) -> Unit,
     onAuthCode: (AuthCodeData, Boolean) -> Unit,
@@ -82,7 +78,6 @@ internal fun startAlternateAuth(
     authStatus.value = OneTapBottomSheetAuthStatus.AuthStarted
     startAuth(
         coroutineScope,
-        vkid,
         onAuth = {
             authStatus.value = OneTapBottomSheetAuthStatus.AuthSuccess
             onAuth(it)

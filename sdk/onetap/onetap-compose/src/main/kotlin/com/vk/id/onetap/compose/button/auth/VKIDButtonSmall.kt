@@ -23,14 +23,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.decode.DataSource
-import com.vk.id.VKID
 import com.vk.id.VKIDUser
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.onetap.common.auth.style.InternalVKIDButtonStyle
@@ -52,17 +50,11 @@ import kotlinx.coroutines.launch
 internal fun VKIDButtonSmall(
     state: VKIDSmallButtonState = remember { VKIDSmallButtonState(inProgress = false, userIconLoaded = false) },
     style: InternalVKIDButtonStyle = InternalVKIDButtonStyle.Light(),
-    vkid: VKID? = null,
     onClick: () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val context = LocalContext.current
-    val useVKID = vkid ?: remember {
-        VKID(context)
-    }
     FetchUserData(
         coroutineScope,
-        useVKID,
         object : OnFetchingProgress {
             override suspend fun onPreFetch() {
                 /*nothing*/

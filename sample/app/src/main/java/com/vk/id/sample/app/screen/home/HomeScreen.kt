@@ -44,7 +44,6 @@ import com.vk.id.sample.app.screen.Button
 import com.vk.id.sample.app.screen.UseToken
 import com.vk.id.sample.xml.uikit.common.getOneTapFailCallback
 import com.vk.id.sample.xml.uikit.common.getOneTapSuccessCallback
-import com.vk.id.sample.xml.vkid
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -76,7 +75,6 @@ internal fun HomeScreen(
             onFail = getOneTapFailCallback(context),
             signInAnotherAccountButtonEnabled = true,
             oAuths = setOf(OneTapOAuth.MAIL, OneTapOAuth.OK),
-            vkid = context.vkid,
         )
         token?.let {
             UseToken(it)
