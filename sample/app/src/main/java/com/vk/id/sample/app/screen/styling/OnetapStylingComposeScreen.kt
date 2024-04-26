@@ -86,6 +86,7 @@ internal fun OnetapStylingComposeScreen() {
     }
     val shouldUseXml = remember { mutableStateOf(false) }
     val signInToAnotherAccountEnabled = remember { mutableStateOf(true) }
+    var scopes by remember { mutableStateOf("") }
     var state by remember { mutableStateOf("") }
     var codeChallenge by remember { mutableStateOf("") }
     var selectedStyle by remember { mutableStateOf(OneTapStyle.system(context)) }
@@ -139,6 +140,7 @@ internal fun OnetapStylingComposeScreen() {
                     }
                 }
                 val authParams = VKIDAuthUiParams {
+                    this.scopes = scopes.split(' ', ',').toSet()
                     this.state = state.takeIf { it.isNotBlank() }
                     this.codeChallenge = codeChallenge.takeIf { it.isNotBlank() }
                 }
@@ -222,6 +224,12 @@ internal fun OnetapStylingComposeScreen() {
                 label = { Text("size") },
             )
 
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = scopes,
+                onValueChange = { scopes = it },
+                label = { Text("Scopes (Space-separated)") },
+            )
             TextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = state,

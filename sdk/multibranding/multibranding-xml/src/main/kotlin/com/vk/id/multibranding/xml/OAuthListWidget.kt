@@ -1,3 +1,5 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.multibranding.xml
 
 import android.content.Context
@@ -20,6 +22,7 @@ import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthUiParams
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.multibranding.OAuthListWidget
 import com.vk.id.multibranding.common.style.OAuthListWidgetCornersStyle
 import com.vk.id.multibranding.common.style.OAuthListWidgetSizeStyle
@@ -74,9 +77,10 @@ public class OAuthListWidget @JvmOverloads constructor(
     private var onVKIDChange: (VKID?) -> Unit = {}
 
     init {
-        val (style, oAuths) = parseAttrs(context, attrs)
+        val (style, oAuths, scopes) = parseAttrs(context, attrs)
         this.style = style
         this.oAuths = oAuths
+        this.authParams = authParams.newBuilder { this.scopes = scopes }
         addView(composeView)
         composeView.setContent { Content() }
     }
@@ -140,7 +144,7 @@ public class OAuthListWidget @JvmOverloads constructor(
 private fun parseAttrs(
     context: Context,
     attrs: AttributeSet?,
-): Pair<OAuthListWidgetStyle, Set<OAuth>> {
+): Triple<OAuthListWidgetStyle, Set<OAuth>, Set<String>> {
     context.theme.obtainStyledAttributes(
         attrs,
         R.styleable.vkid_OAuthListWidget,
@@ -148,10 +152,14 @@ private fun parseAttrs(
         0
     ).apply {
         try {
-            return getStyleConstructor(context = context)(
-                OAuthListWidgetCornersStyle.Custom(context.pixelsToDp(getCornerRadius(context))),
-                getSize(),
-            ) to getOAuths()
+            return Triple(
+                getStyleConstructor(context = context)(
+                    OAuthListWidgetCornersStyle.Custom(context.pixelsToDp(getCornerRadius(context))),
+                    getSize(),
+                ),
+                getOAuths(),
+                getScopes(),
+            )
         } finally {
             recycle()
         }
@@ -203,6 +211,13 @@ private fun TypedArray.getOAuths(): Set<OAuth> {
                 else -> error("""Unexpected oauth "$it", please use one of "vk", "mail" or "ok", separated by commas""")
             }
         }
+        .toSet()
+}
+
+private fun TypedArray.getScopes(): Set<String> {
+    return (getString(R.styleable.vkid_OAuthListWidget_vkid_oAuthListScopes) ?: "")
+        .split(',', ' ')
+        .filter { it.isNotBlank() }
         .toSet()
 }
 

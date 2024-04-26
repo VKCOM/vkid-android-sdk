@@ -103,6 +103,7 @@ internal fun MultibrandingComposeScreen() {
             styleConstructors = OAuthListWidgetStyle::class.styleConstructors(context)
         }
     }
+    var scopes by remember { mutableStateOf("") }
     var state by remember { mutableStateOf("") }
     var codeChallenge by remember { mutableStateOf("") }
     AppTheme(
@@ -132,6 +133,7 @@ internal fun MultibrandingComposeScreen() {
                         }
                     }
                     val authParams = VKIDAuthUiParams {
+                        this.scopes = scopes.split(' ', ',').toSet()
                         this.state = state.takeIf { it.isNotBlank() }
                         this.codeChallenge = codeChallenge.takeIf { it.isNotBlank() }
                     }
@@ -206,6 +208,12 @@ internal fun MultibrandingComposeScreen() {
                 label = { Text("size") },
             )
 
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = scopes,
+                onValueChange = { scopes = it },
+                label = { Text("Scopes (Space-separated)") },
+            )
             TextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = state,

@@ -1,3 +1,5 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.onetap.xml
 
 import android.content.Context
@@ -14,6 +16,7 @@ import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthUiParams
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.compose.onetap.sheet.OneTapBottomSheet
 import com.vk.id.onetap.compose.onetap.sheet.OneTapBottomSheetState
@@ -73,6 +76,7 @@ public class OneTapBottomSheet @JvmOverloads constructor(
     init {
         val sheetSettings = parseOneTapBottomSheetAttrs(context, attrs)
         this.oAuths = sheetSettings.oAuths
+        this.authParams = authParams.newBuilder { this.scopes = sheetSettings.scopes }
         composeView.setContent {
             Content(sheetSettings)
         }

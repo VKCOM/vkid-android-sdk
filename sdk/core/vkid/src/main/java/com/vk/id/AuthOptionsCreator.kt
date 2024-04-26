@@ -3,6 +3,7 @@
 package com.vk.id
 
 import android.content.Context
+import android.util.Base64
 import com.vk.id.auth.Prompt
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.common.InternalVKIDApi
@@ -33,7 +34,7 @@ internal class AuthOptionsCreator(
         val locale = authParams.locale ?: VKIDAuthParams.Locale.systemLocale(appContext)
         val theme = authParams.theme ?: VKIDAuthParams.Theme.systemTheme(appContext)
         val credentials = serviceCredentials.value
-        val redirectUri = "${credentials.redirectUri}/blank.html?oauth2_params=oauth2"
+        val redirectUri = "${credentials.redirectUri}?oauth2_params=${getOAuth2Params(authParams.scopes)}"
         return AuthOptions(
             appId = credentials.clientID,
             clientSecret = credentials.clientSecret,
@@ -47,6 +48,13 @@ internal class AuthOptionsCreator(
             webAuthPhoneScreen = !authParams.useOAuthProviderIfPossible,
             oAuth = authParams.oAuth,
             prompt = if (authParams.prompt == Prompt.LOGIN) "login" else "",
+            scopes = authParams.scopes,
         )
     }
+}
+
+private fun getOAuth2Params(scopes: Set<String>): String {
+    return Base64
+        .encodeToString("""{"scopes":"${scopes.joinToString(separator = " ")}"}""".encodeToByteArray(), Base64.DEFAULT)
+        .filter { it != '\n' }
 }

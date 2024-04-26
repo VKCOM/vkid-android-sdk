@@ -89,6 +89,7 @@ internal class VKIDTest : BehaviorSpec({
             webAuthPhoneScreen = false,
             oAuth = null,
             prompt = "",
+            scopes = emptySet(),
         )
         coEvery { authProvidersChooser.chooseBest(authParams) } returns authProvider
         every { authOptionsCreator.create(authParams) } returns authOptions

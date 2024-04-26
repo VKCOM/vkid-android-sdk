@@ -85,6 +85,7 @@ internal fun UtilsScreen() {
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun AuthUtil() {
     ExpandableCard(title = "Auth") {
@@ -92,6 +93,13 @@ private fun AuthUtil() {
         val coroutineScope = rememberCoroutineScope()
         var currentToken: AccessToken? by remember { mutableStateOf(null) }
         var currentAuthCode: AuthCodeData? by remember { mutableStateOf(null) }
+        var scopes by remember { mutableStateOf("") }
+        TextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = scopes,
+            onValueChange = { scopes = it },
+            label = { Text("Scopes (Space-separated)") },
+        )
         var state by remember { mutableStateOf("") }
         TextField(
             modifier = Modifier.fillMaxWidth(),
@@ -134,6 +142,7 @@ private fun AuthUtil() {
                         }
                     },
                     params = VKIDAuthParams {
+                        this.scopes = scopes.split(' ', ',').toSet()
                         this.prompt = prompt
                         if (prompt != Prompt.BLANK) this.useOAuthProviderIfPossible = false
                         this.state = state.takeIf { it.isNotBlank() }

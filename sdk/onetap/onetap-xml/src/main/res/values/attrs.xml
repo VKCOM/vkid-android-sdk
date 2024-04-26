@@ -49,5 +49,6 @@
         </attr>
         <attr name="vkid_autoHideOnSuccess" format="boolean"/>
         <attr name="vkid_onetapOAuths" format="string"/>
+        <attr name="vkid_onetapScopes" format="string"/>
     </declare-styleable>
 </resources>

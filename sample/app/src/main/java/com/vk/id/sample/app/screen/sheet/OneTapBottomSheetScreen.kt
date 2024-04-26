@@ -66,6 +66,7 @@ internal fun OneTapBottomSheetScreen() {
     val autoHideSheetOnSuccess = rememberSaveable { mutableStateOf(true) }
     val selectedOAuths = rememberSaveable { mutableStateOf(setOf(OneTapOAuth.OK, OneTapOAuth.MAIL)) }
     val shouldUseXml = remember { mutableStateOf(false) }
+    var scopes by remember { mutableStateOf("") }
     var state by remember { mutableStateOf("") }
     var codeChallenge by remember { mutableStateOf("") }
     var styleConstructors by remember { mutableStateOf<Map<String, KCallable<OneTapBottomSheetStyle>>>(emptyMap()) }
@@ -95,6 +96,7 @@ internal fun OneTapBottomSheetScreen() {
                 }
             }
             val authParams = VKIDAuthUiParams {
+                this.scopes = scopes.split(' ', ',').toSet()
                 this.state = state.takeIf { it.isNotBlank() }
                 this.codeChallenge = codeChallenge.takeIf { it.isNotBlank() }
             }
@@ -184,6 +186,13 @@ internal fun OneTapBottomSheetScreen() {
             },
             shape = RectangleShape,
             label = { Text("style") },
+        )
+
+        TextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = scopes,
+            onValueChange = { scopes = it },
+            label = { Text("Scopes (Space-separated)") },
         )
         TextField(
             modifier = Modifier.fillMaxWidth(),
