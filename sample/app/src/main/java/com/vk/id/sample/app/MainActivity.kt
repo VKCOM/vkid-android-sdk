@@ -1,16 +1,12 @@
 package com.vk.id.sample.app
 
 import android.os.Bundle
-import android.os.StrictMode
-import android.os.StrictMode.ThreadPolicy
-import android.os.StrictMode.VmPolicy
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.activity
 import androidx.navigation.compose.NavHost
@@ -33,7 +29,6 @@ internal class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableStrictMode()
         VKID.logsEnabled = true
         setContent {
             val navController = rememberNavController()
@@ -59,22 +54,5 @@ internal class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-
-    private fun enableStrictMode() {
-        StrictMode.setThreadPolicy(
-            ThreadPolicy.Builder()
-                .detectAll()
-                .penaltyLog()
-                .penaltyDeath()
-                .build()
-        )
-        StrictMode.setVmPolicy(
-            VmPolicy.Builder()
-                .detectLeakedSqlLiteObjects()
-                .detectLeakedClosableObjects()
-                .penaltyLog()
-                .build()
-        )
     }
 }

@@ -14,6 +14,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.preference)
     debugImplementation(libs.flipper)
     debugImplementation(libs.flipper.network)
     debugImplementation(libs.soloader)
