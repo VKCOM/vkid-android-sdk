@@ -1,7 +1,6 @@
 package com.vk.id.onetap.compose
 
 import com.vk.id.AccessToken
-import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthUiParams
@@ -96,7 +95,6 @@ public class OneTapComposeTest : OneTapTest() {
     }
 
     override fun setOneTapContent(
-        vkid: VKID,
         onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit,
         onAuthCode: (AuthCodeData, Boolean) -> Unit,
         onAuth: (OneTapOAuth?, AccessToken) -> Unit,
@@ -104,7 +102,6 @@ public class OneTapComposeTest : OneTapTest() {
     ) {
         composeTestRule.setContent {
             OneTap(
-                vkid = vkid,
                 onAuth = onAuth,
                 onAuthCode = onAuthCode,
                 onFail = onFail,

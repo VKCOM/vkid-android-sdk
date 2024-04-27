@@ -1,7 +1,6 @@
 package com.vk.id.onetap.xml
 
 import com.vk.id.AccessToken
-import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthUiParams
@@ -95,7 +94,6 @@ public class OneTapChangeAccountXmlTest : ChangeAccountTest() {
     }
 
     override fun setOneTapContent(
-        vkid: VKID,
         onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit,
         onAuthCode: (AuthCodeData, Boolean) -> Unit,
         onAuth: (OneTapOAuth?, AccessToken) -> Unit,
@@ -108,7 +106,6 @@ public class OneTapChangeAccountXmlTest : ChangeAccountTest() {
                     onAuthCode = onAuthCode,
                     onFail = onFail
                 )
-                setVKID(vkid)
                 isSignInToAnotherAccountEnabled = true
                 this.authParams = authParams
             }

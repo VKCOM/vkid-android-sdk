@@ -3,7 +3,6 @@ package com.vk.id.onetap.compose
 import android.os.Handler
 import android.os.Looper
 import com.vk.id.AccessToken
-import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthUiParams
@@ -99,7 +98,6 @@ public class BottomSheetOneTapComposeTest : OneTapTest() {
     }
 
     override fun setOneTapContent(
-        vkid: VKID,
         onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit,
         onAuthCode: (AuthCodeData, Boolean) -> Unit,
         onAuth: (OneTapOAuth?, AccessToken) -> Unit,
@@ -108,7 +106,6 @@ public class BottomSheetOneTapComposeTest : OneTapTest() {
         composeTestRule.setContent {
             val state = rememberOneTapBottomSheetState()
             OneTapBottomSheet(
-                vkid = vkid,
                 state = state,
                 serviceName = "VK",
                 onAuth = onAuth,

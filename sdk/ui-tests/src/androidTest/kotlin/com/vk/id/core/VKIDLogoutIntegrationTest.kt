@@ -70,7 +70,7 @@ internal class VKIDLogoutIntegrationTest : BaseUiTest() {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
         val prefsStore = mockk<InternalVKIDPrefsStore>()
         val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
-        val vkid = InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
+        InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
             .encryptedSharedPreferencesStorage(encryptedStorage)
@@ -84,7 +84,7 @@ internal class VKIDLogoutIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Получается пользователь") {
             runBlocking {
-                result = vkid.logout()
+                result = VKID.getInstance().logout()
             }
         }
         step("Логаут завершается успехом") {
@@ -102,7 +102,7 @@ internal class VKIDLogoutIntegrationTest : BaseUiTest() {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
         val prefsStore = mockk<InternalVKIDPrefsStore>()
         val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
-        val vkid = InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
+        InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
             .encryptedSharedPreferencesStorage(encryptedStorage)
@@ -115,7 +115,7 @@ internal class VKIDLogoutIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Получается пользователь") {
             runBlocking {
-                result = vkid.logout()
+                result = VKID.getInstance().logout()
             }
         }
         step("Нет вызова колбека об успехе") {
@@ -133,7 +133,7 @@ internal class VKIDLogoutIntegrationTest : BaseUiTest() {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
         val prefsStore = mockk<InternalVKIDPrefsStore>()
         val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
-        val vkid = InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
+        InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
             .encryptedSharedPreferencesStorage(encryptedStorage)
@@ -147,7 +147,7 @@ internal class VKIDLogoutIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Получается пользователь") {
             runBlocking {
-                result = vkid.logout()
+                result = VKID.getInstance().logout()
             }
         }
         step("Нет вызова колбека об успехе") {
@@ -165,7 +165,7 @@ internal class VKIDLogoutIntegrationTest : BaseUiTest() {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
         val prefsStore = mockk<InternalVKIDPrefsStore>()
         val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
-        val vkid = InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
+        InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
             .encryptedSharedPreferencesStorage(encryptedStorage)
@@ -179,7 +179,7 @@ internal class VKIDLogoutIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Получается пользователь") {
             runBlocking {
-                result = vkid.logout()
+                result = VKID.getInstance().logout()
             }
         }
         step("Логаут завершается успехом") {

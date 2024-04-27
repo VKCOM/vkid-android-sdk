@@ -106,7 +106,7 @@ internal class VKIDGetUserDataIntegrationTest : BaseUiTest() {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
         val prefsStore = mockk<InternalVKIDPrefsStore>()
         val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
-        val vkid = InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
+        InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
             .encryptedSharedPreferencesStorage(encryptedStorage)
@@ -121,7 +121,7 @@ internal class VKIDGetUserDataIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Получается пользователь") {
             runBlocking {
-                result = vkid.getUserData(params = VKIDGetUserParams { refreshTokenState = STATE })
+                result = VKID.getInstance().getUserData(params = VKIDGetUserParams { refreshTokenState = STATE })
             }
         }
         step("Получен AT") {
@@ -139,7 +139,7 @@ internal class VKIDGetUserDataIntegrationTest : BaseUiTest() {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
         val prefsStore = mockk<InternalVKIDPrefsStore>()
         val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
-        val vkid = InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
+        InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
             .encryptedSharedPreferencesStorage(encryptedStorage)
@@ -159,7 +159,7 @@ internal class VKIDGetUserDataIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Получается пользователь") {
             runBlocking {
-                result = vkid.getUserData(params = VKIDGetUserParams { refreshTokenState = STATE })
+                result = VKID.getInstance().getUserData(params = VKIDGetUserParams { refreshTokenState = STATE })
             }
         }
         step("Получен пользователь") {
@@ -177,7 +177,7 @@ internal class VKIDGetUserDataIntegrationTest : BaseUiTest() {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
         val prefsStore = mockk<InternalVKIDPrefsStore>()
         val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
-        val vkid = InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
+        InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
             .encryptedSharedPreferencesStorage(encryptedStorage)
@@ -191,7 +191,7 @@ internal class VKIDGetUserDataIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Получается пользователь") {
             runBlocking {
-                result = vkid.getUserData(params = VKIDGetUserParams { refreshTokenState = STATE })
+                result = VKID.getInstance().getUserData(params = VKIDGetUserParams { refreshTokenState = STATE })
             }
         }
         step("Получен пользователь") {
@@ -209,7 +209,7 @@ internal class VKIDGetUserDataIntegrationTest : BaseUiTest() {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
         val prefsStore = mockk<InternalVKIDPrefsStore>()
         val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
-        val vkid = InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
+        InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
             .encryptedSharedPreferencesStorage(encryptedStorage)
@@ -220,7 +220,7 @@ internal class VKIDGetUserDataIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Получается пользователь") {
             runBlocking {
-                result = vkid.getUserData(params = VKIDGetUserParams { refreshTokenState = STATE })
+                result = VKID.getInstance().getUserData(params = VKIDGetUserParams { refreshTokenState = STATE })
             }
         }
         step("Получен пользователь") {
@@ -238,7 +238,7 @@ internal class VKIDGetUserDataIntegrationTest : BaseUiTest() {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
         val prefsStore = mockk<InternalVKIDPrefsStore>()
         val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
-        val vkid = InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
+        InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
             .encryptedSharedPreferencesStorage(encryptedStorage)
@@ -248,7 +248,7 @@ internal class VKIDGetUserDataIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Получается пользователь") {
             runBlocking {
-                result = vkid.getUserData(params = VKIDGetUserParams { refreshTokenState = STATE })
+                result = VKID.getInstance().getUserData(params = VKIDGetUserParams { refreshTokenState = STATE })
             }
         }
         step("Получен пользователь") {

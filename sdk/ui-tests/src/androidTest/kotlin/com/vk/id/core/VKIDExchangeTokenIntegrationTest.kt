@@ -121,7 +121,7 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
         val prefsStore = mockk<InternalVKIDPrefsStore>()
         val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
-        val vkid = InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
+        InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
             .encryptedSharedPreferencesStorage(encryptedStorage)
@@ -138,7 +138,7 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Обменивается токен") {
             runBlocking {
-                result = vkid.exchangeToken(
+                result = VKID.getInstance().exchangeToken(
                     v1Token = V1_TOKEN,
                     params = VKIDExchangeTokenParams {
                         state = STATE
@@ -162,7 +162,7 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
         val prefsStore = mockk<InternalVKIDPrefsStore>()
         val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
-        val vkid = InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
+        InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
             .encryptedSharedPreferencesStorage(encryptedStorage)
@@ -173,7 +173,7 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Обменивается токен") {
             runBlocking {
-                result = vkid.exchangeToken(v1Token = V1_TOKEN, params = VKIDExchangeTokenParams { state = STATE })
+                result = VKID.getInstance().exchangeToken(v1Token = V1_TOKEN, params = VKIDExchangeTokenParams { state = STATE })
             }
         }
         step("Не получен AT") {
@@ -191,7 +191,7 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
         val prefsStore = mockk<InternalVKIDPrefsStore>()
         val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
-        val vkid = InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
+        InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
             .encryptedSharedPreferencesStorage(encryptedStorage)
@@ -204,7 +204,7 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Обменивается токен") {
             runBlocking {
-                result = vkid.exchangeToken(
+                result = VKID.getInstance().exchangeToken(
                     v1Token = V1_TOKEN,
                     params = VKIDExchangeTokenParams {
                         state = STATE
@@ -228,7 +228,7 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
         val prefsStore = mockk<InternalVKIDPrefsStore>()
         val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
-        val vkid = InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
+        InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
             .encryptedSharedPreferencesStorage(encryptedStorage)
@@ -241,7 +241,7 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Обменивается токен") {
             runBlocking {
-                result = vkid.exchangeToken(
+                result = VKID.getInstance().exchangeToken(
                     v1Token = V1_TOKEN,
                     params = VKIDExchangeTokenParams {
                         state = STATE
@@ -265,7 +265,7 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
         val prefsStore = mockk<InternalVKIDPrefsStore>()
         val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
-        val vkid = InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
+        InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
             .encryptedSharedPreferencesStorage(encryptedStorage)
@@ -279,7 +279,7 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Обменивается токен") {
             runBlocking {
-                result = vkid.exchangeToken(
+                result = VKID.getInstance().exchangeToken(
                     v1Token = V1_TOKEN,
                     params = VKIDExchangeTokenParams {
                         state = STATE
@@ -303,7 +303,7 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
         val prefsStore = mockk<InternalVKIDPrefsStore>()
         val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
-        val vkid = InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
+        InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
             .encryptedSharedPreferencesStorage(encryptedStorage)
@@ -314,7 +314,7 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Обменивается токен") {
             runBlocking {
-                result = vkid.exchangeToken(v1Token = V1_TOKEN, params = VKIDExchangeTokenParams { state = STATE })
+                result = VKID.getInstance().exchangeToken(v1Token = V1_TOKEN, params = VKIDExchangeTokenParams { state = STATE })
             }
         }
         step("Не получен AT") {
