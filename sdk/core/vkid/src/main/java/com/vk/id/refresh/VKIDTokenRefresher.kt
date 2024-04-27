@@ -62,6 +62,7 @@ internal class VKIDTokenRefresher(
                         VKIDRefreshTokenFail.FailedApiCall("Failed to fetch user data due to ${it.message}", it)
                     )
                 },
+                refreshAccessToken = params.refreshAccessToken,
             )
         }
         result.onFailure {

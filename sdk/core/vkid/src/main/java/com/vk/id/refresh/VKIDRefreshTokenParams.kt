@@ -1,4 +1,8 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.refresh
+
+import com.vk.id.common.InternalVKIDApi
 
 /**
  * Create [VKIDRefreshTokenParams].
@@ -15,7 +19,8 @@ public inline fun VKIDRefreshTokenParams(
  * Encapsulated parameters for logout.
  */
 public class VKIDRefreshTokenParams private constructor(
-    internal val state: String? = null,
+    internal val state: String?,
+    internal val refreshAccessToken: Boolean,
 ) {
     /**
      * A builder for [VKIDRefreshTokenParams].
@@ -28,10 +33,17 @@ public class VKIDRefreshTokenParams private constructor(
         public var state: String? = null
 
         /**
+         * Whether to update access token on refresh
+         */
+        @InternalVKIDApi
+        public var refreshAccessToken: Boolean = true
+
+        /**
          * Constructs [VKIDRefreshTokenParams] with provided values.
          */
         public fun build(): VKIDRefreshTokenParams = VKIDRefreshTokenParams(
             state = state,
+            refreshAccessToken = refreshAccessToken,
         )
     }
 }

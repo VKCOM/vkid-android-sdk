@@ -1,3 +1,5 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.sample.app.screen.utils
 
 import android.content.ComponentName
@@ -33,6 +35,7 @@ import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.Prompt
 import com.vk.id.auth.VKIDAuthCallback
 import com.vk.id.auth.VKIDAuthParams
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.exchangetoken.VKIDExchangeTokenCallback
 import com.vk.id.exchangetoken.VKIDExchangeTokenFail
 import com.vk.id.exchangetoken.VKIDExchangeTokenParams
@@ -178,6 +181,13 @@ private fun RefreshTokenUtil() {
             onValueChange = { state = it },
             label = { Text("State (Optional)") },
         )
+        var refreshAccessToken by remember { mutableStateOf(true) }
+        DropdownSelector(
+            values = mapOf("true" to true, "false" to false),
+            selectedValue = refreshAccessToken.toString(),
+            onValueSelected = { refreshAccessToken = it },
+            label = { Text("Refresh access token") },
+        )
         Button("Refresh") {
             coroutineScope.launch {
                 context.vkid.refreshToken(
@@ -193,6 +203,7 @@ private fun RefreshTokenUtil() {
                     },
                     params = VKIDRefreshTokenParams {
                         this.state = state.takeIf { it.isNotBlank() }
+                        this.refreshAccessToken = refreshAccessToken
                     }
                 )
             }

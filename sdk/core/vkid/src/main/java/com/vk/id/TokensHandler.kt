@@ -19,6 +19,7 @@ internal class TokensHandler(
         payload: VKIDTokenPayload,
         onSuccess: suspend (AccessToken) -> Unit,
         onFailedApiCall: (Throwable) -> Unit,
+        refreshAccessToken: Boolean = true,
     ) {
         userInfoFetcher.fetch(
             accessToken = payload.accessToken,
@@ -31,7 +32,7 @@ internal class TokensHandler(
                     userData = it
                 )
                 withContext(dispatchers.io) {
-                    tokenStorage.accessToken = accessToken
+                    if (refreshAccessToken) tokenStorage.accessToken = accessToken
                     tokenStorage.idToken = payload.idToken
                     tokenStorage.refreshToken = payload.refreshToken
                 }
