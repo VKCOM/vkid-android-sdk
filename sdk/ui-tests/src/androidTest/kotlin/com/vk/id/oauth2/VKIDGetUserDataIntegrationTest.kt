@@ -1,10 +1,9 @@
 @file:OptIn(InternalVKIDApi::class)
 
-package com.vk.id.core
+package com.vk.id.oauth2
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDUser
 import com.vk.id.common.InternalVKIDApi
@@ -17,9 +16,9 @@ import com.vk.id.common.feature.TestFeature
 import com.vk.id.common.mockapi.MockApi
 import com.vk.id.internal.auth.device.InternalVKIDDeviceIdProvider
 import com.vk.id.internal.store.InternalVKIDPrefsStore
-import com.vk.id.refresh.VKIDRefreshTokenCallback
-import com.vk.id.refresh.VKIDRefreshTokenFail
-import com.vk.id.refresh.VKIDRefreshTokenParams
+import com.vk.id.refreshuser.VKIDGetUserCallback
+import com.vk.id.refreshuser.VKIDGetUserFail
+import com.vk.id.refreshuser.VKIDGetUserParams
 import com.vk.id.storage.InternalVKIDEncryptedSharedPreferencesStorage
 import com.vk.id.test.InternalVKIDTestBuilder
 import com.vk.id.test.InternalVKIDTokenPayloadResponse
@@ -83,18 +82,12 @@ private val USER_INFO_RESPONSE = InternalVKIDUserInfoPayloadResponse(
     ),
     state = MockApi.STATE
 )
-private val ACCESS_TOKEN = AccessToken(
-    token = ACCESS_TOKEN_VALUE,
-    idToken = ID_TOKEN_VALUE,
-    userID = USER_ID,
-    expireTime = -1,
-    userData = VKIDUser(
-        firstName = MockApi.FIRST_NAME,
-        lastName = MockApi.LAST_NAME,
-        phone = MockApi.PHONE,
-        photo200 = MockApi.AVATAR,
-        email = MockApi.EMAIL,
-    )
+private val USER = VKIDUser(
+    firstName = MockApi.FIRST_NAME,
+    lastName = MockApi.LAST_NAME,
+    phone = MockApi.PHONE,
+    photo200 = MockApi.AVATAR,
+    email = MockApi.EMAIL,
 )
 
 @Platform(Platform.ANDROID_AUTO)
@@ -103,13 +96,13 @@ private val ACCESS_TOKEN = AccessToken(
 @Owner(Owners.DANIIL_KLIMCHUK)
 @Feature(TestFeature.OAUTH_2_1)
 @RunWith(AndroidJUnit4::class)
-@DisplayName("Рефреш токена")
-internal class VKIDRefreshTokenIntegrationTest : BaseUiTest() {
+@DisplayName("Получение пользовательских данных")
+internal class VKIDGetUserDataIntegrationTest : BaseUiTest() {
 
     @Test
-    @AllureId("2303037")
-    @DisplayName("Успешный рефреш токена")
-    fun refreshTokenSuccess() = run {
+    @AllureId("2303048")
+    @DisplayName("Успешное получение пользовательских данных")
+    fun getUserSuccess() = run {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
         val prefsStore = mockk<InternalVKIDPrefsStore>()
         val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
@@ -118,8 +111,45 @@ internal class VKIDRefreshTokenIntegrationTest : BaseUiTest() {
             .prefsStore(prefsStore)
             .encryptedSharedPreferencesStorage(encryptedStorage)
             .getUserInfoResponse(Result.success(USER_INFO_RESPONSE))
+            .build()
+        every { encryptedStorage.getString(ACCESS_TOKEN_KEY) } returns ACCESS_TOKEN_JSON
+        every { encryptedStorage.set(REFRESH_TOKEN_KEY, REFRESH_TOKEN_NEW_VALUE) } just runs
+        every { encryptedStorage.set(ACCESS_TOKEN_KEY, ACCESS_TOKEN_JSON) } just runs
+        every { encryptedStorage.set(ID_TOKEN_KEY, ID_TOKEN_VALUE) } just runs
+        every { prefsStore.clear() } just runs
+        every { deviceIdStorage.getDeviceId() } returns "device id"
+        var result: Any? = null
+        step("Получается пользователь") {
+            runBlocking {
+                result = VKID.instance.getUserData(params = VKIDGetUserParams { refreshTokenState = STATE })
+            }
+        }
+        step("Получен AT") {
+            (result as? VKIDUser?) shouldBe USER
+        }
+        step("Не получена ошибка") {
+            (result as? VKIDGetUserFail?).shouldBeNull()
+        }
+    }
+
+    @Test
+    @AllureId("2303046")
+    @DisplayName("Успешное получение пользовательских данных после рефреша токена")
+    fun getUserWithRefreshSuccess() = run {
+        val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
+        val prefsStore = mockk<InternalVKIDPrefsStore>()
+        val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
+        InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
+            .deviceIdStorage(deviceIdStorage)
+            .prefsStore(prefsStore)
+            .encryptedSharedPreferencesStorage(encryptedStorage)
+            .getUserInfoResponses(
+                Result.success(InternalVKIDUserInfoPayloadResponse(error = "invalid_token")),
+                Result.success(USER_INFO_RESPONSE),
+            )
             .refreshTokenResponse(Result.success(REFRESH_TOKEN_RESPONSE))
             .build()
+        every { encryptedStorage.getString(ACCESS_TOKEN_KEY) } returns ACCESS_TOKEN_JSON
         every { encryptedStorage.getString(REFRESH_TOKEN_KEY) } returns REFRESH_TOKEN_CURRENT_VALUE
         every { encryptedStorage.set(REFRESH_TOKEN_KEY, REFRESH_TOKEN_NEW_VALUE) } just runs
         every { encryptedStorage.set(ACCESS_TOKEN_KEY, ACCESS_TOKEN_JSON) } just runs
@@ -127,23 +157,23 @@ internal class VKIDRefreshTokenIntegrationTest : BaseUiTest() {
         every { prefsStore.clear() } just runs
         every { deviceIdStorage.getDeviceId() } returns "device id"
         var result: Any? = null
-        step("Рефрешится токен") {
+        step("Получается пользователь") {
             runBlocking {
-                result = VKID.instance.refreshToken(params = VKIDRefreshTokenParams { state = STATE })
+                result = VKID.instance.getUserData(params = VKIDGetUserParams { refreshTokenState = STATE })
             }
         }
-        step("Получен AT") {
-            (result as? AccessToken?) shouldBe ACCESS_TOKEN
+        step("Получен пользователь") {
+            (result as? VKIDUser?) shouldBe USER
         }
         step("Не получена ошибка") {
-            (result as? VKIDRefreshTokenFail?).shouldBeNull()
+            (result as? VKIDGetUserFail?).shouldBeNull()
         }
     }
 
     @Test
-    @AllureId("2303038")
-    @DisplayName("Ошибка отсутствия авторизации при рефреше токена")
-    fun notAuthenticatedFail() = run {
+    @AllureId("2303049")
+    @DisplayName("Ошибка получения пользовательских данных из-за ошибки рефреша токена")
+    fun getUserWithRefreshFail() = run {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
         val prefsStore = mockk<InternalVKIDPrefsStore>()
         val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
@@ -151,122 +181,92 @@ internal class VKIDRefreshTokenIntegrationTest : BaseUiTest() {
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
             .encryptedSharedPreferencesStorage(encryptedStorage)
+            .getUserInfoResponse(Result.success(InternalVKIDUserInfoPayloadResponse(error = "invalid_token")),)
+            .refreshTokenResponse(Result.success(REFRESH_TOKEN_RESPONSE.copy(error = "some error")))
             .build()
-        every { encryptedStorage.getString(REFRESH_TOKEN_KEY) } returns null
-        every { deviceIdStorage.getDeviceId() } returns "device id"
-        var result: Any? = null
-        step("Рефрешится токен") {
-            runBlocking {
-                result = VKID.instance.refreshToken(params = VKIDRefreshTokenParams { state = STATE })
-            }
-        }
-        step("Не получен AT") {
-            (result as? AccessToken?).shouldBeNull()
-        }
-        step("Получена ошибка") {
-            (result as? VKIDRefreshTokenFail?) shouldBe VKIDRefreshTokenFail.NotAuthenticated("You must login before refreshing token")
-        }
-    }
-
-    @Test
-    @AllureId("2303036")
-    @DisplayName("Получение ошибки неверного state при рефреше токена")
-    fun wrongStateFail() = run {
-        val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
-        val prefsStore = mockk<InternalVKIDPrefsStore>()
-        val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
-        InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
-            .deviceIdStorage(deviceIdStorage)
-            .prefsStore(prefsStore)
-            .encryptedSharedPreferencesStorage(encryptedStorage)
-            .refreshTokenResponse(Result.success(REFRESH_TOKEN_RESPONSE.copy(state = "wrong state")))
-            .build()
-        every { encryptedStorage.getString(REFRESH_TOKEN_KEY) } returns REFRESH_TOKEN_CURRENT_VALUE
-        every { deviceIdStorage.getDeviceId() } returns "device id"
-        every { prefsStore.clear() } just runs
-        var result: Any? = null
-        step("Рефрешится токен") {
-            runBlocking {
-                result = VKID.instance.refreshToken(params = VKIDRefreshTokenParams { state = STATE })
-            }
-        }
-        step("Не получен AT") {
-            (result as? AccessToken?).shouldBeNull()
-        }
-        step("Получена ошибка") {
-            (result as? VKIDRefreshTokenFail?) shouldBe VKIDRefreshTokenFail.FailedOAuthState("Wrong state for getting user info")
-        }
-    }
-
-    @Test
-    @AllureId("2303039")
-    @DisplayName("Получение ошибки от апи при рефреше токена")
-    fun refreshTokenApiFail() = run {
-        val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
-        val prefsStore = mockk<InternalVKIDPrefsStore>()
-        val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
-        InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
-            .deviceIdStorage(deviceIdStorage)
-            .prefsStore(prefsStore)
-            .encryptedSharedPreferencesStorage(encryptedStorage)
-            .refreshTokenResponse(Result.success(InternalVKIDTokenPayloadResponse(error = "some error")))
-            .build()
-        every { encryptedStorage.getString(REFRESH_TOKEN_KEY) } returns REFRESH_TOKEN_CURRENT_VALUE
-        every { deviceIdStorage.getDeviceId() } returns "device id"
-        every { prefsStore.clear() } just runs
-        var result: Any? = null
-        step("Рефрешится токен") {
-            runBlocking {
-                result = VKID.instance.refreshToken(params = VKIDRefreshTokenParams { state = STATE })
-            }
-        }
-        step("Не получен AT") {
-            (result as? AccessToken?).shouldBeNull()
-        }
-        step("Получена ошибка") {
-            (result as? VKIDRefreshTokenFail?).shouldBeInstanceOf<VKIDRefreshTokenFail.FailedApiCall>()
-        }
-    }
-
-    @Test
-    @AllureId("2303035")
-    @DisplayName("Получение ошибки получения пользовательских данных при рефреше токена")
-    fun userDataApiFail() = run {
-        val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
-        val prefsStore = mockk<InternalVKIDPrefsStore>()
-        val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
-        InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
-            .deviceIdStorage(deviceIdStorage)
-            .prefsStore(prefsStore)
-            .encryptedSharedPreferencesStorage(encryptedStorage)
-            .getUserInfoResponse(Result.success(InternalVKIDUserInfoPayloadResponse(error = "some error")))
-            .refreshTokenResponse(Result.success(REFRESH_TOKEN_RESPONSE))
-            .build()
+        every { encryptedStorage.getString(ACCESS_TOKEN_KEY) } returns ACCESS_TOKEN_JSON
         every { encryptedStorage.getString(REFRESH_TOKEN_KEY) } returns REFRESH_TOKEN_CURRENT_VALUE
         every { prefsStore.clear() } just runs
         every { deviceIdStorage.getDeviceId() } returns "device id"
         var result: Any? = null
-        step("Рефрешится токен") {
+        step("Получается пользователь") {
             runBlocking {
-                result = VKID.instance.refreshToken(params = VKIDRefreshTokenParams { state = STATE })
+                result = VKID.instance.getUserData(params = VKIDGetUserParams { refreshTokenState = STATE })
             }
         }
-        step("Не получен AT") {
-            (result as? AccessToken?).shouldBeNull()
+        step("Получен пользователь") {
+            (result as? VKIDUser?).shouldBeNull()
         }
-        step("Получена ошибка") {
-            (result as? VKIDRefreshTokenFail?).shouldBeInstanceOf<VKIDRefreshTokenFail.FailedApiCall>()
+        step("Не получена ошибка") {
+            (result as? VKIDGetUserFail?).shouldBeInstanceOf<VKIDGetUserFail.FailedApiCall>()
         }
     }
 
-    private suspend fun VKID.refreshToken(
-        params: VKIDRefreshTokenParams = VKIDRefreshTokenParams { }
+    @Test
+    @AllureId("2303050")
+    @DisplayName("Ошибка получения пользовательских данных из-за ошибки апи")
+    fun apiCallFail() = run {
+        val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
+        val prefsStore = mockk<InternalVKIDPrefsStore>()
+        val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
+        InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
+            .deviceIdStorage(deviceIdStorage)
+            .prefsStore(prefsStore)
+            .encryptedSharedPreferencesStorage(encryptedStorage)
+            .getUserInfoResponse(Result.success(InternalVKIDUserInfoPayloadResponse(error = "some error")),)
+            .build()
+        every { encryptedStorage.getString(ACCESS_TOKEN_KEY) } returns ACCESS_TOKEN_JSON
+        every { deviceIdStorage.getDeviceId() } returns "device id"
+        var result: Any? = null
+        step("Получается пользователь") {
+            runBlocking {
+                result = VKID.instance.getUserData(params = VKIDGetUserParams { refreshTokenState = STATE })
+            }
+        }
+        step("Получен пользователь") {
+            (result as? VKIDUser?).shouldBeNull()
+        }
+        step("Не получена ошибка") {
+            (result as? VKIDGetUserFail?).shouldBeInstanceOf<VKIDGetUserFail.FailedApiCall>()
+        }
+    }
+
+    @Test
+    @AllureId("2303047")
+    @DisplayName("Ошибка получения пользовательских данных из-за отсутствия авторизации")
+    fun notAuthorizedFail() = run {
+        val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
+        val prefsStore = mockk<InternalVKIDPrefsStore>()
+        val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
+        InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
+            .deviceIdStorage(deviceIdStorage)
+            .prefsStore(prefsStore)
+            .encryptedSharedPreferencesStorage(encryptedStorage)
+            .build()
+        every { encryptedStorage.getString(ACCESS_TOKEN_KEY) } returns null
+        every { deviceIdStorage.getDeviceId() } returns "device id"
+        var result: Any? = null
+        step("Получается пользователь") {
+            runBlocking {
+                result = VKID.instance.getUserData(params = VKIDGetUserParams { refreshTokenState = STATE })
+            }
+        }
+        step("Получен пользователь") {
+            (result as? VKIDUser?).shouldBeNull()
+        }
+        step("Не получена ошибка") {
+            (result as? VKIDGetUserFail?) shouldBe VKIDGetUserFail.NotAuthenticated("Not authorized")
+        }
+    }
+
+    private suspend fun VKID.getUserData(
+        params: VKIDGetUserParams = VKIDGetUserParams {}
     ): Any = suspendCoroutine {
         runBlocking {
-            refreshToken(
-                callback = object : VKIDRefreshTokenCallback {
-                    override fun onSuccess(token: AccessToken) = it.resume(token)
-                    override fun onFail(fail: VKIDRefreshTokenFail) = it.resume(fail)
+            getUserData(
+                callback = object : VKIDGetUserCallback {
+                    override fun onSuccess(user: VKIDUser) = it.resume(user)
+                    override fun onFail(fail: VKIDGetUserFail) = it.resume(fail)
                 },
                 params = params
             )
