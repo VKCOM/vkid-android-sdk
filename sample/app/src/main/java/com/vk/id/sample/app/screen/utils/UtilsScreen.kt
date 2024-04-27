@@ -86,11 +86,13 @@ internal fun UtilsScreen() {
         Spacer(modifier = Modifier.height(8.dp))
         ExchangeTokenUtil()
         Spacer(modifier = Modifier.height(8.dp))
-        LogoutUtil()
-        Spacer(modifier = Modifier.height(8.dp))
         RefreshUserUtil()
         Spacer(modifier = Modifier.height(8.dp))
         GetPublicInfoUtil()
+        Spacer(modifier = Modifier.height(8.dp))
+        RevokeUtil()
+        Spacer(modifier = Modifier.height(8.dp))
+        LogoutUtil()
         Spacer(modifier = Modifier.height(8.dp))
         StrictModeUtil()
         Spacer(modifier = Modifier.height(8.dp))
@@ -302,23 +304,21 @@ private fun ExchangeTokenUtil() {
 
 @Composable
 private fun LogoutUtil() {
-    ExpandableCard(title = "Logout") {
-        val context = LocalContext.current
-        val coroutineScope = rememberCoroutineScope()
-        Button(text = "Logout") {
-            coroutineScope.launch {
-                VKID.instance.logout(
-                    callback = object : VKIDLogoutCallback {
-                        override fun onSuccess() {
-                            showToast(context, "Logged out")
-                        }
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+    Button(text = "Logout", verticalPadding = 0.dp) {
+        coroutineScope.launch {
+            VKID.instance.logout(
+                callback = object : VKIDLogoutCallback {
+                    override fun onSuccess() {
+                        showToast(context, "Logged out")
+                    }
 
-                        override fun onFail(fail: VKIDLogoutFail) {
-                            showToast(context, "Logout failed with: ${fail.description}")
-                        }
-                    },
-                )
-            }
+                    override fun onFail(fail: VKIDLogoutFail) {
+                        showToast(context, "Logout failed with: ${fail.description}")
+                    }
+                },
+            )
         }
     }
 }
@@ -384,19 +384,11 @@ private fun GetPublicInfoUtil() {
                     val idToken = VKID.instance.accessToken?.idToken ?: return@withContext null
                     val api = OkHttpClient.Builder().build()
 
-                    val componentName = ComponentName(context, MainActivity::class.java)
-                    val flags = PackageManager.GET_META_DATA or PackageManager.GET_ACTIVITIES
-                    val ai: ActivityInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        context.packageManager.getActivityInfo(componentName, ComponentInfoFlags.of(flags.toLong()))
-                    } else {
-                        context.packageManager.getActivityInfo(componentName, flags)
-                    }
-                    val clientId = ai.metaData.getInt("VKIDClientID").toString()
 //                    val endpoint = "id.vk.com"
                     val endpoint = "tk-training.id.cs7777.vk.com"
                     val formBody = FormBody.Builder()
                         .add("id_token", idToken)
-                        .add("client_id", clientId)
+                        .add("client_id", getClientId(context))
                         .build()
                     val url = "https://$endpoint/oauth2/public_info"
                     val request = Request.Builder()
@@ -436,6 +428,43 @@ private fun GetPublicInfoUtil() {
 }
 
 @Composable
+private fun RevokeUtil() {
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+    Button(text = "Revoke", verticalPadding = 0.dp) {
+        coroutineScope.launch {
+            withContext(Dispatchers.IO) {
+                val accessToken = VKID.instance.accessToken?.token ?: run {
+                    withContext(Dispatchers.Main) {
+                        showToast(context, "Not authorized")
+                    }
+                    return@withContext
+                }
+                val api = OkHttpClient.Builder().build()
+
+//                    val endpoint = "id.vk.com"
+                val endpoint = "tk-training.id.cs7777.vk.com"
+                val formBody = FormBody.Builder()
+                    .add("access_token", accessToken)
+                    .add("client_id", getClientId(context))
+                    .build()
+                val url = "https://$endpoint/oauth2/revoke"
+                val request = Request.Builder()
+                    .url(url)
+                    .post(formBody)
+                    .build()
+                val response = api.newCall(request).execute()
+                val body = requireNotNull(response.body).string()
+                val code = JSONObject(body).optInt("response")
+                withContext(Dispatchers.Main) {
+                    showToast(context, if (code == 1) "Success" else "Fail")
+                }
+            }
+        }
+    }
+}
+
+@Composable
 private fun StrictModeUtil() {
     val context = LocalContext.current
     var strictModeEnabled by remember { mutableStateOf<Boolean?>(null) }
@@ -463,6 +492,17 @@ private fun StrictModeUtil() {
             }
         }
     )
+}
+
+private fun getClientId(context: Context): String {
+    val componentName = ComponentName(context, MainActivity::class.java)
+    val flags = PackageManager.GET_META_DATA or PackageManager.GET_ACTIVITIES
+    val ai: ActivityInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        context.packageManager.getActivityInfo(componentName, ComponentInfoFlags.of(flags.toLong()))
+    } else {
+        context.packageManager.getActivityInfo(componentName, flags)
+    }
+    return ai.metaData.getInt("VKIDClientID").toString()
 }
 
 private fun Context.toActivitySafe(): Activity? {
