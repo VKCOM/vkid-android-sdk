@@ -9,7 +9,7 @@ import com.facebook.flipper.plugins.inspector.DescriptorMapping
 import com.facebook.flipper.plugins.inspector.InspectorFlipperPlugin
 import com.facebook.soloader.SoLoader
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.network.AdditionalInterceptors
+import com.vk.id.network.InternalVKIDAdditionalInterceptors
 
 internal object FlipperInitializer {
     fun init(context: Context) {
@@ -18,7 +18,7 @@ internal object FlipperInitializer {
         if (BuildConfig.DEBUG && FlipperUtils.shouldEnableFlipper(context)) {
             val client = AndroidFlipperClient.getInstance(context)
             client.addPlugin(InspectorFlipperPlugin(context, DescriptorMapping.withDefaults()))
-            client.addPlugin(AdditionalInterceptors.networkFlipperPlugin)
+            client.addPlugin(InternalVKIDAdditionalInterceptors.networkFlipperPlugin)
             client.start()
         }
     }

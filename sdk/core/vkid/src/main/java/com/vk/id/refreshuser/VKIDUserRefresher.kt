@@ -8,8 +8,8 @@ import com.vk.id.VKIDUser
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.ServiceCredentials
-import com.vk.id.internal.auth.device.DeviceIdProvider
-import com.vk.id.internal.concurrent.CoroutinesDispatchers
+import com.vk.id.internal.auth.device.InternalVKIDDeviceIdProvider
+import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
 import com.vk.id.refresh.VKIDRefreshTokenCallback
 import com.vk.id.refresh.VKIDRefreshTokenFail
 import com.vk.id.refresh.VKIDRefreshTokenParams
@@ -21,9 +21,9 @@ import kotlinx.coroutines.withContext
 internal class VKIDUserRefresher(
     private val api: VKIDApiService,
     private val tokenStorage: TokenStorage,
-    private val deviceIdProvider: DeviceIdProvider,
+    private val deviceIdProvider: InternalVKIDDeviceIdProvider,
     private val serviceCredentials: ServiceCredentials,
-    private val dispatchers: CoroutinesDispatchers,
+    private val dispatchers: VKIDCoroutinesDispatchers,
     private val refresher: VKIDTokenRefresher,
 ) {
     suspend fun refresh(

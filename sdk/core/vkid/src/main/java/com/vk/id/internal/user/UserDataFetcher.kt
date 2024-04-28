@@ -5,7 +5,7 @@ package com.vk.id.internal.user
 import com.vk.id.VKIDUser
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.auth.ServiceCredentials
-import com.vk.id.internal.concurrent.CoroutinesDispatchers
+import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
 import com.vk.id.internal.ipc.SilentAuthInfoProvider
 import com.vk.id.internal.util.currentTime
 import com.vk.id.toVKIDUser
@@ -14,7 +14,7 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
 internal class UserDataFetcher(
-    private val dispatchers: CoroutinesDispatchers,
+    private val dispatchers: VKIDCoroutinesDispatchers,
     private val serviceCredentials: ServiceCredentials,
     private val vkSilentAuthInfoProvider: SilentAuthInfoProvider,
 ) {

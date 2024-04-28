@@ -7,9 +7,9 @@ import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.api.dto.VKIDUserInfoPayload
 import com.vk.id.internal.auth.ServiceCredentials
-import com.vk.id.internal.auth.device.DeviceIdProvider
-import com.vk.id.internal.concurrent.CoroutinesDispatchers
-import com.vk.id.network.VKIDCall
+import com.vk.id.internal.auth.device.InternalVKIDDeviceIdProvider
+import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
+import com.vk.id.network.InternalVKIDCall
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.testCoroutineScheduler
 import io.mockk.called
@@ -56,7 +56,7 @@ internal class VKIDUserInfoFetcherTest : BehaviorSpec({
     coroutineTestScope = true
 
     Given("User info fetcher") {
-        val deviceIdProvider = mockk<DeviceIdProvider>()
+        val deviceIdProvider = mockk<InternalVKIDDeviceIdProvider>()
         every { deviceIdProvider.getDeviceId() } returns DEVICE_ID
         val api = mockk<VKIDApiService>()
         val serviceCredentials = ServiceCredentials(
@@ -64,7 +64,7 @@ internal class VKIDUserInfoFetcherTest : BehaviorSpec({
             clientSecret = CLIENT_SECRET,
             redirectUri = REDIRECT_URI,
         )
-        val dispatchers = mockk<CoroutinesDispatchers>()
+        val dispatchers = mockk<VKIDCoroutinesDispatchers>()
         val scheduler = testCoroutineScheduler
         val testDispatcher = StandardTestDispatcher(scheduler)
         every { dispatchers.io } returns testDispatcher
@@ -75,7 +75,7 @@ internal class VKIDUserInfoFetcherTest : BehaviorSpec({
             deviceIdProvider = deviceIdProvider,
         )
         When("Api returns an error") {
-            val call = mockk<VKIDCall<VKIDUserInfoPayload>>()
+            val call = mockk<InternalVKIDCall<VKIDUserInfoPayload>>()
             val exception = Exception()
             every { call.execute() } returns Result.failure(exception)
             coEvery {
@@ -101,7 +101,7 @@ internal class VKIDUserInfoFetcherTest : BehaviorSpec({
             }
         }
         When("Api returns user") {
-            val call = mockk<VKIDCall<VKIDUserInfoPayload>>()
+            val call = mockk<InternalVKIDCall<VKIDUserInfoPayload>>()
             every { call.execute() } returns Result.success(USER_INFO_PAYLOAD)
             coEvery {
                 api.getUserInfo(

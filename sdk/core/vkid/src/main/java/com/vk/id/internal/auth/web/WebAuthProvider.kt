@@ -13,12 +13,12 @@ import com.vk.id.internal.auth.AuthOptions
 import com.vk.id.internal.auth.AuthResult
 import com.vk.id.internal.auth.VKIDAuthProvider
 import com.vk.id.internal.auth.toAuthUriBrowser
-import com.vk.id.logger.createLoggerForClass
+import com.vk.id.logger.internalVKIDCreateLoggerForClass
 
 internal class WebAuthProvider(
     private val context: Context,
 ) : VKIDAuthProvider {
-    private val logger = createLoggerForClass()
+    private val logger = internalVKIDCreateLoggerForClass()
 
     override fun auth(
         authOptions: AuthOptions

@@ -12,7 +12,7 @@ import android.os.Bundle
 import androidx.core.app.ActivityOptionsCompat
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.auth.web.ContextUtils.addNewTaskFlag
-import com.vk.id.logger.createLoggerForClass
+import com.vk.id.logger.internalVKIDCreateLoggerForClass
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 
@@ -33,7 +33,7 @@ internal class AuthActivity : Activity() {
 
     private var authIntent: Intent? = null
 
-    private val logger = createLoggerForClass()
+    private val logger = internalVKIDCreateLoggerForClass()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         overridePendingTransition(0, 0)

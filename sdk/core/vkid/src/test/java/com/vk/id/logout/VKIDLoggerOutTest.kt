@@ -8,9 +8,9 @@ import com.vk.id.VKIDUser
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.ServiceCredentials
-import com.vk.id.internal.auth.device.DeviceIdProvider
-import com.vk.id.internal.concurrent.CoroutinesDispatchers
-import com.vk.id.network.VKIDCall
+import com.vk.id.internal.auth.device.InternalVKIDDeviceIdProvider
+import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
+import com.vk.id.network.InternalVKIDCall
 import com.vk.id.storage.TokenStorage
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
@@ -63,14 +63,14 @@ internal class VKIDLoggerOutTest : BehaviorSpec({
     Given("Logger out") {
         val api = mockk<VKIDApiService>()
         val tokenStorage = mockk<TokenStorage>()
-        val deviceIdProvider = mockk<DeviceIdProvider>()
+        val deviceIdProvider = mockk<InternalVKIDDeviceIdProvider>()
         every { deviceIdProvider.getDeviceId() } returns DEVICE_ID
         val serviceCredentials = ServiceCredentials(
             clientID = CLIENT_ID,
             clientSecret = CLIENT_SECRET,
             redirectUri = REDIRECT_URI,
         )
-        val dispatchers = mockk<CoroutinesDispatchers>()
+        val dispatchers = mockk<VKIDCoroutinesDispatchers>()
         val scheduler = testCoroutineScheduler
         val testDispatcher = StandardTestDispatcher(scheduler)
         every { dispatchers.io } returns testDispatcher
@@ -123,7 +123,7 @@ internal class VKIDLoggerOutTest : BehaviorSpec({
             And("Requests to clear token storage") {
                 val clearTokenStorage = true
                 every { tokenStorage.accessToken } returns ACCESS_TOKEN
-                val call = mockk<VKIDCall<Unit>>()
+                val call = mockk<InternalVKIDCall<Unit>>()
                 val exception = Exception("message")
                 every { call.execute() } returns Result.failure(exception)
                 coEvery {
@@ -147,7 +147,7 @@ internal class VKIDLoggerOutTest : BehaviorSpec({
             And("Requests to not clear token storage") {
                 val clearTokenStorage = false
                 val accessToken = ACCESS_TOKEN_VALUE
-                val call = mockk<VKIDCall<Unit>>()
+                val call = mockk<InternalVKIDCall<Unit>>()
                 val exception = Exception("message")
                 every { call.execute() } returns Result.failure(exception)
                 coEvery {
@@ -175,7 +175,7 @@ internal class VKIDLoggerOutTest : BehaviorSpec({
                 val clearTokenStorage = true
                 every { tokenStorage.accessToken } returns ACCESS_TOKEN
                 every { tokenStorage.clear() } just runs
-                val call = mockk<VKIDCall<Unit>>()
+                val call = mockk<InternalVKIDCall<Unit>>()
                 val exception = VKIDInvalidTokenException()
                 every { call.execute() } returns Result.failure(exception)
                 coEvery {
@@ -208,7 +208,7 @@ internal class VKIDLoggerOutTest : BehaviorSpec({
             And("Requests to not clear token storage") {
                 val clearTokenStorage = false
                 val accessToken = ACCESS_TOKEN_VALUE
-                val call = mockk<VKIDCall<Unit>>()
+                val call = mockk<InternalVKIDCall<Unit>>()
                 val exception = VKIDInvalidTokenException()
                 every { call.execute() } returns Result.failure(exception)
                 coEvery {
@@ -243,7 +243,7 @@ internal class VKIDLoggerOutTest : BehaviorSpec({
                 val clearTokenStorage = true
                 every { tokenStorage.accessToken } returns ACCESS_TOKEN
                 every { tokenStorage.clear() } just runs
-                val call = mockk<VKIDCall<Unit>>()
+                val call = mockk<InternalVKIDCall<Unit>>()
                 every { call.execute() } returns Result.success(Unit)
                 coEvery {
                     api.logout(
@@ -268,7 +268,7 @@ internal class VKIDLoggerOutTest : BehaviorSpec({
             And("Requests to not clear token storage") {
                 val clearTokenStorage = false
                 val accessToken = ACCESS_TOKEN_VALUE
-                val call = mockk<VKIDCall<Unit>>()
+                val call = mockk<InternalVKIDCall<Unit>>()
                 every { call.execute() } returns Result.success(Unit)
                 coEvery {
                     api.logout(

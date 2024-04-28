@@ -17,15 +17,15 @@ public class VKIDLogTest : BehaviorSpec({
 
     beforeSpec {
         mockEngine = mockk(relaxed = true)
-        VKIDLog.setLogEngine(mockEngine)
+        InternalVKIDLog.setLogEngine(mockEngine)
     }
 
     Given("A log engine") {
         val anotherMockEngine = mockk<LogEngine>(relaxed = true)
 
         When("Sets log engine and logs") {
-            VKIDLog.setLogEngine(anotherMockEngine)
-            VKIDLog.log(LogEngine.LogLevel.DEBUG, "TestTag", "TestMessage", null)
+            InternalVKIDLog.setLogEngine(anotherMockEngine)
+            InternalVKIDLog.log(LogEngine.LogLevel.DEBUG, "TestTag", "TestMessage", null)
 
             Then("Log engine is invoked") {
                 verify { anotherMockEngine.log(LogEngine.LogLevel.DEBUG, "TestTag", "TestMessage", null) }
@@ -46,7 +46,7 @@ public class VKIDLogTest : BehaviorSpec({
     }
 
     Given("A logger with tag") {
-        val logger = VKIDLog.createLoggerForTag("TestTag")
+        val logger = InternalVKIDLog.createLoggerForTag("TestTag")
 
         When("Logs info level message") {
             logger.info("TestInfoMessage")

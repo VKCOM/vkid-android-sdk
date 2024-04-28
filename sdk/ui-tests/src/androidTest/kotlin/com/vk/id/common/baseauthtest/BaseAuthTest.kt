@@ -24,7 +24,7 @@ import com.vk.id.common.mockapi.mockGetTokenSuccess
 import com.vk.id.common.mockapi.mockLogoutError
 import com.vk.id.common.mockapi.mockUserInfoError
 import com.vk.id.common.mockprovider.ContinueAuthScenario
-import com.vk.id.test.VKIDTestBuilder
+import com.vk.id.test.InternalVKIDTestBuilder
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
@@ -522,5 +522,5 @@ public abstract class BaseAuthTest(
 
     protected abstract fun TestContext<Unit>.startAuth()
 
-    protected open fun vkidBuilder(): VKIDTestBuilder = VKIDTestBuilder(composeTestRule.activity)
+    protected open fun vkidBuilder(): InternalVKIDTestBuilder = InternalVKIDTestBuilder(composeTestRule.activity)
 }

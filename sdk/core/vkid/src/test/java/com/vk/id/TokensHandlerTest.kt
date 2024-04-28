@@ -5,7 +5,7 @@ package com.vk.id
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.fetchuser.VKIDUserInfoFetcher
 import com.vk.id.internal.auth.VKIDTokenPayload
-import com.vk.id.internal.concurrent.CoroutinesDispatchers
+import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
 import com.vk.id.storage.TokenStorage
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
@@ -68,7 +68,7 @@ internal class TokensHandlerTest : BehaviorSpec({
         val userInfoFetcher = mockk<VKIDUserInfoFetcher>()
         val tokenStorage = mockk<TokenStorage>()
         val scheduler = testCoroutineScheduler
-        val dispatchers = mockk<CoroutinesDispatchers>()
+        val dispatchers = mockk<VKIDCoroutinesDispatchers>()
         val testDispatcher = StandardTestDispatcher(scheduler)
         every { dispatchers.io } returns testDispatcher
         val handler = TokensHandler(

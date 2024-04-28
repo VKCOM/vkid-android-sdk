@@ -36,9 +36,9 @@ import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.auth.app.SilentAuthInfoUtils
 import com.vk.id.internal.auth.app.SilentAuthProviderData
 import com.vk.id.internal.auth.app.SilentAuthServicesProvider
-import com.vk.id.internal.auth.device.DeviceIdProvider
+import com.vk.id.internal.auth.device.InternalVKIDDeviceIdProvider
 import com.vk.id.internal.ipc.VkSilentInfoItemsGrouper.groupByWeightAndUserHash
-import com.vk.id.logger.createLoggerForClass
+import com.vk.id.logger.internalVKIDCreateLoggerForClass
 import com.vk.silentauth.ISilentAuthInfoProvider
 import com.vk.silentauth.SilentAuthInfo
 import com.vk.silentauth.SilentAuthInfoWithProviderWeight
@@ -55,10 +55,10 @@ import java.util.concurrent.TimeUnit
 internal class VkSilentAuthInfoProvider(
     context: Context,
     private val servicesProvider: SilentAuthServicesProvider,
-    private val deviceIdProvider: DeviceIdProvider,
+    private val deviceIdProvider: InternalVKIDDeviceIdProvider,
     override val defaultTimeout: Long = TimeUnit.SECONDS.toMillis(DEFAULT_BINDING_TIMEOUT_SECONDS),
 ) : SilentAuthInfoProvider, IPCClientBaseProvider<ISilentAuthInfoProvider>() {
-    private val logger = createLoggerForClass()
+    private val logger = internalVKIDCreateLoggerForClass()
 
     override val intentName: String
         get() = SilentAuthServicesProvider.ACTION_GET_INFO

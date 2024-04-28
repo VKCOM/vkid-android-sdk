@@ -9,14 +9,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.onetap.common.icon.style.VKIconColorStyle
-import com.vk.id.onetap.common.icon.style.VKIconSizeStyle
-import com.vk.id.onetap.common.icon.style.VKIconStyle
+import com.vk.id.onetap.common.icon.style.InternalVKIconColorStyle
+import com.vk.id.onetap.common.icon.style.InternalVKIconSizeStyle
+import com.vk.id.onetap.common.icon.style.InternalVKIconStyle
 
 @Composable
 internal fun VKIcon(
     modifier: Modifier = Modifier,
-    style: VKIconStyle,
+    style: InternalVKIconStyle,
 ) {
     Image(
         painter = painterResource(style.colorStyle.asPainterResource()),
@@ -29,17 +29,17 @@ internal fun VKIcon(
 @Preview
 @Composable
 private fun VKIconBlue() = VKIcon(
-    style = VKIconStyle(
-        colorStyle = VKIconColorStyle.BLUE,
-        sizeStyle = VKIconSizeStyle.NORMAL,
+    style = InternalVKIconStyle(
+        colorStyle = InternalVKIconColorStyle.BLUE,
+        sizeStyle = InternalVKIconSizeStyle.NORMAL,
     )
 )
 
 @Preview
 @Composable
 private fun VKIconWhite() = VKIcon(
-    style = VKIconStyle(
-        colorStyle = VKIconColorStyle.WHITE,
-        sizeStyle = VKIconSizeStyle.SMALL,
+    style = InternalVKIconStyle(
+        colorStyle = InternalVKIconColorStyle.WHITE,
+        sizeStyle = InternalVKIconSizeStyle.SMALL,
     )
 )

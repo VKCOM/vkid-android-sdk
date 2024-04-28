@@ -57,7 +57,7 @@ private const val ID_TOKEN = "id token"
 internal class TokenStorageTest : BehaviorSpec({
     isolationMode = IsolationMode.InstancePerLeaf
     Given("A token storage") {
-        val prefs = mockk<EncryptedSharedPreferencesStorage>()
+        val prefs = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
         val storage = TokenStorage(prefs)
         When("Saves access token") {
             every { prefs.set(ACCESS_TOKEN_KEY, TOKEN_JSON) } just runs

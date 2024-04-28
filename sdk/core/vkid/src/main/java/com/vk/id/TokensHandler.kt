@@ -6,14 +6,14 @@ import com.vk.id.common.InternalVKIDApi
 import com.vk.id.fetchuser.VKIDUserInfoFetcher
 import com.vk.id.internal.auth.VKIDTokenPayload
 import com.vk.id.internal.auth.toExpireTime
-import com.vk.id.internal.concurrent.CoroutinesDispatchers
+import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
 import com.vk.id.storage.TokenStorage
 import kotlinx.coroutines.withContext
 
 internal class TokensHandler(
     private val userInfoFetcher: VKIDUserInfoFetcher,
     private val tokenStorage: TokenStorage,
-    private val dispatchers: CoroutinesDispatchers,
+    private val dispatchers: VKIDCoroutinesDispatchers,
 ) {
     suspend fun handle(
         payload: VKIDTokenPayload,

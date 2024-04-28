@@ -6,7 +6,7 @@ import android.content.Context
 import android.content.pm.ApplicationInfo
 import androidx.annotation.VisibleForTesting
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.logger.createLoggerForClass
+import com.vk.id.logger.internalVKIDCreateLoggerForClass
 import com.vk.id.network.useragent.UserAgentInterceptor
 import com.vk.id.network.useragent.UserAgentProvider
 import okhttp3.CertificatePinner
@@ -24,7 +24,7 @@ internal class OkHttpClientProvider(
         .connectTimeout(OKHTTP_TIMEOUT_SECONDS, TimeUnit.SECONDS)
         .addInterceptor(loggingInterceptor())
         .addInterceptor(UserAgentInterceptor(UserAgentProvider(context)))
-        .apply { AdditionalInterceptors.getInterceptor()?.let(::addNetworkInterceptor) }
+        .apply { InternalVKIDAdditionalInterceptors.getInterceptor()?.let(::addNetworkInterceptor) }
         .build()
 
     @VisibleForTesting
@@ -51,7 +51,7 @@ internal class OkHttpClientProvider(
 
     private fun loggingInterceptor(): HttpLoggingInterceptor {
         val logging = HttpLoggingInterceptor(object : HttpLoggingInterceptor.Logger {
-            private val logger = createLoggerForClass()
+            private val logger = internalVKIDCreateLoggerForClass()
             override fun log(message: String) {
                 logger.debug(message)
             }

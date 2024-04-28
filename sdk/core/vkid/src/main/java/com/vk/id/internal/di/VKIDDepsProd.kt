@@ -23,21 +23,21 @@ import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.auth.app.SilentAuthServicesProvider
 import com.vk.id.internal.auth.app.TrustedProvidersCache
 import com.vk.id.internal.auth.device.DeviceIdPrefs
-import com.vk.id.internal.auth.device.DeviceIdProvider
+import com.vk.id.internal.auth.device.InternalVKIDDeviceIdProvider
 import com.vk.id.internal.auth.pkce.PkceGeneratorSHA256
-import com.vk.id.internal.concurrent.CoroutinesDispatchers
 import com.vk.id.internal.concurrent.CoroutinesDispatchersProd
+import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
 import com.vk.id.internal.ipc.SilentAuthInfoProvider
 import com.vk.id.internal.ipc.VkSilentAuthInfoProvider
 import com.vk.id.internal.state.StateGenerator
-import com.vk.id.internal.store.PrefsStore
+import com.vk.id.internal.store.InternalVKIDPrefsStore
 import com.vk.id.internal.user.UserDataFetcher
 import com.vk.id.logout.VKIDLoggerOut
-import com.vk.id.network.VKIDApi
-import com.vk.id.network.VKIDRealApi
+import com.vk.id.network.InternalVKIDApiContract
+import com.vk.id.network.InternalVKIDRealApi
 import com.vk.id.refresh.VKIDTokenRefresher
 import com.vk.id.refreshuser.VKIDUserRefresher
-import com.vk.id.storage.EncryptedSharedPreferencesStorage
+import com.vk.id.storage.InternalVKIDEncryptedSharedPreferencesStorage
 import com.vk.id.storage.TokenStorage
 
 internal open class VKIDDepsProd(
@@ -74,8 +74,8 @@ internal open class VKIDDepsProd(
         )
     }
 
-    override val api: Lazy<VKIDApi> = lazy {
-        VKIDRealApi.getInstance(context = appContext)
+    override val api: Lazy<InternalVKIDApiContract> = lazy {
+        InternalVKIDRealApi.getInstance(context = appContext)
     }
     private val apiService = lazy { VKIDApiService(api.value) }
 
@@ -179,8 +179,8 @@ internal open class VKIDDepsProd(
         )
     }
 
-    override val encryptedSharedPreferencesStorage: Lazy<EncryptedSharedPreferencesStorage> = lazy {
-        EncryptedSharedPreferencesStorage(appContext)
+    override val encryptedSharedPreferencesStorage: Lazy<InternalVKIDEncryptedSharedPreferencesStorage> = lazy {
+        InternalVKIDEncryptedSharedPreferencesStorage(appContext)
     }
 
     override val tokenStorage by lazy { TokenStorage(encryptedSharedPreferencesStorage.value) }
@@ -204,23 +204,23 @@ internal open class VKIDDepsProd(
 
     private val stateGenerator by lazy { StateGenerator(prefsStore.value) }
 
-    override val prefsStore: Lazy<PrefsStore> = lazy {
-        PrefsStore(appContext)
+    override val prefsStore: Lazy<InternalVKIDPrefsStore> = lazy {
+        InternalVKIDPrefsStore(appContext)
     }
 
-    override val deviceIdStorage: Lazy<DeviceIdProvider.DeviceIdStorage> = lazy {
+    override val deviceIdStorage: Lazy<InternalVKIDDeviceIdProvider.DeviceIdStorage> = lazy {
         DeviceIdPrefs(appContext)
     }
 
-    private val deviceIdProvider: Lazy<DeviceIdProvider> = lazy {
-        DeviceIdProvider(appContext, deviceIdStorage.value)
+    private val deviceIdProvider: Lazy<InternalVKIDDeviceIdProvider> = lazy {
+        InternalVKIDDeviceIdProvider(appContext, deviceIdStorage.value)
     }
 
     private val pkceGenerator: Lazy<PkceGeneratorSHA256> = lazy {
         PkceGeneratorSHA256()
     }
 
-    override val dispatchers: CoroutinesDispatchers
+    override val dispatchers: VKIDCoroutinesDispatchers
         get() = CoroutinesDispatchersProd()
 }
 
