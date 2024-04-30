@@ -30,6 +30,11 @@ public sealed class VKIDGetUserFail(
             result = 31 * result + throwable.hashCode()
             return result
         }
+
+        /** @suppress */
+        override fun toString(): String {
+            return "FailedApiCall(description=$description&throwable=$throwable)"
+        }
     }
 
     /**

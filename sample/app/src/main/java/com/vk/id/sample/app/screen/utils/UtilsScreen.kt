@@ -90,6 +90,8 @@ internal fun UtilsScreen() {
         Spacer(modifier = Modifier.height(8.dp))
         GetPublicInfoUtil()
         Spacer(modifier = Modifier.height(8.dp))
+        CurrentTokenUtil()
+        Spacer(modifier = Modifier.height(8.dp))
         RevokeUtil()
         Spacer(modifier = Modifier.height(8.dp))
         LogoutUtil()
@@ -423,6 +425,21 @@ private fun GetPublicInfoUtil() {
                 )
                 Spacer(modifier = Modifier.height(12.dp))
             }
+        }
+    }
+}
+
+@Composable
+private fun CurrentTokenUtil() {
+    ExpandableCard(title = "Current token") {
+        var token by remember { mutableStateOf<AccessToken?>(null) }
+        LaunchedEffect(key1 = Unit) {
+            withContext(Dispatchers.IO) {
+                token = VKID.instance.accessToken
+            }
+        }
+        token?.let {
+            UseToken(accessToken = it)
         }
     }
 }
