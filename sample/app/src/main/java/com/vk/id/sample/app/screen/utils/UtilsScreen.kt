@@ -33,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
@@ -72,7 +73,7 @@ import okhttp3.Request
 import org.json.JSONObject
 
 @Composable
-internal fun UtilsScreen() {
+internal fun UtilsScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -96,6 +97,8 @@ internal fun UtilsScreen() {
         RevokeUtil()
         Spacer(modifier = Modifier.height(8.dp))
         LogoutUtil()
+        Spacer(modifier = Modifier.height(8.dp))
+        OldSdkSample(navController)
         Spacer(modifier = Modifier.height(8.dp))
         StrictModeUtil()
         Spacer(modifier = Modifier.height(8.dp))
@@ -327,6 +330,13 @@ private fun LogoutUtil() {
 }
 
 @Composable
+private fun OldSdkSample(navController: NavController) {
+    Button(text = "Old SDK sample", verticalPadding = 0.dp) {
+        navController.navigate("old-sdk-sample")
+    }
+}
+
+@Composable
 private fun RefreshUserUtil() {
     ExpandableCard(title = "Refresh user data") {
         val context = LocalContext.current
@@ -459,7 +469,8 @@ private fun CurrentTokenUtil() {
 private suspend fun getUserBday(accessToken: AccessToken): String {
     return withContext(Dispatchers.IO) {
         val api = OkHttpClient.Builder().build()
-        val url = "https://api.vk.com/method/users.get?user_ids=${accessToken.userID}&fields=bdate&access_token=${accessToken.token}&v=5.131 HTTP/1.1"
+        val url = "https://tk-training.api.cs7777.vk.com/method/users.get?user_ids=${accessToken.userID}&fields=bdate" +
+            "&access_token=${accessToken.token}&v=5.131 HTTP/1.1"
         val request = Request.Builder()
             .url(url)
             .build()

@@ -21,6 +21,7 @@ import com.vk.id.sample.app.screen.sheet.OneTapBottomSheetScreen
 import com.vk.id.sample.app.screen.styling.OnetapStylingComposeScreen
 import com.vk.id.sample.app.screen.utils.UtilsScreen
 import com.vk.id.sample.app.uikit.theme.AppTheme
+import com.vk.id.sample.oldsdk.OldSdkScreen
 import com.vk.id.sample.xml.multibranding.MultibrandingXmlLayoutActivity
 import com.vk.id.sample.xml.onetap.OneTapStylingXmlLayoutActivity
 import com.vk.id.sample.xml.onetapsheet.OnetapSheetStylingXmlActivity
@@ -41,7 +42,7 @@ internal class MainActivity : ComponentActivity() {
                             Modifier.padding(innerPadding),
                         ) {
                             composable(Screen.Main.route) { HomeScreen(navController) }
-                            composable(Screen.Utils.route) { UtilsScreen() }
+                            composable(Screen.Utils.route) { UtilsScreen(navController) }
 
                             composable("onetap-styling-compose") { OnetapStylingComposeScreen() }
                             activity("onetap-styling-xml-layout") { activityClass = OneTapStylingXmlLayoutActivity::class }
@@ -49,6 +50,7 @@ internal class MainActivity : ComponentActivity() {
                             activity("multibranding-xml-layout") { activityClass = MultibrandingXmlLayoutActivity::class }
                             composable("onetap-bottom-sheet") { OneTapBottomSheetScreen() }
                             activity("onetap-bottom-sheet-xml") { activityClass = OnetapSheetStylingXmlActivity::class }
+                            composable("old-sdk-sample") { OldSdkScreen() }
                         }
                     }
                 }
