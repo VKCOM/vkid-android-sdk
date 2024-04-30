@@ -16,6 +16,6 @@ import java.lang.annotation.Inherited
 @LabelAnnotation(name = "Platform")
 internal annotation class Platform(val value: String) {
     companion object {
-        const val ANDROID_MANUAL = "Android Manual"
+        const val ANDROID_AUTO = "Android Auto"
     }
 }

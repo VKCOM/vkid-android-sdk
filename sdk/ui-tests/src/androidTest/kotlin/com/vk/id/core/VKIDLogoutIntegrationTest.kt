@@ -54,7 +54,7 @@ private const val ACCESS_TOKEN_KEY = "ACCESS_TOKEN_KEY"
 private const val REFRESH_TOKEN_KEY = "REFRESH_TOKEN_KEY"
 private const val ID_TOKEN_KEY = "ID_TOKEN_KEY"
 
-@Platform(Platform.ANDROID_MANUAL)
+@Platform(Platform.ANDROID_AUTO)
 @Product(Product.VKID_SDK)
 @Project(Project.VKID_SDK)
 @Owner(Owners.DANIIL_KLIMCHUK)
