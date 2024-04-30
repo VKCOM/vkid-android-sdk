@@ -60,6 +60,7 @@ import com.vk.id.sample.app.uikit.expandablecard.ExpandableCard
 import com.vk.id.sample.app.uikit.selector.CheckboxSelector
 import com.vk.id.sample.app.uikit.selector.DropdownSelector
 import com.vk.id.sample.xml.sctrictmode.StrictModeHandler
+import com.vk.id.sample.xml.uikit.common.copyToClipboard
 import com.vk.id.sample.xml.uikit.common.onVKIDAuthSuccess
 import com.vk.id.sample.xml.uikit.common.showToast
 import kotlinx.coroutines.Dispatchers
@@ -431,7 +432,7 @@ private fun GetPublicInfoUtil() {
 
 @Composable
 private fun CurrentTokenUtil() {
-    ExpandableCard(title = "Current token") {
+    ExpandableCard(title = "Current token", contentAlignment = Alignment.CenterHorizontally) {
         var token by remember { mutableStateOf<AccessToken?>(null) }
         LaunchedEffect(key1 = Unit) {
             withContext(Dispatchers.IO) {
@@ -440,7 +441,33 @@ private fun CurrentTokenUtil() {
         }
         token?.let {
             UseToken(accessToken = it)
+            val coroutineScope = rememberCoroutineScope()
+            val context = LocalContext.current
+            Button(text = "Use token to get Birthday") {
+                coroutineScope.launch {
+                    val bday = getUserBday(it)
+                    showToast(context, "Birth Day: $bday")
+                }
+            }
+            Button(text = "Copy access token to clipboard") {
+                copyToClipboard(context, "Access token", it.token)
+            }
         }
+    }
+}
+
+private suspend fun getUserBday(accessToken: AccessToken): String {
+    return withContext(Dispatchers.IO) {
+        val api = OkHttpClient.Builder().build()
+        val url = "https://api.vk.com/method/users.get?user_ids=${accessToken.userID}&fields=bdate&access_token=${accessToken.token}&v=5.131 HTTP/1.1"
+        val request = Request.Builder()
+            .url(url)
+            .build()
+        val response = api.newCall(request).execute()
+        val responseJson: JSONObject = JSONObject(requireNotNull(response.body).string())
+            .getJSONArray("response")
+            .getJSONObject(0)
+        responseJson.getString("bdate")
     }
 }
 

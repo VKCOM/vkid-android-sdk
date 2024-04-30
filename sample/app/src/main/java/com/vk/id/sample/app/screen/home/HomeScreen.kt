@@ -77,6 +77,7 @@ internal fun HomeScreen(
             oAuths = setOf(OneTapOAuth.MAIL, OneTapOAuth.OK),
         )
         token?.let {
+            Spacer(modifier = Modifier.height(32.dp))
             UseToken(it)
         }
         Spacer(modifier = Modifier.height(32.dp))
