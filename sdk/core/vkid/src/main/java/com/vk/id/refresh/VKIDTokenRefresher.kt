@@ -59,7 +59,7 @@ internal class VKIDTokenRefresher(
                 onFailedApiCall = {
                     prefsStore.clear()
                     callback.onFail(
-                        VKIDRefreshTokenFail.FailedApiCall("Failed to fetch user data due to ${it.message}", it)
+                        VKIDRefreshTokenFail.FailedApiCall("Failed to fetch user data due to: ${it.message}", it)
                     )
                 },
                 refreshAccessToken = params.refreshAccessToken,
