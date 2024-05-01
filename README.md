@@ -79,9 +79,10 @@ android {
 ### Инициализация VK ID SDK
 Инициализируйте работу VK ID SDK через объект `VKID`.
 ```kotlin
-// В Application или Activity
+// В Application
 fun onCreate() {
-    val vkid = VKID(context)
+    super.onCreate()
+    VKID.init(this)
 }
 ```
 ### Авторизация
@@ -112,6 +113,35 @@ viewModelScope.launch {
 или с передачей LifecycleOwner:
 ```kotlin
 vkid.authorize(this@MainActivity, vkAuthCallback) // Первый параметр LifecycleOwner, например активити.
+```
+
+### Обновление токена
+Токен живет ограниченное количество времени, при получении ошибки от апи обновите его:
+```kotlin
+viewModelScope.launch {
+    VKID.instance.refreshToken(
+        callback = object : VKIDRefreshTokenCallback {
+            override fun onSuccess(token: AccessToken) {
+                // Использование token
+            }
+            override fun onFail(fail: VKIDRefreshTokenFail) {
+                when (fail) {
+                    is FailedApiCall -> fail.description // Использование текста ошибки
+                    is RefreshTokenExpired -> fail // Это означает, что нужно пройти авторизацию заново
+                    is Unauthorized -> fail // Пользователь понимает, что сначала нужно авторизоваться
+                }
+            }
+        }
+    )
+}
+```
+
+Также есть версия с передачей LifecycleOwner:
+```kotlin
+VKID.instance.refreshToken(
+    lifecycleOwner = MainActivity@this,
+    callback = ... // такой же, как в suspend версии
+)
 ```
 
 ## Документация
