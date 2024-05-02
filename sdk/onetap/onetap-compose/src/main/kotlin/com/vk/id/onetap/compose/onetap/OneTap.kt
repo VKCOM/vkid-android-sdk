@@ -7,13 +7,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
-<<<<<<< HEAD
-=======
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
->>>>>>> develop
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -22,22 +19,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.vk.id.AccessToken
 import com.vk.id.VKIDAuthFail
-<<<<<<< HEAD
+import com.vk.id.VKIDUser
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.Prompt
-=======
-import com.vk.id.VKIDUser
->>>>>>> develop
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.multibranding.OAuthListWidget
-<<<<<<< HEAD
-=======
-import com.vk.id.multibranding.common.callback.OAuthListWidgetAuthCallback
 import com.vk.id.multibranding.internal.LocalMultibrandingAnalyticsContext
 import com.vk.id.multibranding.internal.MultibrandingAnalyticsContext
->>>>>>> develop
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.compose.button.alternate.AdaptiveAlternateAccountButton
@@ -85,33 +75,23 @@ public fun OneTap(
     val coroutineScope = rememberCoroutineScope()
     var user by remember { mutableStateOf<VKIDUser?>(null) }
     if (style is OneTapStyle.Icon) {
-<<<<<<< HEAD
-        VKIDButtonSmall(style = style.vkidButtonStyle, onClick = {
-            startAuth(
-                coroutineScope,
-                { onAuth(null, it) },
-                onAuthCode,
-                { onFail(null, it) },
-                params = authParams.asParamsBuilder {},
-=======
         OneTapAnalytics.OneTapIconShown()
-        VKIDButtonSmall(style = style.vkidButtonStyle, vkid = vkid, onClick = {
+        VKIDButtonSmall(style = style.vkidButtonStyle, onClick = {
             val extraAuthParams = OneTapAnalytics.oneTapPressedIcon(user)
             startAuth(
                 coroutineScope,
-                useVKID,
                 {
                     OneTapAnalytics.authSuccessIcon()
                     onAuth(null, it)
                 },
+                onAuthCode,
                 {
                     OneTapAnalytics.authErrorIcon(user)
                     onFail(null, it)
                 },
-                VKIDAuthParams {
+                params = authParams.asParamsBuilder {
                     extraParams = extraAuthParams
-                }
->>>>>>> develop
+                },
             )
         }, onUserFetched = {
             user = it
@@ -137,23 +117,16 @@ public fun OneTap(
                         val extraAuthParams = OneTapAnalytics.oneTapPressed(user)
                         startAuth(
                             coroutineScope,
-<<<<<<< HEAD
-                            { onAuth(null, it) },
-                            onAuthCode,
-                            { onFail(null, it) },
-                            authParams.asParamsBuilder {
-=======
-                            useVKID,
                             {
                                 OneTapAnalytics.authSuccess()
                                 onAuth(null, it)
                             },
+                            onAuthCode,
                             {
                                 OneTapAnalytics.authError(user)
                                 onFail(null, it)
                             },
-                            VKIDAuthParams {
->>>>>>> develop
+                            authParams.asParamsBuilder {
                                 theme = style.toProviderTheme()
                                 extraParams = extraAuthParams
                             }
@@ -169,30 +142,15 @@ public fun OneTap(
                             authParams.asParamsBuilder {
                                 useOAuthProviderIfPossible = false
                                 theme = style.toProviderTheme()
-<<<<<<< HEAD
                                 prompt = Prompt.LOGIN
-=======
                                 extraParams = extraAuthParams
->>>>>>> develop
                             }
                         )
                     },
                     onAuth = onAuth,
                     onAuthCode = onAuthCode,
                     onFail = onFail,
-<<<<<<< HEAD
                     authParams = authParams,
-                )
-            },
-            fallback = {
-                VKIDButtonSmall(style = style.vkidButtonStyle, onClick = {
-                    startAuth(
-                        coroutineScope,
-                        { onAuth(null, it) },
-                        onAuthCode,
-                        { onFail(null, it) },
-                        params = authParams.asParamsBuilder {},
-=======
                     onUserFetched = {
                         if (!measureInProgress) {
                             user = it
@@ -205,23 +163,22 @@ public fun OneTap(
             },
             fallback = {
                 OneTapAnalytics.OneTapIconShown()
-                VKIDButtonSmall(style = style.vkidButtonStyle, vkid = useVKID, onClick = {
+                VKIDButtonSmall(style = style.vkidButtonStyle, onClick = {
                     val extraAuthParams = OneTapAnalytics.oneTapPressedIcon(user)
                     startAuth(
                         coroutineScope,
-                        useVKID,
                         {
                             OneTapAnalytics.authSuccessIcon()
                             onAuth(null, it)
                         },
+                        onAuthCode,
                         {
                             OneTapAnalytics.authErrorIcon(user)
                             onFail(null, it)
                         },
-                        VKIDAuthParams {
+                        params = authParams.asParamsBuilder {
                             extraParams = extraAuthParams
                         }
->>>>>>> develop
                     )
                 }, onUserFetched = {
                     user = it
@@ -245,11 +202,8 @@ internal fun OneTap(
     onAuth: (OneTapOAuth?, AccessToken) -> Unit,
     onAuthCode: (AuthCodeData, Boolean) -> Unit,
     onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit,
-<<<<<<< HEAD
     authParams: VKIDAuthUiParams = VKIDAuthUiParams {},
-=======
     onUserFetched: (VKIDUser?) -> Unit,
->>>>>>> develop
 ) {
     val vkidButtonState = rememberVKIDButtonState()
     Column(modifier = modifier) {
@@ -270,28 +224,16 @@ internal fun OneTap(
         }
         if (oAuths.isNotEmpty()) {
             Spacer(modifier = Modifier.height(16.dp))
-<<<<<<< HEAD
-            OAuthListWidget(
-                onAuth = { oAuth, accessToken -> onAuth(OneTapOAuth.fromOAuth(oAuth), accessToken) },
-                onAuthCode = onAuthCode,
-                onFail = { oAuth, fail -> onFail(OneTapOAuth.fromOAuth(oAuth), fail) },
-                style = style.oAuthListWidgetStyle,
-                oAuths = oAuths.map { it.toOAuth() }.toSet(),
-                authParams = authParams,
-            )
-=======
             CompositionLocalProvider(LocalMultibrandingAnalyticsContext provides MultibrandingAnalyticsContext(screen = "nowhere")) {
                 OAuthListWidget(
-                    vkid = vkid,
-                    onAuth = OAuthListWidgetAuthCallback.WithOAuth { oAuth, accessToken ->
-                        onAuth(OneTapOAuth.fromOAuth(oAuth), accessToken)
-                    },
+                    onAuth = { oAuth, accessToken -> onAuth(OneTapOAuth.fromOAuth(oAuth), accessToken) },
+                    onAuthCode = onAuthCode,
                     onFail = { oAuth, fail -> onFail(OneTapOAuth.fromOAuth(oAuth), fail) },
                     style = style.oAuthListWidgetStyle,
                     oAuths = oAuths.map { it.toOAuth() }.toSet(),
+                    authParams = authParams,
                 )
             }
->>>>>>> develop
         }
     }
 }

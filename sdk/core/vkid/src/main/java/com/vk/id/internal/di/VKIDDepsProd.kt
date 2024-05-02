@@ -10,11 +10,8 @@ import android.os.Build
 import android.os.Bundle
 import com.vk.id.AuthOptionsCreator
 import com.vk.id.AuthResultHandler
-<<<<<<< HEAD
 import com.vk.id.TokensHandler
-=======
 import com.vk.id.analytics.stat.StatTracker
->>>>>>> develop
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.exchangetoken.VKIDTokenExchanger
 import com.vk.id.fetchuser.VKIDUserInfoFetcher

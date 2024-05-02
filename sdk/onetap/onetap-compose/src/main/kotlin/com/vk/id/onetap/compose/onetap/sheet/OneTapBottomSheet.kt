@@ -21,18 +21,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
-<<<<<<< HEAD
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.Prompt
 import com.vk.id.auth.VKIDAuthCallback
 import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.InternalVKIDApi
-=======
-import com.vk.id.auth.VKIDAuthParams
-import com.vk.id.common.InternalVKIDApi
 import com.vk.id.multibranding.internal.LocalMultibrandingAnalyticsContext
 import com.vk.id.multibranding.internal.MultibrandingAnalyticsContext
->>>>>>> develop
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.compose.onetap.sheet.content.OneTapBottomSheetAuthStatus
 import com.vk.id.onetap.compose.onetap.sheet.content.SheetContentAuthFailed
@@ -95,25 +90,6 @@ public fun OneTapBottomSheet(
     style: OneTapBottomSheetStyle = OneTapBottomSheetStyle.Light(),
     authParams: VKIDAuthUiParams = VKIDAuthUiParams {}
 ) {
-<<<<<<< HEAD
-    OneTapBottomSheetInternal(
-        modifier = modifier,
-        state = state,
-        serviceName = serviceName,
-        scenario = scenario,
-        autoHideOnSuccess = autoHideOnSuccess,
-        onAuth = onAuth,
-        onAuthCode = onAuthCode,
-        onFail = onFail,
-        oAuths = oAuths,
-        style = style,
-        authParams = authParams,
-    )
-=======
-    val context = LocalContext.current
-    val useVKID = vkid ?: remember {
-        VKID(context)
-    }
     CompositionLocalProvider(LocalMultibrandingAnalyticsContext provides MultibrandingAnalyticsContext(screen = "floating_one_tap")) {
         OneTapBottomSheetInternal(
             modifier = modifier,
@@ -122,13 +98,13 @@ public fun OneTapBottomSheet(
             scenario = scenario,
             autoHideOnSuccess = autoHideOnSuccess,
             onAuth = onAuth,
+            onAuthCode = onAuthCode,
             onFail = onFail,
             oAuths = oAuths,
             style = style,
-            vkid = useVKID
+            authParams = authParams,
         )
     }
->>>>>>> develop
 }
 
 @Suppress("LongParameterList", "LongMethod", "NonSkippableComposable")
@@ -195,7 +171,6 @@ private fun OneTapBottomSheetInternal(
                 ) {
                     val extraAuthParams = OneTapBottomSheetAnalytics.retryAuthTap()
                     startAlternateAuth(
-<<<<<<< HEAD
                         coroutineScope = coroutineScope,
                         style = style,
                         onAuth = { onAuth(null, it) },
@@ -203,15 +178,7 @@ private fun OneTapBottomSheetInternal(
                         onFail = { onFail(null, it) },
                         authStatus = authStatus,
                         authParams = authParams,
-=======
-                        coroutineScope,
-                        vkid,
-                        style,
-                        { onAuth(null, it) },
-                        { onFail(null, it) },
-                        authStatus,
-                        extraAuthParams
->>>>>>> develop
+                        extraAuthParams = extraAuthParams
                     )
                 }
 
@@ -220,7 +187,7 @@ private fun OneTapBottomSheetInternal(
                     style,
                     dismissSheet
                 ) {
-<<<<<<< HEAD
+                    val extraAuthParams = OneTapBottomSheetAnalytics.retryAuthTap()
                     startVKIDAuth(
                         coroutineScope = coroutineScope,
                         style = style,
@@ -229,11 +196,8 @@ private fun OneTapBottomSheetInternal(
                         onFail = { onFail(null, it) },
                         authStatus = authStatus,
                         authParams = authParams,
+                        extraAuthParams = extraAuthParams
                     )
-=======
-                    val extraAuthParams = OneTapBottomSheetAnalytics.retryAuthTap()
-                    startVKIDAuth(coroutineScope, vkid, style, { onAuth(null, it) }, { onFail(null, it) }, authStatus, extraAuthParams)
->>>>>>> develop
                 }
 
                 is OneTapBottomSheetAuthStatus.AuthFailedMultibranding -> SheetContentAuthFailed(

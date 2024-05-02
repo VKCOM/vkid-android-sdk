@@ -6,12 +6,9 @@ import android.content.Context
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
-<<<<<<< HEAD
-import com.vk.id.auth.VKIDAuthCallback
-=======
 import com.vk.id.analytics.LogcatTracker
 import com.vk.id.analytics.VKIDAnalytics
->>>>>>> develop
+import com.vk.id.auth.VKIDAuthCallback
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.exchangetoken.VKIDExchangeTokenCallback
@@ -136,22 +133,16 @@ public class VKID {
             set(value) {
                 field = value
                 if (value) {
-<<<<<<< HEAD
                     InternalVKIDLog.setLogEngine(logEngine)
-                } else {
-                    InternalVKIDLog.setLogEngine(InternalVKIDFakeLogEngine())
-=======
-                    VKIDLog.setLogEngine(logEngine)
                     LogcatTracker().let {
                         analyticsDebugTracker = it
                         VKIDAnalytics.addTracker(it)
                     }
                 } else {
-                    VKIDLog.setLogEngine(FakeLogEngine())
+                    InternalVKIDLog.setLogEngine(InternalVKIDFakeLogEngine())
                     analyticsDebugTracker?.let {
                         VKIDAnalytics.removeTracker(it)
                     }
->>>>>>> develop
                 }
             }
 

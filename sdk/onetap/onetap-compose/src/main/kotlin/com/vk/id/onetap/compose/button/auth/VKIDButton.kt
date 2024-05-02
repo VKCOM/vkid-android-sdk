@@ -77,15 +77,7 @@ internal fun VKIDButton(
         }
     }
     val coroutineScope = rememberCoroutineScope()
-<<<<<<< HEAD
-    FetchUserDataWithAnimation(coroutineScope, state, useTextProvider)
-=======
-    val context = LocalContext.current
-    val useVKID = vkid ?: remember {
-        VKID(context)
-    }
-    FetchUserDataWithAnimation(coroutineScope, state, useVKID, useTextProvider, onUserFetched)
->>>>>>> develop
+    FetchUserDataWithAnimation(coroutineScope, state, useTextProvider, onUserFetched)
     Box(
         modifier = modifier
             .shadow(style)
@@ -150,13 +142,8 @@ private fun defaultTextProvider(resources: Resources): VKIDButtonTextProvider =
 private fun FetchUserDataWithAnimation(
     coroutineScope: CoroutineScope,
     state: VKIDButtonState,
-<<<<<<< HEAD
-    buttonTextProvider: VKIDButtonTextProvider
-=======
-    vkid: VKID,
     buttonTextProvider: VKIDButtonTextProvider,
     onUserFetched: (VKIDUser?) -> Unit,
->>>>>>> develop
 ) {
     FetchUserData(
         coroutineScope,

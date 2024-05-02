@@ -16,12 +16,9 @@ internal data class AuthOptions(
     val theme: String?,
     val webAuthPhoneScreen: Boolean,
     val oAuth: OAuth?,
-<<<<<<< HEAD
     val prompt: String,
     val scopes: Set<String>,
-=======
     val extraParams: Map<String, String>?,
->>>>>>> develop
 )
 
 private const val APP_ID = "app_id"
@@ -106,16 +103,12 @@ internal fun AuthOptions.toAuthUriCodeFlow(appPackage: String): Uri {
     if (webAuthPhoneScreen) {
         builder.appendQueryParameter(SCREEN_PARAM, SCREEN_PHONE)
     }
-<<<<<<< HEAD
-    return builder.scheme(appPackage)
-        .authority(AUTHORITY_CODE_FLOW)
-        .build()
-=======
     extraParams?.forEach { (key, value) ->
         builder.appendQueryParameter(key, value)
     }
-    return builder
->>>>>>> develop
+    return builder.scheme(appPackage)
+        .authority(AUTHORITY_CODE_FLOW)
+        .build()
 }
 
 @Suppress("MagicNumber")

@@ -24,12 +24,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vk.id.AccessToken
 import com.vk.id.VKIDAuthFail
-<<<<<<< HEAD
+import com.vk.id.VKIDUser
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthUiParams
-=======
-import com.vk.id.VKIDUser
->>>>>>> develop
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.compose.R
 import com.vk.id.onetap.compose.onetap.OneTap
@@ -39,7 +36,7 @@ import com.vk.id.onetap.compose.onetap.sheet.scenarioTitle
 import com.vk.id.onetap.compose.onetap.sheet.style.OneTapBottomSheetStyle
 import com.vk.id.onetap.compose.onetap.sheet.vkidButtonTextProvider
 
-@Suppress("LongParameterList", "NonSkippableComposable")
+@Suppress("LongParameterList", "NonSkippableComposable", "LongMethod")
 @Composable
 internal fun SheetContentMain(
     onAuth: (OneTapOAuth?, AccessToken) -> Unit,
@@ -78,7 +75,7 @@ internal fun SheetContentMain(
             oAuths = oAuths,
             vkidButtonTextProvider = remember(scenario) { scenario.vkidButtonTextProvider(resources) },
             onVKIDButtonClick = {
-<<<<<<< HEAD
+                val extraAuthParams = OneTapBottomSheetAnalytics.oneTapPressed(user)
                 startVKIDAuth(
                     coroutineScope = coroutineScope,
                     style = style,
@@ -87,9 +84,11 @@ internal fun SheetContentMain(
                     onFail = { onFail(null, it) },
                     authStatus = authStatus,
                     authParams = authParams,
+                    extraAuthParams = extraAuthParams,
                 )
             },
             onAlternateButtonClick = {
+                val extraAuthParams = OneTapBottomSheetAnalytics.alternatePressed()
                 startAlternateAuth(
                     coroutineScope = coroutineScope,
                     style = style,
@@ -98,15 +97,8 @@ internal fun SheetContentMain(
                     onFail = { onFail(null, it) },
                     authStatus = authStatus,
                     authParams = authParams,
+                    extraAuthParams = extraAuthParams,
                 )
-=======
-                val extraAuthParams = OneTapBottomSheetAnalytics.oneTapPressed(user)
-                startVKIDAuth(coroutineScope, vkid, style, { onAuth(null, it) }, { onFail(null, it) }, authStatus, extraAuthParams)
-            },
-            onAlternateButtonClick = {
-                val extraAuthParams = OneTapBottomSheetAnalytics.alternatePressed()
-                startAlternateAuth(coroutineScope, vkid, style, { onAuth(null, it) }, { onFail(null, it) }, authStatus, extraAuthParams)
->>>>>>> develop
             },
             onAuth = onAuth,
             onAuthCode = onAuthCode,
@@ -115,9 +107,7 @@ internal fun SheetContentMain(
                 authStatus.value = OneTapBottomSheetAuthStatus.AuthFailedMultibranding(oAuth)
                 onFail(oAuth, fail)
             },
-<<<<<<< HEAD
             authParams = authParams,
-=======
             onUserFetched = {
                 user = it
                 if (it == null) {
@@ -127,7 +117,6 @@ internal fun SheetContentMain(
                     OneTapBottomSheetAnalytics.userWasFound(true)
                 }
             }
->>>>>>> develop
         )
     }
 }
