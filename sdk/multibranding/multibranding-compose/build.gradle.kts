@@ -19,5 +19,6 @@ dependencies {
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.material.ripple)
     implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.lifecycle.compose)
     debugImplementation(libs.androidx.compose.ui.tooling)
 }
