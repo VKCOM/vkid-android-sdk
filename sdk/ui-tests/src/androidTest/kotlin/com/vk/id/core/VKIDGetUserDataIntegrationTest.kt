@@ -121,7 +121,7 @@ internal class VKIDGetUserDataIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Получается пользователь") {
             runBlocking {
-                result = VKID.getInstance().getUserData(params = VKIDGetUserParams { refreshTokenState = STATE })
+                result = VKID.instance.getUserData(params = VKIDGetUserParams { refreshTokenState = STATE })
             }
         }
         step("Получен AT") {
@@ -159,7 +159,7 @@ internal class VKIDGetUserDataIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Получается пользователь") {
             runBlocking {
-                result = VKID.getInstance().getUserData(params = VKIDGetUserParams { refreshTokenState = STATE })
+                result = VKID.instance.getUserData(params = VKIDGetUserParams { refreshTokenState = STATE })
             }
         }
         step("Получен пользователь") {
@@ -191,7 +191,7 @@ internal class VKIDGetUserDataIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Получается пользователь") {
             runBlocking {
-                result = VKID.getInstance().getUserData(params = VKIDGetUserParams { refreshTokenState = STATE })
+                result = VKID.instance.getUserData(params = VKIDGetUserParams { refreshTokenState = STATE })
             }
         }
         step("Получен пользователь") {
@@ -220,7 +220,7 @@ internal class VKIDGetUserDataIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Получается пользователь") {
             runBlocking {
-                result = VKID.getInstance().getUserData(params = VKIDGetUserParams { refreshTokenState = STATE })
+                result = VKID.instance.getUserData(params = VKIDGetUserParams { refreshTokenState = STATE })
             }
         }
         step("Получен пользователь") {
@@ -248,7 +248,7 @@ internal class VKIDGetUserDataIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Получается пользователь") {
             runBlocking {
-                result = VKID.getInstance().getUserData(params = VKIDGetUserParams { refreshTokenState = STATE })
+                result = VKID.instance.getUserData(params = VKIDGetUserParams { refreshTokenState = STATE })
             }
         }
         step("Получен пользователь") {

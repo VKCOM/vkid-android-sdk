@@ -129,7 +129,7 @@ internal class VKIDRefreshTokenIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Рефрешится токен") {
             runBlocking {
-                result = VKID.getInstance().refreshToken(params = VKIDRefreshTokenParams { state = STATE })
+                result = VKID.instance.refreshToken(params = VKIDRefreshTokenParams { state = STATE })
             }
         }
         step("Получен AT") {
@@ -157,7 +157,7 @@ internal class VKIDRefreshTokenIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Рефрешится токен") {
             runBlocking {
-                result = VKID.getInstance().refreshToken(params = VKIDRefreshTokenParams { state = STATE })
+                result = VKID.instance.refreshToken(params = VKIDRefreshTokenParams { state = STATE })
             }
         }
         step("Не получен AT") {
@@ -187,7 +187,7 @@ internal class VKIDRefreshTokenIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Рефрешится токен") {
             runBlocking {
-                result = VKID.getInstance().refreshToken(params = VKIDRefreshTokenParams { state = STATE })
+                result = VKID.instance.refreshToken(params = VKIDRefreshTokenParams { state = STATE })
             }
         }
         step("Не получен AT") {
@@ -217,7 +217,7 @@ internal class VKIDRefreshTokenIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Рефрешится токен") {
             runBlocking {
-                result = VKID.getInstance().refreshToken(params = VKIDRefreshTokenParams { state = STATE })
+                result = VKID.instance.refreshToken(params = VKIDRefreshTokenParams { state = STATE })
             }
         }
         step("Не получен AT") {
@@ -248,7 +248,7 @@ internal class VKIDRefreshTokenIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Рефрешится токен") {
             runBlocking {
-                result = VKID.getInstance().refreshToken(params = VKIDRefreshTokenParams { state = STATE })
+                result = VKID.instance.refreshToken(params = VKIDRefreshTokenParams { state = STATE })
             }
         }
         step("Не получен AT") {

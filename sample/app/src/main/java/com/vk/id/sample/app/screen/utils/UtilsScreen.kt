@@ -135,7 +135,7 @@ private fun AuthUtil() {
         )
         Button("Auth") {
             coroutineScope.launch {
-                VKID.getInstance().authorize(
+                VKID.instance.authorize(
                     callback = object : VKIDAuthCallback {
                         override fun onAuth(accessToken: AccessToken) {
                             currentToken = accessToken
@@ -199,7 +199,7 @@ private fun RefreshTokenUtil() {
         )
         Button("Refresh") {
             coroutineScope.launch {
-                VKID.getInstance().refreshToken(
+                VKID.instance.refreshToken(
                     callback = object : VKIDRefreshTokenCallback {
                         override fun onSuccess(token: AccessToken) {
                             currentToken = token
@@ -259,7 +259,7 @@ private fun ExchangeTokenUtil() {
         )
         Button(text = "Exchange") {
             coroutineScope.launch {
-                VKID.getInstance().exchangeTokenToV2(
+                VKID.instance.exchangeTokenToV2(
                     v1Token = v1Token,
                     callback = object : VKIDExchangeTokenCallback {
                         override fun onAuth(accessToken: AccessToken) {
@@ -307,7 +307,7 @@ private fun LogoutUtil() {
         val coroutineScope = rememberCoroutineScope()
         Button(text = "Logout") {
             coroutineScope.launch {
-                VKID.getInstance().logout(
+                VKID.instance.logout(
                     callback = object : VKIDLogoutCallback {
                         override fun onSuccess() {
                             showToast(context, "Logged out")
@@ -338,7 +338,7 @@ private fun RefreshUserUtil() {
         )
         Button(text = "Refresh") {
             coroutineScope.launch {
-                VKID.getInstance().getUserData(
+                VKID.instance.getUserData(
                     callback = object : VKIDGetUserCallback {
                         override fun onSuccess(user: VKIDUser) {
                             currentUser = user
@@ -381,7 +381,7 @@ private fun GetPublicInfoUtil() {
         Button(text = "Get") {
             coroutineScope.launch {
                 currentUser = withContext(Dispatchers.IO) {
-                    val idToken = VKID.getInstance().accessToken?.idToken ?: return@withContext null
+                    val idToken = VKID.instance.accessToken?.idToken ?: return@withContext null
                     val api = OkHttpClient.Builder().build()
 
                     val componentName = ComponentName(context, MainActivity::class.java)

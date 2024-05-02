@@ -138,7 +138,7 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Обменивается токен") {
             runBlocking {
-                result = VKID.getInstance().exchangeToken(
+                result = VKID.instance.exchangeToken(
                     v1Token = V1_TOKEN,
                     params = VKIDExchangeTokenParams {
                         state = STATE
@@ -173,7 +173,7 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Обменивается токен") {
             runBlocking {
-                result = VKID.getInstance().exchangeToken(v1Token = V1_TOKEN, params = VKIDExchangeTokenParams { state = STATE })
+                result = VKID.instance.exchangeToken(v1Token = V1_TOKEN, params = VKIDExchangeTokenParams { state = STATE })
             }
         }
         step("Не получен AT") {
@@ -204,7 +204,7 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Обменивается токен") {
             runBlocking {
-                result = VKID.getInstance().exchangeToken(
+                result = VKID.instance.exchangeToken(
                     v1Token = V1_TOKEN,
                     params = VKIDExchangeTokenParams {
                         state = STATE
@@ -241,7 +241,7 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Обменивается токен") {
             runBlocking {
-                result = VKID.getInstance().exchangeToken(
+                result = VKID.instance.exchangeToken(
                     v1Token = V1_TOKEN,
                     params = VKIDExchangeTokenParams {
                         state = STATE
@@ -279,7 +279,7 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Обменивается токен") {
             runBlocking {
-                result = VKID.getInstance().exchangeToken(
+                result = VKID.instance.exchangeToken(
                     v1Token = V1_TOKEN,
                     params = VKIDExchangeTokenParams {
                         state = STATE
@@ -314,7 +314,7 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Обменивается токен") {
             runBlocking {
-                result = VKID.getInstance().exchangeToken(v1Token = V1_TOKEN, params = VKIDExchangeTokenParams { state = STATE })
+                result = VKID.instance.exchangeToken(v1Token = V1_TOKEN, params = VKIDExchangeTokenParams { state = STATE })
             }
         }
         step("Не получен AT") {

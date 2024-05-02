@@ -196,7 +196,7 @@ private fun OneTapBottomSheetInternal(
                     dismissSheet
                 ) {
                     coroutineScope.launch {
-                        VKID.getInstance().authorize(
+                        VKID.instance.authorize(
                             object : VKIDAuthCallback {
                                 override fun onAuth(accessToken: AccessToken) = onAuth(status.oAuth, accessToken)
                                 override fun onAuthCode(

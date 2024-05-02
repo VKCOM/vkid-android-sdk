@@ -57,7 +57,7 @@ internal fun startAuth(
     params: VKIDAuthParams = VKIDAuthParams {}
 ) {
     coroutineScope.launch {
-        VKID.getInstance().authorize(
+        VKID.instance.authorize(
             object : VKIDAuthCallback {
                 override fun onAuth(accessToken: AccessToken) = onAuth(accessToken)
                 override fun onAuthCode(data: AuthCodeData, isCompletion: Boolean) = onAuthCode(data, isCompletion)
@@ -80,7 +80,7 @@ internal fun FetchUserData(
             Lifecycle.Event.ON_RESUME -> {
                 fetchUserJob = coroutineScope.launch {
                     onFetchingProgress.onPreFetch()
-                    val user = VKID.getInstance().fetchUserData().getOrNull()
+                    val user = VKID.instance.fetchUserData().getOrNull()
                     onFetchingProgress.onFetched(user)
                 }
             }

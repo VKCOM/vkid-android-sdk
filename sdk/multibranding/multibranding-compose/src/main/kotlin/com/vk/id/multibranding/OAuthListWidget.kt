@@ -150,7 +150,7 @@ private fun OAuthButton(
                 role = Role.Button,
                 onClick = {
                     coroutineScope.launch {
-                        VKID.getInstance().authorize(
+                        VKID.instance.authorize(
                             object : VKIDAuthCallback {
                                 override fun onAuth(accessToken: AccessToken) = onAuth(item, accessToken)
                                 override fun onAuthCode(

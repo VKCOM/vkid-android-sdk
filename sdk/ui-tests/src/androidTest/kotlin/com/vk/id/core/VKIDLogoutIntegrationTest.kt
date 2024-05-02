@@ -84,7 +84,7 @@ internal class VKIDLogoutIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Получается пользователь") {
             runBlocking {
-                result = VKID.getInstance().logout()
+                result = VKID.instance.logout()
             }
         }
         step("Логаут завершается успехом") {
@@ -115,7 +115,7 @@ internal class VKIDLogoutIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Получается пользователь") {
             runBlocking {
-                result = VKID.getInstance().logout()
+                result = VKID.instance.logout()
             }
         }
         step("Нет вызова колбека об успехе") {
@@ -147,7 +147,7 @@ internal class VKIDLogoutIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Получается пользователь") {
             runBlocking {
-                result = VKID.getInstance().logout()
+                result = VKID.instance.logout()
             }
         }
         step("Нет вызова колбека об успехе") {
@@ -179,7 +179,7 @@ internal class VKIDLogoutIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Получается пользователь") {
             runBlocking {
-                result = VKID.getInstance().logout()
+                result = VKID.instance.logout()
             }
         }
         step("Логаут завершается успехом") {

@@ -63,12 +63,12 @@ public class VKID {
     public companion object {
 
         @Volatile
-        private var instance: VKID? = null
+        private var _instance: VKID? = null
 
         private fun init(vkid: VKID) {
             synchronized(this) {
-                check(BuildConfig.DEBUG || instance == null) { "You've already initialized VKID" }
-                instance = vkid
+                check(BuildConfig.DEBUG || _instance == null) { "You've already initialized VKID" }
+                _instance = vkid
             }
         }
 
@@ -102,9 +102,10 @@ public class VKID {
 
         /**
          * Returns a VKID Instance.
-         * You must call [init] before calling this method.
+         * You must call [init] before accessing this property.
          */
-        public fun getInstance(): VKID = instance ?: synchronized(this) { instance } ?: error("VKID is not initialized")
+        public val instance: VKID
+            get() = _instance ?: synchronized(this) { _instance } ?: error("VKID is not initialized")
 
         /**
          * The logging engine used by VKID.
