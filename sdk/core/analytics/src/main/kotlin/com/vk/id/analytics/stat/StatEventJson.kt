@@ -16,7 +16,7 @@ internal class StatEventJson(
     val json: JSONObject
 
     private companion object {
-        val specialParams = listOf("screen_current", "screen_to")
+        val specialParams = listOf("screen_current", "screen_to", "error")
     }
 
     init {

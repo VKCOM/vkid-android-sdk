@@ -14,7 +14,7 @@ import com.vk.id.common.InternalVKIDApi
 import java.util.UUID
 
 @Suppress("TooManyFunctions")
-internal class OAuthListWidgetAnalytics(screen: String) {
+internal class OAuthListWidgetAnalytics(private val screen: String) {
 
     private val screenParam = VKIDAnalytics.EventParam("screen", screen)
 
@@ -58,15 +58,15 @@ internal class OAuthListWidgetAnalytics(screen: String) {
         }
     }
 
-    fun onOAutTap(oAuth: OAuth, isText: Boolean): Map<String, String> {
+    fun onOAuthTap(oAuth: OAuth, isText: Boolean): Map<String, String> {
         val uuid = UUID.randomUUID().toString()
         val name = when (oAuth) {
             OAuth.VK -> "vk_button_tap"
             OAuth.MAIL -> "mail_button_tap"
             OAuth.OK -> "ok_button_tap"
         }
-        track(name, isIconParam(isText))
-        return mapOf("unique_session_id" to uuid)
+        track(name, isIconParam(isText), uuidParam(uuid))
+        return mapOf(UNIQUE_SESSION_PARAM_NAME to uuid)
     }
 
     fun onAuthSuccess(oAuth: OAuth) {
@@ -78,8 +78,19 @@ internal class OAuthListWidgetAnalytics(screen: String) {
         track("auth_by_oauth", VKIDAnalytics.EventParam("oauth_service", oauth))
     }
 
+    fun onAuthError(sessionId: String) {
+        track(
+            "multibranding_auth_error",
+            uuidParam(sessionId),
+            VKIDAnalytics.EventParam("error", "auth_error"),
+            VKIDAnalytics.EventParam("screen_current", screen)
+        )
+    }
+
     private fun isIconParam(isText: Boolean) =
         VKIDAnalytics.EventParam("button_type", if (isText) "default" else "icon")
+
+    private fun uuidParam(uuid: String) = VKIDAnalytics.EventParam(UNIQUE_SESSION_PARAM_NAME, uuid)
 
     private fun track(name: String, vararg params: VKIDAnalytics.EventParam) {
         VKIDAnalytics.trackEvent(
@@ -87,5 +98,9 @@ internal class OAuthListWidgetAnalytics(screen: String) {
             VKIDAnalytics.EventParam("sdk_type", "vkid"),
             *params
         )
+    }
+
+    internal companion object {
+        const val UNIQUE_SESSION_PARAM_NAME = "unique_session_id"
     }
 }
