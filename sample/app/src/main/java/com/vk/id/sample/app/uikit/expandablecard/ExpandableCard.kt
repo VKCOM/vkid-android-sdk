@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 internal fun ExpandableCard(
     title: String,
+    contentAlignment: Alignment.Horizontal = Alignment.Start,
     content: @Composable () -> Unit,
 ) {
     var expandedState by remember {
@@ -58,7 +59,8 @@ internal fun ExpandableCard(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = 16.dp),
+            horizontalAlignment = contentAlignment
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
