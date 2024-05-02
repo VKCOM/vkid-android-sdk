@@ -1,4 +1,4 @@
-package com.vk.id.onetap.xml
+package com.vk.id.bottomsheet.xml
 
 import android.os.Handler
 import android.os.Looper
@@ -10,6 +10,7 @@ import com.vk.id.common.allure.Feature
 import com.vk.id.common.feature.TestFeature
 import com.vk.id.onetap.base.OneTapTest
 import com.vk.id.onetap.common.OneTapOAuth
+import com.vk.id.onetap.xml.OneTapBottomSheet
 import io.qameta.allure.kotlin.AllureId
 import io.qameta.allure.kotlin.junit4.DisplayName
 import org.junit.Test

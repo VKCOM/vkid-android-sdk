@@ -1,6 +1,6 @@
 @file:OptIn(InternalVKIDApi::class)
 
-package com.vk.id.core
+package com.vk.id.oauth2
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
