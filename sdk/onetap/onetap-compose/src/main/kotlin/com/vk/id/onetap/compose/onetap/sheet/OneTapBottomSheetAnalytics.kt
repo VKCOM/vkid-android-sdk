@@ -16,6 +16,7 @@ import com.vk.id.analytics.VKIDAnalytics
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.onetap.compose.onetap.OneTapAnalytics
+import com.vk.id.onetap.compose.onetap.OneTapAnalytics.SCREEN_PARAM_NAME
 import com.vk.id.onetap.compose.onetap.OneTapAnalytics.track
 import java.util.UUID
 
@@ -128,7 +129,7 @@ internal object OneTapBottomSheetAnalytics {
         return mapOf(OneTapAnalytics.UNIQUE_SESSION_PARAM_NAME to uuid)
     }
 
-    private val screenParam = VKIDAnalytics.EventParam("screen", "floating_one_tap")
+    private val screenParam = VKIDAnalytics.EventParam(SCREEN_PARAM_NAME, "floating_one_tap")
 
     private fun langParam(context: Context): VKIDAnalytics.EventParam {
         val systemLocale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

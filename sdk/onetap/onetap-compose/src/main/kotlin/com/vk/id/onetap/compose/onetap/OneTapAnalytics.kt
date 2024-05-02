@@ -130,4 +130,5 @@ internal object OneTapAnalytics {
     }
 
     internal const val UNIQUE_SESSION_PARAM_NAME = "unique_session_id"
+    internal const val SCREEN_PARAM_NAME = "screen"
 }
