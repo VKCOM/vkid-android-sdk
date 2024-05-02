@@ -2,11 +2,15 @@
 
 package com.vk.id.sample.app.screen.utils
 
+import android.app.Activity
 import android.content.ComponentName
+import android.content.Context
+import android.content.ContextWrapper
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.pm.PackageManager.ComponentInfoFlags
 import android.os.Build
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,6 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -51,7 +56,9 @@ import com.vk.id.sample.app.MainActivity
 import com.vk.id.sample.app.screen.Button
 import com.vk.id.sample.app.screen.UseToken
 import com.vk.id.sample.app.uikit.expandablecard.ExpandableCard
+import com.vk.id.sample.app.uikit.selector.CheckboxSelector
 import com.vk.id.sample.app.uikit.selector.DropdownSelector
+import com.vk.id.sample.xml.sctrictmode.StrictModeHandler
 import com.vk.id.sample.xml.uikit.common.onVKIDAuthSuccess
 import com.vk.id.sample.xml.uikit.common.showToast
 import com.vk.id.sample.xml.vkid
@@ -84,6 +91,8 @@ internal fun UtilsScreen() {
         RefreshUserUtil()
         Spacer(modifier = Modifier.height(8.dp))
         GetPublicInfoUtil()
+        Spacer(modifier = Modifier.height(8.dp))
+        StrictModeUtil()
         Spacer(modifier = Modifier.height(8.dp))
     }
 }
@@ -424,4 +433,40 @@ private fun GetPublicInfoUtil() {
             }
         }
     }
+}
+
+@Composable
+private fun StrictModeUtil() {
+    val context = LocalContext.current
+    var strictModeEnabled by remember { mutableStateOf<Boolean?>(null) }
+    LaunchedEffect(Unit) {
+        launch(Dispatchers.IO) {
+            strictModeEnabled = StrictModeHandler.isStrictModeEnabled(context)
+        }
+    }
+    val coroutineScope = rememberCoroutineScope()
+    CheckboxSelector(
+        title = "Strict mode enabled",
+        isChecked = strictModeEnabled ?: true,
+        onCheckedChange = {
+            strictModeEnabled = it
+            coroutineScope.launch(Dispatchers.IO) {
+                StrictModeHandler.setStrictModeEnabled(context, it)
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        context,
+                        "Strict mode ${if (it) "enabled" else "disabled"}. Killing app to apply changes.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                context.toActivitySafe()?.finishAffinity()
+            }
+        }
+    )
+}
+
+private fun Context.toActivitySafe(): Activity? {
+    var context = this
+    while (context !is Activity && context is ContextWrapper) context = context.baseContext
+    return context as? Activity
 }
