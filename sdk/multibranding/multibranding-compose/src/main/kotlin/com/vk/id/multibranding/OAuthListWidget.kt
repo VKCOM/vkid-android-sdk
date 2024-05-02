@@ -46,6 +46,7 @@ import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.auth.VKIDAuthParams.Theme
 import com.vk.id.common.InternalVKIDApi
+import com.vk.id.multibranding.OAuthListWidgetAnalytics.Companion.UNIQUE_SESSION_PARAM_NAME
 import com.vk.id.multibranding.common.callback.OAuthListWidgetAuthCallback
 import com.vk.id.multibranding.common.style.OAuthListWidgetStyle
 import com.vk.id.multibranding.internal.LocalMultibrandingAnalyticsContext
@@ -184,7 +185,7 @@ private fun OAuthButton(
                 ),
                 role = Role.Button,
                 onClick = {
-                    val extraAuthParams = analytics.onOAutTap(item, showText)
+                    val extraAuthParams = analytics.onOAuthTap(item, showText)
                     coroutineScope.launch {
                         vkid.authorize(
                             object : VKID.AuthCallback {
@@ -197,6 +198,7 @@ private fun OAuthButton(
                                 }
 
                                 override fun onFail(fail: VKIDAuthFail) {
+                                    analytics.onAuthError(extraAuthParams[UNIQUE_SESSION_PARAM_NAME] ?: "")
                                     onFail(fail)
                                 }
                             },
