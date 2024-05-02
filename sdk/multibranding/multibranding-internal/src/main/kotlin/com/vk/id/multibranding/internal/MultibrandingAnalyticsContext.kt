@@ -9,4 +9,4 @@ public data class MultibrandingAnalyticsContext(public val screen: String)
 
 @InternalVKIDApi
 public val LocalMultibrandingAnalyticsContext: ProvidableCompositionLocal<MultibrandingAnalyticsContext> =
-    staticCompositionLocalOf { MultibrandingAnalyticsContext(screen = "nowhere") }
+    staticCompositionLocalOf { MultibrandingAnalyticsContext(screen = "multibranding_widget") }
