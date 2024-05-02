@@ -70,6 +70,8 @@ public data class InternalVKIDCodePayloadResponse(
     val code: String? = null,
     @SerializedName("state")
     val state: String? = null,
+    @SerializedName("device_id")
+    val deviceId: String? = null,
     @SerializedName("error")
     val error: String? = null,
 )
