@@ -10,7 +10,10 @@ import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.Prompt
 import com.vk.id.auth.VKIDAuthParams
+<<<<<<< HEAD
 import com.vk.id.auth.VKIDAuthUiParams
+=======
+>>>>>>> develop
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.compose.button.startAuth
@@ -42,7 +45,11 @@ internal fun startVKIDAuth(
     onAuthCode: (AuthCodeData, Boolean) -> Unit,
     onFail: (VKIDAuthFail) -> Unit,
     authStatus: MutableState<OneTapBottomSheetAuthStatus>,
+<<<<<<< HEAD
     authParams: VKIDAuthUiParams,
+=======
+    extraAuthParams: Map<String, String>
+>>>>>>> develop
 ) {
     authStatus.value = OneTapBottomSheetAuthStatus.AuthStarted
     startAuth(
@@ -61,6 +68,7 @@ internal fun startVKIDAuth(
         },
         authParams.asParamsBuilder {
             theme = style.toProviderTheme()
+            extraParams = extraAuthParams
         }
     )
 }
@@ -73,7 +81,11 @@ internal fun startAlternateAuth(
     onAuthCode: (AuthCodeData, Boolean) -> Unit,
     onFail: (VKIDAuthFail) -> Unit,
     authStatus: MutableState<OneTapBottomSheetAuthStatus>,
+<<<<<<< HEAD
     authParams: VKIDAuthUiParams,
+=======
+    extraAuthParams: Map<String, String>
+>>>>>>> develop
 ) {
     authStatus.value = OneTapBottomSheetAuthStatus.AuthStarted
     startAuth(
@@ -90,7 +102,11 @@ internal fun startAlternateAuth(
         authParams.asParamsBuilder {
             useOAuthProviderIfPossible = false
             theme = style.toProviderTheme()
+<<<<<<< HEAD
             prompt = Prompt.LOGIN
+=======
+            extraParams = extraAuthParams
+>>>>>>> develop
         }
     )
 }

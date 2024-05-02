@@ -49,8 +49,15 @@ import kotlinx.coroutines.launch
 @Composable
 internal fun VKIDButtonSmall(
     state: VKIDSmallButtonState = remember { VKIDSmallButtonState(inProgress = false, userIconLoaded = false) },
+<<<<<<< HEAD
     style: InternalVKIDButtonStyle = InternalVKIDButtonStyle.Light(),
     onClick: () -> Unit
+=======
+    style: VKIDButtonStyle = VKIDButtonStyle.Light(),
+    vkid: VKID? = null,
+    onClick: () -> Unit,
+    onUserFetched: (VKIDUser?) -> Unit = {},
+>>>>>>> develop
 ) {
     val coroutineScope = rememberCoroutineScope()
     FetchUserData(
@@ -65,6 +72,7 @@ internal fun VKIDButtonSmall(
             }
 
             override suspend fun onFetched(user: VKIDUser?) {
+                onUserFetched(user)
                 val newIconUrl = user?.photo200
                 if (newIconUrl != null) {
                     state.userIconUrl = newIconUrl

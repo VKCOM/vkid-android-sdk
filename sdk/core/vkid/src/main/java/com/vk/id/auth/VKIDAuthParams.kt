@@ -22,9 +22,11 @@ public inline fun VKIDAuthParams(initializer: VKIDAuthParams.Builder.() -> Unit)
  * @property theme The [Theme] setting for the authentication UI (Light or Dark). Optional.
  * @property useOAuthProviderIfPossible Flag to use OAuth provider installed on device if possible. Defaults to true.
  * @property oAuth The [OAuth] provider to be used for authentication. Optional.
+ * @property extraParams Key-value pairs of extra params that client want to send to auth provider. Optional.
  */
 @Suppress("LongParameterList")
 public class VKIDAuthParams private constructor(
+<<<<<<< HEAD
     internal val locale: Locale?,
     internal val theme: Theme?,
     internal val useOAuthProviderIfPossible: Boolean,
@@ -33,6 +35,13 @@ public class VKIDAuthParams private constructor(
     internal val state: String?,
     internal val codeChallenge: String?,
     internal val scopes: Set<String>,
+=======
+    public val locale: Locale? = null,
+    public val theme: Theme? = null,
+    public val useOAuthProviderIfPossible: Boolean = true,
+    public val oAuth: OAuth? = null,
+    internal val extraParams: Map<String, String>? = null
+>>>>>>> develop
 ) {
     /**
      * Represents a locale that user prefers during authorization.
@@ -154,6 +163,7 @@ public class VKIDAuthParams private constructor(
         public var oAuth: OAuth? = null
 
         /**
+<<<<<<< HEAD
          * A [Prompt] parameter to be passed to /authorize.
          * Note: Changing it only works for auth view browser (not auth provider). Add [useOAuthProviderIfPossible] = false for this to work.
          */
@@ -184,11 +194,19 @@ public class VKIDAuthParams private constructor(
          * The user will see a screen where he may grant some of this scopes during authorization process.
          */
         public var scopes: Set<String> = emptySet()
+=======
+         * Extra params that should be send to auth provider
+         */
+        @InternalVKIDApi
+        public var extraParams: Map<String, String>? = null
+>>>>>>> develop
 
         /**
          * Constructs [VKIDAuthParams] object with provided values.
          */
+        @OptIn(InternalVKIDApi::class)
         public fun build(): VKIDAuthParams = VKIDAuthParams(
+<<<<<<< HEAD
             locale = locale,
             theme = theme,
             useOAuthProviderIfPossible = useOAuthProviderIfPossible,
@@ -197,6 +215,13 @@ public class VKIDAuthParams private constructor(
             state = state,
             codeChallenge = codeChallenge,
             scopes = scopes,
+=======
+            locale,
+            theme,
+            useOAuthProviderIfPossible,
+            oAuth,
+            extraParams
+>>>>>>> develop
         )
     }
 }

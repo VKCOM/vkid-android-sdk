@@ -2,6 +2,7 @@
 
 package com.vk.id
 
+import com.vk.id.analytics.stat.StatTracker
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.exchangetoken.VKIDTokenExchanger
@@ -52,7 +53,12 @@ internal class VKIDTest : BehaviorSpec({
         val scheduler = testCoroutineScheduler
         val testDispatcher = StandardTestDispatcher(scheduler)
         val userDataFetcher = mockk<UserDataFetcher>()
+<<<<<<< HEAD
         val dispatchers = mockk<VKIDCoroutinesDispatchers>()
+=======
+        val dispatchers = mockk<CoroutinesDispatchers>()
+        val statTracker = mockk<StatTracker>(relaxed = true)
+>>>>>>> develop
         every { dispatchers.io } returns testDispatcher
         val vkid = VKID(
             object : VKIDDeps {
@@ -60,7 +66,12 @@ internal class VKIDTest : BehaviorSpec({
                 override val authOptionsCreator: AuthOptionsCreator = authOptionsCreator
                 override val authCallbacksHolder: AuthCallbacksHolder = authCallbacksHolder
                 override val authResultHandler: Lazy<AuthResultHandler> = lazy { authResultHandler }
+<<<<<<< HEAD
                 override val dispatchers: VKIDCoroutinesDispatchers = dispatchers
+=======
+                override val dispatchers: CoroutinesDispatchers = dispatchers
+                override val statTracker: StatTracker = statTracker
+>>>>>>> develop
                 override val vkSilentAuthInfoProvider: Lazy<VkSilentAuthInfoProvider> = mockk()
                 override val userDataFetcher: Lazy<UserDataFetcher> = lazy { userDataFetcher }
                 override val api: Lazy<InternalVKIDApiContract> = lazy { mockk() }
@@ -76,6 +87,17 @@ internal class VKIDTest : BehaviorSpec({
             }
         )
 
+        When("VKID initialized") {
+            Then("Analytics vkid_init event is send") {
+                verify {
+                    statTracker.trackEvent(
+                        "sdk_init",
+                        match { it.name == "sdk_type" && it.strValue == "vkid" }
+                    )
+                }
+            }
+        }
+
         val authParams = VKIDAuthParams { oAuth = OAuth.VK }
         val authOptions = AuthOptions(
             appId = "appId",
@@ -88,8 +110,12 @@ internal class VKIDTest : BehaviorSpec({
             theme = "theme",
             webAuthPhoneScreen = false,
             oAuth = null,
+<<<<<<< HEAD
             prompt = "",
             scopes = emptySet(),
+=======
+            extraParams = null
+>>>>>>> develop
         )
         coEvery { authProvidersChooser.chooseBest(authParams) } returns authProvider
         every { authOptionsCreator.create(authParams) } returns authOptions

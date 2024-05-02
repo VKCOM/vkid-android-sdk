@@ -6,7 +6,12 @@ import android.content.Context
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
+<<<<<<< HEAD
 import com.vk.id.auth.VKIDAuthCallback
+=======
+import com.vk.id.analytics.LogcatTracker
+import com.vk.id.analytics.VKIDAnalytics
+>>>>>>> develop
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.exchangetoken.VKIDExchangeTokenCallback
@@ -131,16 +136,32 @@ public class VKID {
             set(value) {
                 field = value
                 if (value) {
+<<<<<<< HEAD
                     InternalVKIDLog.setLogEngine(logEngine)
                 } else {
                     InternalVKIDLog.setLogEngine(InternalVKIDFakeLogEngine())
+=======
+                    VKIDLog.setLogEngine(logEngine)
+                    LogcatTracker().let {
+                        analyticsDebugTracker = it
+                        VKIDAnalytics.addTracker(it)
+                    }
+                } else {
+                    VKIDLog.setLogEngine(FakeLogEngine())
+                    analyticsDebugTracker?.let {
+                        VKIDAnalytics.removeTracker(it)
+                    }
+>>>>>>> develop
                 }
             }
+
+        private var analyticsDebugTracker: LogcatTracker? = null
     }
 
     /**
      * Only for tests, to provide mocked dependencies
      */
+    @InternalVKIDApi
     @VisibleForTesting
     internal constructor(deps: VKIDDeps) {
         this.authProvidersChooser = deps.authProvidersChooser
@@ -156,9 +177,12 @@ public class VKID {
         this.loggerOut = deps.loggerOut
         this.tokenStorage = deps.tokenStorage
 
+        VKIDAnalytics.addTracker(deps.statTracker)
+
         logger.info(
             "VKID initialized\nVersion name: ${BuildConfig.VKID_VERSION_NAME}\nCI build: ${BuildConfig.CI_BUILD_NUMBER} ${BuildConfig.CI_BUILD_TYPE}"
         )
+        VKIDAnalytics.trackEvent("sdk_init", VKIDAnalytics.EventParam("sdk_type", "vkid"))
     }
 
     private val requestMutex = Mutex()

@@ -32,6 +32,7 @@ import com.vk.id.onetap.compose.button.alternate.style.asColorResource
 import com.vk.id.onetap.compose.button.alternate.style.background
 import com.vk.id.onetap.compose.button.auth.style.asColor
 import com.vk.id.onetap.compose.button.auth.style.border
+import com.vk.id.onetap.compose.onetap.sheet.OneTapBottomSheetAnalytics
 import com.vk.id.onetap.compose.onetap.sheet.style.OneTapBottomSheetStyle
 import com.vk.id.onetap.compose.onetap.style.asFontSize
 import com.vk.id.onetap.compose.onetap.style.clip
@@ -43,6 +44,7 @@ internal fun SheetContentAuthFailed(
     dismissSheet: () -> Unit,
     repeatClicked: () -> Unit
 ) {
+    OneTapBottomSheetAnalytics.BottomSheetErrorShown()
     SheetContentBox(
         serviceName,
         style,
