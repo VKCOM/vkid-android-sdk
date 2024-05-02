@@ -18,6 +18,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vk.id.AccessToken
@@ -35,12 +36,13 @@ import org.json.JSONObject
 internal fun Button(
     text: String,
     modifier: Modifier = Modifier,
+    verticalPadding: Dp = 8.dp,
     onClick: () -> Unit,
 ) {
     androidx.compose.material3.Button(
         modifier = modifier
             .width(355.dp)
-            .padding(vertical = 8.dp),
+            .padding(vertical = verticalPadding),
         shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.vkid_azure_A100)),
         onClick = onClick
