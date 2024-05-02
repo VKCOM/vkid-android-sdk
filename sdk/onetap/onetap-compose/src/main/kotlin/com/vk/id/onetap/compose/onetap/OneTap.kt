@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,6 +26,8 @@ import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.multibranding.OAuthListWidget
 import com.vk.id.multibranding.common.callback.OAuthListWidgetAuthCallback
+import com.vk.id.multibranding.internal.LocalMultibrandingAnalyticsContext
+import com.vk.id.multibranding.internal.MultibrandingAnalyticsContext
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.compose.button.alternate.AdaptiveAlternateAccountButton
@@ -249,15 +252,17 @@ internal fun OneTap(
         }
         if (oAuths.isNotEmpty()) {
             Spacer(modifier = Modifier.height(16.dp))
-            OAuthListWidget(
-                vkid = vkid,
-                onAuth = OAuthListWidgetAuthCallback.WithOAuth { oAuth, accessToken ->
-                    onAuth(OneTapOAuth.fromOAuth(oAuth), accessToken)
-                },
-                onFail = { oAuth, fail -> onFail(OneTapOAuth.fromOAuth(oAuth), fail) },
-                style = style.oAuthListWidgetStyle,
-                oAuths = oAuths.map { it.toOAuth() }.toSet(),
-            )
+            CompositionLocalProvider(LocalMultibrandingAnalyticsContext provides MultibrandingAnalyticsContext(screen = "nowhere")) {
+                OAuthListWidget(
+                    vkid = vkid,
+                    onAuth = OAuthListWidgetAuthCallback.WithOAuth { oAuth, accessToken ->
+                        onAuth(OneTapOAuth.fromOAuth(oAuth), accessToken)
+                    },
+                    onFail = { oAuth, fail -> onFail(OneTapOAuth.fromOAuth(oAuth), fail) },
+                    style = style.oAuthListWidgetStyle,
+                    oAuths = oAuths.map { it.toOAuth() }.toSet(),
+                )
+            }
         }
     }
 }
