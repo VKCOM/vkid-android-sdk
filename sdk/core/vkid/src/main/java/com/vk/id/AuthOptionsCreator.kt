@@ -55,6 +55,6 @@ internal class AuthOptionsCreator(
 
 private fun getOAuth2Params(scopes: Set<String>): String {
     return Base64
-        .encodeToString("""{"scopes":"${scopes.joinToString(separator = " ")}"}""".encodeToByteArray(), Base64.DEFAULT)
+        .encodeToString("""{"scope":"${scopes.joinToString(separator = " ")}"}""".encodeToByteArray(), Base64.DEFAULT)
         .filter { it != '\n' }
 }
