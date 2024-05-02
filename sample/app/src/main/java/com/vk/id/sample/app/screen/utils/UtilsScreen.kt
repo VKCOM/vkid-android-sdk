@@ -253,7 +253,7 @@ private fun ExchangeTokenUtil() {
                 context.vkid.exchangeTokenToV2(
                     v1Token = v1Token,
                     callback = object : VKIDExchangeTokenCallback {
-                        override fun onSuccess(accessToken: AccessToken) {
+                        override fun onAuth(accessToken: AccessToken) {
                             currentToken = accessToken
                             onVKIDAuthSuccess(context, null, accessToken)
                         }

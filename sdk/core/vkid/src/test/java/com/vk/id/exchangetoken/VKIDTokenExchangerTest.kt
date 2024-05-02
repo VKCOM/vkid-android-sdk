@@ -416,7 +416,7 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
             val onFailedApiCall = slot<(Throwable) -> Unit>()
             val onSuccess = slot<suspend (AccessToken) -> Unit>()
             val callback = mockk<VKIDExchangeTokenCallback>()
-            every { callback.onSuccess(ACCESS_TOKEN) } just runs
+            every { callback.onAuth(ACCESS_TOKEN) } just runs
             every { callback.onAuthCode(AuthCodeData(CODE), false) } just runs
             coEvery {
                 tokensHandler.handle(
@@ -443,7 +443,7 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
             }
             Then("Calls callback's onFail") {
                 onSuccess.captured(ACCESS_TOKEN)
-                verify { callback.onSuccess(ACCESS_TOKEN) }
+                verify { callback.onAuth(ACCESS_TOKEN) }
             }
         }
     }
