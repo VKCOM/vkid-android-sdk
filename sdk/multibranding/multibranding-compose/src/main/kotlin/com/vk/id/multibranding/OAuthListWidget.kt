@@ -132,6 +132,7 @@ public fun OAuthListWidget(
                     showText = oAuths.size == 1,
                     coroutineScope = coroutineScope,
                     vkid = useVKID,
+                    analytics = analytics,
                     onAuth = onAuth,
                     onFail = { onFail(item, it) },
                 )
@@ -166,9 +167,11 @@ private fun OAuthButton(
     showText: Boolean,
     coroutineScope: CoroutineScope,
     vkid: VKID,
+    analytics: OAuthListWidgetAnalytics,
     onAuth: OAuthListWidgetAuthCallback,
     onFail: (VKIDAuthFail) -> Unit
 ) {
+    analytics.OAuthShown(oAuth = item, isText = showText)
     Row(
         modifier = modifier
             .height(style.sizeStyle)
@@ -181,10 +184,12 @@ private fun OAuthButton(
                 ),
                 role = Role.Button,
                 onClick = {
+                    val extraAuthParams = analytics.onOAutTap(item, showText)
                     coroutineScope.launch {
                         vkid.authorize(
                             object : VKID.AuthCallback {
                                 override fun onSuccess(accessToken: AccessToken) {
+                                    analytics.onAuthSuccess(item)
                                     when (onAuth) {
                                         is OAuthListWidgetAuthCallback.WithOAuth -> onAuth(item, accessToken)
                                         is OAuthListWidgetAuthCallback.JustToken -> onAuth(accessToken)
@@ -198,6 +203,7 @@ private fun OAuthButton(
                             VKIDAuthParams {
                                 oAuth = item
                                 theme = style.toProviderTheme()
+                                extraParams = extraAuthParams
                             }
                         )
                     }
