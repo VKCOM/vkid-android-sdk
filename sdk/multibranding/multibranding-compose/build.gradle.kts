@@ -13,6 +13,8 @@ dependencies {
     api(project(":vkid"))
     api(project(":common"))
     api(project(":multibranding-common"))
+    implementation(project(":analytics"))
+    implementation(project(":multibranding-internal"))
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.material.ripple)

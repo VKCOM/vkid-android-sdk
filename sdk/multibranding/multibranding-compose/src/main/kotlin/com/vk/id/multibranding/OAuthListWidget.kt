@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -47,6 +48,7 @@ import com.vk.id.auth.VKIDAuthParams.Theme
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.multibranding.common.callback.OAuthListWidgetAuthCallback
 import com.vk.id.multibranding.common.style.OAuthListWidgetStyle
+import com.vk.id.multibranding.internal.LocalMultibrandingAnalyticsContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -88,6 +90,7 @@ public fun OAuthListWidget(
  * @param vkid An optional [VKID] instance to use for authentication.
  *  If instance of VKID is not provided, it will be created on first composition.
  */
+@OptIn(InternalVKIDApi::class)
 @Composable
 public fun OAuthListWidget(
     modifier: Modifier = Modifier,
@@ -103,6 +106,14 @@ public fun OAuthListWidget(
     if (oAuths.isEmpty()) {
         error("You need to add at least one oAuth to display the widget")
     }
+
+    val analyticsContext = LocalMultibrandingAnalyticsContext.current
+    val analytics = remember { OAuthListWidgetAnalytics(analyticsContext.screen) }
+
+    LaunchedEffect(oAuths) {
+        analytics.oauthAdded(oAuths)
+    }
+
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally

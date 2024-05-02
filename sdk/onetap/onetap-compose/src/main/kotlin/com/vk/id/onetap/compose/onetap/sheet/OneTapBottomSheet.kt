@@ -5,6 +5,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
@@ -20,6 +21,9 @@ import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.VKIDAuthParams
+import com.vk.id.common.InternalVKIDApi
+import com.vk.id.multibranding.internal.LocalMultibrandingAnalyticsContext
+import com.vk.id.multibranding.internal.MultibrandingAnalyticsContext
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.compose.onetap.sheet.content.OneTapBottomSheetAuthStatus
 import com.vk.id.onetap.compose.onetap.sheet.content.SheetContentAuthFailed
@@ -98,6 +102,7 @@ public fun OneTapBottomSheet(
  * @param style The [OneTapBottomSheetStyle] of the bottom sheet. Default is [OneTapBottomSheetStyle.Light]
  * @param vkid An optional VKID instance to use for authentication. If instance of VKID is not provided, it will be created on first composition.
  */
+@OptIn(InternalVKIDApi::class)
 @Composable
 public fun OneTapBottomSheet(
     modifier: Modifier = Modifier,
@@ -115,18 +120,20 @@ public fun OneTapBottomSheet(
     val useVKID = vkid ?: remember {
         VKID(context)
     }
-    OneTapBottomSheetInternal(
-        modifier = modifier,
-        state = state,
-        serviceName = serviceName,
-        scenario = scenario,
-        autoHideOnSuccess = autoHideOnSuccess,
-        onAuth = onAuth,
-        onFail = onFail,
-        oAuths = oAuths,
-        style = style,
-        vkid = useVKID
-    )
+    CompositionLocalProvider(LocalMultibrandingAnalyticsContext provides MultibrandingAnalyticsContext(screen = "floating_one_tap")) {
+        OneTapBottomSheetInternal(
+            modifier = modifier,
+            state = state,
+            serviceName = serviceName,
+            scenario = scenario,
+            autoHideOnSuccess = autoHideOnSuccess,
+            onAuth = onAuth,
+            onFail = onFail,
+            oAuths = oAuths,
+            style = style,
+            vkid = useVKID
+        )
+    }
 }
 
 @Suppress("LongParameterList", "LongMethod", "NonSkippableComposable")
