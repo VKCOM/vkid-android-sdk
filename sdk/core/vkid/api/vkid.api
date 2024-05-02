@@ -379,6 +379,7 @@ public final class com/vk/id/refresh/VKIDRefreshTokenFail$FailedApiCall : com/vk
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getThrowable ()Ljava/lang/Throwable;
 	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class com/vk/id/refresh/VKIDRefreshTokenFail$FailedOAuthState : com/vk/id/refresh/VKIDRefreshTokenFail {
