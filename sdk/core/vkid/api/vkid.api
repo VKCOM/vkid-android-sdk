@@ -149,6 +149,7 @@ public final class com/vk/id/VKIDUser : android/os/Parcelable {
 	public final fun getPhoto200 ()Ljava/lang/String;
 	public final fun getPhoto50 ()Ljava/lang/String;
 	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 	public fun writeToParcel (Landroid/os/Parcel;I)V
 }
 
@@ -435,6 +436,7 @@ public final class com/vk/id/refreshuser/VKIDGetUserFail$FailedApiCall : com/vk/
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getThrowable ()Ljava/lang/Throwable;
 	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class com/vk/id/refreshuser/VKIDGetUserFail$IdTokenTokenExpired : com/vk/id/refreshuser/VKIDGetUserFail {

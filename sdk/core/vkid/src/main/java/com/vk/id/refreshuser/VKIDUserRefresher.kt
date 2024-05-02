@@ -53,7 +53,7 @@ internal class VKIDUserRefresher(
                         }
 
                         override fun onFail(fail: VKIDRefreshTokenFail) {
-                            callback.onFail(VKIDGetUserFail.FailedApiCall("Failed to fetch user data due to ${it.message}", it))
+                            callback.onFail(VKIDGetUserFail.FailedApiCall("Failed to fetch user data due to ${fail.description}", it))
                         }
                     },
                     params = VKIDRefreshTokenParams {
@@ -64,15 +64,23 @@ internal class VKIDUserRefresher(
                 callback.onFail(VKIDGetUserFail.FailedApiCall("Failed to fetch user data due to ${it.message}", it))
             }
         }.onSuccess {
-            callback.onSuccess(
-                VKIDUser(
-                    firstName = it.firstName,
-                    lastName = it.lastName,
-                    photo200 = it.avatar,
-                    phone = it.phone,
-                    email = it.email,
-                )
+            val user = VKIDUser(
+                firstName = it.firstName,
+                lastName = it.lastName,
+                photo200 = it.avatar,
+                phone = it.phone,
+                email = it.email,
             )
+            tokenStorage.accessToken = tokenStorage.accessToken?.let {
+                AccessToken(
+                    it.token,
+                    it.idToken,
+                    it.userID,
+                    it.expireTime,
+                    user
+                )
+            }
+            callback.onSuccess(user)
         }
     }
 }

@@ -41,6 +41,7 @@ private const val LAST_NAME = "last"
 private const val PHONE = "phone"
 private const val AVATAR = "avatar"
 private const val EMAIL = "email"
+private const val EMAIL_NEW = "new email"
 private const val USER_ID = 100L
 private val VKID_USER = VKIDUser(
     firstName = FIRST_NAME,
@@ -51,6 +52,15 @@ private val VKID_USER = VKIDUser(
     photo200 = AVATAR,
     email = EMAIL,
 )
+private val VKID_USER_NEW = VKIDUser(
+    firstName = FIRST_NAME,
+    lastName = LAST_NAME,
+    phone = PHONE,
+    photo50 = null,
+    photo100 = null,
+    photo200 = AVATAR,
+    email = EMAIL_NEW,
+)
 private val ACCESS_TOKEN = AccessToken(
     token = ACCESS_TOKEN_VALUE,
     idToken = ID_TOKEN_VALUE,
@@ -58,11 +68,18 @@ private val ACCESS_TOKEN = AccessToken(
     expireTime = -1,
     userData = VKID_USER,
 )
+private val ACCESS_TOKEN_WITH_NEW_USER = AccessToken(
+    token = ACCESS_TOKEN_VALUE,
+    idToken = ID_TOKEN_VALUE,
+    userID = USER_ID,
+    expireTime = -1,
+    userData = VKID_USER_NEW,
+)
 private val USER_INFO_PAYLOAD = VKIDUserInfoPayload(
     firstName = FIRST_NAME,
     lastName = LAST_NAME,
     phone = PHONE,
-    email = EMAIL,
+    email = EMAIL_NEW,
     avatar = AVATAR,
 )
 
@@ -141,11 +158,11 @@ internal class VKIDUserRefresherTest : BehaviorSpec({
             } returns call
             val refreshTokenCallback = slot<VKIDRefreshTokenCallback>()
             coEvery { tokenRefresher.refresh(capture(refreshTokenCallback), any()) } just runs
-            val fail = VKIDGetUserFail.FailedApiCall("Failed to fetch user data due to null", exception)
+            val fail = VKIDGetUserFail.FailedApiCall("Failed to fetch user data due to Failed to fetch user data due to null", exception)
             val callback = mockk<VKIDGetUserCallback>()
             every { callback.onFail(fail) } just runs
             runTest(scheduler) { refresher.refresh(callback) }
-            refreshTokenCallback.captured.onFail(VKIDRefreshTokenFail.FailedApiCall(fail.description, fail.throwable))
+            refreshTokenCallback.captured.onFail(VKIDRefreshTokenFail.FailedApiCall("Failed to fetch user data due to null", fail.throwable))
             scheduler.advanceUntilIdle()
             Then("Calls onFail with api fail") {
                 verify(exactly = 0) { callback.onSuccess(any()) }
@@ -178,6 +195,7 @@ internal class VKIDUserRefresherTest : BehaviorSpec({
         }
         When("Api returns user") {
             every { tokenStorage.accessToken } returns ACCESS_TOKEN
+            every { tokenStorage.accessToken = ACCESS_TOKEN_WITH_NEW_USER } just runs
             val call = mockk<InternalVKIDCall<VKIDUserInfoPayload>>()
             every { call.execute() } returns Result.success(USER_INFO_PAYLOAD)
             coEvery {
@@ -188,10 +206,13 @@ internal class VKIDUserRefresherTest : BehaviorSpec({
                 )
             } returns call
             val callback = mockk<VKIDGetUserCallback>()
-            every { callback.onSuccess(VKID_USER) } just runs
+            every { callback.onSuccess(VKID_USER_NEW) } just runs
             runTest(scheduler) { refresher.refresh(callback) }
+            Then("Saves new AT") {
+                tokenStorage.accessToken = ACCESS_TOKEN_WITH_NEW_USER
+            }
             Then("Calls onSuccess") {
-                verify { callback.onSuccess(VKID_USER) }
+                verify { callback.onSuccess(VKID_USER_NEW) }
                 verify(exactly = 0) { callback.onFail(any()) }
             }
         }
