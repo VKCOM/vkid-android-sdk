@@ -7,7 +7,6 @@ import com.vk.id.onetap.xml.OneTapBottomSheet
 import com.vk.id.sample.xml.R
 import com.vk.id.sample.xml.uikit.common.getOneTapFailCallback
 import com.vk.id.sample.xml.uikit.common.getOneTapSuccessCallback
-import com.vk.id.sample.xml.vkid
 
 public class OnetapSheetStylingXmlActivity : AppCompatActivity() {
 
@@ -15,7 +14,6 @@ public class OnetapSheetStylingXmlActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.vkid_activity_onetap_bottom_sheet)
         val vkidOneTapBottomSheet = findViewById<OneTapBottomSheet>(R.id.vkid_bottom_sheet)
-        vkidOneTapBottomSheet.setVKID(vkid)
         vkidOneTapBottomSheet.setCallbacks(
             onAuth = getOneTapSuccessCallback(this) {},
             onFail = getOneTapFailCallback(this),

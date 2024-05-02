@@ -2,7 +2,6 @@ package com.vk.id.multibranding.xml
 
 import com.vk.id.AccessToken
 import com.vk.id.OAuth
-import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthUiParams
@@ -97,7 +96,6 @@ public class MultibrandingXmlTest(
     }
 
     override fun setContent(
-        vkid: VKID,
         onAuth: (OAuth?, AccessToken) -> Unit,
         onAuthCode: (AuthCodeData, Boolean) -> Unit,
         onFail: (OAuth?, VKIDAuthFail) -> Unit,
@@ -110,7 +108,6 @@ public class MultibrandingXmlTest(
                     onAuthCode = onAuthCode,
                     onFail = onFail,
                 )
-                setVKID(vkid)
                 this.authParams = authParams
             }
         )

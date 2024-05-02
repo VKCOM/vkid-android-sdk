@@ -8,7 +8,6 @@ import com.vk.id.sample.xml.R
 import com.vk.id.sample.xml.uikit.common.forEachView
 import com.vk.id.sample.xml.uikit.common.getOneTapFailCallback
 import com.vk.id.sample.xml.uikit.common.getOneTapSuccessCallback
-import com.vk.id.sample.xml.vkid
 
 public class OneTapStylingXmlLayoutActivity : AppCompatActivity() {
 
@@ -16,7 +15,6 @@ public class OneTapStylingXmlLayoutActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.vkid_activity_one_tap)
         findViewById<View>(android.R.id.content).rootView.forEachView(OneTap::class) { widget ->
-            widget.setVKID(vkid)
             widget.setCallbacks(
                 onAuth = getOneTapSuccessCallback(this) {},
                 onFail = getOneTapFailCallback(this),

@@ -122,12 +122,14 @@ public class InternalVKIDTestBuilder(
         this.encryptedSharedPreferencesStorage = storage
     }
 
-    public fun build(): VKID = VKID(
-        context = context,
-        mockApi = mockApi,
-        mockAuthProviderConfig = authProviderConfig,
-        deviceIdStorage = deviceIdStorage,
-        prefsStore = prefsStore,
-        encryptedSharedPreferencesStorage = encryptedSharedPreferencesStorage,
-    )
+    public fun build() {
+        VKID.init(
+            context = context,
+            mockApi = mockApi,
+            mockAuthProviderConfig = authProviderConfig,
+            deviceIdStorage = deviceIdStorage,
+            prefsStore = prefsStore,
+            encryptedSharedPreferencesStorage = encryptedSharedPreferencesStorage,
+        )
+    }
 }

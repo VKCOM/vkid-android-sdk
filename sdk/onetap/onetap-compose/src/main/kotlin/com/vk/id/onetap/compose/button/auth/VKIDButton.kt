@@ -33,7 +33,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.vk.id.VKID
 import com.vk.id.VKIDUser
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.onetap.common.auth.style.InternalVKIDButtonStyle
@@ -65,7 +64,6 @@ internal fun VKIDButton(
     modifier: Modifier = Modifier,
     style: InternalVKIDButtonStyle = InternalVKIDButtonStyle.Light(),
     state: VKIDButtonState = rememberVKIDButtonState(),
-    vkid: VKID? = null,
     textProvider: VKIDButtonTextProvider? = null,
     onClick: () -> Unit
 ) {
@@ -78,11 +76,7 @@ internal fun VKIDButton(
         }
     }
     val coroutineScope = rememberCoroutineScope()
-    val context = LocalContext.current
-    val useVKID = vkid ?: remember {
-        VKID(context)
-    }
-    FetchUserDataWithAnimation(coroutineScope, state, useVKID, useTextProvider)
+    FetchUserDataWithAnimation(coroutineScope, state, useTextProvider)
     Box(
         modifier = modifier
             .shadow(style)
@@ -147,12 +141,10 @@ private fun defaultTextProvider(resources: Resources): VKIDButtonTextProvider =
 private fun FetchUserDataWithAnimation(
     coroutineScope: CoroutineScope,
     state: VKIDButtonState,
-    vkid: VKID,
     buttonTextProvider: VKIDButtonTextProvider
 ) {
     FetchUserData(
         coroutineScope,
-        vkid,
         object : OnFetchingProgress {
             override suspend fun onPreFetch() {
                 if (state.userIconUrl == null) {

@@ -18,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import com.vk.id.AccessToken
 import com.vk.id.OAuth
-import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthUiParams
@@ -69,12 +68,6 @@ public class OAuthListWidget @JvmOverloads constructor(
     }
     private var onAuthCode: (AuthCodeData, Boolean) -> Unit = { _, _ -> }
     private var onFail: (OAuth, VKIDAuthFail) -> Unit = { _, _ -> }
-    private var vkid: VKID? = null
-        set(value) {
-            field = value
-            onVKIDChange(value)
-        }
-    private var onVKIDChange: (VKID?) -> Unit = {}
 
     init {
         val (style, oAuths, scopes) = parseAttrs(context, attrs)
@@ -94,8 +87,6 @@ public class OAuthListWidget @JvmOverloads constructor(
         onOAuthsChange = { oAuths = it }
         var authParams by remember { mutableStateOf(authParams) }
         onAuthParamsChange = { authParams = it }
-        var vkid by remember { mutableStateOf(vkid) }
-        onVKIDChange = { vkid = it }
         OAuthListWidget(
             modifier = Modifier,
             style = style,
@@ -103,7 +94,6 @@ public class OAuthListWidget @JvmOverloads constructor(
             onAuthCode = { data, isCompletion -> onAuthCode(data, isCompletion) },
             onFail = { oAuth, fail -> onFail(oAuth, fail) },
             oAuths = oAuths,
-            vkid = vkid,
             authParams = authParams,
         )
     }
@@ -126,18 +116,6 @@ public class OAuthListWidget @JvmOverloads constructor(
         this.onAuth = onAuth
         this.onAuthCode = onAuthCode
         this.onFail = onFail
-    }
-
-    /**
-     * Set an optional [VKID] instance to use for authentication.
-     *  If instance of VKID is not provided, it will be created.
-     *  Note that you can't change the [VKID] instance after view was added to layout.
-     */
-    public fun setVKID(
-        vkid: VKID
-    ) {
-        check(!composeView.isAttachedToWindow) { "You're not allowed to change VKID instance after it was attached" }
-        this.vkid = vkid
     }
 }
 

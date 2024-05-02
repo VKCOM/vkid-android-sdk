@@ -6,7 +6,6 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import com.kaspersky.kaspresso.testcases.core.testcontext.TestContext
 import com.vk.id.AccessToken
 import com.vk.id.OAuth
-import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthUiParams
@@ -64,12 +63,11 @@ public abstract class BaseAuthTest(
         var receivedAuthCode: AuthCodeData? = null
         var receivedAuthCodeSuccess: Boolean? = null
         before {
-            val vkid = vkidBuilder()
+            vkidBuilder()
                 .mockApiSuccess()
                 .user(MockApi.mockApiUser())
                 .build()
             setContent(
-                vkid = vkid,
                 onAuth = { oAuth, token ->
                     receivedOAuth = oAuth
                     accessToken = token
@@ -110,13 +108,12 @@ public abstract class BaseAuthTest(
         var receivedAuthCode: AuthCodeData? = null
         var receivedAuthCodeSuccess: Boolean? = null
         before {
-            val vkid = vkidBuilder()
+            vkidBuilder()
                 .mockApiSuccess()
                 .mockLogoutError()
                 .user(MockApi.mockApiUser())
                 .build()
             setContent(
-                vkid = vkid,
                 onAuth = { oAuth, token ->
                     receivedOAuth = oAuth
                     accessToken = token
@@ -157,12 +154,11 @@ public abstract class BaseAuthTest(
         var receivedAuthCode: AuthCodeData? = null
         var receivedAuthCodeSuccess: Boolean? = null
         before {
-            val vkid = vkidBuilder()
+            vkidBuilder()
                 .mockApiSuccess()
                 .user(MockApi.mockApiUser())
                 .build()
             setContent(
-                vkid = vkid,
                 onAuth = { oAuth, token ->
                     receivedOAuth = oAuth
                     accessToken = token
@@ -204,11 +200,10 @@ public abstract class BaseAuthTest(
         var receivedAuthCode: AuthCodeData? = null
         var receivedAuthCodeSuccess: Boolean? = null
         before {
-            val vkid = vkidBuilder()
+            vkidBuilder()
                 .notifyFailedRedirect()
                 .build()
             setContent(
-                vkid = vkid,
                 onFail = { oAuth, fail ->
                     receivedFail = fail
                     receivedOAuth = oAuth
@@ -240,11 +235,10 @@ public abstract class BaseAuthTest(
         var receivedAuthCode: AuthCodeData? = null
         var receivedAuthCodeSuccess: Boolean? = null
         before {
-            val vkid = vkidBuilder()
+            vkidBuilder()
                 .notifyNoBrowserAvailable()
                 .build()
             setContent(
-                vkid = vkid,
                 onFail = { oAuth, fail ->
                     receivedFail = fail
                     receivedOAuth = oAuth
@@ -276,11 +270,10 @@ public abstract class BaseAuthTest(
         var receivedAuthCode: AuthCodeData? = null
         var receivedAuthCodeSuccess: Boolean? = null
         before {
-            val vkid = vkidBuilder()
+            vkidBuilder()
                 .mockApiError()
                 .build()
             setContent(
-                vkid = vkid,
                 onFail = { oAuth, fail ->
                     receivedFail = fail
                     receivedOAuth = oAuth
@@ -315,12 +308,11 @@ public abstract class BaseAuthTest(
         var receivedAuthCode: AuthCodeData? = null
         var receivedAuthCodeSuccess: Boolean? = null
         before {
-            val vkid = vkidBuilder()
+            vkidBuilder()
                 .mockGetTokenSuccess()
                 .mockUserInfoError()
                 .build()
             setContent(
-                vkid = vkid,
                 onFail = { oAuth, fail ->
                     receivedFail = fail
                     receivedOAuth = oAuth
@@ -355,11 +347,10 @@ public abstract class BaseAuthTest(
         var receivedAuthCode: AuthCodeData? = null
         var receivedAuthCodeSuccess: Boolean? = null
         before {
-            val vkid = vkidBuilder()
+            vkidBuilder()
                 .mockApiSuccess()
                 .build()
             setContent(
-                vkid = vkid,
                 onFail = { oAuth, fail ->
                     receivedFail = fail
                     receivedOAuth = oAuth
@@ -394,12 +385,11 @@ public abstract class BaseAuthTest(
         var receivedAuthCode: AuthCodeData? = null
         var receivedAuthCodeSuccess: Boolean? = null
         before {
-            val vkid = vkidBuilder()
+            vkidBuilder()
                 .mockApiSuccess()
                 .overrideOAuthToNull()
                 .build()
             setContent(
-                vkid = vkid,
                 onFail = { oAuth, fail ->
                     receivedFail = fail
                     receivedOAuth = oAuth
@@ -432,12 +422,11 @@ public abstract class BaseAuthTest(
         var receivedAuthCode: AuthCodeData? = null
         var receivedAuthCodeSuccess: Boolean? = null
         before {
-            val vkid = vkidBuilder()
+            vkidBuilder()
                 .mockApiSuccess()
                 .overrideDeviceIdToNull()
                 .build()
             setContent(
-                vkid = vkid,
                 onFail = { oAuth, fail ->
                     receivedFail = fail
                     receivedOAuth = oAuth
@@ -470,12 +459,11 @@ public abstract class BaseAuthTest(
         var receivedAuthCode: AuthCodeData? = null
         var receivedAuthCodeSuccess: Boolean? = null
         before {
-            val vkid = vkidBuilder()
+            vkidBuilder()
                 .mockApiSuccess()
                 .overrideState("wrong state")
                 .build()
             setContent(
-                vkid = vkid,
                 onFail = { oAuth, fail ->
                     receivedFail = fail
                     receivedOAuth = oAuth
@@ -511,7 +499,6 @@ public abstract class BaseAuthTest(
     }
 
     protected abstract fun setContent(
-        vkid: VKID,
         onAuth: (OAuth?, AccessToken) -> Unit = { _, _ -> },
         onAuthCode: (AuthCodeData, Boolean) -> Unit = { _, _, -> },
         onFail: (OAuth?, VKIDAuthFail) -> Unit = { _, _ -> },

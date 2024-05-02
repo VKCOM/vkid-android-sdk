@@ -54,7 +54,6 @@ import com.vk.id.sample.xml.uikit.common.dpToPixels
 import com.vk.id.sample.xml.uikit.common.getOneTapFailCallback
 import com.vk.id.sample.xml.uikit.common.getOneTapSuccessCallback
 import com.vk.id.sample.xml.uikit.common.showToast
-import com.vk.id.sample.xml.vkid
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlin.reflect.KCallable
@@ -148,7 +147,6 @@ internal fun OnetapStylingComposeScreen() {
                     var oneTapView: OneTap? by remember { mutableStateOf(null) }
                     AndroidView(factory = { context ->
                         OneTap(context).apply {
-                            setVKID(context.vkid)
                             setCallbacks(
                                 onAuth = getOneTapSuccessCallback(context) { token.value = it },
                                 onAuthCode = onAuthCode,

@@ -113,7 +113,7 @@ internal class VKIDRefreshTokenIntegrationTest : BaseUiTest() {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
         val prefsStore = mockk<InternalVKIDPrefsStore>()
         val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
-        val vkid = InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
+        InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
             .encryptedSharedPreferencesStorage(encryptedStorage)
@@ -129,7 +129,7 @@ internal class VKIDRefreshTokenIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Рефрешится токен") {
             runBlocking {
-                result = vkid.refreshToken(params = VKIDRefreshTokenParams { state = STATE })
+                result = VKID.instance.refreshToken(params = VKIDRefreshTokenParams { state = STATE })
             }
         }
         step("Получен AT") {
@@ -147,7 +147,7 @@ internal class VKIDRefreshTokenIntegrationTest : BaseUiTest() {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
         val prefsStore = mockk<InternalVKIDPrefsStore>()
         val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
-        val vkid = InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
+        InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
             .encryptedSharedPreferencesStorage(encryptedStorage)
@@ -157,7 +157,7 @@ internal class VKIDRefreshTokenIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Рефрешится токен") {
             runBlocking {
-                result = vkid.refreshToken(params = VKIDRefreshTokenParams { state = STATE })
+                result = VKID.instance.refreshToken(params = VKIDRefreshTokenParams { state = STATE })
             }
         }
         step("Не получен AT") {
@@ -175,7 +175,7 @@ internal class VKIDRefreshTokenIntegrationTest : BaseUiTest() {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
         val prefsStore = mockk<InternalVKIDPrefsStore>()
         val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
-        val vkid = InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
+        InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
             .encryptedSharedPreferencesStorage(encryptedStorage)
@@ -187,7 +187,7 @@ internal class VKIDRefreshTokenIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Рефрешится токен") {
             runBlocking {
-                result = vkid.refreshToken(params = VKIDRefreshTokenParams { state = STATE })
+                result = VKID.instance.refreshToken(params = VKIDRefreshTokenParams { state = STATE })
             }
         }
         step("Не получен AT") {
@@ -205,7 +205,7 @@ internal class VKIDRefreshTokenIntegrationTest : BaseUiTest() {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
         val prefsStore = mockk<InternalVKIDPrefsStore>()
         val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
-        val vkid = InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
+        InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
             .encryptedSharedPreferencesStorage(encryptedStorage)
@@ -217,7 +217,7 @@ internal class VKIDRefreshTokenIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Рефрешится токен") {
             runBlocking {
-                result = vkid.refreshToken(params = VKIDRefreshTokenParams { state = STATE })
+                result = VKID.instance.refreshToken(params = VKIDRefreshTokenParams { state = STATE })
             }
         }
         step("Не получен AT") {
@@ -235,7 +235,7 @@ internal class VKIDRefreshTokenIntegrationTest : BaseUiTest() {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
         val prefsStore = mockk<InternalVKIDPrefsStore>()
         val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
-        val vkid = InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
+        InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
             .encryptedSharedPreferencesStorage(encryptedStorage)
@@ -248,7 +248,7 @@ internal class VKIDRefreshTokenIntegrationTest : BaseUiTest() {
         var result: Any? = null
         step("Рефрешится токен") {
             runBlocking {
-                result = vkid.refreshToken(params = VKIDRefreshTokenParams { state = STATE })
+                result = VKID.instance.refreshToken(params = VKIDRefreshTokenParams { state = STATE })
             }
         }
         step("Не получен AT") {

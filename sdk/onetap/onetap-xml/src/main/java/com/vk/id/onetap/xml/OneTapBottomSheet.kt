@@ -12,7 +12,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
 import com.vk.id.AccessToken
-import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthUiParams
@@ -64,12 +63,6 @@ public class OneTapBottomSheet @JvmOverloads constructor(
     }
     private var onAuthCode: (AuthCodeData, Boolean) -> Unit = { _, _ -> }
     private var onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit = { _, _ -> }
-    private var vkid: VKID? = null
-        set(value) {
-            field = value
-            onVKIDChange(value)
-        }
-    private var onVKIDChange: (VKID?) -> Unit = {}
 
     private var state: OneTapBottomSheetState? = null
 
@@ -86,8 +79,6 @@ public class OneTapBottomSheet @JvmOverloads constructor(
     @Suppress("NonSkippableComposable")
     @Composable
     private fun Content(sheetSettings: OneTapBottomSheetAttributeSettings) {
-        var vkid by remember { mutableStateOf(vkid) }
-        onVKIDChange = { vkid = it }
         var oAuths by remember { mutableStateOf(oAuths) }
         onOAuthsChange = { oAuths = it }
         var authParams by remember { mutableStateOf(authParams) }
@@ -104,7 +95,6 @@ public class OneTapBottomSheet @JvmOverloads constructor(
             onFail = { oAuth, fail -> onFail(oAuth, fail) },
             autoHideOnSuccess = sheetSettings.autoHideOnSuccess,
             oAuths = oAuths,
-            vkid = vkid,
             authParams = authParams,
         )
     }
@@ -125,18 +115,6 @@ public class OneTapBottomSheet @JvmOverloads constructor(
         this.onAuth = onAuth
         this.onAuthCode = onAuthCode
         this.onFail = onFail
-    }
-
-    /**
-     * Set an optional [VKID] instance to use for authentication.
-     *  If instance of VKID is not provided, it will be created.
-     *  Note that you can't change the [VKID] instance after view was added to layout.
-     */
-    public fun setVKID(
-        vkid: VKID
-    ) {
-        check(!composeView.isAttachedToWindow) { "You're not allowed to change VKID instance after it was attached" }
-        this.vkid = vkid
     }
 
     /**

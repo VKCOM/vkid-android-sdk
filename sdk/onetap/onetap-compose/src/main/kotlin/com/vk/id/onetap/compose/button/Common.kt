@@ -51,14 +51,13 @@ internal fun Modifier.clickable(
 
 internal fun startAuth(
     coroutineScope: CoroutineScope,
-    vkid: VKID,
     onAuth: (AccessToken) -> Unit,
     onAuthCode: (AuthCodeData, Boolean) -> Unit,
     onFail: (VKIDAuthFail) -> Unit,
     params: VKIDAuthParams = VKIDAuthParams {}
 ) {
     coroutineScope.launch {
-        vkid.authorize(
+        VKID.instance.authorize(
             object : VKIDAuthCallback {
                 override fun onAuth(accessToken: AccessToken) = onAuth(accessToken)
                 override fun onAuthCode(data: AuthCodeData, isCompletion: Boolean) = onAuthCode(data, isCompletion)
@@ -72,7 +71,6 @@ internal fun startAuth(
 @Composable
 internal fun FetchUserData(
     coroutineScope: CoroutineScope,
-    vkid: VKID,
     onFetchingProgress: OnFetchingProgress,
 ) {
     val lifecycleState by LocalLifecycleOwner.current.lifecycle.observeAsState()
@@ -82,7 +80,7 @@ internal fun FetchUserData(
             Lifecycle.Event.ON_RESUME -> {
                 fetchUserJob = coroutineScope.launch {
                     onFetchingProgress.onPreFetch()
-                    val user = vkid.fetchUserData().getOrNull()
+                    val user = VKID.instance.fetchUserData().getOrNull()
                     onFetchingProgress.onFetched(user)
                 }
             }

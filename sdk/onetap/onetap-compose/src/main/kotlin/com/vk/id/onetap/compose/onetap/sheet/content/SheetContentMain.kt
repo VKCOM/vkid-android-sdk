@@ -20,7 +20,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vk.id.AccessToken
-import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthUiParams
@@ -35,7 +34,6 @@ import com.vk.id.onetap.compose.onetap.sheet.vkidButtonTextProvider
 @Suppress("LongParameterList", "NonSkippableComposable")
 @Composable
 internal fun SheetContentMain(
-    vkid: VKID,
     onAuth: (OneTapOAuth?, AccessToken) -> Unit,
     onAuthCode: (AuthCodeData, Boolean) -> Unit,
     onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit,
@@ -68,12 +66,10 @@ internal fun SheetContentMain(
             style = style.oneTapStyle,
             signInAnotherAccountButtonEnabled = true,
             oAuths = oAuths,
-            vkid = vkid,
             vkidButtonTextProvider = remember(scenario) { scenario.vkidButtonTextProvider(resources) },
             onVKIDButtonClick = {
                 startVKIDAuth(
                     coroutineScope = coroutineScope,
-                    vkid = vkid,
                     style = style,
                     onAuth = { onAuth(null, it) },
                     onAuthCode = onAuthCode,
@@ -85,7 +81,6 @@ internal fun SheetContentMain(
             onAlternateButtonClick = {
                 startAlternateAuth(
                     coroutineScope = coroutineScope,
-                    vkid = vkid,
                     style = style,
                     onAuth = { onAuth(null, it) },
                     onAuthCode = onAuthCode,

@@ -49,7 +49,6 @@ import com.vk.id.sample.app.uikit.selector.styleConstructors
 import com.vk.id.sample.xml.uikit.common.getOneTapFailCallback
 import com.vk.id.sample.xml.uikit.common.getOneTapSuccessCallback
 import com.vk.id.sample.xml.uikit.common.showToast
-import com.vk.id.sample.xml.vkid
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlin.reflect.KCallable
@@ -103,7 +102,6 @@ internal fun OneTapBottomSheetScreen() {
             if (shouldUseXml.value) {
                 AndroidView(factory = { context ->
                     OneTapBottomSheet(context).apply {
-                        setVKID(context.vkid)
                         setCallbacks(
                             onAuth = getOneTapSuccessCallback(context) { token.value = it },
                             onAuthCode = onAuthCode,
@@ -118,7 +116,6 @@ internal fun OneTapBottomSheetScreen() {
                 }
             } else {
                 OneTapBottomSheet(
-                    vkid = context.vkid,
                     style = selectedStyle.value,
                     onAuth = getOneTapSuccessCallback(context) { token.value = it },
                     onAuthCode = onAuthCode,
