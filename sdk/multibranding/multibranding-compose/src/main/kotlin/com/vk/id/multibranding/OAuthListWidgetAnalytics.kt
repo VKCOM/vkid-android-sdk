@@ -71,7 +71,7 @@ internal class OAuthListWidgetAnalytics(screen: String) {
 
     fun onAuthSuccess(oAuth: OAuth) {
         val oauth = when (oAuth) {
-            OAuth.VK -> "vk_ru"
+            OAuth.VK -> return // no tracking
             OAuth.MAIL -> "mail_ru"
             OAuth.OK -> "ok_ru"
         }
