@@ -13,7 +13,7 @@ public class InternalVKIDEncryptedSharedPreferencesStorage public constructor(
 ) {
 
     private companion object {
-        const val FILE_NAME = "encrypted_shared_prefs"
+        const val FILE_NAME = "vkid_encrypted_shared_prefs"
     }
 
     private val sharedPreferences: SharedPreferences by lazy {
