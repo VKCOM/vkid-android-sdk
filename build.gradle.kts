@@ -17,9 +17,9 @@ plugins {
 
 healthMetrics {
     buildSpeed {
-        measuredTask = project.tasks.getByName("help")
+        measuredTaskPath = ":help"
     }
     buildSpeed {
-        measuredTask = project.tasks.getByName("dependencies")
+        measuredTaskPath = ":logger:dependencies"
     }
 }
