@@ -1,19 +1,26 @@
 $dokka.format:html-v1
 $dokka.linkExtension:html
+$dokka.location:com.vk.id.analytics.stat////PointingToDeclaration/analytics/com.vk.id.analytics.stat.html
+$dokka.location:com.vk.id.analytics////PointingToDeclaration/analytics/com.vk.id.analytics.html
 $dokka.location:com.vk.id.common.util////PointingToDeclaration/common/com.vk.id.common.util.html
+$dokka.location:com.vk.id.internal.auth.device////PointingToDeclaration/vkid/com.vk.id.internal.auth.device.html
+$dokka.location:com.vk.id.internal.store////PointingToDeclaration/vkid/com.vk.id.internal.store.html
 $dokka.location:com.vk.id.network////PointingToDeclaration/network/com.vk.id.network.html
 $dokka.location:com.vk.id.onetap.common.alternate.style////PointingToDeclaration/onetap-common/com.vk.id.onetap.common.alternate.style.html
 $dokka.location:com.vk.id.onetap.common.auth.style////PointingToDeclaration/onetap-common/com.vk.id.onetap.common.auth.style.html
 $dokka.location:com.vk.id.onetap.common.icon.style////PointingToDeclaration/onetap-common/com.vk.id.onetap.common.icon.style.html
 $dokka.location:com.vk.id.onetap.common.progress.style////PointingToDeclaration/onetap-common/com.vk.id.onetap.common.progress.style.html
+$dokka.location:com.vk.id.storage////PointingToDeclaration/vkid/com.vk.id.storage.html
 $dokka.location:com.vk.id.test////PointingToDeclaration/vkid/com.vk.id.test.html
+module:analytics
+com.vk.id.analytics
+com.vk.id.analytics.stat
 module:common
 com.vk.id.common
 com.vk.id.common.util
 module:logger
 com.vk.id.logger
 module:multibranding-common
-com.vk.id.multibranding.common.callback
 com.vk.id.multibranding.common.style
 module:multibranding-compose
 com.vk.id.multibranding
@@ -34,12 +41,16 @@ com.vk.id.onetap.compose.onetap.sheet
 com.vk.id.onetap.compose.onetap.sheet.style
 module:onetap-xml
 com.vk.id.onetap.xml
+module:vk-sdk-support
+com.vk.id.vksdksupport
 module:vkid
 com.vk.id
 com.vk.id.auth
-<<<<<<< HEAD
-com.vk.id.internal.log
+com.vk.id.exchangetoken
+com.vk.id.internal.auth.device
+com.vk.id.internal.store
+com.vk.id.logout
 com.vk.id.refresh
-=======
->>>>>>> develop
+com.vk.id.refreshuser
+com.vk.id.storage
 com.vk.id.test
