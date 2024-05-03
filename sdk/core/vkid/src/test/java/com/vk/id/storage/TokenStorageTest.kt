@@ -51,9 +51,6 @@ private val TOKEN_JSON = """{
 private const val REFRESH_TOKEN_KEY = "REFRESH_TOKEN_KEY"
 private const val REFRESH_TOKEN = "refresh token"
 
-private const val ID_TOKEN_KEY = "ID_TOKEN_KEY"
-private const val ID_TOKEN = "id token"
-
 internal class TokenStorageTest : BehaviorSpec({
     isolationMode = IsolationMode.InstancePerLeaf
     Given("A token storage") {
@@ -105,35 +102,13 @@ internal class TokenStorageTest : BehaviorSpec({
             }
         }
 
-        When("Saves id token") {
-            every { prefs.set(ID_TOKEN_KEY, ID_TOKEN) } just runs
-            storage.idToken = ID_TOKEN
-            Then("Saves serialized token to prefs") {
-                verify { prefs.set(ID_TOKEN_KEY, ID_TOKEN) }
-            }
-        }
-        When("Requests empty id token") {
-            every { prefs.getString(ID_TOKEN_KEY) } returns null
-            Then("id token is null") {
-                storage.idToken.shouldBeNull()
-            }
-        }
-        When("Requests id token") {
-            every { prefs.getString(ID_TOKEN_KEY) } returns ID_TOKEN
-            Then("id token is deserialized") {
-                storage.idToken shouldBe ID_TOKEN
-            }
-        }
-
         When("Storage is cleared") {
             every { prefs.set(ACCESS_TOKEN_KEY, null) } just runs
             every { prefs.set(REFRESH_TOKEN_KEY, null) } just runs
-            every { prefs.set(ID_TOKEN_KEY, null) } just runs
             storage.clear()
             Then("Prefs for all keys are cleared") {
                 verify { prefs.set(ACCESS_TOKEN_KEY, null) }
                 verify { prefs.set(REFRESH_TOKEN_KEY, null) }
-                verify { prefs.set(ID_TOKEN_KEY, null) }
             }
         }
     }

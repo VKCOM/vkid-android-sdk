@@ -89,11 +89,48 @@ internal class TokensHandlerTest : BehaviorSpec({
             } just runs
             every { tokenStorage.accessToken = ACCESS_TOKEN } just runs
             every { tokenStorage.refreshToken = REFRESH_TOKEN } just runs
-            every { tokenStorage.idToken = ID_TOKEN } just runs
             every { onSuccess(ACCESS_TOKEN) } just runs
             runTest(scheduler) {
                 handler.handle(
                     payload = TOKEN_PAYLOAD,
+                    onSuccess = onSuccess,
+                    onFailedApiCall = onFailedApiCall,
+                )
+            }
+            Then("Call user info fetcher") {
+                coVerify {
+                    userInfoFetcher.fetch(
+                        ACCESS_TOKEN_VALUE,
+                        capture(capturedOnSuccess),
+                        onFailedApiCall,
+                    )
+                }
+                runTest(scheduler) {
+                    capturedOnSuccess.captured(VKID_USER)
+                }
+                verify { tokenStorage.accessToken = ACCESS_TOKEN }
+                verify { tokenStorage.refreshToken = REFRESH_TOKEN }
+                verify { onSuccess(ACCESS_TOKEN) }
+            }
+        }
+        When("Handles token payload with blank id token payload") {
+            val onSuccess = mockk<(AccessToken) -> Unit>()
+            val onFailedApiCall = mockk<(Throwable) -> Unit>()
+            val capturedOnSuccess = slot<suspend (VKIDUser) -> Unit>()
+            coEvery {
+                userInfoFetcher.fetch(
+                    ACCESS_TOKEN_VALUE,
+                    capture(capturedOnSuccess),
+                    onFailedApiCall,
+                )
+            } just runs
+            every { tokenStorage.accessToken } returns ACCESS_TOKEN
+            every { tokenStorage.accessToken = ACCESS_TOKEN } just runs
+            every { tokenStorage.refreshToken = REFRESH_TOKEN } just runs
+            every { onSuccess(ACCESS_TOKEN) } just runs
+            runTest(scheduler) {
+                handler.handle(
+                    payload = TOKEN_PAYLOAD.copy(idToken = "  "),
                     onSuccess = onSuccess,
                     onFailedApiCall = onFailedApiCall,
                 )
@@ -126,7 +163,6 @@ internal class TokensHandlerTest : BehaviorSpec({
                 )
             } just runs
             every { tokenStorage.refreshToken = REFRESH_TOKEN } just runs
-            every { tokenStorage.idToken = ID_TOKEN } just runs
             every { onSuccess(ACCESS_TOKEN) } just runs
             runTest(scheduler) {
                 handler.handle(
