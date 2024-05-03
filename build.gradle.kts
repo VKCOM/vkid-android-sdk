@@ -1,3 +1,5 @@
+import com.vk.id.health.metrics.buildSpeed
+
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
@@ -9,4 +11,15 @@ plugins {
     alias(libs.plugins.androidTest) apply false
     alias(libs.plugins.baselineprofile) apply false
     id("vkid.android.project-substitution") apply true
+    id("vkid.health.metrics") apply true
+}
+
+
+healthMetrics {
+    buildSpeed {
+        measuredTask = project.tasks.getByName("help")
+    }
+    buildSpeed {
+        measuredTask = project.tasks.getByName("dependencies")
+    }
 }
