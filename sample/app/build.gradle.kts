@@ -42,6 +42,7 @@ android {
 
 dependencies {
     implementation(project(":sample-xml"))
+    implementation(project(":sample-oldsdk"))
     implementation(project(":multibranding-compose"))
     implementation(project(":multibranding-xml"))
     implementation(project(":onetap-compose"))

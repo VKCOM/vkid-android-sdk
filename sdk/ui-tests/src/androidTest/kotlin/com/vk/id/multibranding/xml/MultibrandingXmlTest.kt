@@ -2,12 +2,12 @@ package com.vk.id.multibranding.xml
 
 import com.vk.id.AccessToken
 import com.vk.id.OAuth
-import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
+import com.vk.id.auth.AuthCodeData
+import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.allure.Feature
 import com.vk.id.common.feature.TestFeature
 import com.vk.id.multibranding.base.MultibrandingTest
-import com.vk.id.multibranding.common.callback.OAuthListWidgetAuthCallback
 import io.qameta.allure.kotlin.AllureId
 import io.qameta.allure.kotlin.junit4.DisplayName
 import org.junit.Test
@@ -23,6 +23,13 @@ public class MultibrandingXmlTest(
     @DisplayName("Успешное получение токена в XML Мультибрендинге")
     override fun tokenIsReceived() {
         super.tokenIsReceived()
+    }
+
+    @Test
+    @AllureId("2302961")
+    @DisplayName("Успешное получение токена после логаута в Compose OneTap")
+    override fun tokenIsReceivedAfterFailedLogout() {
+        super.tokenIsReceivedAfterFailedLogout()
     }
 
     @Test
@@ -62,9 +69,9 @@ public class MultibrandingXmlTest(
 
     @Test
     @AllureId("2290747")
-    @DisplayName("Получение ошибки неверного uuid в XML Мультибрендинге")
-    override fun invalidUuidIsReceived() {
-        super.invalidUuidIsReceived()
+    @DisplayName("Получение ошибки отсутствия deviceId в XML Мультибрендинге")
+    override fun invalidDeviceIdIsReceived() {
+        super.invalidDeviceIdIsReceived()
     }
 
     @Test
@@ -74,18 +81,34 @@ public class MultibrandingXmlTest(
         super.invalidStateIsReceived()
     }
 
+    @Test
+    @AllureId("2303024")
+    @DisplayName("Успешное получение кода при схеме с бекендом в XML OneTap Мультибрендинге")
+    override fun authCodeIsReceived() {
+        super.authCodeIsReceived()
+    }
+
+    @Test
+    @AllureId("2303001")
+    @DisplayName("Получение ошибки загрузки пользовательских данных в Compose OneTap")
+    override fun failedUserCallIsReceived() {
+        super.failedUserCallIsReceived()
+    }
+
     override fun setContent(
-        vkid: VKID,
         onAuth: (OAuth?, AccessToken) -> Unit,
+        onAuthCode: (AuthCodeData, Boolean) -> Unit,
         onFail: (OAuth?, VKIDAuthFail) -> Unit,
+        authParams: VKIDAuthUiParams,
     ) {
         composeTestRule.activity.setContent(
             OAuthListWidget(composeTestRule.activity).apply {
                 setCallbacks(
-                    onAuth = OAuthListWidgetAuthCallback.WithOAuth { oAuth, accessToken -> onAuth(oAuth, accessToken) },
+                    onAuth = onAuth,
+                    onAuthCode = onAuthCode,
                     onFail = onFail,
                 )
-                setVKID(vkid)
+                this.authParams = authParams
             }
         )
     }

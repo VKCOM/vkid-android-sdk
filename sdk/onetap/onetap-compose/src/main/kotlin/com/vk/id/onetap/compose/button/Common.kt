@@ -24,9 +24,11 @@ import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.VKIDUser
+import com.vk.id.auth.AuthCodeData
+import com.vk.id.auth.VKIDAuthCallback
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.onetap.common.auth.style.VKIDButtonStyle
+import com.vk.id.onetap.common.auth.style.InternalVKIDButtonStyle
 import com.vk.id.onetap.compose.button.auth.style.asColor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -34,7 +36,7 @@ import kotlinx.coroutines.launch
 
 @Suppress("LongParameterList")
 internal fun Modifier.clickable(
-    style: VKIDButtonStyle,
+    style: InternalVKIDButtonStyle,
     onClick: () -> Unit
 ): Modifier = composed {
     clickable(
@@ -49,21 +51,17 @@ internal fun Modifier.clickable(
 
 internal fun startAuth(
     coroutineScope: CoroutineScope,
-    vkid: VKID,
     onAuth: (AccessToken) -> Unit,
+    onAuthCode: (AuthCodeData, Boolean) -> Unit,
     onFail: (VKIDAuthFail) -> Unit,
     params: VKIDAuthParams = VKIDAuthParams {}
 ) {
     coroutineScope.launch {
-        vkid.authorize(
-            object : VKID.AuthCallback {
-                override fun onSuccess(accessToken: AccessToken) {
-                    onAuth(accessToken)
-                }
-
-                override fun onFail(fail: VKIDAuthFail) {
-                    onFail(fail)
-                }
+        VKID.instance.authorize(
+            object : VKIDAuthCallback {
+                override fun onAuth(accessToken: AccessToken) = onAuth(accessToken)
+                override fun onAuthCode(data: AuthCodeData, isCompletion: Boolean) = onAuthCode(data, isCompletion)
+                override fun onFail(fail: VKIDAuthFail) = onFail(fail)
             },
             params
         )
@@ -73,7 +71,6 @@ internal fun startAuth(
 @Composable
 internal fun FetchUserData(
     coroutineScope: CoroutineScope,
-    vkid: VKID,
     onFetchingProgress: OnFetchingProgress,
 ) {
     val lifecycleState by LocalLifecycleOwner.current.lifecycle.observeAsState()
@@ -83,7 +80,7 @@ internal fun FetchUserData(
             Lifecycle.Event.ON_RESUME -> {
                 fetchUserJob = coroutineScope.launch {
                     onFetchingProgress.onPreFetch()
-                    val user = vkid.fetchUserData().getOrNull()
+                    val user = VKID.instance.fetchUserData().getOrNull()
                     onFetchingProgress.onFetched(user)
                 }
             }

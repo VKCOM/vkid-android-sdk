@@ -13,7 +13,7 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.mapSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.common.util.isDarkTheme
+import com.vk.id.common.util.internalVkIdIsDarkTheme
 import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonSizeStyle
@@ -111,7 +111,7 @@ public sealed class OneTapBottomSheetStyle @InternalVKIDApi constructor(
             buttonsCornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
             buttonsSizeStyle: OneTapButtonSizeStyle = OneTapButtonSizeStyle.DEFAULT,
         ): OneTapBottomSheetStyle {
-            return (if (context.isDarkTheme) ::Dark else ::Light)(
+            return (if (context.internalVkIdIsDarkTheme) ::Dark else ::Light)(
                 cornersStyle,
                 buttonsCornersStyle,
                 buttonsSizeStyle,
@@ -128,7 +128,7 @@ public sealed class OneTapBottomSheetStyle @InternalVKIDApi constructor(
             buttonsCornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
             buttonsSizeStyle: OneTapButtonSizeStyle = OneTapButtonSizeStyle.DEFAULT,
         ): OneTapBottomSheetStyle {
-            return (if (context.isDarkTheme) ::TransparentDark else ::TransparentLight)(
+            return (if (context.internalVkIdIsDarkTheme) ::TransparentDark else ::TransparentLight)(
                 cornersStyle,
                 buttonsCornersStyle,
                 buttonsSizeStyle,

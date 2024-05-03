@@ -36,7 +36,7 @@ import android.content.pm.PackageManager
 import android.content.pm.Signature
 import android.os.IBinder
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.logger.createLoggerForClass
+import com.vk.id.logger.internalVKIDCreateLoggerForClass
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
@@ -45,7 +45,7 @@ import kotlin.math.max
 internal abstract class IPCClientBaseProvider<T> {
 
     @OptIn(InternalVKIDApi::class)
-    private val logger = createLoggerForClass()
+    private val logger = internalVKIDCreateLoggerForClass()
 
     open lateinit var appContext: Context
 

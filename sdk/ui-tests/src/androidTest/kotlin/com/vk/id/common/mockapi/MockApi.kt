@@ -4,20 +4,25 @@ package com.vk.id.common.mockapi
 
 import com.vk.id.VKIDUser
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.test.VKIDTestBuilder
-import com.vk.id.test.VKIDTokenPayloadResponse
+import com.vk.id.test.InternalVKIDLogoutPayloadResponse
+import com.vk.id.test.InternalVKIDTestBuilder
+import com.vk.id.test.InternalVKIDTokenPayloadResponse
+import com.vk.id.test.InternalVKIDUserInfoPayloadResponse
+import com.vk.id.test.InternalVKIDUserPayloadResponse
 
 public object MockApi {
     public const val ACCESS_TOKEN: String = "access token"
+    public const val REFRESH_TOKEN: String = "refresh token"
+    public const val ID_TOKEN: String = "id token"
     public const val EXPIRES_IN: Long = 1000L
     public const val USER_ID: Long = 0L
     public const val EMAIL: String = "email"
     public const val PHONE: String = "phone"
     public const val PHONE_ACCESS_KEY: String = "phone access key"
-
-    private const val FIRST_NAME: String = "first name"
-    private const val LAST_NAME: String = "last name"
-    private const val AVATAR: String = "avatar"
+    public const val FIRST_NAME: String = "first name"
+    public const val LAST_NAME: String = "last name"
+    public const val AVATAR: String = "avatar"
+    public const val STATE: String = "state"
 
     public fun mockApiUser(): VKIDUser = VKIDUser(
         firstName = FIRST_NAME,
@@ -36,19 +41,42 @@ public object MockApi {
     )
 }
 
-public fun VKIDTestBuilder.mockApiError(): VKIDTestBuilder = getTokenResponse(
-    Result.failure(UnsupportedOperationException("fake error"))
-)
-
-public fun VKIDTestBuilder.mockApiSuccess(): VKIDTestBuilder = getTokenResponse(
-    Result.success(
-        VKIDTokenPayloadResponse(
-            accessToken = MockApi.ACCESS_TOKEN,
-            expiresIn = MockApi.EXPIRES_IN,
-            userId = MockApi.USER_ID,
-            email = MockApi.EMAIL,
-            phone = MockApi.PHONE,
-            phoneAccessKey = MockApi.PHONE_ACCESS_KEY,
+public fun InternalVKIDTestBuilder.mockGetTokenSuccess(): InternalVKIDTestBuilder = this
+    .getTokenResponse(
+        Result.success(
+            InternalVKIDTokenPayloadResponse(
+                accessToken = MockApi.ACCESS_TOKEN,
+                refreshToken = MockApi.ACCESS_TOKEN,
+                idToken = MockApi.ID_TOKEN,
+                expiresIn = MockApi.EXPIRES_IN,
+                userId = MockApi.USER_ID,
+            )
         )
     )
-)
+
+public fun InternalVKIDTestBuilder.mockUserInfoError(): InternalVKIDTestBuilder = this
+    .getUserInfoResponse(Result.success(InternalVKIDUserInfoPayloadResponse(error = "mock error")))
+
+public fun InternalVKIDTestBuilder.mockLogoutError(): InternalVKIDTestBuilder = this
+    .logoutResponse(Result.success(InternalVKIDLogoutPayloadResponse(error = "error")))
+
+public fun InternalVKIDTestBuilder.mockApiError(): InternalVKIDTestBuilder = this
+    .getTokenResponse(Result.failure(UnsupportedOperationException("fake error")))
+    .mockUserInfoError()
+
+public fun InternalVKIDTestBuilder.mockApiSuccess(): InternalVKIDTestBuilder = this
+    .mockGetTokenSuccess()
+    .getUserInfoResponse(
+        Result.success(
+            InternalVKIDUserInfoPayloadResponse(
+                user = InternalVKIDUserPayloadResponse(
+                    firstName = MockApi.FIRST_NAME,
+                    lastName = MockApi.LAST_NAME,
+                    email = MockApi.EMAIL,
+                    phone = MockApi.PHONE,
+                    avatar = MockApi.AVATAR,
+                ),
+                state = MockApi.STATE
+            )
+        )
+    )

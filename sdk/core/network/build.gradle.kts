@@ -17,6 +17,8 @@ dependencies {
     implementation(libs.androidx.annotation)
     implementation(libs.androidx.core.ktx)
     implementation(libs.okhttp3.logging)
+    debugImplementation(libs.flipper)
+    debugImplementation(libs.flipper.network)
 
     testImplementation(libs.mockk)
     testImplementation(libs.kotest.core)

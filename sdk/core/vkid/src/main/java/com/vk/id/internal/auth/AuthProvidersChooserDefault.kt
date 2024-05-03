@@ -10,13 +10,13 @@ import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.auth.app.AppAuthProvider
 import com.vk.id.internal.auth.app.SilentAuthServicesProvider
 import com.vk.id.internal.auth.web.WebAuthProvider
-import com.vk.id.logger.createLoggerForClass
+import com.vk.id.logger.internalVKIDCreateLoggerForClass
 
 internal class AuthProvidersChooserDefault(
     private val appContext: Context,
     private val silentAuthServicesProvider: SilentAuthServicesProvider
 ) : AuthProvidersChooser {
-    private val logger = createLoggerForClass()
+    private val logger = internalVKIDCreateLoggerForClass()
     override suspend fun chooseBest(params: VKIDAuthParams): VKIDAuthProvider {
         if (!params.useOAuthProviderIfPossible || params.oAuth != null) {
             VKIDAnalytics.trackEvent("no_auth_provider", EventParam(name = "sdk_type", strValue = "vkid"))

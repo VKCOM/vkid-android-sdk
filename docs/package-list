@@ -37,4 +37,9 @@ com.vk.id.onetap.xml
 module:vkid
 com.vk.id
 com.vk.id.auth
+<<<<<<< HEAD
+com.vk.id.internal.log
+com.vk.id.refresh
+=======
+>>>>>>> develop
 com.vk.id.test

@@ -6,31 +6,46 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import com.kaspersky.kaspresso.testcases.core.testcontext.TestContext
 import com.vk.id.AccessToken
 import com.vk.id.OAuth
-import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
+import com.vk.id.auth.AuthCodeData
+import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.common.activity.AutoTestActivityRule
+import com.vk.id.common.allure.Owners
 import com.vk.id.common.allure.Platform
 import com.vk.id.common.allure.Product
+import com.vk.id.common.allure.Project
 import com.vk.id.common.basetest.BaseUiTest
 import com.vk.id.common.mockapi.MockApi
 import com.vk.id.common.mockapi.mockApiError
 import com.vk.id.common.mockapi.mockApiSuccess
+import com.vk.id.common.mockapi.mockGetTokenSuccess
+import com.vk.id.common.mockapi.mockLogoutError
+import com.vk.id.common.mockapi.mockUserInfoError
 import com.vk.id.common.mockprovider.ContinueAuthScenario
-import com.vk.id.test.VKIDTestBuilder
+import com.vk.id.test.InternalVKIDTestBuilder
+import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import io.qameta.allure.kotlin.Allure
+import io.qameta.allure.kotlin.Owner
 import org.junit.Before
 import org.junit.Rule
+import java.util.UUID
 
-@Platform("Android Manual")
-@Product("VK ID SDK")
+@Platform(Platform.ANDROID_AUTO)
+@Product(Product.VKID_SDK)
+@Project(Project.VKID_SDK)
+@Owner(Owners.DANIIL_KLIMCHUK)
 @Suppress("TooManyFunctions")
 public abstract class BaseAuthTest(
     private val oAuth: OAuth?,
     private val skipTest: Boolean = false,
 ) : BaseUiTest() {
+
+    private companion object {
+        val AUTH_CODE = AuthCodeData("d654574949e8664ba1")
+    }
 
     @get:Rule
     public val composeTestRule: AutoTestActivityRule = createAndroidComposeRule()
@@ -45,22 +60,33 @@ public abstract class BaseAuthTest(
     public open fun tokenIsReceived(): Unit = runIfShouldNotSkip {
         var accessToken: AccessToken? = null
         var receivedOAuth: OAuth? = null
+        var receivedAuthCode: AuthCodeData? = null
+        var receivedAuthCodeSuccess: Boolean? = null
         before {
-            val vkid = vkidBuilder()
+            vkidBuilder()
                 .mockApiSuccess()
                 .user(MockApi.mockApiUser())
                 .build()
             setContent(
-                vkid = vkid,
                 onAuth = { oAuth, token ->
                     receivedOAuth = oAuth
                     accessToken = token
+                },
+                onAuthCode = { authCode, isSuccess ->
+                    receivedAuthCode = authCode
+                    receivedAuthCodeSuccess = isSuccess
                 },
             )
         }.after {
         }.run {
             startAuth()
             continueAuth()
+            step("Получен auth code") {
+                flakySafely {
+                    receivedAuthCode shouldBe AUTH_CODE
+                    receivedAuthCodeSuccess = false
+                }
+            }
             step("Получен OAuth") {
                 flakySafely {
                     receivedOAuth shouldBe oAuth
@@ -76,24 +102,124 @@ public abstract class BaseAuthTest(
         }
     }
 
-    public open fun failedRedirectActivityIsReceived(): Unit = runIfShouldNotSkip {
-        var receivedFail: VKIDAuthFail? = null
+    public open fun tokenIsReceivedAfterFailedLogout(): Unit = runIfShouldNotSkip {
+        var accessToken: AccessToken? = null
         var receivedOAuth: OAuth? = null
+        var receivedAuthCode: AuthCodeData? = null
+        var receivedAuthCodeSuccess: Boolean? = null
         before {
-            val vkid = vkidBuilder()
-                .notifyFailedRedirect()
+            vkidBuilder()
+                .mockApiSuccess()
+                .mockLogoutError()
+                .user(MockApi.mockApiUser())
                 .build()
             setContent(
-                vkid = vkid,
-                onFail = { oAuth, fail ->
-                    receivedFail = fail
+                onAuth = { oAuth, token ->
                     receivedOAuth = oAuth
-                }
+                    accessToken = token
+                },
+                onAuthCode = { authCode, isSuccess ->
+                    receivedAuthCode = authCode
+                    receivedAuthCodeSuccess = isSuccess
+                },
             )
         }.after {
         }.run {
             startAuth()
             continueAuth()
+            step("Получен auth code") {
+                flakySafely {
+                    receivedAuthCode shouldBe AUTH_CODE
+                    receivedAuthCodeSuccess = false
+                }
+            }
+            step("Получен OAuth") {
+                flakySafely {
+                    receivedOAuth shouldBe oAuth
+                }
+            }
+            step("Получен токен") {
+                flakySafely {
+                    accessToken?.token shouldBe MockApi.ACCESS_TOKEN
+                    accessToken?.userID shouldBe MockApi.USER_ID
+                    accessToken?.userData shouldBe MockApi.mockReturnedUser()
+                }
+            }
+        }
+    }
+
+    public open fun authCodeIsReceived(): Unit = runIfShouldNotSkip {
+        var accessToken: AccessToken? = null
+        var receivedOAuth: OAuth? = null
+        var receivedAuthCode: AuthCodeData? = null
+        var receivedAuthCodeSuccess: Boolean? = null
+        before {
+            vkidBuilder()
+                .mockApiSuccess()
+                .user(MockApi.mockApiUser())
+                .build()
+            setContent(
+                onAuth = { oAuth, token ->
+                    receivedOAuth = oAuth
+                    accessToken = token
+                },
+                onAuthCode = { authCode, isSuccess ->
+                    receivedAuthCode = authCode
+                    receivedAuthCodeSuccess = isSuccess
+                },
+                authParams = VKIDAuthUiParams {
+                    codeChallenge = UUID.randomUUID().toString()
+                },
+            )
+        }.after {
+        }.run {
+            startAuth()
+            continueAuth()
+            step("Получен auth code") {
+                flakySafely {
+                    receivedAuthCode shouldBe AUTH_CODE
+                    receivedAuthCodeSuccess = true
+                }
+            }
+            step("Не получен OAuth") {
+                flakySafely {
+                    receivedOAuth.shouldBeNull()
+                }
+            }
+            step("Не получен токен") {
+                flakySafely {
+                    accessToken.shouldBeNull()
+                }
+            }
+        }
+    }
+
+    public open fun failedRedirectActivityIsReceived(): Unit = runIfShouldNotSkip {
+        var receivedFail: VKIDAuthFail? = null
+        var receivedOAuth: OAuth? = null
+        var receivedAuthCode: AuthCodeData? = null
+        var receivedAuthCodeSuccess: Boolean? = null
+        before {
+            vkidBuilder()
+                .notifyFailedRedirect()
+                .build()
+            setContent(
+                onFail = { oAuth, fail ->
+                    receivedFail = fail
+                    receivedOAuth = oAuth
+                },
+                onAuthCode = { authCode, isSuccess ->
+                    receivedAuthCode = authCode
+                    receivedAuthCodeSuccess = isSuccess
+                },
+            )
+        }.after {
+        }.run {
+            startAuth()
+            step("Auth code не получен") {
+                receivedAuthCode.shouldBeNull()
+                receivedAuthCodeSuccess.shouldBeNull()
+            }
             step("Получена ошибка") {
                 flakySafely {
                     receivedFail.shouldBeInstanceOf<VKIDAuthFail.FailedRedirectActivity>()
@@ -106,21 +232,29 @@ public abstract class BaseAuthTest(
     public open fun noBrowserAvailableIsReceived(): Unit = runIfShouldNotSkip {
         var receivedFail: VKIDAuthFail? = null
         var receivedOAuth: OAuth? = null
+        var receivedAuthCode: AuthCodeData? = null
+        var receivedAuthCodeSuccess: Boolean? = null
         before {
-            val vkid = vkidBuilder()
+            vkidBuilder()
                 .notifyNoBrowserAvailable()
                 .build()
             setContent(
-                vkid = vkid,
                 onFail = { oAuth, fail ->
                     receivedFail = fail
                     receivedOAuth = oAuth
-                }
+                },
+                onAuthCode = { authCode, isSuccess ->
+                    receivedAuthCode = authCode
+                    receivedAuthCodeSuccess = isSuccess
+                },
             )
         }.after {
         }.run {
             startAuth()
-            continueAuth()
+            step("Auth code не получен") {
+                receivedAuthCode.shouldBeNull()
+                receivedAuthCodeSuccess.shouldBeNull()
+            }
             step("Получена ошибка") {
                 flakySafely {
                     receivedFail.shouldBeInstanceOf<VKIDAuthFail.NoBrowserAvailable>()
@@ -133,21 +267,71 @@ public abstract class BaseAuthTest(
     public open fun failedApiCallIsReceived(): Unit = runIfShouldNotSkip {
         var receivedFail: VKIDAuthFail? = null
         var receivedOAuth: OAuth? = null
+        var receivedAuthCode: AuthCodeData? = null
+        var receivedAuthCodeSuccess: Boolean? = null
         before {
-            val vkid = vkidBuilder()
+            vkidBuilder()
                 .mockApiError()
                 .build()
             setContent(
-                vkid = vkid,
                 onFail = { oAuth, fail ->
                     receivedFail = fail
                     receivedOAuth = oAuth
-                }
+                },
+                onAuthCode = { authCode, isSuccess ->
+                    receivedAuthCode = authCode
+                    receivedAuthCodeSuccess = isSuccess
+                },
             )
         }.after {
         }.run {
             startAuth()
             continueAuth()
+            step("Получен auth code") {
+                flakySafely {
+                    receivedAuthCode shouldBe AUTH_CODE
+                    receivedAuthCodeSuccess = false
+                }
+            }
+            step("Получена ошибка") {
+                flakySafely {
+                    receivedFail.shouldBeInstanceOf<VKIDAuthFail.FailedApiCall>()
+                    receivedOAuth shouldBe oAuth
+                }
+            }
+        }
+    }
+
+    public open fun failedUserCallIsReceived(): Unit = runIfShouldNotSkip {
+        var receivedFail: VKIDAuthFail? = null
+        var receivedOAuth: OAuth? = null
+        var receivedAuthCode: AuthCodeData? = null
+        var receivedAuthCodeSuccess: Boolean? = null
+        before {
+            vkidBuilder()
+                .mockGetTokenSuccess()
+                .mockUserInfoError()
+                .build()
+            setContent(
+                onFail = { oAuth, fail ->
+                    receivedFail = fail
+                    receivedOAuth = oAuth
+                },
+                onAuthCode = { authCode, isSuccess ->
+                    receivedAuthCode = authCode
+                    receivedAuthCodeSuccess = isSuccess
+                },
+            )
+        }.after {
+        }.run {
+            startAuth()
+            continueAuth()
+            step("Получен auth code") {
+                flakySafely {
+                    receivedAuthCode shouldBe AUTH_CODE
+                    receivedAuthCodeSuccess = false
+                }
+            }
             step("Получена ошибка") {
                 flakySafely {
                     receivedFail.shouldBeInstanceOf<VKIDAuthFail.FailedApiCall>()
@@ -160,22 +344,31 @@ public abstract class BaseAuthTest(
     public open fun cancellationIsReceived(): Unit = runIfShouldNotSkip {
         var receivedFail: VKIDAuthFail? = null
         var receivedOAuth: OAuth? = null
+        var receivedAuthCode: AuthCodeData? = null
+        var receivedAuthCodeSuccess: Boolean? = null
         before {
-            val vkid = vkidBuilder()
+            vkidBuilder()
                 .mockApiSuccess()
                 .build()
             setContent(
-                vkid = vkid,
                 onFail = { oAuth, fail ->
                     receivedFail = fail
                     receivedOAuth = oAuth
-                }
+                },
+                onAuthCode = { authCode, isSuccess ->
+                    receivedAuthCode = authCode
+                    receivedAuthCodeSuccess = isSuccess
+                },
             )
         }.after {
         }.run {
             startAuth()
             step("Нажатие кнопки 'назад'") {
                 device.uiDevice.pressBack()
+            }
+            step("Auth code не получен") {
+                receivedAuthCode.shouldBeNull()
+                receivedAuthCodeSuccess.shouldBeNull()
             }
             step("Получена ошибка") {
                 flakySafely {
@@ -189,22 +382,31 @@ public abstract class BaseAuthTest(
     public open fun failedOAuthIsReceived(): Unit = runIfShouldNotSkip {
         var receivedFail: VKIDAuthFail? = null
         var receivedOAuth: OAuth? = null
+        var receivedAuthCode: AuthCodeData? = null
+        var receivedAuthCodeSuccess: Boolean? = null
         before {
-            val vkid = vkidBuilder()
+            vkidBuilder()
                 .mockApiSuccess()
                 .overrideOAuthToNull()
                 .build()
             setContent(
-                vkid = vkid,
                 onFail = { oAuth, fail ->
                     receivedFail = fail
                     receivedOAuth = oAuth
-                }
+                },
+                onAuthCode = { authCode, isSuccess ->
+                    receivedAuthCode = authCode
+                    receivedAuthCodeSuccess = isSuccess
+                },
             )
         }.after {
         }.run {
             startAuth()
             continueAuth()
+            step("Auth code не получен") {
+                receivedAuthCode.shouldBeNull()
+                receivedAuthCodeSuccess.shouldBeNull()
+            }
             step("Получена ошибка") {
                 flakySafely {
                     receivedFail.shouldBeInstanceOf<VKIDAuthFail.FailedOAuth>()
@@ -214,28 +416,37 @@ public abstract class BaseAuthTest(
         }
     }
 
-    public open fun invalidUuidIsReceived(): Unit = runIfShouldNotSkip {
+    public open fun invalidDeviceIdIsReceived(): Unit = runIfShouldNotSkip {
         var receivedFail: VKIDAuthFail? = null
         var receivedOAuth: OAuth? = null
+        var receivedAuthCode: AuthCodeData? = null
+        var receivedAuthCodeSuccess: Boolean? = null
         before {
-            val vkid = vkidBuilder()
+            vkidBuilder()
                 .mockApiSuccess()
-                .overrideUuid("wrong uuid")
+                .overrideDeviceIdToNull()
                 .build()
             setContent(
-                vkid = vkid,
                 onFail = { oAuth, fail ->
                     receivedFail = fail
                     receivedOAuth = oAuth
-                }
+                },
+                onAuthCode = { authCode, isSuccess ->
+                    receivedAuthCode = authCode
+                    receivedAuthCodeSuccess = isSuccess
+                },
             )
         }.after {
         }.run {
             startAuth()
             continueAuth()
+            step("Auth code не получен") {
+                receivedAuthCode.shouldBeNull()
+                receivedAuthCodeSuccess.shouldBeNull()
+            }
             step("Получена ошибка") {
                 flakySafely {
-                    receivedFail shouldBe VKIDAuthFail.FailedOAuthState("Invalid uuid")
+                    receivedFail shouldBe VKIDAuthFail.FailedRedirectActivity("No device id", null)
                     receivedOAuth shouldBe oAuth
                 }
             }
@@ -245,23 +456,32 @@ public abstract class BaseAuthTest(
     public open fun invalidStateIsReceived(): Unit = runIfShouldNotSkip {
         var receivedFail: VKIDAuthFail? = null
         var receivedOAuth: OAuth? = null
+        var receivedAuthCode: AuthCodeData? = null
+        var receivedAuthCodeSuccess: Boolean? = null
         before {
-            val vkid = vkidBuilder()
+            vkidBuilder()
                 .mockApiSuccess()
                 .overrideState("wrong state")
                 .build()
             setContent(
-                vkid = vkid,
                 onFail = { oAuth, fail ->
                     receivedFail = fail
                     receivedOAuth = oAuth
-                }
+                },
+                onAuthCode = { authCode, isSuccess ->
+                    receivedAuthCode = authCode
+                    receivedAuthCodeSuccess = isSuccess
+                },
             )
         }.after {
         }.run {
             startAuth()
             continueAuth()
             step("Получена ошибка") {
+                step("Auth code не получен") {
+                    receivedAuthCode.shouldBeNull()
+                    receivedAuthCodeSuccess.shouldBeNull()
+                }
                 flakySafely {
                     receivedFail shouldBe VKIDAuthFail.FailedOAuthState("Invalid state")
                     receivedOAuth shouldBe oAuth
@@ -279,14 +499,15 @@ public abstract class BaseAuthTest(
     }
 
     protected abstract fun setContent(
-        vkid: VKID,
         onAuth: (OAuth?, AccessToken) -> Unit = { _, _ -> },
+        onAuthCode: (AuthCodeData, Boolean) -> Unit = { _, _, -> },
         onFail: (OAuth?, VKIDAuthFail) -> Unit = { _, _ -> },
+        authParams: VKIDAuthUiParams = VKIDAuthUiParams {},
     )
 
     private fun TestContext<Unit>.continueAuth() = scenario(ContinueAuthScenario(composeTestRule))
 
     protected abstract fun TestContext<Unit>.startAuth()
 
-    protected open fun vkidBuilder(): VKIDTestBuilder = VKIDTestBuilder(composeTestRule.activity)
+    protected open fun vkidBuilder(): InternalVKIDTestBuilder = InternalVKIDTestBuilder(composeTestRule.activity)
 }

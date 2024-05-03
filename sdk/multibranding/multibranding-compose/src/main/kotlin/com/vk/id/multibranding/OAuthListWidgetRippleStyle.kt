@@ -2,10 +2,10 @@ package com.vk.id.multibranding
 
 import androidx.compose.ui.graphics.Color
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.multibranding.common.style.OAuthListWidgetRippleStyle
+import com.vk.id.multibranding.common.style.InternalVKIDOAuthListWidgetRippleStyle
 
 @OptIn(InternalVKIDApi::class)
-internal fun OAuthListWidgetRippleStyle.asColor(): Color = when (this) {
-    OAuthListWidgetRippleStyle.DARK -> Color.Black
-    OAuthListWidgetRippleStyle.LIGHT -> Color.White
+internal fun InternalVKIDOAuthListWidgetRippleStyle.asColor(): Color = when (this) {
+    InternalVKIDOAuthListWidgetRippleStyle.DARK -> Color.Black
+    InternalVKIDOAuthListWidgetRippleStyle.LIGHT -> Color.White
 }

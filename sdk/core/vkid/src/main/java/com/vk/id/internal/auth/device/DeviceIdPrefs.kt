@@ -25,13 +25,16 @@
  * UNDER NO CIRCUMSTANCES LLC “V KONTAKTE” BEAR LIABILITY TO THE LICENSEE OR ANY
  * THIRD PARTIES FOR ANY DAMAGE IN CONNECTION WITH USE OF THE SOFTWARE.
  */
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.internal.auth.device
 
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
+import com.vk.id.common.InternalVKIDApi
 
-internal class DeviceIdPrefs(private val context: Context) : DeviceIdProvider.DeviceIdStorage {
+internal class DeviceIdPrefs(private val context: Context) : InternalVKIDDeviceIdProvider.DeviceIdStorage {
     override fun getDeviceId(): String = getPrefs(context).getString(DEVICE_ID, "") ?: ""
 
     override fun setDeviceId(deviceId: String) {

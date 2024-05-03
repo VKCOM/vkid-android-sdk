@@ -1,0 +1,25 @@
+public final class com/vk/id/vksdksupport/BuildConfig {
+	public static final field BUILD_TYPE Ljava/lang/String;
+	public static final field CI_BUILD_NUMBER Ljava/lang/Integer;
+	public static final field CI_BUILD_TYPE Ljava/lang/String;
+	public static final field DEBUG Z
+	public static final field LIBRARY_PACKAGE_NAME Ljava/lang/String;
+	public static final field VKID_BUILD_TIME Ljava/lang/Long;
+	public static final field VKID_VERSION_NAME Ljava/lang/String;
+	public fun <init> ()V
+}
+
+public final class com/vk/id/vksdksupport/VKIDNotAuthorizedException : java/lang/IllegalStateException {
+	public fun <init> ()V
+}
+
+public final class com/vk/id/vksdksupport/VKIDRefreshTokenFailException : java/lang/IllegalStateException {
+	public fun <init> (Lcom/vk/id/refresh/VKIDRefreshTokenFail;)V
+	public final fun getFail ()Lcom/vk/id/refresh/VKIDRefreshTokenFail;
+}
+
+public final class com/vk/id/vksdksupport/WithVKIDTokenKt {
+	public static final fun withVKIDToken (Lcom/vk/api/sdk/internal/ApiCommand;Lkotlin/jvm/functions/Function0;)Lcom/vk/api/sdk/internal/ApiCommand;
+	public static synthetic fun withVKIDToken$default (Lcom/vk/api/sdk/internal/ApiCommand;Lkotlin/jvm/functions/Function0;ILjava/lang/Object;)Lcom/vk/api/sdk/internal/ApiCommand;
+}
+

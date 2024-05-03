@@ -8,57 +8,107 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.vk.id.analytics.LogcatTracker
 import com.vk.id.analytics.VKIDAnalytics
+import com.vk.id.auth.VKIDAuthCallback
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.common.InternalVKIDApi
+import com.vk.id.exchangetoken.VKIDExchangeTokenCallback
+import com.vk.id.exchangetoken.VKIDExchangeTokenParams
+import com.vk.id.exchangetoken.VKIDTokenExchanger
 import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthEventBridge
 import com.vk.id.internal.auth.AuthProvidersChooser
 import com.vk.id.internal.auth.AuthResult
-import com.vk.id.internal.concurrent.CoroutinesDispatchers
+import com.vk.id.internal.auth.device.InternalVKIDDeviceIdProvider
+import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
 import com.vk.id.internal.di.VKIDDeps
 import com.vk.id.internal.di.VKIDDepsProd
 import com.vk.id.internal.ipc.SilentAuthInfoProvider
+import com.vk.id.internal.store.InternalVKIDPrefsStore
 import com.vk.id.internal.user.UserDataFetcher
-import com.vk.id.logger.AndroidLogcatLogEngine
-import com.vk.id.logger.FakeLogEngine
+import com.vk.id.logger.InternalVKIDAndroidLogcatLogEngine
+import com.vk.id.logger.InternalVKIDFakeLogEngine
+import com.vk.id.logger.InternalVKIDLog
 import com.vk.id.logger.LogEngine
-import com.vk.id.logger.VKIDLog
-import com.vk.id.logger.createLoggerForClass
-import com.vk.id.test.ImmediateVKIDApi
+import com.vk.id.logger.internalVKIDCreateLoggerForClass
+import com.vk.id.logout.VKIDLoggerOut
+import com.vk.id.logout.VKIDLogoutCallback
+import com.vk.id.logout.VKIDLogoutParams
+import com.vk.id.refresh.VKIDRefreshTokenCallback
+import com.vk.id.refresh.VKIDRefreshTokenParams
+import com.vk.id.refresh.VKIDTokenRefresher
+import com.vk.id.refreshuser.VKIDGetUserCallback
+import com.vk.id.refreshuser.VKIDGetUserParams
+import com.vk.id.refreshuser.VKIDUserRefresher
+import com.vk.id.storage.InternalVKIDEncryptedSharedPreferencesStorage
+import com.vk.id.storage.TokenStorage
+import com.vk.id.test.InternalVKIDImmediateApi
+import com.vk.id.test.InternalVKIDOverrideApi
 import com.vk.id.test.MockAuthProviderChooser
 import com.vk.id.test.MockAuthProviderConfig
-import com.vk.id.test.OverrideVKIDApi
 import com.vk.id.test.TestSilentAuthInfoProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
 /**
  * VKID is the main entry point for integrating VK ID authentication into an Android application.
  * Check readme for more information about integration steps https://github.com/VKCOM/vkid-android-sdk#readme
  */
+@Suppress("TooManyFunctions")
 public class VKID {
-    /**
-     * Constructs a new instance of VKID.
-     *
-     * @param context The context of the application.
-     */
-    public constructor(context: Context) : this(VKIDDepsProd(context))
-
-    internal constructor(
-        context: Context,
-        mockApi: OverrideVKIDApi,
-        mockAuthProviderConfig: MockAuthProviderConfig
-    ) : this(object : VKIDDepsProd(context) {
-        override val authProvidersChooser = lazy { MockAuthProviderChooser(context, mockAuthProviderConfig) }
-        override val api = lazy { ImmediateVKIDApi(mockApi) }
-        override val vkSilentAuthInfoProvider = lazy { TestSilentAuthInfoProvider() }
-    })
 
     /** @suppress */
     public companion object {
+
+        @Volatile
+        private var _instance: VKID? = null
+
+        private fun init(vkid: VKID) {
+            synchronized(this) {
+                check(BuildConfig.DEBUG || _instance == null) { "You've already initialized VKID" }
+                _instance = vkid
+            }
+        }
+
+        /**
+         * Initializes a new instance of VKID.
+         * You must not call this method twice.
+         *
+         * @param context The context of the application.
+         */
+        public fun init(context: Context): Unit = init(VKID(VKIDDepsProd(context)))
+
+        @Suppress("LongParameterList")
+        internal fun init(
+            context: Context,
+            mockApi: InternalVKIDOverrideApi,
+            mockAuthProviderConfig: MockAuthProviderConfig,
+            deviceIdStorage: InternalVKIDDeviceIdProvider.DeviceIdStorage?,
+            prefsStore: InternalVKIDPrefsStore?,
+            encryptedSharedPreferencesStorage: InternalVKIDEncryptedSharedPreferencesStorage?,
+        ): Unit = init(
+            VKID(object : VKIDDepsProd(context) {
+                override val authProvidersChooser = lazy { MockAuthProviderChooser(context, mockAuthProviderConfig) }
+                override val api = lazy { InternalVKIDImmediateApi(mockApi) }
+                override val vkSilentAuthInfoProvider = lazy { TestSilentAuthInfoProvider() }
+                override val deviceIdStorage = lazy { deviceIdStorage ?: super.deviceIdStorage.value }
+                override val prefsStore = lazy { prefsStore ?: super.prefsStore.value }
+                override val encryptedSharedPreferencesStorage =
+                    lazy { encryptedSharedPreferencesStorage ?: super.encryptedSharedPreferencesStorage.value }
+            })
+        )
+
+        /**
+         * Returns a VKID Instance.
+         * You must call [init] before accessing this property.
+         */
+        public val instance: VKID
+            get() = _instance ?: synchronized(this) { _instance } ?: error("VKID is not initialized")
+
         /**
          * The logging engine used by VKID.
          * Set this property to change the logging implementation.
@@ -66,10 +116,10 @@ public class VKID {
          * @property logEngine Instance of [LogEngine] to be used for logging.
          */
         @Suppress("MemberVisibilityCanBePrivate")
-        public var logEngine: LogEngine = AndroidLogcatLogEngine()
+        public var logEngine: LogEngine = InternalVKIDAndroidLogcatLogEngine()
             set(value) {
                 field = value
-                VKIDLog.setLogEngine(value)
+                InternalVKIDLog.setLogEngine(value)
             }
 
         /**
@@ -83,13 +133,13 @@ public class VKID {
             set(value) {
                 field = value
                 if (value) {
-                    VKIDLog.setLogEngine(logEngine)
+                    InternalVKIDLog.setLogEngine(logEngine)
                     LogcatTracker().let {
                         analyticsDebugTracker = it
                         VKIDAnalytics.addTracker(it)
                     }
                 } else {
-                    VKIDLog.setLogEngine(FakeLogEngine())
+                    InternalVKIDLog.setLogEngine(InternalVKIDFakeLogEngine())
                     analyticsDebugTracker?.let {
                         VKIDAnalytics.removeTracker(it)
                     }
@@ -112,6 +162,11 @@ public class VKID {
         this.dispatchers = deps.dispatchers
         this.vkSilentAuthInfoProvider = deps.vkSilentAuthInfoProvider
         this.userDataFetcher = deps.userDataFetcher
+        this.tokenRefresher = deps.tokenRefresher
+        this.tokenExchanger = deps.tokenExchanger
+        this.userRefresher = deps.userRefresher
+        this.loggerOut = deps.loggerOut
+        this.tokenStorage = deps.tokenStorage
 
         VKIDAnalytics.addTracker(deps.statTracker)
 
@@ -121,60 +176,198 @@ public class VKID {
         VKIDAnalytics.trackEvent("sdk_init", VKIDAnalytics.EventParam("sdk_type", "vkid"))
     }
 
-    private val logger = createLoggerForClass()
+    private val requestMutex = Mutex()
+    private val logger = internalVKIDCreateLoggerForClass()
 
     private val authProvidersChooser: Lazy<AuthProvidersChooser>
     private val authOptionsCreator: AuthOptionsCreator
     private val authCallbacksHolder: AuthCallbacksHolder
     private val authResultHandler: Lazy<AuthResultHandler>
-    private val dispatchers: CoroutinesDispatchers
+    private val dispatchers: VKIDCoroutinesDispatchers
     private val vkSilentAuthInfoProvider: Lazy<SilentAuthInfoProvider>
     private val userDataFetcher: Lazy<UserDataFetcher>
+    private val tokenRefresher: Lazy<VKIDTokenRefresher>
+    private val tokenExchanger: Lazy<VKIDTokenExchanger>
+    private val userRefresher: Lazy<VKIDUserRefresher>
+    private val loggerOut: Lazy<VKIDLoggerOut>
+    private val tokenStorage: TokenStorage
 
     /**
      * Initiates the authorization process.
      *
      * @param lifecycleOwner The [LifecycleOwner] in which the authorization process should be handled.
-     * @param authCallback [AuthCallback] to handle the result of the authorization process.
-     * @param authParams Optional [VKIDAuthParams] for the authentication process.
+     * @param callback [VKIDAuthCallback] to handle the result of the authorization process.
+     * @param params Optional [VKIDAuthParams] for the authentication process.
      */
     public fun authorize(
         lifecycleOwner: LifecycleOwner,
-        authCallback: AuthCallback,
-        authParams: VKIDAuthParams = VKIDAuthParams {},
+        callback: VKIDAuthCallback,
+        params: VKIDAuthParams = VKIDAuthParams {},
     ) {
         lifecycleOwner.lifecycleScope.launch {
-            authorize(authCallback, authParams)
+            authorize(callback, params)
         }
     }
 
     /**
      * Initiates the authorization process in a coroutine scope.
      *
-     * @param authCallback [AuthCallback] to handle the result of the authorization process.
-     * @param authParams Optional [VKIDAuthParams] for the authentication process.
+     * @param callback [VKIDAuthCallback] to handle the result of the authorization process.
+     * @param params Optional [VKIDAuthParams] for the authentication process.
      */
     public suspend fun authorize(
-        authCallback: AuthCallback,
-        authParams: VKIDAuthParams = VKIDAuthParams {}
+        callback: VKIDAuthCallback,
+        params: VKIDAuthParams = VKIDAuthParams {}
     ) {
-        authCallbacksHolder.add(authCallback)
+        authCallbacksHolder.add(callback)
         val authContext = currentCoroutineContext()
 
         AuthEventBridge.listener = object : AuthEventBridge.Listener {
             override fun onAuthResult(authResult: AuthResult) {
                 CoroutineScope(authContext + Job()).launch {
                     authResultHandler.value.handle(authResult)
+                    requestMutex.unlock()
                 }
             }
         }
 
         withContext(dispatchers.io) {
-            val bestAuthProvider = authProvidersChooser.value.chooseBest(authParams)
-            val fullAuthOptions = authOptionsCreator.create(authParams)
+            requestMutex.lock()
+            val bestAuthProvider = authProvidersChooser.value.chooseBest(params)
+            val fullAuthOptions = authOptionsCreator.create(params)
             bestAuthProvider.auth(fullAuthOptions)
         }
     }
+
+    /**
+     * Initiates token refreshing.
+     *
+     * @param lifecycleOwner The [LifecycleOwner] in which the authorization process should be handled.
+     * @param callback [VKIDRefreshTokenCallback] to handle the result of the token refreshing.
+     * @param params Optional parameters.
+     */
+    public fun refreshToken(
+        lifecycleOwner: LifecycleOwner,
+        callback: VKIDRefreshTokenCallback,
+        params: VKIDRefreshTokenParams = VKIDRefreshTokenParams {},
+    ) {
+        lifecycleOwner.lifecycleScope.launch { refreshToken(callback = callback, params = params) }
+    }
+
+    /**
+     * Initiates token refreshing.
+     *
+     * @param callback [VKIDRefreshTokenCallback] to handle the result of the token refreshing.
+     * @param params Optional parameters.
+     */
+    public suspend fun refreshToken(
+        callback: VKIDRefreshTokenCallback,
+        params: VKIDRefreshTokenParams = VKIDRefreshTokenParams {},
+    ) {
+        requestMutex.withLock {
+            tokenRefresher.value.refresh(callback, params)
+        }
+    }
+
+    /**
+     * Exchanges v1 access token to v2 access token.
+     *
+     * @param lifecycleOwner The [LifecycleOwner] in which the authorization process should be handled.
+     * @param v1Token The token to exchange.
+     * @param callback [VKIDExchangeTokenCallback] to handle the result of the token exchange.
+     * @param params Optional parameters.
+     */
+    public fun exchangeTokenToV2(
+        lifecycleOwner: LifecycleOwner,
+        v1Token: String,
+        callback: VKIDExchangeTokenCallback,
+        params: VKIDExchangeTokenParams = VKIDExchangeTokenParams {},
+    ) {
+        lifecycleOwner.lifecycleScope.launch { exchangeTokenToV2(v1Token = v1Token, callback = callback, params = params) }
+    }
+
+    /**
+     * Exchanges v1 access token to v2 access token.
+     *
+     * @param v1Token The token to exchange.
+     * @param callback [VKIDExchangeTokenCallback] to handle the result of the token exchange.
+     * @param params Optional parameters.
+     */
+    public suspend fun exchangeTokenToV2(
+        v1Token: String,
+        callback: VKIDExchangeTokenCallback,
+        params: VKIDExchangeTokenParams = VKIDExchangeTokenParams {},
+    ) {
+        requestMutex.withLock {
+            tokenExchanger.value.exchange(v1Token = v1Token, params = params, callback = callback)
+        }
+    }
+
+    /**
+     * Fetches up-to-data user data using token from previous auth.
+     *
+     * @param lifecycleOwner The [LifecycleOwner] in which the user data refreshing should be handled.
+     * @param callback [VKIDGetUserCallback] to handle the result of the user data refreshing.
+     * @param params Optional parameters.
+     */
+    public fun getUserData(
+        lifecycleOwner: LifecycleOwner,
+        callback: VKIDGetUserCallback,
+        params: VKIDGetUserParams = VKIDGetUserParams {},
+    ) {
+        lifecycleOwner.lifecycleScope.launch { getUserData(callback = callback, params = params) }
+    }
+
+    /**
+     * Fetches up-to-data user data using token from previous auth.
+     *
+     * @param callback [VKIDGetUserCallback] to handle the result of the user data refreshing.
+     * @param params Optional parameters.
+     */
+    public suspend fun getUserData(
+        callback: VKIDGetUserCallback,
+        params: VKIDGetUserParams = VKIDGetUserParams {},
+    ) {
+        requestMutex.withLock {
+            userRefresher.value.refresh(callback = callback, params = params)
+        }
+    }
+
+    /**
+     * Logs out user and invalidates the access token.
+     *
+     * @param lifecycleOwner The [LifecycleOwner] in which the logging out should be handled.
+     * @param callback [VKIDLogoutCallback] to handle the result of logging out.
+     * @param params Optional parameters.
+     */
+    public fun logout(
+        callback: VKIDLogoutCallback,
+        lifecycleOwner: LifecycleOwner,
+        params: VKIDLogoutParams = VKIDLogoutParams {},
+    ) {
+        lifecycleOwner.lifecycleScope.launch { logout(callback = callback, params = params) }
+    }
+
+    /**
+     * Logs out user and invalidates the access token.
+     *
+     * @param callback [VKIDLogoutCallback] to handle the result of logging out.
+     * @param params Optional parameters.
+     */
+    public suspend fun logout(
+        callback: VKIDLogoutCallback,
+        params: VKIDLogoutParams = VKIDLogoutParams {},
+    ) {
+        requestMutex.withLock {
+            loggerOut.value.logout(callback = callback, params = params)
+        }
+    }
+
+    /**
+     * Returns current access token or null if auth wasn't passed.
+     */
+    public val accessToken: AccessToken?
+        get() = tokenStorage.accessToken
 
     /**
      * Fetches the user data.
@@ -183,20 +376,5 @@ public class VKID {
      */
     public suspend fun fetchUserData(): Result<VKIDUser?> {
         return Result.success(userDataFetcher.value.fetchUserData())
-    }
-
-    /**
-     * Callback interface for handling the authentication result.
-     */
-    public interface AuthCallback {
-        /**
-         * Called upon successful auth.
-         */
-        public fun onSuccess(accessToken: AccessToken)
-
-        /**
-         * Called upon any failure during auth.
-         */
-        public fun onFail(fail: VKIDAuthFail)
     }
 }

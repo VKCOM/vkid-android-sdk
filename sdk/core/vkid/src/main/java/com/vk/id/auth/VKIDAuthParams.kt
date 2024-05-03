@@ -24,11 +24,16 @@ public inline fun VKIDAuthParams(initializer: VKIDAuthParams.Builder.() -> Unit)
  * @property oAuth The [OAuth] provider to be used for authentication. Optional.
  * @property extraParams Key-value pairs of extra params that client want to send to auth provider. Optional.
  */
+@Suppress("LongParameterList")
 public class VKIDAuthParams private constructor(
-    public val locale: Locale? = null,
-    public val theme: Theme? = null,
-    public val useOAuthProviderIfPossible: Boolean = true,
-    public val oAuth: OAuth? = null,
+    internal val locale: Locale?,
+    internal val theme: Theme?,
+    internal val useOAuthProviderIfPossible: Boolean,
+    internal val oAuth: OAuth?,
+    internal val prompt: Prompt,
+    internal val state: String?,
+    internal val codeChallenge: String?,
+    internal val scopes: Set<String>,
     internal val extraParams: Map<String, String>? = null
 ) {
     /**
@@ -126,7 +131,7 @@ public class VKIDAuthParams private constructor(
     }
 
     /**
-     * Builder for [VKIDAuthParams]
+     * Builder for [VKIDAuthParams].
      */
     @Suppress("MemberVisibilityCanBePrivate")
     public class Builder {
@@ -151,6 +156,38 @@ public class VKIDAuthParams private constructor(
         public var oAuth: OAuth? = null
 
         /**
+         * A [Prompt] parameter to be passed to /authorize.
+         * Note: Changing it only works for auth view browser (not auth provider). Add [useOAuthProviderIfPossible] = false for this to work.
+         */
+        public var prompt: Prompt = Prompt.BLANK
+
+        /**
+         * A token to be passes /authorize.
+         */
+        @InternalVKIDApi
+        public var token: String? = null
+
+        /**
+         * An optional state to be passed to auth.
+         */
+        public var state: String? = null
+
+        /**
+         * An optional code challenge to be passed to auth.
+         * See https://datatracker.ietf.org/doc/html/rfc7636#section-4.2 for more information.
+         */
+        public var codeChallenge: String? = null
+
+        /**
+         * A required parameter with a list of requested scopes for the access token.
+         * You have to specify a subset a scopes that you request for your app in Self Service.
+         * If you keep the scopes empty, only the default scope will be requested from user.
+         * You can view the list of available scopes here: https://dev.vk.com/ru/reference/access-rights.
+         * The user will see a screen where he may grant some of this scopes during authorization process.
+         */
+        public var scopes: Set<String> = emptySet()
+
+        /**
          * Extra params that should be send to auth provider
          */
         @InternalVKIDApi
@@ -161,11 +198,15 @@ public class VKIDAuthParams private constructor(
          */
         @OptIn(InternalVKIDApi::class)
         public fun build(): VKIDAuthParams = VKIDAuthParams(
-            locale,
-            theme,
-            useOAuthProviderIfPossible,
-            oAuth,
-            extraParams
+            locale = locale,
+            theme = theme,
+            useOAuthProviderIfPossible = useOAuthProviderIfPossible,
+            oAuth = oAuth,
+            prompt = prompt,
+            state = state,
+            codeChallenge = codeChallenge,
+            scopes = scopes,
+            extraParams = extraParams,
         )
     }
 }

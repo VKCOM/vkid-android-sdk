@@ -5,8 +5,8 @@ package com.vk.id.analytics.stat
 import com.vk.id.analytics.BuildConfig
 import com.vk.id.analytics.VKIDAnalytics
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.logger.createLoggerForClass
-import com.vk.id.network.VKIDApi
+import com.vk.id.logger.internalVKIDCreateLoggerForClass
+import com.vk.id.network.InternalVKIDApiContract
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -26,12 +26,12 @@ import kotlin.time.Duration.Companion.seconds
 public class StatTracker(
     private val clientId: String,
     private val clientSecret: String,
-    private val api: Lazy<VKIDApi>,
+    private val api: Lazy<InternalVKIDApiContract>,
     dispatcher: CoroutineDispatcher
 ) : VKIDAnalytics.Tracker {
 
     private val trackerScope = CoroutineScope(dispatcher + SupervisorJob())
-    private val logger = createLoggerForClass()
+    private val logger = internalVKIDCreateLoggerForClass()
     private val batchEvents = LinkedBlockingQueue<JSONObject>()
     private val eventCounter = EventCounter()
 

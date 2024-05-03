@@ -2,13 +2,13 @@ package com.vk.id.multibranding.compose
 
 import com.vk.id.AccessToken
 import com.vk.id.OAuth
-import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
+import com.vk.id.auth.AuthCodeData
+import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.allure.Feature
 import com.vk.id.common.feature.TestFeature
 import com.vk.id.multibranding.OAuthListWidget
 import com.vk.id.multibranding.base.MultibrandingTest
-import com.vk.id.multibranding.common.callback.OAuthListWidgetAuthCallback
 import io.qameta.allure.kotlin.AllureId
 import io.qameta.allure.kotlin.junit4.DisplayName
 import org.junit.Test
@@ -24,6 +24,13 @@ public class MultibrandingComposeTest(
     @DisplayName("Успешное получение токена в Compose Мультибрендинге")
     override fun tokenIsReceived() {
         super.tokenIsReceived()
+    }
+
+    @Test
+    @AllureId("2302974")
+    @DisplayName("Успешное получение токена после логаута в Compose OneTap")
+    override fun tokenIsReceivedAfterFailedLogout() {
+        super.tokenIsReceivedAfterFailedLogout()
     }
 
     @Test
@@ -63,9 +70,9 @@ public class MultibrandingComposeTest(
 
     @Test
     @AllureId("2290797")
-    @DisplayName("Получение ошибки неверного uuid в Compose Мультибрендинге")
-    override fun invalidUuidIsReceived() {
-        super.invalidUuidIsReceived()
+    @DisplayName("Получение ошибки отсутствия deviceId в Compose Мультибрендинге")
+    override fun invalidDeviceIdIsReceived() {
+        super.invalidDeviceIdIsReceived()
     }
 
     @Test
@@ -75,16 +82,32 @@ public class MultibrandingComposeTest(
         super.invalidStateIsReceived()
     }
 
+    @Test
+    @AllureId("2303020")
+    @DisplayName("Успешное получение кода при схеме с бекендом в XML OneTap Мультибрендинге")
+    override fun authCodeIsReceived() {
+        super.authCodeIsReceived()
+    }
+
+    @Test
+    @AllureId("2303013")
+    @DisplayName("Получение ошибки загрузки пользовательских данных в Compose OneTap")
+    override fun failedUserCallIsReceived() {
+        super.failedUserCallIsReceived()
+    }
+
     override fun setContent(
-        vkid: VKID,
         onAuth: (OAuth?, AccessToken) -> Unit,
+        onAuthCode: (AuthCodeData, Boolean) -> Unit,
         onFail: (OAuth?, VKIDAuthFail) -> Unit,
+        authParams: VKIDAuthUiParams,
     ) {
         composeTestRule.setContent {
             OAuthListWidget(
-                vkid = vkid,
-                onAuth = OAuthListWidgetAuthCallback.WithOAuth { oAuth, accessToken -> onAuth(oAuth, accessToken) },
+                onAuth = onAuth,
+                onAuthCode = onAuthCode,
                 onFail = onFail,
+                authParams = authParams,
             )
         }
     }

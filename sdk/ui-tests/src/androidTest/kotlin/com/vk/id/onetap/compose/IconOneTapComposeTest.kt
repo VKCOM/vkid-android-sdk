@@ -1,8 +1,9 @@
 package com.vk.id.onetap.compose
 
 import com.vk.id.AccessToken
-import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
+import com.vk.id.auth.AuthCodeData
+import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.allure.Feature
 import com.vk.id.common.feature.TestFeature
 import com.vk.id.onetap.base.OneTapTest
@@ -22,6 +23,13 @@ public class IconOneTapComposeTest : OneTapTest() {
     @DisplayName("Успешное получение токена в Compose OneTap Icon")
     override fun tokenIsReceived() {
         super.tokenIsReceived()
+    }
+
+    @Test
+    @AllureId("2302975")
+    @DisplayName("Успешное получение токена после логаута в Compose OneTap")
+    override fun tokenIsReceivedAfterFailedLogout() {
+        super.tokenIsReceivedAfterFailedLogout()
     }
 
     @Test
@@ -61,9 +69,9 @@ public class IconOneTapComposeTest : OneTapTest() {
 
     @Test
     @AllureId("2289922")
-    @DisplayName("Получение ошибки неверного uuid в Compose OneTap Icon")
-    override fun invalidUuidIsReceived() {
-        super.invalidUuidIsReceived()
+    @DisplayName("Получение ошибки отсутствия deviceId в Compose OneTap Icon")
+    override fun invalidDeviceIdIsReceived() {
+        super.invalidDeviceIdIsReceived()
     }
 
     @Test
@@ -73,17 +81,33 @@ public class IconOneTapComposeTest : OneTapTest() {
         super.invalidStateIsReceived()
     }
 
+    @Test
+    @AllureId("2302989")
+    @DisplayName("Успешное получение кода при схеме с бекендом в XML OneTap Мультибрендинге")
+    override fun authCodeIsReceived() {
+        super.authCodeIsReceived()
+    }
+
+    @Test
+    @AllureId("2302998")
+    @DisplayName("Получение ошибки загрузки пользовательских данных в Compose OneTap")
+    override fun failedUserCallIsReceived() {
+        super.failedUserCallIsReceived()
+    }
+
     override fun setOneTapContent(
-        vkid: VKID,
         onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit,
+        onAuthCode: (AuthCodeData, Boolean) -> Unit,
         onAuth: (OneTapOAuth?, AccessToken) -> Unit,
+        authParams: VKIDAuthUiParams,
     ) {
         composeTestRule.setContent {
             OneTap(
-                vkid = vkid,
                 onAuth = onAuth,
+                onAuthCode = onAuthCode,
                 onFail = onFail,
-                style = OneTapStyle.Icon()
+                style = OneTapStyle.Icon(),
+                authParams = authParams,
             )
         }
     }

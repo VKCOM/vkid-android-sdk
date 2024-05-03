@@ -33,10 +33,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.vk.id.VKID
 import com.vk.id.VKIDUser
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.onetap.common.auth.style.VKIDButtonStyle
+import com.vk.id.onetap.common.auth.style.InternalVKIDButtonStyle
 import com.vk.id.onetap.compose.R
 import com.vk.id.onetap.compose.button.DURATION_OF_ANIMATION
 import com.vk.id.onetap.compose.button.DURATION_OF_DELAY_BETWEEN_FADE_ANIMATIONS
@@ -63,9 +62,8 @@ import kotlinx.coroutines.delay
 @Composable
 internal fun VKIDButton(
     modifier: Modifier = Modifier,
-    style: VKIDButtonStyle = VKIDButtonStyle.Light(),
+    style: InternalVKIDButtonStyle = InternalVKIDButtonStyle.Light(),
     state: VKIDButtonState = rememberVKIDButtonState(),
-    vkid: VKID? = null,
     textProvider: VKIDButtonTextProvider? = null,
     onClick: () -> Unit,
     onUserFetched: (VKIDUser?) -> Unit = {},
@@ -79,11 +77,7 @@ internal fun VKIDButton(
         }
     }
     val coroutineScope = rememberCoroutineScope()
-    val context = LocalContext.current
-    val useVKID = vkid ?: remember {
-        VKID(context)
-    }
-    FetchUserDataWithAnimation(coroutineScope, state, useVKID, useTextProvider, onUserFetched)
+    FetchUserDataWithAnimation(coroutineScope, state, useTextProvider, onUserFetched)
     Box(
         modifier = modifier
             .shadow(style)
@@ -148,13 +142,11 @@ private fun defaultTextProvider(resources: Resources): VKIDButtonTextProvider =
 private fun FetchUserDataWithAnimation(
     coroutineScope: CoroutineScope,
     state: VKIDButtonState,
-    vkid: VKID,
     buttonTextProvider: VKIDButtonTextProvider,
     onUserFetched: (VKIDUser?) -> Unit,
 ) {
     FetchUserData(
         coroutineScope,
-        vkid,
         object : OnFetchingProgress {
             override suspend fun onPreFetch() {
                 if (state.userIconUrl == null) {
@@ -255,7 +247,7 @@ private suspend fun animateFailedUser(
 
 @Composable
 private fun LeftIconBox(
-    style: VKIDButtonStyle
+    style: InternalVKIDButtonStyle
 ) {
     Box(
         modifier = Modifier
@@ -269,7 +261,7 @@ private fun LeftIconBox(
 @Composable
 private fun TextBox(
     state: VKIDButtonState,
-    style: VKIDButtonStyle,
+    style: InternalVKIDButtonStyle,
 ) {
     val animatedAlpha by animateFloatAsState(
         targetValue = if (state.textVisible) 1.0f else 0f,
@@ -329,7 +321,7 @@ private fun TextBox(
 @Composable
 private fun RightIconBox(
     state: VKIDButtonState,
-    style: VKIDButtonStyle,
+    style: InternalVKIDButtonStyle,
     modifier: Modifier,
 ) {
     val animatedAlpha by animateFloatAsState(

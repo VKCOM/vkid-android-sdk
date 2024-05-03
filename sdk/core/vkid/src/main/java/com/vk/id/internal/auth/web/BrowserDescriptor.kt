@@ -19,7 +19,7 @@ import android.content.pm.PackageInfo
 import android.content.pm.Signature
 import android.util.Base64
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.logger.createLoggerForClass
+import com.vk.id.logger.internalVKIDCreateLoggerForClass
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 
@@ -114,7 +114,7 @@ constructor(
         private const val PRIME_HASH_FACTOR = 92821
         private const val DIGEST_SHA_512 = "SHA-512"
 
-        private val logger = createLoggerForClass()
+        private val logger = internalVKIDCreateLoggerForClass()
 
         /**
          * Generates a SHA-512 hash, Base64 url-safe encoded, from a [Signature].

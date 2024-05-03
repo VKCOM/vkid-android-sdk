@@ -2,44 +2,44 @@
 
 package com.vk.id
 
-import android.content.Context
+import com.vk.id.auth.AuthCodeData
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthResult
 import com.vk.id.internal.auth.ServiceCredentials
-import com.vk.id.internal.auth.device.DeviceIdProvider
-import com.vk.id.internal.auth.toExpireTime
-import com.vk.id.internal.concurrent.CoroutinesDispatchers
-import com.vk.id.internal.store.PrefsStore
-import com.vk.id.internal.util.currentTime
-import com.vk.id.logger.createLoggerForClass
+import com.vk.id.internal.auth.device.InternalVKIDDeviceIdProvider
+import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
+import com.vk.id.internal.store.InternalVKIDPrefsStore
+import com.vk.id.logger.internalVKIDCreateLoggerForClass
+import com.vk.id.logout.VKIDLoggerOut
+import com.vk.id.logout.VKIDLogoutCallback
+import com.vk.id.logout.VKIDLogoutFail
+import com.vk.id.storage.TokenStorage
 import kotlinx.coroutines.withContext
 
 @Suppress("LongParameterList")
 internal class AuthResultHandler(
-    private val appContext: Context,
-    private val dispatchers: CoroutinesDispatchers,
+    private val dispatchers: VKIDCoroutinesDispatchers,
     private val callbacksHolder: AuthCallbacksHolder,
-    private val deviceIdProvider: DeviceIdProvider,
-    private val prefsStore: PrefsStore,
+    private val deviceIdProvider: InternalVKIDDeviceIdProvider,
+    private val prefsStore: InternalVKIDPrefsStore,
     private val serviceCredentials: ServiceCredentials,
-    private val api: VKIDApiService
+    private val api: VKIDApiService,
+    private val tokensHandler: TokensHandler,
+    private val loggerOut: VKIDLoggerOut,
+    private val tokenStorage: TokenStorage,
 ) {
 
-    private val logger = createLoggerForClass()
+    private val logger = internalVKIDCreateLoggerForClass()
 
     internal suspend fun handle(
         authResult: AuthResult
     ) {
         if (authResult !is AuthResult.Success) {
             emitAuthFail(authResult.toVKIDAuthFail())
+            prefsStore.clear()
             return
-        }
-        // We do not stop auth here in hope that it still be success,
-        // but if not there will be error response from backend
-        if (authResult.expireTime < currentTime()) {
-            logger.error("OAuth code is old, there is a big chance auth will fail", null)
         }
 
         if (authResult.oauth != null) {
@@ -50,18 +50,9 @@ internal class AuthResultHandler(
     }
 
     private suspend fun handleOauth(oauth: AuthResult.Success) {
-        val (realUuid, realState, codeVerifier) = withContext(dispatchers.io) {
-            listOf(
-                deviceIdProvider.getDeviceId(appContext),
-                prefsStore.state,
-                prefsStore.codeVerifier,
-            )
-        }
-
-        if (realUuid != oauth.uuid) {
-            logger.error("Invalid oauth UUID, want $realUuid but received ${oauth.uuid}", null)
-            emitAuthFail(VKIDAuthFail.FailedOAuthState("Invalid uuid"))
-            return
+        val (realState, codeVerifier) = withContext(dispatchers.io) {
+            deviceIdProvider.setDeviceId(oauth.deviceId)
+            (prefsStore.state to prefsStore.codeVerifier).also { prefsStore.clear() }
         }
 
         if (realState != oauth.oauth?.state) {
@@ -73,61 +64,63 @@ internal class AuthResultHandler(
             return
         }
 
+        callbacksHolder.getAll().forEach {
+            it.onAuthCode(AuthCodeData(oauth.oauth.code), isCompletion = codeVerifier.isBlank())
+        }
+        if (codeVerifier.isBlank()) {
+            callbacksHolder.clear()
+            return
+        }
+
         // execute token request
         val callResult = withContext(dispatchers.io) {
             api.getToken(
-                oauth.oauth.code,
-                codeVerifier,
-                serviceCredentials.clientID,
-                serviceCredentials.clientSecret,
-                deviceId = realUuid,
-                serviceCredentials.redirectUri,
+                code = oauth.oauth.code,
+                codeVerifier = codeVerifier,
+                clientId = serviceCredentials.clientID,
+                deviceId = oauth.deviceId,
+                redirectUri = serviceCredentials.redirectUri,
+                state = realState,
             ).execute()
         }
         callResult.onFailure {
-            emitAuthFail(
-                VKIDAuthFail.FailedApiCall(
-                    "Failed code to token exchange api call: ${it.message}",
-                    it
-                )
-            )
+            emitAuthFail(VKIDAuthFail.FailedApiCall("Failed code to token exchange api call: ${it.message}", it))
         }
+        val accessToken = withContext(dispatchers.io) { tokenStorage.accessToken }
         callResult.onSuccess { payload ->
-            emitAuthSuccess(
-                AccessToken(
-                    payload.accessToken,
-                    payload.userId,
-                    payload.expiresIn.toExpireTime,
-                    VKIDUser(
-                        firstName = oauth.firstName,
-                        lastName = oauth.lastName,
-                        photo200 = oauth.avatar,
-                        phone = payload.phone,
-                        email = payload.email
-                    )
-                )
+            tokensHandler.handle(
+                payload = payload,
+                onSuccess = {
+                    if (accessToken != null) {
+                        loggerOut.logout(
+                            callback = object : VKIDLogoutCallback {
+                                override fun onSuccess() = emitAuthSuccess(it)
+                                override fun onFail(fail: VKIDLogoutFail) = emitAuthSuccess(it)
+                            },
+                            clearTokenStorage = false,
+                            accessToken = accessToken.token,
+                        )
+                    } else {
+                        emitAuthSuccess(it)
+                    }
+                },
+                onFailedApiCall = {
+                    emitAuthFail(VKIDAuthFail.FailedApiCall("Failed to fetch user data", it))
+                },
             )
         }
     }
 
     private fun AuthResult.toVKIDAuthFail() = when (this) {
         is AuthResult.Canceled -> VKIDAuthFail.Canceled(message)
-        is AuthResult.NoBrowserAvailable -> VKIDAuthFail.NoBrowserAvailable(
-            message,
-            error
-        )
-
-        is AuthResult.AuthActiviyResultFailed -> VKIDAuthFail.FailedRedirectActivity(
-            message,
-            error
-        )
-
+        is AuthResult.NoBrowserAvailable -> VKIDAuthFail.NoBrowserAvailable(message, error)
+        is AuthResult.AuthActiviyResultFailed -> VKIDAuthFail.FailedRedirectActivity(message, error)
         is AuthResult.Success -> error("AuthResult is Success and cannot be converted to fail!")
     }
 
     private fun emitAuthSuccess(token: AccessToken) {
         callbacksHolder.getAll().forEach {
-            it.onSuccess(token)
+            it.onAuth(token)
         }
         callbacksHolder.clear()
     }

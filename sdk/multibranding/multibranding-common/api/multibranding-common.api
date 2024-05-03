@@ -9,15 +9,6 @@ public final class com/vk/id/multibranding/common/BuildConfig {
 	public fun <init> ()V
 }
 
-public abstract interface class com/vk/id/multibranding/common/callback/OAuthListWidgetAuthCallback {
-}
-
-public abstract interface class com/vk/id/multibranding/common/callback/OAuthListWidgetAuthCallback$JustToken : com/vk/id/multibranding/common/callback/OAuthListWidgetAuthCallback, kotlin/jvm/functions/Function1 {
-}
-
-public abstract interface class com/vk/id/multibranding/common/callback/OAuthListWidgetAuthCallback$WithOAuth : com/vk/id/multibranding/common/callback/OAuthListWidgetAuthCallback, kotlin/jvm/functions/Function2 {
-}
-
 public abstract class com/vk/id/multibranding/common/style/OAuthListWidgetCornersStyle {
 	public synthetic fun <init> (FLkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getRadiusDp ()F
@@ -65,12 +56,7 @@ public final class com/vk/id/multibranding/common/style/OAuthListWidgetSizeStyle
 
 public abstract class com/vk/id/multibranding/common/style/OAuthListWidgetStyle {
 	public static final field Companion Lcom/vk/id/multibranding/common/style/OAuthListWidgetStyle$Companion;
-	public synthetic fun <init> (Lcom/vk/id/multibranding/common/style/OAuthListWidgetCornersStyle;Lcom/vk/id/multibranding/common/style/OAuthListWidgetRippleStyle;Lcom/vk/id/multibranding/common/style/OAuthListWidgetBorderStyle;Lcom/vk/id/multibranding/common/style/OAuthListWidgetTextStyle;Lcom/vk/id/multibranding/common/style/OAuthListWidgetSizeStyle;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getBorderStyle ()Lcom/vk/id/multibranding/common/style/OAuthListWidgetBorderStyle;
-	public final fun getCornersStyle ()Lcom/vk/id/multibranding/common/style/OAuthListWidgetCornersStyle;
-	public final fun getRippleStyle ()Lcom/vk/id/multibranding/common/style/OAuthListWidgetRippleStyle;
-	public final fun getSizeStyle ()Lcom/vk/id/multibranding/common/style/OAuthListWidgetSizeStyle;
-	public final fun getTextStyle ()Lcom/vk/id/multibranding/common/style/OAuthListWidgetTextStyle;
+	public synthetic fun <init> (Lcom/vk/id/multibranding/common/style/OAuthListWidgetCornersStyle;Lcom/vk/id/multibranding/common/style/InternalVKIDOAuthListWidgetRippleStyle;Lcom/vk/id/multibranding/common/style/InternalVKIDOAuthListWidgetBorderStyle;Lcom/vk/id/multibranding/common/style/InternalVKIDOAuthListWidgetTextStyle;Lcom/vk/id/multibranding/common/style/OAuthListWidgetSizeStyle;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 }
 
 public final class com/vk/id/multibranding/common/style/OAuthListWidgetStyle$Companion {
