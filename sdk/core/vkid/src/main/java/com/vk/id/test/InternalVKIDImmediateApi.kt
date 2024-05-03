@@ -2,6 +2,7 @@ package com.vk.id.test
 
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.network.InternalVKIDApiContract
+import org.json.JSONArray
 
 @InternalVKIDApi
 internal class InternalVKIDImmediateApi(
@@ -84,4 +85,11 @@ internal class InternalVKIDImmediateApi(
             deviceId = deviceId,
         )
     )
+
+    override fun sendStatEventsAnonymously(
+        clientId: String,
+        clientSecret: String,
+        sakVersion: String,
+        events: JSONArray,
+    ) = VKIDMockCall(Result.success(InternalVKIDSilentAuthProvidersResponse("null")))
 }

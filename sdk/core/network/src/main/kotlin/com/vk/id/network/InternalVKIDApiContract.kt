@@ -2,6 +2,7 @@ package com.vk.id.network
 
 import com.vk.id.common.InternalVKIDApi
 import okhttp3.Call
+import org.json.JSONArray
 
 @InternalVKIDApi
 public interface InternalVKIDApiContract {
@@ -46,5 +47,12 @@ public interface InternalVKIDApiContract {
         accessToken: String,
         clientId: String,
         deviceId: String,
+    ): Call
+
+    public fun sendStatEventsAnonymously(
+        clientId: String,
+        clientSecret: String,
+        sakVersion: String,
+        events: JSONArray
     ): Call
 }

@@ -21,6 +21,7 @@ android {
 
 dependencies {
     implementation(project(":common"))
+    implementation(project(":analytics"))
     implementation(project(":network"))
     implementation(project(":logger"))
     implementation(platform(libs.androidx.compose.bom))

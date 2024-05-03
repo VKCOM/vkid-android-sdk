@@ -11,6 +11,7 @@ import android.os.Bundle
 import com.vk.id.AuthOptionsCreator
 import com.vk.id.AuthResultHandler
 import com.vk.id.TokensHandler
+import com.vk.id.analytics.stat.StatTracker
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.exchangetoken.VKIDTokenExchanger
 import com.vk.id.fetchuser.VKIDUserInfoFetcher
@@ -222,6 +223,11 @@ internal open class VKIDDepsProd(
 
     override val dispatchers: VKIDCoroutinesDispatchers
         get() = CoroutinesDispatchersProd()
+
+    override val statTracker: StatTracker
+        get() = with(serviceCredentials.value) {
+            StatTracker(clientID, clientSecret, api, dispatchers.io)
+        }
 }
 
 private const val MISSED_PLACEHOLDER_ERROR_MESSAGE =

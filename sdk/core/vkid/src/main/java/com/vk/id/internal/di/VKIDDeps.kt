@@ -4,6 +4,7 @@ package com.vk.id.internal.di
 
 import com.vk.id.AuthOptionsCreator
 import com.vk.id.AuthResultHandler
+import com.vk.id.analytics.stat.StatTracker
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.exchangetoken.VKIDTokenExchanger
 import com.vk.id.internal.auth.AuthCallbacksHolder
@@ -21,9 +22,9 @@ import com.vk.id.storage.InternalVKIDEncryptedSharedPreferencesStorage
 import com.vk.id.storage.TokenStorage
 
 internal interface VKIDDeps {
-    val authProvidersChooser: Lazy<AuthProvidersChooser>
-    val authOptionsCreator: AuthOptionsCreator
     val authCallbacksHolder: AuthCallbacksHolder
+    val authOptionsCreator: AuthOptionsCreator
+    val authProvidersChooser: Lazy<AuthProvidersChooser>
     val authResultHandler: Lazy<AuthResultHandler>
     val dispatchers: VKIDCoroutinesDispatchers
     val vkSilentAuthInfoProvider: Lazy<SilentAuthInfoProvider>
@@ -37,4 +38,5 @@ internal interface VKIDDeps {
     val deviceIdStorage: Lazy<InternalVKIDDeviceIdProvider.DeviceIdStorage>
     val prefsStore: Lazy<InternalVKIDPrefsStore>
     val encryptedSharedPreferencesStorage: Lazy<InternalVKIDEncryptedSharedPreferencesStorage>
+    val statTracker: StatTracker
 }

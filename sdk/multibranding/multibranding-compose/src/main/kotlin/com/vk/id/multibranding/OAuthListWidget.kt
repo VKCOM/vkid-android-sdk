@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -50,7 +51,9 @@ import com.vk.id.auth.VKIDAuthCallback
 import com.vk.id.auth.VKIDAuthParams.Theme
 import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.InternalVKIDApi
+import com.vk.id.multibranding.OAuthListWidgetAnalytics.Companion.UNIQUE_SESSION_PARAM_NAME
 import com.vk.id.multibranding.common.style.OAuthListWidgetStyle
+import com.vk.id.multibranding.internal.LocalMultibrandingAnalyticsContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -80,6 +83,14 @@ public fun OAuthListWidget(
     if (oAuths.isEmpty()) {
         error("You need to add at least one oAuth to display the widget")
     }
+
+    val analyticsContext = LocalMultibrandingAnalyticsContext.current
+    val analytics = remember { OAuthListWidgetAnalytics(analyticsContext.screen) }
+
+    LaunchedEffect(oAuths) {
+        analytics.oauthAdded(oAuths)
+    }
+
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -97,6 +108,7 @@ public fun OAuthListWidget(
                     item = item,
                     showText = oAuths.size == 1,
                     coroutineScope = coroutineScope,
+                    analytics = analytics,
                     onAuth = onAuth,
                     onAuthCode = onAuthCode,
                     onFail = { onFail(item, it) },
@@ -136,7 +148,9 @@ private fun OAuthButton(
     onAuthCode: (AuthCodeData, Boolean) -> Unit,
     onFail: (VKIDAuthFail) -> Unit,
     authParams: VKIDAuthUiParams,
+    analytics: OAuthListWidgetAnalytics,
 ) {
+    analytics.OAuthShown(oAuth = item, isText = showText)
     Row(
         modifier = modifier
             .height(style.sizeStyle)
@@ -149,20 +163,30 @@ private fun OAuthButton(
                 ),
                 role = Role.Button,
                 onClick = {
+                    val extraAuthParams = analytics.onOAuthTap(item, showText)
                     coroutineScope.launch {
                         VKID.instance.authorize(
                             object : VKIDAuthCallback {
-                                override fun onAuth(accessToken: AccessToken) = onAuth(item, accessToken)
+                                override fun onAuth(accessToken: AccessToken) {
+                                    analytics.onAuthSuccess(item)
+                                    onAuth(item, accessToken)
+                                }
+
                                 override fun onAuthCode(
                                     data: AuthCodeData,
                                     isCompletion: Boolean
                                 ) = onAuthCode(data, isCompletion)
-                                override fun onFail(fail: VKIDAuthFail) = onFail(fail)
+
+                                override fun onFail(fail: VKIDAuthFail) {
+                                    analytics.onAuthError(extraAuthParams[UNIQUE_SESSION_PARAM_NAME] ?: "")
+                                    onFail(fail)
+                                }
                             },
                             authParams.asParamsBuilder {
                                 oAuth = item
                                 theme = style.toProviderTheme()
                                 prompt = Prompt.LOGIN
+                                extraParams = extraAuthParams
                             }
                         )
                     }

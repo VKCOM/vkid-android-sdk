@@ -29,7 +29,7 @@ internal class SslPinningTest : BehaviorSpec({
         val applicationInfo = ApplicationInfo()
         applicationInfo.flags = 0
         every { context.applicationInfo } returns applicationInfo
-        val builder = com.vk.id.network.OkHttpClientProvider(context).provideBuilderWithSslPinning()
+        val builder = OkHttpClientProvider(context).provideBuilderWithSslPinning()
             .readTimeout(300, TimeUnit.SECONDS)
             .writeTimeout(300, TimeUnit.SECONDS)
             .connectTimeout(300, TimeUnit.SECONDS)

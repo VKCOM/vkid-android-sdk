@@ -8,6 +8,7 @@ import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
+import org.json.JSONArray
 
 @Suppress("LongParameterList")
 @InternalVKIDApi
@@ -113,6 +114,23 @@ public class InternalVKIDRealApi private constructor(
             .build()
 
         return createRequest(HOST_VK_ID, PATH_LOGOUT, formBody)
+    }
+
+    override fun sendStatEventsAnonymously(
+        clientId: String,
+        clientSecret: String,
+        sakVersion: String,
+        events: JSONArray,
+    ): Call {
+        val formBody = FormBody.Builder()
+            .add(FIELD_API_VERSION, API_VERSION_VALUE)
+            .add(FIELD_CLIENT_ID, clientId)
+            .add(FIELD_CLIENT_SECRET, clientSecret)
+            .add("sak_version", sakVersion)
+            .add("events", events.toString())
+            .build()
+
+        return createRequest(HOST_API, "method/statEvents.addVKIDAnonymously", formBody)
     }
 
     private fun createRequest(

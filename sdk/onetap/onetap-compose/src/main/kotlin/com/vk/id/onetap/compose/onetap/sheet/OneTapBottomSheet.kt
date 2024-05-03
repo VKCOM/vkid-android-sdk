@@ -7,6 +7,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
@@ -25,6 +26,8 @@ import com.vk.id.auth.Prompt
 import com.vk.id.auth.VKIDAuthCallback
 import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.InternalVKIDApi
+import com.vk.id.multibranding.internal.LocalMultibrandingAnalyticsContext
+import com.vk.id.multibranding.internal.MultibrandingAnalyticsContext
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.compose.onetap.sheet.content.OneTapBottomSheetAuthStatus
 import com.vk.id.onetap.compose.onetap.sheet.content.SheetContentAuthFailed
@@ -72,6 +75,7 @@ public fun rememberOneTapBottomSheetState(): OneTapBottomSheetState {
  * @param style The [OneTapBottomSheetStyle] of the bottom sheet. Default is [OneTapBottomSheetStyle.Light]
  * @param authParams Optional params to be passed to auth. See [VKIDAuthUiParams.Builder] for more info.
  */
+@OptIn(InternalVKIDApi::class)
 @Composable
 public fun OneTapBottomSheet(
     modifier: Modifier = Modifier,
@@ -86,19 +90,21 @@ public fun OneTapBottomSheet(
     style: OneTapBottomSheetStyle = OneTapBottomSheetStyle.Light(),
     authParams: VKIDAuthUiParams = VKIDAuthUiParams {}
 ) {
-    OneTapBottomSheetInternal(
-        modifier = modifier,
-        state = state,
-        serviceName = serviceName,
-        scenario = scenario,
-        autoHideOnSuccess = autoHideOnSuccess,
-        onAuth = onAuth,
-        onAuthCode = onAuthCode,
-        onFail = onFail,
-        oAuths = oAuths,
-        style = style,
-        authParams = authParams,
-    )
+    CompositionLocalProvider(LocalMultibrandingAnalyticsContext provides MultibrandingAnalyticsContext(screen = "floating_one_tap")) {
+        OneTapBottomSheetInternal(
+            modifier = modifier,
+            state = state,
+            serviceName = serviceName,
+            scenario = scenario,
+            autoHideOnSuccess = autoHideOnSuccess,
+            onAuth = onAuth,
+            onAuthCode = onAuthCode,
+            onFail = onFail,
+            oAuths = oAuths,
+            style = style,
+            authParams = authParams,
+        )
+    }
 }
 
 @Suppress("LongParameterList", "LongMethod", "NonSkippableComposable")
@@ -163,6 +169,7 @@ private fun OneTapBottomSheetInternal(
                     style,
                     dismissSheet
                 ) {
+                    val extraAuthParams = OneTapBottomSheetAnalytics.retryAuthTap()
                     startAlternateAuth(
                         coroutineScope = coroutineScope,
                         style = style,
@@ -171,6 +178,7 @@ private fun OneTapBottomSheetInternal(
                         onFail = { onFail(null, it) },
                         authStatus = authStatus,
                         authParams = authParams,
+                        extraAuthParams = extraAuthParams
                     )
                 }
 
@@ -179,6 +187,7 @@ private fun OneTapBottomSheetInternal(
                     style,
                     dismissSheet
                 ) {
+                    val extraAuthParams = OneTapBottomSheetAnalytics.retryAuthTap()
                     startVKIDAuth(
                         coroutineScope = coroutineScope,
                         style = style,
@@ -187,6 +196,7 @@ private fun OneTapBottomSheetInternal(
                         onFail = { onFail(null, it) },
                         authStatus = authStatus,
                         authParams = authParams,
+                        extraAuthParams = extraAuthParams
                     )
                 }
 

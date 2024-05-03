@@ -49,6 +49,7 @@ internal class AuthOptionsCreator(
             oAuth = authParams.oAuth,
             prompt = if (authParams.prompt == Prompt.LOGIN) "login" else "",
             scopes = authParams.scopes,
+            extraParams = authParams.extraParams,
         )
     }
 }
