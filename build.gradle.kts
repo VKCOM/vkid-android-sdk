@@ -1,4 +1,5 @@
-import com.vk.id.health.metrics.buildSpeed
+import com.vk.id.health.metrics.buildspeed.buildSpeed
+import com.vk.id.health.metrics.storage.firestore
 
 plugins {
     alias(libs.plugins.android.application) apply false
@@ -15,11 +16,12 @@ plugins {
 }
 
 
-healthMetrics {
-    buildSpeed {
-        measuredTaskPath = ":help"
-    }
-    buildSpeed {
-        measuredTaskPath = ":logger:dependencies"
-    }
-}
+//healthMetrics {
+//    firestore(rootProject.file("build-logic/metrics/service-credentials.json"))
+//    buildSpeed {
+//        measuredTaskPath = ":help"
+//    }
+//    buildSpeed {
+//        measuredTaskPath = ":logger:dependencies"
+//    }
+//}

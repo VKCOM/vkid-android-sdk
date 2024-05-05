@@ -20,6 +20,7 @@ tasks.withType<KotlinCompile>().configureEach {
 
 dependencies {
     compileOnly(libs.android.gradlePlugin)
+    implementation(libs.firebase.firestore.admin)
 }
 
 gradlePlugin {
