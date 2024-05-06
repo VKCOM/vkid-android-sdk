@@ -187,7 +187,7 @@ private fun OAuthButton(
                                 theme = style.toProviderTheme()
                                 prompt = Prompt.LOGIN
                                 extraParams = extraAuthParams
-                            }
+                            }.build()
                         )
                     }
                 }

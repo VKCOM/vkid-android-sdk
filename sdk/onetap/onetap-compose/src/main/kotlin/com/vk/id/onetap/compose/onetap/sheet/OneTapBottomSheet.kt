@@ -219,7 +219,7 @@ private fun OneTapBottomSheetInternal(
                                 oAuth = status.oAuth.toOAuth()
                                 theme = style.toProviderTheme()
                                 prompt = Prompt.LOGIN
-                            }
+                            }.build()
                         )
                     }
                 }

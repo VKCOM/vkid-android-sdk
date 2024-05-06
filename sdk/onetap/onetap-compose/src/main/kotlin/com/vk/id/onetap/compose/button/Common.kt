@@ -54,8 +54,9 @@ internal fun startAuth(
     onAuth: (AccessToken) -> Unit,
     onAuthCode: (AuthCodeData, Boolean) -> Unit,
     onFail: (VKIDAuthFail) -> Unit,
-    params: VKIDAuthParams = VKIDAuthParams {}
+    params: VKIDAuthParams.Builder = VKIDAuthParams.Builder()
 ) {
+    params.internalUse = true
     coroutineScope.launch {
         VKID.instance.authorize(
             object : VKIDAuthCallback {
@@ -63,7 +64,7 @@ internal fun startAuth(
                 override fun onAuthCode(data: AuthCodeData, isCompletion: Boolean) = onAuthCode(data, isCompletion)
                 override fun onFail(fail: VKIDAuthFail) = onFail(fail)
             },
-            params
+            params.build()
         )
     }
 }
