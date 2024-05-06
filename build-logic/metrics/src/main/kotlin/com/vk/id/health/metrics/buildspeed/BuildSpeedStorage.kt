@@ -3,12 +3,12 @@ package com.vk.id.health.metrics.buildspeed
 import com.google.cloud.firestore.Firestore
 import com.vk.id.health.metrics.git.Git
 
-class BuildSpeedStorage(
+internal class BuildSpeedStorage(
     private val firestore: Firestore,
     private val measuredTaskPath: String,
 ) {
 
-    companion object {
+    private companion object {
         private const val FIELD_BUILD_DURATION = "BUILD_DURATION_MS"
         private const val FIELD_DIFF_CONTENT = "DIFF_CONTENT"
     }
@@ -16,11 +16,11 @@ class BuildSpeedStorage(
     private val diffDocument = firestore.collection("build-speed-diffs")
         .document("${Git.currentCommitHash} $measuredTaskPath")
 
-    fun saveBuildSpeed(buildDuration: Long) {
+    internal fun saveBuildSpeed(buildDuration: Long) {
         getMetricDocument(Git.currentCommitHash).set(mapOf(FIELD_BUILD_DURATION to buildDuration)).get()
     }
 
-    fun getBuildSpeed(): Long {
+    internal fun getBuildSpeed(): Long {
         return getMetricDocument(Git.rootCommitHash)
             .get()
             .get()
@@ -29,11 +29,11 @@ class BuildSpeedStorage(
             ?: 1L
     }
 
-    fun saveDiff(diff: String) {
+    internal fun saveDiff(diff: String) {
         diffDocument.set(mapOf(FIELD_DIFF_CONTENT to diff)).get()
     }
 
-    fun getDiff(): String {
+    internal fun getDiff(): String {
         return (diffDocument
             .get()
             .get()
