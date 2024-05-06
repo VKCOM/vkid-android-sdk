@@ -34,11 +34,13 @@ internal class BuildSpeedStorage(
     }
 
     internal fun getDiff(): String {
-        return (diffDocument
-            .get()
-            .get()
-            .get(FIELD_DIFF_CONTENT, String::class.java)
-            ?: error("Build speed diff for commit ${Git.currentCommitHash} is not found in Firestore"))
+        return (
+            diffDocument
+                .get()
+                .get()
+                .get(FIELD_DIFF_CONTENT, String::class.java)
+                ?: error("Build speed diff for commit ${Git.currentCommitHash} is not found in Firestore")
+            )
             .also { diffDocument.delete() }
     }
 

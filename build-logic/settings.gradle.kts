@@ -1,3 +1,11 @@
+pluginManagement {
+    includeBuild("detekt")
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
 dependencyResolutionManagement {
     repositories {
         google()

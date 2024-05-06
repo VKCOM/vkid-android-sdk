@@ -15,6 +15,10 @@ public class VKIDBuildSpeedStep internal constructor(
     measuredTaskPath: String
 ) : VKIDHeathMetricsStep {
 
+    private companion object {
+        private const val HUNDRED_PERCENT = 100
+    }
+
     private var startTaskTimestamp: Long? = null
     private var endTaskTimestamp: Long? = null
     private val buildDuration
@@ -43,7 +47,7 @@ public class VKIDBuildSpeedStep internal constructor(
     private val publishDiffTask = rootProject.tasks.create("healthMetricsBuildSpeed${taskNameAppendix}PublishDiff") {
         doLast {
             val previousBuildDuration = storage.getBuildSpeed()
-            val changePercent = BigDecimal(100 - buildDuration.toDouble() / previousBuildDuration * 100)
+            val changePercent = BigDecimal(HUNDRED_PERCENT - buildDuration.toDouble() / previousBuildDuration * HUNDRED_PERCENT)
                 .setScale(2, RoundingMode.HALF_EVEN)
             val sign = when {
                 changePercent > BigDecimal.ZERO -> "-"
@@ -68,7 +72,6 @@ public class VKIDBuildSpeedStep internal constructor(
         recordEndTimeTask.dependsOn(measuredTask)
         measuredTask.dependsOn(recordStartTimeTask)
     }
-
 
     public class Builder(
         private val firestore: Firestore
