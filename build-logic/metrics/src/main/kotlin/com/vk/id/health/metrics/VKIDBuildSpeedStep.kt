@@ -1,51 +1,68 @@
 package com.vk.id.health.metrics
 
+import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.configurationcache.extensions.capitalized
 
 class VKIDBuildSpeedStep(
-    val measuredTask: Task
+    rootProject: Project,
+    measuredTaskPath: String
 ) : VKIDHeathMetricsStep {
 
     private var startTaskTimestamp: Long? = null
     private var endTaskTimestamp: Long? = null
+    private val buildDuration
+        get() = (endTaskTimestamp ?: error("End time is not initialized"))
+            .minus(startTaskTimestamp ?: error("Start time is not initialized"))
+    private var durationDiff: Long? = null
 
-    private val publishDiffTask = measuredTask.project.tasks.create("healthMetricsBuildSpeed${measuredTask.name.capitalized()}PublishDiff") {
+    private val measuredTask: Task = rootProject.tasks.getByPath(measuredTaskPath)
+    private val taskName = measuredTask.name
+    private val publishMetricTask = rootProject.tasks.create("healthMetricsBuildSpeed${taskName.capitalized()}PublishMetric") {
         doLast {
-            val duration = (endTaskTimestamp ?: error("End time is not initialized"))
-                .minus(startTaskTimestamp ?: error("Start time is not initialized"))
-            println("Task :${measuredTask.name} took $duration milliseconds to execute")
+            println("Task :$taskName took $buildDuration milliseconds to execute")
         }
     }
-    private val recordStartTimeTask = measuredTask.project.tasks.create("healthMetricsBuildSpeed${measuredTask.name.capitalized()}RecordStart") {
+    private val recordStartTimeTask = rootProject.tasks.create("healthMetricsBuildSpeed${taskName.capitalized()}RecordStart") {
         doLast {
             startTaskTimestamp = System.currentTimeMillis()
         }
     }
-    private val recordEndTimeTask = measuredTask.project.tasks.create("healthMetricsBuildSpeed${measuredTask.name.capitalized()}RecordEnd") {
+    private val recordEndTimeTask = rootProject.tasks.create("healthMetricsBuildSpeed${taskName.capitalized()}RecordEnd") {
         doLast {
             endTaskTimestamp = System.currentTimeMillis()
         }
     }
-
-    init {
-        publishDiffTask.dependsOn(recordEndTimeTask)
-        recordEndTimeTask.dependsOn(measuredTask)
-        measuredTask.dependsOn(recordStartTimeTask)
+    private val publishDiffTask = rootProject.tasks.create("healthMetricsBuildSpeed${taskName.capitalized()}PublishDiff") {
+        doLast {
+            val previousBuildDuration = 0L
+            durationDiff = buildDuration - previousBuildDuration
+            println("Build speed diff is $durationDiff milliseconds")
+        }
     }
 
     override val task: Task = publishDiffTask
 
+    init {
+        publishDiffTask.dependsOn(publishMetricTask)
+        publishMetricTask.dependsOn(recordEndTimeTask)
+        recordEndTimeTask.dependsOn(measuredTask)
+        measuredTask.dependsOn(recordStartTimeTask)
+    }
+
+
     class Builder {
 
-        var measuredTask: Task? = null
+        var rootProject: Project? = null
+        var measuredTaskPath: String? = null
 
         fun build() = VKIDBuildSpeedStep(
-            measuredTask = measuredTask ?: error("Task for measurement is not specified")
+            rootProject = checkNotNull(rootProject) { "Project is not specified" },
+            measuredTaskPath = checkNotNull(measuredTaskPath) { "Task for measurement is not specified" }
         )
     }
 }
 
 fun VKIDHealthMetricsExtension.buildSpeed(configuration: VKIDBuildSpeedStep.Builder.() -> Unit) {
-    stepsInternal.add(VKIDBuildSpeedStep.Builder().apply(configuration).build())
+    stepsInternal.add(VKIDBuildSpeedStep.Builder().apply { rootProject = this@buildSpeed.rootProject }.apply(configuration).build())
 }
