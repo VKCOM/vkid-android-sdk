@@ -15,6 +15,8 @@ java {
 tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.toString()
+        // Force implicit visibility modifiers to avoid mistakes like exposing internal api
+        freeCompilerArgs = freeCompilerArgs + "-Xexplicit-api=strict"
     }
 }
 

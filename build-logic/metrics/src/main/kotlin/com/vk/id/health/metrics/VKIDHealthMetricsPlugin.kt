@@ -6,7 +6,7 @@ import org.gradle.kotlin.dsl.create
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 
-class VKIDHealthMetricsPlugin : Plugin<Project> {
+internal class VKIDHealthMetricsPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         val extension = target.extensions.create("healthMetrics", VKIDHealthMetricsExtension::class)
         extension.rootProjectInternal = target.rootProject
@@ -20,7 +20,7 @@ class VKIDHealthMetricsPlugin : Plugin<Project> {
                 extension.steps.forEach {
                     target.exec {
                         workingDir = project.projectDir
-                        commandLine("./gradlew", it.task.name)
+                        commandLine("./gradlew", it.task.name, "--stacktrace")
                     }
                 }
             }

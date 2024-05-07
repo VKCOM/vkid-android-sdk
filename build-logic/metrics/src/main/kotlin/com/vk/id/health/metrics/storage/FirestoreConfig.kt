@@ -9,7 +9,7 @@ import java.io.File
 import java.io.FileInputStream
 
 
-fun VKIDHealthMetricsExtension.firestore(serviceAccountFile: File) {
+public fun VKIDHealthMetricsExtension.firestore(serviceAccountFile: File) {
     val options: FirebaseOptions = FirebaseOptions.builder()
         .setCredentials(GoogleCredentials.fromStream(FileInputStream(serviceAccountFile)))
         .build()

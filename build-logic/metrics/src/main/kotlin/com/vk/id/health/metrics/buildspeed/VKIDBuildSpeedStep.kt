@@ -3,14 +3,13 @@ package com.vk.id.health.metrics.buildspeed
 import com.google.cloud.firestore.Firestore
 import com.vk.id.health.metrics.VKIDHealthMetricsExtension
 import com.vk.id.health.metrics.VKIDHeathMetricsStep
-import com.vk.id.health.metrics.git.Git
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.configurationcache.extensions.capitalized
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-class VKIDBuildSpeedStep(
+public class VKIDBuildSpeedStep internal constructor(
     private val storage: BuildSpeedStorage,
     rootProject: Project,
     measuredTaskPath: String
@@ -59,9 +58,9 @@ class VKIDBuildSpeedStep(
         }
     }
 
-    override val task = publishDiffTask
+    override val task: Task = publishDiffTask
 
-    override fun getDiff() = storage.getDiff()
+    override fun getDiff(): String = storage.getDiff()
 
     init {
         publishDiffTask.dependsOn(publishMetricTask)
@@ -71,14 +70,14 @@ class VKIDBuildSpeedStep(
     }
 
 
-    class Builder(
+    public class Builder(
         private val firestore: Firestore
     ) {
 
-        var rootProject: Project? = null
-        var measuredTaskPath: String? = null
+        public var rootProject: Project? = null
+        public var measuredTaskPath: String? = null
 
-        fun build(): VKIDBuildSpeedStep {
+        internal fun build(): VKIDBuildSpeedStep {
             val measuredTaskPath = checkNotNull(measuredTaskPath) { "Task for measurement is not specified" }
             return VKIDBuildSpeedStep(
                 storage = BuildSpeedStorage(firestore, measuredTaskPath),
@@ -89,6 +88,6 @@ class VKIDBuildSpeedStep(
     }
 }
 
-fun VKIDHealthMetricsExtension.buildSpeed(configuration: VKIDBuildSpeedStep.Builder.() -> Unit) {
+public fun VKIDHealthMetricsExtension.buildSpeed(configuration: VKIDBuildSpeedStep.Builder.() -> Unit) {
     stepsInternal.add(VKIDBuildSpeedStep.Builder(firestore).apply { rootProject = this@buildSpeed.rootProject }.apply(configuration).build())
 }
