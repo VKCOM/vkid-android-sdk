@@ -39,6 +39,7 @@ private const val STATE = "state"
 private const val UUID = "uuid"
 private const val PROMPT = "prompt"
 private const val ACTION = "action"
+private const val PROVIDER = "provider"
 private const val LOCALE = "lang_id"
 private const val THEME = "scheme"
 private const val SCREEN_PARAM = "screen"
@@ -65,6 +66,7 @@ internal fun AuthOptions.toAuthUriBrowser(): Uri {
     }
     if (oAuth != null) {
         builder.appendQueryParameter(ACTION, oAuth.toQueryParam())
+        builder.appendQueryParameter(PROVIDER, oAuth.serverName)
     }
     if (locale != null) {
         builder.appendQueryParameter(LOCALE, locale)
@@ -93,6 +95,7 @@ internal fun AuthOptions.toAuthUriCodeFlow(appPackage: String): Uri {
 
     if (oAuth != null) {
         builder.appendQueryParameter(ACTION, oAuth.toQueryParam())
+        builder.appendQueryParameter(PROVIDER, oAuth.serverName)
     }
     if (locale != null) {
         builder.appendQueryParameter(LOCALE, locale)
