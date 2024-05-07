@@ -66,12 +66,13 @@ public class VKIDAuthUiParams private constructor(
     }
 
     @InternalVKIDApi
-    public fun asParamsBuilder(initializer: VKIDAuthParams.Builder.() -> Unit): VKIDAuthParams {
+    public fun asParamsBuilder(initializer: VKIDAuthParams.Builder.() -> Unit): VKIDAuthParams.Builder {
         val params = this
-        return VKIDAuthParams {
+        return VKIDAuthParams.Builder().apply {
             state = params.state
             codeChallenge = params.codeChallenge
             scopes = params.scopes
+            internalUse = true
             initializer()
         }
     }
