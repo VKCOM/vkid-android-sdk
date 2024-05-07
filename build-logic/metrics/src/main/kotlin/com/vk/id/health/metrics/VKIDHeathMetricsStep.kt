@@ -4,4 +4,5 @@ import org.gradle.api.Task
 
 interface VKIDHeathMetricsStep {
     val task: Task
+    fun getDiff(): String
 }

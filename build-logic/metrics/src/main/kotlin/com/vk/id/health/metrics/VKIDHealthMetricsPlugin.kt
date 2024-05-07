@@ -12,9 +12,7 @@ class VKIDHealthMetricsPlugin : Plugin<Project> {
         extension.rootProjectInternal = target.rootProject
         val publishMetricsTask = target.tasks.create("publishHealthMetrics") {
             doLast {
-                val metric1 = "Build speed diff is 101 milliseconds"
-                val metric2 = "Build speed diff is 18 milliseconds"
-                println(metric1 + "\n" + metric2)
+                println(extension.steps.joinToString("\n") { it.getDiff() })
             }
         }
         val calculateMetricsTask = target.tasks.create("calculateHealthMetrics") {
