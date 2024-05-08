@@ -1,5 +1,6 @@
 pluginManagement {
     includeBuild("build-logic")
+    includeBuild("build-logic/detekt")
     repositories {
         google()
         mavenCentral()

@@ -3,8 +3,6 @@ package com.vk.id.health.metrics
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.create
-import java.io.ByteArrayOutputStream
-import java.io.IOException
 
 internal class VKIDHealthMetricsPlugin : Plugin<Project> {
     override fun apply(target: Project) {

@@ -8,7 +8,6 @@ import com.vk.id.health.metrics.VKIDHealthMetricsExtension
 import java.io.File
 import java.io.FileInputStream
 
-
 public fun VKIDHealthMetricsExtension.firestore(serviceAccountFile: File) {
     val options: FirebaseOptions = FirebaseOptions.builder()
         .setCredentials(GoogleCredentials.fromStream(FileInputStream(serviceAccountFile)))

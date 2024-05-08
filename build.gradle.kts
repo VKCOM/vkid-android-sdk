@@ -13,6 +13,12 @@ plugins {
     alias(libs.plugins.baselineprofile) apply false
     id("vkid.android.project-substitution") apply true
     id("vkid.health.metrics") apply true
+    id("vkid.detekt") apply false
+}
+
+tasks.register("detekt") {
+    subprojects.mapNotNull { it.tasks.findByName("detekt") }.forEach(::dependsOn)
+    dependsOn(gradle.includedBuild("build-logic").task(":detekt"))
 }
 
 
