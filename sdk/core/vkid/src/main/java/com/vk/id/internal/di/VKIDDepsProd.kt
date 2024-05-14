@@ -76,7 +76,7 @@ internal open class VKIDDepsProd(
     }
 
     override val api: Lazy<InternalVKIDApiContract> = lazy {
-        InternalVKIDRealApi.getInstance(context = appContext)
+        InternalVKIDRealApi(context = appContext)
     }
     private val apiService = lazy { VKIDApiService(api.value) }
 
