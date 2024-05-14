@@ -3,14 +3,14 @@
     <img src="logo.svg" width="150" alt="VK ID SDK Logo">
   </h1>
   <p align="center">
-    <a href="https://artifactory-external.vkpartner.ru/ui/native/vkid-sdk-andorid/com/vk/id/">
+    <a href="https://artifactory-external.vkpartner.ru/ui/native/vkid-sdk-android/com/vk/id/">
         <img src="https://img.shields.io/badge/stability-beta-red">
     </a>
     <a href="LICENSE">
       <img src="https://img.shields.io/npm/l/@vkid/sdk?maxAge=3600">
     </a>
-    <a href="https://artifactory-external.vkpartner.ru/ui/native/vkid-sdk-andorid/com/vk/id/">
-        <img src="https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Fartifactory-external.vkpartner.ru%2Fartifactory%2Fvkid-sdk-andorid%2Fcom%2Fvk%2Fid%2Fvkid%2Fmaven-metadata.xml"/>
+    <a href="https://artifactory-external.vkpartner.ru/ui/native/vkid-sdk-android/com/vk/id/">
+        <img src="https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Fartifactory-external.vkpartner.ru%2Fartifactory%2Fvkid-sdk-android%2Fcom%2Fvk%2Fid%2Fvkid%2Fmaven-metadata.xml"/>
     </a>
   </p>
   <p align="center">
@@ -49,7 +49,7 @@ VKIDClientID=Ваш ID приложения
 Для начала работы добавьте репозиторий:
 ```kotlin
 maven {
-    url("https://artifactory-external.vkpartner.ru/artifactory/vkid-sdk-andorid/")
+    url("https://artifactory-external.vkpartner.ru/artifactory/vkid-sdk-android/")
 }
 ```
 
