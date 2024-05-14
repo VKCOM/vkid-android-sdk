@@ -14,7 +14,7 @@ import com.vk.id.common.InternalVKIDApi
 import java.util.UUID
 
 @Suppress("TooManyFunctions")
-internal class OAuthListWidgetAnalytics(private val screen: String) {
+internal class OAuthListWidgetAnalytics(private val screen: String, private val paused: Boolean) {
 
     fun oauthAdded(oAuths: Set<OAuth>) {
         val oauthParam: (String, OAuth) -> VKIDAnalytics.EventParam = { name, oauth ->
@@ -76,13 +76,15 @@ internal class OAuthListWidgetAnalytics(private val screen: String) {
     }
 
     fun onAuthError(sessionId: String) {
-        VKIDAnalytics.trackEvent(
-            "multibranding_auth_error",
-            VKIDAnalytics.EventParam("sdk_type", "vkid"),
-            uuidParam(sessionId),
-            VKIDAnalytics.EventParam("error", "auth_error"),
-            VKIDAnalytics.EventParam("screen_current", screen)
-        )
+        if (!paused) {
+            VKIDAnalytics.trackEvent(
+                "multibranding_auth_error",
+                VKIDAnalytics.EventParam("sdk_type", "vkid"),
+                uuidParam(sessionId),
+                VKIDAnalytics.EventParam("error", "auth_error"),
+                VKIDAnalytics.EventParam("screen_current", screen)
+            )
+        }
     }
 
     private fun isIconParam(isText: Boolean) =
@@ -91,12 +93,14 @@ internal class OAuthListWidgetAnalytics(private val screen: String) {
     private fun uuidParam(uuid: String) = VKIDAnalytics.EventParam(UNIQUE_SESSION_PARAM_NAME, uuid)
 
     private fun track(name: String, vararg params: VKIDAnalytics.EventParam) {
-        VKIDAnalytics.trackEvent(
-            name,
-            VKIDAnalytics.EventParam("sdk_type", "vkid"),
-            VKIDAnalytics.EventParam("screen", screen),
-            *params
-        )
+        if (!paused) {
+            VKIDAnalytics.trackEvent(
+                name,
+                VKIDAnalytics.EventParam("sdk_type", "vkid"),
+                VKIDAnalytics.EventParam("screen", screen),
+                *params
+            )
+        }
     }
 
     internal companion object {

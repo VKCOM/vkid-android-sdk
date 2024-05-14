@@ -107,59 +107,66 @@ public fun OneTap(
                 if (!measureInProgress) {
                     OneTapAnalytics.OneTapShown(signInAnotherAccountButtonEnabled)
                 }
-                OneTap(
-                    modifier = measureModifier,
-                    style = style,
-                    oAuths = oAuths,
-                    signInAnotherAccountButtonEnabled = signInAnotherAccountButtonEnabled,
-                    vkidButtonTextProvider = null,
-                    onVKIDButtonClick = {
-                        val extraAuthParams = OneTapAnalytics.oneTapPressed(user)
-                        startAuth(
-                            coroutineScope,
-                            {
-                                OneTapAnalytics.authSuccess()
-                                onAuth(null, it)
-                            },
-                            onAuthCode,
-                            {
-                                OneTapAnalytics.authError(user)
-                                onFail(null, it)
-                            },
-                            authParams.asParamsBuilder {
-                                theme = style.toProviderTheme()
-                                extraParams = extraAuthParams
-                            }
-                        )
-                    },
-                    onAlternateButtonClick = {
-                        val extraAuthParams = OneTapAnalytics.alternatePressed()
-                        startAuth(
-                            coroutineScope,
-                            { onAuth(null, it) },
-                            onAuthCode,
-                            { onFail(null, it) },
-                            authParams.asParamsBuilder {
-                                useOAuthProviderIfPossible = false
-                                theme = style.toProviderTheme()
-                                prompt = Prompt.LOGIN
-                                extraParams = extraAuthParams
-                            }
-                        )
-                    },
-                    onAuth = onAuth,
-                    onAuthCode = onAuthCode,
-                    onFail = onFail,
-                    authParams = authParams,
-                    onUserFetched = {
-                        if (!measureInProgress) {
-                            user = it
-                            it?.let {
-                                OneTapAnalytics.userWasFound(signInAnotherAccountButtonEnabled)
+                CompositionLocalProvider(
+                    LocalMultibrandingAnalyticsContext provides MultibrandingAnalyticsContext(
+                        screen = "nowhere",
+                        isPaused = measureInProgress
+                    )
+                ) {
+                    OneTap(
+                        modifier = measureModifier,
+                        style = style,
+                        oAuths = oAuths,
+                        signInAnotherAccountButtonEnabled = signInAnotherAccountButtonEnabled,
+                        vkidButtonTextProvider = null,
+                        onVKIDButtonClick = {
+                            val extraAuthParams = OneTapAnalytics.oneTapPressed(user)
+                            startAuth(
+                                coroutineScope,
+                                {
+                                    OneTapAnalytics.authSuccess()
+                                    onAuth(null, it)
+                                },
+                                onAuthCode,
+                                {
+                                    OneTapAnalytics.authError(user)
+                                    onFail(null, it)
+                                },
+                                authParams.asParamsBuilder {
+                                    theme = style.toProviderTheme()
+                                    extraParams = extraAuthParams
+                                }
+                            )
+                        },
+                        onAlternateButtonClick = {
+                            val extraAuthParams = OneTapAnalytics.alternatePressed()
+                            startAuth(
+                                coroutineScope,
+                                { onAuth(null, it) },
+                                onAuthCode,
+                                { onFail(null, it) },
+                                authParams.asParamsBuilder {
+                                    useOAuthProviderIfPossible = false
+                                    theme = style.toProviderTheme()
+                                    prompt = Prompt.LOGIN
+                                    extraParams = extraAuthParams
+                                }
+                            )
+                        },
+                        onAuth = onAuth,
+                        onAuthCode = onAuthCode,
+                        onFail = onFail,
+                        authParams = authParams,
+                        onUserFetched = {
+                            if (!measureInProgress) {
+                                user = it
+                                it?.let {
+                                    OneTapAnalytics.userWasFound(signInAnotherAccountButtonEnabled)
+                                }
                             }
                         }
-                    }
-                )
+                    )
+                }
             },
             fallback = {
                 OneTapAnalytics.OneTapIconShown()
@@ -224,16 +231,14 @@ internal fun OneTap(
         }
         if (oAuths.isNotEmpty()) {
             Spacer(modifier = Modifier.height(16.dp))
-            CompositionLocalProvider(LocalMultibrandingAnalyticsContext provides MultibrandingAnalyticsContext(screen = "nowhere")) {
-                OAuthListWidget(
-                    onAuth = { oAuth, accessToken -> onAuth(OneTapOAuth.fromOAuth(oAuth), accessToken) },
-                    onAuthCode = onAuthCode,
-                    onFail = { oAuth, fail -> onFail(OneTapOAuth.fromOAuth(oAuth), fail) },
-                    style = style.oAuthListWidgetStyle,
-                    oAuths = oAuths.map { it.toOAuth() }.toSet(),
-                    authParams = authParams,
-                )
-            }
+            OAuthListWidget(
+                onAuth = { oAuth, accessToken -> onAuth(OneTapOAuth.fromOAuth(oAuth), accessToken) },
+                onAuthCode = onAuthCode,
+                onFail = { oAuth, fail -> onFail(OneTapOAuth.fromOAuth(oAuth), fail) },
+                style = style.oAuthListWidgetStyle,
+                oAuths = oAuths.map { it.toOAuth() }.toSet(),
+                authParams = authParams,
+            )
         }
     }
 }
