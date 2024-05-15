@@ -34,7 +34,7 @@ internal object OneTapAnalytics {
     }
 
     @Composable
-    internal fun OneTapShown(signInAnotherAccountButton: Boolean = false, icon: Boolean = false) {
+    internal fun OneTapShown(icon: Boolean = false) {
         val lifecycleOwner = rememberUpdatedState(LocalLifecycleOwner.current)
         DisposableEffect(lifecycleOwner.value) {
             val lifecycle = lifecycleOwner.value.lifecycle
@@ -43,7 +43,6 @@ internal object OneTapAnalytics {
                     Lifecycle.Event.ON_RESUME -> {
                         track(
                             "onetap_button_no_user_show",
-                            alternateParam(signInAnotherAccountButton),
                             iconParam(icon)
                         )
                     }

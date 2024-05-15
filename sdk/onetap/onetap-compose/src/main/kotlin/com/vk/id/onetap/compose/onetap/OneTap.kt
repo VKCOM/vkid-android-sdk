@@ -105,7 +105,7 @@ public fun OneTap(
             measureModifier = Modifier.fillMaxWidth(),
             viewToMeasure = { measureModifier, measureInProgress ->
                 if (!measureInProgress) {
-                    OneTapAnalytics.OneTapShown(signInAnotherAccountButtonEnabled)
+                    OneTapAnalytics.OneTapShown()
                 }
                 CompositionLocalProvider(
                     LocalMultibrandingAnalyticsContext provides MultibrandingAnalyticsContext(
