@@ -16,8 +16,6 @@ import java.util.UUID
 @Suppress("TooManyFunctions")
 internal class OAuthListWidgetAnalytics(private val screen: String) {
 
-    private val screenParam = VKIDAnalytics.EventParam("screen", screen)
-
     fun oauthAdded(oAuths: Set<OAuth>) {
         val oauthParam: (String, OAuth) -> VKIDAnalytics.EventParam = { name, oauth ->
             val value = if (oAuths.contains(oauth)) "1" else "0"
@@ -27,8 +25,7 @@ internal class OAuthListWidgetAnalytics(private val screen: String) {
             "multibranding_oauth_added",
             oauthParam("ok", OAuth.OK),
             oauthParam("mail", OAuth.MAIL),
-            oauthParam("vk", OAuth.VK),
-            screenParam
+            oauthParam("vk", OAuth.VK)
         )
     }
 
@@ -79,8 +76,9 @@ internal class OAuthListWidgetAnalytics(private val screen: String) {
     }
 
     fun onAuthError(sessionId: String) {
-        track(
+        VKIDAnalytics.trackEvent(
             "multibranding_auth_error",
+            VKIDAnalytics.EventParam("sdk_type", "vkid"),
             uuidParam(sessionId),
             VKIDAnalytics.EventParam("error", "auth_error"),
             VKIDAnalytics.EventParam("screen_current", screen)
@@ -96,6 +94,7 @@ internal class OAuthListWidgetAnalytics(private val screen: String) {
         VKIDAnalytics.trackEvent(
             name,
             VKIDAnalytics.EventParam("sdk_type", "vkid"),
+            VKIDAnalytics.EventParam("screen", screen),
             *params
         )
     }
