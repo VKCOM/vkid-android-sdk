@@ -85,7 +85,7 @@ public fun OAuthListWidget(
     }
 
     val analyticsContext = LocalMultibrandingAnalyticsContext.current
-    val analytics = remember { OAuthListWidgetAnalytics(analyticsContext.screen) }
+    val analytics = remember { OAuthListWidgetAnalytics(analyticsContext.screen, analyticsContext.isPaused) }
 
     LaunchedEffect(oAuths) {
         analytics.oauthAdded(oAuths)
