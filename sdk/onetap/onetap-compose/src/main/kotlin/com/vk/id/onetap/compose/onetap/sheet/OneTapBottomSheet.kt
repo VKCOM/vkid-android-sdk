@@ -155,6 +155,7 @@ private fun OneTapBottomSheetInternal(
                         style = style,
                         authStatus = authStatus,
                         authParams = authParams,
+                        coroutineScope = coroutineScope
                     )
                 }
 
@@ -327,6 +328,7 @@ private fun OneTapBottomSheetPreview() {
         dismissSheet = {},
         authStatus = remember { mutableStateOf(OneTapBottomSheetAuthStatus.Init) },
         authParams = VKIDAuthUiParams {},
+        rememberCoroutineScope()
     )
 }
 
