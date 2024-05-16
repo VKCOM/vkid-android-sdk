@@ -397,8 +397,7 @@ private fun GetPublicInfoUtil() {
                     val idToken = VKID.instance.accessToken?.idToken ?: return@withContext null
                     val api = OkHttpClient.Builder().build()
 
-//                    val endpoint = "id.vk.com"
-                    val endpoint = "tk-training.id.cs7777.vk.com"
+                    val endpoint = "id.vk.com"
                     val formBody = FormBody.Builder()
                         .add("id_token", idToken)
                         .add("client_id", getClientId(context))
@@ -469,7 +468,7 @@ private fun CurrentTokenUtil() {
 private suspend fun getUserBday(accessToken: AccessToken): String {
     return withContext(Dispatchers.IO) {
         val api = OkHttpClient.Builder().build()
-        val url = "https://tk-training.api.cs7777.vk.com/method/users.get?user_ids=${accessToken.userID}&fields=bdate" +
+        val url = "https://api.vk.com/method/users.get?user_ids=${accessToken.userID}&fields=bdate" +
             "&access_token=${accessToken.token}&v=5.131 HTTP/1.1"
         val request = Request.Builder()
             .url(url)
@@ -497,8 +496,7 @@ private fun RevokeUtil() {
                 }
                 val api = OkHttpClient.Builder().build()
 
-//                    val endpoint = "id.vk.com"
-                val endpoint = "tk-training.id.cs7777.vk.com"
+                val endpoint = "id.vk.com"
                 val formBody = FormBody.Builder()
                     .add("access_token", accessToken)
                     .add("client_id", getClientId(context))
