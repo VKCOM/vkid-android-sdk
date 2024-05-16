@@ -25,7 +25,7 @@ private const val APP_ID = "app_id"
 private const val CLIENT_ID = "client_id"
 
 // todo: Change to actual host after oauth2 completion
-private const val AUTHORITY_BROWSER = "tk-training.id.cs7777.vk.com"
+private const val AUTHORITY_BROWSER = "id.vk.com"
 private const val AUTHORITY_CODE_FLOW = "vkcexternalauth-codeflow"
 private const val PATH_BROWSER = "authorize"
 private const val CODE_CHALLENGE = "code_challenge"

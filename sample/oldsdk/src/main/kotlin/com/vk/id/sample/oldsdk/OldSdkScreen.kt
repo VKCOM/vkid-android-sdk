@@ -43,7 +43,7 @@ public fun OldSdkScreen() {
                     context = context,
                     appId = 51867225,
                     validationHandler = VKDefaultValidationHandler(context),
-                    apiHostProvider = { "tk-training.api.cs7777.vk.com" },
+                    apiHostProvider = { "api.vk.com" },
                     logger = DefaultApiLogger(lazy { Logger.LogLevel.VERBOSE }, "VKSdkApi"),
                 )
             )
