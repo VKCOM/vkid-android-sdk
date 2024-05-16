@@ -66,13 +66,13 @@ internal class OAuthListWidgetAnalytics(private val screen: String, private val 
         return mapOf(UNIQUE_SESSION_PARAM_NAME to uuid)
     }
 
-    fun onAuthSuccess(oAuth: OAuth) {
+    fun onAuthSuccess(oAuth: OAuth, uuid: String) {
         val oauth = when (oAuth) {
             OAuth.VK -> return // no tracking
             OAuth.MAIL -> "mail_ru"
             OAuth.OK -> "ok_ru"
         }
-        track("auth_by_oauth", VKIDAnalytics.EventParam("oauth_service", oauth))
+        track("auth_by_oauth", VKIDAnalytics.EventParam("oauth_service", oauth), uuidParam(uuid))
     }
 
     fun onAuthError(sessionId: String) {
