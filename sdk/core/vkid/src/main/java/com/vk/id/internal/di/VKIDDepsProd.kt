@@ -63,7 +63,7 @@ internal open class VKIDDepsProd(
         val clientSecret = ai.metaData.getStringOrThrow("VKIDClientSecret")
         val redirectScheme = ai.metaData.getStringOrThrow("VKIDRedirectScheme")
         val redirectHost = ai.metaData.getStringOrThrow("VKIDRedirectHost")
-        val redirectUri = "$redirectScheme://$redirectHost"
+        val redirectUri = "$redirectScheme://$redirectHost/blank.html"
 
         ServiceCredentials(clientID, clientSecret, redirectUri)
     }
