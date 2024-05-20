@@ -20,13 +20,13 @@ public interface InternalVKIDCall<out T> {
 
 @InternalVKIDApi
 public fun <T> Call.internalVKIDWrapToVKIDCall(
-    responseMapping: (response: Response) -> T,
+    responseMapping: (response: Response) -> Result<T>,
 ): InternalVKIDCall<T> {
     return object : InternalVKIDCall<T> {
         override fun execute(): Result<T> {
             return try {
                 val response = this@internalVKIDWrapToVKIDCall.execute()
-                Result.success(responseMapping(response))
+                responseMapping(response)
             } catch (ioe: IOException) {
                 Result.failure(ioe)
             } catch (je: JSONException) {
