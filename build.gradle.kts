@@ -1,4 +1,5 @@
 import com.vk.id.health.metrics.buildspeed.buildSpeed
+import com.vk.id.health.metrics.gitlab.gitlab
 import com.vk.id.health.metrics.storage.firestore
 
 plugins {
@@ -22,6 +23,7 @@ tasks.register("detekt") {
 }
 
 //healthMetrics {
+//    gitlab()
 //    firestore(rootProject.file("build-logic/metrics/service-credentials.json"))
 //    buildSpeed {
 //        isExternal = true
