@@ -3,7 +3,7 @@
 package com.vk.id.onetap.common.button.style
 
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.onetap.common.icon.style.VKIconSizeStyle
+import com.vk.id.onetap.common.icon.style.InternalVKIconSizeStyle
 
 /**
  * OneTap's button size style.
@@ -81,12 +81,12 @@ public enum class OneTapButtonSizeStyle {
 }
 
 @InternalVKIDApi
-public fun OneTapButtonSizeStyle.asIconSizeStyle(): VKIconSizeStyle = when (this) {
-    OneTapButtonSizeStyle.DEFAULT -> VKIconSizeStyle.NORMAL
+public fun OneTapButtonSizeStyle.internalVKIDAsIconSizeStyle(): InternalVKIconSizeStyle = when (this) {
+    OneTapButtonSizeStyle.DEFAULT -> InternalVKIconSizeStyle.NORMAL
     OneTapButtonSizeStyle.SMALL_32,
     OneTapButtonSizeStyle.SMALL_34,
     OneTapButtonSizeStyle.SMALL_36,
-    OneTapButtonSizeStyle.SMALL_38 -> VKIconSizeStyle.SMALL
+    OneTapButtonSizeStyle.SMALL_38 -> InternalVKIconSizeStyle.SMALL
 
     OneTapButtonSizeStyle.MEDIUM_40,
     OneTapButtonSizeStyle.MEDIUM_42,
@@ -96,5 +96,5 @@ public fun OneTapButtonSizeStyle.asIconSizeStyle(): VKIconSizeStyle = when (this
     OneTapButtonSizeStyle.LARGE_50,
     OneTapButtonSizeStyle.LARGE_52,
     OneTapButtonSizeStyle.LARGE_54,
-    OneTapButtonSizeStyle.LARGE_56 -> VKIconSizeStyle.NORMAL
+    OneTapButtonSizeStyle.LARGE_56 -> InternalVKIconSizeStyle.NORMAL
 }

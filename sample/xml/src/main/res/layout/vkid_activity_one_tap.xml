@@ -36,6 +36,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/no_multibranding_title_spacer"
             app:layout_constraintWidth_max="355dp"
+            app:vkid_onetapScopes="email messages"
             app:vkid_onetapShowSignInToAnotherAccount="true"
             app:vkid_onetapStyle="system" />
 

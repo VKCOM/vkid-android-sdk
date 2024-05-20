@@ -66,19 +66,18 @@ internal fun HomeScreen(
         Spacer(modifier = Modifier.height(32.dp))
         OneTap(
             modifier = Modifier.width(355.dp),
-            style = (
-                if (isSystemInDarkTheme()) {
-                    OneTapStyle.Dark(cornersStyle = OneTapButtonCornersStyle.Rounded)
-                } else {
-                    OneTapStyle.Light(cornersStyle = OneTapButtonCornersStyle.Rounded)
-                }
-                ),
+            style = if (isSystemInDarkTheme()) {
+                OneTapStyle.Dark(cornersStyle = OneTapButtonCornersStyle.Rounded)
+            } else {
+                OneTapStyle.Light(cornersStyle = OneTapButtonCornersStyle.Rounded)
+            },
             onAuth = getOneTapSuccessCallback(context) { token = it },
             onFail = getOneTapFailCallback(context),
             signInAnotherAccountButtonEnabled = true,
             oAuths = setOf(OneTapOAuth.MAIL, OneTapOAuth.OK),
         )
         token?.let {
+            Spacer(modifier = Modifier.height(32.dp))
             UseToken(it)
         }
         Spacer(modifier = Modifier.height(32.dp))

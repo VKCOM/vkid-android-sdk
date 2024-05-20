@@ -1,17 +1,29 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id
 
+import com.vk.id.analytics.stat.StatTracker
 import com.vk.id.auth.VKIDAuthParams
-import com.vk.id.internal.api.VKIDApi
+import com.vk.id.common.InternalVKIDApi
+import com.vk.id.exchangetoken.VKIDTokenExchanger
 import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthEventBridge
 import com.vk.id.internal.auth.AuthOptions
 import com.vk.id.internal.auth.AuthProvidersChooser
 import com.vk.id.internal.auth.AuthResult
 import com.vk.id.internal.auth.VKIDAuthProvider
-import com.vk.id.internal.concurrent.CoroutinesDispatchers
+import com.vk.id.internal.auth.device.InternalVKIDDeviceIdProvider
+import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
 import com.vk.id.internal.di.VKIDDeps
 import com.vk.id.internal.ipc.VkSilentAuthInfoProvider
+import com.vk.id.internal.store.InternalVKIDPrefsStore
 import com.vk.id.internal.user.UserDataFetcher
+import com.vk.id.logout.VKIDLoggerOut
+import com.vk.id.network.InternalVKIDApiContract
+import com.vk.id.refresh.VKIDTokenRefresher
+import com.vk.id.refreshuser.VKIDUserRefresher
+import com.vk.id.storage.InternalVKIDEncryptedSharedPreferencesStorage
+import com.vk.id.storage.TokenStorage
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.testCoroutineScheduler
 import io.kotest.matchers.shouldBe
@@ -41,7 +53,8 @@ internal class VKIDTest : BehaviorSpec({
         val scheduler = testCoroutineScheduler
         val testDispatcher = StandardTestDispatcher(scheduler)
         val userDataFetcher = mockk<UserDataFetcher>()
-        val dispatchers = mockk<CoroutinesDispatchers>()
+        val dispatchers = mockk<VKIDCoroutinesDispatchers>()
+        val statTracker = mockk<StatTracker>(relaxed = true)
         every { dispatchers.io } returns testDispatcher
         val vkid = VKID(
             object : VKIDDeps {
@@ -49,12 +62,33 @@ internal class VKIDTest : BehaviorSpec({
                 override val authOptionsCreator: AuthOptionsCreator = authOptionsCreator
                 override val authCallbacksHolder: AuthCallbacksHolder = authCallbacksHolder
                 override val authResultHandler: Lazy<AuthResultHandler> = lazy { authResultHandler }
-                override val dispatchers: CoroutinesDispatchers = dispatchers
+                override val dispatchers: VKIDCoroutinesDispatchers = dispatchers
+                override val statTracker: StatTracker = statTracker
                 override val vkSilentAuthInfoProvider: Lazy<VkSilentAuthInfoProvider> = mockk()
                 override val userDataFetcher: Lazy<UserDataFetcher> = lazy { userDataFetcher }
-                override val api: Lazy<VKIDApi> = lazy { mockk() }
+                override val api: Lazy<InternalVKIDApiContract> = lazy { mockk() }
+                override val tokenRefresher: Lazy<VKIDTokenRefresher> = lazy { mockk() }
+                override val tokenExchanger: Lazy<VKIDTokenExchanger> = lazy { mockk() }
+                override val userRefresher: Lazy<VKIDUserRefresher> = lazy { mockk() }
+                override val loggerOut: Lazy<VKIDLoggerOut> = lazy { mockk() }
+                override val tokenStorage: TokenStorage = mockk()
+                override val deviceIdStorage: Lazy<InternalVKIDDeviceIdProvider.DeviceIdStorage> = lazy { mockk() }
+                override val prefsStore: Lazy<InternalVKIDPrefsStore> = lazy { mockk() }
+                override val encryptedSharedPreferencesStorage: Lazy<InternalVKIDEncryptedSharedPreferencesStorage> =
+                    lazy { mockk() }
             }
         )
+
+        When("VKID initialized") {
+            Then("Analytics vkid_init event is send") {
+                verify {
+                    statTracker.trackEvent(
+                        "sdk_init",
+                        match { it.name == "sdk_type" && it.strValue == "vkid" }
+                    )
+                }
+            }
+        }
 
         val authParams = VKIDAuthParams { oAuth = OAuth.VK }
         val authOptions = AuthOptions(
@@ -62,22 +96,23 @@ internal class VKIDTest : BehaviorSpec({
             clientSecret = "client secret",
             codeChallenge = "code challenge",
             codeChallengeMethod = "code challenge method",
-            deviceId = "device id",
             redirectUri = "redirect uri",
             state = "state",
             locale = "locale",
             theme = "theme",
             webAuthPhoneScreen = false,
-            oAuth = null
+            oAuth = null,
+            prompt = "",
+            scopes = emptySet(),
+            extraParams = null
         )
-        val expireTime = System.currentTimeMillis() + 1000
         coEvery { authProvidersChooser.chooseBest(authParams) } returns authProvider
         every { authOptionsCreator.create(authParams) } returns authOptions
         every { authProvider.auth(authOptions) } just runs
         every { authCallbacksHolder.add(any()) } just runs
         coEvery { authResultHandler.handle(any()) } just runs
         TestScope(scheduler).launch {
-            vkid.authorize(authCallback = mockk(), authParams = authParams)
+            vkid.authorize(callback = mockk(), params = authParams)
         }
         scheduler.advanceUntilIdle()
 
@@ -85,14 +120,8 @@ internal class VKIDTest : BehaviorSpec({
             TestScope(scheduler).launch {
                 AuthEventBridge.listener?.onAuthResult(
                     AuthResult.Success(
-                        uuid = "uuid",
-                        expireTime = expireTime,
-                        userId = 123L,
-                        firstName = "first name",
-                        lastName = "last name",
-                        avatar = null,
-                        phone = null,
                         oauth = null,
+                        "device id"
                     )
                 )
             }

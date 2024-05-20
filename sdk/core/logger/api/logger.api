@@ -1,0 +1,24 @@
+public final class com/vk/id/logger/BuildConfig {
+	public static final field BUILD_TYPE Ljava/lang/String;
+	public static final field CI_BUILD_NUMBER Ljava/lang/Integer;
+	public static final field CI_BUILD_TYPE Ljava/lang/String;
+	public static final field DEBUG Z
+	public static final field LIBRARY_PACKAGE_NAME Ljava/lang/String;
+	public static final field VKID_BUILD_TIME Ljava/lang/Long;
+	public static final field VKID_VERSION_NAME Ljava/lang/String;
+	public fun <init> ()V
+}
+
+public abstract interface class com/vk/id/logger/LogEngine {
+	public abstract fun log (Lcom/vk/id/logger/LogEngine$LogLevel;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)V
+}
+
+public final class com/vk/id/logger/LogEngine$LogLevel : java/lang/Enum {
+	public static final field DEBUG Lcom/vk/id/logger/LogEngine$LogLevel;
+	public static final field ERROR Lcom/vk/id/logger/LogEngine$LogLevel;
+	public static final field INFO Lcom/vk/id/logger/LogEngine$LogLevel;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/vk/id/logger/LogEngine$LogLevel;
+	public static fun values ()[Lcom/vk/id/logger/LogEngine$LogLevel;
+}
+

@@ -1,3 +1,5 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.multibranding
 
 import android.content.Context
@@ -18,6 +20,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -42,11 +45,15 @@ import com.vk.id.AccessToken
 import com.vk.id.OAuth
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
-import com.vk.id.auth.VKIDAuthParams
+import com.vk.id.auth.AuthCodeData
+import com.vk.id.auth.Prompt
+import com.vk.id.auth.VKIDAuthCallback
 import com.vk.id.auth.VKIDAuthParams.Theme
+import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.multibranding.common.callback.OAuthListWidgetAuthCallback
+import com.vk.id.multibranding.OAuthListWidgetAnalytics.Companion.UNIQUE_SESSION_PARAM_NAME
 import com.vk.id.multibranding.common.style.OAuthListWidgetStyle
+import com.vk.id.multibranding.internal.LocalMultibrandingAnalyticsContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -56,53 +63,34 @@ import kotlinx.coroutines.launch
  * @param modifier Layout configuration for the widget.
  * @param style Styling widget configuration.
  * @param onAuth A callback to be invoked upon a successful auth.
+ * @param onAuthCode A callback to be invoked upon successful first step of auth - receiving auth code which can later be exchanged to access token.
  * @param onFail A callback to be invoked upon an error during auth.
  * @param oAuths A set of [OAuth]s the should be displayed to the user.
+ * @param authParams Optional params to be passed to auth. See [VKIDAuthUiParams.Builder] for more info.
  */
 @Composable
 public fun OAuthListWidget(
     modifier: Modifier = Modifier,
     style: OAuthListWidgetStyle = OAuthListWidgetStyle.Dark(),
-    onAuth: OAuthListWidgetAuthCallback,
-    onFail: (OAuth, VKIDAuthFail) -> Unit,
+    onAuth: (oAuth: OAuth, accessToken: AccessToken) -> Unit,
+    onAuthCode: (data: AuthCodeData, isCompletion: Boolean) -> Unit = { _, _ -> },
+    onFail: (oAuth: OAuth, fail: VKIDAuthFail) -> Unit,
     oAuths: Set<OAuth> = OAuth.entries.toSet(),
-) {
-    OAuthListWidget(
-        modifier = modifier,
-        style = style,
-        onAuth = onAuth,
-        onFail = onFail,
-        oAuths = oAuths,
-        vkid = null
-    )
-}
-
-/**
- * Constructs a multibranding widget that supports auth with multiple [OAuth]s.
- *
- * @param modifier Layout configuration for the widget.
- * @param style Styling widget configuration.
- * @param onAuth A callback to be invoked upon a successful auth.
- * @param onFail A callback to be invoked upon an error during auth.
- * @param oAuths A set of [OAuth]s the should be displayed to the user.
- * @param vkid An optional [VKID] instance to use for authentication.
- *  If instance of VKID is not provided, it will be created on first composition.
- */
-@Composable
-public fun OAuthListWidget(
-    modifier: Modifier = Modifier,
-    style: OAuthListWidgetStyle = OAuthListWidgetStyle.Dark(),
-    onAuth: OAuthListWidgetAuthCallback,
-    onFail: (OAuth, VKIDAuthFail) -> Unit,
-    oAuths: Set<OAuth> = OAuth.entries.toSet(),
-    vkid: VKID? = null,
+    authParams: VKIDAuthUiParams = VKIDAuthUiParams {},
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
-    val useVKID = vkid ?: remember { VKID(context) }
     if (oAuths.isEmpty()) {
         error("You need to add at least one oAuth to display the widget")
     }
+
+    val analyticsContext = LocalMultibrandingAnalyticsContext.current
+    val analytics = remember { OAuthListWidgetAnalytics(analyticsContext.screen, analyticsContext.isPaused) }
+
+    LaunchedEffect(oAuths) {
+        analytics.oauthAdded(oAuths)
+    }
+
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -120,9 +108,11 @@ public fun OAuthListWidget(
                     item = item,
                     showText = oAuths.size == 1,
                     coroutineScope = coroutineScope,
-                    vkid = useVKID,
+                    analytics = analytics,
                     onAuth = onAuth,
+                    onAuthCode = onAuthCode,
                     onFail = { onFail(item, it) },
+                    authParams = authParams,
                 )
                 if (index != oAuths.size - 1) {
                     Spacer(modifier = Modifier.width(12.dp))
@@ -154,10 +144,13 @@ private fun OAuthButton(
     item: OAuth,
     showText: Boolean,
     coroutineScope: CoroutineScope,
-    vkid: VKID,
-    onAuth: OAuthListWidgetAuthCallback,
-    onFail: (VKIDAuthFail) -> Unit
+    onAuth: (oAuth: OAuth, accessToken: AccessToken) -> Unit,
+    onAuthCode: (AuthCodeData, Boolean) -> Unit,
+    onFail: (VKIDAuthFail) -> Unit,
+    authParams: VKIDAuthUiParams,
+    analytics: OAuthListWidgetAnalytics,
 ) {
+    analytics.OAuthShown(oAuth = item, isText = showText)
     Row(
         modifier = modifier
             .height(style.sizeStyle)
@@ -170,24 +163,31 @@ private fun OAuthButton(
                 ),
                 role = Role.Button,
                 onClick = {
+                    val extraAuthParams = analytics.onOAuthTap(item, showText)
                     coroutineScope.launch {
-                        vkid.authorize(
-                            object : VKID.AuthCallback {
-                                override fun onSuccess(accessToken: AccessToken) {
-                                    when (onAuth) {
-                                        is OAuthListWidgetAuthCallback.WithOAuth -> onAuth(item, accessToken)
-                                        is OAuthListWidgetAuthCallback.JustToken -> onAuth(accessToken)
-                                    }
+                        VKID.instance.authorize(
+                            object : VKIDAuthCallback {
+                                override fun onAuth(accessToken: AccessToken) {
+                                    analytics.onAuthSuccess(item, extraAuthParams[UNIQUE_SESSION_PARAM_NAME] ?: "")
+                                    onAuth(item, accessToken)
                                 }
 
+                                override fun onAuthCode(
+                                    data: AuthCodeData,
+                                    isCompletion: Boolean
+                                ) = onAuthCode(data, isCompletion)
+
                                 override fun onFail(fail: VKIDAuthFail) {
+                                    analytics.onAuthError(extraAuthParams[UNIQUE_SESSION_PARAM_NAME] ?: "")
                                     onFail(fail)
                                 }
                             },
-                            VKIDAuthParams {
+                            authParams.asParamsBuilder {
                                 oAuth = item
                                 theme = style.toProviderTheme()
-                            }
+                                prompt = Prompt.LOGIN
+                                extraParams = extraAuthParams
+                            }.build()
                         )
                     }
                 }
@@ -341,7 +341,7 @@ private fun OAuthListWidgetStyle.toProviderTheme() = when (this) {
 private fun OAuthListWidgetWithOneItem() {
     OAuthListWidget(
         oAuths = setOf(OAuth.OK),
-        onAuth = OAuthListWidgetAuthCallback.WithOAuth { _, _ -> },
+        onAuth = { _, _ -> },
         onFail = { _, _ -> },
     )
 }
@@ -351,7 +351,7 @@ private fun OAuthListWidgetWithOneItem() {
 private fun OAuthListWidgetWithTwoItems() {
     OAuthListWidget(
         oAuths = setOf(OAuth.VK, OAuth.OK),
-        onAuth = OAuthListWidgetAuthCallback.WithOAuth { _, _ -> },
+        onAuth = { _, _ -> },
         onFail = { _, _ -> },
     )
 }
@@ -361,7 +361,7 @@ private fun OAuthListWidgetWithTwoItems() {
 private fun OAuthListWidgetLight() {
     OAuthListWidget(
         style = OAuthListWidgetStyle.Dark(),
-        onAuth = OAuthListWidgetAuthCallback.WithOAuth { _, _ -> },
+        onAuth = { _, _ -> },
         onFail = { _, _ -> },
     )
 }
@@ -373,7 +373,7 @@ private fun OAuthListWidgetDark() {
         modifier = Modifier.background(Color.White),
         style = OAuthListWidgetStyle.Light(),
         oAuths = setOf(OAuth.VK),
-        onAuth = OAuthListWidgetAuthCallback.WithOAuth { _, _ -> },
+        onAuth = { _, _ -> },
         onFail = { _, _ -> },
     )
 }

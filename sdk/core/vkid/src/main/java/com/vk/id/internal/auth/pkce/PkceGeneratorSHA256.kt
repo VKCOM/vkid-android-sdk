@@ -25,10 +25,13 @@
  * UNDER NO CIRCUMSTANCES LLC “V KONTAKTE” BEAR LIABILITY TO THE LICENSEE OR ANY
  * THIRD PARTIES FOR ANY DAMAGE IN CONNECTION WITH USE OF THE SOFTWARE.
  */
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.internal.auth.pkce
 
 import android.util.Base64
-import com.vk.id.internal.log.createLoggerForClass
+import com.vk.id.common.InternalVKIDApi
+import com.vk.id.logger.internalVKIDCreateLoggerForClass
 import java.io.UnsupportedEncodingException
 import java.nio.charset.Charset
 import java.security.MessageDigest
@@ -37,7 +40,7 @@ import java.security.SecureRandom
 
 internal class PkceGeneratorSHA256 {
 
-    private val logger = createLoggerForClass()
+    private val logger = internalVKIDCreateLoggerForClass()
 
     fun generateRandomCodeVerifier(entropySource: SecureRandom): String {
         val randomBytes = ByteArray(MIN_CODE_VERIFIER_ENTROPY)
@@ -64,7 +67,7 @@ internal class PkceGeneratorSHA256 {
     companion object {
         private const val ALGORITHM = "SHA-256"
         private const val CHARSET_NAME = "ISO_8859_1"
-        private const val MIN_CODE_VERIFIER_ENTROPY = 32
+        private const val MIN_CODE_VERIFIER_ENTROPY = 128
         private const val PKCE_BASE64_ENCODE_SETTINGS =
             Base64.URL_SAFE or Base64.NO_PADDING or Base64.NO_WRAP
     }

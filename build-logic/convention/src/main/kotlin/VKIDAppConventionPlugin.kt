@@ -7,7 +7,7 @@ import java.util.Properties
 
 class VKIDAppConventionPlugin : Plugin<Project> {
     override fun apply(target: Project): Unit = with(target) {
-        val android = extensions.getByName("android") as CommonExtension<*, *, *, *, *>
+        val android = extensions.getByName("android") as CommonExtension<*, *, *, *, *, *>
         android.apply {
             defaultConfig {
                 if (shouldInjectManifestPlaceholders()) {
