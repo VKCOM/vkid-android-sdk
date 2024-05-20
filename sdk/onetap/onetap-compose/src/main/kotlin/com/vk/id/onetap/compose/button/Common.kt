@@ -10,10 +10,8 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.State
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -24,9 +22,11 @@ import com.vk.id.AccessToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.VKIDUser
+import com.vk.id.auth.AuthCodeData
+import com.vk.id.auth.VKIDAuthCallback
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.onetap.common.auth.style.VKIDButtonStyle
+import com.vk.id.onetap.common.auth.style.InternalVKIDButtonStyle
 import com.vk.id.onetap.compose.button.auth.style.asColor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -34,7 +34,7 @@ import kotlinx.coroutines.launch
 
 @Suppress("LongParameterList")
 internal fun Modifier.clickable(
-    style: VKIDButtonStyle,
+    style: InternalVKIDButtonStyle,
     onClick: () -> Unit
 ): Modifier = composed {
     clickable(
@@ -49,23 +49,20 @@ internal fun Modifier.clickable(
 
 internal fun startAuth(
     coroutineScope: CoroutineScope,
-    vkid: VKID,
     onAuth: (AccessToken) -> Unit,
+    onAuthCode: (AuthCodeData, Boolean) -> Unit,
     onFail: (VKIDAuthFail) -> Unit,
-    params: VKIDAuthParams = VKIDAuthParams {}
+    params: VKIDAuthParams.Builder = VKIDAuthParams.Builder()
 ) {
+    params.internalUse = true
     coroutineScope.launch {
-        vkid.authorize(
-            object : VKID.AuthCallback {
-                override fun onSuccess(accessToken: AccessToken) {
-                    onAuth(accessToken)
-                }
-
-                override fun onFail(fail: VKIDAuthFail) {
-                    onFail(fail)
-                }
+        VKID.instance.authorize(
+            object : VKIDAuthCallback {
+                override fun onAuth(accessToken: AccessToken) = onAuth(accessToken)
+                override fun onAuthCode(data: AuthCodeData, isCompletion: Boolean) = onAuthCode(data, isCompletion)
+                override fun onFail(fail: VKIDAuthFail) = onFail(fail)
             },
-            params
+            params.build()
         )
     }
 }
@@ -73,43 +70,32 @@ internal fun startAuth(
 @Composable
 internal fun FetchUserData(
     coroutineScope: CoroutineScope,
-    vkid: VKID,
     onFetchingProgress: OnFetchingProgress,
 ) {
-    val lifecycleState by LocalLifecycleOwner.current.lifecycle.observeAsState()
-    DisposableEffect(lifecycleState) {
+    val lifecycleOwner = rememberUpdatedState(LocalLifecycleOwner.current)
+    DisposableEffect(lifecycleOwner.value) {
         var fetchUserJob: Job? = null
-        when (lifecycleState) {
-            Lifecycle.Event.ON_RESUME -> {
-                fetchUserJob = coroutineScope.launch {
-                    onFetchingProgress.onPreFetch()
-                    val user = vkid.fetchUserData().getOrNull()
-                    onFetchingProgress.onFetched(user)
-                }
-            }
-
-            else -> {}
-        }
-        onDispose {
-            onFetchingProgress.onDispose()
-            fetchUserJob?.cancel()
-        }
-    }
-}
-
-@Composable
-private fun Lifecycle.observeAsState(): State<Lifecycle.Event> {
-    val state = remember { mutableStateOf(Lifecycle.Event.ON_ANY) }
-    DisposableEffect(this) {
+        val lifecycle = lifecycleOwner.value.lifecycle
         val observer = LifecycleEventObserver { _, event ->
-            state.value = event
+            when (event) {
+                Lifecycle.Event.ON_RESUME -> {
+                    fetchUserJob = coroutineScope.launch {
+                        onFetchingProgress.onPreFetch()
+                        val user = VKID.instance.fetchUserData().getOrNull()
+                        onFetchingProgress.onFetched(user)
+                    }
+                }
+                else -> {}
+            }
         }
-        this@observeAsState.addObserver(observer)
+
+        lifecycle.addObserver(observer)
         onDispose {
-            this@observeAsState.removeObserver(observer)
+            lifecycle.removeObserver(observer)
+            fetchUserJob?.cancel()
+            onFetchingProgress.onDispose()
         }
     }
-    return state
 }
 
 internal interface OnFetchingProgress {

@@ -5,7 +5,7 @@ package com.vk.id.multibranding.common.style
 import android.content.Context
 import androidx.compose.runtime.Immutable
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.common.util.isDarkTheme
+import com.vk.id.common.util.internalVkIdIsDarkTheme
 
 /**
  * The style for OAuthListWidget.
@@ -18,11 +18,11 @@ import com.vk.id.common.util.isDarkTheme
  */
 @Immutable
 public sealed class OAuthListWidgetStyle(
-    public val cornersStyle: OAuthListWidgetCornersStyle,
-    public val rippleStyle: OAuthListWidgetRippleStyle,
-    public val borderStyle: OAuthListWidgetBorderStyle,
-    public val textStyle: OAuthListWidgetTextStyle,
-    public val sizeStyle: OAuthListWidgetSizeStyle,
+    @InternalVKIDApi public val cornersStyle: OAuthListWidgetCornersStyle,
+    @InternalVKIDApi public val rippleStyle: InternalVKIDOAuthListWidgetRippleStyle,
+    @InternalVKIDApi public val borderStyle: InternalVKIDOAuthListWidgetBorderStyle,
+    @InternalVKIDApi public val textStyle: InternalVKIDOAuthListWidgetTextStyle,
+    @InternalVKIDApi public val sizeStyle: OAuthListWidgetSizeStyle,
 ) {
     /**
      * Light version, should be used for the dark layout.
@@ -35,9 +35,9 @@ public sealed class OAuthListWidgetStyle(
         sizeStyle: OAuthListWidgetSizeStyle = OAuthListWidgetSizeStyle.DEFAULT,
     ) : OAuthListWidgetStyle(
         cornersStyle = cornersStyle,
-        rippleStyle = OAuthListWidgetRippleStyle.LIGHT,
-        borderStyle = OAuthListWidgetBorderStyle.LIGHT,
-        textStyle = OAuthListWidgetTextStyle.LIGHT,
+        rippleStyle = InternalVKIDOAuthListWidgetRippleStyle.LIGHT,
+        borderStyle = InternalVKIDOAuthListWidgetBorderStyle.LIGHT,
+        textStyle = InternalVKIDOAuthListWidgetTextStyle.LIGHT,
         sizeStyle = sizeStyle,
     )
 
@@ -52,9 +52,9 @@ public sealed class OAuthListWidgetStyle(
         sizeStyle: OAuthListWidgetSizeStyle = OAuthListWidgetSizeStyle.DEFAULT,
     ) : OAuthListWidgetStyle(
         cornersStyle = cornersStyle,
-        rippleStyle = OAuthListWidgetRippleStyle.DARK,
-        borderStyle = OAuthListWidgetBorderStyle.DARK,
-        textStyle = OAuthListWidgetTextStyle.DARK,
+        rippleStyle = InternalVKIDOAuthListWidgetRippleStyle.DARK,
+        borderStyle = InternalVKIDOAuthListWidgetBorderStyle.DARK,
+        textStyle = InternalVKIDOAuthListWidgetTextStyle.DARK,
         sizeStyle = sizeStyle,
     )
 
@@ -71,7 +71,7 @@ public sealed class OAuthListWidgetStyle(
             cornersStyle: OAuthListWidgetCornersStyle = OAuthListWidgetCornersStyle.Default,
             sizeStyle: OAuthListWidgetSizeStyle = OAuthListWidgetSizeStyle.DEFAULT,
         ): OAuthListWidgetStyle {
-            return (if (context.isDarkTheme) ::Dark else ::Light).invoke(cornersStyle, sizeStyle)
+            return (if (context.internalVkIdIsDarkTheme) ::Dark else ::Light).invoke(cornersStyle, sizeStyle)
         }
     }
 }

@@ -36,6 +36,7 @@ internal fun parseOneTapAttrs(
                 ),
                 isSignInToAnotherAccountEnabled = getSignInToAnotherAccountButtonEnabled(),
                 oAuths = getOAuths(),
+                scopes = getScopes(),
             )
         } finally {
             recycle()
@@ -47,6 +48,7 @@ internal data class OneTapParsedAttrs(
     val style: OneTapStyle,
     val isSignInToAnotherAccountEnabled: Boolean,
     val oAuths: Set<OneTapOAuth>,
+    val scopes: Set<String>,
 )
 
 internal class OneTapBottomSheetAttributeSettings(
@@ -55,6 +57,7 @@ internal class OneTapBottomSheetAttributeSettings(
     val scenario: OneTapScenario,
     val autoHideOnSuccess: Boolean,
     val oAuths: Set<OneTapOAuth>,
+    val scopes: Set<String>,
 )
 
 internal fun parseOneTapBottomSheetAttrs(
@@ -78,6 +81,7 @@ internal fun parseOneTapBottomSheetAttrs(
                 scenario = getSheetScenario(),
                 autoHideOnSuccess = getSheetAutoHideOnSuccess(),
                 oAuths = getOAuths(),
+                scopes = getScopes(),
             )
         } finally {
             recycle()
@@ -208,6 +212,13 @@ private fun TypedArray.getOAuths(): Set<OneTapOAuth> {
                 else -> error("""Unexpected oauth "$it", please use one of "mail" or "ok", separated by commas""")
             }
         }
+        .toSet()
+}
+
+private fun TypedArray.getScopes(): Set<String> {
+    return (getString(R.styleable.vkid_OneTap_vkid_onetapScopes) ?: "")
+        .split(',', ' ')
+        .filter { it.isNotBlank() }
         .toSet()
 }
 

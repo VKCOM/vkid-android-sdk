@@ -23,17 +23,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.decode.DataSource
-import com.vk.id.VKID
 import com.vk.id.VKIDUser
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.onetap.common.auth.style.VKIDButtonStyle
+import com.vk.id.onetap.common.auth.style.InternalVKIDButtonStyle
 import com.vk.id.onetap.compose.button.FetchUserData
 import com.vk.id.onetap.compose.button.OnFetchingProgress
 import com.vk.id.onetap.compose.button.auth.style.background
@@ -51,18 +49,13 @@ import kotlinx.coroutines.launch
 @Composable
 internal fun VKIDButtonSmall(
     state: VKIDSmallButtonState = remember { VKIDSmallButtonState(inProgress = false, userIconLoaded = false) },
-    style: VKIDButtonStyle = VKIDButtonStyle.Light(),
-    vkid: VKID? = null,
-    onClick: () -> Unit
+    style: InternalVKIDButtonStyle = InternalVKIDButtonStyle.Light(),
+    onClick: () -> Unit,
+    onUserFetched: (VKIDUser?) -> Unit = {},
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val context = LocalContext.current
-    val useVKID = vkid ?: remember {
-        VKID(context)
-    }
     FetchUserData(
         coroutineScope,
-        useVKID,
         object : OnFetchingProgress {
             override suspend fun onPreFetch() {
                 /*nothing*/
@@ -73,6 +66,7 @@ internal fun VKIDButtonSmall(
             }
 
             override suspend fun onFetched(user: VKIDUser?) {
+                onUserFetched(user)
                 val newIconUrl = user?.photo200
                 if (newIconUrl != null) {
                     state.userIconUrl = newIconUrl
@@ -138,7 +132,7 @@ private fun SmallButtonAnimation(
 @Composable
 private fun SmallButtonContent(
     state: VKIDSmallButtonState,
-    style: VKIDButtonStyle,
+    style: InternalVKIDButtonStyle,
     animatedOffsetXVkIcon: Animatable<Float, AnimationVector1D>,
     animatedOffsetXUserIcon: Animatable<Float, AnimationVector1D>
 ) {

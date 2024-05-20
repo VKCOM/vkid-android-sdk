@@ -8,14 +8,16 @@ import kotlinx.parcelize.Parcelize
  * Represents an access token for VK ID authentication.
  *
  * @property token The access token string.
+ * @property idToken The ID token string.
  * @property userID The user ID associated with this token.
- * @property expireTime The expiration time of the token.
+ * @property expireTime The expiration time of the token. If the value is -1 the token will not expire.
  * @property userData The user data associated with this token.
  */
 @Parcelize
 @Immutable
-public class AccessToken(
+public class AccessToken @JvmOverloads constructor(
     public val token: String,
+    public val idToken: String? = null,
     public val userID: Long,
     public val expireTime: Long,
     public val userData: VKIDUser,

@@ -19,12 +19,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.onetap.common.progress.style.CircleProgressStyle
+import com.vk.id.onetap.common.progress.style.InternalCircleProgressStyle
 import com.vk.id.onetap.compose.R
 
 @Composable
 internal fun CircleProgress(
-    style: CircleProgressStyle
+    style: InternalCircleProgressStyle
 ) {
     val infiniteTransition = rememberInfiniteTransition(label = "vkid_spinner")
     val angle by infiniteTransition.animateFloat(

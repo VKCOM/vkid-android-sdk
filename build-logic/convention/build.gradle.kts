@@ -23,6 +23,7 @@ dependencies {
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.ksp.gradlePlugin)
     compileOnly(libs.detekt.gradlePlugin)
+    compileOnly(libs.kotlin.binaryCompatibilityValidator)
     implementation(libs.dokka.gradlePlugin)
 }
 
@@ -79,6 +80,10 @@ gradlePlugin {
             implementationClass = "VKIDDokkaPlugin"
             description = """A plugin that configures dokka for documentation generation. 
                 |Usage: ./gradlew dokkaHtmlMultiModule""".trimMargin()
+        }
+        register("vkidBinaryCompatibilityValidator") {
+            id = "vkid.binaryCompatibilityValidator"
+            implementationClass = "VKIDBinaryCompatibilityValidatorPlugin"
         }
     }
 }

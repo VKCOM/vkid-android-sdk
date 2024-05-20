@@ -35,7 +35,8 @@ import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.content.pm.Signature
 import android.os.IBinder
-import com.vk.id.internal.log.createLoggerForClass
+import com.vk.id.common.InternalVKIDApi
+import com.vk.id.logger.internalVKIDCreateLoggerForClass
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
@@ -43,7 +44,8 @@ import kotlin.math.max
 
 internal abstract class IPCClientBaseProvider<T> {
 
-    private val logger = createLoggerForClass()
+    @OptIn(InternalVKIDApi::class)
+    private val logger = internalVKIDCreateLoggerForClass()
 
     open lateinit var appContext: Context
 
@@ -96,6 +98,7 @@ internal abstract class IPCClientBaseProvider<T> {
             .firstOrNull()
     }
 
+    @OptIn(InternalVKIDApi::class)
     @Suppress("TooGenericExceptionCaught")
     protected fun prepareSpecificApp(component: ComponentName): ConnectionInfo<T>? {
         var connectionInfo = connectionsMap[component]
@@ -148,7 +151,7 @@ internal abstract class IPCClientBaseProvider<T> {
                     // I'm not sure if onServiceDisconnected() can be called without onServiceConnected(). Because
                     // if it does, there is possibility of this situation:
                     // We have called bind() during prepare() on some thread (T1), then we called prepareSpecificApp() in
-                    // getSpecificAppSilentAuthInfos() so we called latch.await() on this thread (T2). Then onServiceConnected()
+                    // getSpecificAppSilentAuthInfos() so we called latch.await() on this thread (T2). Then onServiceDisconnected()
                     // is called on T1. We have to call bind again() without blocking the T2 (or have to wait until
                     // system recreates service, but c'mon...).
                     //
@@ -178,6 +181,7 @@ internal abstract class IPCClientBaseProvider<T> {
         }
     }
 
+    @OptIn(InternalVKIDApi::class)
     private fun <T> waitForConnection(connectionInfo: ConnectionInfo<T>, startTime: Long, timeout: Long): Boolean {
         val actualTimeout = calculateActualTimeout(startTime, timeout)
         return try {

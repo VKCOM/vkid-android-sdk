@@ -39,8 +39,8 @@ deleteBranch() {
 
 nothingToCommit() {
   if [[ $(git status --porcelain) ]]; then
-    true
-  else
     false
+  else
+    true
   fi
 }

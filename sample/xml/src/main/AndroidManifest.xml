@@ -23,9 +23,12 @@
 # ****************************************************************************** -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <application>
+    <application android:name=".App">
         <activity android:name=".multibranding.MultibrandingXmlLayoutActivity" />
         <activity android:name=".onetap.OneTapStylingXmlLayoutActivity" />
         <activity android:name=".onetapsheet.OnetapSheetStylingXmlActivity" />
+
+        <activity android:name="com.facebook.flipper.android.diagnostics.FlipperDiagnosticActivity"
+            android:exported="true"/>
     </application>
 </manifest>

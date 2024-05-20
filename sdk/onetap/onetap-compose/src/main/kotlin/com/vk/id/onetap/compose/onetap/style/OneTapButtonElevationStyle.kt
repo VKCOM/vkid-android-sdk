@@ -7,12 +7,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.onetap.common.auth.style.VKIDButtonStyle
+import com.vk.id.onetap.common.auth.style.InternalVKIDButtonStyle
 
 internal fun Modifier.shadow(
-    style: VKIDButtonStyle,
+    style: InternalVKIDButtonStyle,
 ): Modifier {
-    val elevation = if (style !is VKIDButtonStyle.TransparentLight && style !is VKIDButtonStyle.TransparentDark) {
+    val elevation = if (style !is InternalVKIDButtonStyle.TransparentLight && style !is InternalVKIDButtonStyle.TransparentDark) {
         style.elevationStyle.elevationDp
     } else {
         0f

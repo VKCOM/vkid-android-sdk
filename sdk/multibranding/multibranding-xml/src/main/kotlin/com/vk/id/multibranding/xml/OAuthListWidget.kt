@@ -1,3 +1,5 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.multibranding.xml
 
 import android.content.Context
@@ -8,16 +10,19 @@ import android.util.TypedValue
 import android.util.TypedValue.COMPLEX_UNIT_DIP
 import android.widget.FrameLayout
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import com.vk.id.AccessToken
 import com.vk.id.OAuth
-import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
+import com.vk.id.auth.AuthCodeData
+import com.vk.id.auth.VKIDAuthUiParams
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.multibranding.OAuthListWidget
-import com.vk.id.multibranding.common.callback.OAuthListWidgetAuthCallback
 import com.vk.id.multibranding.common.style.OAuthListWidgetCornersStyle
 import com.vk.id.multibranding.common.style.OAuthListWidgetSizeStyle
 import com.vk.id.multibranding.common.style.OAuthListWidgetStyle
@@ -48,21 +53,27 @@ public class OAuthListWidget @JvmOverloads constructor(
             onOAuthsChange(value)
         }
     private var onOAuthsChange: (Set<OAuth>) -> Unit = {}
-    private var onAuth: OAuthListWidgetAuthCallback = OAuthListWidgetAuthCallback.JustToken {
-        error("No onAuth callback for OAuthListWidget. Set it with setCallbacks method.")
-    }
-    private var onFail: (OAuth, VKIDAuthFail) -> Unit = { _, _ -> }
-    private var vkid: VKID? = null
+
+    /**
+     * Optional params to be passed to auth. See [VKIDAuthUiParams.Builder] for more info.
+     */
+    public var authParams: VKIDAuthUiParams = VKIDAuthUiParams { }
         set(value) {
             field = value
-            onVKIDChange(value)
+            onAuthParamsChange(value)
         }
-    private var onVKIDChange: (VKID?) -> Unit = {}
+    private var onAuthParamsChange: (VKIDAuthUiParams) -> Unit = {}
+    private var onAuth: (oAuth: OAuth, accessToken: AccessToken) -> Unit = { _, _ ->
+        error("No onAuth callback for OAuthListWidget. Set it with setCallbacks method.")
+    }
+    private var onAuthCode: (AuthCodeData, Boolean) -> Unit = { _, _ -> }
+    private var onFail: (OAuth, VKIDAuthFail) -> Unit = { _, _ -> }
 
     init {
-        val (style, oAuths) = parseAttrs(context, attrs)
+        val (style, oAuths, scopes) = parseAttrs(context, attrs)
         this.style = style
         this.oAuths = oAuths
+        this.authParams = authParams.newBuilder { this.scopes = scopes }
         addView(composeView)
         composeView.setContent { Content() }
     }
@@ -70,24 +81,20 @@ public class OAuthListWidget @JvmOverloads constructor(
     @Suppress("NonSkippableComposable")
     @Composable
     private fun Content() {
-        val style = remember { mutableStateOf(style) }
-        onStyleChange = { style.value = it }
-        val oAuths = remember { mutableStateOf(oAuths) }
-        onOAuthsChange = { oAuths.value = it }
-        val vkid = remember { mutableStateOf(vkid) }
-        onVKIDChange = { vkid.value = it }
+        var style by remember { mutableStateOf(style) }
+        onStyleChange = { style = it }
+        var oAuths by remember { mutableStateOf(oAuths) }
+        onOAuthsChange = { oAuths = it }
+        var authParams by remember { mutableStateOf(authParams) }
+        onAuthParamsChange = { authParams = it }
         OAuthListWidget(
             modifier = Modifier,
-            style = style.value,
-            onAuth = OAuthListWidgetAuthCallback.WithOAuth { oAuth: OAuth, token: AccessToken ->
-                when (val callback = onAuth) {
-                    is OAuthListWidgetAuthCallback.WithOAuth -> callback(oAuth, token)
-                    is OAuthListWidgetAuthCallback.JustToken -> callback(token)
-                }
-            },
+            style = style,
+            onAuth = { oAuth, accessToken -> onAuth(oAuth, accessToken) },
+            onAuthCode = { data, isCompletion -> onAuthCode(data, isCompletion) },
             onFail = { oAuth, fail -> onFail(oAuth, fail) },
-            oAuths = oAuths.value,
-            vkid = vkid.value,
+            oAuths = oAuths,
+            authParams = authParams,
         )
     }
 
@@ -95,33 +102,27 @@ public class OAuthListWidget @JvmOverloads constructor(
      * Sets callbacks for the authorization
      *
      * @param onAuth A callback to be invoked upon a successful auth.
+     * @param onAuthCode A callback to be invoked upon successful first step of auth - receiving auth code.
+     * isCompletion is true if [onSuccess] won't be called.
+     * This will happen if you passed auth parameters and implement their validation yourself.
+     * In that case we can't exchange auth code for access token and you should do this yourself.
      * @param onFail A callback to be invoked upon an error during auth.
      */
     public fun setCallbacks(
-        onAuth: OAuthListWidgetAuthCallback,
-        onFail: (OAuth, VKIDAuthFail) -> Unit = { _, _ -> },
+        onAuth: (oAuth: OAuth, accessToken: AccessToken) -> Unit,
+        onAuthCode: (data: AuthCodeData, isCompletion: Boolean) -> Unit = { _, _ -> },
+        onFail: (oAuth: OAuth, fail: VKIDAuthFail) -> Unit = { _, _ -> },
     ) {
         this.onAuth = onAuth
+        this.onAuthCode = onAuthCode
         this.onFail = onFail
-    }
-
-    /**
-     * Set an optional [VKID] instance to use for authentication.
-     *  If instance of VKID is not provided, it will be created.
-     *  Note that you can't change the [VKID] instance after view was added to layout.
-     */
-    public fun setVKID(
-        vkid: VKID
-    ) {
-        check(!composeView.isAttachedToWindow) { "You're not allowed to change VKID instance after it was attached" }
-        this.vkid = vkid
     }
 }
 
 private fun parseAttrs(
     context: Context,
     attrs: AttributeSet?,
-): Pair<OAuthListWidgetStyle, Set<OAuth>> {
+): Triple<OAuthListWidgetStyle, Set<OAuth>, Set<String>> {
     context.theme.obtainStyledAttributes(
         attrs,
         R.styleable.vkid_OAuthListWidget,
@@ -129,10 +130,14 @@ private fun parseAttrs(
         0
     ).apply {
         try {
-            return getStyleConstructor(context = context)(
-                OAuthListWidgetCornersStyle.Custom(context.pixelsToDp(getCornerRadius(context))),
-                getSize(),
-            ) to getOAuths()
+            return Triple(
+                getStyleConstructor(context = context)(
+                    OAuthListWidgetCornersStyle.Custom(context.pixelsToDp(getCornerRadius(context))),
+                    getSize(),
+                ),
+                getOAuths(),
+                getScopes(),
+            )
         } finally {
             recycle()
         }
@@ -184,6 +189,13 @@ private fun TypedArray.getOAuths(): Set<OAuth> {
                 else -> error("""Unexpected oauth "$it", please use one of "vk", "mail" or "ok", separated by commas""")
             }
         }
+        .toSet()
+}
+
+private fun TypedArray.getScopes(): Set<String> {
+    return (getString(R.styleable.vkid_OAuthListWidget_vkid_oAuthListScopes) ?: "")
+        .split(',', ' ')
+        .filter { it.isNotBlank() }
         .toSet()
 }
 
