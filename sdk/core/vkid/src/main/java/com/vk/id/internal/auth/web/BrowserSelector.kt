@@ -11,6 +11,8 @@
  * express or implied. See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.internal.auth.web
 
 import android.annotation.SuppressLint
@@ -21,8 +23,8 @@ import android.content.pm.ResolveInfo
 import android.net.Uri
 import android.os.Build
 import android.os.Build.VERSION_CODES
-import androidx.annotation.VisibleForTesting
-import com.vk.id.internal.log.createLoggerForClass
+import com.vk.id.common.InternalVKIDApi
+import com.vk.id.logger.internalVKIDCreateLoggerForClass
 
 /**
  * Utility class to obtain the browser package name to be used for
@@ -36,12 +38,11 @@ internal object BrowserSelector {
     private const val SCHEME_HTTP = "http"
     private const val SCHEME_HTTPS = "https"
 
-    private val logger = createLoggerForClass()
+    private val logger = internalVKIDCreateLoggerForClass()
 
     /**
      * The service we expect to find on a web browser that indicates it supports custom tabs.
      */
-    @VisibleForTesting
     // HACK: Using a StringBuilder prevents Jetifier from tempering with our constants.
     private val ACTION_CUSTOM_TABS_CONNECTION = StringBuilder("android")
         .append(".support.customtabs.action.CustomTabsService").toString()
@@ -51,8 +52,7 @@ internal object BrowserSelector {
      * [IANA rules](https://www.iana.org/domains/reserved)) web intent used to query
      * for installed web browsers on the system.
      */
-    @VisibleForTesting
-    val BROWSER_INTENT = Intent(Intent.ACTION_VIEW, Uri.parse("http://www.example.com"))
+    private val BROWSER_INTENT = Intent(Intent.ACTION_VIEW, Uri.parse("http://www.example.com"))
         .addCategory(Intent.CATEGORY_BROWSABLE)
 
     /**

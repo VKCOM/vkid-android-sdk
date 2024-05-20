@@ -19,6 +19,11 @@
 ### Changed
 - Обновлена поддержка SSL Pinning
 
+## 1.3.1
+
+### Changed
+- Обновлена поддержка SSL Pinning
+
 ## 1.3.0
 
 ### Added

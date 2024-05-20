@@ -7,4 +7,12 @@ package com.vk.id.common
     level = RequiresOptIn.Level.ERROR,
     message = "This is internal VK ID api, do not use it in your code"
 )
+@Target(
+    AnnotationTarget.CLASS,
+    AnnotationTarget.PROPERTY,
+    AnnotationTarget.FIELD,
+    AnnotationTarget.CONSTRUCTOR,
+    AnnotationTarget.FUNCTION,
+    AnnotationTarget.TYPEALIAS
+)
 public annotation class InternalVKIDApi

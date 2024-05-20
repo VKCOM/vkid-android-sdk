@@ -1,38 +1,40 @@
 [versions]
 allure = "2.4.0"
 androidDesugarJdkLibs = "2.0.4"
-androidGradlePlugin = "8.2.2"
+androidGradlePlugin = "8.3.1"
 androidMaterial = "1.11.0"
 androidxActivity = "1.8.2"
 androidxAppcompat = "1.6.1"
 androidxAnnotation = "1.7.1"
 androidxBrowser = "1.7.0"
 androidxCollection = "1.4.0"
-androidxComposeBom = "2024.01.00"
-androidxComposeCompiler = "1.5.8"
+androidxComposeBom = "2024.02.01"
+androidxComposeCompiler = "1.5.10"
 androidxConstraintLayout = "2.1.4"
 androidxCore = "1.12.0"
 androidxCoreSplashscreen = "1.0.1"
-androidxMaterial3 = "1.2.0-rc01"
-androidxNavigationCompose = "2.7.6"
+androidxMaterial3 = "1.2.0"
+androidxNavigationCompose = "2.7.7"
 androidxOrchestrator = "1.4.2"
+androidxSecurityCrypto = "1.1.0-alpha06"
 androidxTestJunitKtx = "1.1.5"
-andoridxUiTestJunit4 = "1.6.0"
+andoridxUiTestJunit4 = "1.6.2"
 binary-compatibility-validator = "0.14.0"
-coil = "2.5.0"
+coil = "2.6.0"
 detekt = "1.23.5"
-dokka = "1.9.10"
+dokka = "1.9.20"
+flipper = "0.250.0"
 gson = "2.10.1"
-kaspresso = "1.5.4"
+kaspresso = "1.5.5"
 kotlin = "1.9.22"
-kotlinxCoroutines = "1.7.3"
+kotlinxCoroutines = "1.8.0"
 kotest = "5.8.0"
-ksp = "1.9.22-1.0.17"
+ksp = "1.9.22-1.0.18"
 lifecycle-runtime-compose = "2.7.0"
-mockk = "1.13.9"
+mockk = "1.13.10"
 okHttpVersion = "4.12.0"
-okioVersion = "3.4.0"
 preference = "1.2.1"
+soLoader = "0.10.5"
 junit = "1.1.5"
 benchmarkMacroJunit4 = "1.2.3"
 baselineprofile = "1.2.3"
@@ -68,10 +70,14 @@ androidx-lifecycle-compose = { group = "androidx.lifecycle", name = "lifecycle-r
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigationCompose" }
 androidx-preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }
 androidx-preference-ktx = { group = "androidx.preference", name = "preference-ktx", version.ref = "preference" }
+androidx-security-crypto = { group = "androidx.security", name = "security-crypto", version.ref = "androidxSecurityCrypto" }
 androidx-test-orchestrator = { group = "androidx.test", name = "orchestrator", version.ref = "androidxOrchestrator" }
 androidx-test-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "androidxTestJunitKtx" }
 coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+flipper = { group = "com.facebook.flipper", name = "flipper", version.ref = "flipper" }
+flipper-network = { group = "com.facebook.flipper", name = "flipper-network-plugin", version.ref = "flipper" }
+flipper-noop = { group = "com.facebook.flipper", name = "flipper-noop", version.ref = "flipper" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 kaspresso = { group = "com.kaspersky.android-components", name = "kaspresso", version.ref = "kaspresso" }
 kaspresso-compose = { group = "com.kaspersky.android-components", name = "kaspresso-compose-support", version.ref = "kaspresso" }
@@ -82,9 +88,10 @@ kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-cor
 kotest-core = { group = "io.kotest", name = "kotest-runner-junit5", version.ref = "kotest" }
 kotest-assertions = { group = "io.kotest", name = "kotest-assertions-core", version.ref = "kotest" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+mockk-android = { group = "io.mockk", name = "mockk-android", version.ref = "mockk" }
 okhttp3-okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okHttpVersion" }
 okhttp3-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okHttpVersion" }
-okio = { group = "com.squareup.okio", name = "okio", version = { require = "3.7.0" } }
+soloader = { group = "com.facebook.soloader", name = "soloader", version.ref = "soLoader" }
 vk-userid = { group = "com.vk", name = "android-sdk-id", version.ref = "vkUserIdVersion" }
 vk-sdk-core = { group = "com.vk", name = "android-sdk-core", version.ref = "vkSdkVersion" }
 vk-sdk-api = { group = "com.vk", name = "android-sdk-api", version.ref = "vkSdkVersion" }
@@ -105,6 +112,7 @@ dokka-core = { group = "org.jetbrains.dokka", name = "dokka-core", version.ref =
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junit" }
 androidx-benchmark-macro-junit4 = { group = "androidx.benchmark", name = "benchmark-macro-junit4", version.ref = "benchmarkMacroJunit4" }
 androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profileinstaller", version.ref = "profileinstaller" }
+kotlin-binaryCompatibilityValidator = { group = "org.jetbrains.kotlinx", name = "binary-compatibility-validator", version.ref = "binary-compatibility-validator" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }

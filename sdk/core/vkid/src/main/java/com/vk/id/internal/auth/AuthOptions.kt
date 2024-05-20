@@ -10,61 +10,63 @@ internal data class AuthOptions(
     val clientSecret: String,
     val codeChallenge: String,
     val codeChallengeMethod: String,
-    val deviceId: String,
     val redirectUri: String,
     val state: String,
     val locale: String?,
     val theme: String?,
     val webAuthPhoneScreen: Boolean,
     val oAuth: OAuth?,
+    val prompt: String,
+    val scopes: Set<String>,
+    val extraParams: Map<String, String>?,
 )
 
 private const val APP_ID = "app_id"
+private const val CLIENT_ID = "client_id"
+
+// todo: Change to actual host after oauth2 completion
 private const val AUTHORITY_BROWSER = "id.vk.com"
 private const val AUTHORITY_CODE_FLOW = "vkcexternalauth-codeflow"
-private const val PATH_BROWSER = "auth"
+private const val PATH_BROWSER = "authorize"
 private const val CODE_CHALLENGE = "code_challenge"
 private const val CODE_CHALLENGE_METHOD = "code_challenge_method"
+private const val CODE_CHALLENGE_METHOD_VALUE = "s256"
 private const val REDIRECT_URI = "redirect_uri"
 private const val RESPONSE_TYPE = "response_type"
 private const val RESPONSE_TYPE_CODE = "code"
 private const val SCHEME_BROWSER = "https"
 private const val STATE = "state"
 private const val UUID = "uuid"
+private const val PROMPT = "prompt"
 private const val ACTION = "action"
+private const val PROVIDER = "provider"
 private const val LOCALE = "lang_id"
 private const val THEME = "scheme"
 private const val SCREEN_PARAM = "screen"
 private const val SCREEN_PHONE = "phone"
+private const val SCOPES = "scope"
 
 internal fun basicCodeFlowUri(appPackage: String) = Uri.Builder()
     .scheme(appPackage)
     .authority(AUTHORITY_CODE_FLOW)
     .build()
 
-internal fun AuthOptions.toAuthUriBrowser(): Uri = toAuthUriBuilder()
-    .scheme(SCHEME_BROWSER)
-    .authority(AUTHORITY_BROWSER)
-    .path(PATH_BROWSER)
-    .build()
-
-internal fun AuthOptions.toAuthUriCodeFlow(appPackage: String): Uri = toAuthUriBuilder()
-    .scheme(appPackage)
-    .authority(AUTHORITY_CODE_FLOW)
-    .build()
-
-private fun AuthOptions.toAuthUriBuilder(): Uri.Builder {
+internal fun AuthOptions.toAuthUriBrowser(): Uri {
     val builder = Uri.Builder()
-        .appendQueryParameter(APP_ID, appId)
+        .appendQueryParameter(CLIENT_ID, appId)
         .appendQueryParameter(RESPONSE_TYPE, RESPONSE_TYPE_CODE)
         .appendQueryParameter(REDIRECT_URI, redirectUri)
-        .appendQueryParameter(CODE_CHALLENGE_METHOD, codeChallengeMethod)
+        .appendQueryParameter(CODE_CHALLENGE_METHOD, CODE_CHALLENGE_METHOD_VALUE)
         .appendQueryParameter(CODE_CHALLENGE, codeChallenge)
         .appendQueryParameter(STATE, state)
-        .appendQueryParameter(UUID, deviceId)
+        .appendQueryParameter(PROMPT, prompt)
 
+    if (scopes.isNotEmpty()) {
+        builder.appendQueryParameter(SCOPES, scopes.joinToString(separator = " "))
+    }
     if (oAuth != null) {
         builder.appendQueryParameter(ACTION, oAuth.toQueryParam())
+        builder.appendQueryParameter(PROVIDER, oAuth.serverName)
     }
     if (locale != null) {
         builder.appendQueryParameter(LOCALE, locale)
@@ -75,7 +77,41 @@ private fun AuthOptions.toAuthUriBuilder(): Uri.Builder {
     if (webAuthPhoneScreen) {
         builder.appendQueryParameter(SCREEN_PARAM, SCREEN_PHONE)
     }
-    return builder
+    return builder.scheme(SCHEME_BROWSER)
+        .authority(AUTHORITY_BROWSER)
+        .path(PATH_BROWSER)
+        .build()
+}
+
+internal fun AuthOptions.toAuthUriCodeFlow(appPackage: String): Uri {
+    val builder = Uri.Builder()
+        .appendQueryParameter(APP_ID, appId)
+        .appendQueryParameter(RESPONSE_TYPE, RESPONSE_TYPE_CODE)
+        .appendQueryParameter(REDIRECT_URI, redirectUri)
+        .appendQueryParameter(CODE_CHALLENGE_METHOD, codeChallengeMethod)
+        .appendQueryParameter(CODE_CHALLENGE, codeChallenge)
+        .appendQueryParameter(STATE, state)
+        .appendQueryParameter(UUID, state)
+
+    if (oAuth != null) {
+        builder.appendQueryParameter(ACTION, oAuth.toQueryParam())
+        builder.appendQueryParameter(PROVIDER, oAuth.serverName)
+    }
+    if (locale != null) {
+        builder.appendQueryParameter(LOCALE, locale)
+    }
+    if (theme != null) {
+        builder.appendQueryParameter(THEME, theme)
+    }
+    if (webAuthPhoneScreen) {
+        builder.appendQueryParameter(SCREEN_PARAM, SCREEN_PHONE)
+    }
+    extraParams?.forEach { (key, value) ->
+        builder.appendQueryParameter(key, value)
+    }
+    return builder.scheme(appPackage)
+        .authority(AUTHORITY_CODE_FLOW)
+        .build()
 }
 
 @Suppress("MagicNumber")

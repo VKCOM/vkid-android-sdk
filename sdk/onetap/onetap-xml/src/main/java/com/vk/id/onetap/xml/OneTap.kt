@@ -1,16 +1,22 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.onetap.xml
 
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.FrameLayout
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import com.vk.id.AccessToken
-import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
+import com.vk.id.auth.AuthCodeData
+import com.vk.id.auth.VKIDAuthUiParams
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.compose.onetap.OneTap
@@ -46,12 +52,23 @@ public class OneTap @JvmOverloads constructor(
     public var isSignInToAnotherAccountEnabled: Boolean = false
         set(value) {
             field = value
-            onSignInToAnotherAccountEnabled(value)
+            onSignInToAnotherAccountEnabledChange(value)
         }
-    private var onSignInToAnotherAccountEnabled: (Boolean) -> Unit = {}
+    private var onSignInToAnotherAccountEnabledChange: (Boolean) -> Unit = {}
+
+    /**
+     * Optional params to be passed to auth. See [VKIDAuthUiParams.Builder] for more info.
+     */
+    public var authParams: VKIDAuthUiParams = VKIDAuthUiParams { }
+        set(value) {
+            field = value
+            onAuthParamsChange(value)
+        }
+    private var onAuthParamsChange: (VKIDAuthUiParams) -> Unit = {}
     private var onAuth: (OneTapOAuth?, AccessToken) -> Unit = { _, _ ->
         throw IllegalStateException("No onAuth callback for VKID OneTap Button. Set it with setCallbacks method.")
     }
+    private var onAuthCode: (AuthCodeData, Boolean) -> Unit = { _, _ -> }
     private var onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit = { _, _ -> }
 
     /**
@@ -64,18 +81,13 @@ public class OneTap @JvmOverloads constructor(
             onOAuthsChange(value)
         }
     private var onOAuthsChange: (Set<OneTapOAuth>) -> Unit = {}
-    private var vkid: VKID? = null
-        set(value) {
-            field = value
-            onVKIDChange(value)
-        }
-    private var onVKIDChange: (VKID?) -> Unit = {}
 
     init {
-        val (style, isSignInToAnotherAccountEnabled, oAuths) = parseOneTapAttrs(context, attrs)
-        this.style = style
-        this.isSignInToAnotherAccountEnabled = isSignInToAnotherAccountEnabled
-        this.oAuths = oAuths
+        val params = parseOneTapAttrs(context, attrs)
+        this.style = params.style
+        this.isSignInToAnotherAccountEnabled = params.isSignInToAnotherAccountEnabled
+        this.oAuths = params.oAuths
+        this.authParams = authParams.newBuilder { scopes = params.scopes }
         addView(composeView)
         composeView.setContent { Content() }
         clipChildren = false
@@ -85,56 +97,44 @@ public class OneTap @JvmOverloads constructor(
     @Suppress("NonSkippableComposable")
     @Composable
     private fun Content() {
-        val style = remember { mutableStateOf(style) }
-        onStyleChange = { style.value = it }
-        val isSignInToAnotherAccountEnabled = remember { mutableStateOf(isSignInToAnotherAccountEnabled) }
-        onSignInToAnotherAccountEnabled = { isSignInToAnotherAccountEnabled.value = it }
-        val oAuths = remember { mutableStateOf(oAuths) }
-        onOAuthsChange = { oAuths.value = it }
-        val vkid = remember { mutableStateOf(vkid) }
-        onVKIDChange = { vkid.value = it }
+        var style by remember { mutableStateOf(style) }
+        onStyleChange = { style = it }
+        var isSignInToAnotherAccountEnabled by remember { mutableStateOf(isSignInToAnotherAccountEnabled) }
+        onSignInToAnotherAccountEnabledChange = { isSignInToAnotherAccountEnabled = it }
+        var authParams by remember { mutableStateOf(authParams) }
+        onAuthParamsChange = { authParams = it }
+        var oAuths by remember { mutableStateOf(oAuths) }
+        onOAuthsChange = { oAuths = it }
         OneTap(
             modifier = Modifier,
-            style = style.value,
+            style = style,
             onAuth = { oAuth, accessToken -> onAuth(oAuth, accessToken) },
+            onAuthCode = { data, isCompletion -> onAuthCode(data, isCompletion) },
             onFail = { oAuth, fail -> onFail(oAuth, fail) },
-            oAuths = oAuths.value,
-            signInAnotherAccountButtonEnabled = isSignInToAnotherAccountEnabled.value,
-            vkid = vkid.value,
+            oAuths = oAuths,
+            signInAnotherAccountButtonEnabled = isSignInToAnotherAccountEnabled,
+            authParams = authParams,
         )
     }
 
     /**
      * Callbacks that provide auth result for version with multibranding.
+     *
+     * @param onAuth A callback to be invoked upon a successful auth.
+     * @param onAuthCode A callback to be invoked upon successful first step of auth - receiving auth code
+     * which can later be exchanged to access token.
+     * isCompletion is true if [onSuccess] won't be called.
+     * This will happen if you passed auth parameters and implement their validation yourself.
+     * In that case we can't exchange auth code for access token and you should do this yourself.
+     * @param onFail A callback to be invoked upon an error during auth.
      */
     public fun setCallbacks(
-        onAuth: (OneTapOAuth?, AccessToken) -> Unit,
-        onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit = { _, _ -> },
+        onAuth: (oAuth: OneTapOAuth?, accessToken: AccessToken) -> Unit,
+        onFail: (oAuth: OneTapOAuth?, fail: VKIDAuthFail) -> Unit = { _, _ -> },
+        onAuthCode: (data: AuthCodeData, isCompletion: Boolean) -> Unit = { _, _ -> },
     ) {
         this.onAuth = onAuth
+        this.onAuthCode = onAuthCode
         this.onFail = onFail
-    }
-
-    /**
-     * Callbacks that provide auth result.
-     */
-    public fun setCallbacks(
-        onAuth: (AccessToken) -> Unit,
-        onFail: (VKIDAuthFail) -> Unit = {},
-    ) {
-        this.onAuth = { _, token -> onAuth(token) }
-        this.onFail = { _, fail -> onFail(fail) }
-    }
-
-    /**
-     * Set an optional [VKID] instance to use for authentication.
-     *  If instance of VKID is not provided, it will be created.
-     *  Note that you can't change the [VKID] instance after view was added to layout.
-     */
-    public fun setVKID(
-        vkid: VKID,
-    ) {
-        check(!composeView.isAttachedToWindow) { "You're not allowed to change VKID instance after it was attached" }
-        this.vkid = vkid
     }
 }

@@ -25,10 +25,13 @@
  * UNDER NO CIRCUMSTANCES LLC “V KONTAKTE” BEAR LIABILITY TO THE LICENSEE OR ANY
  * THIRD PARTIES FOR ANY DAMAGE IN CONNECTION WITH USE OF THE SOFTWARE.
  */
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.internal.auth.app
 
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.api.VKIDApiService
-import com.vk.id.internal.concurrent.CoroutinesDispatchers
+import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
 import kotlinx.coroutines.withContext
 
 /**
@@ -38,7 +41,7 @@ internal class TrustedProvidersCache(
     private val api: Lazy<VKIDApiService>,
     private val clientId: String,
     private val clientSecret: String,
-    private val dispatchers: CoroutinesDispatchers
+    private val dispatchers: VKIDCoroutinesDispatchers
 ) {
 
     private var cachedTrustedProviders: List<VkAuthSilentAuthProvider>? = null
