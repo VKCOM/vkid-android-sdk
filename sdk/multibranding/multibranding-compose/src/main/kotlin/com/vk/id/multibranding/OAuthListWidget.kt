@@ -98,7 +98,7 @@ public fun OAuthListWidget(
         OAuthTitle()
         Spacer(modifier = Modifier.height(16.dp))
         Row {
-            oAuths.sorted().forEachIndexed { index, item ->
+            oAuths.forEachIndexed { index, item ->
                 OAuthButton(
                     modifier = Modifier
                         .testTag("oauth_button_${item.name.lowercase()}")
@@ -350,7 +350,7 @@ private fun OAuthListWidgetWithOneItem() {
 @Composable
 private fun OAuthListWidgetWithTwoItems() {
     OAuthListWidget(
-        oAuths = setOf(OAuth.VK, OAuth.OK),
+        oAuths = setOf(OAuth.OK, OAuth.VK),
         onAuth = { _, _ -> },
         onFail = { _, _ -> },
     )
