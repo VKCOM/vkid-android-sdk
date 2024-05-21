@@ -10,12 +10,12 @@ import okhttp3.Request
 import okhttp3.RequestBody
 import org.json.JSONArray
 
-@Suppress("LongParameterList")
 @InternalVKIDApi
-/** Singleton **/
-public class InternalVKIDRealApi private constructor(
-    private val client: OkHttpClient,
+public class InternalVKIDRealApi(
+    context: Context
 ) : InternalVKIDApiContract {
+
+    private val client: OkHttpClient = OkHttpClientProvider(context).provide()
 
     override fun getToken(
         code: String,
@@ -156,19 +156,9 @@ public class InternalVKIDRealApi private constructor(
 
     @InternalVKIDApi
     public companion object {
-        @Volatile
-        private var instance: InternalVKIDRealApi? = null
 
-        public fun getInstance(context: Context): InternalVKIDRealApi {
-            return instance ?: synchronized(this) {
-                instance ?: InternalVKIDRealApi(OkHttpClientProvider(context).provide()).also { instance = it }
-            }
-        }
-
-        private const val HOST_API = "https://tk-training.api.cs7777.vk.com"
-
-        // todo: Change to actual host after oauth2 completion
-        private const val HOST_VK_ID = "https://tk-training.id.cs7777.vk.com"
+        private const val HOST_API = "https://api.vk.com"
+        private const val HOST_VK_ID = "https://id.vk.com"
 
         private const val PATH_SILENT_AUTH_PROVIDERS = "method/auth.getSilentAuthProviders"
         private const val PATH_AUTH = "oauth2/auth"

@@ -14,9 +14,7 @@ import com.vk.id.common.InternalVKIDApi
 import java.util.UUID
 
 @Suppress("TooManyFunctions")
-internal class OAuthListWidgetAnalytics(private val screen: String) {
-
-    private val screenParam = VKIDAnalytics.EventParam("screen", screen)
+internal class OAuthListWidgetAnalytics(private val screen: String, private val paused: Boolean) {
 
     fun oauthAdded(oAuths: Set<OAuth>) {
         val oauthParam: (String, OAuth) -> VKIDAnalytics.EventParam = { name, oauth ->
@@ -27,8 +25,7 @@ internal class OAuthListWidgetAnalytics(private val screen: String) {
             "multibranding_oauth_added",
             oauthParam("ok", OAuth.OK),
             oauthParam("mail", OAuth.MAIL),
-            oauthParam("vk", OAuth.VK),
-            screenParam
+            oauthParam("vk", OAuth.VK)
         )
     }
 
@@ -69,22 +66,25 @@ internal class OAuthListWidgetAnalytics(private val screen: String) {
         return mapOf(UNIQUE_SESSION_PARAM_NAME to uuid)
     }
 
-    fun onAuthSuccess(oAuth: OAuth) {
+    fun onAuthSuccess(oAuth: OAuth, uuid: String) {
         val oauth = when (oAuth) {
             OAuth.VK -> return // no tracking
             OAuth.MAIL -> "mail_ru"
             OAuth.OK -> "ok_ru"
         }
-        track("auth_by_oauth", VKIDAnalytics.EventParam("oauth_service", oauth))
+        track("auth_by_oauth", VKIDAnalytics.EventParam("oauth_service", oauth), uuidParam(uuid))
     }
 
     fun onAuthError(sessionId: String) {
-        track(
-            "multibranding_auth_error",
-            uuidParam(sessionId),
-            VKIDAnalytics.EventParam("error", "auth_error"),
-            VKIDAnalytics.EventParam("screen_current", screen)
-        )
+        if (!paused) {
+            VKIDAnalytics.trackEvent(
+                "multibranding_auth_error",
+                VKIDAnalytics.EventParam("sdk_type", "vkid"),
+                uuidParam(sessionId),
+                VKIDAnalytics.EventParam("error", "auth_error"),
+                VKIDAnalytics.EventParam("screen_current", screen)
+            )
+        }
     }
 
     private fun isIconParam(isText: Boolean) =
@@ -93,11 +93,14 @@ internal class OAuthListWidgetAnalytics(private val screen: String) {
     private fun uuidParam(uuid: String) = VKIDAnalytics.EventParam(UNIQUE_SESSION_PARAM_NAME, uuid)
 
     private fun track(name: String, vararg params: VKIDAnalytics.EventParam) {
-        VKIDAnalytics.trackEvent(
-            name,
-            VKIDAnalytics.EventParam("sdk_type", "vkid"),
-            *params
-        )
+        if (!paused) {
+            VKIDAnalytics.trackEvent(
+                name,
+                VKIDAnalytics.EventParam("sdk_type", "vkid"),
+                VKIDAnalytics.EventParam("screen", screen),
+                *params
+            )
+        }
     }
 
     internal companion object {

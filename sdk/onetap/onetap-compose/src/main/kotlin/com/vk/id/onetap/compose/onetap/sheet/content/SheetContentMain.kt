@@ -11,7 +11,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -35,6 +34,7 @@ import com.vk.id.onetap.compose.onetap.sheet.OneTapScenario
 import com.vk.id.onetap.compose.onetap.sheet.scenarioTitle
 import com.vk.id.onetap.compose.onetap.sheet.style.OneTapBottomSheetStyle
 import com.vk.id.onetap.compose.onetap.sheet.vkidButtonTextProvider
+import kotlinx.coroutines.CoroutineScope
 
 @Suppress("LongParameterList", "NonSkippableComposable", "LongMethod")
 @Composable
@@ -49,6 +49,7 @@ internal fun SheetContentMain(
     dismissSheet: () -> Unit,
     authStatus: MutableState<OneTapBottomSheetAuthStatus>,
     authParams: VKIDAuthUiParams,
+    coroutineScope: CoroutineScope
 ) {
     SheetContentBox(
         serviceName = serviceName,
@@ -68,7 +69,6 @@ internal fun SheetContentMain(
             Spacer(Modifier.height(8.dp))
             ContentDescription(stringResource(id = R.string.vkid_scenario_common_description), style)
         }
-        val coroutineScope = rememberCoroutineScope()
         OneTap(
             style = style.oneTapStyle,
             signInAnotherAccountButtonEnabled = true,
