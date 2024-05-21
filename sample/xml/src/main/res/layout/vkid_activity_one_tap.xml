@@ -69,7 +69,7 @@
             app:layout_constraintTop_toBottomOf="@id/primary_title_spacer"
             app:layout_constraintWidth_max="355dp"
             app:vkid_buttonsCornerRadius="0dp"
-            app:vkid_onetapOAuths="mail,ok"
+            app:vkid_onetapOAuths="ok,mail"
             app:vkid_onetapShowSignInToAnotherAccount="true"
             app:vkid_onetapStyle="system" />
 
