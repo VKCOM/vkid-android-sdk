@@ -31,33 +31,18 @@ public class VKIDBuildSpeedStep internal constructor(
         private const val HUNDRED_PERCENT = 100
     }
 
-    private val sourceBranch
-        get() = rootProject.properties["healthMetrics.common.sourceBranch"] as String? ?: error("Source branch is not specified")
-    private val targetBranch
-        get() = rootProject.properties["healthMetrics.common.targetBranch"] as String? ?: error("Target branch is not specified")
-
     override val task: Task = rootProject.tasks.getByPath(measuredTaskPath)
     override val properties: Array<String> = arrayOf("-PhealthMetrics.buildSpeed.measure")
 
-    override fun getDiff(): String = BuildSpeedStorage(
-        measuredTaskPath = measuredTaskPath,
-        sourceBranch = sourceBranch,
-        targetBranch = targetBranch,
-    ).getDiff()
+    override fun getDiff(): String = BuildSpeedStorage(measuredTaskPath = measuredTaskPath).getDiff()
 
     internal abstract class BuildDurationService : BuildService<BuildDurationService.Params>, BuildOperationListener {
 
         interface Params : BuildServiceParameters {
             val measuredTaskPath: Property<String>
-            val sourceBranch: Property<String>
-            val targetBranch: Property<String>
         }
 
-        private val storage = BuildSpeedStorage(
-            measuredTaskPath = parameters.measuredTaskPath.get(),
-            sourceBranch = parameters.sourceBranch.get(),
-            targetBranch = parameters.targetBranch.get(),
-        )
+        private val storage = BuildSpeedStorage(measuredTaskPath = parameters.measuredTaskPath.get())
 
         override fun progress(operationIdentifier: OperationIdentifier, progressEvent: OperationProgressEvent) = Unit
 
@@ -83,11 +68,16 @@ public class VKIDBuildSpeedStep internal constructor(
             configurationDuration: Long,
         ) {
             val measuredTaskPath = parameters.measuredTaskPath.get()
+            val buildDurationChange = "$buildDuration ms (${formatDurationChangePercent(storage.getBuildDuration(), buildDuration)})"
+            val configDurationChange = "$configurationDuration ms (${formatDurationChangePercent(
+                storage.getConfigurationDuration(),
+                configurationDuration
+            )})"
             val diff = """
-                |The task $measuredTaskPath was executing for $buildDuration ms
-                |Change: ${formatDurationChangePercent(storage.getBuildDuration(), buildDuration)}
-                |Configuration took $configurationDuration ms
-                |Change: ${formatDurationChangePercent(storage.getConfigurationDuration(), configurationDuration)}
+                |# Build speed report for task $measuredTaskPath
+                || Build                | Configuration         |
+                ||----------------------|-----------------------|
+                || $buildDurationChange | $configDurationChange |
             """.trimMargin()
             storage.saveDiff(diff)
         }
@@ -98,12 +88,14 @@ public class VKIDBuildSpeedStep internal constructor(
         ): String {
             val changePercent = BigDecimal(HUNDRED_PERCENT - newDuration.toDouble() / oldDuration * HUNDRED_PERCENT)
                 .setScale(2, RoundingMode.HALF_EVEN)
+                .stripTrailingZeros()
             val sign = when {
                 changePercent > BigDecimal.ZERO -> "-"
                 changePercent == BigDecimal.ZERO -> ""
                 else -> "+"
             }
-            return "$sign${changePercent.abs()}%"
+            val colorSign = if (sign == "-") "-" else "+"
+            return "{$colorSign$sign${changePercent.abs().toPlainString()}%$colorSign}"
         }
     }
 
@@ -121,8 +113,6 @@ public class VKIDBuildSpeedStep internal constructor(
         return gradle.sharedServices
             .registerIfAbsent("build-duration-service-$measuredTaskPath", BuildDurationService::class.java) {
                 parameters.measuredTaskPath.set(measuredTaskPath)
-                parameters.sourceBranch.set(sourceBranch)
-                parameters.targetBranch.set(targetBranch)
             }
             .also(registry::onOperationCompletion)
     }

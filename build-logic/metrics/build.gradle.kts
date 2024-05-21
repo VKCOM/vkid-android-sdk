@@ -24,6 +24,11 @@ tasks.withType<KotlinCompile>().configureEach {
 dependencies {
     compileOnly(libs.android.gradlePlugin)
     implementation(libs.firebase.firestore.admin)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.okhttp3.okhttp)
+    implementation(libs.okhttp3.logging)
 }
 
 gradlePlugin {

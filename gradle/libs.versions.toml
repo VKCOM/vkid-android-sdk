@@ -35,6 +35,7 @@ lifecycle-runtime-compose = "2.7.0"
 mockk = "1.13.10"
 okHttpVersion = "4.12.0"
 preference = "1.2.1"
+retrofit = "2.11.0"
 soLoader = "0.10.5"
 junit = "1.1.5"
 benchmarkMacroJunit4 = "1.2.3"
@@ -117,6 +118,8 @@ androidx-benchmark-macro-junit4 = { group = "androidx.benchmark", name = "benchm
 androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profileinstaller", version.ref = "profileinstaller" }
 kotlin-binaryCompatibilityValidator = { group = "org.jetbrains.kotlinx", name = "binary-compatibility-validator", version.ref = "binary-compatibility-validator" }
 firebase-common-ktx = { group = "com.google.firebase", name = "firebase-common-ktx", version.ref = "firebaseCommonKtx" }
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }

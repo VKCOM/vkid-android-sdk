@@ -2,11 +2,10 @@ package com.vk.id.health.metrics.buildspeed
 
 import com.google.firebase.cloud.FirestoreClient
 import com.vk.id.health.metrics.git.Git
+import com.vk.id.health.metrics.gitlab.GitlabRepository
 
 internal class BuildSpeedStorage(
     private val measuredTaskPath: String,
-    private val sourceBranch: String,
-    private val targetBranch: String,
 ) {
 
     private companion object {
@@ -31,7 +30,7 @@ internal class BuildSpeedStorage(
     }
 
     internal fun getBuildDuration(): Long {
-        return getMetricDocument(Git.getRootCommitHash(sourceBranch, targetBranch))
+        return getMetricDocument(Git.getRootCommitHash(GitlabRepository.sourceBranch, GitlabRepository.targetBranch))
             .get()
             .get()
             .get(FIELD_BUILD_DURATION, Long::class.java)
@@ -40,7 +39,7 @@ internal class BuildSpeedStorage(
     }
 
     internal fun getConfigurationDuration(): Long {
-        return getMetricDocument(Git.getRootCommitHash(sourceBranch, targetBranch))
+        return getMetricDocument(Git.getRootCommitHash(GitlabRepository.sourceBranch, GitlabRepository.targetBranch))
             .get()
             .get()
             .get(FIELD_CONFIGURATION_DURATION, Long::class.java)

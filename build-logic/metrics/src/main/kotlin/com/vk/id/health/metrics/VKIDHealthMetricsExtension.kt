@@ -10,4 +10,5 @@ public open class VKIDHealthMetricsExtension {
     public val rootProject: Project get() = checkNotNull(rootProjectInternal) { "Project is not set" }
     internal var firestoreAccountFileInternal: File? = null
     public val firestoreAccountFile: File get() = checkNotNull(firestoreAccountFileInternal) { "Firestore account file is not initialized" }
+    internal lateinit var gitlabToken: String
 }
