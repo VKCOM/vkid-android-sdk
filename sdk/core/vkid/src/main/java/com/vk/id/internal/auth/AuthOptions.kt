@@ -25,7 +25,7 @@ private const val APP_ID = "app_id"
 private const val CLIENT_ID = "client_id"
 
 // todo: Change to actual host after oauth2 completion
-private const val AUTHORITY_BROWSER = "tk-training.id.cs7777.vk.com"
+private const val AUTHORITY_BROWSER = "id.vk.com"
 private const val AUTHORITY_CODE_FLOW = "vkcexternalauth-codeflow"
 private const val PATH_BROWSER = "authorize"
 private const val CODE_CHALLENGE = "code_challenge"
@@ -39,6 +39,7 @@ private const val STATE = "state"
 private const val UUID = "uuid"
 private const val PROMPT = "prompt"
 private const val ACTION = "action"
+private const val PROVIDER = "provider"
 private const val LOCALE = "lang_id"
 private const val THEME = "scheme"
 private const val SCREEN_PARAM = "screen"
@@ -65,6 +66,7 @@ internal fun AuthOptions.toAuthUriBrowser(): Uri {
     }
     if (oAuth != null) {
         builder.appendQueryParameter(ACTION, oAuth.toQueryParam())
+        builder.appendQueryParameter(PROVIDER, oAuth.serverName)
     }
     if (locale != null) {
         builder.appendQueryParameter(LOCALE, locale)
@@ -93,6 +95,7 @@ internal fun AuthOptions.toAuthUriCodeFlow(appPackage: String): Uri {
 
     if (oAuth != null) {
         builder.appendQueryParameter(ACTION, oAuth.toQueryParam())
+        builder.appendQueryParameter(PROVIDER, oAuth.serverName)
     }
     if (locale != null) {
         builder.appendQueryParameter(LOCALE, locale)

@@ -85,7 +85,7 @@ public fun OAuthListWidget(
     }
 
     val analyticsContext = LocalMultibrandingAnalyticsContext.current
-    val analytics = remember { OAuthListWidgetAnalytics(analyticsContext.screen) }
+    val analytics = remember { OAuthListWidgetAnalytics(analyticsContext.screen, analyticsContext.isPaused) }
 
     LaunchedEffect(oAuths) {
         analytics.oauthAdded(oAuths)
@@ -168,7 +168,7 @@ private fun OAuthButton(
                         VKID.instance.authorize(
                             object : VKIDAuthCallback {
                                 override fun onAuth(accessToken: AccessToken) {
-                                    analytics.onAuthSuccess(item)
+                                    analytics.onAuthSuccess(item, extraAuthParams[UNIQUE_SESSION_PARAM_NAME] ?: "")
                                     onAuth(item, accessToken)
                                 }
 
@@ -187,7 +187,7 @@ private fun OAuthButton(
                                 theme = style.toProviderTheme()
                                 prompt = Prompt.LOGIN
                                 extraParams = extraAuthParams
-                            }
+                            }.build()
                         )
                     }
                 }

@@ -53,6 +53,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import java.util.UUID
 
 /**
  * VKID is the main entry point for integrating VK ID authentication into an Android application.
@@ -222,8 +223,26 @@ public class VKID {
         authCallbacksHolder.add(callback)
         val authContext = currentCoroutineContext()
 
+        val authEventUUId = UUID.randomUUID().toString()
+        if (!params.internalUse) {
+            VKIDAnalytics.trackEvent(
+                "custom_auth",
+                VKIDAnalytics.EventParam("sdk_type", "vkid"),
+                VKIDAnalytics.EventParam("unique_session_id", authEventUUId)
+            )
+        }
+
         AuthEventBridge.listener = object : AuthEventBridge.Listener {
             override fun onAuthResult(authResult: AuthResult) {
+                if (!params.internalUse) {
+                    if (authResult !is AuthResult.Success) {
+                        VKIDAnalytics.trackEvent(
+                            "error_custom_auth",
+                            VKIDAnalytics.EventParam("sdk_type", "vkid"),
+                            VKIDAnalytics.EventParam("unique_session_id", authEventUUId)
+                        )
+                    }
+                }
                 CoroutineScope(authContext + Job()).launch {
                     authResultHandler.value.handle(authResult)
                     requestMutex.unlock()

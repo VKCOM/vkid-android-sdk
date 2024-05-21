@@ -34,7 +34,8 @@ public class VKIDAuthParams private constructor(
     internal val state: String?,
     internal val codeChallenge: String?,
     internal val scopes: Set<String>,
-    internal val extraParams: Map<String, String>? = null
+    internal val extraParams: Map<String, String>? = null,
+    internal val internalUse: Boolean = false
 ) {
     /**
      * Represents a locale that user prefers during authorization.
@@ -194,6 +195,12 @@ public class VKIDAuthParams private constructor(
         public var extraParams: Map<String, String>? = null
 
         /**
+         * Mark that auth started from internal VK ID module
+         */
+        @InternalVKIDApi
+        public var internalUse: Boolean = false
+
+        /**
          * Constructs [VKIDAuthParams] object with provided values.
          */
         @OptIn(InternalVKIDApi::class)
@@ -207,6 +214,7 @@ public class VKIDAuthParams private constructor(
             codeChallenge = codeChallenge,
             scopes = scopes,
             extraParams = extraParams,
+            internalUse = internalUse,
         )
     }
 }

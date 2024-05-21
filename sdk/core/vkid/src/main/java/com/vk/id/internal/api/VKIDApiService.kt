@@ -45,35 +45,27 @@ internal class VKIDApiService(
         clientId: String,
         deviceId: String,
     ): InternalVKIDCall<VKIDUserInfoPayload> {
-        val call = api.getUser(
+        return api.getUser(
             accessToken = accessToken,
             clientId = clientId,
             deviceId = deviceId,
-        )
-        return object : InternalVKIDCall<VKIDUserInfoPayload> {
-            override fun execute(): Result<VKIDUserInfoPayload> {
-                val result = call.execute()
-                val body = JSONObject(requireNotNull(result.body).string())
-                return when {
-                    body.isNull("error") -> {
-                        val user = body.getJSONObject("user")
-                        Result.success(
-                            VKIDUserInfoPayload(
-                                firstName = user.optString("first_name"),
-                                lastName = user.optString("last_name"),
-                                phone = user.optString("phone"),
-                                avatar = user.optString("avatar"),
-                                email = user.optString("email"),
-                            )
+        ).internalVKIDWrapToVKIDCall {
+            val body = JSONObject(requireNotNull(it.body).string())
+            when {
+                body.isNull("error") -> {
+                    val user = body.getJSONObject("user")
+                    Result.success(
+                        VKIDUserInfoPayload(
+                            firstName = user.optString("first_name"),
+                            lastName = user.optString("last_name"),
+                            phone = user.optString("phone"),
+                            avatar = user.optString("avatar"),
+                            email = user.optString("email"),
                         )
-                    }
-                    body.getString("error") == "invalid_token" -> Result.failure(VKIDInvalidTokenException())
-                    else -> Result.failure(IOException())
+                    )
                 }
-            }
-
-            override fun cancel() {
-                call.cancel()
+                body.getString("error") == "invalid_token" -> Result.failure(VKIDInvalidTokenException())
+                else -> Result.failure(IOException())
             }
         }
     }
@@ -86,10 +78,12 @@ internal class VKIDApiService(
             clientId = clientId,
             clientSecret = clientSecret
         ).internalVKIDWrapToVKIDCall {
-            JSONObject(requireNotNull(it.body).string())
-                .getJSONArray("response")
-                .parseList(VkAuthSilentAuthProvider.Companion::parse)
-                ?: emptyList()
+            Result.success(
+                JSONObject(requireNotNull(it.body).string())
+                    .getJSONArray("response")
+                    .parseList(VkAuthSilentAuthProvider.Companion::parse)
+                    ?: emptyList()
+            )
         }
     }
 
@@ -129,10 +123,12 @@ internal class VKIDApiService(
                 throw IOException("Api error: ${it.code} $body")
             }
             try {
-                VKIDCodePayload(
-                    code = jsonObject.getString("code"),
-                    state = jsonObject.optString("state"),
-                    deviceId = jsonObject.optString("device_id"),
+                Result.success(
+                    VKIDCodePayload(
+                        code = jsonObject.getString("code"),
+                        state = jsonObject.optString("state"),
+                        deviceId = jsonObject.optString("device_id"),
+                    )
                 )
             } catch (@Suppress("SwallowedException") e: JSONException) {
                 val error = e.message
@@ -146,24 +142,16 @@ internal class VKIDApiService(
         clientId: String,
         deviceId: String,
     ): InternalVKIDCall<Unit> {
-        val call = api.logout(
+        return api.logout(
             accessToken = accessToken,
             clientId = clientId,
             deviceId = deviceId,
-        )
-        return object : InternalVKIDCall<Unit> {
-            override fun execute(): Result<Unit> {
-                val result = call.execute()
-                val body = JSONObject(requireNotNull(result.body).string())
-                return when {
-                    body.isNull("error") -> Result.success(Unit)
-                    body.getString("error") == "invalid_token" -> Result.failure(VKIDInvalidTokenException())
-                    else -> Result.failure(IOException())
-                }
-            }
-
-            override fun cancel() {
-                call.cancel()
+        ).internalVKIDWrapToVKIDCall {
+            val body = JSONObject(requireNotNull(it.body).string())
+            when {
+                body.isNull("error") -> Result.success(Unit)
+                body.getString("error") == "invalid_token" -> Result.failure(VKIDInvalidTokenException())
+                else -> Result.failure(IOException())
             }
         }
     }
@@ -184,13 +172,15 @@ internal class VKIDApiService(
                 throw IOException("Api error: ${it.code} $body")
             }
             try {
-                VKIDTokenPayload(
-                    accessToken = jsonObject.getString("access_token"),
-                    refreshToken = jsonObject.getString("refresh_token"),
-                    idToken = jsonObject.optString("id_token"),
-                    userId = jsonObject.getLong("user_id"),
-                    expiresIn = jsonObject.optLong("expires_in"),
-                    state = jsonObject.optString("state"),
+                Result.success(
+                    VKIDTokenPayload(
+                        accessToken = jsonObject.getString("access_token"),
+                        refreshToken = jsonObject.getString("refresh_token"),
+                        idToken = jsonObject.optString("id_token"),
+                        userId = jsonObject.getLong("user_id"),
+                        expiresIn = jsonObject.optLong("expires_in"),
+                        state = jsonObject.optString("state"),
+                    )
                 )
             } catch (@Suppress("SwallowedException") e: JSONException) {
                 val error = e.message
