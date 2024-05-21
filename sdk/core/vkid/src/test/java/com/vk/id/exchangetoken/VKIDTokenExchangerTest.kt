@@ -66,6 +66,7 @@ private val ACCESS_TOKEN = AccessToken(
     userID = USER_ID,
     expireTime = -1,
     userData = VKID_USER,
+    scopes = setOf("phone", "email"),
 )
 private val CODE_PAYLOAD = VKIDCodePayload(
     code = CODE,
@@ -79,6 +80,7 @@ private val TOKEN_PAYLOAD = VKIDTokenPayload(
     expiresIn = -1,
     userId = USER_ID,
     state = STATE,
+    scope = "phone email",
 )
 
 @OptIn(ExperimentalStdlibApi::class, ExperimentalCoroutinesApi::class)

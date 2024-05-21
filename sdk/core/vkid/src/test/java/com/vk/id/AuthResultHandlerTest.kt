@@ -42,6 +42,7 @@ private const val REFRESH_TOKEN = "refresh token"
 private const val ID_TOKEN = "id token"
 private const val USER_ID = 0L
 private const val STATE = "state"
+private const val SCOPE = "phone email"
 private const val DIFFERENT_STATE = "differentstate"
 private const val CODE_VERIFIER = "code verifier"
 private const val CODE = "code"
@@ -66,7 +67,8 @@ private val ACCESS_TOKEN = AccessToken(
         photo100 = "100",
         photo200 = "200",
         email = "email"
-    )
+    ),
+    scopes = setOf("phone", "email"),
 )
 
 @OptIn(ExperimentalStdlibApi::class, ExperimentalCoroutinesApi::class)
@@ -231,7 +233,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             val authResult = authResultSuccess
             val callback = mockk<VKIDAuthCallback>()
             val call = mockk<InternalVKIDCall<VKIDTokenPayload>>()
-            val payload = VKIDTokenPayload(ACCESS_TOKEN_VALUE, REFRESH_TOKEN, ID_TOKEN, 0, USER_ID, STATE)
+            val payload = VKIDTokenPayload(ACCESS_TOKEN_VALUE, REFRESH_TOKEN, ID_TOKEN, 0, USER_ID, STATE, SCOPE)
             every { callbacksHolder.getAll() } returns setOf(callback)
             every { callback.onAuthCode(any(), any()) } just runs
             every { callback.onAuth(any()) } just runs
@@ -271,7 +273,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             val authResult = authResultSuccess
             val callback = mockk<VKIDAuthCallback>()
             val call = mockk<InternalVKIDCall<VKIDTokenPayload>>()
-            val payload = VKIDTokenPayload(ACCESS_TOKEN_VALUE, REFRESH_TOKEN, ID_TOKEN, 0, USER_ID, STATE)
+            val payload = VKIDTokenPayload(ACCESS_TOKEN_VALUE, REFRESH_TOKEN, ID_TOKEN, 0, USER_ID, STATE, SCOPE)
             every { callbacksHolder.getAll() } returns setOf(callback)
             every { callback.onAuthCode(any(), any()) } just runs
             every { callback.onAuth(any()) } just runs
@@ -322,7 +324,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             val authResult = authResultSuccess
             val callback = mockk<VKIDAuthCallback>()
             val call = mockk<InternalVKIDCall<VKIDTokenPayload>>()
-            val payload = VKIDTokenPayload(ACCESS_TOKEN_VALUE, REFRESH_TOKEN, ID_TOKEN, 0, USER_ID, STATE)
+            val payload = VKIDTokenPayload(ACCESS_TOKEN_VALUE, REFRESH_TOKEN, ID_TOKEN, 0, USER_ID, STATE, SCOPE)
             every { callbacksHolder.getAll() } returns setOf(callback)
             every { callback.onAuthCode(any(), any()) } just runs
             every { callback.onAuth(any()) } just runs
