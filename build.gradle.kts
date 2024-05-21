@@ -21,10 +21,10 @@ tasks.register("detekt") {
     dependsOn(gradle.includedBuild("build-logic").task(":detekt"))
 }
 
-
 //healthMetrics {
 //    firestore(rootProject.file("build-logic/metrics/service-credentials.json"))
 //    buildSpeed {
+//        isExternal = true
 //        measuredTaskPath = ":help"
 //    }
 //    buildSpeed {

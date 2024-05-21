@@ -1,30 +1,49 @@
 package com.vk.id.health.metrics.buildspeed
 
-import com.google.cloud.firestore.Firestore
+import com.google.firebase.cloud.FirestoreClient
 import com.vk.id.health.metrics.git.Git
 
 internal class BuildSpeedStorage(
-    private val firestore: Firestore,
     private val measuredTaskPath: String,
+    private val sourceBranch: String,
+    private val targetBranch: String,
 ) {
 
     private companion object {
         private const val FIELD_BUILD_DURATION = "BUILD_DURATION_MS"
+        private const val FIELD_CONFIGURATION_DURATION = "CONFIGURATION_DURATION_MS"
         private const val FIELD_DIFF_CONTENT = "DIFF_CONTENT"
     }
 
-    private val diffDocument = firestore.collection("build-speed-diffs")
+    private val diffDocument = FirestoreClient.getFirestore().collection("build-speed-diffs")
         .document("${Git.currentCommitHash} $measuredTaskPath")
 
-    internal fun saveBuildSpeed(buildDuration: Long) {
-        getMetricDocument(Git.currentCommitHash).set(mapOf(FIELD_BUILD_DURATION to buildDuration)).get()
+    internal fun saveBuildDuration(
+        buildDuration: Long,
+        configurationDuration: Long,
+    ) {
+        getMetricDocument(Git.currentCommitHash).set(
+            mapOf(
+                FIELD_BUILD_DURATION to buildDuration,
+                FIELD_CONFIGURATION_DURATION to configurationDuration,
+            )
+        ).get()
     }
 
-    internal fun getBuildSpeed(): Long {
-        return getMetricDocument(Git.rootCommitHash)
+    internal fun getBuildDuration(): Long {
+        return getMetricDocument(Git.getRootCommitHash(sourceBranch, targetBranch))
             .get()
             .get()
             .get(FIELD_BUILD_DURATION, Long::class.java)
+            ?.takeIf { it != 0L }
+            ?: 1L
+    }
+
+    internal fun getConfigurationDuration(): Long {
+        return getMetricDocument(Git.getRootCommitHash(sourceBranch, targetBranch))
+            .get()
+            .get()
+            .get(FIELD_CONFIGURATION_DURATION, Long::class.java)
             ?.takeIf { it != 0L }
             ?: 1L
     }
@@ -44,7 +63,7 @@ internal class BuildSpeedStorage(
             .also { diffDocument.delete() }
     }
 
-    private fun getMetricDocument(commitHash: String) = firestore
+    private fun getMetricDocument(commitHash: String) = FirestoreClient.getFirestore()
         .collection("build-speed-metrics")
         .document("$commitHash $measuredTaskPath")
 }

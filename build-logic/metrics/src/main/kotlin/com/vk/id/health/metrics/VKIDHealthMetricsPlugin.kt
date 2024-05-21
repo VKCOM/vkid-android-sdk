@@ -13,12 +13,22 @@ internal class VKIDHealthMetricsPlugin : Plugin<Project> {
                 println(extension.steps.joinToString("\n") { it.getDiff() })
             }
         }
+        val sourceBranch = target.properties["healthMetrics.common.sourceBranch"] as String?
+        val targetBranch = target.properties["healthMetrics.common.targetBranch"] as String?
         val calculateMetricsTask = target.tasks.create("calculateHealthMetrics") {
             doLast {
-                extension.steps.forEach {
+                extension.steps.filterNot { it.isExternal }.forEach {
                     target.exec {
                         workingDir = project.projectDir
-                        commandLine("./gradlew", it.task.name, "--stacktrace")
+                        @Suppress("SpreadOperator")
+                        commandLine(
+                            "./gradlew",
+                            it.task.path,
+                            "--stacktrace",
+                            *(it.properties),
+                            "-PhealthMetrics.common.sourceBranch=$sourceBranch",
+                            "-PhealthMetrics.common.targetBranch=$targetBranch"
+                        )
                     }
                 }
             }
