@@ -21,6 +21,8 @@
 ---
 :information_source: VK ID SDK сейчас находится в бета-тестировании. О проблемах вы можете сообщить с помощью <a href="https://github.com/VKCOM/vkid-android-sdk/issues">issues репозитория</a>.
 
+Текущая стабильная версия VK ID SDK - [1.3.2](https://github.com/VKCOM/vkid-android-sdk/releases/tag/v1.3.2).
+
 ---
 
 ## Демонстрация
