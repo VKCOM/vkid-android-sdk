@@ -35,12 +35,8 @@ lifecycle-runtime-compose = "2.8.0"
 mockk = "1.13.11"
 okHttpVersion = "4.12.0"
 preference = "1.2.1"
-<<<<<<< HEAD
 retrofit = "2.11.0"
-soLoader = "0.10.5"
-=======
 soLoader = "0.11.0"
->>>>>>> develop
 junit = "1.1.5"
 benchmarkMacroJunit4 = "1.2.4"
 baselineprofile = "1.2.4"
