@@ -17,19 +17,24 @@ plugins {
     id("vkid.detekt") apply false
 }
 
-tasks.register("detekt") {
-    subprojects.mapNotNull { it.tasks.findByName("detekt") }.forEach(::dependsOn)
+registerGeneralTask("detekt") {
     dependsOn(gradle.includedBuild("build-logic").task(":detekt"))
+}
+registerGeneralTask("clean")
+registerGeneralTask("assembleDebug")
+registerGeneralTask("assembleRelease")
+
+private fun registerGeneralTask(name: String, configuration: Task.() -> Unit = {}) {
+    tasks.register(name) {
+        subprojects.mapNotNull { it.tasks.findByName(name) }.forEach(::dependsOn)
+        configuration()
+    }
 }
 
 //healthMetrics {
 //    gitlab()
 //    firestore(rootProject.file("build-logic/metrics/service-credentials.json"))
 //    buildSpeed {
-//        isExternal = true
-//        measuredTaskPath = ":help"
-//    }
-//    buildSpeed {
-//        measuredTaskPath = ":logger:dependencies"
+//        measuredTaskPaths = setOf(":clean", ":assembleDebug")
 //    }
 //}

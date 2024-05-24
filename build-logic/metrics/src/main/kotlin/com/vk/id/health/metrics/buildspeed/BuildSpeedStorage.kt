@@ -5,7 +5,7 @@ import com.vk.id.health.metrics.git.Git
 import com.vk.id.health.metrics.gitlab.GitlabRepository
 
 internal class BuildSpeedStorage(
-    private val measuredTaskPath: String,
+    private val measuredTaskPaths: Set<String>,
 ) {
 
     private companion object {
@@ -15,7 +15,7 @@ internal class BuildSpeedStorage(
     }
 
     private val diffDocument = FirestoreClient.getFirestore().collection("build-speed-diffs")
-        .document("${Git.currentCommitHash} $measuredTaskPath")
+        .document("${Git.currentCommitHash} ${measuredTaskPaths.joinToString()}")
 
     internal fun saveBuildDuration(
         buildDuration: Long,
@@ -57,12 +57,12 @@ internal class BuildSpeedStorage(
                 .get()
                 .get()
                 .get(FIELD_DIFF_CONTENT, String::class.java)
-                ?: error("Build speed diff for commit ${Git.currentCommitHash} is not found in Firestore")
+                ?: error("Build speed diff for commit ${Git.currentCommitHash} is not found in Firestore. Doc name should be ${diffDocument.path}")
             )
             .also { diffDocument.delete() }
     }
 
     private fun getMetricDocument(commitHash: String) = FirestoreClient.getFirestore()
         .collection("build-speed-metrics")
-        .document("$commitHash $measuredTaskPath")
+        .document("$commitHash ${measuredTaskPaths.joinToString()}")
 }
