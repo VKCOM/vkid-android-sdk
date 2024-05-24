@@ -1,3 +1,11 @@
+pluginManagement {
+    includeBuild("detekt")
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
 dependencyResolutionManagement {
     repositories {
         google()
@@ -13,3 +21,4 @@ dependencyResolutionManagement {
 rootProject.name = "build-logic"
 include(":convention")
 include(":dokka-skip")
+include(":metrics")
