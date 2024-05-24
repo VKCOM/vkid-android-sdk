@@ -9,7 +9,6 @@ androidxAnnotation = "1.8.0"
 androidxBrowser = "1.8.0"
 androidxCollection = "1.4.0"
 androidxComposeBom = "2024.05.00"
-androidxComposeCompiler = "1.5.14"
 androidxConstraintLayout = "2.1.4"
 androidxCore = "1.13.1"
 androidxCoreSplashscreen = "1.0.1"
@@ -26,10 +25,10 @@ dokka = "1.9.20"
 flipper = "0.250.0"
 gson = "2.11.0"
 kaspresso = "1.5.5"
-kotlin = "1.9.24"
+kotlin = "2.0.0"
 kotlinxCoroutines = "1.8.1"
 kotest = "5.9.0"
-ksp = "1.9.24-1.0.20"
+ksp = "2.0.0-1.0.21"
 lifecycle-runtime-compose = "2.8.0"
 mockk = "1.13.11"
 okHttpVersion = "4.12.0"
@@ -52,7 +51,6 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 androidx-browser = { group = "androidx.browser", name = "browser", version.ref = "androidxBrowser" }
 androidx-collection = { group = "androidx.collection", name = "collection", version.ref = "androidxCollection" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
-androidx-compose-compiler = { group = "androidx.compose.compiler", name = "compiler", version.ref = "androidxComposeCompiler" }
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
 androidx-compose-material-ripple = { group = "androidx.compose.material", name = "material-ripple" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "androidxMaterial3" }
@@ -124,3 +122,4 @@ kotlin-binary-compatibility-validator = { id = "org.jetbrains.kotlinx.binary-com
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 androidTest = { id = "com.android.test", version.ref = "androidGradlePlugin" }
 baselineprofile = { id = "androidx.baselineprofile", version.ref = "baselineprofile" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
