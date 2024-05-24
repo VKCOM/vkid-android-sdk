@@ -3,12 +3,12 @@
 > **Note**\
 > Описание основных изменений в релизах VK ID SDK. Наш SDK следует [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 2.0.0
-Для этого релиза, такие же изменения, как в 2.0.0-alpha плюс несколько дополнительных
+## 2.0.0-alpha02
 
 ### Added
 - Возможность получения Refresh token с помощью проперти VKID#refreshToken
 - Возможность получения полученных скопов для Access token с помощью проперти AccessToken#scopes
+- Возможность смены порядка OAuth в виджете 3в1
 
 ### Changed
 - Сделан приватным конструктор класса AccessToken
