@@ -6,7 +6,8 @@ internal object Git {
     val currentCommitHash get() = exec("git rev-parse --verify HEAD")
 
     fun getRootCommitHash(sourceBranch: String, targetBranch: String): String {
-        return exec("git merge-base $sourceBranch $targetBranch")
+        val mergeBase = exec("git merge-base $sourceBranch $targetBranch")
+        return exec("git rev-list --no-merges -n 1 $mergeBase")
     }
 
     private fun exec(command: String): String {
