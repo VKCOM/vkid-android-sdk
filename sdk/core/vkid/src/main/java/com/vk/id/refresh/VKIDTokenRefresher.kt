@@ -38,7 +38,7 @@ internal class VKIDTokenRefresher(
 
         val result = withContext(dispatchers.io) {
             api.refreshToken(
-                refreshToken = refreshToken,
+                refreshToken = refreshToken.token,
                 deviceId = deviceId,
                 clientId = clientId,
                 state = refreshTokenState,

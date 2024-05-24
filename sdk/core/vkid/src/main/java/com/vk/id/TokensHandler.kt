@@ -24,18 +24,24 @@ internal class TokensHandler(
         userInfoFetcher.fetch(
             accessToken = payload.accessToken,
             onSuccess = {
+                val scopes = payload.scope.split(' ').toSet()
                 val accessToken = withContext(dispatchers.io) {
                     AccessToken(
                         token = payload.accessToken,
                         idToken = payload.idToken.takeIf { it.isNotBlank() } ?: tokenStorage.accessToken?.idToken,
                         userID = payload.userId,
                         expireTime = payload.expiresIn.toExpireTime,
-                        userData = it
+                        userData = it,
+                        scopes = scopes,
                     )
                 }
+                val refreshToken = RefreshToken(
+                    token = payload.refreshToken,
+                    scopes = scopes,
+                )
                 withContext(dispatchers.io) {
                     if (refreshAccessToken) tokenStorage.accessToken = accessToken
-                    tokenStorage.refreshToken = payload.refreshToken
+                    tokenStorage.refreshToken = refreshToken
                 }
                 onSuccess(accessToken)
             },

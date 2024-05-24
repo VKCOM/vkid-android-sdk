@@ -3,6 +3,7 @@
 package com.vk.id.refresh
 
 import com.vk.id.AccessToken
+import com.vk.id.RefreshToken
 import com.vk.id.TokensHandler
 import com.vk.id.VKIDUser
 import com.vk.id.common.InternalVKIDApi
@@ -32,7 +33,7 @@ private const val CLIENT_ID = "client id"
 private const val CLIENT_SECRET = "client secret"
 private const val REDIRECT_URI = "redirect uri"
 private const val ACCESS_TOKEN_VALUE = "access token"
-private const val REFRESH_TOKEN = "refresh token"
+private const val REFRESH_TOKEN_VALUE = "refresh token"
 private const val ID_TOKEN = "id token"
 private const val DEVICE_ID = "device id"
 private const val STATE = "state"
@@ -58,14 +59,20 @@ private val ACCESS_TOKEN = AccessToken(
     userID = USER_ID,
     expireTime = -1,
     userData = VKID_USER,
+    scopes = setOf("phone", "email"),
+)
+private val REFRESH_TOKEN = RefreshToken(
+    token = REFRESH_TOKEN_VALUE,
+    scopes = setOf("phone", "email"),
 )
 private val TOKEN_PAYLOAD = VKIDTokenPayload(
     accessToken = ACCESS_TOKEN_VALUE,
-    refreshToken = REFRESH_TOKEN,
+    refreshToken = REFRESH_TOKEN_VALUE,
     idToken = ID_TOKEN,
     expiresIn = -1,
     userId = USER_ID,
     state = STATE,
+    scope = "phone email",
 )
 
 @OptIn(ExperimentalStdlibApi::class, ExperimentalCoroutinesApi::class)
@@ -121,7 +128,7 @@ internal class VKIDTokenRefresherTest : BehaviorSpec({
             every { call.execute() } returns Result.failure(exception)
             every {
                 api.refreshToken(
-                    refreshToken = REFRESH_TOKEN,
+                    refreshToken = REFRESH_TOKEN_VALUE,
                     clientId = CLIENT_ID,
                     deviceId = DEVICE_ID,
                     state = PARAMS_STATE,
@@ -152,7 +159,7 @@ internal class VKIDTokenRefresherTest : BehaviorSpec({
             every { call.execute() } returns Result.success(TOKEN_PAYLOAD.copy(state = "wrong state"))
             every {
                 api.refreshToken(
-                    refreshToken = REFRESH_TOKEN,
+                    refreshToken = REFRESH_TOKEN_VALUE,
                     clientId = CLIENT_ID,
                     deviceId = DEVICE_ID,
                     state = STATE,
@@ -178,7 +185,7 @@ internal class VKIDTokenRefresherTest : BehaviorSpec({
             every { call.execute() } returns Result.success(TOKEN_PAYLOAD)
             every {
                 api.refreshToken(
-                    refreshToken = REFRESH_TOKEN,
+                    refreshToken = REFRESH_TOKEN_VALUE,
                     clientId = CLIENT_ID,
                     deviceId = DEVICE_ID,
                     state = STATE,
@@ -216,7 +223,7 @@ internal class VKIDTokenRefresherTest : BehaviorSpec({
             every { call.execute() } returns Result.success(TOKEN_PAYLOAD)
             every {
                 api.refreshToken(
-                    refreshToken = REFRESH_TOKEN,
+                    refreshToken = REFRESH_TOKEN_VALUE,
                     clientId = CLIENT_ID,
                     deviceId = DEVICE_ID,
                     state = STATE,

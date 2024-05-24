@@ -35,6 +35,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.vk.id.AccessToken
+import com.vk.id.RefreshToken
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.VKIDUser
@@ -442,13 +443,15 @@ private fun GetPublicInfoUtil() {
 @Composable
 private fun CurrentTokenUtil() {
     ExpandableCard(title = "Current token", contentAlignment = Alignment.CenterHorizontally) {
-        var token by remember { mutableStateOf<AccessToken?>(null) }
+        var accessToken by remember { mutableStateOf<AccessToken?>(null) }
+        var refreshToken by remember { mutableStateOf<RefreshToken?>(null) }
         LaunchedEffect(key1 = Unit) {
             withContext(Dispatchers.IO) {
-                token = VKID.instance.accessToken
+                accessToken = VKID.instance.accessToken
+                refreshToken = VKID.instance.refreshToken
             }
         }
-        token?.let {
+        accessToken?.let {
             UseToken(accessToken = it)
             val coroutineScope = rememberCoroutineScope()
             val context = LocalContext.current

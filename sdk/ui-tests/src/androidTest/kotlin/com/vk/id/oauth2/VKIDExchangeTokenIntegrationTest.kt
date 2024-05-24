@@ -48,6 +48,7 @@ private const val ACCESS_TOKEN_VALUE = "access token"
 private val ACCESS_TOKEN_JSON = """{
     |"expireTime":-1,
     |"idToken":"id token",
+    |"scopes":["phone","email"],
     |"token":"access token",
     |"userData":{
         |"email":"email",
@@ -59,13 +60,18 @@ private val ACCESS_TOKEN_JSON = """{
     |"userID":123
 |}
 """.trimMargin().replace("\n", "")
+private val REFRESH_TOKEN_NEW_JSON = """{
+    |"scopes":["phone","email"],
+    |"token":"refresh token new"
+|}
+""".trimMargin().replace("\n", "")
 private const val REFRESH_TOKEN_NEW_VALUE = "refresh token new"
 private const val ID_TOKEN_VALUE = "id token"
 private const val USER_ID = 123L
 private const val STATE = "state"
 private const val NEW_DEVICE_ID = "new device id"
 private const val ACCESS_TOKEN_KEY = "ACCESS_TOKEN_KEY"
-private const val REFRESH_TOKEN_KEY = "REFRESH_TOKEN_KEY"
+private const val REFRESH_TOKEN_KEY = "REFRESH_TOKEN_WITH_SCOPES_KEY"
 private const val ID_TOKEN_KEY = "ID_TOKEN_KEY"
 private const val CODE = "code"
 private val GET_TOKEN_RESPONSE = InternalVKIDTokenPayloadResponse(
@@ -75,6 +81,7 @@ private val GET_TOKEN_RESPONSE = InternalVKIDTokenPayloadResponse(
     expiresIn = 0,
     userId = USER_ID,
     state = STATE,
+    scope = "phone email",
 )
 private val EXCHANGE_TOKEN_RESPONSE = InternalVKIDCodePayloadResponse(
     code = CODE,
@@ -102,7 +109,8 @@ private val ACCESS_TOKEN = AccessToken(
         phone = MockApi.PHONE,
         photo200 = MockApi.AVATAR,
         email = MockApi.EMAIL,
-    )
+    ),
+    scopes = setOf("phone", "email"),
 )
 
 @Platform(Platform.ANDROID_AUTO)
@@ -129,7 +137,7 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
             .exchangeTokenResponse(Result.success(EXCHANGE_TOKEN_RESPONSE))
             .getTokenResponse(Result.success(GET_TOKEN_RESPONSE))
             .build()
-        every { encryptedStorage.set(REFRESH_TOKEN_KEY, REFRESH_TOKEN_NEW_VALUE) } just runs
+        every { encryptedStorage.set(REFRESH_TOKEN_KEY, REFRESH_TOKEN_NEW_JSON) } just runs
         every { encryptedStorage.set(ACCESS_TOKEN_KEY, ACCESS_TOKEN_JSON) } just runs
         every { encryptedStorage.set(ID_TOKEN_KEY, ID_TOKEN_VALUE) } just runs
         every { prefsStore.clear() } just runs

@@ -13,8 +13,12 @@ plugins {
     alias(libs.plugins.androidTest) apply false
     alias(libs.plugins.baselineprofile) apply false
     id("vkid.android.project-substitution") apply true
+<<<<<<< HEAD
     id("vkid.health.metrics") apply true
     id("vkid.detekt") apply false
+=======
+    alias(libs.plugins.compose.compiler) apply false
+>>>>>>> develop
 }
 
 registerGeneralTask("detekt") {

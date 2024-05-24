@@ -77,7 +77,8 @@ internal class VKIDUserRefresher(
                     it.idToken,
                     it.userID,
                     it.expireTime,
-                    user
+                    user,
+                    it.scopes,
                 )
             }
             callback.onSuccess(user)
