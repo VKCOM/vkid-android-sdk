@@ -52,6 +52,7 @@ private val ACCESS_TOKEN = AccessToken(
     userID = USER_ID,
     expireTime = -1,
     userData = VKID_USER,
+    scopes = setOf("phone", "email"),
 )
 
 @OptIn(ExperimentalStdlibApi::class, ExperimentalCoroutinesApi::class)

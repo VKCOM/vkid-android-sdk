@@ -1,13 +1,11 @@
 public final class com/vk/id/AccessToken : android/os/Parcelable {
 	public static final field $stable I
 	public static final field CREATOR Landroid/os/Parcelable$Creator;
-	public fun <init> (Ljava/lang/String;JJLcom/vk/id/VKIDUser;)V
-	public fun <init> (Ljava/lang/String;Ljava/lang/String;JJLcom/vk/id/VKIDUser;)V
-	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;JJLcom/vk/id/VKIDUser;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun describeContents ()I
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getExpireTime ()J
 	public final fun getIdToken ()Ljava/lang/String;
+	public final fun getScopes ()Ljava/util/Set;
 	public final fun getToken ()Ljava/lang/String;
 	public final fun getUserData ()Lcom/vk/id/VKIDUser;
 	public final fun getUserID ()J
@@ -43,6 +41,14 @@ public final class com/vk/id/OAuth : java/lang/Enum {
 	public static fun values ()[Lcom/vk/id/OAuth;
 }
 
+public final class com/vk/id/RefreshToken {
+	public static final field $stable I
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getScopes ()Ljava/util/Set;
+	public final fun getToken ()Ljava/lang/String;
+	public fun hashCode ()I
+}
+
 public final class com/vk/id/VKID {
 	public static final field $stable I
 	public static final field Companion Lcom/vk/id/VKID$Companion;
@@ -56,6 +62,7 @@ public final class com/vk/id/VKID {
 	public static synthetic fun exchangeTokenToV2$default (Lcom/vk/id/VKID;Ljava/lang/String;Lcom/vk/id/exchangetoken/VKIDExchangeTokenCallback;Lcom/vk/id/exchangetoken/VKIDExchangeTokenParams;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public final fun fetchUserData-IoAF18A (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun getAccessToken ()Lcom/vk/id/AccessToken;
+	public final fun getRefreshToken ()Lcom/vk/id/RefreshToken;
 	public final fun getUserData (Landroidx/lifecycle/LifecycleOwner;Lcom/vk/id/refreshuser/VKIDGetUserCallback;Lcom/vk/id/refreshuser/VKIDGetUserParams;)V
 	public final fun getUserData (Lcom/vk/id/refreshuser/VKIDGetUserCallback;Lcom/vk/id/refreshuser/VKIDGetUserParams;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun getUserData$default (Lcom/vk/id/VKID;Landroidx/lifecycle/LifecycleOwner;Lcom/vk/id/refreshuser/VKIDGetUserCallback;Lcom/vk/id/refreshuser/VKIDGetUserParams;ILjava/lang/Object;)V

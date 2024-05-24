@@ -67,6 +67,7 @@ private val ACCESS_TOKEN = AccessToken(
     userID = USER_ID,
     expireTime = -1,
     userData = VKID_USER,
+    scopes = setOf("phone", "email"),
 )
 private val ACCESS_TOKEN_WITH_NEW_USER = AccessToken(
     token = ACCESS_TOKEN_VALUE,
@@ -74,6 +75,7 @@ private val ACCESS_TOKEN_WITH_NEW_USER = AccessToken(
     userID = USER_ID,
     expireTime = -1,
     userData = VKID_USER_NEW,
+    scopes = setOf("phone", "email"),
 )
 private val USER_INFO_PAYLOAD = VKIDUserInfoPayload(
     firstName = FIRST_NAME,
