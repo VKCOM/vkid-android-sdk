@@ -2,7 +2,7 @@
 <html class="no-js">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
-    <title>VKIDNotAuthorizedException</title>
+    <title>RefreshToken</title>
 <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../../../";</script>
     <script>document.documentElement.classList.replace("no-js","js");</script>
     <script>const storage = localStorage.getItem("dokka-dark-mode")
@@ -45,7 +45,7 @@
             </div>
         </div>
         <div class="filter-section" id="filter-section">
-                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":vk-sdk-support:dokkaHtmlPartial/release">androidJvm</button>
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":vkid:dokkaHtmlPartial/release">androidJvm</button>
         </div>
     </div>
     <div class="navigation-controls">
@@ -58,28 +58,43 @@
                 <div class="sidebar--inner" id="sideMenu"></div>
             </div>
             <div id="main">
-<div class="main-content" data-page-type="classlike" id="content" pageids="vk-sdk-support::com.vk.id.vksdksupport/VKIDNotAuthorizedException///PointingToDeclaration//1683512815">
-  <div class="breadcrumbs"><a href="../../index.html">vk-sdk-support</a><span class="delimiter">/</span><a href="../index.html">com.vk.id.vksdksupport</a><span class="delimiter">/</span><span class="current">VKIDNotAuthorizedException</span></div>
+<div class="main-content" data-page-type="classlike" id="content" pageids="vkid::com.vk.id/RefreshToken///PointingToDeclaration//753365699">
+  <div class="breadcrumbs"><a href="../../index.html">vkid</a><span class="delimiter">/</span><a href="../index.html">com.vk.id</a><span class="delimiter">/</span><span class="current">RefreshToken</span></div>
   <div class="cover ">
-    <h1 class="cover"><span>VKIDNot</span><wbr><span>Authorized</span><wbr><span><span>Exception</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":vk-sdk-support:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">VKIDNotAuthorizedException</a> : <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalStateException.html">IllegalStateException</a></div><p class="paragraph">An exception which is thrown during VK Android SDK Request while using <a href="../with-v-k-i-d-token.html">withVKIDToken</a> if the user didn't pass auth yet.</p></div></div>
+    <h1 class="cover"><span>Refresh</span><wbr><span><span>Token</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":vkid:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">RefreshToken</a></div><p class="paragraph">Represents a refresh token for VK ID authentication.</p></div></div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
     <div class="tabs-section-body">
-      <div data-togglable="CONSTRUCTOR">
-        <h2 class="">Constructors</h2>
-        <div class="table"><a data-name="1290294924%2FConstructors%2F1683512815" anchor-label="VKIDNotAuthorizedException" id="1290294924%2FConstructors%2F1683512815" data-filterable-set=":vk-sdk-support:dokkaHtmlPartial/release"></a>
-          <div class="table-row" data-togglable="CONSTRUCTOR" data-filterable-current=":vk-sdk-support:dokkaHtmlPartial/release" data-filterable-set=":vk-sdk-support:dokkaHtmlPartial/release">
+      <div data-togglable="PROPERTY">
+        <h2 class="">Properties</h2>
+        <div class="table"><a data-name="130700981%2FProperties%2F753365699" anchor-label="scopes" id="130700981%2FProperties%2F753365699" data-filterable-set=":vkid:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":vkid:dokkaHtmlPartial/release" data-filterable-set=":vkid:dokkaHtmlPartial/release">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
-                  <div><a href="-v-k-i-d-not-authorized-exception.html"><span>VKIDNot</span><wbr><span>Authorized</span><wbr><span><span>Exception</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1290294924%2FConstructors%2F1683512815"></span>
+                  <div><a href="scopes.html"><span><span>scopes</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="130700981%2FProperties%2F753365699"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":vk-sdk-support:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":vkid:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">val </span><a href="scopes.html">scopes</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-set/index.html">Set</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span><span class="token operator">?</span></div><div class="brief "><p class="paragraph">The scopes granted for the refresh token. That means that access tokens received with this token will have these scopes. Null only for tokens received with 2.0.0-alpha library release. You're allowed to assert non-nullness the value if you're using a later version.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="526619213%2FProperties%2F753365699" anchor-label="token" id="526619213%2FProperties%2F753365699" data-filterable-set=":vkid:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":vkid:dokkaHtmlPartial/release" data-filterable-set=":vkid:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="token.html"><span><span>token</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="526619213%2FProperties%2F753365699"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":vkid:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">val </span><a href="token.html">token</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">The refresh token string.</p></div></div></div>
                 </div>
               </div>
             </div>
