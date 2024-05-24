@@ -4,7 +4,7 @@ validateCommitMessages() {
     TARGET_BRANCH=$1
     SOURCE_BRANCH=$2
     echo "Validating commit message history..."
-    COMMIT_MESSAGE_REGEX="(VKIDSDK-[0-9]+: [A-Z][a-zA-Z0-9';,: -]+)"
+    COMMIT_MESSAGE_REGEX="((VKIDSDK-[0-9]+: [A-Z][a-zA-Z0-9';,: -]+))|(Merge branch .*)"
 
     SOURCE_BRANCH_SHA=$(git log -n 1 --pretty=format:"%H" $SOURCE_BRANCH)
     TARGET_BRANCH_SHA=$(git merge-base $TARGET_BRANCH $SOURCE_BRANCH)

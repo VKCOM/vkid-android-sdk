@@ -9,4 +9,5 @@ plugins {
     alias(libs.plugins.androidTest) apply false
     alias(libs.plugins.baselineprofile) apply false
     id("vkid.android.project-substitution") apply true
+    alias(libs.plugins.compose.compiler) apply false
 }

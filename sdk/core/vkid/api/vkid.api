@@ -1,7 +1,7 @@
 public final class com/vk/id/AccessToken : android/os/Parcelable {
 	public static final field $stable I
 	public static final field CREATOR Landroid/os/Parcelable$Creator;
-	public fun describeContents ()I
+	public final fun describeContents ()I
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getExpireTime ()J
 	public final fun getIdToken ()Ljava/lang/String;
@@ -10,7 +10,7 @@ public final class com/vk/id/AccessToken : android/os/Parcelable {
 	public final fun getUserData ()Lcom/vk/id/VKIDUser;
 	public final fun getUserID ()J
 	public fun hashCode ()I
-	public fun writeToParcel (Landroid/os/Parcel;I)V
+	public final fun writeToParcel (Landroid/os/Parcel;I)V
 }
 
 public final class com/vk/id/AccessToken$Creator : android/os/Parcelable$Creator {
@@ -146,7 +146,7 @@ public final class com/vk/id/VKIDUser : android/os/Parcelable {
 	public static final field CREATOR Landroid/os/Parcelable$Creator;
 	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public fun describeContents ()I
+	public final fun describeContents ()I
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getEmail ()Ljava/lang/String;
 	public final fun getFirstName ()Ljava/lang/String;
@@ -157,7 +157,7 @@ public final class com/vk/id/VKIDUser : android/os/Parcelable {
 	public final fun getPhoto50 ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
-	public fun writeToParcel (Landroid/os/Parcel;I)V
+	public final fun writeToParcel (Landroid/os/Parcel;I)V
 }
 
 public final class com/vk/id/VKIDUser$Creator : android/os/Parcelable$Creator {
