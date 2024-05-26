@@ -20,10 +20,10 @@ android {
 }
 
 dependencies {
-    implementation(project(":common"))
-    implementation(project(":analytics"))
-    implementation(project(":network"))
-    implementation(project(":logger"))
+    implementation(projects.common)
+    implementation(projects.analytics)
+    implementation(projects.network)
+    implementation(projects.logger)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.annotation)

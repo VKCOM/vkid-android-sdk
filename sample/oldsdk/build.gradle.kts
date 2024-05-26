@@ -7,8 +7,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":sample-xml"))
-    implementation(project(":vk-sdk-support"))
+    implementation(projects.sampleXml)
+    implementation(projects.vkSdkSupport)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)

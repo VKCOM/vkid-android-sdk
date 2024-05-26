@@ -10,7 +10,7 @@ android {
 }
 
 dependencies {
-    api(project(":vkid"))
+    api(projects.vkid)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.vk.sdk.core)
 }

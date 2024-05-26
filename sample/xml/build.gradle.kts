@@ -7,10 +7,10 @@ android {
 }
 
 dependencies {
-    implementation(project(":multibranding-xml"))
-    implementation(project(":onetap-xml"))
-    implementation(project(":network"))
-    implementation(project(":common"))
+    implementation(projects.multibrandingXml)
+    implementation(projects.onetapXml)
+    implementation(projects.network)
+    implementation(projects.common)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.constraintlayout)

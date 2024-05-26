@@ -10,11 +10,11 @@ android {
 }
 
 dependencies {
-    api(project(":vkid"))
-    api(project(":common"))
-    api(project(":multibranding-common"))
-    implementation(project(":analytics"))
-    implementation(project(":multibranding-internal"))
+    api(projects.vkid)
+    api(projects.common)
+    api(projects.multibrandingCommon)
+    implementation(projects.analytics)
+    implementation(projects.multibrandingInternal)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.material.ripple)
