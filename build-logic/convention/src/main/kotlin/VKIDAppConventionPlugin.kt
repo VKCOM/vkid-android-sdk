@@ -29,7 +29,7 @@ class VKIDAppConventionPlugin : Plugin<Project> {
                     } catch (e: FileNotFoundException) {
                         logger.error(
                             "Warning! Build will not work!\nCreate the 'secrets.properties' file in the 'sample/app' folder and add your 'VKIDClientID' and 'VKIDClientSecret' to it." +
-                                    "\nFor more information, refer to the 'README.md' file."
+                                "\nFor more information, refer to the 'README.md' file."
                         )
                         throw e
                     }
@@ -39,14 +39,19 @@ class VKIDAppConventionPlugin : Plugin<Project> {
     }
 }
 
+/**
+ * The project should sync without placeholders
+ */
 private fun Project.shouldInjectManifestPlaceholders() = gradle
     .startParameter
     .taskNames
     .map { it.lowercase() }
     .any {
         it.contains("assemble")
-                || it.endsWith("test")
-                || it.contains("lint")
-                || it.contains("dokka")
-                || it.contains("generatebaselineprofile")
+            || it.endsWith("test")
+            || it.contains("lint")
+            || it.contains("dokka")
+            || it.contains("generatebaselineprofile")
+            || it.contains("publishhealthmetrics")
+            || it.contains("healthmetricsbuildspeed")
     }

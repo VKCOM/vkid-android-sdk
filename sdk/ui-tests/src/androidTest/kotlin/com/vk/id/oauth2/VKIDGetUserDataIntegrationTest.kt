@@ -45,6 +45,7 @@ private const val ACCESS_TOKEN_VALUE = "access token"
 private val ACCESS_TOKEN_JSON = """{
     |"expireTime":-1,
     |"idToken":"id token",
+    |"scopes":["phone","email"],
     |"token":"access token",
     |"userData":{
         |"email":"email",
@@ -56,13 +57,22 @@ private val ACCESS_TOKEN_JSON = """{
     |"userID":123
 |}
 """.trimMargin().replace("\n", "")
-private const val REFRESH_TOKEN_CURRENT_VALUE = "refresh token current"
+private val REFRESH_TOKEN_CURRENT_JSON = """{
+    |"token":"refresh token current",
+    |"scopes":["phone","email"]
+|}
+""".trimMargin().replace("\n", "")
+private val REFRESH_TOKEN_NEW_JSON = """{
+    |"scopes":["phone","email"],
+    |"token":"refresh token new"
+|}
+""".trimMargin().replace("\n", "")
 private const val REFRESH_TOKEN_NEW_VALUE = "refresh token new"
 private const val ID_TOKEN_VALUE = "id token"
 private const val USER_ID = 123L
 private const val STATE = "state"
 private const val ACCESS_TOKEN_KEY = "ACCESS_TOKEN_KEY"
-private const val REFRESH_TOKEN_KEY = "REFRESH_TOKEN_KEY"
+private const val REFRESH_TOKEN_KEY = "REFRESH_TOKEN_WITH_SCOPES_KEY"
 private const val ID_TOKEN_KEY = "ID_TOKEN_KEY"
 private val REFRESH_TOKEN_RESPONSE = InternalVKIDTokenPayloadResponse(
     accessToken = ACCESS_TOKEN_VALUE,
@@ -71,6 +81,7 @@ private val REFRESH_TOKEN_RESPONSE = InternalVKIDTokenPayloadResponse(
     expiresIn = 0,
     userId = USER_ID,
     state = STATE,
+    scope = "phone email",
 )
 private val USER_INFO_RESPONSE = InternalVKIDUserInfoPayloadResponse(
     user = InternalVKIDUserPayloadResponse(
@@ -113,9 +124,7 @@ internal class VKIDGetUserDataIntegrationTest : BaseUiTest() {
             .getUserInfoResponse(Result.success(USER_INFO_RESPONSE))
             .build()
         every { encryptedStorage.getString(ACCESS_TOKEN_KEY) } returns ACCESS_TOKEN_JSON
-        every { encryptedStorage.set(REFRESH_TOKEN_KEY, REFRESH_TOKEN_NEW_VALUE) } just runs
         every { encryptedStorage.set(ACCESS_TOKEN_KEY, ACCESS_TOKEN_JSON) } just runs
-        every { encryptedStorage.set(ID_TOKEN_KEY, ID_TOKEN_VALUE) } just runs
         every { prefsStore.clear() } just runs
         every { deviceIdStorage.getDeviceId() } returns "device id"
         var result: Any? = null
@@ -150,8 +159,8 @@ internal class VKIDGetUserDataIntegrationTest : BaseUiTest() {
             .refreshTokenResponse(Result.success(REFRESH_TOKEN_RESPONSE))
             .build()
         every { encryptedStorage.getString(ACCESS_TOKEN_KEY) } returns ACCESS_TOKEN_JSON
-        every { encryptedStorage.getString(REFRESH_TOKEN_KEY) } returns REFRESH_TOKEN_CURRENT_VALUE
-        every { encryptedStorage.set(REFRESH_TOKEN_KEY, REFRESH_TOKEN_NEW_VALUE) } just runs
+        every { encryptedStorage.getString(REFRESH_TOKEN_KEY) } returns REFRESH_TOKEN_CURRENT_JSON
+        every { encryptedStorage.set(REFRESH_TOKEN_KEY, REFRESH_TOKEN_NEW_JSON) } just runs
         every { encryptedStorage.set(ACCESS_TOKEN_KEY, ACCESS_TOKEN_JSON) } just runs
         every { encryptedStorage.set(ID_TOKEN_KEY, ID_TOKEN_VALUE) } just runs
         every { prefsStore.clear() } just runs
@@ -185,7 +194,7 @@ internal class VKIDGetUserDataIntegrationTest : BaseUiTest() {
             .refreshTokenResponse(Result.success(REFRESH_TOKEN_RESPONSE.copy(error = "some error")))
             .build()
         every { encryptedStorage.getString(ACCESS_TOKEN_KEY) } returns ACCESS_TOKEN_JSON
-        every { encryptedStorage.getString(REFRESH_TOKEN_KEY) } returns REFRESH_TOKEN_CURRENT_VALUE
+        every { encryptedStorage.getString(REFRESH_TOKEN_KEY) } returns REFRESH_TOKEN_CURRENT_JSON
         every { prefsStore.clear() } just runs
         every { deviceIdStorage.getDeviceId() } returns "device id"
         var result: Any? = null

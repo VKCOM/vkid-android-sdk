@@ -51,6 +51,7 @@ import com.vk.id.sample.xml.uikit.common.getOneTapSuccessCallback
 import com.vk.id.sample.xml.uikit.common.showToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlin.enums.enumEntries
 import kotlin.reflect.KCallable
 
 @Preview
@@ -166,7 +167,7 @@ internal fun OneTapBottomSheetScreen() {
             onCheckedChange = { autoHideSheetOnSuccess.value = it }
         )
         DropdownSelector(
-            values = enumValues<OneTapScenario>().associateBy { it.name },
+            values = enumEntries<OneTapScenario>().associateBy { it.name },
             selectedValue = selectedScenario.value.name,
             onValueSelected = { selectedScenario.value = it },
             label = { Text("scenario") },

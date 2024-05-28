@@ -50,6 +50,7 @@ public fun InternalVKIDTestBuilder.mockGetTokenSuccess(): InternalVKIDTestBuilde
                 idToken = MockApi.ID_TOKEN,
                 expiresIn = MockApi.EXPIRES_IN,
                 userId = MockApi.USER_ID,
+                scope = "phone email",
             )
         )
     )

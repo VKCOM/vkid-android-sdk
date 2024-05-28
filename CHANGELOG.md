@@ -2,6 +2,28 @@
 
 > **Note**\
 > Описание основных изменений в релизах VK ID SDK. Наш SDK следует [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## 2.0.0-alpha02
+
+### Added
+- Возможность получения Refresh token с помощью проперти VKID#refreshToken
+- Возможность получения полученных скопов для Access token с помощью проперти AccessToken#scopes
+- Возможность смены порядка OAuth в виджете 3в1
+
+### Changed
+- Сделан приватным конструктор класса AccessToken
+
+## 2.0.0-alpha
+Альфа релиз для тестирования выборочными партнерами. 
+В этой версии много изменений публичного интерфеса и он ломает обратную совместимость.
+Миграция описана в [статье](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id-2/connection/android/migration-on-oauth-2.1)
+
+### Added
+- Поддержка OAuth2.1. [Статья с документацией](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id-2/connection/android/oauth-2.1-methods)
+- Поддержка совместной работы с vk-android-sdk "из коробки" в модуле vk-sdk-support. [Статья с документацией](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id-2/connection/android/migration-on-oauth-2.1#Sovmestnoe-ispolzovanie-s-VK-ANDROID-SDK)
+
+### Fixed
+- Исправлена опечатка в названии maven репозитория. Часть урла изменена с "andorid" на "android". Поддерживаются оба варианта
  
 ## 1.3.2
 

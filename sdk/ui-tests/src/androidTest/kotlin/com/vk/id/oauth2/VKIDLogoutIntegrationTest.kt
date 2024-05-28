@@ -39,6 +39,7 @@ import kotlin.coroutines.suspendCoroutine
 private val ACCESS_TOKEN_JSON = """{
     |"expireTime":-1,
     |"idToken":"id token",
+    |"scopes":["phone","email"],
     |"token":"access token",
     |"userData":{
         |"email":"email",
@@ -51,7 +52,8 @@ private val ACCESS_TOKEN_JSON = """{
 |}
 """.trimMargin().replace("\n", "")
 private const val ACCESS_TOKEN_KEY = "ACCESS_TOKEN_KEY"
-private const val REFRESH_TOKEN_KEY = "REFRESH_TOKEN_KEY"
+private const val REFRESH_TOKEN_V1_KEY = "REFRESH_TOKEN_KEY"
+private const val REFRESH_TOKEN_V2_KEY = "REFRESH_TOKEN_WITH_SCOPES_KEY"
 private const val ID_TOKEN_KEY = "ID_TOKEN_KEY"
 
 @Platform(Platform.ANDROID_AUTO)
@@ -77,7 +79,8 @@ internal class VKIDLogoutIntegrationTest : BaseUiTest() {
             .logoutResponse(Result.success(InternalVKIDLogoutPayloadResponse()))
             .build()
         every { encryptedStorage.getString(ACCESS_TOKEN_KEY) } returns ACCESS_TOKEN_JSON
-        every { encryptedStorage.set(REFRESH_TOKEN_KEY, null) } just runs
+        every { encryptedStorage.set(REFRESH_TOKEN_V1_KEY, null) } just runs
+        every { encryptedStorage.set(REFRESH_TOKEN_V2_KEY, null) } just runs
         every { encryptedStorage.set(ACCESS_TOKEN_KEY, null) } just runs
         every { encryptedStorage.set(ID_TOKEN_KEY, null) } just runs
         every { deviceIdStorage.getDeviceId() } returns "device id"
@@ -108,7 +111,8 @@ internal class VKIDLogoutIntegrationTest : BaseUiTest() {
             .encryptedSharedPreferencesStorage(encryptedStorage)
             .build()
         every { encryptedStorage.getString(ACCESS_TOKEN_KEY) } returns null
-        every { encryptedStorage.set(REFRESH_TOKEN_KEY, null) } just runs
+        every { encryptedStorage.set(REFRESH_TOKEN_V1_KEY, null) } just runs
+        every { encryptedStorage.set(REFRESH_TOKEN_V2_KEY, null) } just runs
         every { encryptedStorage.set(ACCESS_TOKEN_KEY, null) } just runs
         every { encryptedStorage.set(ID_TOKEN_KEY, null) } just runs
         every { deviceIdStorage.getDeviceId() } returns "device id"
@@ -140,7 +144,8 @@ internal class VKIDLogoutIntegrationTest : BaseUiTest() {
             .logoutResponse(Result.success(InternalVKIDLogoutPayloadResponse(error = "some error")))
             .build()
         every { encryptedStorage.getString(ACCESS_TOKEN_KEY) } returns ACCESS_TOKEN_JSON
-        every { encryptedStorage.set(REFRESH_TOKEN_KEY, null) } just runs
+        every { encryptedStorage.set(REFRESH_TOKEN_V1_KEY, null) } just runs
+        every { encryptedStorage.set(REFRESH_TOKEN_V2_KEY, null) } just runs
         every { encryptedStorage.set(ACCESS_TOKEN_KEY, null) } just runs
         every { encryptedStorage.set(ID_TOKEN_KEY, null) } just runs
         every { deviceIdStorage.getDeviceId() } returns "device id"
@@ -172,7 +177,8 @@ internal class VKIDLogoutIntegrationTest : BaseUiTest() {
             .logoutResponse(Result.success(InternalVKIDLogoutPayloadResponse(error = "invalid_token")))
             .build()
         every { encryptedStorage.getString(ACCESS_TOKEN_KEY) } returns ACCESS_TOKEN_JSON
-        every { encryptedStorage.set(REFRESH_TOKEN_KEY, null) } just runs
+        every { encryptedStorage.set(REFRESH_TOKEN_V1_KEY, null) } just runs
+        every { encryptedStorage.set(REFRESH_TOKEN_V2_KEY, null) } just runs
         every { encryptedStorage.set(ACCESS_TOKEN_KEY, null) } just runs
         every { encryptedStorage.set(ID_TOKEN_KEY, null) } just runs
         every { deviceIdStorage.getDeviceId() } returns "device id"

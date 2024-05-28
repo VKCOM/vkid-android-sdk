@@ -1,4 +1,4 @@
-@file:OptIn(InternalVKIDApi::class, InternalVKIDApi::class)
+@file:OptIn(InternalVKIDApi::class)
 
 package com.vk.id.internal.api
 
@@ -180,6 +180,7 @@ internal class VKIDApiService(
                         userId = jsonObject.getLong("user_id"),
                         expiresIn = jsonObject.optLong("expires_in"),
                         state = jsonObject.optString("state"),
+                        scope = jsonObject.getString("scope"),
                     )
                 )
             } catch (@Suppress("SwallowedException") e: JSONException) {

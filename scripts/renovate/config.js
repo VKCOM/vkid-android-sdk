@@ -44,4 +44,6 @@ module.exports = {
     "draftPR": true,
 
     "baseBranches": ["develop"],
+    "commitMessagePrefix": "VKIDSDK-0: ",
+    "branchName": "task/VKIDSDK-0/renovate-all"
 }

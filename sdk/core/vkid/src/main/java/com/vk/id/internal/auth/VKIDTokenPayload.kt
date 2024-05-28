@@ -9,6 +9,7 @@ internal data class VKIDTokenPayload(
     val expiresIn: Long,
     val userId: Long,
     val state: String,
+    val scope: String,
 )
 
 /**
