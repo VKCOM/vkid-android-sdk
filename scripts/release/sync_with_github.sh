@@ -18,7 +18,7 @@ set -ex
 importCommon
 git checkout master
 PUBLIC_REPO_URL="git@github.com:VKCOM/vkid-android-sdk.git"
-PUBLIC_TARGET_BRANCH="public"
+PUBLIC_TARGET_BRANCH="master"
 SDK_VERSION="$(fetchCurrentVersion)"
 git branch -D public
 git checkout -b public

@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vk.id.AccessToken
+import com.vk.id.VKID
 import com.vk.id.sample.app.R
 
 @Composable
@@ -64,8 +65,19 @@ internal fun UseToken(accessToken: AccessToken) {
                 |Last name: ${accessToken.userData.lastName}
                 |Phone: ${accessToken.userData.phone}
                 |Email: ${accessToken.userData.email}
+                |Scopes: ${accessToken.scopes?.joinToString()}
             """.trimMargin()
         )
         Spacer(modifier = Modifier.height(12.dp))
+        VKID.instance.refreshToken?.let {
+            Text(
+                color = MaterialTheme.colorScheme.onBackground,
+                text = """
+                |Refresh token: ${it.token.take(@Suppress("MagicNumber") 5)}...
+                |Scopes: ${it.scopes?.joinToString()}
+                """.trimMargin()
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+        }
     }
 }

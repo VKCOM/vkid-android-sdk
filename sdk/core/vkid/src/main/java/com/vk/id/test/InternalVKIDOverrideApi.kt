@@ -62,6 +62,8 @@ public data class InternalVKIDTokenPayloadResponse(
     val state: String? = null,
     @SerializedName("error")
     val error: String? = null,
+    @SerializedName("scope")
+    val scope: String? = null,
 )
 
 @InternalVKIDApi

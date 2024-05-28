@@ -2,6 +2,7 @@ package com.vk.id
 
 import android.os.Parcelable
 import androidx.compose.runtime.Immutable
+import com.vk.id.common.InternalVKIDApi
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -12,15 +13,21 @@ import kotlinx.parcelize.Parcelize
  * @property userID The user ID associated with this token.
  * @property expireTime The expiration time of the token. If the value is -1 the token will not expire.
  * @property userData The user data associated with this token.
+ * @property scopes The set of scopes granted for the [token].
+ * Null only for tokens received with 2.0.0-alpha library release.
+ * You're allowed to assert non-nullness the value if you're using a later version.
  */
 @Parcelize
 @Immutable
-public class AccessToken @JvmOverloads constructor(
+public class AccessToken
+@JvmOverloads @InternalVKIDApi
+constructor(
     public val token: String,
     public val idToken: String? = null,
     public val userID: Long,
     public val expireTime: Long,
     public val userData: VKIDUser,
+    public val scopes: Set<String>?,
 ) : Parcelable {
 
     /** @suppress */

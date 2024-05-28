@@ -23,7 +23,7 @@ import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 
 private const val ACCESS_TOKEN_VALUE = "access token"
-private const val REFRESH_TOKEN = "refresh token"
+private const val REFRESH_TOKEN_VALUE = "refresh token"
 private const val ID_TOKEN = "id token"
 private const val EXPIRES_IN = 0L
 private const val USER_ID = 100L
@@ -49,14 +49,20 @@ private val ACCESS_TOKEN = AccessToken(
     userID = USER_ID,
     expireTime = -1,
     userData = VKID_USER,
+    scopes = setOf("phone", "email"),
+)
+private val REFRESH_TOKEN = RefreshToken(
+    token = REFRESH_TOKEN_VALUE,
+    scopes = setOf("phone", "email"),
 )
 private val TOKEN_PAYLOAD = VKIDTokenPayload(
     accessToken = ACCESS_TOKEN_VALUE,
-    refreshToken = REFRESH_TOKEN,
+    refreshToken = REFRESH_TOKEN_VALUE,
     idToken = ID_TOKEN,
     expiresIn = EXPIRES_IN,
     userId = USER_ID,
     state = STATE,
+    scope = "phone email",
 )
 
 internal class TokensHandlerTest : BehaviorSpec({

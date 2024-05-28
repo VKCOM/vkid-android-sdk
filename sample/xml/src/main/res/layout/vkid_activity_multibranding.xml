@@ -57,7 +57,7 @@
             app:layout_constraintWidth_max="355dp"
             app:vkid_OAuthListStyle="transparentSystem"
             app:vkid_oAuthListCornerRadius="8dp"
-            app:vkid_oAuthListOAuths="mail,ok"
+            app:vkid_oAuthListOAuths="ok,mail"
             app:vkid_oAuthListSize="standard" />
 
         <View
