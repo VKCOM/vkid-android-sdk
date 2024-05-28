@@ -107,11 +107,15 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             authFail: VKIDAuthFail
         ) = When("Handle is called with ${authResult::class.simpleName}") {
             val callback = mockk<VKIDAuthCallback>()
+            every { callbacksHolder.isEmpty() } returns false
             every { callbacksHolder.getAll() } returns setOf(callback)
             every { callback.onFail(any()) } just runs
             every { callbacksHolder.clear() } just runs
             every { prefsStore.clear() } just runs
             handler.handle(authResult)
+            Then("Checks whether callbacks are present") {
+                verify { callbacksHolder.isEmpty() }
+            }
             Then("state is cleared") {
                 verify { prefsStore.clear() }
             }
@@ -138,13 +142,29 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             VKIDAuthFail.FailedRedirectActivity(ERROR_MESSAGE, error)
         )
 
+        When("There are not callbacks") {
+            val authResult = authResultSuccess.copy(oauth = null)
+            every { callbacksHolder.isEmpty() } returns true
+            handler.handle(authResult)
+            Then("Checks whether callbacks are present") {
+                verify { callbacksHolder.isEmpty() }
+            }
+            Then("Callbacks are not accessed") {
+                verify(exactly = 0) { callbacksHolder.getAll() }
+            }
+        }
+
         When("Auth result doesn't have oAuth") {
             val authResult = authResultSuccess.copy(oauth = null)
             val callback = mockk<VKIDAuthCallback>()
+            every { callbacksHolder.isEmpty() } returns false
             every { callbacksHolder.getAll() } returns setOf(callback)
             every { callback.onFail(any()) } just runs
             every { callbacksHolder.clear() } just runs
             handler.handle(authResult)
+            Then("Checks whether callbacks are present") {
+                verify { callbacksHolder.isEmpty() }
+            }
             Then("Callbacks are requested from holder") {
                 verify { callbacksHolder.getAll() }
             }
@@ -161,6 +181,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
         When("Handle is called with wrong state") {
             val authResult = authResultSuccess
             val callback = mockk<VKIDAuthCallback>()
+            every { callbacksHolder.isEmpty() } returns false
             every { callbacksHolder.getAll() } returns setOf(callback)
             every { callback.onFail(any()) } just runs
             every { callbacksHolder.clear() } just runs
@@ -170,6 +191,9 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             every { prefsStore.codeVerifier } returns CODE_VERIFIER
             runTest(scheduler) { handler.handle(authResult) }
             scheduler.advanceUntilIdle()
+            Then("Checks whether callbacks are present") {
+                verify { callbacksHolder.isEmpty() }
+            }
             Then("state is cleared") {
                 verify { prefsStore.clear() }
             }
@@ -190,6 +214,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             val authResult = authResultSuccess
             val callback = mockk<VKIDAuthCallback>()
             val call = mockk<InternalVKIDCall<VKIDTokenPayload>>()
+            every { callbacksHolder.isEmpty() } returns false
             every { callbacksHolder.getAll() } returns setOf(callback)
             every { callback.onAuthCode(any(), any()) } just runs
             every { callback.onFail(any()) } just runs
@@ -206,6 +231,9 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             every { tokenStorage.accessToken } returns null
             runTest(scheduler) { handler.handle(authResult) }
             scheduler.advanceUntilIdle()
+            Then("Checks whether callbacks are present") {
+                verify { callbacksHolder.isEmpty() }
+            }
             Then("Device id is saved") {
                 verify { deviceIdProvider.setDeviceId(DEVICE_ID) }
             }
@@ -234,6 +262,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             val callback = mockk<VKIDAuthCallback>()
             val call = mockk<InternalVKIDCall<VKIDTokenPayload>>()
             val payload = VKIDTokenPayload(ACCESS_TOKEN_VALUE, REFRESH_TOKEN, ID_TOKEN, 0, USER_ID, STATE, SCOPE)
+            every { callbacksHolder.isEmpty() } returns false
             every { callbacksHolder.getAll() } returns setOf(callback)
             every { callback.onAuthCode(any(), any()) } just runs
             every { callback.onAuth(any()) } just runs
@@ -252,6 +281,9 @@ internal class AuthResultHandlerTest : BehaviorSpec({
 
                 coEvery { tokensHandler.handle(any(), any(), any()) } just runs
                 runTest(scheduler) { handler.handle(authResult) }
+                Then("Checks whether callbacks are present") {
+                    verify { callbacksHolder.isEmpty() }
+                }
                 Then("state is cleared") {
                     verify { prefsStore.clear() }
                 }
@@ -274,6 +306,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             val callback = mockk<VKIDAuthCallback>()
             val call = mockk<InternalVKIDCall<VKIDTokenPayload>>()
             val payload = VKIDTokenPayload(ACCESS_TOKEN_VALUE, REFRESH_TOKEN, ID_TOKEN, 0, USER_ID, STATE, SCOPE)
+            every { callbacksHolder.isEmpty() } returns false
             every { callbacksHolder.getAll() } returns setOf(callback)
             every { callback.onAuthCode(any(), any()) } just runs
             every { callback.onAuth(any()) } just runs
@@ -296,6 +329,9 @@ internal class AuthResultHandlerTest : BehaviorSpec({
                 val onSuccessSlot = slot<suspend (AccessToken) -> Unit>()
                 coEvery { tokensHandler.handle(any(), capture(onSuccessSlot), any()) } just runs
                 runTest(scheduler) { handler.handle(authResult) }
+                Then("Checks whether callbacks are present") {
+                    verify { callbacksHolder.isEmpty() }
+                }
                 Then("state is cleared") {
                     verify { prefsStore.clear() }
                 }
@@ -325,6 +361,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             val callback = mockk<VKIDAuthCallback>()
             val call = mockk<InternalVKIDCall<VKIDTokenPayload>>()
             val payload = VKIDTokenPayload(ACCESS_TOKEN_VALUE, REFRESH_TOKEN, ID_TOKEN, 0, USER_ID, STATE, SCOPE)
+            every { callbacksHolder.isEmpty() } returns false
             every { callbacksHolder.getAll() } returns setOf(callback)
             every { callback.onAuthCode(any(), any()) } just runs
             every { callback.onAuth(any()) } just runs
@@ -347,6 +384,9 @@ internal class AuthResultHandlerTest : BehaviorSpec({
                 val onSuccessSlot = slot<suspend (AccessToken) -> Unit>()
                 coEvery { tokensHandler.handle(any(), capture(onSuccessSlot), any()) } just runs
                 runTest(scheduler) { handler.handle(authResult) }
+                Then("Checks whether callbacks are present") {
+                    verify { callbacksHolder.isEmpty() }
+                }
                 Then("state is cleared") {
                     verify { prefsStore.clear() }
                 }

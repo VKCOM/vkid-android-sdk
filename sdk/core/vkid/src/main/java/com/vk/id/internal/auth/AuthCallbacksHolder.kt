@@ -18,4 +18,6 @@ internal class AuthCallbacksHolder {
     fun clear() {
         authCallbacks.clear()
     }
+
+    fun isEmpty() = authCallbacks.isEmpty()
 }
