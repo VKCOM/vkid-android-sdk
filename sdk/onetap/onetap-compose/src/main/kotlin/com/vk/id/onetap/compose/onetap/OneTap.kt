@@ -33,8 +33,8 @@ import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.compose.button.alternate.AdaptiveAlternateAccountButton
 import com.vk.id.onetap.compose.button.auth.VKIDButton
 import com.vk.id.onetap.compose.button.auth.VKIDButtonSmall
+import com.vk.id.onetap.compose.button.auth.VKIDButtonState
 import com.vk.id.onetap.compose.button.auth.VKIDButtonTextProvider
-import com.vk.id.onetap.compose.button.auth.rememberVKIDButtonState
 import com.vk.id.onetap.compose.button.startAuth
 import com.vk.id.onetap.compose.util.PlaceComposableIfFitsWidth
 
@@ -59,6 +59,9 @@ import com.vk.id.onetap.compose.util.PlaceComposableIfFitsWidth
  * @param signInAnotherAccountButtonEnabled Flag to enable a button for signing into another account.
  *  Note that if text doesn't fit the available width the view will be hidden regardless of the flag.
  * @param authParams Optional params to be passed to auth. See [VKIDAuthUiParams.Builder] for more info.
+ * @param fastAuthEnabled Whether to fetch user. Defaults to true.
+ * In case this parameter is set to false the user data won't be fetched and user will have to confirm authorization on click.
+ * Note that this parameter doesn't support changes in runtime.
  */
 @Composable
 @Suppress("LongMethod")
@@ -69,36 +72,50 @@ public fun OneTap(
     onAuthCode: (data: AuthCodeData, isCompletion: Boolean) -> Unit = { _, _ -> },
     onFail: (oAuth: OneTapOAuth?, fail: VKIDAuthFail) -> Unit = { _, _ -> },
     oAuths: Set<OneTapOAuth> = emptySet(),
+    fastAuthEnabled: Boolean = true,
     signInAnotherAccountButtonEnabled: Boolean = false,
     authParams: VKIDAuthUiParams = VKIDAuthUiParams {},
 ) {
     val coroutineScope = rememberCoroutineScope()
     var user by remember { mutableStateOf<VKIDUser?>(null) }
+    val fastAuthEnabledValue by remember { mutableStateOf(fastAuthEnabled) }
+    if (fastAuthEnabledValue != fastAuthEnabled) {
+        error("You can't change fastAuthEnabled in runtime")
+    }
     if (style is OneTapStyle.Icon) {
         OneTapAnalytics.OneTapIconShown()
-        VKIDButtonSmall(style = style.vkidButtonStyle, onClick = {
-            val extraAuthParams = OneTapAnalytics.oneTapPressedIcon(user)
-            startAuth(
-                coroutineScope,
-                {
-                    OneTapAnalytics.authSuccessIcon()
-                    onAuth(null, it)
-                },
-                onAuthCode,
-                {
-                    OneTapAnalytics.authErrorIcon(user)
-                    onFail(null, it)
-                },
-                params = authParams.asParamsBuilder {
-                    extraParams = extraAuthParams
-                },
-            )
-        }, onUserFetched = {
-            user = it
-            it?.let {
-                OneTapAnalytics.userWasFoundIcon()
-            }
-        })
+        VKIDButtonSmall(
+            style = style.vkidButtonStyle,
+            onClick = {
+                val extraAuthParams = OneTapAnalytics.oneTapPressedIcon(user)
+                startAuth(
+                    coroutineScope,
+                    {
+                        OneTapAnalytics.authSuccessIcon()
+                        onAuth(null, it)
+                    },
+                    onAuthCode,
+                    {
+                        OneTapAnalytics.authErrorIcon(user)
+                        onFail(null, it)
+                    },
+                    params = authParams.asParamsBuilder {
+                        extraParams = extraAuthParams
+                        if (!fastAuthEnabled) {
+                            useOAuthProviderIfPossible = false
+                            prompt = Prompt.LOGIN
+                        }
+                    },
+                )
+            },
+            onUserFetched = {
+                user = it
+                it?.let {
+                    OneTapAnalytics.userWasFoundIcon()
+                }
+            },
+            fastAuthEnabled = fastAuthEnabled,
+        )
     } else {
         PlaceComposableIfFitsWidth(
             modifier = modifier,
@@ -135,6 +152,10 @@ public fun OneTap(
                                 authParams.asParamsBuilder {
                                     theme = style.toProviderTheme()
                                     extraParams = extraAuthParams
+                                    if (!fastAuthEnabled) {
+                                        useOAuthProviderIfPossible = false
+                                        prompt = Prompt.LOGIN
+                                    }
                                 }
                             )
                         },
@@ -164,33 +185,43 @@ public fun OneTap(
                                     OneTapAnalytics.userWasFound(signInAnotherAccountButtonEnabled)
                                 }
                             }
-                        }
+                        },
+                        fastAuthEnabled = fastAuthEnabled,
                     )
                 }
             },
             fallback = {
                 OneTapAnalytics.OneTapIconShown()
-                VKIDButtonSmall(style = style.vkidButtonStyle, onClick = {
-                    val extraAuthParams = OneTapAnalytics.oneTapPressedIcon(user)
-                    startAuth(
-                        coroutineScope,
-                        {
-                            OneTapAnalytics.authSuccessIcon()
-                            onAuth(null, it)
-                        },
-                        onAuthCode,
-                        {
-                            OneTapAnalytics.authErrorIcon(user)
-                            onFail(null, it)
-                        },
-                        params = authParams.asParamsBuilder {
-                            extraParams = extraAuthParams
-                        }
-                    )
-                }, onUserFetched = {
-                    user = it
-                    it?.let { OneTapAnalytics.userWasFoundIcon() }
-                })
+                VKIDButtonSmall(
+                    style = style.vkidButtonStyle,
+                    onClick = {
+                        val extraAuthParams = OneTapAnalytics.oneTapPressedIcon(user)
+                        startAuth(
+                            coroutineScope,
+                            {
+                                OneTapAnalytics.authSuccessIcon()
+                                onAuth(null, it)
+                            },
+                            onAuthCode,
+                            {
+                                OneTapAnalytics.authErrorIcon(user)
+                                onFail(null, it)
+                            },
+                            params = authParams.asParamsBuilder {
+                                extraParams = extraAuthParams
+                                if (!fastAuthEnabled) {
+                                    useOAuthProviderIfPossible = false
+                                    prompt = Prompt.LOGIN
+                                }
+                            }
+                        )
+                    },
+                    onUserFetched = {
+                        user = it
+                        it?.let { OneTapAnalytics.userWasFoundIcon() }
+                    },
+                    fastAuthEnabled = fastAuthEnabled,
+                )
             }
         )
     }
@@ -211,8 +242,9 @@ internal fun OneTap(
     onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit,
     authParams: VKIDAuthUiParams = VKIDAuthUiParams {},
     onUserFetched: (VKIDUser?) -> Unit,
+    fastAuthEnabled: Boolean,
 ) {
-    val vkidButtonState = rememberVKIDButtonState()
+    val vkidButtonState = remember { VKIDButtonState(inProgress = false) }
     Column(modifier = modifier) {
         VKIDButton(
             modifier = Modifier.testTag("vkid_button"),
@@ -220,7 +252,8 @@ internal fun OneTap(
             state = vkidButtonState,
             textProvider = vkidButtonTextProvider,
             onClick = onVKIDButtonClick,
-            onUserFetched = onUserFetched
+            onUserFetched = onUserFetched,
+            fastAuthEnabled = fastAuthEnabled,
         )
         if (signInAnotherAccountButtonEnabled) {
             AdaptiveAlternateAccountButton(

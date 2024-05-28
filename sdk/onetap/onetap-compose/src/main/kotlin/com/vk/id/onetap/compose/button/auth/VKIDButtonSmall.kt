@@ -52,30 +52,33 @@ internal fun VKIDButtonSmall(
     style: InternalVKIDButtonStyle = InternalVKIDButtonStyle.Light(),
     onClick: () -> Unit,
     onUserFetched: (VKIDUser?) -> Unit = {},
+    fastAuthEnabled: Boolean,
 ) {
     val coroutineScope = rememberCoroutineScope()
-    FetchUserData(
-        coroutineScope,
-        object : OnFetchingProgress {
-            override suspend fun onPreFetch() {
-                /*nothing*/
-            }
+    if (fastAuthEnabled) {
+        FetchUserData(
+            coroutineScope,
+            object : OnFetchingProgress {
+                override suspend fun onPreFetch() {
+                    /*nothing*/
+                }
 
-            override fun onDispose() {
-                /*nothing*/
-            }
+                override fun onDispose() {
+                    /*nothing*/
+                }
 
-            override suspend fun onFetched(user: VKIDUser?) {
-                onUserFetched(user)
-                val newIconUrl = user?.photo200
-                if (newIconUrl != null) {
-                    state.userIconUrl = newIconUrl
-                } else {
-                    state.userIconLoaded = false
+                override suspend fun onFetched(user: VKIDUser?) {
+                    onUserFetched(user)
+                    val newIconUrl = user?.photo200
+                    if (newIconUrl != null) {
+                        state.userIconUrl = newIconUrl
+                    } else {
+                        state.userIconLoaded = false
+                    }
                 }
             }
-        }
-    )
+        )
+    }
     var size by remember { mutableStateOf(IntSize.Zero) }
     Row(
         horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.CenterHorizontally),
@@ -178,7 +181,10 @@ private fun SmallButtonContent(
 @Preview
 @Composable
 private fun PreviewVKIDButtonSmall() {
-    VKIDButtonSmall(onClick = {})
+    VKIDButtonSmall(
+        onClick = {},
+        fastAuthEnabled = true,
+    )
 }
 
 @Preview
@@ -186,7 +192,8 @@ private fun PreviewVKIDButtonSmall() {
 private fun PreviewVKIDButtonSmallProgress() {
     VKIDButtonSmall(
         onClick = {},
-        state = VKIDSmallButtonState(inProgress = true, userIconLoaded = false)
+        state = VKIDSmallButtonState(inProgress = true, userIconLoaded = false),
+        fastAuthEnabled = true,
     )
 }
 
@@ -195,7 +202,8 @@ private fun PreviewVKIDButtonSmallProgress() {
 private fun PreviewVKIDButtonSmallUser() {
     VKIDButtonSmall(
         onClick = {},
-        state = VKIDSmallButtonState(inProgress = false, userIconLoaded = true)
+        state = VKIDSmallButtonState(inProgress = false, userIconLoaded = true),
+        fastAuthEnabled = true,
     )
 }
 
@@ -204,6 +212,7 @@ private fun PreviewVKIDButtonSmallUser() {
 private fun PreviewVKIDButtonSmallProgressAndUser() {
     VKIDButtonSmall(
         onClick = {},
-        state = VKIDSmallButtonState(inProgress = true, userIconLoaded = true)
+        state = VKIDSmallButtonState(inProgress = true, userIconLoaded = true),
+        fastAuthEnabled = true,
     )
 }

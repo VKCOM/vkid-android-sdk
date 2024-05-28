@@ -37,6 +37,7 @@ internal fun parseOneTapAttrs(
                 isSignInToAnotherAccountEnabled = getSignInToAnotherAccountButtonEnabled(),
                 oAuths = getOAuths(),
                 scopes = getScopes(),
+                fastAuthEnabled = getFastAuthEnabled(),
             )
         } finally {
             recycle()
@@ -49,8 +50,10 @@ internal data class OneTapParsedAttrs(
     val isSignInToAnotherAccountEnabled: Boolean,
     val oAuths: Set<OneTapOAuth>,
     val scopes: Set<String>,
+    val fastAuthEnabled: Boolean,
 )
 
+@Suppress("LongParameterList")
 internal class OneTapBottomSheetAttributeSettings(
     val style: OneTapBottomSheetStyle,
     val serviceName: String,
@@ -58,6 +61,7 @@ internal class OneTapBottomSheetAttributeSettings(
     val autoHideOnSuccess: Boolean,
     val oAuths: Set<OneTapOAuth>,
     val scopes: Set<String>,
+    val fastAuthEnabled: Boolean,
 )
 
 internal fun parseOneTapBottomSheetAttrs(
@@ -82,6 +86,7 @@ internal fun parseOneTapBottomSheetAttrs(
                 autoHideOnSuccess = getSheetAutoHideOnSuccess(),
                 oAuths = getOAuths(),
                 scopes = getScopes(),
+                fastAuthEnabled = getFastAuthEnabled(),
             )
         } finally {
             recycle()
@@ -220,6 +225,10 @@ private fun TypedArray.getScopes(): Set<String> {
         .split(',', ' ')
         .filter { it.isNotBlank() }
         .toSet()
+}
+
+private fun TypedArray.getFastAuthEnabled(): Boolean {
+    return getBoolean(R.styleable.vkid_OneTap_vkid_onetapFastAuthEnabled, true)
 }
 
 private fun Context.pixelsToDp(
