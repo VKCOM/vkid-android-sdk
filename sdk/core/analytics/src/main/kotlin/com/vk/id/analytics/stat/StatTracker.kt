@@ -35,6 +35,16 @@ public class StatTracker(
     private val batchEvents = LinkedBlockingQueue<JSONObject>()
     private val eventCounter = EventCounter()
 
+    @InternalVKIDApi
+    public companion object {
+        // External analytics params that needs to be send in redirect uri.
+        // UUID of auth session - from auth start to auth result.
+        public const val EXTERNAL_PARAM_SESSION_ID: String = "session_id"
+
+        // Start point of auth. Possible values: from_one_tap, from_floating_one_tap, from_multibranding.
+        public const val EXTERNAL_PARAM_FLOW_SOURCE: String = "flow_source"
+    }
+
     override fun trackEvent(name: String, vararg params: VKIDAnalytics.EventParam) {
         val eventJson = StatEventJson(name, params, eventCounter.eventId, eventCounter.prevEventId)
         eventCounter.increment()
