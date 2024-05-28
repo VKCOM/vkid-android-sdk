@@ -19,21 +19,19 @@ package com.vk.id
 import com.vk.id.util.android
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.withType
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.io.File
+import org.gradle.kotlin.dsl.getByType
+import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 
 /**
  * Configure Compose-specific options
  */
 internal fun Project.configureAndroidCompose() {
+    with(pluginManager) {
+        apply(libs.findPlugin("compose-compiler").get().get().pluginId)
+    }
     extensions.android {
         buildFeatures {
             compose = true
-        }
-
-        composeOptions {
-            kotlinCompilerExtensionVersion = libs.findVersion("androidxComposeCompiler").get().toString()
         }
 
         dependencies {
@@ -43,9 +41,10 @@ internal fun Project.configureAndroidCompose() {
         }
     }
 
-    tasks.withType<KotlinCompile>().configureEach {
-        kotlinOptions {
-            freeCompilerArgs = freeCompilerArgs + buildComposeMetricsParameters()
+    with(extensions.getByType<KotlinAndroidProjectExtension>()) {
+        compilerOptions {
+            // Force implicit visibility modifiers to avoid mistakes like exposing internal api
+            freeCompilerArgs.set(buildComposeMetricsParameters())
         }
     }
 }

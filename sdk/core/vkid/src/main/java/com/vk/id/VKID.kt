@@ -389,6 +389,12 @@ public class VKID {
         get() = tokenStorage.accessToken
 
     /**
+     * Returns current refresh token or null if auth wasn't passed.
+     */
+    public val refreshToken: RefreshToken?
+        get() = tokenStorage.refreshToken
+
+    /**
      * Fetches the user data.
      *
      * @return A Result object containing the fetched [VKIDUser] or an error.

@@ -46,6 +46,7 @@ private const val ACCESS_TOKEN_VALUE = "access token"
 private val ACCESS_TOKEN_JSON = """{
     |"expireTime":-1,
     |"idToken":"id token",
+    |"scopes":["phone","email"],
     |"token":"access token",
     |"userData":{
         |"email":"email",
@@ -57,13 +58,23 @@ private val ACCESS_TOKEN_JSON = """{
     |"userID":123
 |}
 """.trimMargin().replace("\n", "")
-private const val REFRESH_TOKEN_CURRENT_VALUE = "refresh token current"
+private val REFRESH_TOKEN_NEW_JSON = """{
+    |"scopes":["phone","email"],
+    |"token":"refresh token new"
+|}
+""".trimMargin().replace("\n", "")
+private val REFRESH_TOKEN_CURRENT_JSON = """{
+    |"token":"refresh token current",
+    |"scopes":["phone","email"]
+|}
+""".trimMargin().replace("\n", "")
 private const val REFRESH_TOKEN_NEW_VALUE = "refresh token new"
 private const val ID_TOKEN_VALUE = "id token"
 private const val USER_ID = 123L
 private const val STATE = "state"
 private const val ACCESS_TOKEN_KEY = "ACCESS_TOKEN_KEY"
-private const val REFRESH_TOKEN_KEY = "REFRESH_TOKEN_KEY"
+private const val REFRESH_TOKEN_V1_KEY = "REFRESH_TOKEN_KEY"
+private const val REFRESH_TOKEN_V2_KEY = "REFRESH_TOKEN_WITH_SCOPES_KEY"
 private const val ID_TOKEN_KEY = "ID_TOKEN_KEY"
 private val REFRESH_TOKEN_RESPONSE = InternalVKIDTokenPayloadResponse(
     accessToken = ACCESS_TOKEN_VALUE,
@@ -72,6 +83,7 @@ private val REFRESH_TOKEN_RESPONSE = InternalVKIDTokenPayloadResponse(
     expiresIn = 0,
     userId = USER_ID,
     state = STATE,
+    scope = "phone email",
 )
 private val USER_INFO_RESPONSE = InternalVKIDUserInfoPayloadResponse(
     user = InternalVKIDUserPayloadResponse(
@@ -94,7 +106,8 @@ private val ACCESS_TOKEN = AccessToken(
         phone = MockApi.PHONE,
         photo200 = MockApi.AVATAR,
         email = MockApi.EMAIL,
-    )
+    ),
+    scopes = setOf("phone", "email"),
 )
 
 @Platform(Platform.ANDROID_AUTO)
@@ -120,8 +133,8 @@ internal class VKIDRefreshTokenIntegrationTest : BaseUiTest() {
             .getUserInfoResponse(Result.success(USER_INFO_RESPONSE))
             .refreshTokenResponse(Result.success(REFRESH_TOKEN_RESPONSE))
             .build()
-        every { encryptedStorage.getString(REFRESH_TOKEN_KEY) } returns REFRESH_TOKEN_CURRENT_VALUE
-        every { encryptedStorage.set(REFRESH_TOKEN_KEY, REFRESH_TOKEN_NEW_VALUE) } just runs
+        every { encryptedStorage.getString(REFRESH_TOKEN_V2_KEY) } returns REFRESH_TOKEN_CURRENT_JSON
+        every { encryptedStorage.set(REFRESH_TOKEN_V2_KEY, REFRESH_TOKEN_NEW_JSON) } just runs
         every { encryptedStorage.set(ACCESS_TOKEN_KEY, ACCESS_TOKEN_JSON) } just runs
         every { encryptedStorage.set(ID_TOKEN_KEY, ID_TOKEN_VALUE) } just runs
         every { prefsStore.clear() } just runs
@@ -152,7 +165,8 @@ internal class VKIDRefreshTokenIntegrationTest : BaseUiTest() {
             .prefsStore(prefsStore)
             .encryptedSharedPreferencesStorage(encryptedStorage)
             .build()
-        every { encryptedStorage.getString(REFRESH_TOKEN_KEY) } returns null
+        every { encryptedStorage.getString(REFRESH_TOKEN_V1_KEY) } returns null
+        every { encryptedStorage.getString(REFRESH_TOKEN_V2_KEY) } returns null
         every { deviceIdStorage.getDeviceId() } returns "device id"
         var result: Any? = null
         step("Рефрешится токен") {
@@ -181,7 +195,7 @@ internal class VKIDRefreshTokenIntegrationTest : BaseUiTest() {
             .encryptedSharedPreferencesStorage(encryptedStorage)
             .refreshTokenResponse(Result.success(REFRESH_TOKEN_RESPONSE.copy(state = "wrong state")))
             .build()
-        every { encryptedStorage.getString(REFRESH_TOKEN_KEY) } returns REFRESH_TOKEN_CURRENT_VALUE
+        every { encryptedStorage.getString(REFRESH_TOKEN_V2_KEY) } returns REFRESH_TOKEN_CURRENT_JSON
         every { deviceIdStorage.getDeviceId() } returns "device id"
         every { prefsStore.clear() } just runs
         var result: Any? = null
@@ -211,7 +225,7 @@ internal class VKIDRefreshTokenIntegrationTest : BaseUiTest() {
             .encryptedSharedPreferencesStorage(encryptedStorage)
             .refreshTokenResponse(Result.success(InternalVKIDTokenPayloadResponse(error = "some error")))
             .build()
-        every { encryptedStorage.getString(REFRESH_TOKEN_KEY) } returns REFRESH_TOKEN_CURRENT_VALUE
+        every { encryptedStorage.getString(REFRESH_TOKEN_V2_KEY) } returns REFRESH_TOKEN_CURRENT_JSON
         every { deviceIdStorage.getDeviceId() } returns "device id"
         every { prefsStore.clear() } just runs
         var result: Any? = null
@@ -242,7 +256,7 @@ internal class VKIDRefreshTokenIntegrationTest : BaseUiTest() {
             .getUserInfoResponse(Result.success(InternalVKIDUserInfoPayloadResponse(error = "some error")))
             .refreshTokenResponse(Result.success(REFRESH_TOKEN_RESPONSE))
             .build()
-        every { encryptedStorage.getString(REFRESH_TOKEN_KEY) } returns REFRESH_TOKEN_CURRENT_VALUE
+        every { encryptedStorage.getString(REFRESH_TOKEN_V2_KEY) } returns REFRESH_TOKEN_CURRENT_JSON
         every { prefsStore.clear() } just runs
         every { deviceIdStorage.getDeviceId() } returns "device id"
         var result: Any? = null

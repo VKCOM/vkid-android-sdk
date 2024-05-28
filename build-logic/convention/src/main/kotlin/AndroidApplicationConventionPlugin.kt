@@ -18,7 +18,6 @@ import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import com.vk.id.Versions
 import com.vk.id.configureAndroidLint
-import com.vk.id.configureDetekt
 import com.vk.id.configureKotest
 import com.vk.id.configureKotlinAndroid
 import com.vk.id.configurePrintApksTask
@@ -33,6 +32,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             with(pluginManager) {
                 apply("com.android.application")
                 apply("org.jetbrains.kotlin.android")
+                apply("vkid.detekt")
             }
 
             extensions.configure<ApplicationExtension> {
@@ -44,7 +44,6 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             configureKotlinAndroid()
             configureStrictMode()
             configureKotest()
-            configureDetekt(isCompose = false)
             configureAndroidLint()
         }
     }

@@ -3,9 +3,6 @@
     <img src="logo.svg" width="150" alt="VK ID SDK Logo">
   </h1>
   <p align="center">
-    <a href="https://artifactory-external.vkpartner.ru/ui/native/vkid-sdk-android/com/vk/id/">
-        <img src="https://img.shields.io/badge/stability-beta-red">
-    </a>
     <a href="LICENSE">
       <img src="https://img.shields.io/npm/l/@vkid/sdk?maxAge=3600">
     </a>
@@ -21,6 +18,8 @@
 ---
 
 :information_source: Версия VK ID SDK 2.0.0-alpha поддерживает авторизацию по протоколу [OAuth 2.1](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-v2-1-10), а также способы входа через аккаунты Одноклассников и Mail.ru. Если вы хотите участвовать в тестировании этой версии SDK или узнать о ней подробнее, напишите нам на почту devsupport@corp.vk.com.
+
+Текущая стабильная версия VK ID SDK - [1.3.2](https://github.com/VKCOM/vkid-android-sdk/releases/tag/v1.3.2).
 
 ---
 
@@ -38,11 +37,11 @@ VKIDClientID=Ваш ID приложения
 
 ## Предварительно
 
-Что такое VK ID и как интегрировать его в приложение читайте здесь https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id-2/connection/android/install.
+Что такое VK ID и как интегрировать его в приложение читайте [в статье "Начало работы"](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id-2/connection/android/install).
 
 Чтобы подключить VK ID SDK, сначала получите ID приложения (app_id) и защищенный ключ (client_secret). Для этого создайте приложение в [кабинете подключения VK ID](https://id.vk.com/business/go).
 
-Документацию по API SDK можно найти здесь https://vkcom.github.io/vkid-android-sdk/
+Документацию по API SDK можно найти [на Github pages](https://vkcom.github.io/vkid-android-sdk/).
 
 
 ## Установка

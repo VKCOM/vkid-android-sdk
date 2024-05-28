@@ -1,12 +1,14 @@
-package com.vk.id
+package com.vk.id.detekt
 
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import org.gradle.api.Project
+import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.withType
 
-fun Project.configureDetekt(isCompose: Boolean = false) {
+internal fun Project.configureDetekt(isCompose: Boolean) {
     pluginManager.apply("io.gitlab.arturbosch.detekt")
 
     tasks.withType<Detekt>().configureEach {
@@ -22,9 +24,10 @@ fun Project.configureDetekt(isCompose: Boolean = false) {
         }
         buildUponDefaultConfig = true
         allRules = false
+        val rootDir = rootDir.let { if (it.name == "build-logic") it.parent else it }
         val configs = listOfNotNull(
-            "$rootDir/config/detekt.yml",
-            if (isCompose) "$rootDir/config/detekt-compose.yml" else null
+            "$rootDir/build-logic/detekt/config/detekt.yml",
+            if (isCompose) "$rootDir/build-logic/detekt/config/detekt-compose.yml" else null
         )
         config.setFrom(configs)
         autoCorrect = true
@@ -43,7 +46,12 @@ fun Project.configureDetekt(isCompose: Boolean = false) {
         jvmTarget = "1.8"
     }
     dependencies {
-        "detektPlugins"(libs.findLibrary("detekt-formatting").get())
-        add("detekt", project(":detekt-rules"))
+        addProvider("detektPlugins", provider {
+            val libs = this@configureDetekt.extensions.getByType<VersionCatalogsExtension>().named("libs")
+            libs.findLibrary("detekt-formatting").get().get()
+        })
+        if (findProject(":detekt-rules") != null) {
+            add("detekt", project(":detekt-rules"))
+        }
     }
 }

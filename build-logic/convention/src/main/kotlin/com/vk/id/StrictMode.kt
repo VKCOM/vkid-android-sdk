@@ -1,14 +1,14 @@
 package com.vk.id
 
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.withType
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.gradle.kotlin.dsl.getByType
+import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 
 fun Project.configureStrictMode() {
-    tasks.withType<KotlinCompile>().configureEach {
-        kotlinOptions {
+    with(extensions.getByType<KotlinAndroidProjectExtension>()) {
+        compilerOptions {
             // Force implicit visibility modifiers to avoid mistakes like exposing internal api
-            freeCompilerArgs = freeCompilerArgs + "-Xexplicit-api=strict"
+            freeCompilerArgs.set(listOf("-Xexplicit-api=strict"))
         }
     }
 }
