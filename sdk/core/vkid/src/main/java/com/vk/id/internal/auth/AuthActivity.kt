@@ -156,6 +156,13 @@ internal class AuthActivity : Activity() {
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
             context.startActivity(intent)
         }
+
+        internal fun createRedirectUriHandlingIntent(context: Context, responseUri: Uri): Intent {
+            val intent = Intent(context, AuthActivity::class.java)
+            intent.setData(responseUri)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP and Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            return intent
+        }
     }
 
     /**
