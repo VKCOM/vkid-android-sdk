@@ -1,9 +1,15 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     id("vkid.android.library")
 }
 
 android {
     namespace = "com.vk.id.sample.xml"
+    defaultConfig {
+        resValue("bool", "default_strict_mode_enabled", getStrictModeDefault())
+    }
 }
 
 dependencies {
@@ -19,4 +25,12 @@ dependencies {
     debugImplementation(libs.flipper.network)
     debugImplementation(libs.soloader)
     releaseImplementation(libs.flipper.noop)
+}
+
+fun getStrictModeDefault(): String {
+    val properties = Properties()
+    properties.load(
+        FileInputStream(project.rootProject.file("local.properties"))
+    )
+    return properties.getProperty("StrictModeEnabled", "false")
 }
