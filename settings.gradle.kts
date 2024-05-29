@@ -26,7 +26,7 @@ dependencyResolutionManagement {
         }
     }
 }
-rootProject.name = "VKID"
+rootProject.name = "VKIDSDK"
 include(":sample-app")
 project(":sample-app").projectDir = File("sample/app")
 include(":sample-oldsdk")
@@ -65,3 +65,5 @@ include(":network")
 project(":network").projectDir = File("sdk/core/network")
 include(":vk-sdk-support")
 project(":vk-sdk-support").projectDir = File("sdk/core/vk-sdk-support")
+
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")

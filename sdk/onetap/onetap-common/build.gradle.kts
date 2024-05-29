@@ -10,8 +10,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":common"))
-    implementation(project(":multibranding-common"))
-    implementation(project(":vkid"))
+    implementation(projects.common)
+    implementation(projects.multibrandingCommon)
+    implementation(projects.vkid)
     implementation(libs.androidx.compose.runtime)
 }

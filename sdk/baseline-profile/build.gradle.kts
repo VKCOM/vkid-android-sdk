@@ -24,7 +24,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    targetProjectPath = ":sample-app"
+    targetProjectPath = projects.sampleApp.identityPath.path
 }
 
 // This is the configuration block for the Baseline Profile plugin.
