@@ -43,7 +43,8 @@ internal fun startVKIDAuth(
     onFail: (VKIDAuthFail) -> Unit,
     authStatus: MutableState<OneTapBottomSheetAuthStatus>,
     authParams: VKIDAuthUiParams,
-    extraAuthParams: Map<String, String>
+    extraAuthParams: Map<String, String>,
+    fastAuthEnabled: Boolean,
 ) {
     authStatus.value = OneTapBottomSheetAuthStatus.AuthStarted
     startAuth(
@@ -63,6 +64,10 @@ internal fun startVKIDAuth(
         authParams.asParamsBuilder {
             theme = style.toProviderTheme()
             extraParams = extraAuthParams
+            if (!fastAuthEnabled) {
+                useOAuthProviderIfPossible = false
+                prompt = Prompt.LOGIN
+            }
         }
     )
 }

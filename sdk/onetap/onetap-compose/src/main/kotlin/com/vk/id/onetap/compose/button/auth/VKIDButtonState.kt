@@ -1,17 +1,8 @@
 package com.vk.id.onetap.compose.button.auth
 
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-
-@Composable
-internal fun rememberVKIDButtonState(
-    inProgress: Boolean = false,
-): VKIDButtonState = remember {
-    VKIDButtonState(inProgress)
-}
 
 internal open class VKIDButtonState(
     inProgress: Boolean,

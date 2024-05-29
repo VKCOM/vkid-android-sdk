@@ -72,6 +72,14 @@ public class OneTap @JvmOverloads constructor(
     private var onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit = { _, _ -> }
 
     /**
+     * Whether to fetch user. Defaults to true.
+     * In case this parameter is set to false the user data won't be fetched and user will have to confirm authorization on click.
+     * Note: this parameter doesn't support changes in runtime and must be initialized when the view is constructed.
+     * Note: This parameter will hide "change account" button because in this case OneTap will have the same behaviour.
+     */
+    public var fastAuthEnabled = true
+
+    /**
      * Adds support multibranding auth. By default this widget is not displayed.
      * This property represents a set of [OneTapOAuth] to be displayed.
      */
@@ -88,6 +96,7 @@ public class OneTap @JvmOverloads constructor(
         this.isSignInToAnotherAccountEnabled = params.isSignInToAnotherAccountEnabled
         this.oAuths = params.oAuths
         this.authParams = authParams.newBuilder { scopes = params.scopes }
+        this.fastAuthEnabled = params.fastAuthEnabled
         addView(composeView)
         composeView.setContent { Content() }
         clipChildren = false
@@ -114,6 +123,7 @@ public class OneTap @JvmOverloads constructor(
             oAuths = oAuths,
             signInAnotherAccountButtonEnabled = isSignInToAnotherAccountEnabled,
             authParams = authParams,
+            fastAuthEnabled = fastAuthEnabled,
         )
     }
 
