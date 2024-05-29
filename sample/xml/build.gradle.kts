@@ -29,8 +29,13 @@ dependencies {
 
 fun getStrictModeDefault(): String {
     val properties = Properties()
-    properties.load(
-        FileInputStream(project.rootProject.file("local.properties"))
-    )
-    return properties.getProperty("StrictModeEnabled", "false")
+    val propertiesFile = project.rootProject.file("local.properties")
+    return if (propertiesFile.exists()) {
+        properties.load(
+            FileInputStream(propertiesFile)
+        )
+        properties.getProperty("StrictModeEnabled", "false")
+    } else {
+        "false"
+    }
 }
