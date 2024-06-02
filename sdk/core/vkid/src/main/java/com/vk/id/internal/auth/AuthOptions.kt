@@ -17,8 +17,7 @@ internal data class AuthOptions(
     val webAuthPhoneScreen: Boolean,
     val oAuth: OAuth?,
     val prompt: String,
-    val scopes: Set<String>,
-    val extraParams: Map<String, String>?,
+    val scopes: Set<String>
 )
 
 private const val APP_ID = "app_id"
@@ -104,9 +103,6 @@ internal fun AuthOptions.toAuthUriCodeFlow(appPackage: String): Uri {
     }
     if (webAuthPhoneScreen) {
         builder.appendQueryParameter(SCREEN_PARAM, SCREEN_PHONE)
-    }
-    extraParams?.forEach { (key, value) ->
-        builder.appendQueryParameter(key, value)
     }
     return builder.scheme(appPackage)
         .authority(AUTHORITY_CODE_FLOW)
