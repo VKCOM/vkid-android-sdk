@@ -110,7 +110,10 @@ public fun OneTap(
             },
             onUserFetched = {
                 user = it
-                it?.let {
+                if (user == null) {
+                    OneTapAnalytics.sessionNotFound()
+                    OneTapAnalytics.userNotFoundIcon()
+                } else {
                     OneTapAnalytics.userWasFoundIcon()
                 }
             },
@@ -181,7 +184,10 @@ public fun OneTap(
                         onUserFetched = {
                             if (!measureInProgress) {
                                 user = it
-                                it?.let {
+                                if (user == null) {
+                                    OneTapAnalytics.sessionNotFound()
+                                    OneTapAnalytics.userNotFound()
+                                } else {
                                     OneTapAnalytics.userWasFound(signInAnotherAccountButtonEnabled)
                                 }
                             }
@@ -218,7 +224,12 @@ public fun OneTap(
                     },
                     onUserFetched = {
                         user = it
-                        it?.let { OneTapAnalytics.userWasFoundIcon() }
+                        if (user == null) {
+                            OneTapAnalytics.sessionNotFound()
+                            OneTapAnalytics.userNotFoundIcon()
+                        } else {
+                            OneTapAnalytics.userWasFoundIcon()
+                        }
                     },
                     fastAuthEnabled = fastAuthEnabled,
                 )
@@ -241,7 +252,7 @@ internal fun OneTap(
     onAuthCode: (AuthCodeData, Boolean) -> Unit,
     onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit,
     authParams: VKIDAuthUiParams = VKIDAuthUiParams {},
-    onUserFetched: (VKIDUser?) -> Unit,
+    onUserFetched: (VKIDUser?)->Unit = {},
     fastAuthEnabled: Boolean,
 ) {
     val vkidButtonState = remember { VKIDButtonState(inProgress = false) }

@@ -23,18 +23,14 @@ internal object OneTapAnalytics {
     private const val EVENT_ONETAP_TAP = "onetap_button_tap"
     private const val EVENT_AUTH_BY_BUTTON = "auth_by_button"
     private const val EVENT_ONETAP_ALTERNATIVE_SIGN_IN_TAP = "onetap_button_alternative_sign_in_tap"
-    private const val EVENT_ONETAP_AUTH_ERROR= "onetap_button_auth_error"
+    private const val EVENT_ONETAP_AUTH_ERROR = "onetap_button_auth_error"
     private const val EVENT_NO_SESSION_FOUND = "no_session_found"
     private const val EVENT_NO_USER_SHOW = "onetap_button_no_user_show"
     private const val EVENT_ONETAP_NO_USER_TAP = "onetap_button_no_user_tap"
     private const val EVENT_ONETAP_NO_USER_AUTH_ERROR = "onetap_button_no_user_auth_error"
 
-    // Загрузка кнопки, ищем сессию у пользователя
-    internal fun tryToFoundUserEvent() {
-        track(
-            EVENT_SCREEN_PROCEED,
-            VKIDAnalytics.EventParam("screen_current", "nowhere")
-        )
+    internal fun sessionNotFound() {
+        track(EVENT_NO_SESSION_FOUND)
     }
 
     internal fun userWasFoundIcon() {
@@ -45,6 +41,17 @@ internal object OneTapAnalytics {
         track(
             EVENT_USER_FOUND,
             alternateParam(signInAnotherAccountButton),
+            iconParam(icon)
+        )
+    }
+
+    internal fun userNotFoundIcon() {
+        userNotFound(true)
+    }
+
+    internal fun userNotFound(icon: Boolean = false) {
+        track(
+            EVENT_NO_USER_SHOW,
             iconParam(icon)
         )
     }
@@ -63,7 +70,7 @@ internal object OneTapAnalytics {
                 when (event) {
                     Lifecycle.Event.ON_RESUME -> {
                         track(
-                            EVENT_NO_USER_SHOW,
+                            EVENT_SCREEN_PROCEED,
                             iconParam(icon)
                         )
                     }
