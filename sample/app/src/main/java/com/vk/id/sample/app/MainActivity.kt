@@ -12,7 +12,6 @@ import androidx.navigation.activity
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.vk.id.VKID
 import com.vk.id.sample.app.screen.bottomnav.BottomNavigation
 import com.vk.id.sample.app.screen.bottomnav.Screen
 import com.vk.id.sample.app.screen.home.HomeScreen
@@ -30,7 +29,6 @@ internal class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        VKID.logsEnabled = true
         setContent {
             val navController = rememberNavController()
             AppTheme {
