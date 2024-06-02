@@ -17,7 +17,6 @@ import java.util.UUID
 @Suppress("TooManyFunctions")
 internal object OneTapAnalytics {
 
-    // https://confluence.vk.team/pages/viewpage.action?pageId=1099030792
     private const val EVENT_SCREEN_PROCEED = "screen_proceed"
     private const val EVENT_USER_FOUND = "onetap_button_user_found"
     private const val EVENT_ONETAP_TAP = "onetap_button_tap"
@@ -114,15 +113,15 @@ internal object OneTapAnalytics {
         track(EVENT_AUTH_BY_BUTTON, iconParam(icon))
     }
 
-    internal fun authErrorIcon(user: VKIDUser?) {
-        authError(user, true)
+    internal fun authErrorIcon(uuid: String, user: VKIDUser?) {
+        authError(uuid, user, true)
     }
 
-    internal fun authError(user: VKIDUser?, icon: Boolean = false) {
+    internal fun authError(uuid: String, user: VKIDUser?, icon: Boolean = false) {
         if (user != null) {
-            track(EVENT_ONETAP_AUTH_ERROR, iconParam(icon))
+            track(EVENT_ONETAP_AUTH_ERROR, iconParam(icon), uuidParam(uuid))
         } else {
-            track(EVENT_ONETAP_NO_USER_AUTH_ERROR, iconParam(icon))
+            track(EVENT_ONETAP_NO_USER_AUTH_ERROR, iconParam(icon), uuidParam(uuid))
         }
     }
 

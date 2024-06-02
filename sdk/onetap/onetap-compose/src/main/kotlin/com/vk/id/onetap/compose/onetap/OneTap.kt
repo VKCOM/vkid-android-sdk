@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.vk.id.AccessToken
 import com.vk.id.VKIDAuthFail
 import com.vk.id.VKIDUser
+import com.vk.id.analytics.stat.StatTracker
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.Prompt
 import com.vk.id.auth.VKIDAuthParams
@@ -96,7 +97,8 @@ public fun OneTap(
                     },
                     onAuthCode,
                     {
-                        OneTapAnalytics.authErrorIcon(user)
+                        val uuid = extraAuthParams[StatTracker.EXTERNAL_PARAM_SESSION_ID] ?: ""
+                        OneTapAnalytics.authErrorIcon(uuid, user)
                         onFail(null, it)
                     },
                     params = authParams.asParamsBuilder {
@@ -149,7 +151,8 @@ public fun OneTap(
                                 },
                                 onAuthCode,
                                 {
-                                    OneTapAnalytics.authError(user)
+                                    val uuid = extraAuthParams[StatTracker.EXTERNAL_PARAM_SESSION_ID] ?: ""
+                                    OneTapAnalytics.authError(uuid, user)
                                     onFail(null, it)
                                 },
                                 authParams.asParamsBuilder {
@@ -210,7 +213,8 @@ public fun OneTap(
                             },
                             onAuthCode,
                             {
-                                OneTapAnalytics.authErrorIcon(user)
+                                val uuid = extraAuthParams[StatTracker.EXTERNAL_PARAM_SESSION_ID] ?: ""
+                                OneTapAnalytics.authErrorIcon(uuid, user)
                                 onFail(null, it)
                             },
                             params = authParams.asParamsBuilder {
@@ -252,7 +256,7 @@ internal fun OneTap(
     onAuthCode: (AuthCodeData, Boolean) -> Unit,
     onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit,
     authParams: VKIDAuthUiParams = VKIDAuthUiParams {},
-    onUserFetched: (VKIDUser?)->Unit = {},
+    onUserFetched: (VKIDUser?) -> Unit = {},
     fastAuthEnabled: Boolean,
 ) {
     val vkidButtonState = remember { VKIDButtonState(inProgress = false) }
