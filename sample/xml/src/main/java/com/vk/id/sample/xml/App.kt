@@ -12,6 +12,7 @@ public class App : Application() {
         if (StrictModeHandler.isStrictModeEnabled(this@App)) {
             StrictModeHandler.enableStrictMode()
         }
+        VKID.logsEnabled = true
         VKID.init(this)
     }
 }
