@@ -8,10 +8,11 @@ public class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        VKID.init(this)
         FlipperInitializer.init(this)
         if (StrictModeHandler.isStrictModeEnabled(this@App)) {
             StrictModeHandler.enableStrictMode()
         }
+        VKID.logsEnabled = true
+        VKID.init(this)
     }
 }

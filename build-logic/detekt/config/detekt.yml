@@ -43,3 +43,12 @@ formatting:
   Wrapping:
     active: true
     maxLineLength: 150
+
+libraries:
+  ForbiddenPublicDataClass:
+    active: true
+  LibraryCodeMustSpecifyReturnType:
+    active: true
+    allowOmitUnit: true
+  LibraryEntitiesShouldNotBePublic:
+    active: false

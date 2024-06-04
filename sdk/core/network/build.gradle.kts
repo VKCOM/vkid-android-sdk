@@ -12,8 +12,8 @@ android {
 
 dependencies {
     api(libs.okhttp3.okhttp)
-    implementation(project(":common"))
-    implementation(project(":logger"))
+    implementation(projects.common)
+    implementation(projects.logger)
     implementation(libs.androidx.annotation)
     implementation(libs.androidx.core.ktx)
     implementation(libs.okhttp3.logging)

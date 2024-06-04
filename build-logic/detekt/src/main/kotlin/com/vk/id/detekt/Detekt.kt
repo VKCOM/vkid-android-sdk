@@ -46,10 +46,9 @@ internal fun Project.configureDetekt(isCompose: Boolean) {
         jvmTarget = "1.8"
     }
     dependencies {
-        addProvider("detektPlugins", provider {
-            val libs = this@configureDetekt.extensions.getByType<VersionCatalogsExtension>().named("libs")
-            libs.findLibrary("detekt-formatting").get().get()
-        })
+        val libs = this@configureDetekt.extensions.getByType<VersionCatalogsExtension>().named("libs")
+        addProvider("detektPlugins", provider { libs.findLibrary("detekt-formatting").get().get() })
+        addProvider("detektPlugins", provider { libs.findLibrary("detekt-libraries").get().get() })
         if (findProject(":detekt-rules") != null) {
             add("detekt", project(":detekt-rules"))
         }

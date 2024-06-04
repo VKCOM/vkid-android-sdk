@@ -245,7 +245,9 @@ public class VKID {
                 }
                 CoroutineScope(authContext + Job()).launch {
                     authResultHandler.value.handle(authResult)
-                    requestMutex.unlock()
+                    if (requestMutex.isLocked) {
+                        requestMutex.unlock()
+                    }
                 }
             }
         }

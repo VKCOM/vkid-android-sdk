@@ -16,11 +16,11 @@ android {
 }
 
 dependencies {
-    androidTestImplementation(project(":vkid"))
-    androidTestImplementation(project(":onetap-xml"))
-    androidTestImplementation(project(":onetap-compose"))
-    androidTestImplementation(project(":multibranding-xml"))
-    androidTestImplementation(project(":multibranding-compose"))
+    androidTestImplementation(projects.vkid)
+    androidTestImplementation(projects.onetapXml)
+    androidTestImplementation(projects.onetapCompose)
+    androidTestImplementation(projects.multibrandingXml)
+    androidTestImplementation(projects.multibrandingCompose)
     androidTestImplementation(libs.mockk.android)
     androidTestImplementation(libs.kotest.core)
     androidTestImplementation(libs.kotest.assertions)

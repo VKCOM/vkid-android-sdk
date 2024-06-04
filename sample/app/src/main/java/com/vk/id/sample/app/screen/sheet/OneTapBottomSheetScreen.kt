@@ -56,7 +56,7 @@ import kotlin.reflect.KCallable
 
 @Preview
 @Composable
-@Suppress("LongMethod")
+@Suppress("LongMethod", "CyclomaticComplexMethod")
 internal fun OneTapBottomSheetScreen() {
     val context = LocalContext.current
     val token = remember { mutableStateOf<AccessToken?>(null) }
@@ -64,6 +64,7 @@ internal fun OneTapBottomSheetScreen() {
     val selectedScenario = rememberSaveable { mutableStateOf(OneTapScenario.EnterService) }
     val selectedStyle = rememberOneTapBottomSheetStyle(OneTapBottomSheetStyle.system(context))
     val autoHideSheetOnSuccess = rememberSaveable { mutableStateOf(true) }
+    val fastAuthEnabled = remember { mutableStateOf(true) }
     val selectedOAuths = rememberSaveable { mutableStateOf(setOf(OneTapOAuth.OK, OneTapOAuth.MAIL)) }
     val shouldUseXml = remember { mutableStateOf(false) }
     var scopes by remember { mutableStateOf("") }
@@ -101,33 +102,52 @@ internal fun OneTapBottomSheetScreen() {
                 this.codeChallenge = codeChallenge.takeIf { it.isNotBlank() }
             }
             if (shouldUseXml.value) {
-                AndroidView(factory = { context ->
-                    OneTapBottomSheet(context).apply {
-                        setCallbacks(
-                            onAuth = getOneTapSuccessCallback(context) { token.value = it },
-                            onAuthCode = onAuthCode,
-                            onFail = getOneTapFailCallback(context),
-                        )
-                        bottomSheetView = this
+                @Composable
+                fun BottomSheetAndroidView(fastAuthEnabled: Boolean) {
+                    AndroidView(factory = { context ->
+                        OneTapBottomSheet(context).apply {
+                            setCallbacks(
+                                onAuth = getOneTapSuccessCallback(context) { token.value = it },
+                                onAuthCode = onAuthCode,
+                                onFail = getOneTapFailCallback(context),
+                            )
+                            bottomSheetView = this
+                            this.fastAuthEnabled = fastAuthEnabled
+                        }
+                    })
+                    bottomSheetView?.apply {
+                        this.oAuths = selectedOAuths.value
+                        this.authParams = authParams
                     }
-                })
-                bottomSheetView?.apply {
-                    this.oAuths = selectedOAuths.value
-                    this.authParams = authParams
+                }
+                if (fastAuthEnabled.value) {
+                    BottomSheetAndroidView(fastAuthEnabled = true)
+                } else {
+                    BottomSheetAndroidView(fastAuthEnabled = false)
                 }
             } else {
-                OneTapBottomSheet(
-                    style = selectedStyle.value,
-                    onAuth = getOneTapSuccessCallback(context) { token.value = it },
-                    onAuthCode = onAuthCode,
-                    onFail = getOneTapFailCallback(context),
-                    state = bottomSheetState,
-                    scenario = selectedScenario.value,
-                    autoHideOnSuccess = autoHideSheetOnSuccess.value,
-                    serviceName = "VKID Sample",
-                    oAuths = selectedOAuths.value,
-                    authParams = authParams,
-                )
+                // Force state drop when changing the parameter
+                @Composable
+                fun renderBottomSheet(fastAuthEnabled: Boolean) {
+                    OneTapBottomSheet(
+                        style = selectedStyle.value,
+                        onAuth = getOneTapSuccessCallback(context) { token.value = it },
+                        onAuthCode = onAuthCode,
+                        onFail = getOneTapFailCallback(context),
+                        state = bottomSheetState,
+                        scenario = selectedScenario.value,
+                        autoHideOnSuccess = autoHideSheetOnSuccess.value,
+                        serviceName = "VKID Sample",
+                        oAuths = selectedOAuths.value,
+                        authParams = authParams,
+                        fastAuthEnabled = fastAuthEnabled,
+                    )
+                }
+                if (fastAuthEnabled.value) {
+                    renderBottomSheet(true)
+                } else {
+                    renderBottomSheet(false)
+                }
             }
         }
         Spacer(Modifier.padding(8.dp))
@@ -165,6 +185,11 @@ internal fun OneTapBottomSheetScreen() {
             title = "Auto hide on success",
             isChecked = autoHideSheetOnSuccess.value,
             onCheckedChange = { autoHideSheetOnSuccess.value = it }
+        )
+        CheckboxSelector(
+            title = "Fetch user",
+            isChecked = fastAuthEnabled.value,
+            onCheckedChange = { fastAuthEnabled.value = it }
         )
         DropdownSelector(
             values = enumEntries<OneTapScenario>().associateBy { it.name },

@@ -10,9 +10,9 @@ android {
 }
 
 dependencies {
-    api(project(":vkid"))
-    api(project(":onetap-common"))
-    implementation(project(":onetap-compose"))
+    api(projects.vkid)
+    api(projects.onetapCommon)
+    implementation(projects.onetapCompose)
     implementation(libs.androidx.compose.ui)
     implementation(libs.coil)
 }

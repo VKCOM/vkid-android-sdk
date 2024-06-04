@@ -66,10 +66,19 @@ public class OneTapBottomSheet @JvmOverloads constructor(
 
     private var state: OneTapBottomSheetState? = null
 
+    /**
+     * Whether to fetch user. Defaults to true.
+     * In case this parameter is set to false the user data won't be fetched and user will have to confirm authorization on click.
+     * Note: this parameter doesn't support changes in runtime and must be initialized when the view is constructed.
+     * Note: This parameter will hide "change account" button because in this case OneTap will have the same behaviour.
+     */
+    public var fastAuthEnabled = true
+
     init {
         val sheetSettings = parseOneTapBottomSheetAttrs(context, attrs)
         this.oAuths = sheetSettings.oAuths
         this.authParams = authParams.newBuilder { this.scopes = sheetSettings.scopes }
+        this.fastAuthEnabled = sheetSettings.fastAuthEnabled
         composeView.setContent {
             Content(sheetSettings)
         }
@@ -96,6 +105,7 @@ public class OneTapBottomSheet @JvmOverloads constructor(
             autoHideOnSuccess = sheetSettings.autoHideOnSuccess,
             oAuths = oAuths,
             authParams = authParams,
+            fastAuthEnabled = fastAuthEnabled,
         )
     }
 

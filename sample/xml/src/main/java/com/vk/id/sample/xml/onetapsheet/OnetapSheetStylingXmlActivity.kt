@@ -2,6 +2,7 @@ package com.vk.id.sample.xml.onetapsheet
 
 import android.os.Bundle
 import android.widget.Button
+import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import com.vk.id.onetap.xml.OneTapBottomSheet
 import com.vk.id.sample.xml.R
@@ -13,14 +14,16 @@ public class OnetapSheetStylingXmlActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.vkid_activity_onetap_bottom_sheet)
-        val vkidOneTapBottomSheet = findViewById<OneTapBottomSheet>(R.id.vkid_bottom_sheet)
+        setupSheet(R.id.show_sheet_button, R.id.vkid_bottom_sheet)
+        setupSheet(R.id.show_sheet_without_fast_auth_button, R.id.vkid_bottom_sheet_without_fast_auth)
+    }
+
+    private fun setupSheet(@IdRes buttonId: Int, @IdRes bottomSheetId: Int) {
+        val vkidOneTapBottomSheet = findViewById<OneTapBottomSheet>(bottomSheetId)
         vkidOneTapBottomSheet.setCallbacks(
             onAuth = getOneTapSuccessCallback(this) {},
             onFail = getOneTapFailCallback(this),
         )
-        val button = findViewById<Button>(R.id.show_sheet_button)
-        button.setOnClickListener {
-            vkidOneTapBottomSheet.show()
-        }
+        findViewById<Button>(buttonId).setOnClickListener { vkidOneTapBottomSheet.show() }
     }
 }

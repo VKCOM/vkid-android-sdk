@@ -41,12 +41,12 @@ android {
 }
 
 dependencies {
-    implementation(project(":sample-xml"))
-    implementation(project(":sample-oldsdk"))
-    implementation(project(":multibranding-compose"))
-    implementation(project(":multibranding-xml"))
-    implementation(project(":onetap-compose"))
-    implementation(project(":onetap-xml"))
+    implementation(projects.sampleXml)
+    implementation(projects.sampleOldsdk)
+    implementation(projects.multibrandingCompose)
+    implementation(projects.multibrandingXml)
+    implementation(projects.onetapCompose)
+    implementation(projects.onetapXml)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)
     implementation(platform(libs.androidx.compose.bom))
@@ -61,7 +61,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.okhttp3.okhttp)
     implementation(libs.androidx.profileinstaller)
-    baselineProfile(project(":baseline-profile"))
+    baselineProfile(projects.baselineProfile)
     debugImplementation(libs.androidx.compose.ui.tooling)
 
     /* For testing intersections with https://github.com/VKCOM/vk-android-sdk:
