@@ -20,7 +20,6 @@ internal object OneTapAnalytics {
     private const val EVENT_SCREEN_PROCEED = "screen_proceed"
     private const val EVENT_USER_FOUND = "onetap_button_user_found"
     private const val EVENT_ONETAP_TAP = "onetap_button_tap"
-    private const val EVENT_AUTH_BY_BUTTON = "auth_by_button"
     private const val EVENT_ONETAP_ALTERNATIVE_SIGN_IN_TAP = "onetap_button_alternative_sign_in_tap"
     private const val EVENT_ONETAP_AUTH_ERROR = "onetap_button_auth_error"
     private const val EVENT_NO_SESSION_FOUND = "no_session_found"
@@ -103,14 +102,6 @@ internal object OneTapAnalytics {
         val uuid = UUID.randomUUID().toString()
         track(EVENT_ONETAP_ALTERNATIVE_SIGN_IN_TAP, uuidParam(uuid))
         return mapOf(StatTracker.EXTERNAL_PARAM_SESSION_ID to uuid, FLOW_SOURCE)
-    }
-
-    internal fun authSuccessIcon() {
-        authSuccess(true)
-    }
-
-    internal fun authSuccess(icon: Boolean = false) {
-        track(EVENT_AUTH_BY_BUTTON, iconParam(icon))
     }
 
     internal fun authErrorIcon(uuid: String, user: VKIDUser?) {

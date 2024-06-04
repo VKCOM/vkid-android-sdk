@@ -51,16 +51,6 @@ internal object OneTapBottomSheetAnalytics {
     }
 
     @Composable
-    internal fun BottomSheetSuccessShown() {
-        SheetScreenShown {
-            track(
-                "auth_by_floating_one_tap",
-                screenParam,
-            )
-        }
-    }
-
-    @Composable
     internal fun BottomSheetErrorShown() {
         SheetScreenShown {
             track(
