@@ -11,6 +11,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -74,6 +75,10 @@ public fun rememberOneTapBottomSheetState(): OneTapBottomSheetState {
  * The second parameter is the error which happened during authorization.
  * @param style The [OneTapBottomSheetStyle] of the bottom sheet. Default is [OneTapBottomSheetStyle.Light]
  * @param authParams Optional params to be passed to auth. See [VKIDAuthUiParams.Builder] for more info.
+ * @param fastAuthEnabled Whether to fetch user. Defaults to true.
+ * In case this parameter is set to false the user data won't be fetched and user will have to confirm authorization on click.
+ * Note: this parameter doesn't support changes in runtime.
+ * Note: This parameter will hide "change account" button because in this case OneTap will have the same behaviour.
  */
 @OptIn(InternalVKIDApi::class)
 @Composable
@@ -88,8 +93,13 @@ public fun OneTapBottomSheet(
     onFail: (oAuth: OneTapOAuth?, fail: VKIDAuthFail) -> Unit = { _, _ -> },
     oAuths: Set<OneTapOAuth> = emptySet(),
     style: OneTapBottomSheetStyle = OneTapBottomSheetStyle.Light(),
-    authParams: VKIDAuthUiParams = VKIDAuthUiParams {}
+    authParams: VKIDAuthUiParams = VKIDAuthUiParams {},
+    fastAuthEnabled: Boolean = true,
 ) {
+    val rememberedFastAuthEnabledValue by remember { mutableStateOf(fastAuthEnabled) }
+    if (rememberedFastAuthEnabledValue != fastAuthEnabled) {
+        error("You can't change fastAuthEnabled in runtime")
+    }
     CompositionLocalProvider(LocalMultibrandingAnalyticsContext provides MultibrandingAnalyticsContext(screen = "floating_one_tap")) {
         OneTapBottomSheetInternal(
             modifier = modifier,
@@ -103,6 +113,8 @@ public fun OneTapBottomSheet(
             oAuths = oAuths,
             style = style,
             authParams = authParams,
+            fastAuthEnabled = fastAuthEnabled,
+            signInAnotherAccountButtonEnabled = fastAuthEnabled,
         )
     }
 }
@@ -122,6 +134,8 @@ private fun OneTapBottomSheetInternal(
     style: OneTapBottomSheetStyle,
     oAuths: Set<OneTapOAuth> = emptySet(),
     authParams: VKIDAuthUiParams,
+    fastAuthEnabled: Boolean,
+    signInAnotherAccountButtonEnabled: Boolean,
 ) {
     val authStatus = rememberSaveable { mutableStateOf<OneTapBottomSheetAuthStatus>(OneTapBottomSheetAuthStatus.Init) }
     val showBottomSheet = rememberSaveable {
@@ -155,7 +169,9 @@ private fun OneTapBottomSheetInternal(
                         style = style,
                         authStatus = authStatus,
                         authParams = authParams,
-                        coroutineScope = coroutineScope
+                        coroutineScope = coroutineScope,
+                        fastAuthEnabled = fastAuthEnabled,
+                        signInAnotherAccountButtonEnabled = signInAnotherAccountButtonEnabled,
                     )
                 }
 
@@ -197,7 +213,8 @@ private fun OneTapBottomSheetInternal(
                         onFail = { onFail(null, it) },
                         authStatus = authStatus,
                         authParams = authParams,
-                        extraAuthParams = extraAuthParams
+                        extraAuthParams = extraAuthParams,
+                        fastAuthEnabled = fastAuthEnabled,
                     )
                 }
 
@@ -214,6 +231,7 @@ private fun OneTapBottomSheetInternal(
                                     data: AuthCodeData,
                                     isCompletion: Boolean
                                 ) = onAuthCode(data, isCompletion)
+
                                 override fun onFail(fail: VKIDAuthFail) = onFail(status.oAuth, fail)
                             },
                             authParams.asParamsBuilder {
@@ -328,7 +346,9 @@ private fun OneTapBottomSheetPreview() {
         dismissSheet = {},
         authStatus = remember { mutableStateOf(OneTapBottomSheetAuthStatus.Init) },
         authParams = VKIDAuthUiParams {},
-        rememberCoroutineScope()
+        rememberCoroutineScope(),
+        fastAuthEnabled = true,
+        signInAnotherAccountButtonEnabled = true,
     )
 }
 

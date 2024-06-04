@@ -9,7 +9,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":common"))
+    implementation(projects.common)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.foundation)
 }

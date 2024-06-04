@@ -13,6 +13,7 @@ import android.os.Build
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -394,30 +395,34 @@ private fun GetPublicInfoUtil() {
         var currentUser: VKIDUser? by remember { mutableStateOf(null) }
         Button(text = "Get") {
             coroutineScope.launch {
-                currentUser = withContext(Dispatchers.IO) {
-                    val idToken = VKID.instance.accessToken?.idToken ?: return@withContext null
-                    val api = OkHttpClient.Builder().build()
+                try {
+                    currentUser = withContext(Dispatchers.IO) {
+                        val idToken = VKID.instance.accessToken?.idToken ?: return@withContext null
+                        val api = OkHttpClient.Builder().build()
 
-                    val endpoint = "id.vk.com"
-                    val formBody = FormBody.Builder()
-                        .add("id_token", idToken)
-                        .add("client_id", getClientId(context))
-                        .build()
-                    val url = "https://$endpoint/oauth2/public_info"
-                    val request = Request.Builder()
-                        .url(url)
-                        .post(formBody)
-                        .build()
-                    val response = api.newCall(request).execute()
-                    val body = requireNotNull(response.body).string()
-                    val user = JSONObject(body).getJSONObject("user")
-                    VKIDUser(
-                        firstName = user.optString("first_name"),
-                        lastName = user.optString("last_name"),
-                        phone = user.optString("phone"),
-                        photo200 = user.optString("avatar"),
-                        email = user.optString("email"),
-                    )
+                        val endpoint = "id.vk.com"
+                        val formBody = FormBody.Builder()
+                            .add("id_token", idToken)
+                            .add("client_id", getClientId(context))
+                            .build()
+                        val url = "https://$endpoint/oauth2/public_info"
+                        val request = Request.Builder()
+                            .url(url)
+                            .post(formBody)
+                            .build()
+                        val response = api.newCall(request).execute()
+                        val body = requireNotNull(response.body).string()
+                        val user = JSONObject(body).getJSONObject("user")
+                        VKIDUser(
+                            firstName = user.optString("first_name"),
+                            lastName = user.optString("last_name"),
+                            phone = user.optString("phone"),
+                            photo200 = user.optString("avatar"),
+                            email = user.optString("email"),
+                        )
+                    }
+                } catch (@Suppress("TooGenericExceptionCaught") t: Throwable) {
+                    showToast(context, "Error: ${t.message}")
                 }
             }
         }
@@ -457,14 +462,20 @@ private fun CurrentTokenUtil() {
             val context = LocalContext.current
             Button(text = "Use token to get Birthday") {
                 coroutineScope.launch {
-                    val bday = getUserBday(it)
-                    showToast(context, "Birth Day: $bday")
+                    try {
+                        showToast(context, "Birth Day: ${getUserBday(it)}")
+                    } catch (@Suppress("TooGenericExceptionCaught") t: Throwable) {
+                        showToast(context, "Error: ${t.message}")
+                    }
                 }
             }
             Button(text = "Copy access token to clipboard") {
                 copyToClipboard(context, "Access token", it.token)
             }
-        }
+        } ?: Text(
+            modifier = Modifier.defaultMinSize(minHeight = 40.dp),
+            text = "You are not authorized"
+        )
     }
 }
 

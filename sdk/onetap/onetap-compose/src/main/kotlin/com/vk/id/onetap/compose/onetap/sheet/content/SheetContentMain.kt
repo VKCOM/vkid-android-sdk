@@ -49,7 +49,9 @@ internal fun SheetContentMain(
     dismissSheet: () -> Unit,
     authStatus: MutableState<OneTapBottomSheetAuthStatus>,
     authParams: VKIDAuthUiParams,
-    coroutineScope: CoroutineScope
+    coroutineScope: CoroutineScope,
+    fastAuthEnabled: Boolean,
+    signInAnotherAccountButtonEnabled: Boolean,
 ) {
     SheetContentBox(
         serviceName = serviceName,
@@ -71,7 +73,7 @@ internal fun SheetContentMain(
         }
         OneTap(
             style = style.oneTapStyle,
-            signInAnotherAccountButtonEnabled = true,
+            signInAnotherAccountButtonEnabled = signInAnotherAccountButtonEnabled,
             oAuths = oAuths,
             vkidButtonTextProvider = remember(scenario) { scenario.vkidButtonTextProvider(resources) },
             onVKIDButtonClick = {
@@ -85,6 +87,7 @@ internal fun SheetContentMain(
                     authStatus = authStatus,
                     authParams = authParams,
                     extraAuthParams = extraAuthParams,
+                    fastAuthEnabled = fastAuthEnabled,
                 )
             },
             onAlternateButtonClick = {
@@ -116,7 +119,8 @@ internal fun SheetContentMain(
                 } else {
                     OneTapBottomSheetAnalytics.userWasFound(true)
                 }
-            }
+            },
+            fastAuthEnabled = fastAuthEnabled,
         )
     }
 }

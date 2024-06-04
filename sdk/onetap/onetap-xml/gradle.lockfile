@@ -177,6 +177,7 @@ io.gitlab.arturbosch.detekt:detekt-rules-documentation:1.23.6=detekt
 io.gitlab.arturbosch.detekt:detekt-rules-empty:1.23.6=detekt
 io.gitlab.arturbosch.detekt:detekt-rules-errorprone:1.23.6=detekt
 io.gitlab.arturbosch.detekt:detekt-rules-exceptions:1.23.6=detekt
+io.gitlab.arturbosch.detekt:detekt-rules-libraries:1.23.6=detektPlugins
 io.gitlab.arturbosch.detekt:detekt-rules-naming:1.23.6=detekt
 io.gitlab.arturbosch.detekt:detekt-rules-performance:1.23.6=detekt
 io.gitlab.arturbosch.detekt:detekt-rules-style:1.23.6=detekt

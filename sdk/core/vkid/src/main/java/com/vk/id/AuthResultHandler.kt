@@ -36,6 +36,9 @@ internal class AuthResultHandler(
     internal suspend fun handle(
         authResult: AuthResult
     ) {
+        if (callbacksHolder.isEmpty()) {
+            return
+        }
         if (authResult !is AuthResult.Success) {
             emitAuthFail(authResult.toVKIDAuthFail())
             prefsStore.clear()

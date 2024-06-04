@@ -10,6 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.vk.id.VKIDUser
 import com.vk.id.analytics.VKIDAnalytics
+import com.vk.id.analytics.stat.StatTracker
 import com.vk.id.common.InternalVKIDApi
 import java.util.UUID
 
@@ -69,13 +70,13 @@ internal object OneTapAnalytics {
         } else {
             track("onetap_button_no_user_tap", iconParam(icon), uuidParam(uuid))
         }
-        return mapOf(UNIQUE_SESSION_PARAM_NAME to uuid)
+        return mapOf(StatTracker.EXTERNAL_PARAM_SESSION_ID to uuid, FLOW_SOURCE)
     }
 
     internal fun alternatePressed(): Map<String, String> {
         val uuid = UUID.randomUUID().toString()
         track("onetap_button_alternative_sign_in_tap", uuidParam(uuid))
-        return mapOf(UNIQUE_SESSION_PARAM_NAME to uuid)
+        return mapOf(StatTracker.EXTERNAL_PARAM_SESSION_ID to uuid, FLOW_SOURCE)
     }
 
     internal fun authSuccessIcon() {
@@ -118,7 +119,7 @@ internal object OneTapAnalytics {
             }
         )
 
-    internal fun uuidParam(uuid: String) = VKIDAnalytics.EventParam(UNIQUE_SESSION_PARAM_NAME, uuid)
+    internal fun uuidParam(uuid: String) = VKIDAnalytics.EventParam("unique_session_id", uuid)
 
     internal fun track(name: String, vararg params: VKIDAnalytics.EventParam) {
         VKIDAnalytics.trackEvent(
@@ -128,6 +129,6 @@ internal object OneTapAnalytics {
         )
     }
 
-    internal const val UNIQUE_SESSION_PARAM_NAME = "unique_session_id"
     internal const val SCREEN_PARAM_NAME = "screen"
+    private val FLOW_SOURCE = StatTracker.EXTERNAL_PARAM_FLOW_SOURCE to "from_one_tap"
 }

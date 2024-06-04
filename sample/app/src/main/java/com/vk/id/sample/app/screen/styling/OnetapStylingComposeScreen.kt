@@ -63,7 +63,7 @@ private const val MIN_WIDTH_DP = 48f
 private const val MAX_RADIUS_DP = 30
 private const val MAX_ELEVATION_DP = 20
 
-@Suppress("LongMethod")
+@Suppress("LongMethod", "CyclomaticComplexMethod")
 @Composable
 internal fun OnetapStylingComposeScreen() {
     val token = remember { mutableStateOf<AccessToken?>(null) }
@@ -84,7 +84,8 @@ internal fun OnetapStylingComposeScreen() {
         }
     }
     val shouldUseXml = remember { mutableStateOf(false) }
-    val signInToAnotherAccountEnabled = remember { mutableStateOf(true) }
+    val signInToAnotherAccountEnabled = remember { mutableStateOf(false) }
+    val fastAuthEnabled = remember { mutableStateOf(true) }
     var scopes by remember { mutableStateOf("") }
     var state by remember { mutableStateOf("") }
     var codeChallenge by remember { mutableStateOf("") }
@@ -144,38 +145,57 @@ internal fun OnetapStylingComposeScreen() {
                     this.codeChallenge = codeChallenge.takeIf { it.isNotBlank() }
                 }
                 if (shouldUseXml.value) {
-                    var oneTapView: OneTap? by remember { mutableStateOf(null) }
-                    AndroidView(factory = { context ->
-                        OneTap(context).apply {
-                            setCallbacks(
-                                onAuth = getOneTapSuccessCallback(context) { token.value = it },
-                                onAuthCode = onAuthCode,
-                                onFail = getOneTapFailCallback(context),
+                    @Composable
+                    fun OneTapAndroidView(fastAuthEnabled: Boolean) {
+                        var oneTapView: OneTap? by remember { mutableStateOf(null) }
+                        AndroidView(factory = { context ->
+                            OneTap(context).apply {
+                                setCallbacks(
+                                    onAuth = getOneTapSuccessCallback(context) { token.value = it },
+                                    onAuthCode = onAuthCode,
+                                    onFail = getOneTapFailCallback(context),
+                                )
+                                oneTapView = this
+                                this.fastAuthEnabled = fastAuthEnabled
+                            }
+                        })
+                        oneTapView?.apply {
+                            this.layoutParams = LayoutParams(
+                                if (selectedStyle is OneTapStyle.Icon) WRAP_CONTENT else context.dpToPixels(width.toInt()),
+                                WRAP_CONTENT,
                             )
-                            oneTapView = this
+                            this.style = selectedStyle
+                            this.oAuths = selectedOAuths.value
+                            this.isSignInToAnotherAccountEnabled = signInToAnotherAccountEnabled.value
+                            this.authParams = authParams
                         }
-                    })
-                    oneTapView?.apply {
-                        this.layoutParams = LayoutParams(
-                            if (selectedStyle is OneTapStyle.Icon) WRAP_CONTENT else context.dpToPixels(width.toInt()),
-                            WRAP_CONTENT,
-                        )
-                        this.style = selectedStyle
-                        this.oAuths = selectedOAuths.value
-                        this.isSignInToAnotherAccountEnabled = signInToAnotherAccountEnabled.value
-                        this.authParams = authParams
+                    }
+                    if (fastAuthEnabled.value) {
+                        OneTapAndroidView(fastAuthEnabled = true)
+                    } else {
+                        OneTapAndroidView(fastAuthEnabled = false)
                     }
                 } else {
-                    OneTap(
-                        modifier = Modifier.width(width.dp),
-                        style = selectedStyle,
-                        onAuth = getOneTapSuccessCallback(context) { token.value = it },
-                        onAuthCode = onAuthCode,
-                        onFail = getOneTapFailCallback(context),
-                        oAuths = selectedOAuths.value,
-                        signInAnotherAccountButtonEnabled = signInToAnotherAccountEnabled.value,
-                        authParams = authParams,
-                    )
+                    // Force state drop when changing the parameter
+                    @Composable
+                    fun renderOneTap(fastAuthEnabled: Boolean) {
+                        OneTap(
+                            modifier = Modifier.width(width.dp),
+                            style = selectedStyle,
+                            onAuth = getOneTapSuccessCallback(context) { token.value = it },
+                            onAuthCode = onAuthCode,
+                            onFail = getOneTapFailCallback(context),
+                            oAuths = selectedOAuths.value,
+                            signInAnotherAccountButtonEnabled = signInToAnotherAccountEnabled.value,
+                            authParams = authParams,
+                            fastAuthEnabled = fastAuthEnabled,
+                        )
+                    }
+                    if (fastAuthEnabled.value) {
+                        renderOneTap(true)
+                    } else {
+                        renderOneTap(false)
+                    }
                 }
             }
             code?.let { value ->
@@ -201,6 +221,11 @@ internal fun OnetapStylingComposeScreen() {
                 title = "Change account",
                 isChecked = signInToAnotherAccountEnabled.value,
                 onCheckedChange = { signInToAnotherAccountEnabled.value = it }
+            )
+            CheckboxSelector(
+                title = "Fetch user",
+                isChecked = fastAuthEnabled.value,
+                onCheckedChange = { fastAuthEnabled.value = it }
             )
             EnumStateCheckboxSelector(state = selectedOAuths)
             DropdownSelector(

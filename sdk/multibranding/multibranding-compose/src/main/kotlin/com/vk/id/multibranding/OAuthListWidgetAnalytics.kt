@@ -10,6 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.vk.id.OAuth
 import com.vk.id.analytics.VKIDAnalytics
+import com.vk.id.analytics.stat.StatTracker
 import com.vk.id.common.InternalVKIDApi
 import java.util.UUID
 
@@ -63,7 +64,7 @@ internal class OAuthListWidgetAnalytics(private val screen: String, private val 
             OAuth.OK -> "ok_button_tap"
         }
         track(name, isIconParam(isText), uuidParam(uuid))
-        return mapOf(UNIQUE_SESSION_PARAM_NAME to uuid)
+        return mapOf(StatTracker.EXTERNAL_PARAM_SESSION_ID to uuid, flowSource)
     }
 
     fun onAuthSuccess(oAuth: OAuth, uuid: String) {
@@ -103,6 +104,7 @@ internal class OAuthListWidgetAnalytics(private val screen: String, private val 
         }
     }
 
+    private val flowSource = StatTracker.EXTERNAL_PARAM_FLOW_SOURCE to "from_multibranding"
     internal companion object {
         const val UNIQUE_SESSION_PARAM_NAME = "unique_session_id"
     }

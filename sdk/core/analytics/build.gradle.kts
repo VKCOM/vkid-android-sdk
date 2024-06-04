@@ -10,8 +10,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":common"))
-    implementation(project(":network"))
-    implementation(project(":logger"))
+    implementation(projects.common)
+    implementation(projects.network)
+    implementation(projects.logger)
     implementation(libs.kotlinx.coroutines.core)
 }

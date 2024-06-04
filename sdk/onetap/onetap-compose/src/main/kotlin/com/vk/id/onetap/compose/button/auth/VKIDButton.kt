@@ -63,10 +63,11 @@ import kotlinx.coroutines.delay
 internal fun VKIDButton(
     modifier: Modifier = Modifier,
     style: InternalVKIDButtonStyle = InternalVKIDButtonStyle.Light(),
-    state: VKIDButtonState = rememberVKIDButtonState(),
+    state: VKIDButtonState,
     textProvider: VKIDButtonTextProvider? = null,
     onClick: () -> Unit,
     onUserFetched: (VKIDUser?) -> Unit = {},
+    fastAuthEnabled: Boolean
 ) {
     val useTextProvider = textProvider ?: defaultTextProvider(LocalContext.current.resources)
     // Runs only on initial composition
@@ -77,7 +78,9 @@ internal fun VKIDButton(
         }
     }
     val coroutineScope = rememberCoroutineScope()
-    FetchUserDataWithAnimation(coroutineScope, state, useTextProvider, onUserFetched)
+    if (fastAuthEnabled) {
+        FetchUserDataWithAnimation(coroutineScope, state, useTextProvider, onUserFetched)
+    }
     Box(
         modifier = modifier
             .shadow(style)
@@ -353,7 +356,13 @@ private fun RightIconBox(
 @Preview
 @Composable
 private fun PreviewVKIDButton() {
-    VKIDButton(onClick = {})
+    VKIDButton(
+        onClick = {},
+        state = VKIDButtonState(
+            inProgress = false
+        ),
+        fastAuthEnabled = true,
+    )
 }
 
 @Preview
@@ -364,7 +373,8 @@ private fun PreviewVKIDButtonProgress() {
         state = VKIDButtonState(
             inProgress = true,
             rightIconVisible = true,
-        )
+        ),
+        fastAuthEnabled = true,
     )
 }
 
@@ -376,6 +386,7 @@ private fun PreviewVKIDButtonUserFailed() {
         state = VKIDButtonState(
             inProgress = false,
             userLoadFailed = true
-        )
+        ),
+        fastAuthEnabled = true,
     )
 }

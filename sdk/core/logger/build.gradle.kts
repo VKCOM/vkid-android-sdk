@@ -11,7 +11,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":common"))
+    implementation(projects.common)
 
     testImplementation(libs.mockk)
     testImplementation(libs.kotest.core)

@@ -13,6 +13,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.vk.id.VKIDUser
 import com.vk.id.analytics.VKIDAnalytics
+import com.vk.id.analytics.stat.StatTracker
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.onetap.compose.onetap.OneTapAnalytics
@@ -106,13 +107,13 @@ internal object OneTapBottomSheetAnalytics {
         } else {
             track("continue_as_tap", OneTapAnalytics.uuidParam(uuid), screenParam)
         }
-        return mapOf(OneTapAnalytics.UNIQUE_SESSION_PARAM_NAME to uuid)
+        return mapOf(StatTracker.EXTERNAL_PARAM_SESSION_ID to uuid, FLOW_SOURCE)
     }
 
     internal fun alternatePressed(): Map<String, String> {
         val uuid = UUID.randomUUID().toString()
         track("alternative_sign_in_tap", OneTapAnalytics.uuidParam(uuid), screenParam)
-        return mapOf(OneTapAnalytics.UNIQUE_SESSION_PARAM_NAME to uuid)
+        return mapOf(StatTracker.EXTERNAL_PARAM_SESSION_ID to uuid, FLOW_SOURCE)
     }
 
     internal fun userWasFound(signInAnotherAccountButton: Boolean) {
@@ -126,7 +127,7 @@ internal object OneTapBottomSheetAnalytics {
     internal fun retryAuthTap(): Map<String, String> {
         val uuid = UUID.randomUUID().toString()
         track("retry_auth_tap")
-        return mapOf(OneTapAnalytics.UNIQUE_SESSION_PARAM_NAME to uuid)
+        return mapOf(StatTracker.EXTERNAL_PARAM_SESSION_ID to uuid, FLOW_SOURCE)
     }
 
     private val screenParam = VKIDAnalytics.EventParam(SCREEN_PARAM_NAME, "floating_one_tap")
@@ -151,6 +152,8 @@ internal object OneTapBottomSheetAnalytics {
         }
         return vkidLocale.toAnalyticsParam()
     }
+
+    private val FLOW_SOURCE = StatTracker.EXTERNAL_PARAM_FLOW_SOURCE to "from_floating_one_tap"
 }
 
 @Suppress("MagicNumber")
