@@ -57,7 +57,11 @@ internal class AuthOptionsCreator(
             // To not show "Log in as..." screen in web view
             webAuthPhoneScreen = !authParams.useOAuthProviderIfPossible,
             oAuth = authParams.oAuth,
-            prompt = if (authParams.prompt == Prompt.LOGIN) "login" else "",
+            prompt = when (authParams.prompt) {
+                Prompt.LOGIN -> "login"
+                Prompt.CONSENT -> "consent"
+                else -> ""
+            },
             scopes = authParams.scopes
         )
     }

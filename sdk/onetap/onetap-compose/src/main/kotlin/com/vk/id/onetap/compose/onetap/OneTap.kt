@@ -65,7 +65,7 @@ import com.vk.id.onetap.compose.util.PlaceComposableIfFitsWidth
  * Note that this parameter doesn't support changes in runtime.
  */
 @Composable
-@Suppress("LongMethod")
+@Suppress("LongMethod", "CyclomaticComplexMethod")
 public fun OneTap(
     modifier: Modifier = Modifier,
     style: OneTapStyle = OneTapStyle.Light(),
@@ -106,6 +106,8 @@ public fun OneTap(
                         if (!fastAuthEnabled) {
                             useOAuthProviderIfPossible = false
                             prompt = Prompt.LOGIN
+                        } else if (user == null) {
+                            prompt = Prompt.CONSENT
                         }
                     },
                 )
@@ -161,6 +163,8 @@ public fun OneTap(
                                     if (!fastAuthEnabled) {
                                         useOAuthProviderIfPossible = false
                                         prompt = Prompt.LOGIN
+                                    } else if (user == null) {
+                                        prompt = Prompt.CONSENT
                                     }
                                 }
                             )
@@ -222,6 +226,8 @@ public fun OneTap(
                                 if (!fastAuthEnabled) {
                                     useOAuthProviderIfPossible = false
                                     prompt = Prompt.LOGIN
+                                } else if (user == null) {
+                                    prompt = Prompt.CONSENT
                                 }
                             }
                         )

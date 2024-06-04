@@ -215,6 +215,7 @@ private fun OneTapBottomSheetInternal(
                         authParams = authParams,
                         extraAuthParams = extraAuthParams,
                         fastAuthEnabled = fastAuthEnabled,
+                        user = status.user,
                     )
                 }
 

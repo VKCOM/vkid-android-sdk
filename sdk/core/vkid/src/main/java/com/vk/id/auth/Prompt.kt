@@ -10,4 +10,7 @@ public enum class Prompt {
 
     /** Always show login form */
     LOGIN,
+
+    /** Always show consent screen */
+    CONSENT,
 }
