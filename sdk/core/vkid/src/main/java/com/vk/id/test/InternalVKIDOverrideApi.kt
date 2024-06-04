@@ -47,6 +47,7 @@ public interface InternalVKIDOverrideApi {
 }
 
 @InternalVKIDApi
+@Suppress("ForbiddenPublicDataClass")
 public data class InternalVKIDTokenPayloadResponse(
     @SerializedName("access_token")
     val accessToken: String? = null,
@@ -67,6 +68,7 @@ public data class InternalVKIDTokenPayloadResponse(
 )
 
 @InternalVKIDApi
+@Suppress("ForbiddenPublicDataClass")
 public data class InternalVKIDCodePayloadResponse(
     @SerializedName("code")
     val code: String? = null,
@@ -79,6 +81,7 @@ public data class InternalVKIDCodePayloadResponse(
 )
 
 @InternalVKIDApi
+@Suppress("ForbiddenPublicDataClass")
 public data class InternalVKIDUserInfoPayloadResponse(
     val error: String? = null,
     val user: InternalVKIDUserPayloadResponse? = null,
@@ -86,11 +89,13 @@ public data class InternalVKIDUserInfoPayloadResponse(
 )
 
 @InternalVKIDApi
+@Suppress("ForbiddenPublicDataClass")
 public data class InternalVKIDLogoutPayloadResponse(
     val error: String? = null,
 )
 
 @InternalVKIDApi
+@Suppress("ForbiddenPublicDataClass")
 public data class InternalVKIDUserPayloadResponse(
     @SerializedName("first_name")
     val firstName: String,
@@ -105,6 +110,7 @@ public data class InternalVKIDUserPayloadResponse(
 )
 
 @InternalVKIDApi
+@Suppress("ForbiddenPublicDataClass")
 public data class InternalVKIDSilentAuthProvidersResponse(
     @SerializedName("response")
     val response: String

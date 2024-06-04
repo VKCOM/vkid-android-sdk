@@ -10,7 +10,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":vkid"))
-    implementation(project(":common"))
+    implementation(projects.vkid)
+    implementation(projects.common)
     implementation(libs.androidx.compose.runtime)
 }
