@@ -30,7 +30,6 @@ internal object OneTapBottomSheetAnalytics {
         SheetScreenShown {
             track(
                 "screen_proceed",
-                screenParam,
                 VKIDAnalytics.EventParam("screen_current", "nowhere"),
                 VKIDAnalytics.EventParam("screen_to", "floating_one_tap"),
                 theme.toAnalyticsParam(),
