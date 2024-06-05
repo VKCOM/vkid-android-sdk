@@ -168,7 +168,6 @@ private fun OAuthButton(
                         VKID.instance.authorize(
                             object : VKIDAuthCallback {
                                 override fun onAuth(accessToken: AccessToken) {
-                                    analytics.onAuthSuccess(item, extraAuthParams[UNIQUE_SESSION_PARAM_NAME] ?: "")
                                     onAuth(item, accessToken)
                                 }
 

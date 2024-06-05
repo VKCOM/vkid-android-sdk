@@ -67,15 +67,6 @@ internal class OAuthListWidgetAnalytics(private val screen: String, private val 
         return mapOf(StatTracker.EXTERNAL_PARAM_SESSION_ID to uuid, flowSource)
     }
 
-    fun onAuthSuccess(oAuth: OAuth, uuid: String) {
-        val oauth = when (oAuth) {
-            OAuth.VK -> return // no tracking
-            OAuth.MAIL -> "mail_ru"
-            OAuth.OK -> "ok_ru"
-        }
-        track("auth_by_oauth", VKIDAnalytics.EventParam("oauth_service", oauth), uuidParam(uuid))
-    }
-
     fun onAuthError(sessionId: String) {
         if (!paused) {
             VKIDAnalytics.trackEvent(
@@ -83,7 +74,7 @@ internal class OAuthListWidgetAnalytics(private val screen: String, private val 
                 VKIDAnalytics.EventParam("sdk_type", "vkid"),
                 uuidParam(sessionId),
                 VKIDAnalytics.EventParam("error", "auth_error"),
-                VKIDAnalytics.EventParam("screen_current", screen)
+                VKIDAnalytics.EventParam("screen", screen)
             )
         }
     }

@@ -10,14 +10,16 @@ internal data class AuthOptions(
     val clientSecret: String,
     val codeChallenge: String,
     val codeChallengeMethod: String,
-    val redirectUri: String,
+    val redirectUriCodeFlow: String,
+    val redirectUriBrowser: String,
     val state: String,
     val locale: String?,
     val theme: String?,
     val webAuthPhoneScreen: Boolean,
     val oAuth: OAuth?,
     val prompt: String,
-    val scopes: Set<String>
+    val scopes: Set<String>,
+    val statsInfo: String
 )
 
 private const val APP_ID = "app_id"
@@ -43,6 +45,9 @@ private const val THEME = "scheme"
 private const val SCREEN_PARAM = "screen"
 private const val SCREEN_PHONE = "phone"
 private const val SCOPES = "scope"
+private const val STATS_INFO = "stats_info"
+private const val SDK_TYPE = "sdk_type"
+private const val SDK_TYPE_VALUE = "vkid"
 
 internal fun basicCodeFlowUri(appPackage: String) = Uri.Builder()
     .scheme(appPackage)
@@ -53,11 +58,13 @@ internal fun AuthOptions.toAuthUriBrowser(): Uri {
     val builder = Uri.Builder()
         .appendQueryParameter(CLIENT_ID, appId)
         .appendQueryParameter(RESPONSE_TYPE, RESPONSE_TYPE_CODE)
-        .appendQueryParameter(REDIRECT_URI, redirectUri)
+        .appendQueryParameter(REDIRECT_URI, redirectUriBrowser)
         .appendQueryParameter(CODE_CHALLENGE_METHOD, CODE_CHALLENGE_METHOD_VALUE)
         .appendQueryParameter(CODE_CHALLENGE, codeChallenge)
         .appendQueryParameter(STATE, state)
         .appendQueryParameter(PROMPT, prompt)
+        .appendQueryParameter(STATS_INFO, statsInfo)
+        .appendQueryParameter(SDK_TYPE, SDK_TYPE_VALUE)
 
     if (scopes.isNotEmpty()) {
         builder.appendQueryParameter(SCOPES, scopes.joinToString(separator = " "))
@@ -85,7 +92,7 @@ internal fun AuthOptions.toAuthUriCodeFlow(appPackage: String): Uri {
     val builder = Uri.Builder()
         .appendQueryParameter(APP_ID, appId)
         .appendQueryParameter(RESPONSE_TYPE, RESPONSE_TYPE_CODE)
-        .appendQueryParameter(REDIRECT_URI, redirectUri)
+        .appendQueryParameter(REDIRECT_URI, redirectUriCodeFlow)
         .appendQueryParameter(CODE_CHALLENGE_METHOD, codeChallengeMethod)
         .appendQueryParameter(CODE_CHALLENGE, codeChallenge)
         .appendQueryParameter(STATE, state)

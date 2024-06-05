@@ -96,14 +96,16 @@ internal class VKIDTest : BehaviorSpec({
             clientSecret = "client secret",
             codeChallenge = "code challenge",
             codeChallengeMethod = "code challenge method",
-            redirectUri = "redirect uri",
+            redirectUriBrowser = "redirect uri browser",
+            redirectUriCodeFlow = "redirect uri provider",
             state = "state",
             locale = "locale",
             theme = "theme",
             webAuthPhoneScreen = false,
             oAuth = null,
             prompt = "",
-            scopes = emptySet()
+            scopes = emptySet(),
+            statsInfo = ""
         )
         coEvery { authProvidersChooser.chooseBest(authParams) } returns authProvider
         every { authOptionsCreator.create(authParams) } returns authOptions

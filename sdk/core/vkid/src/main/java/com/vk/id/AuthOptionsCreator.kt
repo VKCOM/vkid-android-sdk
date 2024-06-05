@@ -38,19 +38,26 @@ internal class AuthOptionsCreator(
         val theme = authParams.theme ?: VKIDAuthParams.Theme.systemTheme(appContext)
         val credentials = serviceCredentials.value
 
-        val redirectUri = Uri.parse(credentials.redirectUri).buildUpon()
         val extraRedirectUriParams = JSONObject().apply {
             addOAuthParams(authParams.scopes)
-            addStatParams(authParams.extraParams)
         }
-        redirectUri.appendQueryParameter("oauth2_params", extraRedirectUriParams.toBase64())
+        val baseRedirectUri = Uri.parse(credentials.redirectUri)
+        val redirectUriBrowser = baseRedirectUri.buildUpon()
+        redirectUriBrowser.appendQueryParameter("oauth2_params", extraRedirectUriParams.toBase64())
+
+        // statsInfo should only be in redirectUri for auth provider, and not for browser
+        val redirectUriCodeFlow = baseRedirectUri.buildUpon()
+        val statsInfo = createStatsInfo(authParams.extraParams)
+        extraRedirectUriParams.addStatParams(statsInfo)
+        redirectUriCodeFlow.appendQueryParameter("oauth2_params", extraRedirectUriParams.toBase64())
 
         return AuthOptions(
             appId = credentials.clientID,
             clientSecret = credentials.clientSecret,
             codeChallenge = codeChallenge,
             codeChallengeMethod = "sha256",
-            redirectUri = redirectUri.toString(),
+            redirectUriBrowser = redirectUriBrowser.toString(),
+            redirectUriCodeFlow = redirectUriCodeFlow.toString(),
             state = state,
             locale = locale?.toQueryParam(),
             theme = theme?.toQueryParam(),
@@ -62,7 +69,8 @@ internal class AuthOptionsCreator(
                 Prompt.CONSENT -> "consent"
                 else -> ""
             },
-            scopes = authParams.scopes
+            scopes = authParams.scopes,
+            statsInfo = statsInfo.toBase64()
         )
     }
 }
@@ -71,19 +79,20 @@ private fun JSONObject.addOAuthParams(scopes: Set<String>) {
     put("scope", scopes.joinToString(separator = " "))
 }
 
-private fun JSONObject.addStatParams(extraParams: Map<String, String>?) {
-    val statsInfo = JSONObject().apply {
-        if (extraParams != null) {
-            val flowSource = extraParams[StatTracker.EXTERNAL_PARAM_FLOW_SOURCE]
-            if (flowSource != null) {
-                put(StatTracker.EXTERNAL_PARAM_FLOW_SOURCE, flowSource)
-            }
-            val sessionId = extraParams[StatTracker.EXTERNAL_PARAM_SESSION_ID]
-            if (sessionId != null) {
-                put(StatTracker.EXTERNAL_PARAM_SESSION_ID, sessionId)
-            }
+private fun createStatsInfo(extraParams: Map<String, String>?) = JSONObject().apply {
+    if (extraParams != null) {
+        val flowSource = extraParams[StatTracker.EXTERNAL_PARAM_FLOW_SOURCE]
+        if (flowSource != null) {
+            put(StatTracker.EXTERNAL_PARAM_FLOW_SOURCE, flowSource)
+        }
+        val sessionId = extraParams[StatTracker.EXTERNAL_PARAM_SESSION_ID]
+        if (sessionId != null) {
+            put(StatTracker.EXTERNAL_PARAM_SESSION_ID, sessionId)
         }
     }
+}
+
+private fun JSONObject.addStatParams(statsInfo: JSONObject) {
     put("stats_info", statsInfo)
 }
 private fun JSONObject.toBase64(): String {

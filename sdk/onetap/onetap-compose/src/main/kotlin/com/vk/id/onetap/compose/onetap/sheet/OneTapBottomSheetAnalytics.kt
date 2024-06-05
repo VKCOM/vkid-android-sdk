@@ -30,7 +30,6 @@ internal object OneTapBottomSheetAnalytics {
         SheetScreenShown {
             track(
                 "screen_proceed",
-                screenParam,
                 VKIDAnalytics.EventParam("screen_current", "nowhere"),
                 VKIDAnalytics.EventParam("screen_to", "floating_one_tap"),
                 theme.toAnalyticsParam(),
@@ -45,16 +44,6 @@ internal object OneTapBottomSheetAnalytics {
         SheetScreenShown {
             track(
                 "data_loading",
-                screenParam,
-            )
-        }
-    }
-
-    @Composable
-    internal fun BottomSheetSuccessShown() {
-        SheetScreenShown {
-            track(
-                "auth_by_floating_one_tap",
                 screenParam,
             )
         }

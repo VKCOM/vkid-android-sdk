@@ -92,7 +92,6 @@ public fun OneTap(
                 startAuth(
                     coroutineScope,
                     {
-                        OneTapAnalytics.authSuccessIcon()
                         onAuth(null, it)
                     },
                     onAuthCode,
@@ -148,7 +147,6 @@ public fun OneTap(
                             startAuth(
                                 coroutineScope,
                                 {
-                                    OneTapAnalytics.authSuccess()
                                     onAuth(null, it)
                                 },
                                 onAuthCode,
@@ -212,7 +210,6 @@ public fun OneTap(
                         startAuth(
                             coroutineScope,
                             {
-                                OneTapAnalytics.authSuccessIcon()
                                 onAuth(null, it)
                             },
                             onAuthCode,
