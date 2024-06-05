@@ -74,7 +74,7 @@ internal class OAuthListWidgetAnalytics(private val screen: String, private val 
                 VKIDAnalytics.EventParam("sdk_type", "vkid"),
                 uuidParam(sessionId),
                 VKIDAnalytics.EventParam("error", "auth_error"),
-                VKIDAnalytics.EventParam("screen_current", screen)
+                VKIDAnalytics.EventParam("screen", screen)
             )
         }
     }
