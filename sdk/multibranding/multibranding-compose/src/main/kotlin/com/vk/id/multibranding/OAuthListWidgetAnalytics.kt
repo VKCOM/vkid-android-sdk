@@ -96,7 +96,7 @@ internal class OAuthListWidgetAnalytics(private val screen: String, private val 
     }
 
     private val flowSource = StatTracker.EXTERNAL_PARAM_FLOW_SOURCE to "from_multibranding"
-    internal companion object {
+    private companion object {
         const val UNIQUE_SESSION_PARAM_NAME = "unique_session_id"
     }
 }
