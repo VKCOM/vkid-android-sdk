@@ -115,7 +115,7 @@ internal object OneTapBottomSheetAnalytics {
 
     internal fun retryAuthTap(): Map<String, String> {
         val uuid = UUID.randomUUID().toString()
-        track("retry_auth_tap")
+        track("retry_auth_tap", screenParam)
         return mapOf(StatTracker.EXTERNAL_PARAM_SESSION_ID to uuid, FLOW_SOURCE)
     }
 
