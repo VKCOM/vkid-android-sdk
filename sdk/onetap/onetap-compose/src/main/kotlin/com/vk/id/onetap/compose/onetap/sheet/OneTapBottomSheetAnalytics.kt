@@ -119,6 +119,15 @@ internal object OneTapBottomSheetAnalytics {
         return mapOf(StatTracker.EXTERNAL_PARAM_SESSION_ID to uuid, FLOW_SOURCE)
     }
 
+    internal fun authError(uuid: String) {
+        track(
+            "sdk_auth_error",
+            OneTapAnalytics.uuidParam(uuid),
+            VKIDAnalytics.EventParam("from_floating_one_tap", "true"),
+            VKIDAnalytics.EventParam("error", "sdk_auth_error")
+        )
+    }
+
     private val screenParam = VKIDAnalytics.EventParam(SCREEN_PARAM_NAME, "floating_one_tap")
 
     private fun langParam(context: Context): VKIDAnalytics.EventParam {

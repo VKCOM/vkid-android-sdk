@@ -29,6 +29,7 @@ import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.compose.R
 import com.vk.id.onetap.compose.onetap.OneTap
+import com.vk.id.onetap.compose.onetap.OneTapAnalytics.uuidFromParams
 import com.vk.id.onetap.compose.onetap.sheet.OneTapBottomSheetAnalytics
 import com.vk.id.onetap.compose.onetap.sheet.OneTapScenario
 import com.vk.id.onetap.compose.onetap.sheet.scenarioTitle
@@ -83,7 +84,10 @@ internal fun SheetContentMain(
                     style = style,
                     onAuth = { onAuth(null, it) },
                     onAuthCode = onAuthCode,
-                    onFail = { onFail(null, it) },
+                    onFail = {
+                        OneTapBottomSheetAnalytics.authError(extraAuthParams.uuidFromParams())
+                        onFail(null, it)
+                    },
                     authStatus = authStatus,
                     authParams = authParams,
                     extraAuthParams = extraAuthParams,
@@ -98,7 +102,10 @@ internal fun SheetContentMain(
                     style = style,
                     onAuth = { onAuth(null, it) },
                     onAuthCode = onAuthCode,
-                    onFail = { onFail(null, it) },
+                    onFail = {
+                        OneTapBottomSheetAnalytics.authError(extraAuthParams.uuidFromParams())
+                        onFail(null, it)
+                    },
                     authStatus = authStatus,
                     authParams = authParams,
                     extraAuthParams = extraAuthParams,
