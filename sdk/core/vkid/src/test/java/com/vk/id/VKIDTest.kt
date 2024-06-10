@@ -111,7 +111,7 @@ internal class VKIDTest : BehaviorSpec({
         every { authOptionsCreator.create(authParams) } returns authOptions
         every { authProvider.auth(authOptions) } just runs
         every { authCallbacksHolder.add(any()) } just runs
-        coEvery { authResultHandler.handle(any()) } just runs
+        coEvery { authResultHandler.handle(any(), any()) } just runs
         TestScope(scheduler).launch {
             vkid.authorize(callback = mockk(), params = authParams)
         }
@@ -129,7 +129,7 @@ internal class VKIDTest : BehaviorSpec({
             scheduler.advanceUntilIdle()
 
             Then("Auth result is handled") {
-                coVerify { authResultHandler.handle(any()) }
+                coVerify { authResultHandler.handle(any(), any()) }
             }
 
             Then("Auth callback is added") {
