@@ -234,17 +234,18 @@ public class VKID {
 
         AuthEventBridge.listener = object : AuthEventBridge.Listener {
             override fun onAuthResult(authResult: AuthResult) {
-                if (!params.internalUse) {
-                    if (authResult !is AuthResult.Success) {
-                        VKIDAnalytics.trackEvent(
-                            "error_custom_auth",
-                            VKIDAnalytics.EventParam("sdk_type", "vkid"),
-                            VKIDAnalytics.EventParam("unique_session_id", authEventUUId)
-                        )
-                    }
-                }
                 CoroutineScope(authContext + Job()).launch {
-                    authResultHandler.value.handle(authResult)
+                    authResultHandler.value.handle(authResult, onFail = {
+                        if (!params.internalUse) {
+                            VKIDAnalytics.trackEvent(
+                                "sdk_auth_error",
+                                VKIDAnalytics.EventParam("error", "sdk_auth_error"),
+                                VKIDAnalytics.EventParam("sdk_type", "vkid"),
+                                VKIDAnalytics.EventParam("unique_session_id", authEventUUId),
+                                VKIDAnalytics.EventParam("from_custom_auth", "true")
+                            )
+                        }
+                    })
                     if (requestMutex.isLocked) {
                         requestMutex.unlock()
                     }

@@ -21,11 +21,10 @@ internal object OneTapAnalytics {
     private const val EVENT_USER_FOUND = "onetap_button_user_found"
     private const val EVENT_ONETAP_TAP = "onetap_button_tap"
     private const val EVENT_ONETAP_ALTERNATIVE_SIGN_IN_TAP = "onetap_button_alternative_sign_in_tap"
-    private const val EVENT_ONETAP_AUTH_ERROR = "onetap_button_auth_error"
+    private const val EVENT_ONETAP_AUTH_ERROR = "sdk_auth_error"
     private const val EVENT_NO_SESSION_FOUND = "no_session_found"
     private const val EVENT_NO_USER_SHOW = "onetap_button_no_user_show"
     private const val EVENT_ONETAP_NO_USER_TAP = "onetap_button_no_user_tap"
-    private const val EVENT_ONETAP_NO_USER_AUTH_ERROR = "onetap_button_no_user_auth_error"
 
     internal fun sessionNotFound() {
         track(EVENT_NO_SESSION_FOUND)
@@ -104,16 +103,18 @@ internal object OneTapAnalytics {
         return mapOf(StatTracker.EXTERNAL_PARAM_SESSION_ID to uuid, FLOW_SOURCE)
     }
 
-    internal fun authErrorIcon(uuid: String, user: VKIDUser?) {
-        authError(uuid, user, true)
+    internal fun authErrorIcon(uuid: String) {
+        authError(uuid, true)
     }
 
-    internal fun authError(uuid: String, user: VKIDUser?, icon: Boolean = false) {
-        if (user != null) {
-            track(EVENT_ONETAP_AUTH_ERROR, iconParam(icon), uuidParam(uuid))
-        } else {
-            track(EVENT_ONETAP_NO_USER_AUTH_ERROR, iconParam(icon), uuidParam(uuid))
-        }
+    internal fun authError(uuid: String, icon: Boolean = false) {
+        track(
+            EVENT_ONETAP_AUTH_ERROR,
+            iconParam(icon),
+            uuidParam(uuid),
+            VKIDAnalytics.EventParam("from_one_tap", "true"),
+            VKIDAnalytics.EventParam("error", "sdk_auth_error")
+        )
     }
 
     private fun iconParam(icon: Boolean): VKIDAnalytics.EventParam =
@@ -144,6 +145,10 @@ internal object OneTapAnalytics {
             VKIDAnalytics.EventParam("sdk_type", "vkid"),
             *params
         )
+    }
+
+    internal fun Map<String, String>.uuidFromParams(): String {
+        return this[StatTracker.EXTERNAL_PARAM_SESSION_ID] ?: ""
     }
 
     internal const val SCREEN_PARAM_NAME = "screen"
