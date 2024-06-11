@@ -88,6 +88,7 @@ internal fun SheetContentMain(
                     authParams = authParams,
                     extraAuthParams = extraAuthParams,
                     fastAuthEnabled = fastAuthEnabled,
+                    user = user,
                 )
             },
             onAlternateButtonClick = {
