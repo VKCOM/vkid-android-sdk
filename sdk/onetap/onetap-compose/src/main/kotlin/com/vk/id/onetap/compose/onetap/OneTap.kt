@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.vk.id.AccessToken
 import com.vk.id.VKIDAuthFail
 import com.vk.id.VKIDUser
+import com.vk.id.analytics.stat.StatTracker
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.Prompt
 import com.vk.id.auth.VKIDAuthParams
@@ -64,7 +65,7 @@ import com.vk.id.onetap.compose.util.PlaceComposableIfFitsWidth
  * Note that this parameter doesn't support changes in runtime.
  */
 @Composable
-@Suppress("LongMethod")
+@Suppress("LongMethod", "CyclomaticComplexMethod")
 public fun OneTap(
     modifier: Modifier = Modifier,
     style: OneTapStyle = OneTapStyle.Light(),
@@ -91,12 +92,12 @@ public fun OneTap(
                 startAuth(
                     coroutineScope,
                     {
-                        OneTapAnalytics.authSuccessIcon()
                         onAuth(null, it)
                     },
                     onAuthCode,
                     {
-                        OneTapAnalytics.authErrorIcon(user)
+                        val uuid = extraAuthParams[StatTracker.EXTERNAL_PARAM_SESSION_ID] ?: ""
+                        OneTapAnalytics.authErrorIcon(uuid, user)
                         onFail(null, it)
                     },
                     params = authParams.asParamsBuilder {
@@ -104,13 +105,18 @@ public fun OneTap(
                         if (!fastAuthEnabled) {
                             useOAuthProviderIfPossible = false
                             prompt = Prompt.LOGIN
+                        } else if (user == null) {
+                            prompt = Prompt.CONSENT
                         }
                     },
                 )
             },
             onUserFetched = {
                 user = it
-                it?.let {
+                if (user == null) {
+                    OneTapAnalytics.sessionNotFound()
+                    OneTapAnalytics.userNotFoundIcon()
+                } else {
                     OneTapAnalytics.userWasFoundIcon()
                 }
             },
@@ -141,12 +147,12 @@ public fun OneTap(
                             startAuth(
                                 coroutineScope,
                                 {
-                                    OneTapAnalytics.authSuccess()
                                     onAuth(null, it)
                                 },
                                 onAuthCode,
                                 {
-                                    OneTapAnalytics.authError(user)
+                                    val uuid = extraAuthParams[StatTracker.EXTERNAL_PARAM_SESSION_ID] ?: ""
+                                    OneTapAnalytics.authError(uuid, user)
                                     onFail(null, it)
                                 },
                                 authParams.asParamsBuilder {
@@ -155,6 +161,8 @@ public fun OneTap(
                                     if (!fastAuthEnabled) {
                                         useOAuthProviderIfPossible = false
                                         prompt = Prompt.LOGIN
+                                    } else if (user == null) {
+                                        prompt = Prompt.CONSENT
                                     }
                                 }
                             )
@@ -181,7 +189,10 @@ public fun OneTap(
                         onUserFetched = {
                             if (!measureInProgress) {
                                 user = it
-                                it?.let {
+                                if (user == null) {
+                                    OneTapAnalytics.sessionNotFound()
+                                    OneTapAnalytics.userNotFound()
+                                } else {
                                     OneTapAnalytics.userWasFound(signInAnotherAccountButtonEnabled)
                                 }
                             }
@@ -199,12 +210,12 @@ public fun OneTap(
                         startAuth(
                             coroutineScope,
                             {
-                                OneTapAnalytics.authSuccessIcon()
                                 onAuth(null, it)
                             },
                             onAuthCode,
                             {
-                                OneTapAnalytics.authErrorIcon(user)
+                                val uuid = extraAuthParams[StatTracker.EXTERNAL_PARAM_SESSION_ID] ?: ""
+                                OneTapAnalytics.authErrorIcon(uuid, user)
                                 onFail(null, it)
                             },
                             params = authParams.asParamsBuilder {
@@ -212,13 +223,20 @@ public fun OneTap(
                                 if (!fastAuthEnabled) {
                                     useOAuthProviderIfPossible = false
                                     prompt = Prompt.LOGIN
+                                } else if (user == null) {
+                                    prompt = Prompt.CONSENT
                                 }
                             }
                         )
                     },
                     onUserFetched = {
                         user = it
-                        it?.let { OneTapAnalytics.userWasFoundIcon() }
+                        if (user == null) {
+                            OneTapAnalytics.sessionNotFound()
+                            OneTapAnalytics.userNotFoundIcon()
+                        } else {
+                            OneTapAnalytics.userWasFoundIcon()
+                        }
                     },
                     fastAuthEnabled = fastAuthEnabled,
                 )
@@ -241,7 +259,7 @@ internal fun OneTap(
     onAuthCode: (AuthCodeData, Boolean) -> Unit,
     onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit,
     authParams: VKIDAuthUiParams = VKIDAuthUiParams {},
-    onUserFetched: (VKIDUser?) -> Unit,
+    onUserFetched: (VKIDUser?) -> Unit = {},
     fastAuthEnabled: Boolean,
 ) {
     val vkidButtonState = remember { VKIDButtonState(inProgress = false) }

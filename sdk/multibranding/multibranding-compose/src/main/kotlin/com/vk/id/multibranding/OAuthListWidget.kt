@@ -45,13 +45,13 @@ import com.vk.id.AccessToken
 import com.vk.id.OAuth
 import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
+import com.vk.id.analytics.stat.StatTracker
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.Prompt
 import com.vk.id.auth.VKIDAuthCallback
 import com.vk.id.auth.VKIDAuthParams.Theme
 import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.multibranding.OAuthListWidgetAnalytics.Companion.UNIQUE_SESSION_PARAM_NAME
 import com.vk.id.multibranding.common.style.OAuthListWidgetStyle
 import com.vk.id.multibranding.internal.LocalMultibrandingAnalyticsContext
 import kotlinx.coroutines.CoroutineScope
@@ -168,7 +168,6 @@ private fun OAuthButton(
                         VKID.instance.authorize(
                             object : VKIDAuthCallback {
                                 override fun onAuth(accessToken: AccessToken) {
-                                    analytics.onAuthSuccess(item, extraAuthParams[UNIQUE_SESSION_PARAM_NAME] ?: "")
                                     onAuth(item, accessToken)
                                 }
 
@@ -178,7 +177,7 @@ private fun OAuthButton(
                                 ) = onAuthCode(data, isCompletion)
 
                                 override fun onFail(fail: VKIDAuthFail) {
-                                    analytics.onAuthError(extraAuthParams[UNIQUE_SESSION_PARAM_NAME] ?: "")
+                                    analytics.onAuthError(extraAuthParams[StatTracker.EXTERNAL_PARAM_SESSION_ID] ?: "")
                                     onFail(fail)
                                 }
                             },

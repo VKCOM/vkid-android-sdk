@@ -30,7 +30,6 @@ internal object OneTapBottomSheetAnalytics {
         SheetScreenShown {
             track(
                 "screen_proceed",
-                screenParam,
                 VKIDAnalytics.EventParam("screen_current", "nowhere"),
                 VKIDAnalytics.EventParam("screen_to", "floating_one_tap"),
                 theme.toAnalyticsParam(),
@@ -45,16 +44,6 @@ internal object OneTapBottomSheetAnalytics {
         SheetScreenShown {
             track(
                 "data_loading",
-                screenParam,
-            )
-        }
-    }
-
-    @Composable
-    internal fun BottomSheetSuccessShown() {
-        SheetScreenShown {
-            track(
-                "auth_by_floating_one_tap",
                 screenParam,
             )
         }
@@ -126,7 +115,7 @@ internal object OneTapBottomSheetAnalytics {
 
     internal fun retryAuthTap(): Map<String, String> {
         val uuid = UUID.randomUUID().toString()
-        track("retry_auth_tap")
+        track("retry_auth_tap", screenParam)
         return mapOf(StatTracker.EXTERNAL_PARAM_SESSION_ID to uuid, FLOW_SOURCE)
     }
 

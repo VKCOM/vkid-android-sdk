@@ -17,14 +17,39 @@ import java.util.UUID
 @Suppress("TooManyFunctions")
 internal object OneTapAnalytics {
 
+    private const val EVENT_SCREEN_PROCEED = "screen_proceed"
+    private const val EVENT_USER_FOUND = "onetap_button_user_found"
+    private const val EVENT_ONETAP_TAP = "onetap_button_tap"
+    private const val EVENT_ONETAP_ALTERNATIVE_SIGN_IN_TAP = "onetap_button_alternative_sign_in_tap"
+    private const val EVENT_ONETAP_AUTH_ERROR = "onetap_button_auth_error"
+    private const val EVENT_NO_SESSION_FOUND = "no_session_found"
+    private const val EVENT_NO_USER_SHOW = "onetap_button_no_user_show"
+    private const val EVENT_ONETAP_NO_USER_TAP = "onetap_button_no_user_tap"
+    private const val EVENT_ONETAP_NO_USER_AUTH_ERROR = "onetap_button_no_user_auth_error"
+
+    internal fun sessionNotFound() {
+        track(EVENT_NO_SESSION_FOUND)
+    }
+
     internal fun userWasFoundIcon() {
         userWasFound(signInAnotherAccountButton = false, icon = true)
     }
 
     internal fun userWasFound(signInAnotherAccountButton: Boolean, icon: Boolean = false) {
         track(
-            "onetap_button_user_found",
+            EVENT_USER_FOUND,
             alternateParam(signInAnotherAccountButton),
+            iconParam(icon)
+        )
+    }
+
+    internal fun userNotFoundIcon() {
+        userNotFound(true)
+    }
+
+    internal fun userNotFound(icon: Boolean = false) {
+        track(
+            EVENT_NO_USER_SHOW,
             iconParam(icon)
         )
     }
@@ -43,7 +68,7 @@ internal object OneTapAnalytics {
                 when (event) {
                     Lifecycle.Event.ON_RESUME -> {
                         track(
-                            "onetap_button_no_user_show",
+                            EVENT_SCREEN_PROCEED,
                             iconParam(icon)
                         )
                     }
@@ -66,36 +91,28 @@ internal object OneTapAnalytics {
     internal fun oneTapPressed(user: VKIDUser?, icon: Boolean = false): Map<String, String> {
         val uuid = UUID.randomUUID().toString()
         if (user != null) {
-            track("onetap_button_tap", iconParam(icon), uuidParam(uuid))
+            track(EVENT_ONETAP_TAP, iconParam(icon), uuidParam(uuid))
         } else {
-            track("onetap_button_no_user_tap", iconParam(icon), uuidParam(uuid))
+            track(EVENT_ONETAP_NO_USER_TAP, iconParam(icon), uuidParam(uuid))
         }
         return mapOf(StatTracker.EXTERNAL_PARAM_SESSION_ID to uuid, FLOW_SOURCE)
     }
 
     internal fun alternatePressed(): Map<String, String> {
         val uuid = UUID.randomUUID().toString()
-        track("onetap_button_alternative_sign_in_tap", uuidParam(uuid))
+        track(EVENT_ONETAP_ALTERNATIVE_SIGN_IN_TAP, uuidParam(uuid))
         return mapOf(StatTracker.EXTERNAL_PARAM_SESSION_ID to uuid, FLOW_SOURCE)
     }
 
-    internal fun authSuccessIcon() {
-        authSuccess(true)
+    internal fun authErrorIcon(uuid: String, user: VKIDUser?) {
+        authError(uuid, user, true)
     }
 
-    internal fun authSuccess(icon: Boolean = false) {
-        track("auth_by_button", iconParam(icon))
-    }
-
-    internal fun authErrorIcon(user: VKIDUser?) {
-        authError(user, true)
-    }
-
-    internal fun authError(user: VKIDUser?, icon: Boolean = false) {
+    internal fun authError(uuid: String, user: VKIDUser?, icon: Boolean = false) {
         if (user != null) {
-            track("onetap_button_auth_error", iconParam(icon))
+            track(EVENT_ONETAP_AUTH_ERROR, iconParam(icon), uuidParam(uuid))
         } else {
-            track("onetap_button_no_user_auth_error", iconParam(icon))
+            track(EVENT_ONETAP_NO_USER_AUTH_ERROR, iconParam(icon), uuidParam(uuid))
         }
     }
 

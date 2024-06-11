@@ -179,6 +179,7 @@ public final class com/vk/id/auth/AuthCodeData {
 
 public final class com/vk/id/auth/Prompt : java/lang/Enum {
 	public static final field BLANK Lcom/vk/id/auth/Prompt;
+	public static final field CONSENT Lcom/vk/id/auth/Prompt;
 	public static final field LOGIN Lcom/vk/id/auth/Prompt;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lcom/vk/id/auth/Prompt;

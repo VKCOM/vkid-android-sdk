@@ -7,6 +7,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.MutableState
 import com.vk.id.AccessToken
 import com.vk.id.VKIDAuthFail
+import com.vk.id.VKIDUser
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.Prompt
 import com.vk.id.auth.VKIDAuthParams
@@ -28,7 +29,7 @@ internal sealed class OneTapBottomSheetAuthStatus : Serializable {
 
     object AuthStarted : OneTapBottomSheetAuthStatus()
 
-    object AuthFailedVKID : OneTapBottomSheetAuthStatus()
+    data class AuthFailedVKID(val user: VKIDUser?) : OneTapBottomSheetAuthStatus()
     object AuthFailedAlternate : OneTapBottomSheetAuthStatus()
     data class AuthFailedMultibranding(val oAuth: OneTapOAuth) : OneTapBottomSheetAuthStatus()
     object AuthSuccess : OneTapBottomSheetAuthStatus()
@@ -45,6 +46,7 @@ internal fun startVKIDAuth(
     authParams: VKIDAuthUiParams,
     extraAuthParams: Map<String, String>,
     fastAuthEnabled: Boolean,
+    user: VKIDUser?,
 ) {
     authStatus.value = OneTapBottomSheetAuthStatus.AuthStarted
     startAuth(
@@ -58,7 +60,7 @@ internal fun startVKIDAuth(
             onAuthCode(data, isCompletion)
         },
         onFail = {
-            authStatus.value = OneTapBottomSheetAuthStatus.AuthFailedVKID
+            authStatus.value = OneTapBottomSheetAuthStatus.AuthFailedVKID(user = user)
             onFail(it)
         },
         authParams.asParamsBuilder {
@@ -67,6 +69,8 @@ internal fun startVKIDAuth(
             if (!fastAuthEnabled) {
                 useOAuthProviderIfPossible = false
                 prompt = Prompt.LOGIN
+            } else if (user == null) {
+                prompt = Prompt.CONSENT
             }
         }
     )

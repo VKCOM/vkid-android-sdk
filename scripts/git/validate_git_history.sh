@@ -21,7 +21,7 @@ validateCommitMessages() {
 validateBranchName() {
     SOURCE_BRANCH=$1
     echo "Validating branch name..."
-    BRANCH_NAME_REGEX='((epic|task|fix|feature)\/VKIDSDK-[0-9]+\/([a-zA-Z0-9-]+)*|(release/.*)'
+    BRANCH_NAME_REGEX='((epic|task|fix|feature)\/VKIDSDK-[0-9]+\/([a-zA-Z0-9-]+)*|(release/.*))'
     error_msg="Branch name must match 'type/VKIDSDK-XXX/branch-name'"
 
     if [[ ! ${SOURCE_BRANCH} =~ ${BRANCH_NAME_REGEX} ]]; then
@@ -31,9 +31,9 @@ validateBranchName() {
     echo "Branch name is valid"
 }
 
-# TARGET_BRANCH=$1
-# SOURCE_BRANCH=$2
-# git fetch origin $TARGET_BRANCH:$TARGET_BRANCH || true
-# git fetch origin $SOURCE_BRANCH:$SOURCE_BRANCH || true
-# validateCommitMessages $TARGET_BRANCH $SOURCE_BRANCH
-# validateBranchName $SOURCE_BRANCH
+TARGET_BRANCH=$1
+SOURCE_BRANCH=$2
+git fetch origin $TARGET_BRANCH:$TARGET_BRANCH || true
+git fetch origin $SOURCE_BRANCH:$SOURCE_BRANCH || true
+validateCommitMessages $TARGET_BRANCH $SOURCE_BRANCH
+validateBranchName $SOURCE_BRANCH
