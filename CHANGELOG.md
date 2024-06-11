@@ -3,11 +3,24 @@
 > **Note**\
 > Описание основных изменений в релизах VK ID SDK. Наш SDK следует [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.0-alpha04
+
+### Added
+- Добавлена опция CONSENT в параметр авторизации Prompt. При передаче CONSENT всегда будет показываться экран подтверждения входа при авторизации без провайдера.
+
+### Fixed
+- Исправлен автоматический вход в аккаунт при нажатии на OneTap-кнопку без подтянутого пользователя. Теперь, если в кнопке нет пользователя, всегда показывается промежуточный экран, где можно подтвердить вход или сменить аккаунт.
+
+## 1.3.3
+
+### Fixed
+Сделали важные исправления внутренней работы SDK. Если вы используете более раннюю версию, пожалуйста, обновитесь на версию 1.3.3
+
 ## 2.0.0-alpha03
 
 ### Added
 - Добавлена возможность отключить быструю авторизацию параметром fastAuthEnabled в OneTap и OneTapBottomSheet.
-  Подробноси смотрите в статьях [Кнопка One Tap](https://id.vk.com/about/business/go/docs/en/vkid/latest/vk-id-2/connection/android/onetap) и [Шторка авторизации](https://id.vk.com/about/business/go/docs/en/vkid/latest/vk-id-2/connection/android/floating-onetap) в разделе "Отключение быстрой авторизации".
+  Подробности смотрите в статьях [Кнопка One Tap](https://id.vk.com/about/business/go/docs/en/vkid/latest/vk-id-2/connection/android/onetap) и [Шторка авторизации](https://id.vk.com/about/business/go/docs/en/vkid/latest/vk-id-2/connection/android/floating-onetap) в разделе "Отключение быстрой авторизации".
 
 ### Fixed
 - Исправлен краш при авторизации с временным возвратом в клиент SDK
