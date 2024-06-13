@@ -8,6 +8,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.vk.id.analytics.LogcatTracker
 import com.vk.id.analytics.VKIDAnalytics
+import com.vk.id.analytics.stat.StatTracker
 import com.vk.id.auth.VKIDAuthCallback
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.common.InternalVKIDApi
@@ -224,12 +225,18 @@ public class VKID {
         val authContext = currentCoroutineContext()
 
         val authEventUUId = UUID.randomUUID().toString()
-        if (!params.internalUse) {
+        val statParams = if (!params.internalUse) {
             VKIDAnalytics.trackEvent(
                 "custom_auth",
                 VKIDAnalytics.EventParam("sdk_type", "vkid"),
                 VKIDAnalytics.EventParam("unique_session_id", authEventUUId)
             )
+            mapOf(
+                StatTracker.EXTERNAL_PARAM_SESSION_ID to authEventUUId,
+                StatTracker.EXTERNAL_PARAM_FLOW_SOURCE to "from_custom_auth"
+            )
+        } else {
+            params.extraParams
         }
 
         AuthEventBridge.listener = object : AuthEventBridge.Listener {
@@ -256,7 +263,7 @@ public class VKID {
         withContext(dispatchers.io) {
             requestMutex.lock()
             val bestAuthProvider = authProvidersChooser.value.chooseBest(params)
-            val fullAuthOptions = authOptionsCreator.create(params)
+            val fullAuthOptions = authOptionsCreator.create(params, statParams)
             bestAuthProvider.auth(fullAuthOptions)
         }
     }

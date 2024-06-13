@@ -26,7 +26,8 @@ internal class AuthOptionsCreator(
     private val stateGenerator: StateGenerator,
 ) {
     internal fun create(
-        authParams: VKIDAuthParams
+        authParams: VKIDAuthParams,
+        statParams: Map<String, String>?
     ): AuthOptions {
         val codeChallenge = authParams.codeChallenge ?: run {
             val codeVerifier = pkceGenerator.value.generateRandomCodeVerifier(SecureRandom())
@@ -47,7 +48,7 @@ internal class AuthOptionsCreator(
 
         // statsInfo should only be in redirectUri for auth provider, and not for browser
         val redirectUriCodeFlow = baseRedirectUri.buildUpon()
-        val statsInfo = createStatsInfo(authParams.extraParams)
+        val statsInfo = createStatsInfo(statParams)
         extraRedirectUriParams.addStatParams(statsInfo)
         redirectUriCodeFlow.appendQueryParameter("oauth2_params", extraRedirectUriParams.toBase64())
 
@@ -79,13 +80,13 @@ private fun JSONObject.addOAuthParams(scopes: Set<String>) {
     put("scope", scopes.joinToString(separator = " "))
 }
 
-private fun createStatsInfo(extraParams: Map<String, String>?) = JSONObject().apply {
-    if (extraParams != null) {
-        val flowSource = extraParams[StatTracker.EXTERNAL_PARAM_FLOW_SOURCE]
+private fun createStatsInfo(statParams: Map<String, String>?) = JSONObject().apply {
+    if (statParams != null) {
+        val flowSource = statParams[StatTracker.EXTERNAL_PARAM_FLOW_SOURCE]
         if (flowSource != null) {
             put(StatTracker.EXTERNAL_PARAM_FLOW_SOURCE, flowSource)
         }
-        val sessionId = extraParams[StatTracker.EXTERNAL_PARAM_SESSION_ID]
+        val sessionId = statParams[StatTracker.EXTERNAL_PARAM_SESSION_ID]
         if (sessionId != null) {
             put(StatTracker.EXTERNAL_PARAM_SESSION_ID, sessionId)
         }
