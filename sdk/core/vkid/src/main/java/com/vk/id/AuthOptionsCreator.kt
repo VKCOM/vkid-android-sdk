@@ -27,7 +27,7 @@ internal class AuthOptionsCreator(
 ) {
     internal fun create(
         authParams: VKIDAuthParams,
-        statParams: Map<String, String>?
+        statParams: StatParams
     ): AuthOptions {
         val codeChallenge = authParams.codeChallenge ?: run {
             val codeVerifier = pkceGenerator.value.generateRandomCodeVerifier(SecureRandom())
@@ -76,20 +76,16 @@ internal class AuthOptionsCreator(
     }
 }
 
+internal data class StatParams(val flowSource: String, val sessionId: String)
+
 private fun JSONObject.addOAuthParams(scopes: Set<String>) {
     put("scope", scopes.joinToString(separator = " "))
 }
 
-private fun createStatsInfo(statParams: Map<String, String>?) = JSONObject().apply {
+private fun createStatsInfo(statParams: StatParams?) = JSONObject().apply {
     if (statParams != null) {
-        val flowSource = statParams[StatTracker.EXTERNAL_PARAM_FLOW_SOURCE]
-        if (flowSource != null) {
-            put(StatTracker.EXTERNAL_PARAM_FLOW_SOURCE, flowSource)
-        }
-        val sessionId = statParams[StatTracker.EXTERNAL_PARAM_SESSION_ID]
-        if (sessionId != null) {
-            put(StatTracker.EXTERNAL_PARAM_SESSION_ID, sessionId)
-        }
+        put(StatTracker.EXTERNAL_PARAM_FLOW_SOURCE, statParams.flowSource)
+        put(StatTracker.EXTERNAL_PARAM_SESSION_ID, statParams.sessionId)
     }
 }
 

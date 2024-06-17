@@ -225,18 +225,24 @@ public class VKID {
         val authContext = currentCoroutineContext()
 
         val authEventUUId = UUID.randomUUID().toString()
-        val statParams = if (!params.internalUse) {
+        if (!params.internalUse) {
             VKIDAnalytics.trackEvent(
                 "custom_auth",
                 VKIDAnalytics.EventParam("sdk_type", "vkid"),
                 VKIDAnalytics.EventParam("unique_session_id", authEventUUId)
             )
-            mapOf(
-                StatTracker.EXTERNAL_PARAM_SESSION_ID to authEventUUId,
-                StatTracker.EXTERNAL_PARAM_FLOW_SOURCE to "from_custom_auth"
+        }
+
+        val statParams = if (!params.internalUse) {
+            StatParams(
+                flowSource = "from_custom_auth",
+                sessionId = authEventUUId
             )
         } else {
-            params.extraParams
+            StatParams(
+                flowSource = params.extraParams?.get(StatTracker.EXTERNAL_PARAM_FLOW_SOURCE) ?: "",
+                sessionId = params.extraParams?.get(StatTracker.EXTERNAL_PARAM_SESSION_ID) ?: ""
+            )
         }
 
         AuthEventBridge.listener = object : AuthEventBridge.Listener {
