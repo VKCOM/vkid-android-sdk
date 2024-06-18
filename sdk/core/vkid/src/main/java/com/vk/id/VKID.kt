@@ -175,7 +175,7 @@ public class VKID {
         logger.info(
             "VKID initialized\nVersion name: ${BuildConfig.VKID_VERSION_NAME}\nCI build: ${BuildConfig.CI_BUILD_NUMBER} ${BuildConfig.CI_BUILD_TYPE}"
         )
-        VKIDAnalytics.trackEvent("sdk_init", VKIDAnalytics.EventParam("sdk_type", "vkid"))
+        VKIDAnalytics.trackEvent("vkid_sdk_init")
     }
 
     private val requestMutex = Mutex()
