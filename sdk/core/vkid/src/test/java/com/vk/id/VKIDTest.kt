@@ -108,7 +108,7 @@ internal class VKIDTest : BehaviorSpec({
             statsInfo = ""
         )
         coEvery { authProvidersChooser.chooseBest(authParams) } returns authProvider
-        every { authOptionsCreator.create(authParams) } returns authOptions
+        every { authOptionsCreator.create(authParams, any()) } returns authOptions
         every { authProvider.auth(authOptions) } just runs
         every { authCallbacksHolder.add(any()) } just runs
         coEvery { authResultHandler.handle(any(), any()) } just runs
