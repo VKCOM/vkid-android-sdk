@@ -229,7 +229,8 @@ public class VKID {
             VKIDAnalytics.trackEvent(
                 "custom_auth",
                 VKIDAnalytics.EventParam("sdk_type", "vkid"),
-                VKIDAnalytics.EventParam("unique_session_id", authEventUUId)
+                VKIDAnalytics.EventParam("unique_session_id", authEventUUId),
+                VKIDAnalytics.EventParam("oauth_service", params.oAuth?.serverName ?: "")
             )
         }
 
