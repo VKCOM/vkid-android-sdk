@@ -90,7 +90,8 @@ internal class AuthResultHandlerTest : BehaviorSpec({
         val tokensHandler = mockk<TokensHandler>()
         val loggerOut = mockk<VKIDLoggerOut>()
         val tokenStorage = mockk<TokenStorage>()
-        val onFailCallback = mockk<() -> Unit>(relaxed = true)
+        val onFailCallback = mockk<() -> Unit>()
+        every { onFailCallback() } just runs
         val handler = AuthResultHandler(
             dispatchers = dispatchers,
             callbacksHolder = callbacksHolder,
@@ -114,7 +115,9 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             every { callback.onFail(any()) } just runs
             every { callbacksHolder.clear() } just runs
             every { prefsStore.clear() } just runs
-            handler.handle(authResult, onFail)
+            runTest(scheduler) {
+                handler.handle(authResult, onFail)
+            }
             Then("Checks whether callbacks are present") {
                 verify { callbacksHolder.isEmpty() }
             }
@@ -153,7 +156,9 @@ internal class AuthResultHandlerTest : BehaviorSpec({
         When("There are not callbacks") {
             val authResult = authResultSuccess.copy(oauth = null)
             every { callbacksHolder.isEmpty() } returns true
-            handler.handle(authResult, onFailCallback)
+            runTest(scheduler) {
+                handler.handle(authResult, onFailCallback)
+            }
             Then("Checks whether callbacks are present") {
                 verify { callbacksHolder.isEmpty() }
             }
@@ -172,7 +177,9 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             every { callbacksHolder.getAll() } returns setOf(callback)
             every { callback.onFail(any()) } just runs
             every { callbacksHolder.clear() } just runs
-            handler.handle(authResult, onFailCallback)
+            runTest(scheduler) {
+                handler.handle(authResult, onFailCallback)
+            }
             Then("Checks whether callbacks are present") {
                 verify { callbacksHolder.isEmpty() }
             }
@@ -203,7 +210,9 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             every { prefsStore.state } returns DIFFERENT_STATE
             every { prefsStore.clear() } just runs
             every { prefsStore.codeVerifier } returns CODE_VERIFIER
-            runTest(scheduler) { handler.handle(authResult, onFailCallback) }
+            runTest(scheduler) {
+                handler.handle(authResult, onFailCallback)
+            }
             scheduler.advanceUntilIdle()
             Then("Checks whether callbacks are present") {
                 verify { callbacksHolder.isEmpty() }
@@ -246,7 +255,9 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             every { api.getToken(CODE, CODE_VERIFIER, CLIENT_ID, DEVICE_ID, REDIRECT_URI, STATE) } returns call
             every { call.execute() } returns Result.failure(error)
             every { tokenStorage.accessToken } returns null
-            runTest(scheduler) { handler.handle(authResult, onFailCallback) }
+            runTest(scheduler) {
+                handler.handle(authResult, onFailCallback)
+            }
             scheduler.advanceUntilIdle()
             Then("Checks whether callbacks are present") {
                 verify { callbacksHolder.isEmpty() }
@@ -300,7 +311,9 @@ internal class AuthResultHandlerTest : BehaviorSpec({
                 every { tokenStorage.accessToken } returns null
 
                 coEvery { tokensHandler.handle(any(), any(), any()) } just runs
-                runTest(scheduler) { handler.handle(authResult, onFailCallback) }
+                runTest(scheduler) {
+                    handler.handle(authResult, onFailCallback)
+                }
                 Then("Checks whether callbacks are present") {
                     verify { callbacksHolder.isEmpty() }
                 }
@@ -351,7 +364,9 @@ internal class AuthResultHandlerTest : BehaviorSpec({
                 coEvery { loggerOut.logout(capture(callbackSlot), any(), any(), capture(paramsSlot)) } just runs
                 val onSuccessSlot = slot<suspend (AccessToken) -> Unit>()
                 coEvery { tokensHandler.handle(any(), capture(onSuccessSlot), any()) } just runs
-                runTest(scheduler) { handler.handle(authResult, onFailCallback) }
+                runTest(scheduler) {
+                    handler.handle(authResult, onFailCallback)
+                }
                 Then("Checks whether callbacks are present") {
                     verify { callbacksHolder.isEmpty() }
                 }
@@ -409,7 +424,9 @@ internal class AuthResultHandlerTest : BehaviorSpec({
                 coEvery { loggerOut.logout(capture(callbackSlot), any(), any(), capture(paramsSlot)) } just runs
                 val onSuccessSlot = slot<suspend (AccessToken) -> Unit>()
                 coEvery { tokensHandler.handle(any(), capture(onSuccessSlot), any()) } just runs
-                runTest(scheduler) { handler.handle(authResult, onFailCallback) }
+                runTest(scheduler) {
+                    handler.handle(authResult, onFailCallback)
+                }
                 Then("Checks whether callbacks are present") {
                     verify { callbacksHolder.isEmpty() }
                 }

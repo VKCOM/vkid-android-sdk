@@ -35,9 +35,8 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.runTest
 
 @OptIn(ExperimentalStdlibApi::class, ExperimentalCoroutinesApi::class)
 internal class VKIDTest : BehaviorSpec({
@@ -112,13 +111,12 @@ internal class VKIDTest : BehaviorSpec({
         every { authProvider.auth(authOptions) } just runs
         every { authCallbacksHolder.add(any()) } just runs
         coEvery { authResultHandler.handle(any(), any()) } just runs
-        TestScope(scheduler).launch {
+        runTest(scheduler) {
             vkid.authorize(callback = mockk(), params = authParams)
         }
-        scheduler.advanceUntilIdle()
 
         When("Auth result is delivered") {
-            TestScope(scheduler).launch {
+            runTest(scheduler) {
                 AuthEventBridge.listener?.onAuthResult(
                     AuthResult.Success(
                         oauth = null,
@@ -126,7 +124,6 @@ internal class VKIDTest : BehaviorSpec({
                     )
                 )
             }
-            scheduler.advanceUntilIdle()
 
             Then("Auth result is handled") {
                 coVerify { authResultHandler.handle(any(), any()) }
