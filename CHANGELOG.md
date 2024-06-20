@@ -3,6 +3,9 @@
 > **Note**\
 > Описание основных изменений в релизах VK ID SDK. Наш SDK следует [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.0
+В этой версии становится стабильной поддержка OAuth2.1 и авторизации 3в1 (через VK, OK и Mail.ru).
+
 ## 2.0.0-alpha04
 
 ### Added
@@ -55,11 +58,6 @@
 ### Fixed
 - Фикс дублирования класса UserId при подключении библиотек https://github.com/VKCOM/vk-android-sdk
  
-### Changed
-- Обновлена поддержка SSL Pinning
-
-## 1.3.1
-
 ### Changed
 - Обновлена поддержка SSL Pinning
 
