@@ -82,8 +82,7 @@ internal class VKIDTest : BehaviorSpec({
             Then("Analytics vkid_init event is send") {
                 verify {
                     statTracker.trackEvent(
-                        "sdk_init",
-                        match { it.name == "sdk_type" && it.strValue == "vkid" }
+                        "vkid_sdk_init"
                     )
                 }
             }
