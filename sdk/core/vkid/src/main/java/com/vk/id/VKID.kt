@@ -227,7 +227,7 @@ public class VKID {
         val authEventUUId = UUID.randomUUID().toString()
         if (!params.internalUse) {
             VKIDAnalytics.trackEvent(
-                "custom_auth",
+                "custom_auth_start",
                 VKIDAnalytics.EventParam("sdk_type", "vkid"),
                 VKIDAnalytics.EventParam("unique_session_id", authEventUUId),
                 VKIDAnalytics.EventParam("oauth_service", params.oAuth?.serverName ?: "")
