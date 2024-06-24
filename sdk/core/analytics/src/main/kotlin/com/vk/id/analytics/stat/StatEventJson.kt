@@ -16,7 +16,8 @@ internal class StatEventJson(
     val json: JSONObject
 
     private companion object {
-        val specialParams = listOf("screen_current", "screen_to", "error")
+        private val specialParams = listOf("screen_current", "screen_to", "error")
+        private val techEvents = setOf("vkid_sdk_init")
     }
 
     init {
@@ -38,9 +39,14 @@ internal class StatEventJson(
                 }
             }
         }
-        val eventJson = eventJson(name, filteredParams, topLevelParams)
+        val typeAction = actionForEvent(name)
+        val eventJson = if (name in techEvents) {
+            techEventJson(name)
+        } else {
+            eventJson(name, filteredParams, topLevelParams)
+        }
         json = actionJson(
-            typeAction = "type_registration_item",
+            typeAction = typeAction,
             screen = screen,
             data = eventJson,
             eventId = eventId,
@@ -125,4 +131,15 @@ internal class StatEventJson(
             put(p.key, p.value)
         }
     }
+
+    private fun techEventJson(eventName: String) = JSONObject().apply {
+        put("step", eventName)
+    }
+
+    private fun actionForEvent(name: String): String =
+        if (name in techEvents) {
+            "type_sak_sessions_event_item"
+        } else {
+            "type_registration_item"
+        }
 }
