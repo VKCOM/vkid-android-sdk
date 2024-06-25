@@ -152,7 +152,7 @@ public class VKIDAuthParams private constructor(
         public var useOAuthProviderIfPossible: Boolean = true
 
         /**
-         * An [OAuth] that shoud be used for authorization.
+         * An [OAuth] that should be used for authorization.
          */
         public var oAuth: OAuth? = null
 
@@ -161,12 +161,6 @@ public class VKIDAuthParams private constructor(
          * Note: Changing it only works for auth view browser (not auth provider). Add [useOAuthProviderIfPossible] = false for this to work.
          */
         public var prompt: Prompt = Prompt.BLANK
-
-        /**
-         * A token to be passes /authorize.
-         */
-        @InternalVKIDApi
-        public var token: String? = null
 
         /**
          * An optional state to be passed to auth.

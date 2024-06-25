@@ -24,9 +24,9 @@ internal class OAuthListWidgetAnalytics(private val screen: String, private val 
         }
         track(
             "multibranding_oauth_added",
-            oauthParam("ok", OAuth.OK),
-            oauthParam("mail", OAuth.MAIL),
-            oauthParam("vk", OAuth.VK)
+            oauthParam("ok_ru", OAuth.OK),
+            oauthParam("mail_ru", OAuth.MAIL),
+            oauthParam("vkid", OAuth.VK)
         )
     }
 
@@ -67,13 +67,20 @@ internal class OAuthListWidgetAnalytics(private val screen: String, private val 
         return mapOf(StatTracker.EXTERNAL_PARAM_SESSION_ID to uuid, flowSource)
     }
 
-    fun onAuthError(sessionId: String) {
+    fun onAuthError(sessionId: String, oAuth: OAuth) {
         if (!paused) {
+            val oAuthParam = when (oAuth) {
+                OAuth.VK -> "vkid"
+                OAuth.MAIL -> "mail_ru"
+                OAuth.OK -> "ok_ru"
+            }
             VKIDAnalytics.trackEvent(
-                "multibranding_auth_error",
+                "sdk_auth_error",
                 VKIDAnalytics.EventParam("sdk_type", "vkid"),
                 uuidParam(sessionId),
-                VKIDAnalytics.EventParam("error", "auth_error"),
+                VKIDAnalytics.EventParam("error", "sdk_auth_error"),
+                VKIDAnalytics.EventParam("from_multibranding", "true"),
+                VKIDAnalytics.EventParam("oauth_service", oAuthParam),
                 VKIDAnalytics.EventParam("screen", screen)
             )
         }

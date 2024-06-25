@@ -8,6 +8,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.vk.id.analytics.LogcatTracker
 import com.vk.id.analytics.VKIDAnalytics
+import com.vk.id.analytics.stat.StatTracker
 import com.vk.id.auth.VKIDAuthCallback
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.common.InternalVKIDApi
@@ -174,7 +175,7 @@ public class VKID {
         logger.info(
             "VKID initialized\nVersion name: ${BuildConfig.VKID_VERSION_NAME}\nCI build: ${BuildConfig.CI_BUILD_NUMBER} ${BuildConfig.CI_BUILD_TYPE}"
         )
-        VKIDAnalytics.trackEvent("sdk_init", VKIDAnalytics.EventParam("sdk_type", "vkid"))
+        VKIDAnalytics.trackEvent("vkid_sdk_init")
     }
 
     private val requestMutex = Mutex()
@@ -226,25 +227,39 @@ public class VKID {
         val authEventUUId = UUID.randomUUID().toString()
         if (!params.internalUse) {
             VKIDAnalytics.trackEvent(
-                "custom_auth",
+                "custom_auth_start",
                 VKIDAnalytics.EventParam("sdk_type", "vkid"),
-                VKIDAnalytics.EventParam("unique_session_id", authEventUUId)
+                VKIDAnalytics.EventParam("unique_session_id", authEventUUId),
+                VKIDAnalytics.EventParam("oauth_service", params.oAuth?.serverName ?: "")
+            )
+        }
+
+        val statParams = if (!params.internalUse) {
+            StatParams(
+                flowSource = "from_custom_auth",
+                sessionId = authEventUUId
+            )
+        } else {
+            StatParams(
+                flowSource = params.extraParams?.get(StatTracker.EXTERNAL_PARAM_FLOW_SOURCE) ?: "",
+                sessionId = params.extraParams?.get(StatTracker.EXTERNAL_PARAM_SESSION_ID) ?: ""
             )
         }
 
         AuthEventBridge.listener = object : AuthEventBridge.Listener {
             override fun onAuthResult(authResult: AuthResult) {
-                if (!params.internalUse) {
-                    if (authResult !is AuthResult.Success) {
-                        VKIDAnalytics.trackEvent(
-                            "error_custom_auth",
-                            VKIDAnalytics.EventParam("sdk_type", "vkid"),
-                            VKIDAnalytics.EventParam("unique_session_id", authEventUUId)
-                        )
-                    }
-                }
                 CoroutineScope(authContext + Job()).launch {
-                    authResultHandler.value.handle(authResult)
+                    authResultHandler.value.handle(authResult, onFail = {
+                        if (!params.internalUse) {
+                            VKIDAnalytics.trackEvent(
+                                "sdk_auth_error",
+                                VKIDAnalytics.EventParam("error", "sdk_auth_error"),
+                                VKIDAnalytics.EventParam("sdk_type", "vkid"),
+                                VKIDAnalytics.EventParam("unique_session_id", authEventUUId),
+                                VKIDAnalytics.EventParam("from_custom_auth", "true")
+                            )
+                        }
+                    })
                     if (requestMutex.isLocked) {
                         requestMutex.unlock()
                     }
@@ -255,7 +270,7 @@ public class VKID {
         withContext(dispatchers.io) {
             requestMutex.lock()
             val bestAuthProvider = authProvidersChooser.value.chooseBest(params)
-            val fullAuthOptions = authOptionsCreator.create(params)
+            val fullAuthOptions = authOptionsCreator.create(params, statParams)
             bestAuthProvider.auth(fullAuthOptions)
         }
     }
