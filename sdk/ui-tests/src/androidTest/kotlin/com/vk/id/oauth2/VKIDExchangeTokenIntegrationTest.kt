@@ -205,7 +205,8 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
             .encryptedSharedPreferencesStorage(encryptedStorage)
-            .getUserInfoResponse(Result.success(InternalVKIDUserInfoPayloadResponse(error = "some error")))
+            .exchangeTokenResponse(Result.success(EXCHANGE_TOKEN_RESPONSE))
+            .getTokenResponse(Result.success(GET_TOKEN_RESPONSE.copy(error = "some error")))
             .exchangeTokenResponse(Result.success(EXCHANGE_TOKEN_RESPONSE))
             .build()
         every { prefsStore.clear() } just runs
