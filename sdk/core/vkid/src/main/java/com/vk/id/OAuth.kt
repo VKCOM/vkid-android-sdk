@@ -9,7 +9,7 @@ public enum class OAuth(
     /**
      * Represents VK OAuth provider.
      */
-    VK("vk_id"),
+    VK("vkid"),
 
     /**
      * Represents Mail OAuth provider.

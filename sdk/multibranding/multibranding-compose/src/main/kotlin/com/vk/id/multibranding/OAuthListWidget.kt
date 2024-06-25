@@ -177,16 +177,18 @@ private fun OAuthButton(
                                 ) = onAuthCode(data, isCompletion)
 
                                 override fun onFail(fail: VKIDAuthFail) {
-                                    analytics.onAuthError(extraAuthParams[StatTracker.EXTERNAL_PARAM_SESSION_ID] ?: "")
+                                    analytics.onAuthError(extraAuthParams[StatTracker.EXTERNAL_PARAM_SESSION_ID] ?: "", oAuth = item)
                                     onFail(fail)
                                 }
                             },
-                            authParams.asParamsBuilder {
-                                oAuth = item
-                                theme = style.toProviderTheme()
-                                prompt = Prompt.LOGIN
-                                extraParams = extraAuthParams
-                            }.build()
+                            authParams
+                                .asParamsBuilder {
+                                    oAuth = item
+                                    theme = style.toProviderTheme()
+                                    prompt = Prompt.LOGIN
+                                    extraParams = extraAuthParams
+                                }
+                                .build()
                         )
                     }
                 }

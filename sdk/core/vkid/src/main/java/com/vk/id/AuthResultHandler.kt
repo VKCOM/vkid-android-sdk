@@ -34,25 +34,26 @@ internal class AuthResultHandler(
     private val logger = internalVKIDCreateLoggerForClass()
 
     internal suspend fun handle(
-        authResult: AuthResult
+        authResult: AuthResult,
+        onFail: () -> Unit
     ) {
         if (callbacksHolder.isEmpty()) {
             return
         }
         if (authResult !is AuthResult.Success) {
-            emitAuthFail(authResult.toVKIDAuthFail())
+            emitAuthFail(authResult.toVKIDAuthFail(), onFail)
             prefsStore.clear()
             return
         }
 
         if (authResult.oauth != null) {
-            handleOauth(authResult)
+            handleOauth(authResult, onFail)
         } else {
-            emitAuthFail(VKIDAuthFail.FailedOAuth("OAuth provider response does not have necessary OAuth data."))
+            emitAuthFail(VKIDAuthFail.FailedOAuth("OAuth provider response does not have necessary OAuth data."), onFail)
         }
     }
 
-    private suspend fun handleOauth(oauth: AuthResult.Success) {
+    private suspend fun handleOauth(oauth: AuthResult.Success, onFail: () -> Unit) {
         val (realState, codeVerifier) = withContext(dispatchers.io) {
             deviceIdProvider.setDeviceId(oauth.deviceId)
             (prefsStore.state to prefsStore.codeVerifier).also { prefsStore.clear() }
@@ -63,7 +64,7 @@ internal class AuthResultHandler(
                 "Invalid oauth state, want $realState but received ${oauth.oauth?.state}",
                 null
             )
-            emitAuthFail(VKIDAuthFail.FailedOAuthState("Invalid state"))
+            emitAuthFail(VKIDAuthFail.FailedOAuthState("Invalid state"), onFail)
             return
         }
 
@@ -87,7 +88,7 @@ internal class AuthResultHandler(
             ).execute()
         }
         callResult.onFailure {
-            emitAuthFail(VKIDAuthFail.FailedApiCall("Failed code to token exchange api call: ${it.message}", it))
+            emitAuthFail(VKIDAuthFail.FailedApiCall("Failed code to token exchange api call: ${it.message}", it), onFail)
         }
         val accessToken = withContext(dispatchers.io) { tokenStorage.accessToken }
         callResult.onSuccess { payload ->
@@ -108,7 +109,7 @@ internal class AuthResultHandler(
                     }
                 },
                 onFailedApiCall = {
-                    emitAuthFail(VKIDAuthFail.FailedApiCall("Failed to fetch user data", it))
+                    emitAuthFail(VKIDAuthFail.FailedApiCall("Failed to fetch user data", it), onFail)
                 },
             )
         }
@@ -128,10 +129,11 @@ internal class AuthResultHandler(
         callbacksHolder.clear()
     }
 
-    private fun emitAuthFail(fail: VKIDAuthFail) {
+    private fun emitAuthFail(fail: VKIDAuthFail, onFail: () -> Unit) {
         callbacksHolder.getAll().forEach {
             it.onFail(fail)
         }
+        onFail()
         callbacksHolder.clear()
     }
 }

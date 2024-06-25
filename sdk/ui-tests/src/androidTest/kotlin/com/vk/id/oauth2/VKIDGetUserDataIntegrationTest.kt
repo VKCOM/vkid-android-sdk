@@ -9,6 +9,7 @@ import com.vk.id.VKIDUser
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.common.allure.Owners
 import com.vk.id.common.allure.Platform
+import com.vk.id.common.allure.Priority
 import com.vk.id.common.allure.Product
 import com.vk.id.common.allure.Project
 import com.vk.id.common.basetest.BaseUiTest
@@ -108,6 +109,7 @@ private val USER = VKIDUser(
 @Feature(TestFeature.OAUTH_2_1)
 @RunWith(AndroidJUnit4::class)
 @DisplayName("Получение пользовательских данных")
+@Priority(Priority.CRITICAL)
 internal class VKIDGetUserDataIntegrationTest : BaseUiTest() {
 
     @Test

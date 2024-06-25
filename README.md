@@ -17,9 +17,7 @@
 
 ---
 
-:information_source: Версия VK ID SDK 2.0.0-alpha поддерживает авторизацию по протоколу [OAuth 2.1](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-v2-1-10), а также способы входа через аккаунты Одноклассников и Mail.ru. Если вы хотите участвовать в тестировании этой версии SDK или узнать о ней подробнее, напишите нам на почту devsupport@corp.vk.com.
-
-Текущая стабильная версия VK ID SDK - [1.3.3](https://github.com/VKCOM/vkid-android-sdk/releases/tag/v1.3.3).
+:information_source: Версия VK ID SDK 2.0.0 поддерживает авторизацию по протоколу [OAuth 2.1](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-v2-1-10), а также способы входа через аккаунты Одноклассников и Mail.ru.
 
 ---
 
@@ -37,12 +35,11 @@ VKIDClientID=Ваш ID приложения
 
 ## Предварительно
 
-Что такое VK ID и как интегрировать его в приложение читайте [в статье "Начало работы"](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id-2/connection/android/install).
+Что такое VK ID и как интегрировать его в приложение читайте [в статье "Начало работы"](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/connection/android/install).
 
 Чтобы подключить VK ID SDK, сначала получите ID приложения (app_id) и защищенный ключ (client_secret). Для этого создайте приложение в [кабинете подключения VK ID](https://id.vk.com/business/go).
 
-Документацию по API SDK можно найти [на Github pages](https://vkcom.github.io/vkid-android-sdk/).
-
+Документация API SDK доступна [на Github](https://vkcom.github.io/vkid-android-sdk/).
 
 ## Установка
 
@@ -146,10 +143,9 @@ VKID.instance.refreshToken(
 
 ## Документация
 
-- [Что такое VK ID](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id-2/intro/start-page)
-- [Создание приложения](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id-2/connection/create-application)
-- [Требования к дизайну](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id-2/connection/guidelines/design-rules-oauth)
-
+- [Что такое VK ID](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/intro/start-page)
+- [Создание приложения](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/connection/create-application)
+- [Требования к дизайну](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/connection/guidelines/design-rules-oauth)
 
 ## Локальная сборка
 Если проект не собирается со странными ошибками, то скореe всего нужно выставить в настройках проекта в студии **jdk-17**. Для того, чтобы работали градл-скрипты из консоли, также нужно прописать в переменной среды JAVA_HOME путь по которому находится jdk **17-й** версии.

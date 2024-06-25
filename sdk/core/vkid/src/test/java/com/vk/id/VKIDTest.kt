@@ -35,9 +35,8 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.runTest
 
 @OptIn(ExperimentalStdlibApi::class, ExperimentalCoroutinesApi::class)
 internal class VKIDTest : BehaviorSpec({
@@ -83,8 +82,7 @@ internal class VKIDTest : BehaviorSpec({
             Then("Analytics vkid_init event is send") {
                 verify {
                     statTracker.trackEvent(
-                        "sdk_init",
-                        match { it.name == "sdk_type" && it.strValue == "vkid" }
+                        "vkid_sdk_init"
                     )
                 }
             }
@@ -108,17 +106,16 @@ internal class VKIDTest : BehaviorSpec({
             statsInfo = ""
         )
         coEvery { authProvidersChooser.chooseBest(authParams) } returns authProvider
-        every { authOptionsCreator.create(authParams) } returns authOptions
+        every { authOptionsCreator.create(authParams, any()) } returns authOptions
         every { authProvider.auth(authOptions) } just runs
         every { authCallbacksHolder.add(any()) } just runs
-        coEvery { authResultHandler.handle(any()) } just runs
-        TestScope(scheduler).launch {
+        coEvery { authResultHandler.handle(any(), any()) } just runs
+        runTest(scheduler) {
             vkid.authorize(callback = mockk(), params = authParams)
         }
-        scheduler.advanceUntilIdle()
 
         When("Auth result is delivered") {
-            TestScope(scheduler).launch {
+            runTest(scheduler) {
                 AuthEventBridge.listener?.onAuthResult(
                     AuthResult.Success(
                         oauth = null,
@@ -126,10 +123,9 @@ internal class VKIDTest : BehaviorSpec({
                     )
                 )
             }
-            scheduler.advanceUntilIdle()
 
             Then("Auth result is handled") {
-                coVerify { authResultHandler.handle(any()) }
+                coVerify { authResultHandler.handle(any(), any()) }
             }
 
             Then("Auth callback is added") {
