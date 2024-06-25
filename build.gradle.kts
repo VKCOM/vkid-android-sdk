@@ -3,6 +3,7 @@ import com.vk.id.health.metrics.gitlab.gitlab
 import com.vk.id.health.metrics.storage.firestore
 import com.vk.id.health.metrics.apksize.apkSize
 import java.io.IOException
+import com.vk.id.health.metrics.apichange.publicApiChanges
 
 plugins {
     alias(libs.plugins.android.application) apply false
@@ -24,18 +25,6 @@ registerGeneralTask("detekt") {
     dependsOn(gradle.includedBuild("build-logic").task(":detekt"))
 }
 
-internal fun exec(command: String): String {
-    val process = Runtime.getRuntime().exec(command)
-    val output = StringBuilder()
-    val error = StringBuilder()
-    process.inputReader().lines().forEach(output::append)
-    process.errorReader().lines().forEach { error.append("$it\n") }
-    val exitCode = process.waitFor()
-    if (exitCode != 0) {
-        throw IOException("Command exited with $exitCode\n$error")
-    }
-    return output.toString()
-}
 registerGeneralTask("clean")
 registerGeneralTask("assembleDebug")
 registerGeneralTask("assembleRelease")
@@ -65,4 +54,5 @@ healthMetrics {
         targetBuildType = "withSdk"
         sourceBuildType = "withDeps"
     }
+    publicApiChanges()
 }
