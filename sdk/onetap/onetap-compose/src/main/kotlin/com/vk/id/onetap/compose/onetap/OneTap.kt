@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import com.vk.id.AccessToken
 import com.vk.id.VKIDAuthFail
 import com.vk.id.VKIDUser
-import com.vk.id.analytics.stat.StatTracker
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.Prompt
 import com.vk.id.auth.VKIDAuthParams
@@ -37,6 +36,7 @@ import com.vk.id.onetap.compose.button.auth.VKIDButtonSmall
 import com.vk.id.onetap.compose.button.auth.VKIDButtonState
 import com.vk.id.onetap.compose.button.auth.VKIDButtonTextProvider
 import com.vk.id.onetap.compose.button.startAuth
+import com.vk.id.onetap.compose.onetap.OneTapAnalytics.uuidFromParams
 import com.vk.id.onetap.compose.util.PlaceComposableIfFitsWidth
 
 /**
@@ -96,8 +96,8 @@ public fun OneTap(
                     },
                     onAuthCode,
                     {
-                        val uuid = extraAuthParams[StatTracker.EXTERNAL_PARAM_SESSION_ID] ?: ""
-                        OneTapAnalytics.authErrorIcon(uuid, user)
+                        val uuid = extraAuthParams.uuidFromParams()
+                        OneTapAnalytics.authErrorIcon(uuid)
                         onFail(null, it)
                     },
                     params = authParams.asParamsBuilder {
@@ -151,8 +151,8 @@ public fun OneTap(
                                 },
                                 onAuthCode,
                                 {
-                                    val uuid = extraAuthParams[StatTracker.EXTERNAL_PARAM_SESSION_ID] ?: ""
-                                    OneTapAnalytics.authError(uuid, user)
+                                    val uuid = extraAuthParams.uuidFromParams()
+                                    OneTapAnalytics.authError(uuid)
                                     onFail(null, it)
                                 },
                                 authParams.asParamsBuilder {
@@ -173,7 +173,11 @@ public fun OneTap(
                                 coroutineScope,
                                 { onAuth(null, it) },
                                 onAuthCode,
-                                { onFail(null, it) },
+                                {
+                                    val uuid = extraAuthParams.uuidFromParams()
+                                    OneTapAnalytics.authError(uuid)
+                                    onFail(null, it)
+                                },
                                 authParams.asParamsBuilder {
                                     useOAuthProviderIfPossible = false
                                     theme = style.toProviderTheme()
@@ -214,8 +218,8 @@ public fun OneTap(
                             },
                             onAuthCode,
                             {
-                                val uuid = extraAuthParams[StatTracker.EXTERNAL_PARAM_SESSION_ID] ?: ""
-                                OneTapAnalytics.authErrorIcon(uuid, user)
+                                val uuid = extraAuthParams.uuidFromParams()
+                                OneTapAnalytics.authErrorIcon(uuid)
                                 onFail(null, it)
                             },
                             params = authParams.asParamsBuilder {

@@ -13,6 +13,7 @@ import com.vk.id.common.InternalVKIDApi
 import com.vk.id.common.activity.AutoTestActivityRule
 import com.vk.id.common.allure.Owners
 import com.vk.id.common.allure.Platform
+import com.vk.id.common.allure.Priority
 import com.vk.id.common.allure.Product
 import com.vk.id.common.allure.Project
 import com.vk.id.common.basetest.BaseUiTest
@@ -38,6 +39,7 @@ import java.util.UUID
 @Project(Project.VKID_SDK)
 @Owner(Owners.DANIIL_KLIMCHUK)
 @Suppress("TooManyFunctions")
+@Priority(Priority.CRITICAL)
 public abstract class BaseAuthTest(
     private val oAuth: OAuth?,
     private val skipTest: Boolean = false,

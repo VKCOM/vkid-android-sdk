@@ -8,6 +8,7 @@ import com.vk.id.VKID
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.common.allure.Owners
 import com.vk.id.common.allure.Platform
+import com.vk.id.common.allure.Priority
 import com.vk.id.common.allure.Product
 import com.vk.id.common.allure.Project
 import com.vk.id.common.basetest.BaseUiTest
@@ -63,6 +64,7 @@ private const val ID_TOKEN_KEY = "ID_TOKEN_KEY"
 @Feature(TestFeature.OAUTH_2_1)
 @RunWith(AndroidJUnit4::class)
 @DisplayName("Логаут")
+@Priority(Priority.CRITICAL)
 internal class VKIDLogoutIntegrationTest : BaseUiTest() {
 
     @Test
