@@ -1,7 +1,7 @@
 package com.vk.id.health.metrics.buildspeed
 
 import com.vk.id.health.metrics.VKIDHealthMetricsExtension
-import com.vk.id.health.metrics.VKIDHeathMetricsStep
+import com.vk.id.health.metrics.VKIDHeathMetric
 import com.vk.id.health.metrics.utils.formatChangePercent
 import org.gradle.api.Project
 import org.gradle.api.Task
@@ -21,22 +21,22 @@ import org.gradle.internal.operations.OperationStartEvent
 import org.gradle.invocation.DefaultGradle
 import java.security.MessageDigest
 
-public fun VKIDHealthMetricsExtension.buildSpeed(configuration: VKIDBuildSpeedStep.Builder.() -> Unit) {
-    stepsInternal.add(VKIDBuildSpeedStep.Builder().apply { rootProject = this@buildSpeed.rootProject }.apply(configuration).build())
+public fun VKIDHealthMetricsExtension.buildSpeed(configuration: VKIDBuildSpeedMetric.Builder.() -> Unit) {
+    stepsInternal.add(VKIDBuildSpeedMetric.Builder().apply { rootProject = this@buildSpeed.rootProject }.apply(configuration).build())
 }
 
-public class VKIDBuildSpeedStep internal constructor(
+public class VKIDBuildSpeedMetric internal constructor(
     override val isExternal: Boolean,
     private val rootProject: Project,
     private val measuredTaskPaths: Set<String>
-) : VKIDHeathMetricsStep {
+) : VKIDHeathMetric {
 
     override val task: Task = rootProject.tasks.create("healthMetricsBuildSpeed${measuredTaskPaths.joinToString().sha256()}") {
         measuredTaskPaths.forEach { dependsOn(rootProject.tasks.findByPath(it)) }
     }
     override val properties: Array<String> = arrayOf("-PhealthMetrics.buildSpeed.measure")
 
-    override fun getDiff(): String = BuildSpeedStorage(measuredTaskPaths = measuredTaskPaths).getDiff()
+    override fun getDiff(): String = BuildSpeedRepository(measuredTaskPaths = measuredTaskPaths).getDiff()
 
     internal abstract class BuildDurationService : BuildService<BuildDurationService.Params>, BuildOperationListener {
 
@@ -44,7 +44,7 @@ public class VKIDBuildSpeedStep internal constructor(
             val measuredTaskPaths: SetProperty<String>
         }
 
-        private val storage = BuildSpeedStorage(measuredTaskPaths = parameters.measuredTaskPaths.get())
+        private val storage = BuildSpeedRepository(measuredTaskPaths = parameters.measuredTaskPaths.get())
 
         override fun progress(operationIdentifier: OperationIdentifier, progressEvent: OperationProgressEvent) = Unit
 
@@ -105,14 +105,14 @@ public class VKIDBuildSpeedStep internal constructor(
         public var rootProject: Project? = null
         public var measuredTaskPaths: Set<String> = emptySet()
 
-        internal fun build(): VKIDBuildSpeedStep {
+        internal fun build(): VKIDBuildSpeedMetric {
             if (measuredTaskPaths.isEmpty()) {
                 error("Tasks for measurement are not specified")
             }
             measuredTaskPaths.filter { !it.startsWith(':') }.takeIf { it.isNotEmpty() }?.joinToString()?.let {
                 error("Task path for $it must start with a colon")
             }
-            return VKIDBuildSpeedStep(
+            return VKIDBuildSpeedMetric(
                 isExternal = isExternal,
                 rootProject = checkNotNull(rootProject) { "Project is not specified" },
                 measuredTaskPaths = measuredTaskPaths

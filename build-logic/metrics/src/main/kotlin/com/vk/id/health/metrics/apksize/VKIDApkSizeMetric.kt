@@ -4,7 +4,7 @@ import com.android.build.gradle.AbstractAppExtension
 import com.android.build.gradle.api.ApplicationVariant
 import com.android.build.gradle.api.BaseVariantOutput
 import com.vk.id.health.metrics.VKIDHealthMetricsExtension
-import com.vk.id.health.metrics.VKIDHeathMetricsStep
+import com.vk.id.health.metrics.VKIDHeathMetric
 import com.vk.id.health.metrics.utils.exec
 import com.vk.id.health.metrics.utils.formatChangePercent
 import org.gradle.api.Project
@@ -24,7 +24,7 @@ public class VKIDApkSizeMetric(
     private val targetBuildType: ApplicationVariant,
     private val sourceProject: Project,
     private val sourceBuildType: ApplicationVariant?,
-) : VKIDHeathMetricsStep {
+) : VKIDHeathMetric {
 
     override val isExternal: Boolean = false
 
@@ -37,7 +37,7 @@ public class VKIDApkSizeMetric(
             val targetSize = getApkSize(targetBuildType.apkFilePath)
             val sourceSize = sourceBuildType?.let { getApkSize(it.apkFilePath) } ?: "0"
             val apkSize = targetSize.toLong() - sourceSize.toLong()
-            val storage = ApkSizeMetricStorage(
+            val storage = ApkSizeRepository(
                 targetProject = targetProject,
                 targetBuildType = targetBuildType,
                 sourceProject = sourceProject,
@@ -72,7 +72,7 @@ public class VKIDApkSizeMetric(
             .outputFile
             .absolutePath
 
-    override fun getDiff(): String = ApkSizeMetricStorage(
+    override fun getDiff(): String = ApkSizeRepository(
         targetProject = targetProject,
         targetBuildType = targetBuildType,
         sourceProject = sourceProject,
