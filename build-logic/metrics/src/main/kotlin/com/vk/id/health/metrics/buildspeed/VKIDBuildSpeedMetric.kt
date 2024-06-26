@@ -20,6 +20,8 @@ import org.gradle.internal.operations.OperationProgressEvent
 import org.gradle.internal.operations.OperationStartEvent
 import org.gradle.invocation.DefaultGradle
 import java.security.MessageDigest
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 public fun VKIDHealthMetricsExtension.buildSpeed(configuration: VKIDBuildSpeedMetric.Builder.() -> Unit) {
     stepsInternal.add(VKIDBuildSpeedMetric.Builder().apply { rootProject = this@buildSpeed.rootProject }.apply(configuration).build())
@@ -68,9 +70,11 @@ public class VKIDBuildSpeedMetric internal constructor(
         ) {
             val measuredTaskPath = parameters.measuredTaskPaths.get()
             val durationChangePercent = formatChangePercent(storage.getBuildDuration(), buildDuration)
-            val buildDurationChange = "$buildDuration ms ($durationChangePercent)"
+            val buildDurationText = formatDurationText(buildDuration)
+            val buildDurationChange = "$buildDurationText ($durationChangePercent)"
             val configChangePercent = formatChangePercent(storage.getConfigurationDuration(), configurationDuration)
-            val configDurationChange = "$configurationDuration ms ($configChangePercent)"
+            val configurationDurationText = formatDurationText(configurationDuration)
+            val configDurationChange = "$configurationDurationText ($configChangePercent)"
             val diff = """
                 |# Build speed report for $measuredTaskPath
                 || Build                | Configuration         |
@@ -79,6 +83,8 @@ public class VKIDBuildSpeedMetric internal constructor(
             """.trimMargin()
             storage.saveDiff(diff)
         }
+
+        private fun formatDurationText(duration: Long) = duration.toDuration(DurationUnit.MILLISECONDS).absoluteValue.toString()
     }
 
     init {
