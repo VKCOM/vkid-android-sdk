@@ -86,6 +86,10 @@ gradlePlugin {
             id = "vkid.binaryCompatibilityValidator"
             implementationClass = "VKIDBinaryCompatibilityValidatorPlugin"
         }
+        register("vkidScreenshotTesting") {
+            id = "vkid.screenshotTesting"
+            implementationClass = "VKIDScreenshotTestingPlugin"
+        }
     }
 }
 

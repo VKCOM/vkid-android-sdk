@@ -54,4 +54,5 @@ private fun Project.shouldInjectManifestPlaceholders() = gradle
             || it.contains("generatebaselineprofile")
             || it.contains("publishhealthmetrics")
             || it.contains("healthmetricsbuildspeed")
+            || it.contains("updatedebugscreenshottest")
     }
