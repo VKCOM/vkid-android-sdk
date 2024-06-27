@@ -9,6 +9,7 @@ plugins {
 
 android {
     namespace = "com.vk.id.onetap.compose"
+    experimentalProperties["android.experimental.enableScreenshotTest"] = true
 }
 
 dependencies {
