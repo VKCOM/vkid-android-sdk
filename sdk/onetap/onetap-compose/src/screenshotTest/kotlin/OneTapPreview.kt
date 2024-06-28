@@ -218,7 +218,8 @@ private fun OneTapMailAndOKOauthsPreview() {
 @Preview
 @Composable
 private fun OneTapFastAuthEnabledPreview() {
-    OneTap(fastAuthEnabled = false,
+    OneTap(signInAnotherAccountButtonEnabled = true,
+        fastAuthEnabled = false,
         onAuth = { _, _ -> })
 }
 
