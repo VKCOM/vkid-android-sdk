@@ -8,8 +8,9 @@ import com.vk.id.multibranding.OAuthListWidget
 import com.vk.id.multibranding.common.style.OAuthListWidgetCornersStyle
 import com.vk.id.multibranding.common.style.OAuthListWidgetSizeStyle
 import com.vk.id.multibranding.common.style.OAuthListWidgetStyle
+import org.intellij.lang.annotations.Language
 
-@Preview
+@Preview(locale = "ru-RU")
 @Composable
 private fun OAuthListWidgetDark() {
     OAuthListWidget(
@@ -21,7 +22,7 @@ private fun OAuthListWidgetDark() {
     )
 }
 
-@Preview
+@Preview(locale = "en-US")
 @Composable
 private fun OAuthListWidgetMailLight() {
     OAuthListWidget(
@@ -32,7 +33,7 @@ private fun OAuthListWidgetMailLight() {
     )
 }
 
-@Preview
+@Preview(locale = "fr-FR")
 @Composable
 private fun OAuthListWidgetWithOKItem() {
     OAuthListWidget(
@@ -42,7 +43,7 @@ private fun OAuthListWidgetWithOKItem() {
     )
 }
 
-@Preview
+@Preview(locale = "de-DE")
 @Composable
 private fun OAuthListWidgetWithTwoItems() {
     OAuthListWidget(
@@ -52,7 +53,7 @@ private fun OAuthListWidgetWithTwoItems() {
     )
 }
 
-@Preview
+@Preview(locale = "pl-PL")
 @Composable
 private fun OAuthListWidgetWithOKAndMailItems() {
     OAuthListWidget(
@@ -62,8 +63,8 @@ private fun OAuthListWidgetWithOKAndMailItems() {
     )
 }
 
-@Preview
-@Composable
+@Preview(locale = "tr-TR")
+@Composable()
 private fun OAuthListWidgetWithMailAndVkItems() {
     OAuthListWidget(
         oAuths = setOf(OAuth.MAIL, OAuth.VK),
@@ -72,7 +73,7 @@ private fun OAuthListWidgetWithMailAndVkItems() {
     )
 }
 
-@Preview
+@Preview(locale = "uk-UA")
 @Composable
 private fun OAuthListWidgetWithThreeItems() {
     OAuthListWidget(
@@ -82,7 +83,7 @@ private fun OAuthListWidgetWithThreeItems() {
     )
 }
 
-@Preview
+@Preview(locale = "")
 @Composable
 private fun OAuthListWidgetCornersStyleNoneLight() {
     OAuthListWidget(
@@ -240,4 +241,15 @@ private fun OAuthListWidgetSizeStyleLarge56Dark() {
         onAuth = { _, _ -> },
         onFail = { _, _ -> },
     )
+}
+
+@Preview(locale = "")
+@Composable
+private fun OAuthListWidgetLangRu() {
+    OAuthListWidget(
+        oAuths = setOf(OAuth.OK, OAuth.MAIL, OAuth.VK),
+        onAuth = { _, _ -> },
+        onFail = { _, _ -> },
+    )
+
 }
