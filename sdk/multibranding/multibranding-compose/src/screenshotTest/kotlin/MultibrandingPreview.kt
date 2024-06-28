@@ -8,9 +8,8 @@ import com.vk.id.multibranding.OAuthListWidget
 import com.vk.id.multibranding.common.style.OAuthListWidgetCornersStyle
 import com.vk.id.multibranding.common.style.OAuthListWidgetSizeStyle
 import com.vk.id.multibranding.common.style.OAuthListWidgetStyle
-import org.intellij.lang.annotations.Language
 
-@Preview(locale = "ru-RU")
+@Preview(locale = "ru")
 @Composable
 private fun OAuthListWidgetDark() {
     OAuthListWidget(
@@ -22,7 +21,7 @@ private fun OAuthListWidgetDark() {
     )
 }
 
-@Preview(locale = "en-US")
+@Preview(locale = "en")
 @Composable
 private fun OAuthListWidgetMailLight() {
     OAuthListWidget(
@@ -33,7 +32,7 @@ private fun OAuthListWidgetMailLight() {
     )
 }
 
-@Preview(locale = "fr-FR")
+@Preview(locale = "fr")
 @Composable
 private fun OAuthListWidgetWithOKItem() {
     OAuthListWidget(
@@ -43,7 +42,7 @@ private fun OAuthListWidgetWithOKItem() {
     )
 }
 
-@Preview(locale = "de-DE")
+@Preview(locale = "de")
 @Composable
 private fun OAuthListWidgetWithTwoItems() {
     OAuthListWidget(
@@ -53,7 +52,7 @@ private fun OAuthListWidgetWithTwoItems() {
     )
 }
 
-@Preview(locale = "pl-PL")
+@Preview(locale = "pl")
 @Composable
 private fun OAuthListWidgetWithOKAndMailItems() {
     OAuthListWidget(
@@ -63,7 +62,7 @@ private fun OAuthListWidgetWithOKAndMailItems() {
     )
 }
 
-@Preview(locale = "tr-TR")
+@Preview(locale = "tr")
 @Composable()
 private fun OAuthListWidgetWithMailAndVkItems() {
     OAuthListWidget(
@@ -73,7 +72,7 @@ private fun OAuthListWidgetWithMailAndVkItems() {
     )
 }
 
-@Preview(locale = "uk-UA")
+@Preview(locale = "uk")
 @Composable
 private fun OAuthListWidgetWithThreeItems() {
     OAuthListWidget(
@@ -83,7 +82,7 @@ private fun OAuthListWidgetWithThreeItems() {
     )
 }
 
-@Preview(locale = "")
+@Preview
 @Composable
 private fun OAuthListWidgetCornersStyleNoneLight() {
     OAuthListWidget(
