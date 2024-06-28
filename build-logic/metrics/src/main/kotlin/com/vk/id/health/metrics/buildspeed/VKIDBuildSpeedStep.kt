@@ -2,6 +2,7 @@ package com.vk.id.health.metrics.buildspeed
 
 import com.vk.id.health.metrics.VKIDHealthMetricsExtension
 import com.vk.id.health.metrics.VKIDHeathMetricsStep
+import com.vk.id.health.metrics.utils.formatChangePercent
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.invocation.Gradle
@@ -18,19 +19,17 @@ import org.gradle.internal.operations.OperationIdentifier
 import org.gradle.internal.operations.OperationProgressEvent
 import org.gradle.internal.operations.OperationStartEvent
 import org.gradle.invocation.DefaultGradle
-import java.math.BigDecimal
-import java.math.RoundingMode
 import java.security.MessageDigest
+
+public fun VKIDHealthMetricsExtension.buildSpeed(configuration: VKIDBuildSpeedStep.Builder.() -> Unit) {
+    stepsInternal.add(VKIDBuildSpeedStep.Builder().apply { rootProject = this@buildSpeed.rootProject }.apply(configuration).build())
+}
 
 public class VKIDBuildSpeedStep internal constructor(
     override val isExternal: Boolean,
     private val rootProject: Project,
     private val measuredTaskPaths: Set<String>
 ) : VKIDHeathMetricsStep {
-
-    private companion object {
-        private const val HUNDRED_PERCENT = 100
-    }
 
     override val task: Task = rootProject.tasks.create("healthMetricsBuildSpeed${measuredTaskPaths.joinToString().sha256()}") {
         measuredTaskPaths.forEach { dependsOn(rootProject.tasks.findByPath(it)) }
@@ -68,10 +67,9 @@ public class VKIDBuildSpeedStep internal constructor(
             configurationDuration: Long,
         ) {
             val measuredTaskPath = parameters.measuredTaskPaths.get()
-            val durationChangePercent = formatDurationChangePercent(storage.getBuildDuration(), buildDuration)
+            val durationChangePercent = formatChangePercent(storage.getBuildDuration(), buildDuration)
             val buildDurationChange = "$buildDuration ms ($durationChangePercent)"
-            val configChangePercent =
-                formatDurationChangePercent(storage.getConfigurationDuration(), configurationDuration)
+            val configChangePercent = formatChangePercent(storage.getConfigurationDuration(), configurationDuration)
             val configDurationChange = "$configurationDuration ms ($configChangePercent)"
             val diff = """
                 |# Build speed report for $measuredTaskPath
@@ -80,22 +78,6 @@ public class VKIDBuildSpeedStep internal constructor(
                 || $buildDurationChange | $configDurationChange |
             """.trimMargin()
             storage.saveDiff(diff)
-        }
-
-        private fun formatDurationChangePercent(
-            oldDuration: Long,
-            newDuration: Long,
-        ): String {
-            val changePercent = BigDecimal(HUNDRED_PERCENT - newDuration.toDouble() / oldDuration * HUNDRED_PERCENT)
-                .setScale(2, RoundingMode.HALF_EVEN)
-                .stripTrailingZeros()
-            val sign = when {
-                changePercent > BigDecimal.ZERO -> "-"
-                changePercent == BigDecimal.ZERO -> ""
-                else -> "+"
-            }
-            val colorSign = if (sign == "-") "-" else "+"
-            return "{$colorSign$sign${changePercent.abs().toPlainString()}%$colorSign}"
         }
     }
 
@@ -141,8 +123,4 @@ public class VKIDBuildSpeedStep internal constructor(
     private fun String.sha256() = MessageDigest.getInstance("SHA-256")
         .digest(toByteArray())
         .fold("") { str, item -> str + "%02x".format(item) }
-}
-
-public fun VKIDHealthMetricsExtension.buildSpeed(configuration: VKIDBuildSpeedStep.Builder.() -> Unit) {
-    stepsInternal.add(VKIDBuildSpeedStep.Builder().apply { rootProject = this@buildSpeed.rootProject }.apply(configuration).build())
 }
