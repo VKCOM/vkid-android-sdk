@@ -47,7 +47,7 @@ public class VKIDApkSizeMetric(
             val oldApkSize = storage.getApkSize()
 
             @Suppress("MagicNumber")
-            val apkSizeMb = BigDecimal(apkSize.toDouble() / 1024 / 1024).setScale(2, RoundingMode.HALF_EVEN)
+            val apkSizeMb = BigDecimal(apkSize.toDouble() / 1024 / 1024).setScale(4, RoundingMode.HALF_EVEN)
             val targetIdentifier = "${targetProject.name}#${targetBuildType.name}"
             val sourceIdentifier = sourceBuildType?.let { " ${sourceProject.name}${it.name}" }.orEmpty()
             val title = title ?: ("Apk size report for $targetIdentifier$sourceIdentifier")
@@ -63,7 +63,6 @@ public class VKIDApkSizeMetric(
         val properties = Properties()
         properties.load(targetProject.rootProject.file("local.properties").inputStream())
         val apkanalyzerPath = properties.getProperty("healthmetrics.apksize.apkanalyzerpath")
-            ?: "/opt/android/sdk/cmdline-tools/tools/bin/apkanalyzer"
         return exec("$apkanalyzerPath apk file-size $apkPath").first()
     }
 
