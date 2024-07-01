@@ -64,7 +64,7 @@ public class VKIDApkSizeMetric(
         properties.load(targetProject.rootProject.file("local.properties").inputStream())
         val apkanalyzerPath = properties.getProperty("healthmetrics.apksize.apkanalyzerpath")
             ?: "/opt/android/sdk/cmdline-tools/tools/bin/apkanalyzer"
-        return exec("$apkanalyzerPath apk file-size $apkPath")
+        return exec("$apkanalyzerPath apk file-size $apkPath").first()
     }
 
     private val ApplicationVariant.apkFilePath: String
