@@ -78,6 +78,30 @@ public fun OAuthListWidget(
     oAuths: Set<OAuth> = OAuth.entries.toSet(),
     authParams: VKIDAuthUiParams = VKIDAuthUiParams {},
 ) {
+    OAuthListWidget(
+        modifier = modifier,
+        style = style,
+        onAuth = onAuth,
+        onAuthCode = onAuthCode,
+        onFail = onFail,
+        oAuths = oAuths,
+        authParams = authParams,
+        measureInProgress = false,
+    )
+}
+
+@InternalVKIDApi
+@Composable
+public fun OAuthListWidget(
+    modifier: Modifier = Modifier,
+    style: OAuthListWidgetStyle = OAuthListWidgetStyle.Dark(),
+    onAuth: (oAuth: OAuth, accessToken: AccessToken) -> Unit,
+    onAuthCode: (data: AuthCodeData, isCompletion: Boolean) -> Unit = { _, _ -> },
+    onFail: (oAuth: OAuth, fail: VKIDAuthFail) -> Unit,
+    oAuths: Set<OAuth> = OAuth.entries.toSet(),
+    authParams: VKIDAuthUiParams = VKIDAuthUiParams {},
+    measureInProgress: Boolean,
+) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     if (oAuths.isEmpty()) {
@@ -95,7 +119,9 @@ public fun OAuthListWidget(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        OAuthTitle()
+        if (!measureInProgress) {
+            OAuthTitle()
+        }
         Spacer(modifier = Modifier.height(16.dp))
         Row {
             oAuths.forEachIndexed { index, item ->

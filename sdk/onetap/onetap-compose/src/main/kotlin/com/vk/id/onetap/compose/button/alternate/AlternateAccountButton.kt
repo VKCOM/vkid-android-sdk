@@ -7,7 +7,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicText
@@ -36,50 +35,30 @@ import com.vk.id.onetap.compose.onetap.style.asFontSize
 import com.vk.id.onetap.compose.onetap.style.asLineHeight
 import com.vk.id.onetap.compose.onetap.style.clip
 import com.vk.id.onetap.compose.onetap.style.height
-import com.vk.id.onetap.compose.util.MeasureUnconstrainedViewWidth
 
 @Composable
 internal fun AdaptiveAlternateAccountButton(
     vkidButtonState: VKIDButtonState,
     style: InternalVKIDAlternateAccountButtonStyle = InternalVKIDAlternateAccountButtonStyle.Light(),
     onClick: () -> Unit,
+    largeText: Boolean
 ) {
     AnimatedVisibility(
         modifier = Modifier.padding(top = 12.dp),
         visible = !vkidButtonState.userLoadFailed,
     ) {
-        BoxWithConstraints {
-            MeasureUnconstrainedViewWidth(viewToMeasure = {
-                AlternateAccountButton(
-                    style = style,
-                    textResId = R.string.vkid_auth_use_another_account,
-                    onClick = onClick
-                )
-            }) { largeViewMeasuredWidth ->
-                if (largeViewMeasuredWidth < maxWidth) {
-                    AlternateAccountButton(
-                        style = style,
-                        textResId = R.string.vkid_auth_use_another_account,
-                        onClick = onClick
-                    )
-                } else {
-                    MeasureUnconstrainedViewWidth(viewToMeasure = {
-                        AlternateAccountButton(
-                            style = style,
-                            textResId = R.string.vkid_auth_use_another_account_short,
-                            onClick = onClick
-                        )
-                    }) { shortViewMasuredWidth ->
-                        if (shortViewMasuredWidth < maxWidth) {
-                            AlternateAccountButton(
-                                style = style,
-                                textResId = R.string.vkid_auth_use_another_account_short,
-                                onClick = onClick
-                            )
-                        }
-                    }
-                }
-            }
+        if (largeText) {
+            AlternateAccountButton(
+                style = style,
+                textResId = R.string.vkid_auth_use_another_account,
+                onClick = onClick
+            )
+        } else {
+            AlternateAccountButton(
+                style = style,
+                textResId = R.string.vkid_auth_use_another_account_short,
+                onClick = onClick
+            )
         }
     }
 }
