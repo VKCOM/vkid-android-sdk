@@ -492,7 +492,7 @@ public abstract class BaseAuthTest(
         }
     }
 
-    private fun runIfShouldNotSkip(
+    fun runIfShouldNotSkip(
         test: () -> Unit,
     ) {
         if (!skipTest) {
@@ -502,12 +502,12 @@ public abstract class BaseAuthTest(
 
     protected abstract fun setContent(
         onAuth: (OAuth?, AccessToken) -> Unit = { _, _ -> },
-        onAuthCode: (AuthCodeData, Boolean) -> Unit = { _, _, -> },
+        onAuthCode: (AuthCodeData, Boolean) -> Unit = { _, _ -> },
         onFail: (OAuth?, VKIDAuthFail) -> Unit = { _, _ -> },
         authParams: VKIDAuthUiParams = VKIDAuthUiParams {},
     )
 
-    private fun TestContext<Unit>.continueAuth() = scenario(ContinueAuthScenario(composeTestRule))
+    fun TestContext<Unit>.continueAuth() = scenario(ContinueAuthScenario(composeTestRule))
 
     protected abstract fun TestContext<Unit>.startAuth()
 

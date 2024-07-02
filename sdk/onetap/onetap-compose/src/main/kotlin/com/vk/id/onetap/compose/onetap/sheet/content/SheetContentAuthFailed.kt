@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -87,7 +88,8 @@ private fun RepeatButton(style: InternalVKIDAlternateAccountButtonStyle, repeatC
                     color = style.rippleStyle.asColor(),
                 ),
                 onClick = repeatClicked
-            ),
+            )
+            .testTag("vkid_retry_btn"),
         contentAlignment = Alignment.Center
     ) {
         BasicText(
