@@ -32,10 +32,10 @@ private fun registerGeneralTask(name: String, configuration: Task.() -> Unit = {
     }
 }
 
-healthMetrics {
-    gitlab()
-    firestore(rootProject.file("build-logic/metrics/service-credentials.json"))
-    buildSpeed {
-        measuredTaskPaths = setOf(":clean", ":assembleDebug")
-    }
-}
+//healthMetrics {
+//    gitlab()
+//    firestore(rootProject.file("build-logic/metrics/service-credentials.json"))
+//    buildSpeed {
+//        measuredTaskPaths = setOf(":clean", ":assembleDebug")
+//    }
+//}
