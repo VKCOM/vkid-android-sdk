@@ -1,3 +1,5 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.bottomsheet.compose
 
 import android.os.Handler
@@ -10,14 +12,13 @@ import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.bottomsheet.screen.BottomSheetRetryScreen
 import com.vk.id.common.InternalVKIDApi
+import com.vk.id.common.baseauthtest.BaseAuthTest
 import com.vk.id.common.mockapi.MockApi
 import com.vk.id.common.mockapi.mockApiError
 import com.vk.id.common.mockapi.mockApiSuccess
-import com.vk.id.common.mockapi.mockGetTokenSuccess
-import com.vk.id.onetap.base.OneTapTest
-import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.compose.onetap.sheet.OneTapBottomSheet
 import com.vk.id.onetap.compose.onetap.sheet.rememberOneTapBottomSheetState
+import com.vk.id.onetap.screen.OneTapScreen
 import io.github.kakaocup.compose.node.element.ComposeScreen
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
@@ -26,16 +27,18 @@ import io.qameta.allure.kotlin.junit4.DisplayName
 import org.junit.Test
 
 @Suppress("EmptyFunctionBlock")
-public class BottomSheetFlowComposeTest : OneTapTest() {
+public class BottomSheetFlowComposeTest : BaseAuthTest(
+    oAuth = null,
+    skipTest = false
+) {
     private companion object {
         val AUTH_CODE = AuthCodeData("d654574949e8664ba1")
     }
 
-    @OptIn(InternalVKIDApi::class)
     @Test
     @AllureId("2315339")
     @DisplayName("Успешная авторизация после ретрая в Compose BottomSheet")
-    fun authSuccessAfterRetry(): Unit = runIfShouldNotSkip {
+    fun authSuccessAfterRetry(): Unit = run {
         var receivedFail: VKIDAuthFail? = null
         var accessToken: AccessToken? = null
         var receivedOAuth: OAuth? = null
@@ -80,7 +83,6 @@ public class BottomSheetFlowComposeTest : OneTapTest() {
             step("Нажимаем 'Попробовать снова'") {
                 vkidBuilder()
                     .mockApiSuccess()
-                    .mockGetTokenSuccess()
                     .user(MockApi.mockApiUser())
                     .build()
                 retryAuth()
@@ -137,10 +139,10 @@ public class BottomSheetFlowComposeTest : OneTapTest() {
     fun sheetAuthHide() {
     }
 
-    override fun setOneTapContent(
-        onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit,
+    override fun setContent(
+        onAuth: (OAuth?, AccessToken) -> Unit,
         onAuthCode: (AuthCodeData, Boolean) -> Unit,
-        onAuth: (OneTapOAuth?, AccessToken) -> Unit,
+        onFail: (OAuth?, VKIDAuthFail) -> Unit,
         authParams: VKIDAuthUiParams
     ) {
         composeTestRule.setContent {
@@ -148,13 +150,21 @@ public class BottomSheetFlowComposeTest : OneTapTest() {
             OneTapBottomSheet(
                 state = state,
                 serviceName = "VK",
-                onAuth = onAuth,
+                onAuth = { oAuth, token -> onAuth(oAuth?.toOAuth(), token) },
                 onAuthCode = onAuthCode,
-                onFail = onFail,
+                onFail = { oAuth, fail -> onFail(oAuth?.toOAuth(), fail) },
                 authParams = authParams,
             )
             Handler(Looper.getMainLooper()).post {
                 state.show()
+            }
+        }
+    }
+
+    override fun TestContext<Unit>.startAuth(): Unit = step("Начало авторизации") {
+        ComposeScreen.onComposeScreen<OneTapScreen>(composeTestRule) {
+            oneTapButton {
+                performClick()
             }
         }
     }
