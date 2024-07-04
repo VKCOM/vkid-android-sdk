@@ -4,7 +4,7 @@ import com.android.build.gradle.AbstractAppExtension
 import com.android.build.gradle.api.ApplicationVariant
 import com.android.build.gradle.api.BaseVariantOutput
 import com.vk.id.health.metrics.VKIDHealthMetricsExtension
-import com.vk.id.health.metrics.VKIDHeathMetric
+import com.vk.id.health.metrics.VKIDSingleRunHealthMetric
 import com.vk.id.health.metrics.utils.exec
 import com.vk.id.health.metrics.utils.formatChangePercent
 import org.gradle.api.Project
@@ -24,9 +24,7 @@ public class VKIDApkSizeMetric(
     private val targetBuildType: ApplicationVariant,
     private val sourceProject: Project,
     private val sourceBuildType: ApplicationVariant?,
-) : VKIDHeathMetric {
-
-    override val isExternal: Boolean = false
+) : VKIDSingleRunHealthMetric {
 
     private val taskSuffix = "${targetProject.name.capitalized()}${targetBuildType.name.capitalized()}" +
         "${sourceProject.name.capitalized()}${sourceBuildType?.name?.capitalized().orEmpty()}"
@@ -77,8 +75,6 @@ public class VKIDApkSizeMetric(
         sourceProject = sourceProject,
         sourceBuildType = sourceBuildType
     ).getDiff()
-
-    override val properties: Array<String> = emptyArray()
 
     public class Builder {
 

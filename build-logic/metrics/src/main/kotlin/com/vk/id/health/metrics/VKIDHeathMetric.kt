@@ -1,10 +1,8 @@
 package com.vk.id.health.metrics
 
-import org.gradle.api.Task
+import org.gradle.api.Project
 
 public interface VKIDHeathMetric {
-    public val isExternal: Boolean
-    public val task: Task
     public fun getDiff(): String
-    public val properties: Array<String>
+    public fun exec(project: Project)
 }

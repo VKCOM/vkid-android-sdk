@@ -2,10 +2,12 @@ package com.vk.id.health.metrics.buildspeed
 
 import com.vk.id.health.metrics.VKIDHealthMetricsExtension
 import com.vk.id.health.metrics.VKIDHeathMetric
+import com.vk.id.health.metrics.gitlab.GitlabRepository
 import com.vk.id.health.metrics.utils.formatChangePercent
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.invocation.Gradle
+import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
 import org.gradle.api.provider.SetProperty
 import org.gradle.api.services.BuildService
@@ -28,22 +30,74 @@ public fun VKIDHealthMetricsExtension.buildSpeed(configuration: VKIDBuildSpeedMe
 }
 
 public class VKIDBuildSpeedMetric internal constructor(
-    override val isExternal: Boolean,
+    private val isExternal: Boolean,
     private val rootProject: Project,
-    private val measuredTaskPaths: Set<String>
+    private val measuredTaskPaths: Set<String>,
+    private val iterations: Int,
+    private val warmUps: Int,
 ) : VKIDHeathMetric {
 
-    override val task: Task = rootProject.tasks.create("healthMetricsBuildSpeed${measuredTaskPaths.joinToString().sha256()}") {
+    private val taskPrefix = "healthMetricsBuildSpeed${measuredTaskPaths.joinToString().sha256()}"
+    private val iterationTasks = (1..iterations).map {
+        rootProject.tasks.create("${taskPrefix}Iteration$it") {
+            measuredTaskPaths.forEach { dependsOn(rootProject.tasks.findByPath(it)) }
+        }
+    }
+    private val warmUpTask = createExecTask("${taskPrefix}WarmUp")
+    private val repository = BuildSpeedRepository(measuredTaskPaths = measuredTaskPaths)
+
+    private fun createExecTask(taskName: String) = rootProject.tasks.create(taskName) {
         measuredTaskPaths.forEach { dependsOn(rootProject.tasks.findByPath(it)) }
     }
-    override val properties: Array<String> = arrayOf("-PhealthMetrics.buildSpeed.measure")
 
-    override fun getDiff(): String = BuildSpeedRepository(measuredTaskPaths = measuredTaskPaths).getDiff()
+    override fun exec(project: Project) {
+        repository.initMetrics(iterations)
+        if (isExternal) return
+        repeat(warmUps) { execSingleTask(project, warmUpTask) }
+        iterationTasks.forEach { execSingleTask(project, it) }
+    }
+
+    private fun execSingleTask(project: Project, task: Task) {
+        val mergeRequestId = GitlabRepository.mergeRequestId
+        project.exec {
+            workingDir = project.projectDir
+            @Suppress("SpreadOperator")
+            commandLine(
+                "./gradlew",
+                task.path,
+                "--stacktrace",
+                "-PhealthMetrics.buildSpeed.measure",
+                "-PhealthMetrics.common.mergeRequestId=$mergeRequestId",
+            )
+        }
+    }
+
+    override fun getDiff(): String {
+        val targetBuildDuration = repository.getTargetBuildDuration(iterations)
+        val targetConfigurationDuration = repository.getTargetConfigurationDuration(iterations)
+        val sourceBuildDuration = repository.getSourceBuildDuration(iterations)
+        val sourceConfigurationDuration = repository.getSourceConfigurationDuration(iterations)
+        val durationChangePercent = formatChangePercent(sourceBuildDuration, targetBuildDuration)
+        val buildDurationText = formatDurationText(targetBuildDuration)
+        val buildDurationChange = "$buildDurationText ($durationChangePercent)"
+        val configChangePercent = formatChangePercent(sourceConfigurationDuration, targetConfigurationDuration)
+        val configurationDurationText = formatDurationText(targetConfigurationDuration)
+        val configDurationChange = "$configurationDurationText ($configChangePercent)"
+        return """
+                |# Build speed report for $measuredTaskPaths
+                || Build                | Configuration         |
+                ||----------------------|-----------------------|
+                || $buildDurationChange | $configDurationChange |
+        """.trimMargin()
+    }
+
+    private fun formatDurationText(duration: Long) = duration.toDuration(DurationUnit.MILLISECONDS).absoluteValue.toString()
 
     internal abstract class BuildDurationService : BuildService<BuildDurationService.Params>, BuildOperationListener {
 
         interface Params : BuildServiceParameters {
             val measuredTaskPaths: SetProperty<String>
+            val iteration: Property<Int>
         }
 
         private val storage = BuildSpeedRepository(measuredTaskPaths = parameters.measuredTaskPaths.get())
@@ -59,32 +113,12 @@ public class VKIDBuildSpeedMetric internal constructor(
 
                 val firstTaskStartTime = finishEvent.startTime
                 val configurationDuration = firstTaskStartTime - details.buildStartTime
-                storage.saveBuildDuration(buildDuration, configurationDuration)
-                publishDiff(buildDuration, configurationDuration)
+                println("====")
+                println("Saving build duration for ${parameters.iteration.get()}, $buildDuration, $configurationDuration")
+                println("====")
+                storage.saveBuildDuration(parameters.iteration.get(), buildDuration, configurationDuration)
             }
         }
-
-        private fun publishDiff(
-            buildDuration: Long,
-            configurationDuration: Long,
-        ) {
-            val measuredTaskPath = parameters.measuredTaskPaths.get()
-            val durationChangePercent = formatChangePercent(storage.getBuildDuration(), buildDuration)
-            val buildDurationText = formatDurationText(buildDuration)
-            val buildDurationChange = "$buildDurationText ($durationChangePercent)"
-            val configChangePercent = formatChangePercent(storage.getConfigurationDuration(), configurationDuration)
-            val configurationDurationText = formatDurationText(configurationDuration)
-            val configDurationChange = "$configurationDurationText ($configChangePercent)"
-            val diff = """
-                |# Build speed report for $measuredTaskPath
-                || Build                | Configuration         |
-                ||----------------------|-----------------------|
-                || $buildDurationChange | $configDurationChange |
-            """.trimMargin()
-            storage.saveDiff(diff)
-        }
-
-        private fun formatDurationText(duration: Long) = duration.toDuration(DurationUnit.MILLISECONDS).absoluteValue.toString()
     }
 
     init {
@@ -93,16 +127,16 @@ public class VKIDBuildSpeedMetric internal constructor(
         }
     }
 
-    private fun shouldRegisterBuildDurationService() = rootProject.gradle.startParameter.taskNames == listOf(task.path) &&
-        rootProject.hasProperty("healthMetrics.buildSpeed.measure")
+    private fun shouldRegisterBuildDurationService() =
+        rootProject.gradle.startParameter.taskNames.let { it.size == 1 && it.first().contains("${taskPrefix}Iteration") } &&
+            rootProject.hasProperty("healthMetrics.buildSpeed.measure")
 
     private fun registerBuildDurationService(gradle: Gradle): Provider<BuildDurationService> {
         val registry = (gradle as DefaultGradle).services[BuildEventListenerRegistryInternal::class.java]
-        return gradle.sharedServices
-            .registerIfAbsent("build-duration-service", BuildDurationService::class.java) {
-                parameters.measuredTaskPaths.set(measuredTaskPaths)
-            }
-            .also(registry::onOperationCompletion)
+        return gradle.sharedServices.registerIfAbsent("build-duration-service", BuildDurationService::class.java) {
+            parameters.measuredTaskPaths.set(measuredTaskPaths)
+            parameters.iteration.set(rootProject.gradle.startParameter.taskNames.first().takeLastWhile { it.isDigit() }.toInt())
+        }.also(registry::onOperationCompletion)
     }
 
     public class Builder {
@@ -110,6 +144,8 @@ public class VKIDBuildSpeedMetric internal constructor(
         public var isExternal: Boolean = false
         public var rootProject: Project? = null
         public var measuredTaskPaths: Set<String> = emptySet()
+        public var iterations: Int = 1
+        public var warmUps: Int = 0
 
         internal fun build(): VKIDBuildSpeedMetric {
             if (measuredTaskPaths.isEmpty()) {
@@ -121,12 +157,12 @@ public class VKIDBuildSpeedMetric internal constructor(
             return VKIDBuildSpeedMetric(
                 isExternal = isExternal,
                 rootProject = checkNotNull(rootProject) { "Project is not specified" },
-                measuredTaskPaths = measuredTaskPaths
+                measuredTaskPaths = measuredTaskPaths,
+                iterations = iterations,
+                warmUps = warmUps,
             )
         }
     }
 
-    private fun String.sha256() = MessageDigest.getInstance("SHA-256")
-        .digest(toByteArray())
-        .fold("") { str, item -> str + "%02x".format(item) }
+    private fun String.sha256() = MessageDigest.getInstance("SHA-256").digest(toByteArray()).fold("") { str, item -> str + "%02x".format(item) }
 }

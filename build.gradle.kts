@@ -41,6 +41,8 @@ healthMetrics {
     firestore(rootProject.file("build-logic/metrics/service-credentials.json"))
     buildSpeed {
         measuredTaskPaths = setOf(":clean", ":assembleDebug")
+        iterations = 3
+        warmUps = 2
     }
     apkSize {
         title = "SDK size with all dependencies"

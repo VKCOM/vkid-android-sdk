@@ -10,8 +10,7 @@ internal class VKIDHealthMetricsPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         val extension = target.extensions.create("healthMetrics", VKIDHealthMetricsExtension::class)
         extension.rootProjectInternal = target.rootProject
-        val mergeRequestId = target.properties["healthMetrics.common.mergeRequestId"] as String?
-        mergeRequestId?.let {
+        (target.properties["healthMetrics.common.mergeRequestId"] as String?)?.let {
             GitlabRepository.init(
                 token = lazy { extension.gitlabToken.value },
                 mergeRequestId = it,
@@ -21,21 +20,7 @@ internal class VKIDHealthMetricsPlugin : Plugin<Project> {
             steps = lazy { extension.steps }
         }
         val calculateMetricsTask = target.tasks.create("calculateHealthMetrics") {
-            doLast {
-                extension.steps.filterNot { it.isExternal }.forEach {
-                    target.exec {
-                        workingDir = project.projectDir
-                        @Suppress("SpreadOperator")
-                        commandLine(
-                            "./gradlew",
-                            it.task.path,
-                            "--stacktrace",
-                            *(it.properties),
-                            "-PhealthMetrics.common.mergeRequestId=$mergeRequestId",
-                        )
-                    }
-                }
-            }
+            doLast { extension.steps.forEach { it.exec(target) } }
         }
         publishMetricsTask.dependsOn(calculateMetricsTask)
     }
