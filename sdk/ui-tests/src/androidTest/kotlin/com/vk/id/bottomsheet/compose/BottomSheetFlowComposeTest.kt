@@ -7,6 +7,7 @@ import android.os.Looper
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import com.kaspersky.kaspresso.testcases.core.testcontext.TestContext
 import com.vk.id.AccessToken
@@ -20,6 +21,7 @@ import com.vk.id.common.basetest.BaseUiTest
 import com.vk.id.common.mockapi.MockApi
 import com.vk.id.common.mockapi.mockApiError
 import com.vk.id.common.mockapi.mockApiSuccess
+import com.vk.id.common.mockprovider.AuthProviderScreen
 import com.vk.id.common.mockprovider.ContinueAuthScenario
 import com.vk.id.onetap.compose.onetap.sheet.OneTapBottomSheet
 import com.vk.id.onetap.compose.onetap.sheet.rememberOneTapBottomSheetState
@@ -65,7 +67,8 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
                 receivedOAuth = oAuth
             }, autoHideOnSuccess = true
             )
-        }.after {}.run {
+        }.after {
+        }.run {
             startAuth()
             continueAuth()
             step("Auth code не получен") {
@@ -129,11 +132,14 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
                 accessToken = token
             }, autoHideOnSuccess = true
             )
-        }.after {}.run {
+        }.after {
+        }.run {
             startAuth()
             step("Auth code не получен") {
-                receivedAuthCode.shouldBeNull()
-                receivedAuthCodeSuccess.shouldBeNull()
+                flakySafely {
+                    receivedAuthCode.shouldBeNull()
+                    receivedAuthCodeSuccess.shouldBeNull()
+                }
             }
             step("Получена ошибка") {
                 flakySafely {
@@ -171,19 +177,27 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
         var receivedAuthCodeSuccess: Boolean? = null
         val oAuth: OAuth? = null
         before {
-            vkidBuilder().mockApiError().overrideDeviceIdToNull().build()
-            setContent(onAuth = { oAuth, token ->
+            vkidBuilder()
+                .mockApiError()
+                .overrideDeviceIdToNull()
+                .build()
+            setContent(
+                onAuth = { oAuth, token ->
                 receivedOAuth = oAuth
                 accessToken = token
-            }, onAuthCode = { authCode, isSuccess ->
+            },
+                onAuthCode = { authCode, isSuccess ->
                 receivedAuthCode = authCode
                 receivedAuthCodeSuccess = isSuccess
-            }, onFail = { oAuth, fail ->
+            },
+                onFail = { oAuth, fail ->
                 receivedFail = fail
                 receivedOAuth = oAuth
-            }, autoHideOnSuccess = true
+            },
+                autoHideOnSuccess = true
             )
-        }.after {}.run {
+        }.after {
+        }.run {
             startAuth()
             continueAuth()
             step("Auth code не получен") {
@@ -210,7 +224,7 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
             }
             step("Получена ошибка") {
                 flakySafely {
-                    receivedFail shouldBe VKIDAuthFail.FailedApiCall("Failed api call", null)
+                    receivedFail shouldBe VKIDAuthFail.FailedRedirectActivity("No device id", null)
                     receivedOAuth shouldBe oAuth
                 }
             }
@@ -231,23 +245,33 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
         var receivedAuthCodeSuccess: Boolean? = null
         val oAuth: OAuth? = null
         before {
-            vkidBuilder().notifyNoBrowserAvailable().build()
-            setContent(onFail = { oAuth, fail ->
-                receivedFail = fail
-                receivedOAuth = oAuth
-            }, onAuthCode = { authCode, isSuccess ->
-                receivedAuthCode = authCode
-                receivedAuthCodeSuccess = isSuccess
-            }, onAuth = { oAuth, token ->
-                receivedOAuth = oAuth
-                accessToken = token
-            }, autoHideOnSuccess = true
+            vkidBuilder()
+                .mockApiError()
+                .notifyNoBrowserAvailable()
+                .build()
+            setContent(
+                onAuth = { oAuth, token ->
+                    receivedOAuth = oAuth
+                    accessToken = token
+                },
+                onAuthCode = { authCode, isSuccess ->
+                    receivedAuthCode = authCode
+                    receivedAuthCodeSuccess = isSuccess
+                },
+                onFail = { oAuth, fail ->
+                    receivedFail = fail
+                    receivedOAuth = oAuth
+                },
+                autoHideOnSuccess = true
             )
-        }.after {}.run {
+        }.after {
+        }.run {
             startAuth()
             step("Auth code не получен") {
-                receivedAuthCode.shouldBeNull()
-                receivedAuthCodeSuccess.shouldBeNull()
+                flakySafely {
+                    receivedAuthCode.shouldBeNull()
+                    receivedAuthCodeSuccess.shouldBeNull()
+                }
             }
             step("Получена ошибка") {
                 flakySafely {
@@ -255,13 +279,16 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
                     receivedOAuth shouldBe oAuth
                 }
             }
+            step("Ожидание появления кнопки 'Попробовать снова'") {
+                composeTestRule.onNodeWithTag("mock_auth_continue", useUnmergedTree = true).assertExists()
+            }
             step("Нажимаем 'Попробовать снова'") {
                 retryAuth()
             }
             continueAuth()
             step("Auth code не получен") {
                 flakySafely {
-                    receivedAuthCode shouldBe AUTH_CODE
+                    receivedAuthCode.shouldBeNull()
                     receivedAuthCodeSuccess shouldBe false
                 }
             }
