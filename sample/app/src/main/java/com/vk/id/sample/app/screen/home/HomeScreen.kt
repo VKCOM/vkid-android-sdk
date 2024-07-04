@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
@@ -65,7 +64,7 @@ internal fun HomeScreen(
     ) {
         Spacer(modifier = Modifier.height(32.dp))
         OneTap(
-            modifier = Modifier.width(355.dp),
+            modifier = Modifier.fillMaxWidth(),
             style = if (isSystemInDarkTheme()) {
                 OneTapStyle.Dark(cornersStyle = OneTapButtonCornersStyle.Rounded)
             } else {
