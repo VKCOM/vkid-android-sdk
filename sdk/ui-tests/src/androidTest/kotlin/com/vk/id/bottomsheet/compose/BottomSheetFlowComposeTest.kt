@@ -4,6 +4,9 @@ package com.vk.id.bottomsheet.compose
 
 import android.os.Handler
 import android.os.Looper
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
+import androidx.compose.ui.test.onNodeWithTag
 import com.kaspersky.kaspresso.testcases.core.testcontext.TestContext
 import com.vk.id.AccessToken
 import com.vk.id.OAuth
@@ -16,21 +19,27 @@ import com.vk.id.common.baseauthtest.BaseAuthTest
 import com.vk.id.common.mockapi.MockApi
 import com.vk.id.common.mockapi.mockApiError
 import com.vk.id.common.mockapi.mockApiSuccess
+import com.vk.id.common.mockapi.mockGetTokenSuccess
 import com.vk.id.onetap.compose.onetap.sheet.OneTapBottomSheet
 import com.vk.id.onetap.compose.onetap.sheet.rememberOneTapBottomSheetState
 import com.vk.id.onetap.screen.OneTapScreen
 import io.github.kakaocup.compose.node.element.ComposeScreen
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import io.qameta.allure.kotlin.AllureId
 import io.qameta.allure.kotlin.junit4.DisplayName
 import org.junit.Test
+import java.util.UUID
 
 @Suppress("EmptyFunctionBlock")
 public class BottomSheetFlowComposeTest : BaseAuthTest(
     oAuth = null,
-    skipTest = false
+    skipTest = false,
 ) {
+    var autoHideOnSuccess: Boolean = false
+    var autoHideOnSucces: Boolean = true
+
     private companion object {
         val AUTH_CODE = AuthCodeData("d654574949e8664ba1")
     }
@@ -113,6 +122,58 @@ public class BottomSheetFlowComposeTest : BaseAuthTest(
     @AllureId("2315344")
     @DisplayName("Успешная смена аккаунта после ретрая в Compose BottomSheet")
     fun changeAccountSuccessAfterRetry() {
+        var receivedFail: VKIDAuthFail? = null
+        var receivedOAuth: OAuth? = null
+        var receivedAuthCode: AuthCodeData? = null
+        var receivedAuthCodeSuccess: Boolean? = null
+        val oAuth: OAuth? = null
+        before {
+            vkidBuilder()
+                .notifyNoBrowserAvailable()
+                .build()
+            setContent(
+                onFail = { oAuth, fail ->
+                    receivedFail = fail
+                    receivedOAuth = oAuth
+                },
+                onAuthCode = { authCode, isSuccess ->
+                    receivedAuthCode = authCode
+                    receivedAuthCodeSuccess = isSuccess
+                },
+            )
+        }.after {
+        }.run {
+            startAuth()
+            step("Auth code не получен") {
+                receivedAuthCode.shouldBeNull()
+                receivedAuthCodeSuccess.shouldBeNull()
+            }
+            step("Получена ошибка") {
+                flakySafely {
+                    receivedFail.shouldBeInstanceOf<VKIDAuthFail.NoBrowserAvailable>()
+                    receivedOAuth shouldBe oAuth
+                }
+            }
+            step("Нажимаем 'Попробовать снова'") {
+                vkidBuilder()
+                    .mockApiSuccess()
+                    .user(MockApi.mockApiUser())
+                    .build()
+                retryAuth()
+            }
+            continueAuth()
+            step("Получен auth code") {
+                flakySafely {
+                    receivedAuthCode shouldBe AUTH_CODE
+                    receivedAuthCodeSuccess shouldBe false
+                }
+            }
+            step("Получен OAuth") {
+                flakySafely {
+                    receivedOAuth shouldBe oAuth
+                }
+            }
+        }
     }
 
     @Test
@@ -131,19 +192,117 @@ public class BottomSheetFlowComposeTest : BaseAuthTest(
     @AllureId("2315337")
     @DisplayName("Шторка не скрывается после авторизации в Compose BottomSheet")
     fun sheetNotHiddenAfterAuth() {
+        var accessToken: AccessToken? = null
+        var receivedOAuth: OAuth? = null
+        var receivedAuthCode: AuthCodeData? = null
+        var receivedAuthCodeSuccess: Boolean? = null
+        val oAuth: OAuth? = null
+        before {
+            vkidBuilder()
+                .mockApiSuccess()
+                .user(MockApi.mockApiUser())
+                .build()
+            setContent(
+                onAuth = { oAuth, token ->
+                    receivedOAuth = oAuth
+                    accessToken = token
+                },
+                onAuthCode = { authCode, isSuccess ->
+                    receivedAuthCode = authCode
+                    receivedAuthCodeSuccess = isSuccess
+                },
+            )
+        }.after {
+        }.run {
+            startAuth()
+            continueAuth()
+            step("Получен auth code") {
+                flakySafely {
+                    receivedAuthCode shouldBe AUTH_CODE
+                    receivedAuthCodeSuccess = false
+                }
+            }
+            step("Получен OAuth") {
+                flakySafely {
+                    receivedOAuth shouldBe oAuth
+                }
+            }
+            step("Получен токен") {
+                flakySafely {
+                    accessToken?.token shouldBe MockApi.ACCESS_TOKEN
+                    accessToken?.userID shouldBe MockApi.USER_ID
+                    accessToken?.userData shouldBe MockApi.mockReturnedUser()
+                }
+            }
+            step("Боттомшит скрылся после успешной авторизации") {
+                flakySafely {
+                    composeTestRule.onNodeWithTag("onetap_bottomsheet").assertIsDisplayed()
+                }
+            }
+        }
     }
 
     @Test
     @AllureId("2315343")
     @DisplayName("Автоскрытие шторки в Compose BottomSheet")
     fun sheetAuthHide() {
+        var accessToken: AccessToken? = null
+        var receivedOAuth: OAuth? = null
+        var receivedAuthCode: AuthCodeData? = null
+        var receivedAuthCodeSuccess: Boolean? = null
+        var receivedFail: VKIDAuthFail? = null
+        val oAuth: OAuth? = null
+        before {
+            vkidBuilder()
+                .mockApiSuccess()
+                .user(MockApi.mockApiUser())
+                .build()
+            setCustomContent(
+                onAuth = { oAuth, token ->
+                    receivedOAuth = oAuth
+                    accessToken = token
+                },
+                onAuthCode = { authCode, isSuccess ->
+                    receivedAuthCode = authCode
+                    receivedAuthCodeSuccess = isSuccess
+                },
+                autoHideOnSuccess = true,
+            )
+        }.after {
+        }.run {
+            startAuth()
+            continueAuth()
+            step("Получен auth code") {
+                flakySafely {
+                    receivedAuthCode shouldBe AUTH_CODE
+                    receivedAuthCodeSuccess = false
+                }
+            }
+            step("Получен OAuth") {
+                flakySafely {
+                    receivedOAuth shouldBe oAuth
+                }
+            }
+            step("Получен токен") {
+                flakySafely {
+                    accessToken?.token shouldBe MockApi.ACCESS_TOKEN
+                    accessToken?.userID shouldBe MockApi.USER_ID
+                    accessToken?.userData shouldBe MockApi.mockReturnedUser()
+                }
+            }
+            step("Боттомшит скрылся после успешной авторизации") {
+                flakySafely {
+                    composeTestRule.onNodeWithTag("onetap_bottomsheet").assertIsNotDisplayed()
+                }
+            }
+        }
     }
 
     override fun setContent(
         onAuth: (OAuth?, AccessToken) -> Unit,
         onAuthCode: (AuthCodeData, Boolean) -> Unit,
         onFail: (OAuth?, VKIDAuthFail) -> Unit,
-        authParams: VKIDAuthUiParams
+        authParams: VKIDAuthUiParams,
     ) {
         composeTestRule.setContent {
             val state = rememberOneTapBottomSheetState()
@@ -154,11 +313,21 @@ public class BottomSheetFlowComposeTest : BaseAuthTest(
                 onAuthCode = onAuthCode,
                 onFail = { oAuth, fail -> onFail(oAuth?.toOAuth(), fail) },
                 authParams = authParams,
+                autoHideOnSuccess = autoHideOnSuccess,
             )
             Handler(Looper.getMainLooper()).post {
                 state.show()
             }
         }
+    }
+
+    fun setCustomContent(
+        onAuth: (OAuth?, AccessToken) -> Unit,
+        onAuthCode: (AuthCodeData, Boolean) -> Unit,
+        autoHideOnSuccess: Boolean,
+    ) {
+        this.autoHideOnSucces = autoHideOnSuccess
+        setContent(onAuth, onAuthCode)
     }
 
     override fun TestContext<Unit>.startAuth(): Unit = step("Начало авторизации") {
