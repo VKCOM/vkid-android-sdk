@@ -109,7 +109,7 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
     @Test
     @AllureId("2315344")
     @DisplayName("Успешная смена аккаунта после ретрая в Compose BottomSheet")
-    fun changeAccountSuccessAfterRetry() {
+    fun changeAccountSuccessAfterRetry(): Unit = run {
         var accessToken: AccessToken? = null
         var receivedFail: VKIDAuthFail? = null
         var receivedOAuth: OAuth? = null
@@ -163,19 +163,121 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
     @Test
     @AllureId("2315335")
     @DisplayName("Ошибка авторизации после ретрая в Compose BottomSheet")
-    fun authFailAfterRetry() {
+    fun authFailAfterRetry(): Unit = run {
+        var receivedFail: VKIDAuthFail? = null
+        var accessToken: AccessToken? = null
+        var receivedOAuth: OAuth? = null
+        var receivedAuthCode: AuthCodeData? = null
+        var receivedAuthCodeSuccess: Boolean? = null
+        val oAuth: OAuth? = null
+        before {
+            vkidBuilder().mockApiError().overrideDeviceIdToNull().build()
+            setContent(onAuth = { oAuth, token ->
+                receivedOAuth = oAuth
+                accessToken = token
+            }, onAuthCode = { authCode, isSuccess ->
+                receivedAuthCode = authCode
+                receivedAuthCodeSuccess = isSuccess
+            }, onFail = { oAuth, fail ->
+                receivedFail = fail
+                receivedOAuth = oAuth
+            }, autoHideOnSuccess = true
+            )
+        }.after {}.run {
+            startAuth()
+            continueAuth()
+            step("Auth code не получен") {
+                flakySafely {
+                    receivedAuthCode.shouldBeNull()
+                    receivedAuthCodeSuccess.shouldBeNull()
+                }
+            }
+            step("Получена ошибка") {
+                flakySafely {
+                    receivedFail shouldBe VKIDAuthFail.FailedRedirectActivity("No device id", null)
+                    receivedOAuth shouldBe oAuth
+                }
+            }
+            step("Нажимаем 'Попробовать снова'") {
+                retryAuth()
+            }
+            continueAuth()
+            step("Auth code не получен") {
+                flakySafely {
+                    receivedAuthCode.shouldBeNull()
+                    receivedAuthCodeSuccess.shouldBeNull()
+                }
+            }
+            step("Получена ошибка") {
+                flakySafely {
+                    receivedFail shouldBe VKIDAuthFail.FailedApiCall("Failed api call", null)
+                    receivedOAuth shouldBe oAuth
+                }
+            }
+            step("Получена ошибка с кнопкой Повторить") {
+                composeTestRule.onNodeWithTag("vkid_retry_btn").assertIsDisplayed()
+            }
+        }
     }
 
     @Test
     @AllureId("2315342")
     @DisplayName("Ошибка смены аккаунта после ретрая в Compose BottomSheet")
-    fun changeAccountFailAfterRetry() {
+    fun changeAccountFailAfterRetry(): Unit = run {
+        var accessToken: AccessToken? = null
+        var receivedFail: VKIDAuthFail? = null
+        var receivedOAuth: OAuth? = null
+        var receivedAuthCode: AuthCodeData? = null
+        var receivedAuthCodeSuccess: Boolean? = null
+        val oAuth: OAuth? = null
+        before {
+            vkidBuilder().notifyNoBrowserAvailable().build()
+            setContent(onFail = { oAuth, fail ->
+                receivedFail = fail
+                receivedOAuth = oAuth
+            }, onAuthCode = { authCode, isSuccess ->
+                receivedAuthCode = authCode
+                receivedAuthCodeSuccess = isSuccess
+            }, onAuth = { oAuth, token ->
+                receivedOAuth = oAuth
+                accessToken = token
+            }, autoHideOnSuccess = true
+            )
+        }.after {}.run {
+            startAuth()
+            step("Auth code не получен") {
+                receivedAuthCode.shouldBeNull()
+                receivedAuthCodeSuccess.shouldBeNull()
+            }
+            step("Получена ошибка") {
+                flakySafely {
+                    receivedFail.shouldBeInstanceOf<VKIDAuthFail.NoBrowserAvailable>()
+                    receivedOAuth shouldBe oAuth
+                }
+            }
+            step("Нажимаем 'Попробовать снова'") {
+                retryAuth()
+            }
+            continueAuth()
+            step("Auth code не получен") {
+                flakySafely {
+                    receivedAuthCode shouldBe AUTH_CODE
+                    receivedAuthCodeSuccess shouldBe false
+                }
+            }
+            step("Получена ошибка") {
+                flakySafely {
+                    receivedFail.shouldBeInstanceOf<VKIDAuthFail.NoBrowserAvailable>()
+                    receivedOAuth shouldBe oAuth
+                }
+            }
+        }
     }
 
     @Test
     @AllureId("2315337")
     @DisplayName("Шторка не скрывается после авторизации в Compose BottomSheet")
-    fun sheetNotHiddenAfterAuth() {
+    fun sheetNotHiddenAfterAuth(): Unit = run {
         var accessToken: AccessToken? = null
         var receivedOAuth: OAuth? = null
         var receivedAuthCode: AuthCodeData? = null
@@ -218,6 +320,8 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
             }
             step("Боттомшит скрылся после успешной авторизации") {
                 flakySafely {
+                    composeTestRule.mainClock.advanceTimeBy(3000)
+                    composeTestRule.waitForIdle()
                     composeTestRule.onNodeWithTag("onetap_bottomsheet").assertIsDisplayed()
                 }
             }
@@ -227,7 +331,7 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
     @Test
     @AllureId("2315343")
     @DisplayName("Автоскрытие шторки в Compose BottomSheet")
-    fun sheetAuthHide() {
+    fun sheetAuthHide(): Unit = run {
         var accessToken: AccessToken? = null
         var receivedOAuth: OAuth? = null
         var receivedAuthCode: AuthCodeData? = null
@@ -270,6 +374,7 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
             }
             step("Боттомшит скрылся после успешной авторизации") {
                 flakySafely {
+                    composeTestRule.mainClock.advanceTimeBy(1000)
                     composeTestRule.onNodeWithTag("onetap_bottomsheet").assertIsNotDisplayed()
                 }
             }

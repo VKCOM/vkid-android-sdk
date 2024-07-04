@@ -43,7 +43,7 @@ internal fun SheetContentAuthFailed(
     serviceName: String,
     style: OneTapBottomSheetStyle,
     dismissSheet: () -> Unit,
-    repeatClicked: () -> Unit
+    repeatClicked: () -> Unit,
 ) {
     OneTapBottomSheetAnalytics.BottomSheetErrorShown()
     SheetContentBox(
@@ -66,6 +66,7 @@ internal fun SheetContentAuthFailed(
                 letterSpacing = 0.1.sp,
                 lineHeight = 20.sp
             )
+
         )
         RepeatButton(style.oneTapStyle.alternateAccountButtonStyle, repeatClicked)
         Spacer(modifier = Modifier.height(48.dp))
@@ -112,6 +113,6 @@ private fun OneTapBottomSheetProgressPreview() {
         "<Название сервиса>",
         OneTapBottomSheetStyle.Light(),
         dismissSheet = {},
-        repeatClicked = {}
+        repeatClicked = {},
     )
 }
