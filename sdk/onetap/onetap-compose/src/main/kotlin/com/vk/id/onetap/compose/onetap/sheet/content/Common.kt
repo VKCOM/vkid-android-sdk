@@ -3,6 +3,7 @@
 
 package com.vk.id.onetap.compose.onetap.sheet.content
 
+import android.os.Parcelable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.MutableState
 import com.vk.id.AccessToken
@@ -17,6 +18,7 @@ import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.compose.button.startAuth
 import com.vk.id.onetap.compose.onetap.sheet.style.OneTapBottomSheetStyle
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.parcelize.Parcelize
 import java.io.Serializable
 
 @Immutable
@@ -29,7 +31,8 @@ internal sealed class OneTapBottomSheetAuthStatus : Serializable {
 
     object AuthStarted : OneTapBottomSheetAuthStatus()
 
-    data class AuthFailedVKID(val user: VKIDUser?) : OneTapBottomSheetAuthStatus()
+    @Parcelize
+    data class AuthFailedVKID(val user: VKIDUser?) : OneTapBottomSheetAuthStatus(), Parcelable
     object AuthFailedAlternate : OneTapBottomSheetAuthStatus()
     data class AuthFailedMultibranding(val oAuth: OneTapOAuth) : OneTapBottomSheetAuthStatus()
     object AuthSuccess : OneTapBottomSheetAuthStatus()

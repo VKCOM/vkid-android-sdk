@@ -5,6 +5,7 @@ plugins {
     id("vkid.binaryCompatibilityValidator")
     alias(libs.plugins.screenshot)
     id("vkid.screenshotTesting")
+    id("org.jetbrains.kotlin.plugin.parcelize")
 }
 
 android {

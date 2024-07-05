@@ -7,7 +7,6 @@ import android.os.Looper
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import com.kaspersky.kaspresso.testcases.core.testcontext.TestContext
 import com.vk.id.AccessToken
@@ -21,7 +20,6 @@ import com.vk.id.common.basetest.BaseUiTest
 import com.vk.id.common.mockapi.MockApi
 import com.vk.id.common.mockapi.mockApiError
 import com.vk.id.common.mockapi.mockApiSuccess
-import com.vk.id.common.mockprovider.AuthProviderScreen
 import com.vk.id.common.mockprovider.ContinueAuthScenario
 import com.vk.id.onetap.compose.onetap.sheet.OneTapBottomSheet
 import com.vk.id.onetap.compose.onetap.sheet.rememberOneTapBottomSheetState
@@ -36,6 +34,7 @@ import io.qameta.allure.kotlin.junit4.DisplayName
 import org.junit.Rule
 import org.junit.Test
 
+@Suppress("LongMethod")
 public class BottomSheetFlowComposeTest : BaseUiTest() {
     @get:Rule
     public val composeTestRule: AutoTestActivityRule = createAndroidComposeRule()
@@ -56,16 +55,20 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
         val oAuth: OAuth? = null
         before {
             vkidBuilder().mockApiError().overrideDeviceIdToNull().build()
-            setContent(onAuth = { oAuth, token ->
-                receivedOAuth = oAuth
-                accessToken = token
-            }, onAuthCode = { authCode, isSuccess ->
-                receivedAuthCode = authCode
-                receivedAuthCodeSuccess = isSuccess
-            }, onFail = { oAuth, fail ->
-                receivedFail = fail
-                receivedOAuth = oAuth
-            }, autoHideOnSuccess = true
+            setContent(
+                onAuth = { oAuth, token ->
+                    receivedOAuth = oAuth
+                    accessToken = token
+                },
+                onAuthCode = { authCode, isSuccess ->
+                    receivedAuthCode = authCode
+                    receivedAuthCodeSuccess = isSuccess
+                },
+                onFail = { oAuth, fail ->
+                    receivedFail = fail
+                    receivedOAuth = oAuth
+                },
+                autoHideOnSuccess = true
             )
         }.after {
         }.run {
@@ -121,16 +124,20 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
         val oAuth: OAuth? = null
         before {
             vkidBuilder().notifyNoBrowserAvailable().build()
-            setContent(onFail = { oAuth, fail ->
-                receivedFail = fail
-                receivedOAuth = oAuth
-            }, onAuthCode = { authCode, isSuccess ->
-                receivedAuthCode = authCode
-                receivedAuthCodeSuccess = isSuccess
-            }, onAuth = { oAuth, token ->
-                receivedOAuth = oAuth
-                accessToken = token
-            }, autoHideOnSuccess = true
+            setContent(
+                onFail = { oAuth, fail ->
+                    receivedFail = fail
+                    receivedOAuth = oAuth
+                },
+                onAuthCode = { authCode, isSuccess ->
+                    receivedAuthCode = authCode
+                    receivedAuthCodeSuccess = isSuccess
+                },
+                onAuth = { oAuth, token ->
+                    receivedOAuth = oAuth
+                    accessToken = token
+                },
+                autoHideOnSuccess = true
             )
         }.after {
         }.run {
@@ -183,17 +190,17 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
                 .build()
             setContent(
                 onAuth = { oAuth, token ->
-                receivedOAuth = oAuth
-                accessToken = token
-            },
+                    receivedOAuth = oAuth
+                    accessToken = token
+                },
                 onAuthCode = { authCode, isSuccess ->
-                receivedAuthCode = authCode
-                receivedAuthCodeSuccess = isSuccess
-            },
+                    receivedAuthCode = authCode
+                    receivedAuthCodeSuccess = isSuccess
+                },
                 onFail = { oAuth, fail ->
-                receivedFail = fail
-                receivedOAuth = oAuth
-            },
+                    receivedFail = fail
+                    receivedOAuth = oAuth
+                },
                 autoHideOnSuccess = true
             )
         }.after {
@@ -246,8 +253,8 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
         val oAuth: OAuth? = null
         before {
             vkidBuilder()
-                .mockApiError()
                 .notifyNoBrowserAvailable()
+                .requireUnsetUseAuthProviderIfPossible()
                 .build()
             setContent(
                 onAuth = { oAuth, token ->
@@ -266,7 +273,7 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
             )
         }.after {
         }.run {
-            startAuth()
+            changeAccount()
             step("Auth code не получен") {
                 flakySafely {
                     receivedAuthCode.shouldBeNull()
@@ -279,22 +286,23 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
                     receivedOAuth shouldBe oAuth
                 }
             }
-            step("Ожидание появления кнопки 'Попробовать снова'") {
-                composeTestRule.onNodeWithTag("mock_auth_continue", useUnmergedTree = true).assertExists()
-            }
             step("Нажимаем 'Попробовать снова'") {
+                vkidBuilder()
+                    .overrideDeviceIdToNull()
+                    .requireUnsetUseAuthProviderIfPossible()
+                    .build()
                 retryAuth()
             }
             continueAuth()
             step("Auth code не получен") {
                 flakySafely {
                     receivedAuthCode.shouldBeNull()
-                    receivedAuthCodeSuccess shouldBe false
+                    receivedAuthCodeSuccess.shouldBeNull()
                 }
             }
             step("Получена ошибка") {
                 flakySafely {
-                    receivedFail.shouldBeInstanceOf<VKIDAuthFail.NoBrowserAvailable>()
+                    receivedFail shouldBe VKIDAuthFail.FailedRedirectActivity("No device id", null)
                     receivedOAuth shouldBe oAuth
                 }
             }
@@ -313,16 +321,20 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
         val oAuth: OAuth? = null
         before {
             vkidBuilder().mockApiSuccess().user(MockApi.mockApiUser()).build()
-            setContent(onAuth = { oAuth, token ->
-                receivedOAuth = oAuth
-                accessToken = token
-            }, onAuthCode = { authCode, isSuccess ->
-                receivedAuthCode = authCode
-                receivedAuthCodeSuccess = isSuccess
-            }, onFail = { oAuth, fail ->
-                receivedFail = fail
-                receivedOAuth = oAuth
-            }, autoHideOnSuccess = false
+            setContent(
+                onAuth = { oAuth, token ->
+                    receivedOAuth = oAuth
+                    accessToken = token
+                },
+                onAuthCode = { authCode, isSuccess ->
+                    receivedAuthCode = authCode
+                    receivedAuthCodeSuccess = isSuccess
+                },
+                onFail = { oAuth, fail ->
+                    receivedFail = fail
+                    receivedOAuth = oAuth
+                },
+                autoHideOnSuccess = false
             )
         }.after {}.run {
             startAuth()
@@ -367,16 +379,20 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
         val oAuth: OAuth? = null
         before {
             vkidBuilder().mockApiSuccess().user(MockApi.mockApiUser()).build()
-            setContent(onAuth = { oAuth, token ->
-                receivedOAuth = oAuth
-                accessToken = token
-            }, onAuthCode = { authCode, isSuccess ->
-                receivedAuthCode = authCode
-                receivedAuthCodeSuccess = isSuccess
-            }, onFail = { oAuth, fail ->
-                receivedFail = fail
-                receivedOAuth = oAuth
-            }, autoHideOnSuccess = true
+            setContent(
+                onAuth = { oAuth, token ->
+                    receivedOAuth = oAuth
+                    accessToken = token
+                },
+                onAuthCode = { authCode, isSuccess ->
+                    receivedAuthCode = authCode
+                    receivedAuthCodeSuccess = isSuccess
+                },
+                onFail = { oAuth, fail ->
+                    receivedFail = fail
+                    receivedOAuth = oAuth
+                },
+                autoHideOnSuccess = true
             )
         }.after {}.run {
             startAuth()
@@ -430,7 +446,15 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
         }
     }
 
-    fun TestContext<Unit>.startAuth(): Unit = step("Начало авторизации") {
+    private fun TestContext<Unit>.changeAccount(): Unit = step("Начало авторизации") {
+        ComposeScreen.onComposeScreen<OneTapScreen>(composeTestRule) {
+            signInToAnotherAccountButton {
+                performClick()
+            }
+        }
+    }
+
+    private fun TestContext<Unit>.startAuth(): Unit = step("Начало авторизации") {
         ComposeScreen.onComposeScreen<OneTapScreen>(composeTestRule) {
             oneTapButton {
                 performClick()
@@ -438,7 +462,7 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
         }
     }
 
-    protected fun TestContext<Unit>.retryAuth(): Unit = step("Повтор авторизации") {
+    private fun TestContext<Unit>.retryAuth(): Unit = step("Повтор авторизации") {
         ComposeScreen.onComposeScreen<BottomSheetRetryScreen>(composeTestRule) {
             retryButton {
                 performClick()
@@ -446,8 +470,7 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
         }
     }
 
-    protected open fun vkidBuilder(): InternalVKIDTestBuilder = InternalVKIDTestBuilder(composeTestRule.activity)
+    private fun vkidBuilder(): InternalVKIDTestBuilder = InternalVKIDTestBuilder(composeTestRule.activity)
 
-    fun TestContext<Unit>.continueAuth() = scenario(ContinueAuthScenario(composeTestRule))
-
+    private fun TestContext<Unit>.continueAuth() = scenario(ContinueAuthScenario(composeTestRule))
 }
