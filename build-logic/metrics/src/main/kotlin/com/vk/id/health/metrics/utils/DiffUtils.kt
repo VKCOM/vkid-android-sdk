@@ -17,6 +17,6 @@ internal fun formatChangePercent(
         changePercent == BigDecimal.ZERO -> ""
         else -> "+"
     }
-    val colorSign = if (sign == "-") "-" else "+"
+    val colorSign = if (sign == "-") "+" else "-"
     return "{$colorSign$sign${changePercent.abs().toPlainString()}%$colorSign}"
 }
