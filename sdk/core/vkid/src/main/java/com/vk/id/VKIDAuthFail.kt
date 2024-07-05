@@ -36,7 +36,7 @@ public sealed class VKIDAuthFail(
      */
     public class FailedApiCall(
         description: String,
-        public val throwable: Throwable?
+        public val throwable: Throwable
     ) : VKIDAuthFail(description) {
         /** @suppress */
         override fun equals(other: Any?): Boolean {

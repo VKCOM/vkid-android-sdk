@@ -2,6 +2,7 @@ package com.vk.id.bottomsheet.xml
 
 import android.os.Handler
 import android.os.Looper
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import com.kaspersky.kaspresso.testcases.core.testcontext.TestContext
 import com.vk.id.AccessToken
 import com.vk.id.OAuth
@@ -9,18 +10,20 @@ import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.bottomsheet.base.BottomSheetFlowTest
+import com.vk.id.common.activity.AutoTestActivityRule
 import com.vk.id.onetap.compose.onetap.sheet.OneTapBottomSheet
 import com.vk.id.onetap.compose.onetap.sheet.rememberOneTapBottomSheetState
 import com.vk.id.onetap.screen.OneTapScreen
 import io.github.kakaocup.compose.node.element.ComposeScreen
 import io.qameta.allure.kotlin.AllureId
 import io.qameta.allure.kotlin.junit4.DisplayName
+import org.junit.Rule
 import org.junit.Test
 
 @Suppress("EmptyFunctionBlock")
-public class BottomSheetFlowXmlTest : BottomSheetFlowTest(
-    oAuth = null,
-) {
+public class BottomSheetFlowXmlTest : BottomSheetFlowTest() {
+    @get:Rule
+    public val composeTestRule: AutoTestActivityRule = createAndroidComposeRule()
 
     @Test
     @AllureId("2315336")
@@ -58,7 +61,7 @@ public class BottomSheetFlowXmlTest : BottomSheetFlowTest(
     override fun sheetAuthHide() {
     }
 
-    override fun setContent(
+    fun setContent(
         onAuth: (OAuth?, AccessToken) -> Unit,
         onAuthCode: (AuthCodeData, Boolean) -> Unit,
         onFail: (OAuth?, VKIDAuthFail) -> Unit,
@@ -80,7 +83,7 @@ public class BottomSheetFlowXmlTest : BottomSheetFlowTest(
         }
     }
 
-    override fun TestContext<Unit>.startAuth(): Unit = step("Начало авторизации") {
+    fun TestContext<Unit>.startAuth(): Unit = step("Начало авторизации") {
         ComposeScreen.onComposeScreen<OneTapScreen>(composeTestRule) {
             oneTapButton {
                 performClick()

@@ -4,19 +4,16 @@ package com.vk.id.bottomsheet.compose
 
 import android.os.Handler
 import android.os.Looper
-import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onNodeWithTag
 import com.kaspersky.kaspresso.testcases.core.testcontext.TestContext
 import com.vk.id.AccessToken
 import com.vk.id.OAuth
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.AuthCodeData
+import com.vk.id.bottomsheet.base.BottomSheetFlowTest
 import com.vk.id.bottomsheet.screen.BottomSheetRetryScreen
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.common.activity.AutoTestActivityRule
-import com.vk.id.common.basetest.BaseUiTest
 import com.vk.id.common.mockapi.MockApi
 import com.vk.id.common.mockapi.mockApiError
 import com.vk.id.common.mockapi.mockApiSuccess
@@ -35,7 +32,7 @@ import org.junit.Rule
 import org.junit.Test
 
 @Suppress("LongMethod")
-public class BottomSheetFlowComposeTest : BaseUiTest() {
+public class BottomSheetFlowComposeTest : BottomSheetFlowTest() {
     @get:Rule
     public val composeTestRule: AutoTestActivityRule = createAndroidComposeRule()
 
@@ -46,7 +43,7 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
     @Test
     @AllureId("2315339")
     @DisplayName("Успешная авторизация после ретрая в Compose BottomSheet")
-    fun authSuccessAfterRetry(): Unit = run {
+    override fun authSuccessAfterRetry(): Unit = run {
         var receivedFail: VKIDAuthFail? = null
         var accessToken: AccessToken? = null
         var receivedOAuth: OAuth? = null
@@ -54,7 +51,9 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
         var receivedAuthCodeSuccess: Boolean? = null
         val oAuth: OAuth? = null
         before {
-            vkidBuilder().mockApiError().overrideDeviceIdToNull().build()
+            vkidBuilder()
+                .overrideDeviceIdToNull()
+                .build()
             setContent(
                 onAuth = { oAuth, token ->
                     receivedOAuth = oAuth
@@ -86,8 +85,13 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
                     receivedOAuth shouldBe oAuth
                 }
             }
+            step("Делаем мок новых данных") {
+                vkidBuilder()
+                    .mockApiSuccess()
+                    .user(MockApi.mockApiUser())
+                    .build()
+            }
             step("Нажимаем 'Попробовать снова'") {
-                vkidBuilder().mockApiSuccess().user(MockApi.mockApiUser()).build()
                 retryAuth()
             }
             continueAuth()
@@ -115,7 +119,7 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
     @Test
     @AllureId("2315344")
     @DisplayName("Успешная смена аккаунта после ретрая в Compose BottomSheet")
-    fun changeAccountSuccessAfterRetry(): Unit = run {
+    override fun changeAccountSuccessAfterRetry(): Unit = run {
         var accessToken: AccessToken? = null
         var receivedFail: VKIDAuthFail? = null
         var receivedOAuth: OAuth? = null
@@ -157,10 +161,12 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
                     receivedOAuth shouldBe oAuth
                 }
             }
-            step("Нажимаем 'Попробовать снова'") {
+            step("Делаем мок новых данных") {
                 vkidBuilder()
                     .requireUnsetUseAuthProviderIfPossible()
                     .build()
+            }
+            step("Нажимаем 'Попробовать снова'") {
                 retryAuth()
             }
             continueAuth()
@@ -181,7 +187,7 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
     @Test
     @AllureId("2315335")
     @DisplayName("Ошибка авторизации после ретрая в Compose BottomSheet")
-    fun authFailAfterRetry(): Unit = run {
+    override fun authFailAfterRetry(): Unit = run {
         var receivedFail: VKIDAuthFail? = null
         var accessToken: AccessToken? = null
         var receivedOAuth: OAuth? = null
@@ -241,7 +247,7 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
                 }
             }
             step("Получена ошибка с кнопкой Повторить") {
-                composeTestRule.onNodeWithTag("vkid_retry_btn").assertIsDisplayed()
+                retryButtonIsDisplayed()
             }
         }
     }
@@ -249,7 +255,7 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
     @Test
     @AllureId("2315342")
     @DisplayName("Ошибка смены аккаунта после ретрая в Compose BottomSheet")
-    fun changeAccountFailAfterRetry(): Unit = run {
+    override fun changeAccountFailAfterRetry(): Unit = run {
         var accessToken: AccessToken? = null
         var receivedFail: VKIDAuthFail? = null
         var receivedOAuth: OAuth? = null
@@ -291,11 +297,13 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
                     receivedOAuth shouldBe oAuth
                 }
             }
-            step("Нажимаем 'Попробовать снова'") {
+            step("Делаем мок новых данных") {
                 vkidBuilder()
                     .overrideDeviceIdToNull()
                     .requireUnsetUseAuthProviderIfPossible()
                     .build()
+            }
+            step("Нажимаем 'Попробовать снова'") {
                 retryAuth()
             }
             continueAuth()
@@ -317,7 +325,7 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
     @Test
     @AllureId("2315337")
     @DisplayName("Шторка не скрывается после авторизации в Compose BottomSheet")
-    fun sheetNotHiddenAfterAuth(): Unit = run {
+    override fun sheetNotHiddenAfterAuth(): Unit = run {
         var accessToken: AccessToken? = null
         var receivedOAuth: OAuth? = null
         var receivedAuthCode: AuthCodeData? = null
@@ -325,7 +333,10 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
         var receivedAuthCodeSuccess: Boolean? = null
         val oAuth: OAuth? = null
         before {
-            vkidBuilder().mockApiSuccess().user(MockApi.mockApiUser()).build()
+            vkidBuilder()
+                .mockApiSuccess()
+                .user(MockApi.mockApiUser())
+                .build()
             setContent(
                 onAuth = { oAuth, token ->
                     receivedOAuth = oAuth
@@ -365,8 +376,7 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
             step("Боттомшит скрылся после успешной авторизации") {
                 flakySafely {
                     composeTestRule.mainClock.advanceTimeBy(3000)
-                    composeTestRule.waitForIdle()
-                    composeTestRule.onNodeWithTag("onetap_bottomsheet").assertIsDisplayed()
+                    oneTapIsDisplayed()
                 }
             }
         }
@@ -375,7 +385,7 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
     @Test
     @AllureId("2315343")
     @DisplayName("Автоскрытие шторки в Compose BottomSheet")
-    fun sheetAuthHide(): Unit = run {
+    override fun sheetAuthHide(): Unit = run {
         var accessToken: AccessToken? = null
         var receivedOAuth: OAuth? = null
         var receivedAuthCode: AuthCodeData? = null
@@ -383,7 +393,10 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
         var receivedFail: VKIDAuthFail? = null
         val oAuth: OAuth? = null
         before {
-            vkidBuilder().mockApiSuccess().user(MockApi.mockApiUser()).build()
+            vkidBuilder()
+                .mockApiSuccess()
+                .user(MockApi.mockApiUser())
+                .build()
             setContent(
                 onAuth = { oAuth, token ->
                     receivedOAuth = oAuth
@@ -423,7 +436,7 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
             step("Боттомшит скрылся после успешной авторизации") {
                 flakySafely {
                     composeTestRule.mainClock.advanceTimeBy(1000)
-                    composeTestRule.onNodeWithTag("onetap_bottomsheet").assertIsNotDisplayed()
+                    oneTapIsNotDisplayed()
                 }
             }
         }
@@ -474,6 +487,32 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
             }
         }
     }
+
+    private fun TestContext<Unit>.retryButtonIsDisplayed(): Unit = step("Проверяем наличие кнопки Повторить") {
+        ComposeScreen.onComposeScreen<BottomSheetRetryScreen>(composeTestRule) {
+            retryButton {
+                assertIsDisplayed()
+            }
+        }
+    }
+
+    private fun TestContext<Unit>.oneTapIsDisplayed(): Unit =
+        step("OneTap кнопка отображается, bottomsheet скрывается") {
+            ComposeScreen.onComposeScreen<OneTapScreen>(composeTestRule) {
+                oneTapButton {
+                    assertIsDisplayed()
+                }
+            }
+        }
+
+    private fun TestContext<Unit>.oneTapIsNotDisplayed(): Unit =
+        step("OneTap кнопка не отображается, bottomsheet не скрывается") {
+            ComposeScreen.onComposeScreen<OneTapScreen>(composeTestRule) {
+                oneTapButton {
+                    performClick()
+                }
+            }
+        }
 
     private fun vkidBuilder(): InternalVKIDTestBuilder = InternalVKIDTestBuilder(composeTestRule.activity)
 
