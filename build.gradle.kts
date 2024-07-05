@@ -36,23 +36,23 @@ private fun registerGeneralTask(name: String, configuration: Task.() -> Unit = {
     }
 }
 
-//healthMetrics {
-//    gitlab()
-//    firestore(rootProject.file("build-logic/metrics/service-credentials.json"))
-//    buildSpeed {
-//        measuredTaskPaths = setOf(":clean", ":assembleDebug")
-//    }
-//    apkSize {
-//        title = "SDK size with all dependencies"
-//        targetProject = projects.sampleMetricsApp.dependencyProject
-//        targetBuildType = "withSdk"
-//        sourceBuildType = "debug"
-//    }
-//    apkSize {
-//        title = "Pure SDK size"
-//        targetProject = projects.sampleMetricsApp.dependencyProject
-//        targetBuildType = "withSdk"
-//        sourceBuildType = "withDeps"
-//    }
-//    publicApiChanges()
-//}
+healthMetrics {
+    gitlab()
+    firestore(rootProject.file("build-logic/metrics/service-credentials.json"))
+    buildSpeed {
+        measuredTaskPaths = setOf(":clean", ":assembleDebug")
+    }
+    apkSize {
+        title = "SDK size with all dependencies"
+        targetProject = projects.sampleMetricsApp.dependencyProject
+        targetBuildType = "withSdk"
+        sourceBuildType = "debug"
+    }
+    apkSize {
+        title = "Pure SDK size"
+        targetProject = projects.sampleMetricsApp.dependencyProject
+        targetBuildType = "withSdk"
+        sourceBuildType = "withDeps"
+    }
+    publicApiChanges()
+}
