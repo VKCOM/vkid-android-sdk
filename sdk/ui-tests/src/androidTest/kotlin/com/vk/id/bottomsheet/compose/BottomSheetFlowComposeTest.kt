@@ -123,7 +123,10 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
         var receivedAuthCodeSuccess: Boolean? = null
         val oAuth: OAuth? = null
         before {
-            vkidBuilder().notifyNoBrowserAvailable().build()
+            vkidBuilder()
+                .notifyNoBrowserAvailable()
+                .requireUnsetUseAuthProviderIfPossible()
+                .build()
             setContent(
                 onFail = { oAuth, fail ->
                     receivedFail = fail
@@ -141,7 +144,7 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
             )
         }.after {
         }.run {
-            startAuth()
+            changeAccount()
             step("Auth code не получен") {
                 flakySafely {
                     receivedAuthCode.shouldBeNull()
@@ -155,7 +158,9 @@ public class BottomSheetFlowComposeTest : BaseUiTest() {
                 }
             }
             step("Нажимаем 'Попробовать снова'") {
-                vkidBuilder().mockApiSuccess().user(MockApi.mockApiUser()).build()
+                vkidBuilder()
+                    .requireUnsetUseAuthProviderIfPossible()
+                    .build()
                 retryAuth()
             }
             continueAuth()
