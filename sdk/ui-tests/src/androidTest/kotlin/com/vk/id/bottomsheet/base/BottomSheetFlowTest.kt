@@ -10,6 +10,7 @@ import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.bottomsheet.screen.BottomSheetRetryScreen
+import com.vk.id.bottomsheet.screen.BottomSheetScreen
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.common.activity.AutoTestActivityRule
 import com.vk.id.common.allure.Owners
@@ -368,8 +369,8 @@ public abstract class BottomSheetFlowTest : BaseUiTest() {
             }
             step("Боттомшит скрылся после успешной авторизации") {
                 flakySafely {
-                    composeTestRule.mainClock.advanceTimeBy(3000)
-                    oneTapIsDisplayed()
+                    composeTestRule.mainClock.advanceTimeBy(1000)
+                    bottomsheetIsDisplayed()
                 }
             }
         }
@@ -425,8 +426,8 @@ public abstract class BottomSheetFlowTest : BaseUiTest() {
             }
             step("Боттомшит скрылся после успешной авторизации") {
                 flakySafely {
-                    composeTestRule.mainClock.advanceTimeBy(1000)
-                    oneTapIsNotDisplayed()
+                    composeTestRule.mainClock.advanceTimeBy(3000)
+                    bottomsheetIsNotDisplayed()
                 }
             }
         }
@@ -472,20 +473,20 @@ public abstract class BottomSheetFlowTest : BaseUiTest() {
         }
     }
 
-    private fun TestContext<Unit>.oneTapIsDisplayed(): Unit =
-        step("OneTap кнопка отображается, bottomsheet скрывается") {
-            ComposeScreen.onComposeScreen<OneTapScreen>(composeTestRule) {
-                oneTapButton {
-                    assertIsDisplayed()
+    private fun TestContext<Unit>.bottomsheetIsNotDisplayed(): Unit =
+        step("Bottomsheet не скрывается после успешной авторизации") {
+            ComposeScreen.onComposeScreen<BottomSheetScreen>(composeTestRule) {
+                bottomsheet {
+                    assertIsNotDisplayed()
                 }
             }
         }
 
-    private fun TestContext<Unit>.oneTapIsNotDisplayed(): Unit =
-        step("OneTap кнопка не отображается, bottomsheet не скрывается") {
-            ComposeScreen.onComposeScreen<OneTapScreen>(composeTestRule) {
-                oneTapButton {
-                    performClick()
+    private fun TestContext<Unit>.bottomsheetIsDisplayed(): Unit =
+        step("Bottomsheet скрывается после успешной авторизации") {
+            ComposeScreen.onComposeScreen<BottomSheetScreen>(composeTestRule) {
+                bottomsheet {
+                    assertIsDisplayed()
                 }
             }
         }
