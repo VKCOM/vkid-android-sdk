@@ -7,6 +7,7 @@ import com.vk.id.AccessToken
 import com.vk.id.OAuth
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.AuthCodeData
+import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.bottomsheet.screen.BottomSheetRetryScreen
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.common.activity.AutoTestActivityRule
@@ -41,7 +42,7 @@ public abstract class BottomSheetFlowTest : BaseUiTest() {
     }
 
     @get:Rule
-    public open val composeTestRule: AutoTestActivityRule = createAndroidComposeRule()
+    public val composeTestRule: AutoTestActivityRule = createAndroidComposeRule()
 
 //    @Before
 //    public fun setAllureParam() //надо сделать
@@ -431,9 +432,10 @@ public abstract class BottomSheetFlowTest : BaseUiTest() {
     }
 
     abstract fun setContent(
-        onAuth: (OAuth?, AccessToken) -> Unit,
-        onAuthCode: (AuthCodeData, Boolean) -> Unit,
-        onFail: (OAuth?, VKIDAuthFail) -> Unit,
+        onAuth: (OAuth?, AccessToken) -> Unit = { _, _ -> },
+        onAuthCode: (AuthCodeData, Boolean) -> Unit = { _, _ -> },
+        onFail: (OAuth?, VKIDAuthFail) -> Unit = { _, _ -> },
+        authParams: VKIDAuthUiParams = VKIDAuthUiParams {},
         autoHideOnSuccess: Boolean = true,
     )
 

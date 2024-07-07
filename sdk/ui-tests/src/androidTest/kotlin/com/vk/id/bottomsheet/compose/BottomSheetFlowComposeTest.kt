@@ -6,6 +6,7 @@ import com.vk.id.AccessToken
 import com.vk.id.OAuth
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.AuthCodeData
+import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.bottomsheet.base.BottomSheetFlowTest
 import com.vk.id.common.allure.Feature
 import com.vk.id.common.feature.TestFeature
@@ -67,8 +68,9 @@ public class BottomSheetFlowComposeTest : BottomSheetFlowTest() {
         onAuth: (OAuth?, AccessToken) -> Unit,
         onAuthCode: (AuthCodeData, Boolean) -> Unit,
         onFail: (OAuth?, VKIDAuthFail) -> Unit,
+        authParams: VKIDAuthUiParams,
         autoHideOnSuccess: Boolean
-    ): Unit {
+    ) {
         composeTestRule.setContent {
             val state = rememberOneTapBottomSheetState()
             OneTapBottomSheet(
