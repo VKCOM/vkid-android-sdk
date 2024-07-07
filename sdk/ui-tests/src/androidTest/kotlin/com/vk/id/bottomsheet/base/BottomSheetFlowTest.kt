@@ -1,4 +1,5 @@
 @file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.bottomsheet.base
 
 import androidx.compose.ui.test.junit4.createAndroidComposeRule

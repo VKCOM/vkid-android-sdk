@@ -41,7 +41,7 @@ public class BottomSheetFlowComposeTest : BottomSheetFlowTest() {
     @DisplayName("Ошибка авторизации после ретрая в Compose BottomSheet")
     override fun authFailAfterRetry() {
         super.authFailAfterRetry()
-}
+    }
 
     @Test
     @AllureId("2315342")

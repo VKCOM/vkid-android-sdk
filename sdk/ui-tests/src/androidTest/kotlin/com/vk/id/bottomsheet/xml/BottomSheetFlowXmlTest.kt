@@ -10,7 +10,6 @@ import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.bottomsheet.base.BottomSheetFlowTest
 import com.vk.id.common.allure.Feature
 import com.vk.id.common.feature.TestFeature
-import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.xml.OneTapBottomSheet
 import io.qameta.allure.kotlin.AllureId
 import io.qameta.allure.kotlin.junit4.DisplayName
@@ -80,4 +79,5 @@ public class BottomSheetFlowXmlTest : BottomSheetFlowTest() {
         }
         composeTestRule.activity.setContent(view)
         Handler(Looper.getMainLooper()).post { view.show() }
-    }}
+    }
+}
