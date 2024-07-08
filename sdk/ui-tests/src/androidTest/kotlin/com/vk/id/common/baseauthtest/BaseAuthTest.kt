@@ -492,7 +492,7 @@ public abstract class BaseAuthTest(
         }
     }
 
-    fun runIfShouldNotSkip(
+    private fun runIfShouldNotSkip(
         test: () -> Unit,
     ) {
         if (!skipTest) {
@@ -507,7 +507,7 @@ public abstract class BaseAuthTest(
         authParams: VKIDAuthUiParams = VKIDAuthUiParams {},
     )
 
-    fun TestContext<Unit>.continueAuth() = scenario(ContinueAuthScenario(composeTestRule))
+    private fun TestContext<Unit>.continueAuth() = scenario(ContinueAuthScenario(composeTestRule))
 
     protected abstract fun TestContext<Unit>.startAuth()
 

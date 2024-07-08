@@ -3,7 +3,7 @@ import com.vk.id.health.metrics.gitlab.gitlab
 import com.vk.id.health.metrics.storage.firestore
 import com.vk.id.health.metrics.apksize.apkSize
 import java.io.IOException
-//import com.vk.id.health.metrics.apichange.publicApiChanges
+import com.vk.id.health.metrics.apichange.publicApiChanges
 
 plugins {
     alias(libs.plugins.android.application) apply false

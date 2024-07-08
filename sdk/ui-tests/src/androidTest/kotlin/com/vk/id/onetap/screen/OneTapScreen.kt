@@ -15,6 +15,4 @@ public class OneTapScreen(
     public val signInToAnotherAccountButton: KNode = child {
         hasTestTag("sign_in_to_another_account")
     }
-
-
 }
