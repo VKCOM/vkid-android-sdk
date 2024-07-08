@@ -6,5 +6,5 @@ import java.util.Properties
 public fun VKIDHealthMetricsExtension.gitlab() {
     val properties = Properties()
     properties.load(rootProject.file("local.properties").inputStream())
-    gitlabToken = properties.getProperty("healthmetrics.gitlab.token")
+    gitlabToken = lazy { properties.getProperty("healthmetrics.gitlab.token") }
 }

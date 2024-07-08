@@ -13,8 +13,8 @@ internal class VKIDHealthMetricsPlugin : Plugin<Project> {
         val mergeRequestId = target.properties["healthMetrics.common.mergeRequestId"] as String?
         mergeRequestId?.let {
             GitlabRepository.init(
-                token = lazy { extension.gitlabToken },
-                mergeRequestId = it
+                token = lazy { extension.gitlabToken.value },
+                mergeRequestId = it,
             )
         }
         val publishMetricsTask = target.tasks.create("publishHealthMetrics", PublishMetricsTask::class.java) {

@@ -1,13 +1,12 @@
 package com.vk.id.health.metrics.storage
 
-import com.google.firebase.cloud.FirestoreClient
 import com.vk.id.health.metrics.git.Git
 import com.vk.id.health.metrics.gitlab.GitlabRepository
 
 internal class FirestoreMetricStorage(
     private val metricName: String,
     private val metricCollectionName: String,
-    diffCollectionName: String,
+    private val diffCollectionName: String,
     private val documentSuffix: String,
 ) {
 
@@ -15,10 +14,10 @@ internal class FirestoreMetricStorage(
         private const val FIELD_DIFF_CONTENT = "DIFF_CONTENT"
     }
 
-    private val diffDocument = FirestoreClient.getFirestore().collection(diffCollectionName)
+    private fun getDiffDocument() = FirestoreHolder.instance.collection(diffCollectionName)
         .document("${Git.currentCommitHash} $documentSuffix")
 
-    private fun getMetricDocument(commitHash: String) = FirestoreClient.getFirestore()
+    private fun getMetricDocument(commitHash: String) = FirestoreHolder.instance
         .collection(metricCollectionName)
         .document("$commitHash $documentSuffix")
 
@@ -38,17 +37,18 @@ internal class FirestoreMetricStorage(
     }
 
     fun saveDiff(diff: String) {
-        diffDocument.set(mapOf(FIELD_DIFF_CONTENT to diff)).get()
+        getDiffDocument().set(mapOf(FIELD_DIFF_CONTENT to diff)).get()
     }
 
     fun getDiff(): String {
+        val commitHash = Git.currentCommitHash
         return (
-            diffDocument
+            getDiffDocument()
                 .get()
                 .get()
                 .get(FIELD_DIFF_CONTENT, String::class.java)
-                ?: error("$metricName diff for commit ${Git.currentCommitHash} is not found in Firestore. Doc name should be ${diffDocument.path}")
+                ?: error("$metricName diff for commit $commitHash isn't found in Firestore. Doc name should be ${getDiffDocument().path}")
             )
-            .also { diffDocument.delete() }
+            .also { getDiffDocument().delete() }
     }
 }
