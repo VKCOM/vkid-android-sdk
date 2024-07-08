@@ -46,9 +46,6 @@ public abstract class BottomSheetFlowTest : BaseUiTest() {
     @get:Rule
     public val composeTestRule: AutoTestActivityRule = createAndroidComposeRule()
 
-//    @Before
-//    public fun setAllureParam() //надо сделать
-
     public open fun authSuccessAfterRetry(): Unit = run {
         var receivedFail: VKIDAuthFail? = null
         var accessToken: AccessToken? = null

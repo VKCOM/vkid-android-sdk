@@ -82,7 +82,7 @@ public class OneTapComposeTest : OneTapTest() {
 
     @Test
     @AllureId("2302976")
-    @DisplayName("Успешное получение кода при схеме с бекендом в XML OneTap Мультибрендинге")
+    @DisplayName("Успешное получение кода при схеме с бекендом в Compose OneTap Мультибрендинге")
     override fun authCodeIsReceived() {
         super.authCodeIsReceived()
     }
