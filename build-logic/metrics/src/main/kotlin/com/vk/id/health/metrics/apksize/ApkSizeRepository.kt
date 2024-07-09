@@ -26,7 +26,7 @@ internal class ApkSizeRepository(
 
     internal fun saveApkSize(apkSize: Long) = storage.saveMetrics(mapOf(FIELD_APK_SIZE to apkSize))
 
-    internal fun getApkSize() = storage.getMetric<Long>(FIELD_APK_SIZE)?.takeIf { it != 0L } ?: 1L
+    internal fun getApkSize() = storage.getSourceMetric<Long>(FIELD_APK_SIZE)?.takeIf { it != 0L } ?: 1L
 
     internal fun saveDiff(diff: String) = storage.saveDiff(diff)
 

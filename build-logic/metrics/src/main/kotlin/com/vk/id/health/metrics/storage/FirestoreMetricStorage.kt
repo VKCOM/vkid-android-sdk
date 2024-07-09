@@ -21,19 +21,35 @@ internal class FirestoreMetricStorage(
         .collection(metricCollectionName)
         .document("$commitHash $documentSuffix")
 
+    fun updateMetrics(
+        metrics: Map<String, Any>
+    ) {
+        getMetricDocument(Git.currentCommitHash).update(metrics).get()
+    }
+
     fun saveMetrics(
         metrics: Map<String, Any>
     ) {
         getMetricDocument(Git.currentCommitHash).set(metrics).get()
     }
 
-    inline fun <reified T> getMetric(
+    inline fun <reified T> getTargetMetric(
         metricField: String
     ): T? {
-        return getMetricDocument(Git.getRootCommitHash(GitlabRepository.sourceBranch, GitlabRepository.targetBranch))
-            .get()
-            .get()
-            .get(metricField, T::class.java)
+        return getMetric(Git.currentCommitHash, metricField)
+    }
+
+    inline fun <reified T> getSourceMetric(
+        metricField: String
+    ): T? {
+        return getMetric(Git.getRootCommitHash(GitlabRepository.sourceBranch, GitlabRepository.targetBranch), metricField)
+    }
+
+    private inline fun <reified T> getMetric(
+        commitHash: String,
+        metricField: String
+    ): T? {
+        return getMetricDocument(commitHash).get().get().get(metricField, T::class.java)
     }
 
     fun saveDiff(diff: String) {
