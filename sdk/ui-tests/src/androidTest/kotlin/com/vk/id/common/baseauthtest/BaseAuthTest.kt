@@ -502,7 +502,7 @@ public abstract class BaseAuthTest(
 
     protected abstract fun setContent(
         onAuth: (OAuth?, AccessToken) -> Unit = { _, _ -> },
-        onAuthCode: (AuthCodeData, Boolean) -> Unit = { _, _, -> },
+        onAuthCode: (AuthCodeData, Boolean) -> Unit = { _, _ -> },
         onFail: (OAuth?, VKIDAuthFail) -> Unit = { _, _ -> },
         authParams: VKIDAuthUiParams = VKIDAuthUiParams {},
     )
