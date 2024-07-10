@@ -4,7 +4,9 @@ import com.vk.id.health.metrics.VKIDHealthMetricsExtension
 import java.util.Properties
 
 public fun VKIDHealthMetricsExtension.gitlab() {
-    val properties = Properties()
-    properties.load(rootProject.file("local.properties").inputStream())
-    gitlabToken = lazy { properties.getProperty("healthmetrics.gitlab.token") }
+    gitlabToken = lazy {
+        val properties = Properties()
+        properties.load(rootProject.file("local.properties").inputStream())
+        properties.getProperty("healthmetrics.gitlab.token")
+    }
 }
