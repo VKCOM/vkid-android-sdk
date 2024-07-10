@@ -3,7 +3,6 @@ plugins {
     id("vkid.android.publish")
     id("vkid.dokka")
     id("vkid.binaryCompatibilityValidator")
-    alias(libs.plugins.screenshot)
     id("vkid.screenshotTesting")
     id("org.jetbrains.kotlin.plugin.parcelize")
 }
