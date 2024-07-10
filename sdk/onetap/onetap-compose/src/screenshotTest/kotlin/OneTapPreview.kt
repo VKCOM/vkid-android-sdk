@@ -67,6 +67,7 @@ private fun OneTapRoundCornerRadiusStylePreview() {
     )
 }
 
+//из-за transparentDark стиля на белом фоне, текст не видно на скриншотах
 @Preview
 @Composable
 private fun OneTapButtonSmall32StylePreview() {
