@@ -37,6 +37,7 @@ import org.junit.Rule
 @Project(Project.VKID_SDK)
 @Owner(Owners.MAKSIM_SPIRIDONOV)
 @Priority(Priority.CRITICAL)
+@Suppress("LongMethod")
 public abstract class BottomSheetFlowTest : BaseUiTest() {
 
     private companion object {

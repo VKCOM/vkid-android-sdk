@@ -35,7 +35,6 @@ public class BottomSheetFlowComposeTest : BottomSheetFlowTest() {
         super.changeAccountSuccessAfterRetry()
     }
 
-
     @Test
     @AllureId("2315335")
     @DisplayName("Ошибка авторизации после ретрая в Compose BottomSheet")
