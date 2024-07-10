@@ -80,8 +80,8 @@ internal fun VKIDButton(
             }
         }
     } else {
-        state.text = stringResource(id = R.string.vkid_log_in_with_vkid) // get string R.string.vkid_log_in_with_vkid
-        state.shortText = stringResource(id = R.string.vkid_log_in_with_vkid_short) // get string vkid_log_in_with_vkid_short
+        state.text = stringResource(id = R.string.vkid_log_in_with_vkid)
+        state.shortText = stringResource(id = R.string.vkid_log_in_with_vkid_short)
     }
     val coroutineScope = rememberCoroutineScope()
     if (fastAuthEnabled) {
