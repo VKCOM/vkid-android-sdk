@@ -26,6 +26,8 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -70,11 +72,16 @@ internal fun VKIDButton(
 ) {
     val useTextProvider = textProvider ?: defaultTextProvider(LocalContext.current.resources)
     // Runs only on initial composition
-    LaunchedEffect(Unit) {
-        if (state.text.isEmpty()) {
-            state.text = useTextProvider.noUserText()
-            state.shortText = useTextProvider.noUserShortText()
+    if (!LocalInspectionMode.current) {
+        LaunchedEffect(Unit) {
+            if (state.text.isEmpty()) {
+                state.text = useTextProvider.noUserText()
+                state.shortText = useTextProvider.noUserShortText()
+            }
         }
+    } else {
+        state.text = stringResource(id = R.string.vkid_log_in_with_vkid) // get string R.string.vkid_log_in_with_vkid
+        state.shortText = stringResource(id = R.string.vkid_log_in_with_vkid_short) // get string vkid_log_in_with_vkid_short
     }
     val coroutineScope = rememberCoroutineScope()
     if (fastAuthEnabled) {
