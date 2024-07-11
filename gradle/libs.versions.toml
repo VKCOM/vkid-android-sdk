@@ -44,6 +44,7 @@ vkUserIdVersion = "4.0.1"
 vkSdkVersion = "4.1.0"
 firebaseCommonKtx = "21.0.0"
 screenshot = "0.0.1-alpha02"
+kover = "0.8.2"
 
 [libraries]
 allure-kotlin-junit4 = { group = "io.qameta.allure", name = "allure-kotlin-junit4", version.ref = "allure" }
@@ -133,3 +134,4 @@ androidTest = { id = "com.android.test", version.ref = "androidGradlePlugin" }
 baselineprofile = { id = "androidx.baselineprofile", version.ref = "baselineprofile" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 screenshot = { id = "com.android.compose.screenshot", version.ref = "screenshot"}
+kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover"}

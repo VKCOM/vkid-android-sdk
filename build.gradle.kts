@@ -1,8 +1,8 @@
+import com.android.build.api.dsl.LibraryExtension
 import com.vk.id.health.metrics.buildspeed.buildSpeed
 import com.vk.id.health.metrics.gitlab.gitlab
 import com.vk.id.health.metrics.storage.firestore
 import com.vk.id.health.metrics.apksize.apkSize
-import java.io.IOException
 import com.vk.id.health.metrics.apichange.publicApiChanges
 
 plugins {
@@ -19,6 +19,14 @@ plugins {
     id("vkid.health.metrics") apply true
     id("vkid.detekt") apply false
     alias(libs.plugins.compose.compiler) apply false
+    alias(libs.plugins.kover) apply true
+}
+
+dependencies {
+    subprojects
+        .filter { it.extensions.findByType<LibraryExtension>() != null }
+        .filter { it.projectDir.path.contains("/sdk/") }
+        .forEach { kover(it) }
 }
 
 registerGeneralTask("detekt") {
