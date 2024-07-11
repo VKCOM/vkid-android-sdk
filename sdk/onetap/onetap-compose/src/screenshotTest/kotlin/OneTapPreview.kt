@@ -1,5 +1,8 @@
+@file:OptIn(InternalVKIDApi::class)
+
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
@@ -7,11 +10,14 @@ import com.vk.id.onetap.common.button.style.OneTapButtonElevationStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonSizeStyle
 import com.vk.id.onetap.compose.onetap.OneTap
 
+
 @Preview
 @Composable
 private fun OneTapIconStylePreview() {
-    OneTap(style = OneTapStyle.Icon(),
-        onAuth = { _, _ -> })
+    OneTap(
+        style = OneTapStyle.Icon(),
+        onAuth = { _, _ -> },
+    )
 }
 
 @Preview
@@ -61,6 +67,7 @@ private fun OneTapRoundCornerRadiusStylePreview() {
     )
 }
 
+//из-за transparentDark стиля на белом фоне, текст не видно на скриншотах
 @Preview
 @Composable
 private fun OneTapButtonSmall32StylePreview() {
@@ -102,7 +109,7 @@ private fun OneTapButtonSmall38StylePreview() {
 private fun OneTapButtonMedium40StylePreview() {
     OneTap(
         style = OneTapStyle.TransparentLight(sizeStyle = OneTapButtonSizeStyle.MEDIUM_40),
-        onAuth = { _, _ -> }
+        onAuth = { _, _ -> },
     )
 }
 
@@ -131,6 +138,8 @@ private fun OneTapButtonMedium46StylePreview() {
         style = OneTapStyle.TransparentLight(sizeStyle = OneTapButtonSizeStyle.MEDIUM_46),
         onAuth = { _, _ -> }
     )
+
+
 }
 
 @Preview
@@ -138,7 +147,7 @@ private fun OneTapButtonMedium46StylePreview() {
 private fun OneTapButtonLarge48StylePreview() {
     OneTap(
         style = OneTapStyle.Icon(sizeStyle = OneTapButtonSizeStyle.LARGE_48),
-        onAuth = { _, _ -> }
+        onAuth = { _, _ -> },
     )
 }
 
