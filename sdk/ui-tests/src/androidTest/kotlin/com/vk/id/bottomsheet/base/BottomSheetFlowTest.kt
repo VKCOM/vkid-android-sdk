@@ -31,6 +31,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import io.qameta.allure.kotlin.Owner
 import org.junit.Rule
+import java.util.UUID
 
 @Platform(Platform.ANDROID_AUTO)
 @Product(Product.VKID_SDK)
@@ -41,7 +42,8 @@ import org.junit.Rule
 public abstract class BottomSheetFlowTest : BaseUiTest() {
 
     private companion object {
-        val AUTH_CODE = AuthCodeData("d654574949e8664ba1")
+        val DEVICE_ID = UUID.randomUUID().toString()
+        val AUTH_CODE = AuthCodeData(code = "d654574949e8664ba1", deviceId = DEVICE_ID)
     }
 
     @get:Rule
@@ -56,7 +58,7 @@ public abstract class BottomSheetFlowTest : BaseUiTest() {
         val oAuth: OAuth? = null
         before {
             vkidBuilder()
-                .overrideDeviceIdToNull()
+                .overrideDeviceId(null)
                 .build()
             setContent(
                 onAuth = { oAuth, token ->
@@ -93,6 +95,7 @@ public abstract class BottomSheetFlowTest : BaseUiTest() {
                 vkidBuilder()
                     .mockApiSuccess()
                     .user(MockApi.mockApiUser())
+                    .overrideDeviceId(DEVICE_ID)
                     .build()
             }
             step("Нажимаем 'Попробовать снова'") {
@@ -131,6 +134,7 @@ public abstract class BottomSheetFlowTest : BaseUiTest() {
             vkidBuilder()
                 .notifyNoBrowserAvailable()
                 .requireUnsetUseAuthProviderIfPossible()
+                .overrideDeviceId(DEVICE_ID)
                 .build()
             setContent(
                 onFail = { oAuth, fail ->
@@ -165,6 +169,7 @@ public abstract class BottomSheetFlowTest : BaseUiTest() {
             step("Делаем мок новых данных") {
                 vkidBuilder()
                     .requireUnsetUseAuthProviderIfPossible()
+                    .overrideDeviceId(DEVICE_ID)
                     .build()
             }
             step("Нажимаем 'Попробовать снова'") {
@@ -195,7 +200,7 @@ public abstract class BottomSheetFlowTest : BaseUiTest() {
         before {
             vkidBuilder()
                 .mockApiError()
-                .overrideDeviceIdToNull()
+                .overrideDeviceId(null)
                 .build()
             setContent(
                 onAuth = { oAuth, token ->
@@ -261,6 +266,7 @@ public abstract class BottomSheetFlowTest : BaseUiTest() {
             vkidBuilder()
                 .notifyNoBrowserAvailable()
                 .requireUnsetUseAuthProviderIfPossible()
+                .overrideDeviceId(DEVICE_ID)
                 .build()
             setContent(
                 onAuth = { oAuth, token ->
@@ -294,7 +300,7 @@ public abstract class BottomSheetFlowTest : BaseUiTest() {
             }
             step("Делаем мок новых данных") {
                 vkidBuilder()
-                    .overrideDeviceIdToNull()
+                    .overrideDeviceId(null)
                     .requireUnsetUseAuthProviderIfPossible()
                     .build()
             }
@@ -328,6 +334,7 @@ public abstract class BottomSheetFlowTest : BaseUiTest() {
             vkidBuilder()
                 .mockApiSuccess()
                 .user(MockApi.mockApiUser())
+                .overrideDeviceId(DEVICE_ID)
                 .build()
             setContent(
                 onAuth = { oAuth, token ->
@@ -385,6 +392,7 @@ public abstract class BottomSheetFlowTest : BaseUiTest() {
             vkidBuilder()
                 .mockApiSuccess()
                 .user(MockApi.mockApiUser())
+                .overrideDeviceId(DEVICE_ID)
                 .build()
             setContent(
                 onAuth = { oAuth, token ->

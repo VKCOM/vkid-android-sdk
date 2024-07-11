@@ -11,6 +11,11 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -21,8 +26,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vk.id.AccessToken
+import com.vk.id.RefreshToken
 import com.vk.id.VKID
 import com.vk.id.sample.app.R
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @Composable
 internal fun Button(
@@ -60,6 +68,7 @@ internal fun UseToken(accessToken: AccessToken) {
         Text(
             color = MaterialTheme.colorScheme.onBackground,
             text = """
+                |Token: ${accessToken.token.take(@Suppress("MagicNumber") 10)}...
                 |Current user: ${accessToken.userID}
                 |First name: ${accessToken.userData.firstName}
                 |Last name: ${accessToken.userData.lastName}
@@ -69,7 +78,9 @@ internal fun UseToken(accessToken: AccessToken) {
             """.trimMargin()
         )
         Spacer(modifier = Modifier.height(12.dp))
-        VKID.instance.refreshToken?.let {
+        var refreshToken: RefreshToken? by remember { mutableStateOf(null) }
+        LaunchedEffect(Unit) { refreshToken = withContext(Dispatchers.IO) { VKID.instance.refreshToken } }
+        refreshToken?.let {
             Text(
                 color = MaterialTheme.colorScheme.onBackground,
                 text = """

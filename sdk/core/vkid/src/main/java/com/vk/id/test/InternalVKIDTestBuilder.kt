@@ -96,7 +96,7 @@ public class InternalVKIDTestBuilder(
         this.exchangeTokenResponse = response
     }
 
-    public fun overrideDeviceIdToNull(): InternalVKIDTestBuilder = updateConfig { copy(overrideDeviceIdToNull = true) }
+    public fun overrideDeviceId(deviceId: String?): InternalVKIDTestBuilder = updateConfig { copy(deviceId = deviceId) }
     public fun overrideState(state: String): InternalVKIDTestBuilder = updateConfig { copy(overrideState = state) }
     public fun overrideOAuthToNull(): InternalVKIDTestBuilder = updateConfig { copy(overrideOAuthToNull = true) }
     public fun user(user: VKIDUser): InternalVKIDTestBuilder = updateConfig { copy(user = user) }

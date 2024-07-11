@@ -38,6 +38,9 @@
             android:name="com.vk.id.sample.app.MainActivity"
             android:exported="true">
             <meta-data android:name="VKIDClientID" android:value="${VKIDClientID}"/>
+            <meta-data android:name="VKIDClientSecret" android:value="${VKIDClientSecret}"/>
+            <meta-data android:name="VKIDRedirectHost" android:value="${VKIDRedirectHost}"/>
+            <meta-data android:name="VKIDRedirectScheme" android:value="${VKIDRedirectScheme}"/>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
