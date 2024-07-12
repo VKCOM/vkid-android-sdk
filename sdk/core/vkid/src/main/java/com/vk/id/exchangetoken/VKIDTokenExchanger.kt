@@ -60,7 +60,11 @@ internal class VKIDTokenExchanger(
                 return
             }
             withContext(dispatchers.io) { deviceIdProvider.setDeviceId(payload.deviceId) }
-            callback.onAuthCode(AuthCodeData(payload.code), codeVerifier == null)
+            val data = AuthCodeData(
+                code = payload.code,
+                deviceId = payload.deviceId
+            )
+            callback.onAuthCode(data = data, isCompletion = codeVerifier == null)
             if (codeVerifier == null) return
             handleCode(
                 code = payload.code,

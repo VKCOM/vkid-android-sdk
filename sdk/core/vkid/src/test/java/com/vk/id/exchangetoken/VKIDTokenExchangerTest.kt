@@ -82,6 +82,7 @@ private val TOKEN_PAYLOAD = VKIDTokenPayload(
     state = STATE,
     scope = "phone email",
 )
+private val AUTH_CODE_DATA = AuthCodeData(code = CODE, deviceId = DEVICE_ID)
 
 @OptIn(ExperimentalStdlibApi::class, ExperimentalCoroutinesApi::class)
 internal class VKIDTokenExchangerTest : BehaviorSpec({
@@ -196,7 +197,7 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
                 )
             } returns call
             val callback = mockk<VKIDExchangeTokenCallback>()
-            every { callback.onAuthCode(AuthCodeData(CODE), true) } just runs
+            every { callback.onAuthCode(AUTH_CODE_DATA, true) } just runs
             every { deviceIdProvider.setDeviceId(DEVICE_ID) } just runs
             runTest(scheduler) {
                 exchanger.exchange(
@@ -214,7 +215,7 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
                 verify { deviceIdProvider.setDeviceId(DEVICE_ID) }
             }
             Then("Calls callback.onAuthCode") {
-                verify { callback.onAuthCode(AuthCodeData(CODE), true) }
+                verify { callback.onAuthCode(AUTH_CODE_DATA, true) }
             }
         }
         When("Api returns code and token getting fails") {
@@ -249,7 +250,7 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
             val callback = mockk<VKIDExchangeTokenCallback>()
             val fail = VKIDExchangeTokenFail.FailedApiCall("Failed to exchange code due to: message", failedApiCallException)
             every { callback.onFail(fail) } just runs
-            every { callback.onAuthCode(AuthCodeData(CODE), false) } just runs
+            every { callback.onAuthCode(AUTH_CODE_DATA, false) } just runs
             runTest(scheduler) {
                 exchanger.exchange(
                     v1Token = V1_TOKEN,
@@ -264,7 +265,7 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
                 verify { deviceIdProvider.setDeviceId(DEVICE_ID) }
             }
             Then("Calls callback.onAuthCode") {
-                verify { callback.onAuthCode(AuthCodeData(CODE), false) }
+                verify { callback.onAuthCode(AUTH_CODE_DATA, false) }
             }
             Then("Calls callback's onFail") {
                 verify { callback.onFail(fail) }
@@ -299,7 +300,7 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
                 )
             } returns getTokenCall
             val callback = mockk<VKIDExchangeTokenCallback>()
-            every { callback.onAuthCode(AuthCodeData(CODE), false) } just runs
+            every { callback.onAuthCode(AUTH_CODE_DATA, false) } just runs
             val fail = VKIDExchangeTokenFail.FailedOAuthState("Invalid state during code exchange")
             every { callback.onFail(fail) } just runs
             runTest(scheduler) {
@@ -318,7 +319,7 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
                 verify { deviceIdProvider.setDeviceId(DEVICE_ID) }
             }
             Then("Calls callback.onAuthCode") {
-                verify { callback.onAuthCode(AuthCodeData(CODE), false) }
+                verify { callback.onAuthCode(AUTH_CODE_DATA, false) }
             }
             Then("Calls callback's onFail") {
                 verify { callback.onFail(fail) }
@@ -356,7 +357,7 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
             val onFailedApiCall = slot<(Throwable) -> Unit>()
             val onSuccess = slot<suspend (AccessToken) -> Unit>()
             val callback = mockk<VKIDExchangeTokenCallback>()
-            every { callback.onAuthCode(AuthCodeData(CODE), false) } just runs
+            every { callback.onAuthCode(AUTH_CODE_DATA, false) } just runs
             val fail = VKIDExchangeTokenFail.FailedApiCall("Failed to fetch user data", failedApiCallException)
             every { callback.onFail(fail) } just runs
             coEvery {
@@ -380,7 +381,7 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
                 verify { deviceIdProvider.setDeviceId(DEVICE_ID) }
             }
             Then("Calls callback.onAuthCode") {
-                verify { callback.onAuthCode(AuthCodeData(CODE), false) }
+                verify { callback.onAuthCode(AUTH_CODE_DATA, false) }
             }
             Then("Calls callback's onFail") {
                 onFailedApiCall.captured(failedApiCallException)
@@ -419,7 +420,7 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
             val onSuccess = slot<suspend (AccessToken) -> Unit>()
             val callback = mockk<VKIDExchangeTokenCallback>()
             every { callback.onAuth(ACCESS_TOKEN) } just runs
-            every { callback.onAuthCode(AuthCodeData(CODE), false) } just runs
+            every { callback.onAuthCode(AUTH_CODE_DATA, false) } just runs
             coEvery {
                 tokensHandler.handle(
                     TOKEN_PAYLOAD,
@@ -441,7 +442,7 @@ internal class VKIDTokenExchangerTest : BehaviorSpec({
                 verify { deviceIdProvider.setDeviceId(DEVICE_ID) }
             }
             Then("Calls callback.onAuthCode") {
-                verify { callback.onAuthCode(AuthCodeData(CODE), false) }
+                verify { callback.onAuthCode(AUTH_CODE_DATA, false) }
             }
             Then("Calls callback's onFail") {
                 onSuccess.captured(ACCESS_TOKEN)

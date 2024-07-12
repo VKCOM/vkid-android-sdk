@@ -10,6 +10,7 @@ import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.pm.PackageManager.ComponentInfoFlags
 import android.os.Build
+import android.os.Bundle
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -73,6 +74,8 @@ import okhttp3.FormBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONObject
+import java.util.UUID
+import java.util.concurrent.TimeUnit
 
 @Composable
 internal fun UtilsScreen(navController: NavController) {
@@ -173,7 +176,62 @@ private fun AuthUtil() {
                 )
             }
         }
-        currentAuthCode?.let {
+        currentAuthCode?.let { data ->
+            var codeVerifier: String by remember { mutableStateOf("") }
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = codeVerifier,
+                onValueChange = { codeVerifier = it },
+                label = { Text("Code verifier") },
+                maxLines = 1,
+            )
+            Button(text = "Exchange code") {
+                coroutineScope.launch {
+                    try {
+                        currentToken = withContext(Dispatchers.IO) {
+                            val api = OkHttpClient.Builder().build()
+
+                            val endpoint = "id.vk.com"
+                            val formBody = FormBody.Builder()
+                                .add("grant_type", "authorization_code")
+                                .add("code", data.code)
+                                .add("code_verifier", codeVerifier)
+                                .add("client_id", getClientId(context))
+                                .add("device_id", data.deviceId)
+                                .add("redirect_uri", getRedirectUri(context))
+                                .add("state", UUID.randomUUID().toString())
+                                .build()
+                            val url = "https://$endpoint/oauth2/auth"
+                            val request = Request.Builder()
+                                .url(url)
+                                .post(formBody)
+                                .build()
+                            val response = api.newCall(request).execute()
+                            val body = requireNotNull(response.body).string()
+                            val jsonObject = JSONObject(body)
+                            AccessToken(
+                                token = jsonObject.getString("access_token"),
+                                idToken = jsonObject.optString("id_token"),
+                                userID = jsonObject.getLong("user_id"),
+                                expireTime = jsonObject.optLong("expires_in").let {
+                                    if (it > 0) {
+                                        System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(it)
+                                    } else {
+                                        -1
+                                    }
+                                },
+                                userData = VKIDUser(
+                                    firstName = "User should be fetched by token",
+                                    lastName = "",
+                                ),
+                                scopes = jsonObject.getString("scope").split(' ').toSet(),
+                            )
+                        }
+                    } catch (@Suppress("TooGenericExceptionCaught") t: Throwable) {
+                        showToast(context, "Error: ${t.message}")
+                    }
+                }
+            }
             TextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = currentAuthCode?.code.orEmpty(),
@@ -561,15 +619,29 @@ private fun StrictModeUtil() {
     )
 }
 
-private fun getClientId(context: Context): String {
+private fun getActivityInfo(context: Context): ActivityInfo {
     val componentName = ComponentName(context, MainActivity::class.java)
     val flags = PackageManager.GET_META_DATA or PackageManager.GET_ACTIVITIES
-    val ai: ActivityInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         context.packageManager.getActivityInfo(componentName, ComponentInfoFlags.of(flags.toLong()))
     } else {
         context.packageManager.getActivityInfo(componentName, flags)
     }
-    return ai.metaData.getInt("VKIDClientID").toString()
+}
+
+private fun Bundle.getStringOrThrow(key: String): String {
+    return getString(key) ?: error("No string for key: $key")
+}
+
+private fun getRedirectUri(context: Context): String {
+    val ai = getActivityInfo(context)
+    val redirectScheme = ai.metaData.getStringOrThrow("VKIDRedirectScheme")
+    val redirectHost = ai.metaData.getStringOrThrow("VKIDRedirectHost")
+    return "$redirectScheme://$redirectHost/blank.html"
+}
+
+private fun getClientId(context: Context): String {
+    return getActivityInfo(context).metaData.getInt("VKIDClientID").toString()
 }
 
 private fun Context.toActivitySafe(): Activity? {
