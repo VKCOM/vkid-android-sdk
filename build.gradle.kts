@@ -20,6 +20,7 @@ plugins {
     id("vkid.detekt") apply false
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.kover) apply true
+    alias(libs.plugins.screenshot) apply false
 }
 
 dependencies {
