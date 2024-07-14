@@ -113,9 +113,6 @@ public class VKIDBuildSpeedMetric internal constructor(
 
                 val firstTaskStartTime = finishEvent.startTime
                 val configurationDuration = firstTaskStartTime - details.buildStartTime
-                println("====")
-                println("Saving build duration for ${parameters.iteration.get()}, $buildDuration, $configurationDuration")
-                println("====")
                 storage.saveBuildDuration(parameters.iteration.get(), buildDuration, configurationDuration)
             }
         }

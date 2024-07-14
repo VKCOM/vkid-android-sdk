@@ -4,6 +4,7 @@ import com.vk.id.health.metrics.gitlab.gitlab
 import com.vk.id.health.metrics.storage.firestore
 import com.vk.id.health.metrics.apksize.apkSize
 import com.vk.id.health.metrics.apichange.publicApiChanges
+import com.vk.id.health.metrics.codecoverage.codeCoverage
 
 plugins {
     alias(libs.plugins.android.application) apply false
@@ -48,6 +49,10 @@ private fun registerGeneralTask(name: String, configuration: Task.() -> Unit = {
 healthMetrics {
     gitlab()
     firestore(rootProject.file("build-logic/metrics/service-credentials.json"))
+    codeCoverage {
+        title = "Code coverage"
+        targetProject = rootProject
+    }
     buildSpeed {
         measuredTaskPaths = setOf(":clean", ":assembleDebug")
         iterations = 3

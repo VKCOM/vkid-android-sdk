@@ -1,14 +1,14 @@
 package com.vk.id.health.metrics.git
 
-import com.vk.id.health.metrics.utils.exec
+import com.vk.id.health.metrics.utils.execute
 
 internal object Git {
-    val currentCommitHash get() = exec("git rev-parse --verify HEAD").first()
+    val currentCommitHash get() = execute("git rev-parse --verify HEAD").first()
 
     fun getRootCommitHash(sourceBranch: String, targetBranch: String): String {
-        runCatching { exec("git fetch origin $sourceBranch:$sourceBranch") }
-        runCatching { exec("git fetch origin $targetBranch:$targetBranch") }
-        val mergeBase = exec("git merge-base $sourceBranch $targetBranch").first()
-        return exec("git rev-list --no-merges -n 1 $mergeBase").first()
+        runCatching { execute("git fetch origin $sourceBranch:$sourceBranch") }
+        runCatching { execute("git fetch origin $targetBranch:$targetBranch") }
+        val mergeBase = execute("git merge-base $sourceBranch $targetBranch").first()
+        return execute("git rev-list --no-merges -n 1 $mergeBase").first()
     }
 }
