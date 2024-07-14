@@ -56,9 +56,11 @@ healthMetrics {
             .let { if (it.exists()) it else rootProject.layout.buildDirectory.file("reports/kover").get().asFile }
     }
     buildSpeed {
-        measuredTaskPaths = setOf(":clean", ":assembleDebug")
+        title = "Build speed of :assembleDebug"
+        measuredTaskPaths = setOf(":assembleDebug")
         iterations = 3
         warmUps = 2
+        cleanAfterEachBuild = true
     }
     apkSize {
         title = "SDK size with all dependencies"
