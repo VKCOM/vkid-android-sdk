@@ -3,6 +3,7 @@ plugins {
     id("vkid.android.publish")
     id("vkid.dokka")
     id("vkid.binaryCompatibilityValidator")
+    id("vkid.screenshotTesting")
 }
 
 android {

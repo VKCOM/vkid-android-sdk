@@ -18,6 +18,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import com.vk.id.AccessToken
 import com.vk.id.VKID
@@ -145,7 +146,7 @@ private fun OneTapBottomSheetInternal(
     state.showSheet = processSheetShow(authStatus, showBottomSheet, coroutineScope, state)
     if (showBottomSheet.value) {
         ModalBottomSheet(
-            modifier = modifier,
+            modifier = modifier.testTag("onetap_bottomsheet"),
             onDismissRequest = {
                 state.hide()
             },

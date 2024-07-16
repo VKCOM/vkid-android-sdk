@@ -39,5 +39,5 @@ internal sealed class AuthResult {
 
     data class AuthActiviyResultFailed(val message: String, val error: Throwable?) : AuthResult()
 
-    data class OAuth(val code: String, val state: String, val codeVerifier: String)
+    data class OAuth(val code: String, val state: String)
 }

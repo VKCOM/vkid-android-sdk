@@ -171,8 +171,11 @@ public final class com/vk/id/VKIDUser$Creator : android/os/Parcelable$Creator {
 public final class com/vk/id/auth/AuthCodeData {
 	public static final field $stable I
 	public fun <init> (Ljava/lang/String;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getCode ()Ljava/lang/String;
+	public final fun getDeviceId ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }

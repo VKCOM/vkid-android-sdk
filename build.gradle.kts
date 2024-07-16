@@ -1,6 +1,9 @@
+import com.android.build.api.dsl.LibraryExtension
 import com.vk.id.health.metrics.buildspeed.buildSpeed
 import com.vk.id.health.metrics.gitlab.gitlab
 import com.vk.id.health.metrics.storage.firestore
+import com.vk.id.health.metrics.apksize.apkSize
+import com.vk.id.health.metrics.apichange.publicApiChanges
 
 plugins {
     alias(libs.plugins.android.application) apply false
@@ -16,11 +19,21 @@ plugins {
     id("vkid.health.metrics") apply true
     id("vkid.detekt") apply false
     alias(libs.plugins.compose.compiler) apply false
+    alias(libs.plugins.kover) apply true
+    alias(libs.plugins.screenshot) apply false
+}
+
+dependencies {
+    subprojects
+        .filter { it.extensions.findByType<LibraryExtension>() != null }
+        .filter { it.projectDir.path.contains("/sdk/") }
+        .forEach { kover(it) }
 }
 
 registerGeneralTask("detekt") {
     dependsOn(gradle.includedBuild("build-logic").task(":detekt"))
 }
+
 registerGeneralTask("clean")
 registerGeneralTask("assembleDebug")
 registerGeneralTask("assembleRelease")
@@ -32,10 +45,25 @@ private fun registerGeneralTask(name: String, configuration: Task.() -> Unit = {
     }
 }
 
-//healthMetrics {
-//    gitlab()
-//    firestore(rootProject.file("build-logic/metrics/service-credentials.json"))
-//    buildSpeed {
-//        measuredTaskPaths = setOf(":clean", ":assembleDebug")
-//    }
-//}
+healthMetrics {
+    gitlab()
+    firestore(rootProject.file("build-logic/metrics/service-credentials.json"))
+    buildSpeed {
+        measuredTaskPaths = setOf(":clean", ":assembleDebug")
+        iterations = 3
+        warmUps = 2
+    }
+    apkSize {
+        title = "SDK size with all dependencies"
+        targetProject = projects.sampleMetricsApp.dependencyProject
+        targetBuildType = "withSdk"
+        sourceBuildType = "debug"
+    }
+    apkSize {
+        title = "Pure SDK size"
+        targetProject = projects.sampleMetricsApp.dependencyProject
+        targetBuildType = "withSdk"
+        sourceBuildType = "withDeps"
+    }
+    publicApiChanges()
+}

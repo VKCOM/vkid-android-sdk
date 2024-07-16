@@ -44,6 +44,14 @@ public final class com/vk/id/onetap/compose/onetap/sheet/content/ComposableSingl
 	public final fun getLambda-1$onetap_compose_release ()Lkotlin/jvm/functions/Function3;
 }
 
+public final class com/vk/id/onetap/compose/onetap/sheet/content/OneTapBottomSheetAuthStatus$AuthFailedVKID$Creator : android/os/Parcelable$Creator {
+	public fun <init> ()V
+	public final fun createFromParcel (Landroid/os/Parcel;)Lcom/vk/id/onetap/compose/onetap/sheet/content/OneTapBottomSheetAuthStatus$AuthFailedVKID;
+	public synthetic fun createFromParcel (Landroid/os/Parcel;)Ljava/lang/Object;
+	public final fun newArray (I)[Lcom/vk/id/onetap/compose/onetap/sheet/content/OneTapBottomSheetAuthStatus$AuthFailedVKID;
+	public synthetic fun newArray (I)[Ljava/lang/Object;
+}
+
 public abstract class com/vk/id/onetap/compose/onetap/sheet/style/OneTapBottomSheetStyle {
 	public static final field $stable I
 	public static final field Companion Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapBottomSheetStyle$Companion;

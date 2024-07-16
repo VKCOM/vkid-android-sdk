@@ -8,7 +8,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.material3.Button
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import java.util.UUID
 
 internal class TestAuthProviderActivity : ComponentActivity() {
 
@@ -37,6 +36,6 @@ internal class TestAuthProviderActivity : ComponentActivity() {
     private val codeParameter get() = "&code=$code".takeIf { !overrideOAuthToNull }.orEmpty()
     private val state get() = intent.getStringExtra("state")
     private val stateParameter get() = "&state=$state".takeIf { !overrideOAuthToNull }.orEmpty()
-    private val overrideDeviceIdToNull get() = intent.getBooleanExtra("overrideDeviceIdToNull", true)
-    private val deviceIdParameter get() = "&device_id=${UUID.randomUUID()}".takeIf { !overrideDeviceIdToNull }.orEmpty()
+    private val deviceId get() = intent.getStringExtra("deviceId")
+    private val deviceIdParameter get() = "&device_id=$deviceId".takeIf { deviceId != null }.orEmpty()
 }

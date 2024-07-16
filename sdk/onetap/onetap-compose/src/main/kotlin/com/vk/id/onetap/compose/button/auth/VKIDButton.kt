@@ -6,7 +6,6 @@ import android.content.res.Resources
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -27,6 +26,8 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -55,7 +56,6 @@ import com.vk.id.onetap.compose.onetap.style.height
 import com.vk.id.onetap.compose.onetap.style.iconPadding
 import com.vk.id.onetap.compose.onetap.style.shadow
 import com.vk.id.onetap.compose.progress.CircleProgress
-import com.vk.id.onetap.compose.util.MeasureUnconstrainedViewWidth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 
@@ -67,15 +67,21 @@ internal fun VKIDButton(
     textProvider: VKIDButtonTextProvider? = null,
     onClick: () -> Unit,
     onUserFetched: (VKIDUser?) -> Unit = {},
-    fastAuthEnabled: Boolean
+    fastAuthEnabled: Boolean,
+    largeText: Boolean = true,
 ) {
     val useTextProvider = textProvider ?: defaultTextProvider(LocalContext.current.resources)
     // Runs only on initial composition
-    LaunchedEffect(Unit) {
-        if (state.text.isEmpty()) {
-            state.text = useTextProvider.noUserText()
-            state.shortText = useTextProvider.noUserShortText()
+    if (!LocalInspectionMode.current) {
+        LaunchedEffect(Unit) {
+            if (state.text.isEmpty()) {
+                state.text = useTextProvider.noUserText()
+                state.shortText = useTextProvider.noUserShortText()
+            }
         }
+    } else {
+        state.text = stringResource(id = R.string.vkid_log_in_with_vkid)
+        state.shortText = stringResource(id = R.string.vkid_log_in_with_vkid_short)
     }
     val coroutineScope = rememberCoroutineScope()
     if (fastAuthEnabled) {
@@ -114,7 +120,7 @@ internal fun VKIDButton(
             Spacer(modifier = Modifier.width(animatedRightIconWidthCompensation.dp * (1 - animatedSpaceWeight)))
             LeftIconBox(style)
             Spacer(modifier = Modifier.weight(animatedSpaceWeight))
-            TextBox(state, style)
+            TextBox(largeText, state, style)
             Spacer(modifier = Modifier.weight(animatedSpaceWeight))
             Spacer(modifier = Modifier.weight(1f - animatedSpaceWeight))
             RightIconBox(state, style, Modifier)
@@ -263,6 +269,7 @@ private fun LeftIconBox(
 
 @Composable
 private fun TextBox(
+    largeText: Boolean,
     state: VKIDButtonState,
     style: InternalVKIDButtonStyle,
 ) {
@@ -272,52 +279,22 @@ private fun TextBox(
         animationSpec = easeInOutAnimation
     )
 
-    @Suppress("MagicNumber")
-    BoxWithConstraints(
+    Box(
         modifier = Modifier
             .fillMaxHeight()
             .graphicsLayer { this.alpha = animatedAlpha },
         contentAlignment = Alignment.Center
     ) {
-        MeasureUnconstrainedViewWidth(viewToMeasure = {
-            Row {
-                BasicText(
-                    text = state.text,
-                    style = TextStyle(
-                        color = style.textStyle.asColorResource(),
-                        fontSize = style.sizeStyle.asFontSize(),
-                        lineHeight = style.sizeStyle.asLineHeight(),
-                        fontWeight = FontWeight.Medium,
-                        textAlign = TextAlign.Center
-                    )
-                )
-                RightIconBox(state, style, Modifier)
-            }
-        }) {
-            if (it < maxWidth) {
-                BasicText(
-                    text = state.text,
-                    style = TextStyle(
-                        color = style.textStyle.asColorResource(),
-                        fontSize = style.sizeStyle.asFontSize(),
-                        lineHeight = style.sizeStyle.asLineHeight(),
-                        fontWeight = FontWeight.Medium,
-                        textAlign = TextAlign.Center
-                    )
-                )
-            } else {
-                BasicText(
-                    text = state.shortText,
-                    style = TextStyle(
-                        color = style.textStyle.asColorResource(),
-                        fontSize = style.sizeStyle.asFontSize(),
-                        lineHeight = style.sizeStyle.asLineHeight(),
-                        fontWeight = FontWeight.Medium,
-                        textAlign = TextAlign.Center
-                    )
-                )
-            }
-        }
+        BasicText(
+            text = if (largeText) state.text else state.shortText,
+            style = TextStyle(
+                color = style.textStyle.asColorResource(),
+                fontSize = style.sizeStyle.asFontSize(),
+                lineHeight = style.sizeStyle.asLineHeight(),
+                fontWeight = FontWeight.Medium,
+                textAlign = TextAlign.Center
+            )
+        )
     }
 }
 
