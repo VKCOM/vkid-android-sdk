@@ -26,7 +26,7 @@ internal class OAuthListWidgetAnalytics(private val screen: String, private val 
             "multibranding_oauth_added",
             oauthParam("ok_ru", OAuth.OK),
             oauthParam("mail_ru", OAuth.MAIL),
-            oauthParam("vkid", OAuth.VK)
+            oauthParam("vk", OAuth.VK)
         )
     }
 
@@ -70,7 +70,7 @@ internal class OAuthListWidgetAnalytics(private val screen: String, private val 
     fun onAuthError(sessionId: String, oAuth: OAuth) {
         if (!paused) {
             val oAuthParam = when (oAuth) {
-                OAuth.VK -> "vkid"
+                OAuth.VK -> "vk"
                 OAuth.MAIL -> "mail_ru"
                 OAuth.OK -> "ok_ru"
             }
