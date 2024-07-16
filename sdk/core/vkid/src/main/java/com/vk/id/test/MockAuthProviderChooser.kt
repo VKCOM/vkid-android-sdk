@@ -49,14 +49,14 @@ internal class MockAuthProviderChooser(
         intent.putExtra("webAuthPhoneScreen", options.webAuthPhoneScreen)
         intent.putExtra("oAuth", options.oAuth)
         intent.putExtra("overrideOAuthToNull", config.overrideOAuthToNull)
-        intent.putExtra("overrideDeviceIdToNull", config.overrideDeviceIdToNull)
         intent.putExtra("user", config.user)
+        intent.putExtra("deviceId", config.deviceId)
         AuthActivity.startForAuth(context, intent)
     }
 }
 
 internal data class MockAuthProviderConfig(
-    val overrideDeviceIdToNull: Boolean = false,
+    val deviceId: String? = null,
     val overrideState: String? = null,
     val overrideOAuthToNull: Boolean = false,
     val user: VKIDUser? = null,

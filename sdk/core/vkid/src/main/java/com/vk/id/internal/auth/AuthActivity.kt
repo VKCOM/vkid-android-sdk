@@ -110,7 +110,7 @@ internal class AuthActivity : Activity() {
         val state = uri.getQueryParameter("state")
         val deviceId = uri.getQueryParameter("device_id") ?: return AuthResult.AuthActiviyResultFailed("No device id", null)
         val oauth = if (code != null && state != null) {
-            AuthResult.OAuth(code, state, "")
+            AuthResult.OAuth(code, state)
         } else {
             null
         }

@@ -5,6 +5,7 @@ import com.vk.id.configureAndroidLint
 import com.vk.id.configureKotest
 import com.vk.id.configureKotlinAndroid
 import com.vk.id.configureStrictMode
+import com.vk.id.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -18,6 +19,7 @@ class VKIDLibraryConventionPlugin : Plugin<Project> {
                 apply("com.android.library")
                 apply("org.jetbrains.kotlin.android")
                 apply("vkid.detekt")
+                apply(libs.findPlugin("kover").get().get().pluginId)
             }
 
             extensions.configure<LibraryExtension> {

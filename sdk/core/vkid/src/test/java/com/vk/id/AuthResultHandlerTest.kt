@@ -51,7 +51,7 @@ private const val CLIENT_ID = "client id"
 private const val CLIENT_SECRET = "client secret"
 private const val REDIRECT_URI = "redirect uri"
 private val authResultSuccess = AuthResult.Success(
-    oauth = AuthResult.OAuth(CODE, STATE, CODE_VERIFIER),
+    oauth = AuthResult.OAuth(CODE, STATE),
     deviceId = DEVICE_ID
 )
 private val ACCESS_TOKEN = AccessToken(
@@ -70,6 +70,7 @@ private val ACCESS_TOKEN = AccessToken(
     ),
     scopes = setOf("phone", "email"),
 )
+private val AUTH_CODE_DATA = AuthCodeData(code = CODE, deviceId = DEVICE_ID)
 
 @OptIn(ExperimentalStdlibApi::class, ExperimentalCoroutinesApi::class)
 internal class AuthResultHandlerTest : BehaviorSpec({
@@ -272,7 +273,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
                 verify { callbacksHolder.getAll() }
             }
             Then("Auth code is emitted") {
-                verify { callback.onAuthCode(AuthCodeData(CODE), false) }
+                verify { callback.onAuthCode(AUTH_CODE_DATA, false) }
             }
             Then("It is emitted") {
                 verify {
@@ -327,7 +328,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
                     verify { callbacksHolder.getAll() }
                 }
                 Then("Auth code is emitted") {
-                    verify { callback.onAuthCode(AuthCodeData(CODE), false) }
+                    verify { callback.onAuthCode(AUTH_CODE_DATA, false) }
                 }
                 Then("User info fetcher is called") {
                     coVerify { tokensHandler.handle(payload, any(), any()) }
@@ -389,7 +390,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
                     verify { callbacksHolder.getAll() }
                 }
                 Then("Auth code is emitted") {
-                    verify { callback.onAuthCode(AuthCodeData(CODE), false) }
+                    verify { callback.onAuthCode(AUTH_CODE_DATA, false) }
                 }
                 Then("OnFail callback is not called") {
                     verify(exactly = 0) { onFailCallback() }
@@ -449,7 +450,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
                     verify { callbacksHolder.getAll() }
                 }
                 Then("Auth code is emitted") {
-                    verify { callback.onAuthCode(AuthCodeData(CODE), false) }
+                    verify { callback.onAuthCode(AUTH_CODE_DATA, false) }
                 }
                 Then("OnFail callback is not called") {
                     verify(exactly = 0) { onFailCallback() }

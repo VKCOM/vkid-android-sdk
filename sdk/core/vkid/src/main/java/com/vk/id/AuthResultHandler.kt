@@ -69,7 +69,11 @@ internal class AuthResultHandler(
         }
 
         callbacksHolder.getAll().forEach {
-            it.onAuthCode(AuthCodeData(oauth.oauth.code), isCompletion = codeVerifier.isBlank())
+            val data = AuthCodeData(
+                code = oauth.oauth.code,
+                deviceId = oauth.deviceId
+            )
+            it.onAuthCode(data, isCompletion = codeVerifier.isBlank())
         }
         if (codeVerifier.isBlank()) {
             callbacksHolder.clear()
