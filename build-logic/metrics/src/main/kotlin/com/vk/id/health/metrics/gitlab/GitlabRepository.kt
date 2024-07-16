@@ -8,17 +8,18 @@ internal object GitlabRepository {
     private const val PROJECT_ID = "2796"
     private lateinit var token: Lazy<String>
     private val api by lazy { GitlabApiService(token.value) }
-    private lateinit var mergeRequestId: String
+    private lateinit var mergeRequestIdInternal: String
     private val mergeRequest by lazy { runBlocking { getMergeRequestBranches() } }
     val sourceBranch get() = mergeRequest.sourceBranch
     val targetBranch get() = mergeRequest.targetBranch
+    val mergeRequestId get() = mergeRequestIdInternal
 
     fun init(
         token: Lazy<String>,
         mergeRequestId: String
     ) {
         this.token = token
-        this.mergeRequestId = mergeRequestId
+        this.mergeRequestIdInternal = mergeRequestId
     }
 
     suspend fun postCommentToMr(comment: String) {

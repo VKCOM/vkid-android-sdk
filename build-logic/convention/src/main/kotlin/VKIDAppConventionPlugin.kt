@@ -52,6 +52,6 @@ private fun Project.shouldInjectManifestPlaceholders() = gradle
             || it.contains("lint")
             || it.contains("dokka")
             || it.contains("generatebaselineprofile")
-            || it.contains("publishhealthmetrics")
-            || it.contains("healthmetricsbuildspeed")
+            || it.contains("updatedebugscreenshottest")
+            || it.contains("healthmetrics")
     }

@@ -29,6 +29,8 @@ dependencyResolutionManagement {
 rootProject.name = "VKIDSDK"
 include(":sample-app")
 project(":sample-app").projectDir = File("sample/app")
+include(":sample-metrics-app")
+project(":sample-metrics-app").projectDir = File("sample/metrics-app")
 include(":sample-oldsdk")
 project(":sample-oldsdk").projectDir = File("sample/oldsdk")
 include(":sample-xml")

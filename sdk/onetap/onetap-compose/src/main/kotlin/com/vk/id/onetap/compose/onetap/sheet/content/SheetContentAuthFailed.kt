@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -42,7 +43,7 @@ internal fun SheetContentAuthFailed(
     serviceName: String,
     style: OneTapBottomSheetStyle,
     dismissSheet: () -> Unit,
-    repeatClicked: () -> Unit
+    repeatClicked: () -> Unit,
 ) {
     OneTapBottomSheetAnalytics.BottomSheetErrorShown()
     SheetContentBox(
@@ -65,6 +66,7 @@ internal fun SheetContentAuthFailed(
                 letterSpacing = 0.1.sp,
                 lineHeight = 20.sp
             )
+
         )
         RepeatButton(style.oneTapStyle.alternateAccountButtonStyle, repeatClicked)
         Spacer(modifier = Modifier.height(48.dp))
@@ -87,7 +89,8 @@ private fun RepeatButton(style: InternalVKIDAlternateAccountButtonStyle, repeatC
                     color = style.rippleStyle.asColor(),
                 ),
                 onClick = repeatClicked
-            ),
+            )
+            .testTag("vkid_retry_btn"),
         contentAlignment = Alignment.Center
     ) {
         BasicText(
@@ -110,6 +113,6 @@ private fun OneTapBottomSheetProgressPreview() {
         "<Название сервиса>",
         OneTapBottomSheetStyle.Light(),
         dismissSheet = {},
-        repeatClicked = {}
+        repeatClicked = {},
     )
 }

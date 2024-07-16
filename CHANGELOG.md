@@ -3,8 +3,26 @@
 > **Note**\
 > Описание основных изменений в релизах VK ID SDK. Наш SDK следует [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.1
+
+### Added
+- В поле data колбека onAuthCode добавлено поле deviceId со значением, которое нужно передавать в запрос получения токена при генерации параметров PKCE на стороне Backend вашего сервиса.
+
+### Fixed
+- Исправлена адаптивность кнопки OneTap. Раньше кнопка превращалась в иконку раньше, чем заканчивалось свободное меcто. Так же не работал Modifier.fillMaxWidth(). 
+
 ## 2.0.0
 В этой версии становится стабильной поддержка OAuth2.1 и авторизации 3в1 (через VK, OK и Mail.ru).
+Сделано много изменений публичного интерфеса и он ломает обратную совместимость.
+Миграция описана в [статье](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id-2/connection/android/migration-on-oauth-2.1)
+
+### Added
+- Добавлена возможность отключить быструю авторизацию параметром fastAuthEnabled в OneTap и OneTapBottomSheet.
+  Подробности смотрите в статьях [Кнопка One Tap](https://id.vk.com/about/business/go/docs/en/vkid/latest/vk-id-2/connection/android/onetap) и [Шторка авторизации](https://id.vk.com/about/business/go/docs/en/vkid/latest/vk-id-2/connection/android/floating-onetap) в разделе "Отключение быстрой авторизации".
+- Поддержка совместной работы с vk-android-sdk "из коробки" в модуле vk-sdk-support. [Статья с документацией](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id-2/connection/android/migration-on-oauth-2.1#Sovmestnoe-ispolzovanie-s-VK-ANDROID-SDK)
+
+### Fixed
+- Исправлена опечатка в названии maven репозитория. Часть урла изменена с "andorid" на "android". Поддерживаются оба варианта
 
 ## 2.0.0-alpha04
 

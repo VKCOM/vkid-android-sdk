@@ -3,6 +3,8 @@ plugins {
     id("vkid.android.publish")
     id("vkid.dokka")
     id("vkid.binaryCompatibilityValidator")
+    id("vkid.screenshotTesting")
+    id("org.jetbrains.kotlin.plugin.parcelize")
 }
 
 android {
