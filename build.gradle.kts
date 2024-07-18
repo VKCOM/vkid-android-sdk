@@ -52,6 +52,8 @@ healthMetrics {
     codeCoverage {
         title = "Code coverage"
         targetProject = rootProject
+        customKoverDirectory = rootProject.file("artifacts/kover")
+            .let { if (it.exists()) it else rootProject.layout.buildDirectory.file("reports/kover").get().asFile }
     }
     buildSpeed {
         measuredTaskPaths = setOf(":clean", ":assembleDebug")

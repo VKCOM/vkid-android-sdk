@@ -6,6 +6,7 @@ import com.vk.id.health.metrics.utils.formatChangePercent
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.configurationcache.extensions.capitalized
+import java.io.File
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.NumberFormat
@@ -18,6 +19,7 @@ public fun VKIDHealthMetricsExtension.codeCoverage(configuration: VKIDCodeCovera
 public class VKIDCodeCoverageMetric internal constructor(
     private val title: String?,
     private val targetProject: Project,
+    private val koverDirectory: File?,
 ) : VKIDSingleRunHealthMetric {
 
     private companion object {
@@ -28,8 +30,9 @@ public class VKIDCodeCoverageMetric internal constructor(
 
     override val task: Task = targetProject.rootProject.tasks.create("healthMetricsCodeCoverage${targetProject.name.capitalized()}") {
         doLast {
-            val file = targetProject.layout.buildDirectory.file("reports/kover/html/index.html")
-            val lines = file.get().asFile.readLines()
+            val koverDirectory = koverDirectory ?: targetProject.layout.buildDirectory.file("reports/kover").get().asFile
+            val file = File(koverDirectory, "html/index.html")
+            val lines = file.readLines()
             val titleIndex = lines.indexOfFirst { it.contains("Overall Coverage Summary") }
             val percent = lines[titleIndex + LINES_BETWEEN_TITLE_AND_PERCENT].trim()
             val newCoverage = NumberFormat.getInstance(Locale.FRANCE).parse(percent.dropLast(1)).toDouble()
@@ -51,11 +54,13 @@ public class VKIDCodeCoverageMetric internal constructor(
 
         public var title: String? = null
         public var targetProject: Project? = null
+        public var customKoverDirectory: File? = null
 
         internal fun build(): VKIDCodeCoverageMetric {
             return VKIDCodeCoverageMetric(
                 title = title,
                 targetProject = checkNotNull(targetProject) { "Project is not specified" },
+                koverDirectory = customKoverDirectory,
             )
         }
     }
