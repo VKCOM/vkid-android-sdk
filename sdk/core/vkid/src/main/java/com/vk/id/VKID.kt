@@ -15,6 +15,7 @@ import com.vk.id.common.InternalVKIDApi
 import com.vk.id.exchangetoken.VKIDExchangeTokenCallback
 import com.vk.id.exchangetoken.VKIDExchangeTokenParams
 import com.vk.id.exchangetoken.VKIDTokenExchanger
+import com.vk.id.internal.analytics.CustomAuthAnalytics
 import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthEventBridge
 import com.vk.id.internal.auth.AuthProvidersChooser
@@ -54,7 +55,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import java.util.UUID
 
 /**
  * VKID is the main entry point for integrating VK ID authentication into an Android application.
@@ -224,21 +224,8 @@ public class VKID {
         authCallbacksHolder.add(callback)
         val authContext = currentCoroutineContext()
 
-        val authEventUUId = UUID.randomUUID().toString()
-        if (!params.internalUse) {
-            VKIDAnalytics.trackEvent(
-                "custom_auth_start",
-                VKIDAnalytics.EventParam("sdk_type", "vkid"),
-                VKIDAnalytics.EventParam("unique_session_id", authEventUUId),
-                VKIDAnalytics.EventParam("oauth_service", params.oAuth?.serverName ?: "")
-            )
-        }
-
         val statParams = if (!params.internalUse) {
-            StatParams(
-                flowSource = "from_custom_auth",
-                sessionId = authEventUUId
-            )
+            CustomAuthAnalytics.customAuthStart(params)
         } else {
             StatParams(
                 flowSource = params.extraParams?.get(StatTracker.EXTERNAL_PARAM_FLOW_SOURCE) ?: "",
@@ -251,13 +238,7 @@ public class VKID {
                 CoroutineScope(authContext + Job()).launch {
                     authResultHandler.value.handle(authResult, onFail = {
                         if (!params.internalUse) {
-                            VKIDAnalytics.trackEvent(
-                                "sdk_auth_error",
-                                VKIDAnalytics.EventParam("error", "sdk_auth_error"),
-                                VKIDAnalytics.EventParam("sdk_type", "vkid"),
-                                VKIDAnalytics.EventParam("unique_session_id", authEventUUId),
-                                VKIDAnalytics.EventParam("from_custom_auth", "true")
-                            )
+                            CustomAuthAnalytics.customAuthError(statParams)
                         }
                     })
                     if (requestMutex.isLocked) {
