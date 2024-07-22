@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/vkid_background"
-    tools:ignore="HardcodedText,Overdraw">
+    tools:ignore="HardcodedText,Overdraw,TooManyViews">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -681,6 +681,148 @@
             android:layout_width="match_parent"
             android:layout_height="12dp"
             app:layout_constraintTop_toBottomOf="@id/onetap_no_fast_auth" />
+
+        <com.vk.id.sample.xml.uikit.item.TitleItemView
+            android:id="@+id/onetap_scenarios_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Scenarios"
+            app:layout_constraintTop_toBottomOf="@id/onetap_no_fast_auth_spacer" />
+
+        <View
+            android:id="@+id/onetap_scenario_sign_up_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            app:layout_constraintTop_toBottomOf="@id/onetap_scenarios_title" />
+
+        <com.vk.id.onetap.xml.OneTap
+            android:id="@+id/onetap_scenario_sign_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/onetap_scenario_sign_up_spacer"
+            app:vkid_onetapFastAuthEnabled="false"
+            app:vkid_onetapScenario="SignUp" />
+
+        <View
+            android:id="@+id/onetap_scenario_get_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            app:layout_constraintTop_toBottomOf="@id/onetap_scenario_sign_up" />
+
+        <com.vk.id.onetap.xml.OneTap
+            android:id="@+id/onetap_scenario_get"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/onetap_scenario_get_spacer"
+            app:vkid_onetapFastAuthEnabled="false"
+            app:vkid_onetapScenario="Get" />
+
+        <View
+            android:id="@+id/onetap_scenario_open_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            app:layout_constraintTop_toBottomOf="@id/onetap_scenario_get" />
+
+        <com.vk.id.onetap.xml.OneTap
+            android:id="@+id/onetap_scenario_open"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/onetap_scenario_open_spacer"
+            app:vkid_onetapFastAuthEnabled="false"
+            app:vkid_onetapScenario="Open" />
+
+        <View
+            android:id="@+id/onetap_scenario_calculate_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            app:layout_constraintTop_toBottomOf="@id/onetap_scenario_open" />
+
+        <com.vk.id.onetap.xml.OneTap
+            android:id="@+id/onetap_scenario_calculate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/onetap_scenario_calculate_spacer"
+            app:vkid_onetapFastAuthEnabled="false"
+            app:vkid_onetapScenario="Calculate" />
+
+        <View
+            android:id="@+id/onetap_scenario_order_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            app:layout_constraintTop_toBottomOf="@id/onetap_scenario_calculate" />
+
+        <com.vk.id.onetap.xml.OneTap
+            android:id="@+id/onetap_scenario_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/onetap_scenario_order_spacer"
+            app:vkid_onetapFastAuthEnabled="false"
+            app:vkid_onetapScenario="Order" />
+
+        <View
+            android:id="@+id/onetap_scenario_place_order_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            app:layout_constraintTop_toBottomOf="@id/onetap_scenario_order" />
+
+        <com.vk.id.onetap.xml.OneTap
+            android:id="@+id/onetap_scenario_place_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/onetap_scenario_place_order_spacer"
+            app:vkid_onetapFastAuthEnabled="false"
+            app:vkid_onetapScenario="PlaceOrder" />
+
+        <View
+            android:id="@+id/onetap_scenario_send_request_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            app:layout_constraintTop_toBottomOf="@id/onetap_scenario_place_order" />
+
+        <com.vk.id.onetap.xml.OneTap
+            android:id="@+id/onetap_scenario_send_request"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/onetap_scenario_send_request_spacer"
+            app:vkid_onetapFastAuthEnabled="false"
+            app:vkid_onetapScenario="SendRequest" />
+
+        <View
+            android:id="@+id/onetap_scenario_participate_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            app:layout_constraintTop_toBottomOf="@id/onetap_scenario_send_request" />
+
+        <com.vk.id.onetap.xml.OneTap
+            android:id="@+id/onetap_scenario_participate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/onetap_scenario_participate_spacer"
+            app:vkid_onetapFastAuthEnabled="false"
+            app:vkid_onetapScenario="Participate" />
+
+        <View
+            android:id="@+id/onetap_scenarios_spacer_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/onetap_scenario_participate" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

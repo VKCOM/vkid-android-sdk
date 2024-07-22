@@ -18,6 +18,7 @@ public final class com/vk/id/onetap/xml/OneTap : android/widget/FrameLayout {
 	public final fun getAuthParams ()Lcom/vk/id/auth/VKIDAuthUiParams;
 	public final fun getFastAuthEnabled ()Z
 	public final fun getOAuths ()Ljava/util/Set;
+	public final fun getScenario ()Lcom/vk/id/onetap/compose/onetap/OneTapTitleScenario;
 	public final fun getStyle ()Lcom/vk/id/onetap/common/OneTapStyle;
 	public final fun isSignInToAnotherAccountEnabled ()Z
 	public final fun setAuthParams (Lcom/vk/id/auth/VKIDAuthUiParams;)V
@@ -25,6 +26,7 @@ public final class com/vk/id/onetap/xml/OneTap : android/widget/FrameLayout {
 	public static synthetic fun setCallbacks$default (Lcom/vk/id/onetap/xml/OneTap;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)V
 	public final fun setFastAuthEnabled (Z)V
 	public final fun setOAuths (Ljava/util/Set;)V
+	public final fun setScenario (Lcom/vk/id/onetap/compose/onetap/OneTapTitleScenario;)V
 	public final fun setSignInToAnotherAccountEnabled (Z)V
 	public final fun setStyle (Lcom/vk/id/onetap/common/OneTapStyle;)V
 }

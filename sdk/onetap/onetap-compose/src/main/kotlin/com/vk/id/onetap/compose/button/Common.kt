@@ -28,6 +28,7 @@ import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.onetap.common.auth.style.InternalVKIDButtonStyle
 import com.vk.id.onetap.compose.button.auth.style.asColor
+import com.vk.id.onetap.compose.onetap.OneTapTitleScenario
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -71,9 +72,10 @@ internal fun startAuth(
 internal fun FetchUserData(
     coroutineScope: CoroutineScope,
     onFetchingProgress: OnFetchingProgress,
+    scenario: OneTapTitleScenario?,
 ) {
     val lifecycleOwner = rememberUpdatedState(LocalLifecycleOwner.current)
-    DisposableEffect(lifecycleOwner.value) {
+    DisposableEffect(lifecycleOwner.value, scenario) {
         var fetchUserJob: Job? = null
         val lifecycle = lifecycleOwner.value.lifecycle
         val observer = LifecycleEventObserver { _, event ->
