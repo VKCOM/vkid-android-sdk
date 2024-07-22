@@ -13,7 +13,7 @@ internal fun formatChangePercent(
     val changePercent = if (oldValue.toDouble() == 0.0) {
         BigDecimal.valueOf(HUNDRED_PERCENT.toLong())
     } else {
-        BigDecimal(newValue.toDouble() / oldValue.toDouble() * HUNDRED_PERCENT)
+        BigDecimal(newValue.toDouble() / oldValue.toDouble() * HUNDRED_PERCENT - HUNDRED_PERCENT)
             .setScale(2, RoundingMode.HALF_EVEN)
             .stripTrailingZeros()
     }
@@ -22,6 +22,6 @@ internal fun formatChangePercent(
         changePercent == BigDecimal.ZERO -> ""
         else -> "+"
     }
-    val colorSign = if ((sign == "-").xor(increaseIsNegative)) "-" else "+"
+    val colorSign = if (sign != "" && (sign == "-").xor(increaseIsNegative)) "-" else "+"
     return "{$colorSign$sign${changePercent.abs().toPlainString()}%$colorSign}"
 }
