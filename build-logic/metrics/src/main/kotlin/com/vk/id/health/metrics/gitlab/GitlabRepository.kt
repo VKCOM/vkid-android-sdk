@@ -24,11 +24,22 @@ internal object GitlabRepository {
 
     suspend fun postCommentToMr(comment: String) {
         withContext(Dispatchers.IO) {
-            api.postCommentToMr(
-                projectId = PROJECT_ID,
-                mergeRequestId = mergeRequestId,
-                body = GitlabPostCommentToMrBody(body = comment),
-            )
+            val username = api.getUser().username
+            val comments = api.listComments(PROJECT_ID, mergeRequestId)
+            comments.lastOrNull { !it.system && it.author.username == username }
+                ?.let {
+                    api.updateComment(
+                        projectId = PROJECT_ID,
+                        mergeRequestId = mergeRequestId,
+                        commentId = it.id.toString(),
+                        comment = comment,
+                    )
+                }
+                ?: api.postCommentToMr(
+                    projectId = PROJECT_ID,
+                    mergeRequestId = mergeRequestId,
+                    body = GitlabPostCommentToMrBody(body = comment),
+                )
         }
     }
 
