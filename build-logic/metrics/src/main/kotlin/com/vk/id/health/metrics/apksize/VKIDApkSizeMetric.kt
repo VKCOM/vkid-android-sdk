@@ -5,7 +5,7 @@ import com.android.build.gradle.api.ApplicationVariant
 import com.android.build.gradle.api.BaseVariantOutput
 import com.vk.id.health.metrics.VKIDHealthMetricsExtension
 import com.vk.id.health.metrics.VKIDSingleRunHealthMetric
-import com.vk.id.health.metrics.utils.exec
+import com.vk.id.health.metrics.utils.execute
 import com.vk.id.health.metrics.utils.formatChangePercent
 import org.gradle.api.Project
 import org.gradle.api.Task
@@ -18,7 +18,7 @@ public fun VKIDHealthMetricsExtension.apkSize(configuration: VKIDApkSizeMetric.B
     stepsInternal.add(VKIDApkSizeMetric.Builder().apply(configuration).build())
 }
 
-public class VKIDApkSizeMetric(
+public class VKIDApkSizeMetric internal constructor(
     private val title: String?,
     private val targetProject: Project,
     private val targetBuildType: ApplicationVariant,
@@ -61,7 +61,7 @@ public class VKIDApkSizeMetric(
         val properties = Properties()
         properties.load(targetProject.rootProject.file("local.properties").inputStream())
         val apkanalyzerPath = properties.getProperty("healthmetrics.apksize.apkanalyzerpath")
-        return exec("$apkanalyzerPath apk file-size $apkPath").first()
+        return execute("$apkanalyzerPath apk file-size $apkPath").first()
     }
 
     private val ApplicationVariant.apkFilePath: String
