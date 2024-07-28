@@ -5,6 +5,7 @@ import com.vk.id.health.metrics.storage.firestore
 import com.vk.id.health.metrics.apksize.apkSize
 import com.vk.id.health.metrics.apichange.publicApiChanges
 import com.vk.id.health.metrics.codecoverage.codeCoverage
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application) apply false
@@ -47,7 +48,11 @@ private fun registerGeneralTask(name: String, configuration: Task.() -> Unit = {
 }
 
 healthMetrics {
-    gitlab()
+    val localProperties = Properties()
+    localProperties.load(rootProject.file("local.properties").inputStream())
+    gitlab {
+        localProperties.getProperty("healthmetrics.gitlab.token")
+    }
     firestore(rootProject.file("build-logic/metrics/service-credentials.json"))
     codeCoverage {
         title = "Code coverage"
@@ -67,12 +72,14 @@ healthMetrics {
         targetProject = projects.sampleMetricsApp.dependencyProject
         targetBuildType = "withSdk"
         sourceBuildType = "debug"
+        apkAnalyzerPath = localProperties.getProperty("healthmetrics.apksize.apkanalyzerpath")
     }
     apkSize {
         title = "Pure SDK size"
         targetProject = projects.sampleMetricsApp.dependencyProject
         targetBuildType = "withSdk"
         sourceBuildType = "withDeps"
+        apkAnalyzerPath = localProperties.getProperty("healthmetrics.apksize.apkanalyzerpath")
     }
     publicApiChanges()
 }
