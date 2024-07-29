@@ -3,7 +3,9 @@ package com.vk.id.health.metrics.gitlab
 import com.vk.id.health.metrics.VKIDHealthMetricsExtension
 
 public fun VKIDHealthMetricsExtension.gitlab(
-    tokenProvider: () -> String
+    host: () -> String = { "https://gitlab.com" },
+    token: () -> String
 ) {
-    gitlabToken = lazy(tokenProvider)
+    gitlabHost = lazy(host)
+    gitlabToken = lazy(token)
 }

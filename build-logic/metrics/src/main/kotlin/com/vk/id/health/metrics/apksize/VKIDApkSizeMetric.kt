@@ -23,7 +23,7 @@ public class VKIDApkSizeMetric internal constructor(
     private val targetBuildType: ApplicationVariant,
     private val sourceProject: Project,
     private val sourceBuildType: ApplicationVariant?,
-    private val apkAnalyzerPath: String,
+    private val apkAnalyzerPath: () -> String,
 ) : VKIDSingleRunHealthMetric {
 
     private val taskSuffix = "${targetProject.name.capitalized()}${targetBuildType.name.capitalized()}" +
@@ -57,7 +57,7 @@ public class VKIDApkSizeMetric internal constructor(
         }
     }
 
-    private fun getApkSize(apkPath: String) = execute("$apkAnalyzerPath apk file-size $apkPath").first()
+    private fun getApkSize(apkPath: String) = execute("${apkAnalyzerPath()} apk file-size $apkPath").first()
 
     private val ApplicationVariant.apkFilePath: String
         get() = (outputs.filterIsInstance<BaseVariantOutput>().firstOrNull() ?: error("No apk for variant $name"))
@@ -78,7 +78,7 @@ public class VKIDApkSizeMetric internal constructor(
         public var targetBuildType: String = "release"
         public var sourceProject: Project? = null
         public var sourceBuildType: String? = null
-        public var apkAnalyzerPath: String? = null
+        public var apkAnalyzerPath: (() -> String)? = null
 
         internal fun build(): VKIDApkSizeMetric {
             return VKIDApkSizeMetric(

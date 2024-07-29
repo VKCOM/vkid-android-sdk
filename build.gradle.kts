@@ -48,11 +48,13 @@ private fun registerGeneralTask(name: String, configuration: Task.() -> Unit = {
 }
 
 healthMetrics {
-    val localProperties = Properties()
-    localProperties.load(rootProject.file("local.properties").inputStream())
-    gitlab {
-        localProperties.getProperty("healthmetrics.gitlab.token")
+    val localProperties by lazy {
+        Properties().apply { load(rootProject.file("local.properties").inputStream()) }
     }
+    gitlab(
+        host = { localProperties.getProperty("healthmetrics.gitlab.host") },
+        token = { localProperties.getProperty("healthmetrics.gitlab.token") }
+    )
     firestore(rootProject.file("build-logic/metrics/service-credentials.json"))
     codeCoverage {
         title = "Code coverage"
@@ -72,14 +74,14 @@ healthMetrics {
         targetProject = projects.sampleMetricsApp.dependencyProject
         targetBuildType = "withSdk"
         sourceBuildType = "debug"
-        apkAnalyzerPath = localProperties.getProperty("healthmetrics.apksize.apkanalyzerpath")
+        apkAnalyzerPath = { localProperties.getProperty("healthmetrics.apksize.apkanalyzerpath") }
     }
     apkSize {
         title = "Pure SDK size"
         targetProject = projects.sampleMetricsApp.dependencyProject
         targetBuildType = "withSdk"
         sourceBuildType = "withDeps"
-        apkAnalyzerPath = localProperties.getProperty("healthmetrics.apksize.apkanalyzerpath")
+        apkAnalyzerPath = { localProperties.getProperty("healthmetrics.apksize.apkanalyzerpath") }
     }
     publicApiChanges()
 }

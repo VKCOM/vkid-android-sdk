@@ -6,8 +6,9 @@ import kotlinx.coroutines.withContext
 
 internal object GitlabRepository {
     private const val PROJECT_ID = "2796"
+    private lateinit var host: Lazy<String>
     private lateinit var token: Lazy<String>
-    private val api by lazy { GitlabApiService(token.value) }
+    private val api by lazy { GitlabApiService(host.value, token.value) }
     private lateinit var mergeRequestIdInternal: String
     private val mergeRequest by lazy { runBlocking { getMergeRequestBranches() } }
     val sourceBranch get() = mergeRequest.sourceBranch
@@ -15,9 +16,11 @@ internal object GitlabRepository {
     val mergeRequestId get() = mergeRequestIdInternal
 
     fun init(
+        host: Lazy<String>,
         token: Lazy<String>,
         mergeRequestId: String
     ) {
+        this.host = host
         this.token = token
         this.mergeRequestIdInternal = mergeRequestId
     }
