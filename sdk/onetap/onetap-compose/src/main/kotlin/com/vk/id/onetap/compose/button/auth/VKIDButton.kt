@@ -77,10 +77,8 @@ internal fun VKIDButton(
     // Runs only on initial composition
     if (!LocalInspectionMode.current) {
         LaunchedEffect(scenario) {
-            if (state.text.isEmpty()) {
-                state.text = useTextProvider.noUserText(scenario)
-                state.shortText = useTextProvider.noUserShortText(scenario)
-            }
+            state.text = useTextProvider.noUserText(scenario)
+            state.shortText = useTextProvider.noUserShortText(scenario)
         }
     } else {
         state.text = stringResource(id = R.string.vkid_log_in_with_vkid)
