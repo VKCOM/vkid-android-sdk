@@ -1,10 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="vkid_log_in_with_vkid">Wejdź z VK ID</string>
+    <string name="vkid_sign_up_with_vkid">Zapisz się z VK ID</string>
+    <string name="vkid_get_with_vkid">Otrzymaj z VK ID</string>
+    <string name="vkid_open_with_vkid">Otwórz z VK ID</string>
+    <string name="vkid_calculate_with_vkid">Oblicz z VK ID</string>
+    <string name="vkid_order_with_vkid">Zamów z VK ID</string>
+    <string name="vkid_place_order_with_vkid">Wypełnij z VK ID</string>
+    <string name="vkid_send_request_with_vkid">Zostaw wniosek z VK ID</string>
+    <string name="vkid_participate_with_vkid">Uczestnicz z VK ID</string>
+
+    <string name="vkid_log_in_as">Kontynuuj jako %1$s</string>
+    <string name="vkid_sign_up_as">Zapisz się jako %1$s</string>
+    <string name="vkid_get_as">Otrzymaj dla %1$s</string>
+    <string name="vkid_open_as">Otwórz jako %1$s</string>
+    <string name="vkid_calculate_as">Oblicz dla %1$s</string>
+    <string name="vkid_order_as">Zamów jako %1$s</string>
+    <string name="vkid_place_order_as">Wypełnij zamówienie jako %1$s</string>
+    <string name="vkid_send_request_as">Zostaw wniosek jako %1$s</string>
+    <string name="vkid_participate_as">Uczestnicz jako %1$s</string>
+
+    <string name="vkid_log_in">Kontynuuj</string>
+    <string name="vkid_sign_up">Zapisz się</string>
+    <string name="vkid_get">Otrzymaj</string>
+    <string name="vkid_open">Otwórz</string>
+    <string name="vkid_calculate">Oblicz</string>
+    <string name="vkid_order">Zamów</string>
+    <string name="vkid_place_order">Wypełnij zamówienie</string>
+    <string name="vkid_send_request">Pozostaw wniosek</string>
+    <string name="vkid_participate">Uczestnicz</string>
+
     <string name="vkid_auth_use_another_account">Wejdź na inne konto</string>
     <string name="vkid_auth_use_another_account_short">Zmień konto</string>
-    <string name="vkid_log_in_as">Kontynuuj jako %1$s</string>
-    <string name="vkid_log_in">Kontynuuj</string>
 
     <string name="vkid_schenario_enter_service_title">Wejdź do serwisu lub zarejestruj się</string>
     <string name="vkid_schenario_enter_service_vkid_button_text_user_found">Wejdź jako %1$s</string>

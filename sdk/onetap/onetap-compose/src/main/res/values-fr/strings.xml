@@ -1,10 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="vkid_log_in_with_vkid">Se connecter avec VK ID</string>
+    <string name="vkid_sign_up_with_vkid">Prendre RDV avec VK ID</string>
+    <string name="vkid_get_with_vkid">Obtenir avec VK ID</string>
+    <string name="vkid_open_with_vkid">Ouvrir avec VK ID</string>
+    <string name="vkid_calculate_with_vkid">Calculer avec VK ID</string>
+    <string name="vkid_order_with_vkid">Commander avec VK ID</string>
+    <string name="vkid_place_order_with_vkid">Commander avec VK ID</string>
+    <string name="vkid_send_request_with_vkid">Envoyer demande avec VK ID</string>
+    <string name="vkid_participate_with_vkid">Participer avec VK ID</string>
+
+    <string name="vkid_log_in_as">Continuer en tant que %1$s</string>
+    <string name="vkid_sign_up_as">Prendre RDV en tant que %1$s</string>
+    <string name="vkid_get_as">Obtenir pour %1$s</string>
+    <string name="vkid_open_as">Ouvrir en tant que %1$s</string>
+    <string name="vkid_calculate_as">Calculer pour %1$s</string>
+    <string name="vkid_order_as">Commander en tant que %1$s</string>
+    <string name="vkid_place_order_as">Passer commande en tant que %1$s</string>
+    <string name="vkid_send_request_as">Envoyer demande en tant que %1$s</string>
+    <string name="vkid_participate_as">Participer en tant que %1$s</string>
+
+    <string name="vkid_log_in">Continuer</string>
+    <string name="vkid_sign_up">Prendre RDV</string>
+    <string name="vkid_get">Obtenir</string>
+    <string name="vkid_open">Ouvrir</string>
+    <string name="vkid_calculate">Calculer</string>
+    <string name="vkid_order">Commander</string>
+    <string name="vkid_place_order">Passer commande</string>
+    <string name="vkid_send_request">Envoyer demande</string>
+    <string name="vkid_participate">Participer</string>
+
     <string name="vkid_auth_use_another_account">Se connecter à un autre compte</string>
     <string name="vkid_auth_use_another_account_short">Changer de compte</string>
-    <string name="vkid_log_in_as">Continuer en tant que %1$s</string>
-    <string name="vkid_log_in">Continuer</string>
 
     <string name="vkid_schenario_enter_service_title">Connectez-vous au service ou inscrivez-vous</string>
     <string name="vkid_schenario_enter_service_vkid_button_text_user_found">Se connecter en tant que %1$s</string>

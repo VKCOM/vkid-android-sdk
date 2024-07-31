@@ -28,10 +28,37 @@
 -->
 <resources>
     <string name="vkid_log_in_with_vkid">Iniciar sesión con VK ID</string>
+    <string name="vkid_sign_up_with_vkid">Registrarse con VK ID</string>
+    <string name="vkid_get_with_vkid">Obtener con VK ID</string>
+    <string name="vkid_open_with_vkid">Abrir con VK ID</string>
+    <string name="vkid_calculate_with_vkid">Calcular con VK ID</string>
+    <string name="vkid_order_with_vkid">Pedir con VK ID</string>
+    <string name="vkid_place_order_with_vkid">Pedir con VK ID</string>
+    <string name="vkid_send_request_with_vkid">Enviar solicitud con VK ID</string>
+    <string name="vkid_participate_with_vkid">Participar con VK ID</string>
+
+    <string name="vkid_log_in_as">Continuar como %1$s</string>
+    <string name="vkid_sign_up_as">Registrarse como %1$s</string>
+    <string name="vkid_get_as">Obtener para %1$s</string>
+    <string name="vkid_open_as">Abrir como %1$s</string>
+    <string name="vkid_calculate_as">Calcular para %1$s</string>
+    <string name="vkid_order_as">Pedir como %1$s</string>
+    <string name="vkid_place_order_as">Hacer pedido como %1$s</string>
+    <string name="vkid_send_request_as">Enviar solicitud como %1$s</string>
+    <string name="vkid_participate_as">Participar como %1$s</string>
+
+    <string name="vkid_log_in">Continuar</string>
+    <string name="vkid_sign_up">Registrarse</string>
+    <string name="vkid_get">Obtener</string>
+    <string name="vkid_open">Abrir</string>
+    <string name="vkid_calculate">Calcular</string>
+    <string name="vkid_order">Pedir</string>
+    <string name="vkid_place_order">Hacer pedido</string>
+    <string name="vkid_send_request">Enviar solicitud</string>
+    <string name="vkid_participate">Participar</string>
+
     <string name="vkid_auth_use_another_account">Iniciar sesión con otra cuenta</string>
     <string name="vkid_auth_use_another_account_short">Cambiar cuentas</string>
-    <string name="vkid_log_in_as">Continuar como %1$s</string>
-    <string name="vkid_log_in">Continuar</string>
 
     <string name="vkid_schenario_enter_service_title">Acceder al servicio o registrarse</string>
     <string name="vkid_schenario_enter_service_vkid_button_text_user_found">Inicia sesión como %1$s</string>
