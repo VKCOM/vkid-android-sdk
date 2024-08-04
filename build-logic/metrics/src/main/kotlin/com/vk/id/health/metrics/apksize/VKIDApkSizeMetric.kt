@@ -57,6 +57,14 @@ public class VKIDApkSizeMetric internal constructor(
         }
     }
 
+    override fun exec(project: Project) {
+        project.exec {
+            workingDir = project.projectDir
+            commandLine("./gradlew", "clean")
+        }
+        super.exec(project)
+    }
+
     private fun getApkSize(apkPath: String) = execute("${apkAnalyzerPath()} apk file-size $apkPath").first()
 
     private val ApplicationVariant.apkFilePath: String
