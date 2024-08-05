@@ -8,9 +8,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
 
 internal class GitlabApiService(
+    host: String,
     private val token: String
 ) : GitlabApi by Retrofit.Builder()
-    .baseUrl("https://gitlab.mvk.com/api/v4/")
+    .baseUrl("$host/api/v4/")
     .client(
         OkHttpClient.Builder()
             .addInterceptor { it.proceed(it.request().newBuilder().addHeader("Private-Token", token).build()) }

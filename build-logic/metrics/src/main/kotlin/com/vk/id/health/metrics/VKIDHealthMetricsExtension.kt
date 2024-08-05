@@ -11,4 +11,5 @@ public open class VKIDHealthMetricsExtension {
     internal var firestoreAccountFileInternal: File? = null
     public val firestoreAccountFile: File get() = checkNotNull(firestoreAccountFileInternal) { "Firestore account file is not initialized" }
     internal lateinit var gitlabToken: Lazy<String>
+    internal lateinit var gitlabHost: Lazy<String>
 }
