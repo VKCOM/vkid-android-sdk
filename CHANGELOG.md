@@ -3,6 +3,11 @@
 > **Note**\
 > Описание основных изменений в релизах VK ID SDK. Наш SDK следует [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.1.0
+
+### Added
+- Добавлена возможность менять текст OneTap на один из списка доступных. Подробности смотрите в [документации по OneTap](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/connection/android/onetap) 
+
 ## 2.0.1
 
 ### Added
