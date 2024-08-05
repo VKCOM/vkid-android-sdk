@@ -31,6 +31,7 @@ import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.compose.R
 import com.vk.id.onetap.compose.onetap.OneTap
 import com.vk.id.onetap.compose.onetap.OneTapAnalytics.uuidFromParams
+import com.vk.id.onetap.compose.onetap.OneTapTitleScenario
 import com.vk.id.onetap.compose.onetap.sheet.OneTapBottomSheetAnalytics
 import com.vk.id.onetap.compose.onetap.sheet.OneTapScenario
 import com.vk.id.onetap.compose.onetap.sheet.scenarioTitle
@@ -138,6 +139,7 @@ internal fun SheetContentMain(
                 fastAuthEnabled = fastAuthEnabled,
                 largeText = largeText,
                 measureInProgress = measureInProgress,
+                scenario = OneTapTitleScenario.SignIn,
             )
         }
         BoxWithConstraints {

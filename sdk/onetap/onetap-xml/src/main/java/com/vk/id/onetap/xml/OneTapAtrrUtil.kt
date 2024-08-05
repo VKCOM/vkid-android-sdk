@@ -13,6 +13,7 @@ import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonElevationStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonSizeStyle
+import com.vk.id.onetap.compose.onetap.OneTapTitleScenario
 import com.vk.id.onetap.compose.onetap.sheet.OneTapScenario
 import com.vk.id.onetap.compose.onetap.sheet.style.OneTapBottomSheetStyle
 import com.vk.id.onetap.compose.onetap.sheet.style.OneTapSheetCornersStyle
@@ -38,6 +39,7 @@ internal fun parseOneTapAttrs(
                 oAuths = getOAuths(),
                 scopes = getScopes(),
                 fastAuthEnabled = getFastAuthEnabled(),
+                scenario = getOneTapScenario()
             )
         } finally {
             recycle()
@@ -51,6 +53,7 @@ internal data class OneTapParsedAttrs(
     val oAuths: Set<OneTapOAuth>,
     val scopes: Set<String>,
     val fastAuthEnabled: Boolean,
+    val scenario: OneTapTitleScenario,
 )
 
 @Suppress("LongParameterList")
@@ -229,6 +232,21 @@ private fun TypedArray.getScopes(): Set<String> {
 
 private fun TypedArray.getFastAuthEnabled(): Boolean {
     return getBoolean(R.styleable.vkid_OneTap_vkid_onetapFastAuthEnabled, true)
+}
+
+private fun TypedArray.getOneTapScenario(): OneTapTitleScenario {
+    @Suppress("MagicNumber")
+    return when (getInt(R.styleable.vkid_OneTap_vkid_onetapScenario, 0)) {
+        1 -> OneTapTitleScenario.SignUp
+        2 -> OneTapTitleScenario.Get
+        3 -> OneTapTitleScenario.Open
+        4 -> OneTapTitleScenario.Calculate
+        5 -> OneTapTitleScenario.Order
+        6 -> OneTapTitleScenario.PlaceOrder
+        7 -> OneTapTitleScenario.SendRequest
+        8 -> OneTapTitleScenario.Participate
+        else -> OneTapTitleScenario.SignIn
+    }
 }
 
 private fun Context.pixelsToDp(
