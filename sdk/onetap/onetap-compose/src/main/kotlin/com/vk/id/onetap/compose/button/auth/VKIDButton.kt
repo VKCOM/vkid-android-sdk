@@ -27,7 +27,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -81,8 +80,8 @@ internal fun VKIDButton(
             state.shortText = useTextProvider.noUserShortText(scenario)
         }
     } else {
-        state.text = stringResource(id = R.string.vkid_log_in_with_vkid)
-        state.shortText = stringResource(id = R.string.vkid_log_in_with_vkid_short)
+        state.text = useTextProvider.noUserText(scenario)
+        state.shortText = useTextProvider.noUserShortText(scenario)
     }
     val coroutineScope = rememberCoroutineScope()
     if (fastAuthEnabled) {
