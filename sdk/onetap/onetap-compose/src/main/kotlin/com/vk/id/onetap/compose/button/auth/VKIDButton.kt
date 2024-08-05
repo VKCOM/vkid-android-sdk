@@ -2,6 +2,7 @@
 
 package com.vk.id.onetap.compose.button.auth
 
+import android.annotation.SuppressLint
 import android.content.res.Resources
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -15,10 +16,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,7 +27,6 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -59,6 +59,7 @@ import com.vk.id.onetap.compose.progress.CircleProgress
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 
+@SuppressLint("RememberReturnType")
 @Composable
 internal fun VKIDButton(
     modifier: Modifier = Modifier,
@@ -74,12 +75,7 @@ internal fun VKIDButton(
     val resources = LocalContext.current.resources
     val useTextProvider = textProvider ?: remember { DefaultTextProvider(resources) }
     // Runs only on initial composition
-    if (!LocalInspectionMode.current) {
-        LaunchedEffect(scenario) {
-            state.text = useTextProvider.noUserText(scenario)
-            state.shortText = useTextProvider.noUserShortText(scenario)
-        }
-    } else {
+    remember(scenario) {
         state.text = useTextProvider.noUserText(scenario)
         state.shortText = useTextProvider.noUserShortText(scenario)
     }
