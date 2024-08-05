@@ -2,16 +2,21 @@
 
 package com.vk.id.onetap.compose.onetap
 
+import android.content.Context
+import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.vk.id.VKIDUser
 import com.vk.id.analytics.VKIDAnalytics
 import com.vk.id.analytics.stat.StatTracker
+import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.common.InternalVKIDApi
+import com.vk.id.onetap.common.OneTapStyle
 import java.util.UUID
 
 @Suppress("TooManyFunctions")
@@ -54,12 +59,13 @@ internal object OneTapAnalytics {
     }
 
     @Composable
-    internal fun OneTapIconShown(scenario: OneTapTitleScenario) {
-        OneTapShown(icon = true, scenario = scenario)
+    internal fun OneTapIconShown(scenario: OneTapTitleScenario, style: OneTapStyle) {
+        OneTapShown(icon = true, scenario = scenario, style = style)
     }
 
     @Composable
-    internal fun OneTapShown(icon: Boolean = false, scenario: OneTapTitleScenario) {
+    internal fun OneTapShown(icon: Boolean = false, scenario: OneTapTitleScenario, style: OneTapStyle) {
+        val context = LocalContext.current
         val lifecycleOwner = rememberUpdatedState(LocalLifecycleOwner.current)
         DisposableEffect(lifecycleOwner.value) {
             val lifecycle = lifecycleOwner.value.lifecycle
@@ -69,7 +75,10 @@ internal object OneTapAnalytics {
                         track(
                             EVENT_SCREEN_PROCEED,
                             iconParam(icon),
-                            textTypeParam(scenario)
+                            textTypeParam(scenario),
+                            themeParam(style),
+                            styleParam(style),
+                            langParam(context)
                         )
                     }
 
@@ -118,6 +127,30 @@ internal object OneTapAnalytics {
         )
     }
 
+    private fun themeParam(style: OneTapStyle): VKIDAnalytics.EventParam =
+        VKIDAnalytics.EventParam(
+            "theme_type",
+            when (style) {
+                is OneTapStyle.Dark,
+                is OneTapStyle.TransparentDark,
+                is OneTapStyle.Icon -> "dark"
+                is OneTapStyle.Light,
+                is OneTapStyle.TransparentLight -> "light"
+            }
+        )
+
+    private fun styleParam(style: OneTapStyle): VKIDAnalytics.EventParam =
+        VKIDAnalytics.EventParam(
+            "style_type",
+            when (style) {
+                is OneTapStyle.Dark,
+                is OneTapStyle.Icon,
+                is OneTapStyle.Light -> "primary"
+                is OneTapStyle.TransparentDark,
+                is OneTapStyle.TransparentLight -> "secondary"
+            }
+        )
+
     private fun iconParam(icon: Boolean): VKIDAnalytics.EventParam =
         VKIDAnalytics.EventParam(
             "button_type",
@@ -142,6 +175,42 @@ internal object OneTapAnalytics {
             OneTapTitleScenario.Participate -> "take_part"
         }
     )
+
+    @Suppress("MagicNumber")
+    private fun VKIDAuthParams.Locale.toAnalyticsParam(): VKIDAnalytics.EventParam {
+        val langCode = when (this) {
+            VKIDAuthParams.Locale.RUS -> 0
+            VKIDAuthParams.Locale.UKR -> 1
+            VKIDAuthParams.Locale.ENG -> 3
+            VKIDAuthParams.Locale.SPA -> 4
+            VKIDAuthParams.Locale.GERMAN -> 6
+            VKIDAuthParams.Locale.POL -> 15
+            VKIDAuthParams.Locale.FRA -> 16
+            VKIDAuthParams.Locale.TURKEY -> 82
+        }
+        return VKIDAnalytics.EventParam("language", strValue = langCode.toString())
+    }
+
+    internal fun langParam(context: Context): VKIDAnalytics.EventParam {
+        val systemLocale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            context.resources.configuration.locales.get(0)
+        } else {
+            @Suppress("DEPRECATION")
+            context.resources.configuration.locale
+        }
+        val vkidLocale = when (systemLocale.language) {
+            "ru" -> VKIDAuthParams.Locale.RUS
+            "uk" -> VKIDAuthParams.Locale.UKR
+            "en" -> VKIDAuthParams.Locale.ENG
+            "es" -> VKIDAuthParams.Locale.SPA
+            "de" -> VKIDAuthParams.Locale.GERMAN
+            "pl" -> VKIDAuthParams.Locale.POL
+            "fr" -> VKIDAuthParams.Locale.FRA
+            "tr" -> VKIDAuthParams.Locale.TURKEY
+            else -> VKIDAuthParams.Locale.ENG
+        }
+        return vkidLocale.toAnalyticsParam()
+    }
 
     internal fun alternateParam(signInAnotherAccountButton: Boolean): VKIDAnalytics.EventParam =
         VKIDAnalytics.EventParam(
