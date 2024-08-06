@@ -2,8 +2,6 @@
 
 package com.vk.id.onetap.compose.onetap.sheet
 
-import android.content.Context
-import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.rememberUpdatedState
@@ -18,6 +16,7 @@ import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.onetap.compose.onetap.OneTapAnalytics
 import com.vk.id.onetap.compose.onetap.OneTapAnalytics.SCREEN_PARAM_NAME
+import com.vk.id.onetap.compose.onetap.OneTapAnalytics.langParam
 import com.vk.id.onetap.compose.onetap.OneTapAnalytics.track
 import java.util.UUID
 
@@ -130,43 +129,7 @@ internal object OneTapBottomSheetAnalytics {
 
     private val screenParam = VKIDAnalytics.EventParam(SCREEN_PARAM_NAME, "floating_one_tap")
 
-    private fun langParam(context: Context): VKIDAnalytics.EventParam {
-        val systemLocale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            context.resources.configuration.locales.get(0)
-        } else {
-            @Suppress("DEPRECATION")
-            context.resources.configuration.locale
-        }
-        val vkidLocale = when (systemLocale.language) {
-            "ru" -> VKIDAuthParams.Locale.RUS
-            "uk" -> VKIDAuthParams.Locale.UKR
-            "en" -> VKIDAuthParams.Locale.ENG
-            "es" -> VKIDAuthParams.Locale.SPA
-            "de" -> VKIDAuthParams.Locale.GERMAN
-            "pl" -> VKIDAuthParams.Locale.POL
-            "fr" -> VKIDAuthParams.Locale.FRA
-            "tr" -> VKIDAuthParams.Locale.TURKEY
-            else -> VKIDAuthParams.Locale.ENG
-        }
-        return vkidLocale.toAnalyticsParam()
-    }
-
     private val FLOW_SOURCE = StatTracker.EXTERNAL_PARAM_FLOW_SOURCE to "from_floating_one_tap"
-}
-
-@Suppress("MagicNumber")
-private fun VKIDAuthParams.Locale.toAnalyticsParam(): VKIDAnalytics.EventParam {
-    val langCode = when (this) {
-        VKIDAuthParams.Locale.RUS -> 0
-        VKIDAuthParams.Locale.UKR -> 1
-        VKIDAuthParams.Locale.ENG -> 3
-        VKIDAuthParams.Locale.SPA -> 4
-        VKIDAuthParams.Locale.GERMAN -> 6
-        VKIDAuthParams.Locale.POL -> 15
-        VKIDAuthParams.Locale.FRA -> 16
-        VKIDAuthParams.Locale.TURKEY -> 82
-    }
-    return VKIDAnalytics.EventParam("language", strValue = langCode.toString())
 }
 
 private fun OneTapScenario.toAnalyticsParam(): VKIDAnalytics.EventParam {
