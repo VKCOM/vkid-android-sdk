@@ -76,7 +76,8 @@ internal fun VKIDButtonSmall(
                         state.userIconLoaded = false
                     }
                 }
-            }
+            },
+            null,
         )
     }
     var size by remember { mutableStateOf(IntSize.Zero) }

@@ -35,7 +35,11 @@ bumpVersionInVersionFile() {
     VERSION_FILE="$(fetchVersionFile)"
     CURRENT_VERSION=$1
     NEW_VERSION=$2
-    sed -i '' "s/$CURRENT_VERSION/$NEW_VERSION/" "$VERSION_FILE"
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        sed -i '' "s/$CURRENT_VERSION/$NEW_VERSION/" "$VERSION_FILE"
+    else
+        sed -i "s/$CURRENT_VERSION/$NEW_VERSION/" "$VERSION_FILE"
+    fi
 }
 
 assertNewVersionIsDifferent() {

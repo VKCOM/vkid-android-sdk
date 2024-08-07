@@ -28,10 +28,37 @@
 -->
 <resources>
     <string name="vkid_log_in_with_vkid">Увійти з VK ID</string>
+    <string name="vkid_sign_up_with_vkid">Записатися з VK ID</string>
+    <string name="vkid_get_with_vkid">Отримати з VK ID</string>
+    <string name="vkid_open_with_vkid">Відкрити з VK ID</string>
+    <string name="vkid_calculate_with_vkid">Розрахувати з VK ID</string>
+    <string name="vkid_order_with_vkid">Замовити з VK ID</string>
+    <string name="vkid_place_order_with_vkid">Оформити з VK ID</string>
+    <string name="vkid_send_request_with_vkid">Залишити запит з VK ID</string>
+    <string name="vkid_participate_with_vkid">Брати участь з VK ID</string>
+
+    <string name="vkid_log_in_as">Продовжити як %1$s</string>
+    <string name="vkid_sign_up_as">Записатися як %1$s</string>
+    <string name="vkid_get_as">Отримати для %1$s</string>
+    <string name="vkid_open_as">Відкрити як %1$s</string>
+    <string name="vkid_calculate_as">Розрахувати для %1$s</string>
+    <string name="vkid_order_as">Замовити як %1$s</string>
+    <string name="vkid_place_order_as">Оформити замовлення як %1$s</string>
+    <string name="vkid_send_request_as">Залишити запит як %1$s</string>
+    <string name="vkid_participate_as">Брати участь як %1$s</string>
+
+    <string name="vkid_log_in">Продовжити</string>
+    <string name="vkid_sign_up">Записатися</string>
+    <string name="vkid_get">Отримати</string>
+    <string name="vkid_open">Відкрити</string>
+    <string name="vkid_calculate">Розрахувати</string>
+    <string name="vkid_order">Замовити</string>
+    <string name="vkid_place_order">Оформити замовлення</string>
+    <string name="vkid_send_request">Залишити запит</string>
+    <string name="vkid_participate">Брати участь</string>
+
     <string name="vkid_auth_use_another_account">Увійти в інший акаунт</string>
     <string name="vkid_auth_use_another_account_short">Змінити акаунт</string>
-    <string name="vkid_log_in_as">Продовжити як %1$s</string>
-    <string name="vkid_log_in">Продовжити</string>
 
     <string name="vkid_schenario_enter_service_title">Увійдіть у сервіс або зареєструйтеся </string>
     <string name="vkid_schenario_enter_service_vkid_button_text_user_found">Увійти як %1$s</string>

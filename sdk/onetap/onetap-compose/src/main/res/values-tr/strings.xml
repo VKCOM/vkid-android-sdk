@@ -1,10 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="vkid_log_in_with_vkid">VK ID aracılığıyla gir</string>
+    <string name="vkid_sign_up_with_vkid">VK ID ile kaydol</string>
+    <string name="vkid_get_with_vkid">VK ID ile al</string>
+    <string name="vkid_open_with_vkid">VK ID ile aç</string>
+    <string name="vkid_calculate_with_vkid">VK ID ile hesapla</string>
+    <string name="vkid_order_with_vkid">VK ID ile sipariş ver</string>
+    <string name="vkid_place_order_with_vkid">VK ID ile işlem yap</string>
+    <string name="vkid_send_request_with_vkid">VK ID ile talepname bırak</string>
+    <string name="vkid_participate_with_vkid">VK ID ile katıl</string>
+
+    <string name="vkid_log_in_as">%1$s olarak devam et</string>
+    <string name="vkid_sign_up_as">%1$s olarak kaydol</string>
+    <string name="vkid_get_as">%1$s için teslim al</string>
+    <string name="vkid_open_as">%1$s olarak aç</string>
+    <string name="vkid_calculate_as">%1$s için hesapla</string>
+    <string name="vkid_order_as">%1$s olarak sipariş ver</string>
+    <string name="vkid_place_order_as">Siparişi %1$s olarak şekillendir</string>
+    <string name="vkid_send_request_as">%1$s olarak talepname bırak</string>
+    <string name="vkid_participate_as">%1$s olarak katıl</string>
+
+    <string name="vkid_log_in">Devam</string>
+    <string name="vkid_sign_up">Kaydol</string>
+    <string name="vkid_get">Al</string>
+    <string name="vkid_open">Aç</string>
+    <string name="vkid_calculate">Hesapla</string>
+    <string name="vkid_order">Sipariş ver</string>
+    <string name="vkid_place_order">Siparişi tamamlar</string>
+    <string name="vkid_send_request">Başvuru bırak</string>
+    <string name="vkid_participate">Katıl</string>
+
     <string name="vkid_auth_use_another_account">Farlı hesaba giriş yap</string>
     <string name="vkid_auth_use_another_account_short">Hesabı değiştir</string>
-    <string name="vkid_log_in_as">%1$s olarak devam et</string>
-    <string name="vkid_log_in">Devam</string>
 
     <string name="vkid_schenario_enter_service_title" tools:ignore="Typos">Hizmete girin yada oturum oluşturun</string>
     <string name="vkid_schenario_enter_service_vkid_button_text_user_found">%1$s olarak gir</string>
