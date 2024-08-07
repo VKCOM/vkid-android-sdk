@@ -1,10 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="vkid_log_in_with_vkid">Войти с VK ID</string>
+    <string name="vkid_log_in_with_vkid">Войти с VK ID</string>
+    <string name="vkid_sign_up_with_vkid">Записаться с VK ID</string>
+    <string name="vkid_get_with_vkid">Получить с VK ID</string>
+    <string name="vkid_open_with_vkid">Открыть с VK ID</string>
+    <string name="vkid_calculate_with_vkid">Рассчитать с VK ID</string>
+    <string name="vkid_order_with_vkid">Заказать с VK ID</string>
+    <string name="vkid_place_order_with_vkid">Оформить с VK ID</string>
+    <string name="vkid_send_request_with_vkid">Оставить заявку с VK ID</string>
+    <string name="vkid_participate_with_vkid">Участвовать с VK ID</string>
+
+    <string name="vkid_log_in_as">Продолжить как %1$s</string>
+    <string name="vkid_sign_up_as">Записаться как %1$s</string>
+    <string name="vkid_get_as">Получить для %1$s</string>
+    <string name="vkid_open_as">Открыть как %1$s</string>
+    <string name="vkid_calculate_as">Рассчитать для %1$s</string>
+    <string name="vkid_order_as">Заказать как %1$s</string>
+    <string name="vkid_place_order_as">Оформить заказ как %1$s</string>
+    <string name="vkid_send_request_as">Оставить заявку как %1$s</string>
+    <string name="vkid_participate_as">Участвовать как %1$s</string>
+
+    <string name="vkid_log_in">Продолжить</string>
+    <string name="vkid_sign_up">Записаться</string>
+    <string name="vkid_get">Получить</string>
+    <string name="vkid_open">Открыть</string>
+    <string name="vkid_calculate">Рассчитать</string>
+    <string name="vkid_order">Заказать</string>
+    <string name="vkid_place_order">Оформить заказ</string>
+    <string name="vkid_send_request">Оставить заявку</string>
+    <string name="vkid_participate">Участвовать</string>
+
     <string name="vkid_auth_use_another_account">Войти в другой аккаунт</string>
     <string name="vkid_auth_use_another_account_short">Сменить аккаунт</string>
-    <string name="vkid_log_in_as">Продолжить как %1$s</string>
-    <string name="vkid_log_in">Продолжить</string>
 
     <string name="vkid_schenario_enter_service_title">Войдите в сервис или зарегистрируйтесь</string>
     <string name="vkid_schenario_enter_service_vkid_button_text_user_found">Войти как %1$s</string>

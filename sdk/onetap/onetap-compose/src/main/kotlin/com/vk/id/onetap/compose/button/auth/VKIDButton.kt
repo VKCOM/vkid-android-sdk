@@ -49,6 +49,7 @@ import com.vk.id.onetap.compose.button.auth.style.border
 import com.vk.id.onetap.compose.button.clickable
 import com.vk.id.onetap.compose.button.easeInOutAnimation
 import com.vk.id.onetap.compose.icon.VKIcon
+import com.vk.id.onetap.compose.onetap.OneTapTitleScenario
 import com.vk.id.onetap.compose.onetap.style.asFontSize
 import com.vk.id.onetap.compose.onetap.style.asLineHeight
 import com.vk.id.onetap.compose.onetap.style.clip
@@ -69,15 +70,15 @@ internal fun VKIDButton(
     onUserFetched: (VKIDUser?) -> Unit = {},
     fastAuthEnabled: Boolean,
     largeText: Boolean = true,
+    scenario: OneTapTitleScenario,
 ) {
-    val useTextProvider = textProvider ?: defaultTextProvider(LocalContext.current.resources)
+    val resources = LocalContext.current.resources
+    val useTextProvider = textProvider ?: remember { DefaultTextProvider(resources) }
     // Runs only on initial composition
     if (!LocalInspectionMode.current) {
-        LaunchedEffect(Unit) {
-            if (state.text.isEmpty()) {
-                state.text = useTextProvider.noUserText()
-                state.shortText = useTextProvider.noUserShortText()
-            }
+        LaunchedEffect(scenario) {
+            state.text = useTextProvider.noUserText(scenario)
+            state.shortText = useTextProvider.noUserShortText(scenario)
         }
     } else {
         state.text = stringResource(id = R.string.vkid_log_in_with_vkid)
@@ -85,7 +86,7 @@ internal fun VKIDButton(
     }
     val coroutineScope = rememberCoroutineScope()
     if (fastAuthEnabled) {
-        FetchUserDataWithAnimation(coroutineScope, state, useTextProvider, onUserFetched)
+        FetchUserDataWithAnimation(coroutineScope, state, useTextProvider, onUserFetched, scenario)
     }
     Box(
         modifier = modifier
@@ -128,24 +129,6 @@ internal fun VKIDButton(
     }
 }
 
-@Composable
-private fun defaultTextProvider(resources: Resources): VKIDButtonTextProvider =
-    remember {
-        object : VKIDButtonTextProvider {
-            override fun userFoundText(user: VKIDUser): String =
-                resources.getString(R.string.vkid_log_in_as, user.firstName)
-
-            override fun userFoundShortText(user: VKIDUser): String =
-                resources.getString(R.string.vkid_log_in)
-
-            override fun noUserText(): String =
-                resources.getString(R.string.vkid_log_in_with_vkid)
-
-            override fun noUserShortText(): String =
-                resources.getString(R.string.vkid_log_in_with_vkid_short)
-        }
-    }
-
 @Suppress("NonSkippableComposable")
 @Composable
 private fun FetchUserDataWithAnimation(
@@ -153,6 +136,7 @@ private fun FetchUserDataWithAnimation(
     state: VKIDButtonState,
     buttonTextProvider: VKIDButtonTextProvider,
     onUserFetched: (VKIDUser?) -> Unit,
+    scenario: OneTapTitleScenario,
 ) {
     FetchUserData(
         coroutineScope,
@@ -169,13 +153,13 @@ private fun FetchUserDataWithAnimation(
                 // foreverAnimationTest(user!!, state, resources)
                 onUserFetched(user)
                 if (user != null) {
-                    val newText = buttonTextProvider.userFoundText(user)
-                    val newShortText = buttonTextProvider.userFoundShortText(user)
+                    val newText = buttonTextProvider.userFoundText(user, scenario)
+                    val newShortText = buttonTextProvider.userFoundShortText(user, scenario)
                     val newIconUrl = user.photo200
                     animateFetchedUserIfNeeded(state, newText, newShortText, newIconUrl)
                 } else {
-                    val newText = buttonTextProvider.noUserText()
-                    val newShortText = buttonTextProvider.noUserShortText()
+                    val newText = buttonTextProvider.noUserText(scenario)
+                    val newShortText = buttonTextProvider.noUserShortText(scenario)
                     animateFailedUser(state, newText, newShortText)
                 }
             }
@@ -183,7 +167,8 @@ private fun FetchUserDataWithAnimation(
             override fun onDispose() {
                 state.inProgress = false
             }
-        }
+        },
+        scenario
     )
 }
 
@@ -339,6 +324,7 @@ private fun PreviewVKIDButton() {
             inProgress = false
         ),
         fastAuthEnabled = true,
+        scenario = OneTapTitleScenario.SignIn,
     )
 }
 
@@ -352,6 +338,7 @@ private fun PreviewVKIDButtonProgress() {
             rightIconVisible = true,
         ),
         fastAuthEnabled = true,
+        scenario = OneTapTitleScenario.SignIn,
     )
 }
 
@@ -365,5 +352,6 @@ private fun PreviewVKIDButtonUserFailed() {
             userLoadFailed = true
         ),
         fastAuthEnabled = true,
+        scenario = OneTapTitleScenario.SignIn,
     )
 }

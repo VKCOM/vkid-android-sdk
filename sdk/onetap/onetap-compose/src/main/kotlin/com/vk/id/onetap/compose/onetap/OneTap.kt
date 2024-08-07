@@ -77,6 +77,60 @@ public fun OneTap(
     signInAnotherAccountButtonEnabled: Boolean = false,
     authParams: VKIDAuthUiParams = VKIDAuthUiParams {},
 ) {
+    OneTap(
+        modifier = modifier,
+        style = style,
+        onAuth = onAuth,
+        onAuthCode = onAuthCode,
+        onFail = onFail,
+        oAuths = oAuths,
+        fastAuthEnabled = fastAuthEnabled,
+        signInAnotherAccountButtonEnabled = signInAnotherAccountButtonEnabled,
+        authParams = authParams,
+        scenario = OneTapTitleScenario.SignIn,
+    )
+}
+
+/**
+ * Composable function to display a VKID One Tap login interface with multibranding.
+ * For more information how to integrate VK ID Authentication check docs https://id.vk.com/business/go/docs/ru/vkid/latest/vk-id/intro/plan
+ *
+ * @param modifier Modifier for this composable.
+ * @param style The styling for the One Tap interface, default is [OneTapStyle.Light]
+ * @param onAuth Callback function invoked on successful authentication with an [OneTapOAuth] and an [AccessToken].
+ * The first parameter is the OAuth which was used for authorization or null if the main flow with OneTap was used.
+ * The second parameter is the access token to be used for working with VK API.
+ * @param onAuthCode A callback to be invoked upon successful first step of auth - receiving auth code
+ * which can later be exchanged to access token.
+ * isCompletion is true if [onAuth] won't be called.
+ * This will happen if you passed auth parameters and implement their validation yourself.
+ * In that case we can't exchange auth code for access token and you should do this yourself.
+ * @param onFail Callback function invoked on authentication failure with on [OneTapOAuth] and a [VKIDAuthFail] object.
+ * The first parameter is the OAuth which was used for authorization or null if the main flow with OneTap was used.
+ * The second parameter is the error which happened during authorization.
+ * @param oAuths A set of OAuths to be displayed.
+ * @param signInAnotherAccountButtonEnabled Flag to enable a button for signing into another account.
+ *  Note that if text doesn't fit the available width the view will be hidden regardless of the flag.
+ * @param authParams Optional params to be passed to auth. See [VKIDAuthUiParams.Builder] for more info.
+ * @param fastAuthEnabled Whether to fetch user. Defaults to true.
+ * In case this parameter is set to false the user data won't be fetched and user will have to confirm authorization on click.
+ * Note that this parameter doesn't support changes in runtime.
+ * @param scenario Scenario for which the OneTap is used. Changes title accordingly.
+ */
+@Composable
+@Suppress("LongMethod", "CyclomaticComplexMethod")
+public fun OneTap(
+    modifier: Modifier = Modifier,
+    style: OneTapStyle = OneTapStyle.Light(),
+    onAuth: (oAuth: OneTapOAuth?, accessToken: AccessToken) -> Unit,
+    onAuthCode: (data: AuthCodeData, isCompletion: Boolean) -> Unit = { _, _ -> },
+    onFail: (oAuth: OneTapOAuth?, fail: VKIDAuthFail) -> Unit = { _, _ -> },
+    oAuths: Set<OneTapOAuth> = emptySet(),
+    fastAuthEnabled: Boolean = true,
+    signInAnotherAccountButtonEnabled: Boolean = false,
+    authParams: VKIDAuthUiParams = VKIDAuthUiParams {},
+    scenario: OneTapTitleScenario = OneTapTitleScenario.SignIn,
+) {
     val coroutineScope = rememberCoroutineScope()
     var user by remember { mutableStateOf<VKIDUser?>(null) }
     val fastAuthEnabledValue by remember { mutableStateOf(fastAuthEnabled) }
@@ -85,7 +139,7 @@ public fun OneTap(
     }
     @Composable
     fun IconOneTap() {
-        OneTapAnalytics.OneTapIconShown()
+        OneTapAnalytics.OneTapIconShown(scenario = scenario)
         VKIDButtonSmall(
             style = style.vkidButtonStyle,
             onClick = {
@@ -131,7 +185,7 @@ public fun OneTap(
         largeText: Boolean,
     ) {
         if (!measureInProgress) {
-            OneTapAnalytics.OneTapShown()
+            OneTapAnalytics.OneTapShown(scenario = scenario)
         }
         CompositionLocalProvider(
             LocalMultibrandingAnalyticsContext provides MultibrandingAnalyticsContext(
@@ -207,6 +261,7 @@ public fun OneTap(
                 fastAuthEnabled = fastAuthEnabled,
                 largeText = largeText,
                 measureInProgress = measureInProgress,
+                scenario = scenario,
             )
         }
     }
@@ -255,6 +310,7 @@ internal fun OneTap(
     fastAuthEnabled: Boolean,
     largeText: Boolean,
     measureInProgress: Boolean,
+    scenario: OneTapTitleScenario,
 ) {
     val vkidButtonState = remember { VKIDButtonState(inProgress = false) }
     Column(modifier = modifier) {
@@ -267,6 +323,7 @@ internal fun OneTap(
             onUserFetched = onUserFetched,
             fastAuthEnabled = fastAuthEnabled,
             largeText = largeText,
+            scenario = scenario,
         )
         if (signInAnotherAccountButtonEnabled) {
             AdaptiveAlternateAccountButton(

@@ -29,12 +29,15 @@ public fun VKIDHealthMetricsExtension.buildSpeed(configuration: VKIDBuildSpeedMe
     stepsInternal.add(VKIDBuildSpeedMetric.Builder().apply { rootProject = this@buildSpeed.rootProject }.apply(configuration).build())
 }
 
+@Suppress("LongParameterList")
 public class VKIDBuildSpeedMetric internal constructor(
+    private val title: String?,
     private val isExternal: Boolean,
     private val rootProject: Project,
     private val measuredTaskPaths: Set<String>,
     private val iterations: Int,
     private val warmUps: Int,
+    private val cleanAfterEachBuild: Boolean,
 ) : VKIDHeathMetric {
 
     private val taskPrefix = "healthMetricsBuildSpeed${measuredTaskPaths.joinToString().sha256()}"
@@ -70,6 +73,12 @@ public class VKIDBuildSpeedMetric internal constructor(
                 "-PhealthMetrics.common.mergeRequestId=$mergeRequestId",
             )
         }
+        if (cleanAfterEachBuild) {
+            project.exec {
+                workingDir = project.projectDir
+                commandLine("./gradlew", "clean", "--stacktrace")
+            }
+        }
     }
 
     override fun getDiff(): String {
@@ -83,8 +92,9 @@ public class VKIDBuildSpeedMetric internal constructor(
         val configChangePercent = formatChangePercent(sourceConfigurationDuration, targetConfigurationDuration)
         val configurationDurationText = formatDurationText(targetConfigurationDuration)
         val configDurationChange = "$configurationDurationText ($configChangePercent)"
+        val title = title ?: "Build speed report for ${measuredTaskPaths.joinToString()}"
         return """
-                |# Build speed report for $measuredTaskPaths
+                |# $title
                 || Build                | Configuration         |
                 ||----------------------|-----------------------|
                 || $buildDurationChange | $configDurationChange |
@@ -113,9 +123,6 @@ public class VKIDBuildSpeedMetric internal constructor(
 
                 val firstTaskStartTime = finishEvent.startTime
                 val configurationDuration = firstTaskStartTime - details.buildStartTime
-                println("====")
-                println("Saving build duration for ${parameters.iteration.get()}, $buildDuration, $configurationDuration")
-                println("====")
                 storage.saveBuildDuration(parameters.iteration.get(), buildDuration, configurationDuration)
             }
         }
@@ -141,11 +148,13 @@ public class VKIDBuildSpeedMetric internal constructor(
 
     public class Builder {
 
+        public var title: String? = null
         public var isExternal: Boolean = false
         public var rootProject: Project? = null
         public var measuredTaskPaths: Set<String> = emptySet()
         public var iterations: Int = 1
         public var warmUps: Int = 0
+        public var cleanAfterEachBuild: Boolean = false
 
         internal fun build(): VKIDBuildSpeedMetric {
             if (measuredTaskPaths.isEmpty()) {
@@ -155,11 +164,13 @@ public class VKIDBuildSpeedMetric internal constructor(
                 error("Task path for $it must start with a colon")
             }
             return VKIDBuildSpeedMetric(
+                title = title,
                 isExternal = isExternal,
                 rootProject = checkNotNull(rootProject) { "Project is not specified" },
                 measuredTaskPaths = measuredTaskPaths,
                 iterations = iterations,
                 warmUps = warmUps,
+                cleanAfterEachBuild = cleanAfterEachBuild,
             )
         }
     }

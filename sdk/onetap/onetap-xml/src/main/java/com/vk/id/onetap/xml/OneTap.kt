@@ -20,6 +20,7 @@ import com.vk.id.common.InternalVKIDApi
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.compose.onetap.OneTap
+import com.vk.id.onetap.compose.onetap.OneTapTitleScenario
 
 /**
  * OneTap is a view that provides VKID One Tap login interface.
@@ -90,6 +91,16 @@ public class OneTap @JvmOverloads constructor(
         }
     private var onOAuthsChange: (Set<OneTapOAuth>) -> Unit = {}
 
+    /**
+     * Scenario for which the OneTap is used. Changes title accordingly.
+     */
+    public var scenario: OneTapTitleScenario = OneTapTitleScenario.SignIn
+        set(value) {
+            field = value
+            onScenarioChange(value)
+        }
+    private var onScenarioChange: (OneTapTitleScenario) -> Unit = {}
+
     init {
         val params = parseOneTapAttrs(context, attrs)
         this.style = params.style
@@ -97,6 +108,7 @@ public class OneTap @JvmOverloads constructor(
         this.oAuths = params.oAuths
         this.authParams = authParams.newBuilder { scopes = params.scopes }
         this.fastAuthEnabled = params.fastAuthEnabled
+        this.scenario = params.scenario
         addView(composeView)
         composeView.setContent { Content() }
         clipChildren = false
@@ -114,6 +126,8 @@ public class OneTap @JvmOverloads constructor(
         onAuthParamsChange = { authParams = it }
         var oAuths by remember { mutableStateOf(oAuths) }
         onOAuthsChange = { oAuths = it }
+        var scenario by remember { mutableStateOf(scenario) }
+        onScenarioChange = { scenario = it }
         OneTap(
             modifier = Modifier,
             style = style,
@@ -124,6 +138,7 @@ public class OneTap @JvmOverloads constructor(
             signInAnotherAccountButtonEnabled = isSignInToAnotherAccountEnabled,
             authParams = authParams,
             fastAuthEnabled = fastAuthEnabled,
+            scenario = scenario,
         )
     }
 

@@ -4,6 +4,8 @@ import com.vk.id.health.metrics.gitlab.gitlab
 import com.vk.id.health.metrics.storage.firestore
 import com.vk.id.health.metrics.apksize.apkSize
 import com.vk.id.health.metrics.apichange.publicApiChanges
+import com.vk.id.health.metrics.codecoverage.codeCoverage
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application) apply false
@@ -46,24 +48,40 @@ private fun registerGeneralTask(name: String, configuration: Task.() -> Unit = {
 }
 
 healthMetrics {
-    gitlab()
+    val localProperties by lazy {
+        Properties().apply { load(rootProject.file("local.properties").inputStream()) }
+    }
+    gitlab(
+        host = { localProperties.getProperty("healthmetrics.gitlab.host") },
+        token = { localProperties.getProperty("healthmetrics.gitlab.token") }
+    )
     firestore(rootProject.file("build-logic/metrics/service-credentials.json"))
+    codeCoverage {
+        title = "Code coverage"
+        targetProject = rootProject
+        customKoverDirectory = rootProject.file("artifacts/kover")
+            .let { if (it.exists()) it else rootProject.layout.buildDirectory.file("reports/kover").get().asFile }
+    }
     buildSpeed {
-        measuredTaskPaths = setOf(":clean", ":assembleDebug")
+        title = "Build speed of :assembleDebug"
+        measuredTaskPaths = setOf(":assembleDebug")
         iterations = 3
         warmUps = 2
+        cleanAfterEachBuild = true
     }
     apkSize {
         title = "SDK size with all dependencies"
         targetProject = projects.sampleMetricsApp.dependencyProject
         targetBuildType = "withSdk"
         sourceBuildType = "debug"
+        apkAnalyzerPath = { localProperties.getProperty("healthmetrics.apksize.apkanalyzerpath") }
     }
     apkSize {
         title = "Pure SDK size"
         targetProject = projects.sampleMetricsApp.dependencyProject
         targetBuildType = "withSdk"
         sourceBuildType = "withDeps"
+        apkAnalyzerPath = { localProperties.getProperty("healthmetrics.apksize.apkanalyzerpath") }
     }
     publicApiChanges()
 }

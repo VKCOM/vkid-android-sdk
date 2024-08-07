@@ -54,12 +54,12 @@ internal object OneTapAnalytics {
     }
 
     @Composable
-    internal fun OneTapIconShown() {
-        OneTapShown(icon = true)
+    internal fun OneTapIconShown(scenario: OneTapTitleScenario) {
+        OneTapShown(icon = true, scenario = scenario)
     }
 
     @Composable
-    internal fun OneTapShown(icon: Boolean = false) {
+    internal fun OneTapShown(icon: Boolean = false, scenario: OneTapTitleScenario) {
         val lifecycleOwner = rememberUpdatedState(LocalLifecycleOwner.current)
         DisposableEffect(lifecycleOwner.value) {
             val lifecycle = lifecycleOwner.value.lifecycle
@@ -68,7 +68,8 @@ internal object OneTapAnalytics {
                     Lifecycle.Event.ON_RESUME -> {
                         track(
                             EVENT_SCREEN_PROCEED,
-                            iconParam(icon)
+                            iconParam(icon),
+                            textTypeParam(scenario)
                         )
                     }
 
@@ -126,6 +127,21 @@ internal object OneTapAnalytics {
                 "default"
             }
         )
+
+    private fun textTypeParam(scenario: OneTapTitleScenario) = VKIDAnalytics.EventParam(
+        "text_type",
+        when (scenario) {
+            OneTapTitleScenario.SignIn -> "default"
+            OneTapTitleScenario.SignUp -> "appoint"
+            OneTapTitleScenario.Get -> "receive"
+            OneTapTitleScenario.Open -> "open"
+            OneTapTitleScenario.Calculate -> "calculate"
+            OneTapTitleScenario.Order -> "order"
+            OneTapTitleScenario.PlaceOrder -> "service_order_placing"
+            OneTapTitleScenario.SendRequest -> "request"
+            OneTapTitleScenario.Participate -> "take_part"
+        }
+    )
 
     internal fun alternateParam(signInAnotherAccountButton: Boolean): VKIDAnalytics.EventParam =
         VKIDAnalytics.EventParam(

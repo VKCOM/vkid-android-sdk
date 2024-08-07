@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.vk.id.AccessToken
@@ -41,6 +42,7 @@ import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonElevationStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonSizeStyle
 import com.vk.id.onetap.compose.onetap.OneTap
+import com.vk.id.onetap.compose.onetap.OneTapTitleScenario
 import com.vk.id.onetap.xml.OneTap
 import com.vk.id.sample.app.screen.UseToken
 import com.vk.id.sample.app.uikit.selector.CheckboxSelector
@@ -63,6 +65,7 @@ private const val MIN_WIDTH_DP = 48f
 private const val MAX_RADIUS_DP = 30
 private const val MAX_ELEVATION_DP = 20
 
+@Preview
 @Suppress("LongMethod", "CyclomaticComplexMethod")
 @Composable
 internal fun OnetapStylingComposeScreen() {
@@ -114,6 +117,8 @@ internal fun OnetapStylingComposeScreen() {
 
     val useDarkTheme = selectedStyle is OneTapStyle.Dark ||
         selectedStyle is OneTapStyle.TransparentDark
+
+    var scenario by remember { mutableStateOf(OneTapTitleScenario.SignIn) }
     AppTheme(
         useDarkTheme = useDarkTheme
     ) {
@@ -168,6 +173,7 @@ internal fun OnetapStylingComposeScreen() {
                             this.oAuths = selectedOAuths.value
                             this.isSignInToAnotherAccountEnabled = signInToAnotherAccountEnabled.value
                             this.authParams = authParams
+                            this.scenario = scenario
                         }
                     }
                     if (fastAuthEnabled.value) {
@@ -189,6 +195,7 @@ internal fun OnetapStylingComposeScreen() {
                             signInAnotherAccountButtonEnabled = signInToAnotherAccountEnabled.value,
                             authParams = authParams,
                             fastAuthEnabled = fastAuthEnabled,
+                            scenario = scenario,
                         )
                     }
                     if (fastAuthEnabled.value) {
@@ -245,6 +252,12 @@ internal fun OnetapStylingComposeScreen() {
                 selectedValue = selectedSize.value.name,
                 onValueSelected = { selectedSize.value = it },
                 label = { Text("size") },
+            )
+            DropdownSelector(
+                values = OneTapTitleScenario.entries.associateBy { it.name },
+                selectedValue = scenario.name,
+                onValueSelected = { scenario = it },
+                label = { Text("scenario") },
             )
 
             TextField(

@@ -5,25 +5,25 @@ import com.android.build.gradle.api.ApplicationVariant
 import com.android.build.gradle.api.BaseVariantOutput
 import com.vk.id.health.metrics.VKIDHealthMetricsExtension
 import com.vk.id.health.metrics.VKIDSingleRunHealthMetric
-import com.vk.id.health.metrics.utils.exec
+import com.vk.id.health.metrics.utils.execute
 import com.vk.id.health.metrics.utils.formatChangePercent
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.configurationcache.extensions.capitalized
 import java.math.BigDecimal
 import java.math.RoundingMode
-import java.util.Properties
 
 public fun VKIDHealthMetricsExtension.apkSize(configuration: VKIDApkSizeMetric.Builder.() -> Unit) {
     stepsInternal.add(VKIDApkSizeMetric.Builder().apply(configuration).build())
 }
 
-public class VKIDApkSizeMetric(
+public class VKIDApkSizeMetric internal constructor(
     private val title: String?,
     private val targetProject: Project,
     private val targetBuildType: ApplicationVariant,
     private val sourceProject: Project,
     private val sourceBuildType: ApplicationVariant?,
+    private val apkAnalyzerPath: () -> String,
 ) : VKIDSingleRunHealthMetric {
 
     private val taskSuffix = "${targetProject.name.capitalized()}${targetBuildType.name.capitalized()}" +
@@ -57,12 +57,15 @@ public class VKIDApkSizeMetric(
         }
     }
 
-    private fun getApkSize(apkPath: String): String {
-        val properties = Properties()
-        properties.load(targetProject.rootProject.file("local.properties").inputStream())
-        val apkanalyzerPath = properties.getProperty("healthmetrics.apksize.apkanalyzerpath")
-        return exec("$apkanalyzerPath apk file-size $apkPath").first()
+    override fun exec(project: Project) {
+        project.exec {
+            workingDir = project.projectDir
+            commandLine("./gradlew", "clean")
+        }
+        super.exec(project)
     }
+
+    private fun getApkSize(apkPath: String) = execute("${apkAnalyzerPath()} apk file-size $apkPath").first()
 
     private val ApplicationVariant.apkFilePath: String
         get() = (outputs.filterIsInstance<BaseVariantOutput>().firstOrNull() ?: error("No apk for variant $name"))
@@ -83,6 +86,7 @@ public class VKIDApkSizeMetric(
         public var targetBuildType: String = "release"
         public var sourceProject: Project? = null
         public var sourceBuildType: String? = null
+        public var apkAnalyzerPath: (() -> String)? = null
 
         internal fun build(): VKIDApkSizeMetric {
             return VKIDApkSizeMetric(
@@ -91,6 +95,7 @@ public class VKIDApkSizeMetric(
                 targetBuildType = releaseVariant(targetProject!!, targetBuildType) ?: error("No release variant"),
                 sourceProject = sourceProject ?: targetProject!!,
                 sourceBuildType = sourceBuildType?.let { releaseVariant(targetProject!!, it) },
+                apkAnalyzerPath = apkAnalyzerPath ?: error("apkAnalyzerPath is not specified"),
             )
         }
 

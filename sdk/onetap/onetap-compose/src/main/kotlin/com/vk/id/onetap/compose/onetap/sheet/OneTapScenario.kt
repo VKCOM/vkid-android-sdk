@@ -4,6 +4,7 @@ import android.content.res.Resources
 import com.vk.id.VKIDUser
 import com.vk.id.onetap.compose.R
 import com.vk.id.onetap.compose.button.auth.VKIDButtonTextProvider
+import com.vk.id.onetap.compose.onetap.OneTapTitleScenario
 
 /**
  * Enumerates various scenarios for the One Tap authentication process.
@@ -54,7 +55,7 @@ internal fun OneTapScenario.scenarioTitle(resources: Resources, serviceName: Str
 
 internal fun OneTapScenario.vkidButtonTextProvider(resources: Resources): VKIDButtonTextProvider {
     return object : VKIDButtonTextProvider {
-        override fun userFoundText(user: VKIDUser): String {
+        override fun userFoundText(user: VKIDUser, scenario: OneTapTitleScenario): String {
             val userName = user.firstName
             return when (this@vkidButtonTextProvider) {
                 OneTapScenario.EnterService -> resources.getString(
@@ -89,9 +90,9 @@ internal fun OneTapScenario.vkidButtonTextProvider(resources: Resources): VKIDBu
             }
         }
 
-        override fun userFoundShortText(user: VKIDUser) = userFoundText(user)
+        override fun userFoundShortText(user: VKIDUser, scenario: OneTapTitleScenario) = userFoundText(user, scenario)
 
-        override fun noUserText(): String =
+        override fun noUserText(scenario: OneTapTitleScenario): String =
             when (this@vkidButtonTextProvider) {
                 OneTapScenario.EnterService -> resources.getString(
                     R.string.vkid_schenario_enter_service_vkid_button_text_no_user
@@ -115,6 +116,6 @@ internal fun OneTapScenario.vkidButtonTextProvider(resources: Resources): VKIDBu
                 )
             }
 
-        override fun noUserShortText() = noUserText()
+        override fun noUserShortText(scenario: OneTapTitleScenario) = noUserText(scenario)
     }
 }

@@ -15,7 +15,7 @@ internal class BuildSpeedRepository(
 
     fun initMetrics(iterations: Int) {
         (1..iterations)
-            .flatMap { listOf(getBuildDurationField(it) to -1, getConfigurationDurationField(it) to -1) }
+            .flatMap { listOf(getBuildDurationField(it) to 0, getConfigurationDurationField(it) to 0) }
             .toMap()
             .let(storage::saveMetrics)
     }
@@ -54,7 +54,7 @@ internal class BuildSpeedRepository(
     ): Long {
         return (1..iterations)
             .map { fieldAccessor(it) }
-            .sumOf { metricAccessor(it)?.takeIf { it != 0L } ?: 1L }
+            .sumOf { metricAccessor(it) ?: 0 }
             .div(iterations)
     }
 

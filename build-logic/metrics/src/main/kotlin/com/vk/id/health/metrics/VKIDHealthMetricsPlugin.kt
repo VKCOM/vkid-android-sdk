@@ -12,6 +12,7 @@ internal class VKIDHealthMetricsPlugin : Plugin<Project> {
         extension.rootProjectInternal = target.rootProject
         (target.properties["healthMetrics.common.mergeRequestId"] as String?)?.let {
             GitlabRepository.init(
+                host = lazy { extension.gitlabHost.value },
                 token = lazy { extension.gitlabToken.value },
                 mergeRequestId = it,
             )
