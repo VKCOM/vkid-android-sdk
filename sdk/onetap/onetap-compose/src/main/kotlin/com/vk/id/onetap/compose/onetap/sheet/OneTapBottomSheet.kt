@@ -226,15 +226,25 @@ private fun OneTapBottomSheetInternal(
                     dismissSheet
                 ) {
                     coroutineScope.launch {
+                        authStatus.value = OneTapBottomSheetAuthStatus.AuthStarted
                         VKID.instance.authorize(
                             object : VKIDAuthCallback {
-                                override fun onAuth(accessToken: AccessToken) = onAuth(status.oAuth, accessToken)
+                                override fun onAuth(accessToken: AccessToken) {
+                                    authStatus.value = OneTapBottomSheetAuthStatus.AuthSuccess
+                                    onAuth(status.oAuth, accessToken)
+                                }
                                 override fun onAuthCode(
                                     data: AuthCodeData,
                                     isCompletion: Boolean
-                                ) = onAuthCode(data, isCompletion)
+                                ) {
+                                    if (isCompletion) authStatus.value = OneTapBottomSheetAuthStatus.AuthSuccess
+                                    onAuthCode(data, isCompletion)
+                                }
 
-                                override fun onFail(fail: VKIDAuthFail) = onFail(status.oAuth, fail)
+                                override fun onFail(fail: VKIDAuthFail) {
+                                    authStatus.value = OneTapBottomSheetAuthStatus.AuthFailedMultibranding(status.oAuth)
+                                    onFail(status.oAuth, fail)
+                                }
                             },
                             authParams.asParamsBuilder {
                                 oAuth = status.oAuth.toOAuth()
