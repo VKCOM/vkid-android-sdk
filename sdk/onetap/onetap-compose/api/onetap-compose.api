@@ -11,6 +11,22 @@ public final class com/vk/id/onetap/compose/BuildConfig {
 
 public final class com/vk/id/onetap/compose/onetap/OneTapKt {
 	public static final fun OneTap (Landroidx/compose/ui/Modifier;Lcom/vk/id/onetap/common/OneTapStyle;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Ljava/util/Set;ZZLcom/vk/id/auth/VKIDAuthUiParams;Landroidx/compose/runtime/Composer;II)V
+	public static final fun OneTap (Landroidx/compose/ui/Modifier;Lcom/vk/id/onetap/common/OneTapStyle;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Ljava/util/Set;ZZLcom/vk/id/auth/VKIDAuthUiParams;Lcom/vk/id/onetap/compose/onetap/OneTapTitleScenario;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class com/vk/id/onetap/compose/onetap/OneTapTitleScenario : java/lang/Enum {
+	public static final field Calculate Lcom/vk/id/onetap/compose/onetap/OneTapTitleScenario;
+	public static final field Get Lcom/vk/id/onetap/compose/onetap/OneTapTitleScenario;
+	public static final field Open Lcom/vk/id/onetap/compose/onetap/OneTapTitleScenario;
+	public static final field Order Lcom/vk/id/onetap/compose/onetap/OneTapTitleScenario;
+	public static final field Participate Lcom/vk/id/onetap/compose/onetap/OneTapTitleScenario;
+	public static final field PlaceOrder Lcom/vk/id/onetap/compose/onetap/OneTapTitleScenario;
+	public static final field SendRequest Lcom/vk/id/onetap/compose/onetap/OneTapTitleScenario;
+	public static final field SignIn Lcom/vk/id/onetap/compose/onetap/OneTapTitleScenario;
+	public static final field SignUp Lcom/vk/id/onetap/compose/onetap/OneTapTitleScenario;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/vk/id/onetap/compose/onetap/OneTapTitleScenario;
+	public static fun values ()[Lcom/vk/id/onetap/compose/onetap/OneTapTitleScenario;
 }
 
 public final class com/vk/id/onetap/compose/onetap/sheet/OneTapBottomSheetKt {

@@ -2,7 +2,7 @@ package com.vk.id.health.metrics.utils
 
 import java.io.IOException
 
-internal fun exec(command: String): List<String> {
+internal fun execute(command: String): List<String> {
     val process = Runtime.getRuntime().exec(command)
     val error = StringBuilder()
     val output = mutableListOf<String>()

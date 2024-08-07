@@ -1,11 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="vkid_log_in_with_vkid">Sign in with VK ID</string>
+    <string name="vkid_sign_up_with_vkid">Sign up with VK ID</string>
+    <string name="vkid_get_with_vkid">Get with VK ID</string>
+    <string name="vkid_open_with_vkid">Open with VK ID</string>
+    <string name="vkid_calculate_with_vkid">Calculate with VK ID</string>
+    <string name="vkid_order_with_vkid">Order with VK ID</string>
+    <string name="vkid_place_order_with_vkid">Order with VK ID</string>
+    <string name="vkid_send_request_with_vkid">Send request with VK ID</string>
+    <string name="vkid_participate_with_vkid">Participate with VK ID</string>
+
+    <string name="vkid_log_in_as">Continue as %1$s</string>
+    <string name="vkid_sign_up_as">Sign up as %1$s</string>
+    <string name="vkid_get_as">Get for %1$s</string>
+    <string name="vkid_open_as">Open as %1$s</string>
+    <string name="vkid_calculate_as">Calculate for %1$s</string>
+    <string name="vkid_order_as">Order as %1$s</string>
+    <string name="vkid_place_order_as">Place order as %1$s</string>
+    <string name="vkid_send_request_as">Send request as %1$s</string>
+    <string name="vkid_participate_as">Participate as %1$s</string>
+
+    <string name="vkid_log_in">Continue</string>
+    <string name="vkid_sign_up">Sign up</string>
+    <string name="vkid_get">Get</string>
+    <string name="vkid_open">Open</string>
+    <string name="vkid_calculate">Calculate</string>
+    <string name="vkid_order">Order</string>
+    <string name="vkid_place_order">Place order</string>
+    <string name="vkid_send_request">Send request</string>
+    <string name="vkid_participate">Participate</string>
+
     <string name="vkid_log_in_with_vkid_short" translatable="false">VK ID</string>
     <string name="vkid_auth_use_another_account">Sign in to other account</string>
     <string name="vkid_auth_use_another_account_short">Change account</string>
-    <string name="vkid_log_in_as">Continue as %1$s</string>
-    <string name="vkid_log_in">Continue</string>
 
     <string name="vkid_schenario_enter_service_title">Sign in to service or sign up</string>
     <string name="vkid_schenario_enter_service_vkid_button_text_user_found">Sign in as %1$s</string>
