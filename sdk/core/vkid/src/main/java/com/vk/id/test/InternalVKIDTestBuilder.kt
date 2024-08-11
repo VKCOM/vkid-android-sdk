@@ -26,6 +26,8 @@ public class InternalVKIDTestBuilder(
         Result.failure<InternalVKIDUserInfoPayloadResponse>(UnsupportedOperationException("Not supported"))
     )
     private var logoutResponse = Result.success(InternalVKIDLogoutPayloadResponse())
+    private var getSilentAuthProvidersResponse = Result.success(InternalVKIDSilentAuthProvidersResponse(emptyList()))
+
     private var mockApi: InternalVKIDOverrideApi = object : InternalVKIDOverrideApi {
         override fun refreshToken(
             refreshToken: String,
@@ -64,8 +66,10 @@ public class InternalVKIDTestBuilder(
             clientId: String,
             deviceId: String,
         ) = logoutResponse
+
+        override fun getSilentAuthProviders(clientId: String, clientSecret: String) = getSilentAuthProvidersResponse
     }
-    private var authProviderConfig: MockAuthProviderConfig = MockAuthProviderConfig()
+    private var authProviderConfig: MockAuthProviderConfig? = null
 
     public fun refreshTokenResponse(response: Result<InternalVKIDTokenPayloadResponse>): InternalVKIDTestBuilder = apply {
         this.refreshTokenResponse = response
@@ -83,6 +87,10 @@ public class InternalVKIDTestBuilder(
         response1: Result<InternalVKIDUserInfoPayloadResponse>,
         response2: Result<InternalVKIDUserInfoPayloadResponse>,
     ): InternalVKIDTestBuilder = getUserInfoResponses(listOf(response1, response2))
+
+    public fun getSilentAuthProviders(response: Result<InternalVKIDSilentAuthProvidersResponse>): InternalVKIDTestBuilder = apply {
+        this.getSilentAuthProvidersResponse = response
+    }
 
     private fun getUserInfoResponses(responses: List<Result<InternalVKIDUserInfoPayloadResponse>>): InternalVKIDTestBuilder = apply {
         this.getUserInfoResponses = responses
@@ -107,7 +115,9 @@ public class InternalVKIDTestBuilder(
     }
 
     private fun updateConfig(update: MockAuthProviderConfig.() -> MockAuthProviderConfig): InternalVKIDTestBuilder = apply {
-        authProviderConfig = authProviderConfig.update()
+        authProviderConfig = authProviderConfig?.let {
+            it.update()
+        } ?: MockAuthProviderConfig().update()
     }
 
     public fun deviceIdStorage(storage: InternalVKIDDeviceIdProvider.DeviceIdStorage?): InternalVKIDTestBuilder = apply {
