@@ -54,6 +54,10 @@ gradlePlugin {
             id = "vkid.android.publish"
             implementationClass = "VKIDPublishConventionPlugin"
         }
+        register("vkidPluginPublish") {
+            id = "vkid.android.plugin.publish"
+            implementationClass = "VKIDPluginPublishConventionPlugin"
+        }
         register("vkidDependencyLock") {
             id = "vkid.android.dependency.lock"
             implementationClass = "DependencyLockPlugin"

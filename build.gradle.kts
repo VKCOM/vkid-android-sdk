@@ -22,7 +22,7 @@ plugins {
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.kover) apply true
     alias(libs.plugins.screenshot) apply false
-    id("vkid.manifest.placeholders") apply true
+    id("vkid.manifest.placeholders") version "1.0.0-alpha31" apply true
 }
 
 dependencies {
@@ -45,6 +45,23 @@ private fun registerGeneralTask(name: String, configuration: Task.() -> Unit = {
         subprojects.mapNotNull { it.tasks.findByName(name) }.forEach(::dependsOn)
         configuration()
     }
+}
+
+vkidManifestPlaceholders {
+    if (!shouldInjectManifestPlaceholders()) return@vkidManifestPlaceholders
+    fun error() = logger.error(
+        "Warning! Build will not work!\nCreate the 'secrets.properties' file in the 'sample/app' folder and add your 'VKIDClientID' and 'VKIDClientSecret' to it." +
+            "\nFor more information, refer to the 'README.md' file."
+    )
+
+    val properties = Properties()
+    properties.load(file("sample/app/secrets.properties").inputStream())
+    val clientId = properties["VKIDClientID"] ?: error()
+    val clientSecret = properties["VKIDClientSecret"] ?: error()
+    init(
+        clientId = clientId.toString(),
+        clientSecret = clientSecret.toString(),
+    )
 }
 
 healthMetrics {
@@ -84,23 +101,6 @@ healthMetrics {
         apkAnalyzerPath = { localProperties.getProperty("healthmetrics.apksize.apkanalyzerpath") }
     }
     publicApiChanges()
-}
-
-vkidManifestPlaceholders {
-    if (!shouldInjectManifestPlaceholders()) return@vkidManifestPlaceholders
-    fun error() = logger.error(
-        "Warning! Build will not work!\nCreate the 'secrets.properties' file in the 'sample/app' folder and add your 'VKIDClientID' and 'VKIDClientSecret' to it." +
-            "\nFor more information, refer to the 'README.md' file."
-    )
-
-    val properties = Properties()
-    properties.load(file("sample/app/secrets.properties").inputStream())
-    val clientId = properties["VKIDClientID"] ?: error()
-    val clientSecret = properties["VKIDClientSecret"] ?: error()
-    init(
-        clientId = clientId.toString(),
-        clientSecret = clientSecret.toString(),
-    )
 }
 
 /**

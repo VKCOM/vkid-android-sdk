@@ -23,7 +23,7 @@ public open class VKIDManifestPlaceholdersExtension {
      * @param clientId A client id
      * @param clientSecret A client secret
      */
-    public fun VKIDManifestPlaceholdersExtension.init(
+    public fun init(
         clientId: String,
         clientSecret: String
     ) {

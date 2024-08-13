@@ -1,5 +1,6 @@
 pluginManagement {
     includeBuild("detekt")
+    includeBuild("convention")
     repositories {
         google()
         mavenCentral()
@@ -19,7 +20,6 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "build-logic"
-include(":convention")
 include(":dokka-skip")
 include(":metrics")
 include(":placeholders")

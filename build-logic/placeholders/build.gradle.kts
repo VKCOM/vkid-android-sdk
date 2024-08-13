@@ -3,9 +3,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     `kotlin-dsl`
     id("vkid.detekt")
+    id("vkid.android.plugin.publish")
 }
 
-group = "com.vk.id.placeholders"
 
 // Configure the build-logic plugins to target JDK 17
 // This matches the JDK used to build the project, and is not related to what is running on device.
@@ -27,10 +27,11 @@ dependencies {
 
 gradlePlugin {
     plugins {
-        register("vkidManifestPlaceholders") {
-            id = "vkid.manifest.placeholders"
-            implementationClass = "com.vk.id.manifest.placeholders.VKIDManifestPlaceholdersPlugin"
+        if (rootProject.property("USE_PLUGINS_FROM_SOURCES") == "true") {
+            register("vkidManifestPlaceholders") {
+                id = "vkid.manifest.placeholders"
+                implementationClass = "com.vk.id.manifest.placeholders.VKIDManifestPlaceholdersPlugin"
+            }
         }
     }
 }
-
