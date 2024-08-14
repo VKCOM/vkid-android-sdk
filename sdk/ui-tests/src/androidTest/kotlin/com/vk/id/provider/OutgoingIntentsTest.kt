@@ -12,6 +12,7 @@ import android.content.pm.ActivityInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
+import android.content.pm.ServiceInfo
 import android.content.pm.Signature
 import android.net.Uri
 import android.os.Build
@@ -110,7 +111,7 @@ public class OutgoingIntentsTest : BaseUiTest() {
                     IntentMatchers.hasAction(Intent.ACTION_VIEW),
                     IntentMatchers.hasPackage(MockChrome.PACKAGE_NAME),
                     IntentMatchers.hasData(
-                        matchBrowserIntent(
+                        matchIntentUri(
                             uriPrefix = "https://id.vk.com/authorize",
                         )
                     )
@@ -130,9 +131,53 @@ public class OutgoingIntentsTest : BaseUiTest() {
                             IntentMatchers.hasAction(Intent.ACTION_VIEW),
                             IntentMatchers.hasPackage(MockChrome.PACKAGE_NAME),
                             IntentMatchers.hasData(
-                                matchBrowserIntent(
+                                matchIntentUri(
                                     "https://id.vk.com/authorize",
                                     clientId = serviceCredentials.clientID,
+                                    responseType = "code",
+                                    redirectUri = serviceCredentials.redirectUri
+                                )
+                            )
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    @Test
+    public fun providerAvailableVK() {
+        before {
+            vkidBuilder().build()
+            composeTestRule.activity.mockVKProvider()
+            // prevent actually starting provider
+            Intents.intending(
+                allOf(
+                    IntentMatchers.hasAction(Intent.ACTION_VIEW),
+                    IntentMatchers.hasData(
+                        matchIntentUri(
+                            uriPrefix = MockVK.APP_URI,
+                        )
+                    )
+                )
+            ).respondWith(Instrumentation.ActivityResult(Activity.RESULT_OK, Intent()))
+            VKID.instance.authorize(
+                composeTestRule.activity,
+                mockk(relaxed = true)
+            )
+        }.after {
+            composeTestRule.activity.releaseMockPM()
+        }.run {
+            step("Отправлен корректный intent в провайдер") {
+                flakySafely {
+                    // com.vkontakte.android://vkcexternalauth-codeflow?app_id=51925238&response_type=code&redirect_uri=vk51925238%3A%2F%2Fvk.com%2Fblank.html%3Foauth2_params%3DeyJzY29wZSI6IiIsInN0YXRzX2luZm8iOnsiZmxvd19zb3VyY2UiOiJmcm9tX2N1c3RvbV9hdXRoIiwic2Vzc2lvbl9pZCI6IjMyMTVlYjNjLWVmMmQtNDFjNS1iMTg1LTM2YjcwYzViMGI4ZCJ9fQ%253D%253D&code_challenge_method=sha256&code_challenge=BceBr0GI_PHEjOiw9R15-ziH-ypPn-s6cNk-wx41tMY&state=Il2HH1UmwMGWut5WXuAYKuMMPz5p53WH&uuid=Il2HH1UmwMGWut5WXuAYKuMMPz5p53WH&lang_id=3&scheme=space_gray
+                    Intents.intended(
+                        allOf(
+                            IntentMatchers.hasAction(Intent.ACTION_VIEW),
+                            IntentMatchers.hasData(
+                                matchIntentUri(
+                                    MockVK.APP_URI,
+                                    appId = serviceCredentials.clientID,
                                     responseType = "code",
                                     redirectUri = serviceCredentials.redirectUri
                                 )
@@ -147,20 +192,28 @@ public class OutgoingIntentsTest : BaseUiTest() {
     private fun vkidBuilder(): InternalVKIDTestBuilder = InternalVKIDTestBuilder(composeTestRule.activity)
 }
 
-private fun matchBrowserIntent(uriPrefix: String, clientId: String? = null, responseType: String? = null, redirectUri: String? = null): Matcher<Uri> {
+private fun matchIntentUri(
+    uriPrefix: String,
+    clientId: String? = null,
+    appId: String? = null,
+    responseType: String? = null,
+    redirectUri: String? = null
+): Matcher<Uri> {
     return object : TypeSafeMatcher<Uri>() {
         override fun describeTo(description: Description) {
             description.appendText(
-                "Uri should start with $uriPrefix and have params client_id=$clientId, response_type=$responseType, redirect_uri=$redirectUri"
+                "Uri should start with $uriPrefix and have params client_id=$clientId, " +
+                    "response_type=$responseType, redirect_uri=$redirectUri, app_id = $appId"
             )
         }
 
         override fun matchesSafely(item: Uri): Boolean {
             val prefixCorrect = item.toString().startsWith(uriPrefix)
             val clientIdCorrect = clientId == null || item.getQueryParameter("client_id") == clientId
+            val appIdCorrect = appId == null || item.getQueryParameter("app_id") == appId
             val responseTypeCorrect = responseType == null || item.getQueryParameter("response_type") == responseType
             val redirectUriCorrect = redirectUri == null || item.getQueryParameter("redirect_uri")?.startsWith(redirectUri) ?: false
-            return prefixCorrect && clientIdCorrect && responseTypeCorrect && redirectUriCorrect
+            return prefixCorrect && clientIdCorrect && responseTypeCorrect && redirectUriCorrect && appIdCorrect
         }
     }
 }
@@ -218,7 +271,7 @@ private fun AutoTestActivity.mockThereIsOnlyBrowser() {
         }
     )
     every {
-        pm.getPackageInfo(eq("com.android.chrome"), any<Int>())
+        pm.getPackageInfo(eq(MockChrome.PACKAGE_NAME), any<Int>())
     } returns PackageInfo().apply {
         this.packageName = MockChrome.PACKAGE_NAME
         this.versionName = MockChrome.VERSION
@@ -235,6 +288,46 @@ private fun AutoTestActivity.mockThereIsOnlyBrowser() {
             any<Int>()
         )
     } returns ResolveInfo()
+
+    this.mockPackageManager = pm
+}
+
+private fun AutoTestActivity.mockVKProvider() {
+    val pm = mockk<PackageManager>()
+    every {
+        pm.queryIntentServices(
+            match {
+                it.action == "com.vk.silentauth.action.GET_INFO"
+            },
+            eq(0)
+        )
+    } returns listOf(
+        ResolveInfo().apply {
+            serviceInfo = ServiceInfo().apply {
+                this.packageName = "com.vkontakte.android"
+            }
+        }
+    )
+
+    every {
+        pm.getPackageInfo(eq(MockVK.PACKAGE_NAME), any<Int>())
+    } returns PackageInfo().apply {
+        this.packageName = MockVK.PACKAGE_NAME
+        this.signatures = arrayOf(Signature(MockVK.SIGNATURE))
+    }
+
+    every {
+        pm.resolveActivity(
+            match {
+                it.data.toString() == MockVK.APP_URI
+            },
+            any<Int>()
+        )
+    } returns ResolveInfo().apply {
+        activityInfo = ActivityInfo().apply {
+            packageName = MockVK.PACKAGE_NAME
+        }
+    }
 
     this.mockPackageManager = pm
 }
