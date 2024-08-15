@@ -69,6 +69,7 @@ public class VKIDBuildSpeedMetric internal constructor(
                 "./gradlew",
                 task.path,
                 "--stacktrace",
+                "--rerun-tasks",
                 "-PhealthMetrics.buildSpeed.measure",
                 "-PhealthMetrics.common.mergeRequestId=$mergeRequestId",
             )
@@ -76,7 +77,7 @@ public class VKIDBuildSpeedMetric internal constructor(
         if (cleanAfterEachBuild) {
             project.exec {
                 workingDir = project.projectDir
-                commandLine("./gradlew", "clean", "--stacktrace")
+                commandLine("./gradlew", "clean", "--stacktrace", "--rerun-tasks")
             }
         }
     }

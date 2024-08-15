@@ -1,4 +1,3 @@
-import com.android.build.api.dsl.LibraryExtension
 import com.vk.id.health.metrics.buildspeed.buildSpeed
 import com.vk.id.health.metrics.gitlab.gitlab
 import com.vk.id.health.metrics.storage.firestore
@@ -27,7 +26,7 @@ plugins {
 
 dependencies {
     subprojects
-        .filter { it.extensions.findByType<LibraryExtension>() != null }
+        .filter { it.name != projects.baselineProfile.name }
         .filter { it.projectDir.path.contains("/sdk/") }
         .forEach { kover(it) }
 }
