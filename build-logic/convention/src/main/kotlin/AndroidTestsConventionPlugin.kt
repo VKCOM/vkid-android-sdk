@@ -10,7 +10,7 @@ class AndroidTestsConventionPlugin : Plugin<Project> {
         target: Project
     ): Unit = with(target) {
         with(pluginManager) {
-            apply("vkid.placeholders")
+            apply("vkid.manifest.placeholders")
         }
         extensions.android {
             defaultConfig {

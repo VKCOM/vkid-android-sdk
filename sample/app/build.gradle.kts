@@ -1,6 +1,6 @@
 plugins {
     id("vkid.android.application.compose")
-    id("vkid.placeholders")
+    id("vkid.manifest.placeholders")
     alias(libs.plugins.baselineprofile)
 }
 
