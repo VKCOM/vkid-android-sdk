@@ -22,6 +22,7 @@ plugins {
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.kover) apply true
     alias(libs.plugins.screenshot) apply false
+    id("vkid.manifest.placeholders") apply true
 }
 
 dependencies {
@@ -84,3 +85,37 @@ healthMetrics {
     }
     publicApiChanges()
 }
+
+vkidManifestPlaceholders {
+    if (!shouldInjectManifestPlaceholders()) return@vkidManifestPlaceholders
+    fun error() = logger.error(
+        "Warning! Build will not work!\nCreate the 'secrets.properties' file in the 'sample/app' folder and add your 'VKIDClientID' and 'VKIDClientSecret' to it." +
+            "\nFor more information, refer to the 'README.md' file."
+    )
+
+    val properties = Properties()
+    properties.load(file("sample/app/secrets.properties").inputStream())
+    val clientId = properties["VKIDClientID"] ?: error()
+    val clientSecret = properties["VKIDClientSecret"] ?: error()
+    init(
+        clientId = clientId.toString(),
+        clientSecret = clientSecret.toString(),
+    )
+}
+
+/**
+ * The project should sync without placeholders
+ */
+private fun Project.shouldInjectManifestPlaceholders() = gradle
+    .startParameter
+    .taskNames
+    .map { it.lowercase() }
+    .any {
+        it.contains("assemble")
+            || it.endsWith("test")
+            || it.contains("lint")
+            || it.contains("dokka")
+            || it.contains("generatebaselineprofile")
+            || it.contains("updatedebugscreenshottest")
+            || it.contains("healthmetrics")
+    }
