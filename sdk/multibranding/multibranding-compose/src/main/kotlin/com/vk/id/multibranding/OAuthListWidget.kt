@@ -9,12 +9,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicText
@@ -26,7 +24,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
@@ -37,8 +34,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Constraints
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vk.id.AccessToken
@@ -225,9 +220,11 @@ private fun OAuthButton(
         OAuthListImage(
             item = item,
             style = style,
+            showText = showText
         )
         if (showText) {
             OAuthListWithTextEnding(
+                modifier = Modifier,
                 item = item,
                 style = style,
                 context = context
@@ -237,55 +234,7 @@ private fun OAuthButton(
 }
 
 @Composable
-private fun MeasureUnconstrainedViewWidth(
-    viewToMeasure: @Composable () -> Unit,
-    content: @Composable (measuredWidth: Dp) -> Unit,
-) {
-    SubcomposeLayout { constraints ->
-        val measuredWidth = subcompose("viewToMeasure", viewToMeasure)[0].measure(Constraints()).width.toDp()
-        val measurable = subcompose("content") { content(measuredWidth) }
-        if (measurable.isNotEmpty()) {
-            val contentPlaceable = measurable[0].measure(constraints)
-            layout(contentPlaceable.width, contentPlaceable.height) { contentPlaceable.place(0, 0) }
-        } else {
-            layout(0, 0) {}
-        }
-    }
-}
-
-@Composable
 private fun OAuthListWithTextEnding(
-    item: OAuth,
-    style: OAuthListWidgetStyle,
-    context: Context,
-) {
-    BoxWithConstraints {
-        MeasureUnconstrainedViewWidth(viewToMeasure = {
-            Row {
-                OAuthListWithTextEndingContent(
-                    modifier = Modifier.fillMaxWidth(),
-                    item = item,
-                    style = style,
-                    context = context
-                )
-            }
-        }) {
-            if (it < maxWidth) {
-                Row {
-                    OAuthListWithTextEndingContent(
-                        modifier = Modifier.weight(1f),
-                        item = item,
-                        style = style,
-                        context = context
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun OAuthListWithTextEndingContent(
     modifier: Modifier,
     item: OAuth,
     style: OAuthListWidgetStyle,
@@ -297,18 +246,13 @@ private fun OAuthListWithTextEndingContent(
         style = style,
         context = context,
     )
-    Spacer(
-        modifier = Modifier
-            .iconPadding(style.sizeStyle)
-            .width(style.sizeStyle.iconSize())
-            .height(style.sizeStyle.iconSize())
-    )
 }
 
 @Composable
 private fun OAuthListImage(
     item: OAuth,
     style: OAuthListWidgetStyle,
+    showText: Boolean
 ) = Image(
     painter = painterResource(
         id = when (item) {
@@ -320,8 +264,8 @@ private fun OAuthListImage(
     contentDescription = null,
     modifier = Modifier
         .iconPadding(style.sizeStyle)
-        .width(style.sizeStyle.iconSize())
-        .height(style.sizeStyle.iconSize()),
+        .width(style.sizeStyle.iconSize(showText))
+        .height(style.sizeStyle.iconSize(showText)),
 )
 
 @OptIn(InternalVKIDApi::class)

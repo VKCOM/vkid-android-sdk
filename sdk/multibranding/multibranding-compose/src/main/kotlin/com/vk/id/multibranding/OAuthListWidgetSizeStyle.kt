@@ -35,8 +35,8 @@ internal fun OAuthListWidgetSizeStyle.iconPadding(): Dp = when (this) {
 }.dp
 
 @Suppress("MagicNumber")
-internal fun OAuthListWidgetSizeStyle.iconSize(): Dp = when (this) {
-    OAuthListWidgetSizeStyle.DEFAULT -> 28
+internal fun OAuthListWidgetSizeStyle.iconSize(showText: Boolean): Dp = when (this) {
+    OAuthListWidgetSizeStyle.DEFAULT -> if (showText) 24 else 28
     OAuthListWidgetSizeStyle.SMALL_32,
     OAuthListWidgetSizeStyle.SMALL_34,
     OAuthListWidgetSizeStyle.SMALL_36,
