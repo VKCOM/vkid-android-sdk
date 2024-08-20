@@ -31,17 +31,6 @@ commitVersionChange() {
     echo "Checked out version change branch"
 }
 
-bumpVersionInVersionFile() {
-    VERSION_FILE="$(fetchVersionFile)"
-    CURRENT_VERSION=$1
-    NEW_VERSION=$2
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-        sed -i '' "s/$CURRENT_VERSION/$NEW_VERSION/" "$VERSION_FILE"
-    else
-        sed -i "s/$CURRENT_VERSION/$NEW_VERSION/" "$VERSION_FILE"
-    fi
-}
-
 assertNewVersionIsDifferent() {
     CURRENT_VERSION=$1
     NEW_VERSION=$2
