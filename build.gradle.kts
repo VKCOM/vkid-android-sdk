@@ -17,12 +17,12 @@ plugins {
     alias(libs.plugins.androidTest) apply false
     alias(libs.plugins.baselineprofile) apply false
     id("vkid.android.project-substitution") apply true
-    id("vkid.health.metrics") apply true
+    id("vkid.health.metrics") version "1.0.0-alpha02" apply true
     id("vkid.detekt") apply false
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.kover) apply true
     alias(libs.plugins.screenshot) apply false
-    id("vkid.manifest.placeholders") version "1.0.0-alpha31" apply true
+    id("vkid.manifest.placeholders") version "1.0.0" apply true
 }
 
 dependencies {
