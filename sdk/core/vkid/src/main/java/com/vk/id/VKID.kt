@@ -88,13 +88,17 @@ public class VKID {
         internal fun init(
             context: Context,
             mockApi: InternalVKIDOverrideApi,
-            mockAuthProviderConfig: MockAuthProviderConfig,
+            mockAuthProviderConfig: MockAuthProviderConfig?,
             deviceIdStorage: InternalVKIDDeviceIdProvider.DeviceIdStorage?,
             prefsStore: InternalVKIDPrefsStore?,
             encryptedSharedPreferencesStorage: InternalVKIDEncryptedSharedPreferencesStorage?,
         ): Unit = init(
             VKID(object : VKIDDepsProd(context) {
-                override val authProvidersChooser = lazy { MockAuthProviderChooser(context, mockAuthProviderConfig) }
+                override val authProvidersChooser = lazy {
+                    mockAuthProviderConfig?.let {
+                        MockAuthProviderChooser(context, mockAuthProviderConfig)
+                    } ?: super.authProvidersChooser.value
+                }
                 override val api = lazy { InternalVKIDImmediateApi(mockApi) }
                 override val vkSilentAuthInfoProvider = lazy { TestSilentAuthInfoProvider() }
                 override val deviceIdStorage = lazy { deviceIdStorage ?: super.deviceIdStorage.value }

@@ -30,7 +30,12 @@ internal class InternalVKIDImmediateApi(
     override fun getSilentAuthProviders(
         clientId: String,
         clientSecret: String
-    ) = VKIDMockCall(Result.success(InternalVKIDSilentAuthProvidersResponse("null")))
+    ) = VKIDMockCall(
+        mockApi.getSilentAuthProviders(
+            clientId = clientId,
+            clientSecret = clientSecret,
+        )
+    )
 
     override fun refreshToken(
         refreshToken: String,
@@ -91,5 +96,5 @@ internal class InternalVKIDImmediateApi(
         clientSecret: String,
         sakVersion: String,
         events: JSONArray,
-    ) = VKIDMockCall(Result.success(InternalVKIDSilentAuthProvidersResponse("null")))
+    ) = VKIDMockCall(Result.success(InternalVKIDSilentAuthProvidersResponse(emptyList())))
 }

@@ -44,6 +44,11 @@ public interface InternalVKIDOverrideApi {
         clientId: String,
         deviceId: String,
     ): Result<InternalVKIDLogoutPayloadResponse>
+
+    public fun getSilentAuthProviders(
+        clientId: String,
+        clientSecret: String
+    ): Result<InternalVKIDSilentAuthProvidersResponse>
 }
 
 @InternalVKIDApi
@@ -113,5 +118,5 @@ public data class InternalVKIDUserPayloadResponse(
 @Suppress("ForbiddenPublicDataClass")
 public data class InternalVKIDSilentAuthProvidersResponse(
     @SerializedName("response")
-    val response: String
+    val response: List<String>
 )
