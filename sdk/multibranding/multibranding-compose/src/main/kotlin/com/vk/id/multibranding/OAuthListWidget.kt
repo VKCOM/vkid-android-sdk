@@ -219,8 +219,7 @@ private fun OAuthButton(
     ) {
         OAuthListImage(
             item = item,
-            style = style,
-            showText = showText
+            style = style
         )
         if (showText) {
             OAuthListWithTextEnding(
@@ -251,8 +250,7 @@ private fun OAuthListWithTextEnding(
 @Composable
 private fun OAuthListImage(
     item: OAuth,
-    style: OAuthListWidgetStyle,
-    showText: Boolean
+    style: OAuthListWidgetStyle
 ) = Image(
     painter = painterResource(
         id = when (item) {
@@ -264,8 +262,8 @@ private fun OAuthListImage(
     contentDescription = null,
     modifier = Modifier
         .iconPadding(style.sizeStyle)
-        .width(style.sizeStyle.iconSize(showText))
-        .height(style.sizeStyle.iconSize(showText)),
+        .width(style.sizeStyle.iconSize())
+        .height(style.sizeStyle.iconSize()),
 )
 
 @OptIn(InternalVKIDApi::class)
