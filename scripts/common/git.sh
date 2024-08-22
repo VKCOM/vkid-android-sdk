@@ -16,6 +16,10 @@ checkoutDevelop() {
     git checkout develop
 }
 
+pushToOrigin() {
+    git push origin $(git rev-parse --abbrev-ref HEAD)
+}
+
 createMergeRequest() {
     BRANCH_NAME=$1
     git push -o merge_request.create --set-upstream origin "$BRANCH_NAME"
