@@ -74,9 +74,14 @@ createVersionMergeRequest() {
 set -ex
 importCommon
 assertWorkdirIsClean
-checkoutDevelop
-BRANCH_NAME="task/VKIDSDK-0/bump-version-to-$1"
-checkoutNewBranch "$BRANCH_NAME"
-bumpVersion "$1"
-commitVersionChange "$1"
-createVersionMergeRequest "$BRANCH_NAME"
+if [[ $(git rev-parse --abbrev-ref HEAD) =~ ^(release/.*)$ ]]; then
+    bumpVersion "$1"
+    commitVersionChange "$1"
+    pushToOrigin
+else
+    BRANCH_NAME="task/VKIDSDK-0/bump-version-to-$1"
+    checkoutNewBranch "$BRANCH_NAME"
+    bumpVersion "$1"
+    commitVersionChange "$1"
+    createVersionMergeRequest "$BRANCH_NAME"
+fi
