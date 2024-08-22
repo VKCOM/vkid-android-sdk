@@ -2,6 +2,6 @@
 <resources>
     <string name="vkid_oauth_list_widget_note">oder melden Sie sich mit Ihrer VK-ID an, indem Sie Informationen aus dem Dienst verwenden</string>
     <string name="vkid_oauth_list_widget_title_ok">Mit OK anmelden</string>
-    <string name="vkid_oauth_list_widget_title_mail">Mit Mail.ru anmelden</string>
+    <string name="vkid_oauth_list_widget_title_mail">Mit Mail anmelden</string>
     <string name="vkid_oauth_list_widget_title_vk">Mit VK ID anmelden</string>
 </resources>
