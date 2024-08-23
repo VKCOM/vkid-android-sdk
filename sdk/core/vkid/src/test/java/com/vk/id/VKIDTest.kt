@@ -103,7 +103,8 @@ internal class VKIDTest : BehaviorSpec({
             oAuth = null,
             prompt = "",
             scopes = emptySet(),
-            statsInfo = ""
+            statsInfo = "",
+            sdkVersion = "1"
         )
         coEvery { authProvidersChooser.chooseBest(authParams) } returns authProvider
         every { authOptionsCreator.create(authParams, any()) } returns authOptions
