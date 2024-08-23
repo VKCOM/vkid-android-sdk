@@ -17,7 +17,7 @@ plugins {
     alias(libs.plugins.androidTest) apply false
     alias(libs.plugins.baselineprofile) apply false
     id("vkid.android.project-substitution") apply true
-    id("vkid.health.metrics") version "1.0.0-alpha02" apply true
+    id("vkid.health.metrics") version "1.0.0-alpha03" apply true
     id("vkid.detekt") apply false
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.kover) apply true
@@ -70,7 +70,8 @@ healthMetrics {
     }
     gitlab(
         host = { localProperties.getProperty("healthmetrics.gitlab.host") },
-        token = { localProperties.getProperty("healthmetrics.gitlab.token") }
+        token = { localProperties.getProperty("healthmetrics.gitlab.token") },
+        projectId = { "2796" },
     )
     firestore(rootProject.file("build-logic/metrics/service-credentials.json"))
     codeCoverage {
