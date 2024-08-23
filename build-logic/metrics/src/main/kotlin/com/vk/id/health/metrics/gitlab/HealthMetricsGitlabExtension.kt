@@ -4,8 +4,10 @@ import com.vk.id.health.metrics.VKIDHealthMetricsExtension
 
 public fun VKIDHealthMetricsExtension.gitlab(
     host: () -> String = { "https://gitlab.com" },
-    token: () -> String
+    token: () -> String,
+    projectId: () -> String,
 ) {
     gitlabHost = lazy(host)
     gitlabToken = lazy(token)
+    gitlabProjectId = lazy(projectId)
 }

@@ -14,6 +14,7 @@ internal class VKIDHealthMetricsPlugin : Plugin<Project> {
             GitlabRepository.init(
                 host = lazy { extension.gitlabHost.value },
                 token = lazy { extension.gitlabToken.value },
+                projectId = lazy { extension.gitlabProjectId.value },
                 mergeRequestId = it,
             )
         }
