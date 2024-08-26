@@ -42,7 +42,12 @@ registerGeneralTask("assembleRelease")
 
 private fun registerGeneralTask(name: String, configuration: Task.() -> Unit = {}) {
     tasks.register(name) {
-        subprojects.mapNotNull { it.tasks.findByName(name) }.forEach(::dependsOn)
+        subprojects
+            .asSequence()
+            .filter { it.name != projects.baselineProfile.name }
+            .filter { it.name != projects.detektRules.name }
+            .map { ":${it.name}:$name" }
+            .forEach { dependsOn(it) }
         configuration()
     }
 }
