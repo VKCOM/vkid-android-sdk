@@ -14,7 +14,8 @@ internal open class PublishMetricsTask : DefaultTask() {
 
     @TaskAction
     fun execute() {
+        val title = "# Health metrics report"
         val diff = steps.value.joinToString("\n") { it.getDiff() }
-        runBlocking { GitlabRepository.postCommentToMr(diff) }
+        runBlocking { GitlabRepository.postCommentToMr(title, "$title\n$diff") }
     }
 }

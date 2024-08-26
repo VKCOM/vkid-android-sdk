@@ -64,7 +64,7 @@ public class VKIDApkSizeMetric internal constructor(
             val sourceIdentifier = sourceBuildType?.let { " ${sourceProject.name}$it" }.orEmpty()
             val title = title ?: ("Apk size report for $targetIdentifier$sourceIdentifier")
             val diff = """
-                |# $title
+                |## $title
                 |${apkSizeMb}mb (${formatChangePercent(oldApkSize, apkSize)})
             """.trimMargin()
             storage.saveDiff(diff)

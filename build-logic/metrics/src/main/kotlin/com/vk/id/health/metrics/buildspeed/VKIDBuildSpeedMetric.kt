@@ -96,7 +96,7 @@ public class VKIDBuildSpeedMetric internal constructor(
         val configDurationChange = "$configurationDurationText ($configChangePercent)"
         val title = title ?: "Build speed report for ${measuredTaskPaths.joinToString()}"
         return """
-                |# $title
+                |## $title
                 || Build                | Configuration         |
                 ||----------------------|-----------------------|
                 || $buildDurationChange | $configDurationChange |
