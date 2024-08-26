@@ -27,11 +27,11 @@ internal object GitlabRepository {
         this.mergeRequestIdInternal = mergeRequestId
     }
 
-    suspend fun postCommentToMr(comment: String) {
+    suspend fun postCommentToMr(prefix: String, comment: String) {
         withContext(Dispatchers.IO) {
             val username = api.getUser().username
             val comments = api.listComments(projectId.value, mergeRequestId)
-            comments.lastOrNull { !it.system && it.author.username == username }
+            comments.lastOrNull { !it.system && it.author.username == username && it.body.startsWith(prefix) }
                 ?.let {
                     api.updateComment(
                         projectId = projectId.value,

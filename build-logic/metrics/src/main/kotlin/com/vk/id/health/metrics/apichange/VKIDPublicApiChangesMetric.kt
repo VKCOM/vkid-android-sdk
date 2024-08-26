@@ -26,7 +26,7 @@ public class VKIDPublicApiChangesMetric(
             execute("git reset HEAD@{1}")
             val text = if (hasChanges) "There are public api changes, please review them" else "Public api wasn't changed"
             val diff = """
-                |# Public api change
+                |## Public api change
                 |$text
             """.trimMargin()
             repository.saveDiff(diff)
