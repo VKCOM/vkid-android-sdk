@@ -204,6 +204,18 @@ public class VKID {
      * @param lifecycleOwner The [LifecycleOwner] in which the authorization process should be handled.
      * @param callback [VKIDAuthCallback] to handle the result of the authorization process.
      * @param params Optional [VKIDAuthParams] for the authentication process.
+     *
+     * Example usage:
+     *
+     * ```
+     * VKID.instance.authorize(
+     *     lifecycleOwner = MainActivity@this,
+     *     callback = vkAuthCallback,
+     *     params = VKIDAuthParams {
+     *         scopes = setOf("status", "email")
+     *     }
+     * )
+     * ```
      */
     public fun authorize(
         lifecycleOwner: LifecycleOwner,
@@ -220,6 +232,17 @@ public class VKID {
      *
      * @param callback [VKIDAuthCallback] to handle the result of the authorization process.
      * @param params Optional [VKIDAuthParams] for the authentication process.
+     *
+     * Example usage:
+     *
+     * ```
+     * VKID.instance.authorize(
+     *     callback = vkAuthCallback,
+     *     params = VKIDAuthParams {
+     *         scopes = setOf("status", "email")
+     *     }
+     * )
+     * ```
      */
     public suspend fun authorize(
         callback: VKIDAuthCallback,

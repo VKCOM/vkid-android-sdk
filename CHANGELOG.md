@@ -3,6 +3,16 @@
 > **Note**\
 > Описание основных изменений в релизах VK ID SDK. Наш SDK следует [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.2.0 (27.08.2024)
+
+### Changed
+- Поддержали ребрендинг Почты Mail: в SDK обновлены все экраны с логотипом Почты, а также изменено название сервиса с Mail.ru на Mail. Доработки в коде из-за ребрендинга не требуются.
+
+## Placeholders plugin 1.0.0 (27.08.2024)
+
+### Added
+- Добавлен плагин плейсхолдеров как альтернативный способ инициализации SDK. Он позволяет инциализировать плейсхолдеры в одном месте, если у вас несколько application-модулей. Подробнее читайте в [документации](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/connection/start-integration/android/install).
+
 ## 2.1.0
 
 ### Added
