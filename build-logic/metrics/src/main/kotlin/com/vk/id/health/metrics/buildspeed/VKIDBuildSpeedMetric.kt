@@ -152,11 +152,11 @@ public class VKIDBuildSpeedMetric internal constructor(
 
         public var title: String? = null
         public var isExternal: Boolean = false
-        public var rootProject: Project? = null
         public var measuredTaskPaths: Set<String> = emptySet()
         public var iterations: Int = 1
         public var warmUps: Int = 0
         public var cleanAfterEachBuild: Boolean = false
+        internal var rootProject: Project? = null
 
         internal fun build(): VKIDBuildSpeedMetric {
             if (measuredTaskPaths.isEmpty()) {
