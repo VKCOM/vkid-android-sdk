@@ -10,8 +10,6 @@ import com.vk.id.health.metrics.utils.formatChangePercent
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.configurationcache.extensions.capitalized
-import java.math.BigDecimal
-import java.math.RoundingMode
 
 public fun VKIDHealthMetricsExtension.apkSize(configuration: VKIDApkSizeMetric.Builder.() -> Unit) {
     stepsInternal.add(VKIDApkSizeMetric.Builder().apply(configuration).build())
@@ -58,17 +56,24 @@ public class VKIDApkSizeMetric internal constructor(
             storage.saveApkSize(apkSize)
             val oldApkSize = storage.getApkSize()
 
-            @Suppress("MagicNumber")
-            val apkSizeMb = BigDecimal(apkSize.toDouble() / 1024 / 1024).setScale(4, RoundingMode.HALF_EVEN)
+            val apkSizeMb = formatSize(apkSize.toDouble())
             val targetIdentifier = "${targetProject.name}#$targetBuildType"
             val sourceIdentifier = sourceBuildType?.let { " ${sourceProject.name}$it" }.orEmpty()
             val title = title ?: ("Apk size report for $targetIdentifier$sourceIdentifier")
             val diff = """
                 |## $title
-                |${apkSizeMb}mb (${formatChangePercent(oldApkSize, apkSize)})
+                |$apkSizeMb (${formatChangePercent(oldApkSize, apkSize)})
             """.trimMargin()
             storage.saveDiff(diff)
         }
+    }
+
+    @Suppress("MagicNumber")
+    private fun formatSize(sizeInBytes: Double) = when {
+        sizeInBytes >= 1 shl 30 -> "%.2f GB".format(sizeInBytes / (1 shl 30))
+        sizeInBytes >= 1 shl 20 -> "%.2f MB".format(sizeInBytes / (1 shl 20))
+        sizeInBytes >= 1 shl 10 -> "%.2f kB".format(sizeInBytes / (1 shl 10))
+        else -> "$sizeInBytes B"
     }
 
     override fun exec(project: Project) {
