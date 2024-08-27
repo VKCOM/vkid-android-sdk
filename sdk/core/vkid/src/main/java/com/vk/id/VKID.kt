@@ -88,13 +88,17 @@ public class VKID {
         internal fun init(
             context: Context,
             mockApi: InternalVKIDOverrideApi,
-            mockAuthProviderConfig: MockAuthProviderConfig,
+            mockAuthProviderConfig: MockAuthProviderConfig?,
             deviceIdStorage: InternalVKIDDeviceIdProvider.DeviceIdStorage?,
             prefsStore: InternalVKIDPrefsStore?,
             encryptedSharedPreferencesStorage: InternalVKIDEncryptedSharedPreferencesStorage?,
         ): Unit = init(
             VKID(object : VKIDDepsProd(context) {
-                override val authProvidersChooser = lazy { MockAuthProviderChooser(context, mockAuthProviderConfig) }
+                override val authProvidersChooser = lazy {
+                    mockAuthProviderConfig?.let {
+                        MockAuthProviderChooser(context, mockAuthProviderConfig)
+                    } ?: super.authProvidersChooser.value
+                }
                 override val api = lazy { InternalVKIDImmediateApi(mockApi) }
                 override val vkSilentAuthInfoProvider = lazy { TestSilentAuthInfoProvider() }
                 override val deviceIdStorage = lazy { deviceIdStorage ?: super.deviceIdStorage.value }
@@ -200,6 +204,18 @@ public class VKID {
      * @param lifecycleOwner The [LifecycleOwner] in which the authorization process should be handled.
      * @param callback [VKIDAuthCallback] to handle the result of the authorization process.
      * @param params Optional [VKIDAuthParams] for the authentication process.
+     *
+     * Example usage:
+     *
+     * ```
+     * VKID.instance.authorize(
+     *     lifecycleOwner = MainActivity@this,
+     *     callback = vkAuthCallback,
+     *     params = VKIDAuthParams {
+     *         scopes = setOf("status", "email")
+     *     }
+     * )
+     * ```
      */
     public fun authorize(
         lifecycleOwner: LifecycleOwner,
@@ -216,6 +232,17 @@ public class VKID {
      *
      * @param callback [VKIDAuthCallback] to handle the result of the authorization process.
      * @param params Optional [VKIDAuthParams] for the authentication process.
+     *
+     * Example usage:
+     *
+     * ```
+     * VKID.instance.authorize(
+     *     callback = vkAuthCallback,
+     *     params = VKIDAuthParams {
+     *         scopes = setOf("status", "email")
+     *     }
+     * )
+     * ```
      */
     public suspend fun authorize(
         callback: VKIDAuthCallback,

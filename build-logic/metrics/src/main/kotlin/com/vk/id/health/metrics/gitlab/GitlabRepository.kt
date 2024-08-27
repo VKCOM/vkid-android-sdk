@@ -5,9 +5,9 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
 internal object GitlabRepository {
-    private const val PROJECT_ID = "2796"
     private lateinit var host: Lazy<String>
     private lateinit var token: Lazy<String>
+    private lateinit var projectId: Lazy<String>
     private val api by lazy { GitlabApiService(host.value, token.value) }
     private lateinit var mergeRequestIdInternal: String
     private val mergeRequest by lazy { runBlocking { getMergeRequestBranches() } }
@@ -18,28 +18,30 @@ internal object GitlabRepository {
     fun init(
         host: Lazy<String>,
         token: Lazy<String>,
+        projectId: Lazy<String>,
         mergeRequestId: String
     ) {
         this.host = host
         this.token = token
+        this.projectId = projectId
         this.mergeRequestIdInternal = mergeRequestId
     }
 
-    suspend fun postCommentToMr(comment: String) {
+    suspend fun postCommentToMr(prefix: String, comment: String) {
         withContext(Dispatchers.IO) {
             val username = api.getUser().username
-            val comments = api.listComments(PROJECT_ID, mergeRequestId)
-            comments.lastOrNull { !it.system && it.author.username == username }
+            val comments = api.listComments(projectId.value, mergeRequestId)
+            comments.lastOrNull { !it.system && it.author.username == username && it.body.startsWith(prefix) }
                 ?.let {
                     api.updateComment(
-                        projectId = PROJECT_ID,
+                        projectId = projectId.value,
                         mergeRequestId = mergeRequestId,
                         commentId = it.id.toString(),
                         comment = comment,
                     )
                 }
                 ?: api.postCommentToMr(
-                    projectId = PROJECT_ID,
+                    projectId = projectId.value,
                     mergeRequestId = mergeRequestId,
                     body = GitlabPostCommentToMrBody(body = comment),
                 )
@@ -49,7 +51,7 @@ internal object GitlabRepository {
     private suspend fun getMergeRequestBranches(): GitlabMergeRequestResponse {
         return withContext(Dispatchers.IO) {
             api.getMergeRequest(
-                projectId = PROJECT_ID,
+                projectId = projectId.value,
                 mergeRequestId = mergeRequestId,
             )
         }

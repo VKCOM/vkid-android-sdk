@@ -1,7 +1,9 @@
 pluginManagement {
     includeBuild("build-logic")
     includeBuild("build-logic/detekt")
+    includeBuild("build-logic/convention")
     repositories {
+        maven(url = "https://artifactory-external.vkpartner.ru/artifactory/vkid-sdk-android/")
         google()
         mavenCentral()
         gradlePluginPortal()

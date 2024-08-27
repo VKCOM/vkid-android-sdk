@@ -31,17 +31,6 @@ commitVersionChange() {
     echo "Checked out version change branch"
 }
 
-bumpVersionInVersionFile() {
-    VERSION_FILE="$(fetchVersionFile)"
-    CURRENT_VERSION=$1
-    NEW_VERSION=$2
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-        sed -i '' "s/$CURRENT_VERSION/$NEW_VERSION/" "$VERSION_FILE"
-    else
-        sed -i "s/$CURRENT_VERSION/$NEW_VERSION/" "$VERSION_FILE"
-    fi
-}
-
 assertNewVersionIsDifferent() {
     CURRENT_VERSION=$1
     NEW_VERSION=$2
@@ -74,9 +63,14 @@ createVersionMergeRequest() {
 set -ex
 importCommon
 assertWorkdirIsClean
-checkoutDevelop
-BRANCH_NAME="task/VKIDSDK-0/bump-version-to-$1"
-checkoutNewBranch "$BRANCH_NAME"
-bumpVersion "$1"
-commitVersionChange "$1"
-createVersionMergeRequest "$BRANCH_NAME"
+if [[ $(git rev-parse --abbrev-ref HEAD) =~ ^(release/.*)$ ]]; then
+    bumpVersion "$1"
+    commitVersionChange "$1"
+    pushToOrigin
+else
+    BRANCH_NAME="task/VKIDSDK-0/bump-version-to-$1"
+    checkoutNewBranch "$BRANCH_NAME"
+    bumpVersion "$1"
+    commitVersionChange "$1"
+    createVersionMergeRequest "$BRANCH_NAME"
+fi
