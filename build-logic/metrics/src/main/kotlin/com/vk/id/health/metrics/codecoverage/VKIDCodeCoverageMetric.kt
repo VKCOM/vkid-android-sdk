@@ -41,7 +41,7 @@ public class VKIDCodeCoverageMetric internal constructor(
             val oldCoverage = repository.getCodeCoverage()
             val formattedNewCoverage = BigDecimal(newCoverage).setScale(2, RoundingMode.HALF_EVEN).stripTrailingZeros()
             val diff = """
-                |# $title
+                |## $title
                 |$formattedNewCoverage% (${formatChangePercent(oldCoverage, newCoverage, increaseIsNegative = false)})
             """.trimMargin()
             repository.saveDiff(diff)

@@ -19,7 +19,8 @@ internal data class AuthOptions(
     val oAuth: OAuth?,
     val prompt: String,
     val scopes: Set<String>,
-    val statsInfo: String
+    val statsInfo: String,
+    val sdkVersion: String
 )
 
 private const val APP_ID = "app_id"
@@ -48,6 +49,7 @@ private const val SCOPES = "scope"
 private const val STATS_INFO = "stats_info"
 private const val SDK_TYPE = "sdk_type"
 private const val SDK_TYPE_VALUE = "vkid"
+private const val SDK_VERSION = "v"
 
 internal fun basicCodeFlowUri(appPackage: String) = Uri.Builder()
     .scheme(appPackage)
@@ -65,6 +67,7 @@ internal fun AuthOptions.toAuthUriBrowser(): Uri {
         .appendQueryParameter(PROMPT, prompt)
         .appendQueryParameter(STATS_INFO, statsInfo)
         .appendQueryParameter(SDK_TYPE, SDK_TYPE_VALUE)
+        .appendQueryParameter(SDK_VERSION, sdkVersion)
 
     if (scopes.isNotEmpty()) {
         builder.appendQueryParameter(SCOPES, scopes.joinToString(separator = " "))

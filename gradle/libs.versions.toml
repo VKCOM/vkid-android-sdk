@@ -22,6 +22,7 @@ binary-compatibility-validator = "0.14.0"
 coil = "2.6.0"
 detekt = "1.23.6"
 dokka = "1.9.20"
+espresso = "3.6.1"
 firebaseFirestore = "9.2.0"
 flipper = "0.250.0"
 gson = "2.11.0"
@@ -78,6 +79,7 @@ androidx-test-orchestrator = { group = "androidx.test", name = "orchestrator", v
 androidx-test-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "androidxTestJunitKtx" }
 coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+espresso-intents = { group = "androidx.test.espresso", name = "espresso-intents", version.ref = "espresso" }
 firebase-firestore-admin = { group = "com.google.firebase", name = "firebase-admin", version.ref = "firebaseFirestore" }
 flipper = { group = "com.facebook.flipper", name = "flipper", version.ref = "flipper" }
 flipper-network = { group = "com.facebook.flipper", name = "flipper-network-plugin", version.ref = "flipper" }

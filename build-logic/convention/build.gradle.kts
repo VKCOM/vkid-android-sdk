@@ -50,13 +50,13 @@ gradlePlugin {
             id = "vkid.android.tests"
             implementationClass = "AndroidTestsConventionPlugin"
         }
-        register("vkidApp") {
-            id = "vkid.placeholders"
-            implementationClass = "VKIDAppConventionPlugin"
-        }
         register("vkidPublish") {
             id = "vkid.android.publish"
             implementationClass = "VKIDPublishConventionPlugin"
+        }
+        register("vkidPluginPublish") {
+            id = "vkid.android.plugin.publish"
+            implementationClass = "VKIDPluginPublishConventionPlugin"
         }
         register("vkidDependencyLock") {
             id = "vkid.android.dependency.lock"
