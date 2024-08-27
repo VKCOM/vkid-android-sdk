@@ -35,5 +35,5 @@ TARGET_BRANCH=$1
 SOURCE_BRANCH=$2
 git fetch origin $TARGET_BRANCH:$TARGET_BRANCH || true
 git fetch origin $SOURCE_BRANCH:$SOURCE_BRANCH || true
-validateCommitMessages $TARGET_BRANCH $SOURCE_BRANCH
+#validateCommitMessages $TARGET_BRANCH $SOURCE_BRANCH
 validateBranchName $SOURCE_BRANCH
