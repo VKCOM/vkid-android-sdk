@@ -5,6 +5,7 @@ package com.vk.id
 import android.content.Context
 import android.net.Uri
 import android.util.Base64
+import com.vk.id.analytics.BuildConfig
 import com.vk.id.analytics.stat.StatTracker
 import com.vk.id.auth.Prompt
 import com.vk.id.auth.VKIDAuthParams
@@ -51,6 +52,7 @@ internal class AuthOptionsCreator(
         val statsInfo = createStatsInfo(statParams)
         extraRedirectUriParams.addStatParams(statsInfo)
         redirectUriCodeFlow.appendQueryParameter("oauth2_params", extraRedirectUriParams.toBase64())
+        redirectUriCodeFlow.appendQueryParameter("v", BuildConfig.VKID_VERSION_NAME)
 
         return AuthOptions(
             appId = credentials.clientID,
@@ -71,7 +73,8 @@ internal class AuthOptionsCreator(
                 else -> ""
             },
             scopes = authParams.scopes,
-            statsInfo = statsInfo.toBase64()
+            statsInfo = statsInfo.toBase64(),
+            sdkVersion = BuildConfig.VKID_VERSION_NAME
         )
     }
 }

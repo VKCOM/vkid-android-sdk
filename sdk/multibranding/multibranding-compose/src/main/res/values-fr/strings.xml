@@ -2,6 +2,6 @@
 <resources>
     <string name="vkid_oauth_list_widget_note">ou se connecter avec VK ID en utilisant les informations d\'un service</string>
     <string name="vkid_oauth_list_widget_title_ok">Se connecter avec OK</string>
-    <string name="vkid_oauth_list_widget_title_mail">Se connecter avec Mail.ru</string>
+    <string name="vkid_oauth_list_widget_title_mail">Se connecter avec Mail</string>
     <string name="vkid_oauth_list_widget_title_vk">Se connecter avec VK ID</string>
 </resources>

@@ -17,7 +17,7 @@
 
 ---
 
-:information_source: Версия VK ID SDK 2.0.0 поддерживает авторизацию по протоколу [OAuth 2.1](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-v2-1-10), а также способы входа через аккаунты Одноклассников и Mail.ru.
+:information_source: Версия VK ID SDK 2.0.0 поддерживает авторизацию по протоколу [OAuth 2.1](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-v2-1-10), а также способы входа через аккаунты Одноклассников и Mail.
 
 ---
 
@@ -104,12 +104,23 @@ private val vkAuthCallback = object : VKIDAuthCallback {
 Авторизация запускается с помощью метода authorize(), у которого есть два варианта вызова:
 ```kotlin
 viewModelScope.launch {
-    vkid.authorize(vkAuthCallback)
+    VKID.instance.authorize(vkAuthCallback)
 }
 ```
 или с передачей LifecycleOwner:
 ```kotlin
-vkid.authorize(this@MainActivity, vkAuthCallback) // Первый параметр LifecycleOwner, например активити.
+VKID.instance.authorize(this@MainActivity, vkAuthCallback) // Первый параметр LifecycleOwner, например активити.
+```
+
+### Параметры aвторизации
+Вы можете передать дополнительные параметры авторизации с помощью вспомогаельной билдер-функции:
+```kotlin
+VKID.instance.authorize(
+    callback = vkAuthCallback,
+    params = VKIDAuthParams {
+        scopes = setOf("status", "email")
+    }
+)
 ```
 
 ### Обновление токена

@@ -7,7 +7,7 @@ class VKIDScreenshotTestingPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         return with(target) {
             with(pluginManager) {
-                apply("vkid.placeholders")
+                apply("vkid.manifest.placeholders")
                 apply(libs.findPlugin("screenshot").get().get().pluginId)
             }
             extensions.android {

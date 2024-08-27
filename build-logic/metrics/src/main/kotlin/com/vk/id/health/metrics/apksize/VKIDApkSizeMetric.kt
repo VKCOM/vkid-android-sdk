@@ -10,8 +10,6 @@ import com.vk.id.health.metrics.utils.formatChangePercent
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.configurationcache.extensions.capitalized
-import java.math.BigDecimal
-import java.math.RoundingMode
 
 public fun VKIDHealthMetricsExtension.apkSize(configuration: VKIDApkSizeMetric.Builder.() -> Unit) {
     stepsInternal.add(VKIDApkSizeMetric.Builder().apply(configuration).build())
@@ -20,41 +18,62 @@ public fun VKIDHealthMetricsExtension.apkSize(configuration: VKIDApkSizeMetric.B
 public class VKIDApkSizeMetric internal constructor(
     private val title: String?,
     private val targetProject: Project,
-    private val targetBuildType: ApplicationVariant,
+    private val targetBuildType: String,
     private val sourceProject: Project,
-    private val sourceBuildType: ApplicationVariant?,
+    private val sourceBuildType: String?,
     private val apkAnalyzerPath: () -> String,
 ) : VKIDSingleRunHealthMetric {
 
-    private val taskSuffix = "${targetProject.name.capitalized()}${targetBuildType.name.capitalized()}" +
-        "${sourceProject.name.capitalized()}${sourceBuildType?.name?.capitalized().orEmpty()}"
+    // tasks.getByPath forces target and source evaluation which is necessary to retrieve ApplicationVariant information
+    private val assembleTarget = targetProject.tasks.getByPath(":${targetProject.name}:assemble${targetBuildType.capitalized()}")
+    private val assembleSource = sourceBuildType?.let { ":${sourceProject.name}:assemble${it.capitalized()}" }?.let(sourceProject.tasks::getByPath)
+
+    private val sourceApplicationVariant = sourceBuildType?.let { releaseVariant(sourceProject, it) }?.firstOrNull()
+    private val targetApplicationVariant = releaseVariant(targetProject, targetBuildType).first()
+
+    private fun releaseVariant(
+        project: Project,
+        name: String
+    ) = project.android().applicationVariants.matching { it.name == name }
+
+    private fun Project.android() = extensions.getByName("android") as AbstractAppExtension
+
+    private val taskSuffix = "${targetProject.name.capitalized()}${targetBuildType.capitalized()}" +
+        "${sourceProject.name.capitalized()}${sourceBuildType?.capitalized().orEmpty()}"
     override val task: Task = targetProject.rootProject.tasks.create("healthMetricsApkSize$taskSuffix") {
-        dependsOn(":${targetProject.name}:assemble${targetBuildType.name.capitalized()}")
-        sourceBuildType?.let { dependsOn(":${sourceProject.name}:assemble${it.name.capitalized()}") }
+        dependsOn(assembleTarget)
+        assembleSource?.let { dependsOn(it) }
         doLast {
-            val targetSize = getApkSize(targetBuildType.apkFilePath)
-            val sourceSize = sourceBuildType?.let { getApkSize(it.apkFilePath) } ?: "0"
+            val targetSize = getApkSize(targetApplicationVariant.apkFilePath)
+            val sourceSize = sourceApplicationVariant?.let { getApkSize(it.apkFilePath) } ?: "0"
             val apkSize = targetSize.toLong() - sourceSize.toLong()
             val storage = ApkSizeRepository(
                 targetProject = targetProject,
-                targetBuildType = targetBuildType,
+                targetBuildType = targetApplicationVariant,
                 sourceProject = sourceProject,
-                sourceBuildType = sourceBuildType
+                sourceBuildType = sourceApplicationVariant
             )
             storage.saveApkSize(apkSize)
             val oldApkSize = storage.getApkSize()
 
-            @Suppress("MagicNumber")
-            val apkSizeMb = BigDecimal(apkSize.toDouble() / 1024 / 1024).setScale(4, RoundingMode.HALF_EVEN)
-            val targetIdentifier = "${targetProject.name}#${targetBuildType.name}"
-            val sourceIdentifier = sourceBuildType?.let { " ${sourceProject.name}${it.name}" }.orEmpty()
+            val apkSizeMb = formatSize(apkSize.toDouble())
+            val targetIdentifier = "${targetProject.name}#$targetBuildType"
+            val sourceIdentifier = sourceBuildType?.let { " ${sourceProject.name}$it" }.orEmpty()
             val title = title ?: ("Apk size report for $targetIdentifier$sourceIdentifier")
             val diff = """
-                |# $title
-                |${apkSizeMb}mb (${formatChangePercent(oldApkSize, apkSize)})
+                |## $title
+                |$apkSizeMb (${formatChangePercent(oldApkSize, apkSize)})
             """.trimMargin()
             storage.saveDiff(diff)
         }
+    }
+
+    @Suppress("MagicNumber")
+    private fun formatSize(sizeInBytes: Double) = when {
+        sizeInBytes >= 1 shl 30 -> "%.2f GB".format(sizeInBytes / (1 shl 30))
+        sizeInBytes >= 1 shl 20 -> "%.2f MB".format(sizeInBytes / (1 shl 20))
+        sizeInBytes >= 1 shl 10 -> "%.2f kB".format(sizeInBytes / (1 shl 10))
+        else -> "$sizeInBytes B"
     }
 
     override fun exec(project: Project) {
@@ -74,9 +93,9 @@ public class VKIDApkSizeMetric internal constructor(
 
     override fun getDiff(): String = ApkSizeRepository(
         targetProject = targetProject,
-        targetBuildType = targetBuildType,
+        targetBuildType = targetApplicationVariant,
         sourceProject = sourceProject,
-        sourceBuildType = sourceBuildType
+        sourceBuildType = sourceApplicationVariant,
     ).getDiff()
 
     public class Builder {
@@ -92,14 +111,11 @@ public class VKIDApkSizeMetric internal constructor(
             return VKIDApkSizeMetric(
                 title = title,
                 targetProject = checkNotNull(targetProject) { "Project is not specified" },
-                targetBuildType = releaseVariant(targetProject!!, targetBuildType) ?: error("No release variant"),
+                targetBuildType = targetBuildType,
                 sourceProject = sourceProject ?: targetProject!!,
-                sourceBuildType = sourceBuildType?.let { releaseVariant(targetProject!!, it) },
+                sourceBuildType = sourceBuildType,
                 apkAnalyzerPath = apkAnalyzerPath ?: error("apkAnalyzerPath is not specified"),
             )
         }
-
-        private fun releaseVariant(project: Project, name: String) = project.android().applicationVariants.find { it.name == name }
-        private fun Project.android() = extensions.getByName("android") as AbstractAppExtension
     }
 }

@@ -69,6 +69,8 @@ public class VKIDBuildSpeedMetric internal constructor(
                 "./gradlew",
                 task.path,
                 "--stacktrace",
+                "--rerun-tasks",
+                "--no-build-cache",
                 "-PhealthMetrics.buildSpeed.measure",
                 "-PhealthMetrics.common.mergeRequestId=$mergeRequestId",
             )
@@ -76,7 +78,7 @@ public class VKIDBuildSpeedMetric internal constructor(
         if (cleanAfterEachBuild) {
             project.exec {
                 workingDir = project.projectDir
-                commandLine("./gradlew", "clean", "--stacktrace")
+                commandLine("./gradlew", "clean", "--stacktrace", "--rerun-tasks", "--no-build-cache")
             }
         }
     }
@@ -94,7 +96,7 @@ public class VKIDBuildSpeedMetric internal constructor(
         val configDurationChange = "$configurationDurationText ($configChangePercent)"
         val title = title ?: "Build speed report for ${measuredTaskPaths.joinToString()}"
         return """
-                |# $title
+                |## $title
                 || Build                | Configuration         |
                 ||----------------------|-----------------------|
                 || $buildDurationChange | $configDurationChange |
@@ -150,11 +152,11 @@ public class VKIDBuildSpeedMetric internal constructor(
 
         public var title: String? = null
         public var isExternal: Boolean = false
-        public var rootProject: Project? = null
         public var measuredTaskPaths: Set<String> = emptySet()
         public var iterations: Int = 1
         public var warmUps: Int = 0
         public var cleanAfterEachBuild: Boolean = false
+        internal var rootProject: Project? = null
 
         internal fun build(): VKIDBuildSpeedMetric {
             if (measuredTaskPaths.isEmpty()) {

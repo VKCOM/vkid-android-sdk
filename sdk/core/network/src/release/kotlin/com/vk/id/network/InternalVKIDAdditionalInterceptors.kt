@@ -6,5 +6,5 @@ import okhttp3.Interceptor
 @InternalVKIDApi
 public object InternalVKIDAdditionalInterceptors {
     public fun getInterceptor(): Interceptor? = null
-    public fun tmp(): Int = 1
+    public val networkFlipperPlugin: Any? = null
 }

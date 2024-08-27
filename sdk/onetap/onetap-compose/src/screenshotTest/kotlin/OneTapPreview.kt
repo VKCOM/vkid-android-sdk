@@ -1,5 +1,3 @@
-@file:OptIn(InternalVKIDApi::class)
-
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.vk.id.common.InternalVKIDApi
@@ -67,7 +65,8 @@ private fun OneTapRoundCornerRadiusStylePreview() {
     )
 }
 
-//из-за transparentDark стиля на белом фоне, текст не видно на скриншотах
+// Text is barely visible on screenshot because of transparentDark style on white background
+// See https://issuetracker.google.com/issues/352263200
 @Preview
 @Composable
 private fun OneTapButtonSmall32StylePreview() {

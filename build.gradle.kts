@@ -1,4 +1,3 @@
-import com.android.build.api.dsl.LibraryExtension
 import com.vk.id.health.metrics.buildspeed.buildSpeed
 import com.vk.id.health.metrics.gitlab.gitlab
 import com.vk.id.health.metrics.storage.firestore
@@ -18,16 +17,17 @@ plugins {
     alias(libs.plugins.androidTest) apply false
     alias(libs.plugins.baselineprofile) apply false
     id("vkid.android.project-substitution") apply true
-    id("vkid.health.metrics") apply true
+    id("vkid.health.metrics") version "1.0.0-alpha03" apply true
     id("vkid.detekt") apply false
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.kover) apply true
     alias(libs.plugins.screenshot) apply false
+    id("vkid.manifest.placeholders") version "1.0.0" apply true
 }
 
 dependencies {
     subprojects
-        .filter { it.extensions.findByType<LibraryExtension>() != null }
+        .filter { it.name != projects.baselineProfile.name }
         .filter { it.projectDir.path.contains("/sdk/") }
         .forEach { kover(it) }
 }
@@ -42,9 +42,31 @@ registerGeneralTask("assembleRelease")
 
 private fun registerGeneralTask(name: String, configuration: Task.() -> Unit = {}) {
     tasks.register(name) {
-        subprojects.mapNotNull { it.tasks.findByName(name) }.forEach(::dependsOn)
+        subprojects
+            .asSequence()
+            .filter { it.name != projects.baselineProfile.name }
+            .filter { it.name != projects.detektRules.name }
+            .map { ":${it.name}:$name" }
+            .forEach { dependsOn(it) }
         configuration()
     }
+}
+
+vkidManifestPlaceholders {
+    if (!shouldInjectManifestPlaceholders()) return@vkidManifestPlaceholders
+    fun error() = logger.error(
+        "Warning! Build will not work!\nCreate the 'secrets.properties' file in the 'sample/app' folder and add your 'VKIDClientID' and 'VKIDClientSecret' to it." +
+            "\nFor more information, refer to the 'README.md' file."
+    )
+
+    val properties = Properties()
+    properties.load(file("sample/app/secrets.properties").inputStream())
+    val clientId = properties["VKIDClientID"] ?: error()
+    val clientSecret = properties["VKIDClientSecret"] ?: error()
+    init(
+        clientId = clientId.toString(),
+        clientSecret = clientSecret.toString(),
+    )
 }
 
 healthMetrics {
@@ -53,7 +75,8 @@ healthMetrics {
     }
     gitlab(
         host = { localProperties.getProperty("healthmetrics.gitlab.host") },
-        token = { localProperties.getProperty("healthmetrics.gitlab.token") }
+        token = { localProperties.getProperty("healthmetrics.gitlab.token") },
+        projectId = { "2796" },
     )
     firestore(rootProject.file("build-logic/metrics/service-credentials.json"))
     codeCoverage {
@@ -85,3 +108,20 @@ healthMetrics {
     }
     publicApiChanges()
 }
+
+/**
+ * The project should sync without placeholders
+ */
+private fun Project.shouldInjectManifestPlaceholders() = gradle
+    .startParameter
+    .taskNames
+    .map { it.lowercase() }
+    .any {
+        it.contains("assemble")
+            || it.endsWith("test")
+            || it.contains("lint")
+            || it.contains("dokka")
+            || it.contains("generatebaselineprofile")
+            || it.contains("updatedebugscreenshottest")
+            || it.contains("healthmetrics")
+    }

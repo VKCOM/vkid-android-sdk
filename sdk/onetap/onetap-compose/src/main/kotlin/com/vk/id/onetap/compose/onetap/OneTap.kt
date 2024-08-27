@@ -139,7 +139,7 @@ public fun OneTap(
     }
     @Composable
     fun IconOneTap() {
-        OneTapAnalytics.OneTapIconShown(scenario = scenario)
+        OneTapAnalytics.OneTapIconShown(scenario = scenario, style = style)
         VKIDButtonSmall(
             style = style.vkidButtonStyle,
             onClick = {
@@ -185,7 +185,7 @@ public fun OneTap(
         largeText: Boolean,
     ) {
         if (!measureInProgress) {
-            OneTapAnalytics.OneTapShown(scenario = scenario)
+            OneTapAnalytics.OneTapShown(scenario = scenario, style = style)
         }
         CompositionLocalProvider(
             LocalMultibrandingAnalyticsContext provides MultibrandingAnalyticsContext(

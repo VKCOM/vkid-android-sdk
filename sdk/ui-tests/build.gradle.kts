@@ -21,6 +21,7 @@ dependencies {
     androidTestImplementation(projects.onetapCompose)
     androidTestImplementation(projects.multibrandingXml)
     androidTestImplementation(projects.multibrandingCompose)
+    androidTestImplementation(libs.espresso.intents)
     androidTestImplementation(libs.mockk.android)
     androidTestImplementation(libs.kotest.core)
     androidTestImplementation(libs.kotest.assertions)
