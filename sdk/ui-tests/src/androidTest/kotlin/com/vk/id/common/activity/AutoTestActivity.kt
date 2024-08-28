@@ -6,7 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import androidx.activity.ComponentActivity
-import com.vk.id.common.App
+import com.vk.id.common.UiTestApplication
 
 public class AutoTestActivity : ComponentActivity() {
     public fun setContent(view: View) {
@@ -15,25 +15,14 @@ public class AutoTestActivity : ComponentActivity() {
         }
     }
 
-    var mockPackageManager: PackageManager? = null
-        set(value) {
-            field = value
-            (this.application as App).mockPackageManager = value
-        }
-
-    var mockStartActivity: ((Intent) -> Unit)? = null
-        set(value) {
-            field = value
-            (this.application as App).mockStartActivity = value
-        }
-
     override fun startActivity(intent: Intent) {
+        val mockStartActivity = (this.application as? UiTestApplication)?.mockStartActivity
         if (mockStartActivity == null) {
             super.startActivity(intent)
         } else {
-            mockStartActivity?.invoke(intent)
+            mockStartActivity.invoke(intent)
         }
     }
 
-    override fun getPackageManager(): PackageManager = mockPackageManager ?: super.getPackageManager()
+    override fun getPackageManager(): PackageManager = (this.application as? UiTestApplication)?.mockPackageManager ?: super.getPackageManager()
 }

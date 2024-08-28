@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.Intent
 import android.content.pm.PackageManager
 
-public class App : Application() {
+public class UiTestApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()

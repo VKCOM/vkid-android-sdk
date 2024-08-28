@@ -24,6 +24,7 @@ import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.VKIDAuthCallback
 import com.vk.id.common.InternalVKIDApi
+import com.vk.id.common.UiTestApplication
 import com.vk.id.common.activity.AutoTestActivity
 import com.vk.id.common.activity.AutoTestActivityRule
 import com.vk.id.common.allure.Owners
@@ -42,7 +43,6 @@ import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
 import org.hamcrest.core.AllOf.allOf
-import org.junit.After
 import org.junit.AfterClass
 import org.junit.Before
 import org.junit.BeforeClass
@@ -64,11 +64,6 @@ public class OutgoingIntentsTest : BaseUiTest() {
     @Before
     public fun readCreds() {
         serviceCredentials = readCreds(composeTestRule.activity)
-    }
-
-    @After
-    public fun releaseCreds() {
-        serviceCredentials = null
     }
 
     @Test
@@ -253,7 +248,7 @@ private fun AutoTestActivity.mockThereIsNoProviderNoBrowser() {
         )
     } returns emptyList()
 
-    this.mockPackageManager = pm
+    (this.application as UiTestApplication).mockPackageManager = pm
 }
 
 private fun AutoTestActivity.mockThereIsOnlyBrowser() {
@@ -304,7 +299,7 @@ private fun AutoTestActivity.mockThereIsOnlyBrowser() {
         )
     } returns ResolveInfo()
 
-    this.mockPackageManager = pm
+    (this.application as UiTestApplication).mockPackageManager = pm
 }
 
 private fun AutoTestActivity.mockVKProvider() {
@@ -345,7 +340,7 @@ private fun AutoTestActivity.mockVKProvider() {
         }
     }
 
-    this.mockPackageManager = pm
+    (this.application as UiTestApplication).mockPackageManager = pm
 }
 
 private fun PackageManager.mockNoProviders() {
@@ -360,7 +355,7 @@ private fun PackageManager.mockNoProviders() {
 }
 
 private fun AutoTestActivity.releaseMockPM() {
-    mockPackageManager = null
+    (this.application as UiTestApplication).mockPackageManager = null
 }
 
 private data class ServiceCredentials(
