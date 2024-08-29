@@ -5,6 +5,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import androidx.activity.ComponentActivity
+import com.vk.id.common.UiTestApplication
 
 public class AutoTestActivity : ComponentActivity() {
     public fun setContent(view: View) {
@@ -13,7 +14,5 @@ public class AutoTestActivity : ComponentActivity() {
         }
     }
 
-    var mockPackageManager: PackageManager? = null
-
-    override fun getPackageManager(): PackageManager = mockPackageManager ?: super.getPackageManager()
+    override fun getPackageManager(): PackageManager = (this.application as? UiTestApplication)?.mockPackageManager ?: super.getPackageManager()
 }

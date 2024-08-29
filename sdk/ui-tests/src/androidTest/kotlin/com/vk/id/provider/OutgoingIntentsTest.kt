@@ -24,6 +24,7 @@ import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.VKIDAuthCallback
 import com.vk.id.common.InternalVKIDApi
+import com.vk.id.common.UiTestApplication
 import com.vk.id.common.activity.AutoTestActivity
 import com.vk.id.common.activity.AutoTestActivityRule
 import com.vk.id.common.allure.Owners
@@ -42,8 +43,9 @@ import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
 import org.hamcrest.core.AllOf.allOf
-import org.junit.After
+import org.junit.AfterClass
 import org.junit.Before
+import org.junit.BeforeClass
 import org.junit.Rule
 import org.junit.Test
 
@@ -57,17 +59,11 @@ public class OutgoingIntentsTest : BaseUiTest() {
     @get:Rule
     public val composeTestRule: AutoTestActivityRule = createAndroidComposeRule()
 
-    private lateinit var serviceCredentials: ServiceCredentials
+    private var serviceCredentials: ServiceCredentials? = null
 
     @Before
-    public fun initIntents() {
-        Intents.init()
+    public fun readCreds() {
         serviceCredentials = readCreds(composeTestRule.activity)
-    }
-
-    @After
-    public fun releaseIntents() {
-        Intents.release()
     }
 
     @Test
@@ -133,9 +129,9 @@ public class OutgoingIntentsTest : BaseUiTest() {
                             IntentMatchers.hasData(
                                 matchIntentUri(
                                     "https://id.vk.com/authorize",
-                                    clientId = serviceCredentials.clientID,
+                                    clientId = serviceCredentials?.clientID,
                                     responseType = "code",
-                                    redirectUri = serviceCredentials.redirectUri
+                                    redirectUri = serviceCredentials?.redirectUri
                                 )
                             )
                         )
@@ -177,9 +173,9 @@ public class OutgoingIntentsTest : BaseUiTest() {
                             IntentMatchers.hasData(
                                 matchIntentUri(
                                     MockVK.APP_URI,
-                                    appId = serviceCredentials.clientID,
+                                    appId = serviceCredentials?.clientID,
                                     responseType = "code",
-                                    redirectUri = serviceCredentials.redirectUri
+                                    redirectUri = serviceCredentials?.redirectUri
                                 )
                             )
                         )
@@ -190,6 +186,20 @@ public class OutgoingIntentsTest : BaseUiTest() {
     }
 
     private fun vkidBuilder(): InternalVKIDTestBuilder = InternalVKIDTestBuilder(composeTestRule.activity)
+
+    companion object {
+        @JvmStatic
+        @BeforeClass
+        public fun initIntents() {
+            Intents.init()
+        }
+
+        @JvmStatic
+        @AfterClass
+        public fun releaseIntents() {
+            Intents.release()
+        }
+    }
 }
 
 private fun matchIntentUri(
@@ -219,7 +229,7 @@ private fun matchIntentUri(
 }
 
 private fun AutoTestActivity.mockThereIsNoProviderNoBrowser() {
-    val pm = mockk<PackageManager>()
+    val pm = mockk<PackageManager>(relaxed = true)
     pm.mockNoProviders()
     every {
         pm.resolveActivity(
@@ -238,7 +248,7 @@ private fun AutoTestActivity.mockThereIsNoProviderNoBrowser() {
         )
     } returns emptyList()
 
-    this.mockPackageManager = pm
+    (this.application as UiTestApplication).mockPackageManager = pm
 }
 
 private fun AutoTestActivity.mockThereIsOnlyBrowser() {
@@ -289,7 +299,7 @@ private fun AutoTestActivity.mockThereIsOnlyBrowser() {
         )
     } returns ResolveInfo()
 
-    this.mockPackageManager = pm
+    (this.application as UiTestApplication).mockPackageManager = pm
 }
 
 private fun AutoTestActivity.mockVKProvider() {
@@ -305,6 +315,7 @@ private fun AutoTestActivity.mockVKProvider() {
         ResolveInfo().apply {
             serviceInfo = ServiceInfo().apply {
                 this.packageName = "com.vkontakte.android"
+                this.name = "not used"
             }
         }
     )
@@ -329,7 +340,7 @@ private fun AutoTestActivity.mockVKProvider() {
         }
     }
 
-    this.mockPackageManager = pm
+    (this.application as UiTestApplication).mockPackageManager = pm
 }
 
 private fun PackageManager.mockNoProviders() {
@@ -344,7 +355,7 @@ private fun PackageManager.mockNoProviders() {
 }
 
 private fun AutoTestActivity.releaseMockPM() {
-    mockPackageManager = null
+    (this.application as UiTestApplication).mockPackageManager = null
 }
 
 private data class ServiceCredentials(
