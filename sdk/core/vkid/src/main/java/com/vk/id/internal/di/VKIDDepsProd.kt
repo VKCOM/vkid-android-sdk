@@ -28,6 +28,10 @@ import com.vk.id.internal.auth.device.InternalVKIDDeviceIdProvider
 import com.vk.id.internal.auth.pkce.PkceGeneratorSHA256
 import com.vk.id.internal.concurrent.CoroutinesDispatchersProd
 import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
+import com.vk.id.internal.context.AndroidPackageManager
+import com.vk.id.internal.context.DefaultActivityStarter
+import com.vk.id.internal.context.InternalVKIDActivityStarter
+import com.vk.id.internal.context.InternalVKIDPackageManager
 import com.vk.id.internal.ipc.SilentAuthInfoProvider
 import com.vk.id.internal.ipc.VkSilentAuthInfoProvider
 import com.vk.id.internal.state.StateGenerator
@@ -70,10 +74,14 @@ internal open class VKIDDepsProd(
 
     private val silentAuthServicesProvider: Lazy<SilentAuthServicesProvider> = lazy {
         SilentAuthServicesProvider(
-            appContext,
+            vkidPackageManager,
+            appContext.packageName,
             trustedProvidersCache.value
         )
     }
+
+    override val vkidPackageManager: InternalVKIDPackageManager = AndroidPackageManager(appContext.packageManager)
+    override val activityStarter: InternalVKIDActivityStarter = DefaultActivityStarter(appContext)
 
     override val api: Lazy<InternalVKIDApiContract> = lazy {
         InternalVKIDRealApi(context = appContext)
@@ -103,11 +111,13 @@ internal open class VKIDDepsProd(
 
     override val authProvidersChooser: Lazy<AuthProvidersChooser> = lazy {
         AuthProvidersChooserDefault(
-            appContext,
+            vkidPackageManager,
             SilentAuthServicesProvider(
-                appContext,
+                vkidPackageManager,
+                appContext.packageName,
                 trustedProvidersCache.value
-            )
+            ),
+            activityStarter
         )
     }
 

@@ -7,13 +7,8 @@ import android.app.Instrumentation
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.content.pm.ActivityInfo
-import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
-import android.content.pm.ResolveInfo
-import android.content.pm.ServiceInfo
-import android.content.pm.Signature
 import android.net.Uri
 import android.os.Build
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -24,8 +19,6 @@ import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.VKIDAuthCallback
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.common.UiTestApplication
-import com.vk.id.common.activity.AutoTestActivity
 import com.vk.id.common.activity.AutoTestActivityRule
 import com.vk.id.common.allure.Owners
 import com.vk.id.common.allure.Platform
@@ -33,10 +26,10 @@ import com.vk.id.common.allure.Priority
 import com.vk.id.common.allure.Product
 import com.vk.id.common.allure.Project
 import com.vk.id.common.basetest.BaseUiTest
+import com.vk.id.internal.context.InternalVKIDPackageManager
 import com.vk.id.test.InternalVKIDTestBuilder
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.types.shouldBeInstanceOf
-import io.mockk.every
 import io.mockk.mockk
 import io.qameta.allure.kotlin.Owner
 import org.hamcrest.Description
@@ -71,8 +64,7 @@ public class OutgoingIntentsTest : BaseUiTest() {
         var receivedFail: VKIDAuthFail? = null
         var receivedToken: AccessToken? = null
         before {
-            vkidBuilder().build()
-            composeTestRule.activity.mockThereIsNoProviderNoBrowser()
+            vkidBuilder(MockPmNoProvidersNoBrowsers()).build()
             VKID.instance.authorize(
                 composeTestRule.activity,
                 callback = object : VKIDAuthCallback {
@@ -85,7 +77,6 @@ public class OutgoingIntentsTest : BaseUiTest() {
                 }
             )
         }.after {
-            composeTestRule.activity.releaseMockPM()
         }.run {
             step("Получена ошибка NoBrowserAvailable") {
                 flakySafely {
@@ -99,8 +90,7 @@ public class OutgoingIntentsTest : BaseUiTest() {
     @Test
     public fun noProviderOnlyBrowserAvailable() {
         before {
-            vkidBuilder().build()
-            composeTestRule.activity.mockThereIsOnlyBrowser()
+            vkidBuilder(MockPmOnlyBrowser()).build()
             // prevent actually starting browser
             Intents.intending(
                 allOf(
@@ -118,7 +108,6 @@ public class OutgoingIntentsTest : BaseUiTest() {
                 mockk(relaxed = true)
             )
         }.after {
-            composeTestRule.activity.releaseMockPM()
         }.run {
             step("Отправлен корректный intent в браузер") {
                 flakySafely {
@@ -144,8 +133,7 @@ public class OutgoingIntentsTest : BaseUiTest() {
     @Test
     public fun providerAvailableVK() {
         before {
-            vkidBuilder().build()
-            composeTestRule.activity.mockVKProvider()
+            vkidBuilder(MockPmVKProvider()).build()
             // prevent actually starting provider
             Intents.intending(
                 allOf(
@@ -162,7 +150,6 @@ public class OutgoingIntentsTest : BaseUiTest() {
                 mockk(relaxed = true)
             )
         }.after {
-            composeTestRule.activity.releaseMockPM()
         }.run {
             step("Отправлен корректный intent в провайдер") {
                 flakySafely {
@@ -185,7 +172,8 @@ public class OutgoingIntentsTest : BaseUiTest() {
         }
     }
 
-    private fun vkidBuilder(): InternalVKIDTestBuilder = InternalVKIDTestBuilder(composeTestRule.activity)
+    private fun vkidBuilder(pm: InternalVKIDPackageManager): InternalVKIDTestBuilder =
+        InternalVKIDTestBuilder(composeTestRule.activity).overridePackageManager(pm)
 
     companion object {
         @JvmStatic
@@ -226,136 +214,6 @@ private fun matchIntentUri(
             return prefixCorrect && clientIdCorrect && responseTypeCorrect && redirectUriCorrect && appIdCorrect
         }
     }
-}
-
-private fun AutoTestActivity.mockThereIsNoProviderNoBrowser() {
-    val pm = mockk<PackageManager>(relaxed = true)
-    pm.mockNoProviders()
-    every {
-        pm.resolveActivity(
-            match {
-                it.data.toString() == "http://www.example.com"
-            },
-            eq(0)
-        )
-    } returns null
-    every {
-        pm.queryIntentActivities(
-            match {
-                it.data.toString() == "http://www.example.com"
-            },
-            any<Int>()
-        )
-    } returns emptyList()
-
-    (this.application as UiTestApplication).mockPackageManager = pm
-}
-
-private fun AutoTestActivity.mockThereIsOnlyBrowser() {
-    val pm = mockk<PackageManager>()
-    pm.mockNoProviders()
-    every {
-        pm.resolveActivity(
-            match {
-                it.data.toString() == "http://www.example.com"
-            },
-            eq(0)
-        )
-    } returns null
-    every {
-        pm.queryIntentActivities(
-            match {
-                it.data.toString() == "http://www.example.com"
-            },
-            any<Int>()
-        )
-    } returns listOf(
-        ResolveInfo().apply {
-            filter = IntentFilter(Intent.ACTION_VIEW)
-            filter.addCategory(Intent.CATEGORY_BROWSABLE)
-            filter.addDataScheme("http")
-            filter.addDataScheme("https")
-            activityInfo = ActivityInfo().apply {
-                this.packageName = MockChrome.PACKAGE_NAME
-            }
-        }
-    )
-    every {
-        pm.getPackageInfo(eq(MockChrome.PACKAGE_NAME), any<Int>())
-    } returns PackageInfo().apply {
-        this.packageName = MockChrome.PACKAGE_NAME
-        this.versionName = MockChrome.VERSION
-        this.signatures = arrayOf(Signature(MockChrome.SIGNATURE))
-    }
-
-    // for BrowserSelector::hasWarmupService
-    every {
-        pm.resolveService(
-            match {
-                it.action == "android.support.customtabs.action.CustomTabsService" &&
-                    it.`package` == MockChrome.PACKAGE_NAME
-            },
-            any<Int>()
-        )
-    } returns ResolveInfo()
-
-    (this.application as UiTestApplication).mockPackageManager = pm
-}
-
-private fun AutoTestActivity.mockVKProvider() {
-    val pm = mockk<PackageManager>()
-    every {
-        pm.queryIntentServices(
-            match {
-                it.action == "com.vk.silentauth.action.GET_INFO"
-            },
-            eq(0)
-        )
-    } returns listOf(
-        ResolveInfo().apply {
-            serviceInfo = ServiceInfo().apply {
-                this.packageName = "com.vkontakte.android"
-                this.name = "not used"
-            }
-        }
-    )
-
-    every {
-        pm.getPackageInfo(eq(MockVK.PACKAGE_NAME), any<Int>())
-    } returns PackageInfo().apply {
-        this.packageName = MockVK.PACKAGE_NAME
-        this.signatures = arrayOf(Signature(MockVK.SIGNATURE))
-    }
-
-    every {
-        pm.resolveActivity(
-            match {
-                it.data.toString() == MockVK.APP_URI
-            },
-            any<Int>()
-        )
-    } returns ResolveInfo().apply {
-        activityInfo = ActivityInfo().apply {
-            packageName = MockVK.PACKAGE_NAME
-        }
-    }
-
-    (this.application as UiTestApplication).mockPackageManager = pm
-}
-
-private fun PackageManager.mockNoProviders() {
-    every {
-        queryIntentServices(
-            match {
-                it.action == "com.vk.silentauth.action.GET_INFO"
-            },
-            eq(0)
-        )
-    } returns emptyList()
-}
-
-private fun AutoTestActivity.releaseMockPM() {
-    (this.application as UiTestApplication).mockPackageManager = null
 }
 
 private data class ServiceCredentials(

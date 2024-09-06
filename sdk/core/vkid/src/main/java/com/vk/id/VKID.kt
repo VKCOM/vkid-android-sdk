@@ -22,6 +22,7 @@ import com.vk.id.internal.auth.AuthProvidersChooser
 import com.vk.id.internal.auth.AuthResult
 import com.vk.id.internal.auth.device.InternalVKIDDeviceIdProvider
 import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
+import com.vk.id.internal.context.InternalVKIDPackageManager
 import com.vk.id.internal.di.VKIDDeps
 import com.vk.id.internal.di.VKIDDepsProd
 import com.vk.id.internal.ipc.SilentAuthInfoProvider
@@ -92,6 +93,7 @@ public class VKID {
             deviceIdStorage: InternalVKIDDeviceIdProvider.DeviceIdStorage?,
             prefsStore: InternalVKIDPrefsStore?,
             encryptedSharedPreferencesStorage: InternalVKIDEncryptedSharedPreferencesStorage?,
+            packageManager: InternalVKIDPackageManager?,
         ): Unit = init(
             VKID(object : VKIDDepsProd(context) {
                 override val authProvidersChooser = lazy {
@@ -105,6 +107,7 @@ public class VKID {
                 override val prefsStore = lazy { prefsStore ?: super.prefsStore.value }
                 override val encryptedSharedPreferencesStorage =
                     lazy { encryptedSharedPreferencesStorage ?: super.encryptedSharedPreferencesStorage.value }
+                override val vkidPackageManager = packageManager ?: super.vkidPackageManager
             })
         )
 

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import com.vk.id.VKIDUser
 import com.vk.id.auth.VKIDAuthParams
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.auth.AuthActivity
 import com.vk.id.internal.auth.AuthEventBridge
 import com.vk.id.internal.auth.AuthOptions
@@ -20,6 +21,7 @@ internal class MockAuthProviderChooser(
         startTestActivity(it)
     }
 
+    @OptIn(InternalVKIDApi::class)
     private fun startTestActivity(options: AuthOptions) {
         if (config.notifyNoBrowserAvailable) {
             AuthEventBridge.onAuthResult(
