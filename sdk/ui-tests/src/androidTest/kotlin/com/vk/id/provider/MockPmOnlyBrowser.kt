@@ -11,7 +11,7 @@ import android.content.pm.Signature
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.context.InternalVKIDPackageManager
 
-class MockPmOnlyBrowser : InternalVKIDPackageManager {
+internal class MockPmOnlyBrowser : InternalVKIDPackageManager {
 
     override fun queryIntentServices(intent: Intent, flags: Int): List<ResolveInfo> = emptyList()
 

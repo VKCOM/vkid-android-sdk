@@ -11,7 +11,7 @@ import android.content.pm.Signature
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.context.InternalVKIDPackageManager
 
-class MockPmVKProvider : InternalVKIDPackageManager {
+internal class MockPmVKProvider : InternalVKIDPackageManager {
     override fun queryIntentServices(intent: Intent, flags: Int): List<ResolveInfo> {
         return if (intent.action == "com.vk.silentauth.action.GET_INFO") {
             listOf(

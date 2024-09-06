@@ -175,7 +175,7 @@ public class OutgoingIntentsTest : BaseUiTest() {
     private fun vkidBuilder(pm: InternalVKIDPackageManager): InternalVKIDTestBuilder =
         InternalVKIDTestBuilder(composeTestRule.activity).overridePackageManager(pm)
 
-    companion object {
+    public companion object {
         @JvmStatic
         @BeforeClass
         public fun initIntents() {

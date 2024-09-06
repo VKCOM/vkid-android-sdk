@@ -439,7 +439,7 @@ public abstract class BottomSheetFlowTest : BaseUiTest() {
         }
     }
 
-    abstract fun setContent(
+    internal abstract fun setContent(
         onAuth: (OAuth?, AccessToken) -> Unit = { _, _ -> },
         onAuthCode: (AuthCodeData, Boolean) -> Unit = { _, _ -> },
         onFail: (OAuth?, VKIDAuthFail) -> Unit = { _, _ -> },
