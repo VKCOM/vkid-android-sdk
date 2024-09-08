@@ -5,5 +5,5 @@ import com.vk.id.common.InternalVKIDApi
 
 @InternalVKIDApi
 public interface InternalVKIDActivityStarter {
-    fun startActivity(intent: Intent)
+    public fun startActivity(intent: Intent)
 }

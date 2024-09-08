@@ -3,7 +3,7 @@ package com.vk.id.onetap.compose.onetap
 /**
  * Represents a scenario for which OneTap is used which affects OneTap's title.
  */
-enum class OneTapTitleScenario {
+public enum class OneTapTitleScenario {
 
     /**
      * Default auth scenario.

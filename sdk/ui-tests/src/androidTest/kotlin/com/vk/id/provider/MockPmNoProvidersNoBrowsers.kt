@@ -8,7 +8,7 @@ import android.content.pm.ResolveInfo
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.context.InternalVKIDPackageManager
 
-class MockPmNoProvidersNoBrowsers : InternalVKIDPackageManager {
+internal class MockPmNoProvidersNoBrowsers : InternalVKIDPackageManager {
     override fun queryIntentServices(intent: Intent, flags: Int): List<ResolveInfo> = emptyList()
 
     override fun resolveActivity(intent: Intent, flags: Int): ResolveInfo? = null
