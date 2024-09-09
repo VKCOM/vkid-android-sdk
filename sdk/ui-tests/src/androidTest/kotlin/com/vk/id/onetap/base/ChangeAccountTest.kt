@@ -10,8 +10,10 @@ import io.github.kakaocup.compose.node.element.ComposeScreen
 
 public abstract class ChangeAccountTest : OneTapTest() {
 
-    protected override fun vkidBuilder(): InternalVKIDTestBuilder = super.vkidBuilder()
-        .requireUnsetUseAuthProviderIfPossible()
+    protected override fun vkidBuilder(): InternalVKIDTestBuilder {
+        requireUnsetUseAuthProviderIfPossible()
+        return super.vkidBuilder()
+    }
 
     override fun TestContext<Unit>.startAuth(): Unit = step("Начало авторизации") {
         ComposeScreen.onComposeScreen<OneTapScreen>(composeTestRule) {
