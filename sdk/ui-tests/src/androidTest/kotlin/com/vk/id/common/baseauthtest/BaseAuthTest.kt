@@ -11,12 +11,13 @@ import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.common.activity.AutoTestActivityRule
+import com.vk.id.common.activity.MockProviderActivityStarter
 import com.vk.id.common.allure.Owners
 import com.vk.id.common.allure.Platform
 import com.vk.id.common.allure.Priority
 import com.vk.id.common.allure.Product
 import com.vk.id.common.allure.Project
-import com.vk.id.common.basetest.BaseUiTest
+import com.vk.id.common.basetest.BaseUiTestWithProvider
 import com.vk.id.common.mockapi.MockApi
 import com.vk.id.common.mockapi.mockApiError
 import com.vk.id.common.mockapi.mockApiSuccess
@@ -24,6 +25,8 @@ import com.vk.id.common.mockapi.mockGetTokenSuccess
 import com.vk.id.common.mockapi.mockLogoutError
 import com.vk.id.common.mockapi.mockUserInfoError
 import com.vk.id.common.mockprovider.ContinueAuthScenario
+import com.vk.id.common.mockprovider.pm.MockPmNoProvidersNoBrowsers
+import com.vk.id.common.mockprovider.pm.MockPmOnlyBrowser
 import com.vk.id.test.InternalVKIDTestBuilder
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
@@ -43,7 +46,7 @@ import java.util.UUID
 public abstract class BaseAuthTest(
     private val oAuth: OAuth?,
     private val skipTest: Boolean = false,
-) : BaseUiTest() {
+) : BaseUiTestWithProvider() {
 
     private companion object {
         val DEVICE_ID = UUID.randomUUID().toString()
@@ -68,9 +71,9 @@ public abstract class BaseAuthTest(
         before {
             vkidBuilder()
                 .mockApiSuccess()
-                .user(MockApi.mockApiUser())
-                .overrideDeviceId(DEVICE_ID)
                 .build()
+            user(MockApi.mockApiUser())
+            overrideDeviceId(DEVICE_ID)
             setContent(
                 onAuth = { oAuth, token ->
                     receivedOAuth = oAuth
@@ -115,9 +118,9 @@ public abstract class BaseAuthTest(
             vkidBuilder()
                 .mockApiSuccess()
                 .mockLogoutError()
-                .user(MockApi.mockApiUser())
-                .overrideDeviceId(DEVICE_ID)
                 .build()
+            user(MockApi.mockApiUser())
+            overrideDeviceId(DEVICE_ID)
             setContent(
                 onAuth = { oAuth, token ->
                     receivedOAuth = oAuth
@@ -161,9 +164,9 @@ public abstract class BaseAuthTest(
         before {
             vkidBuilder()
                 .mockApiSuccess()
-                .user(MockApi.mockApiUser())
-                .overrideDeviceId(DEVICE_ID)
                 .build()
+            user(MockApi.mockApiUser())
+            overrideDeviceId(DEVICE_ID)
             setContent(
                 onAuth = { oAuth, token ->
                     receivedOAuth = oAuth
@@ -206,10 +209,8 @@ public abstract class BaseAuthTest(
         var receivedAuthCode: AuthCodeData? = null
         var receivedAuthCodeSuccess: Boolean? = null
         before {
-            vkidBuilder()
-                .notifyFailedRedirect()
-                .overrideDeviceId(DEVICE_ID)
-                .build()
+            vkidBuilder().build()
+            deviceIdIsNull()
             setContent(
                 onFail = { oAuth, fail ->
                     receivedFail = fail
@@ -223,6 +224,7 @@ public abstract class BaseAuthTest(
         }.after {
         }.run {
             startAuth()
+            continueAuth()
             step("Auth code не получен") {
                 receivedAuthCode.shouldBeNull()
                 receivedAuthCodeSuccess.shouldBeNull()
@@ -242,10 +244,7 @@ public abstract class BaseAuthTest(
         var receivedAuthCode: AuthCodeData? = null
         var receivedAuthCodeSuccess: Boolean? = null
         before {
-            vkidBuilder()
-                .notifyNoBrowserAvailable()
-                .overrideDeviceId(DEVICE_ID)
-                .build()
+            vkidBuilder().overridePackageManager(MockPmNoProvidersNoBrowsers()).build()
             setContent(
                 onFail = { oAuth, fail ->
                     receivedFail = fail
@@ -280,8 +279,8 @@ public abstract class BaseAuthTest(
         before {
             vkidBuilder()
                 .mockApiError()
-                .overrideDeviceId(DEVICE_ID)
                 .build()
+            overrideDeviceId(DEVICE_ID)
             setContent(
                 onFail = { oAuth, fail ->
                     receivedFail = fail
@@ -320,8 +319,8 @@ public abstract class BaseAuthTest(
             vkidBuilder()
                 .mockGetTokenSuccess()
                 .mockUserInfoError()
-                .overrideDeviceId(DEVICE_ID)
                 .build()
+            overrideDeviceId(DEVICE_ID)
             setContent(
                 onFail = { oAuth, fail ->
                     receivedFail = fail
@@ -359,8 +358,8 @@ public abstract class BaseAuthTest(
         before {
             vkidBuilder()
                 .mockApiSuccess()
-                .overrideDeviceId(DEVICE_ID)
                 .build()
+            overrideDeviceId(DEVICE_ID)
             setContent(
                 onFail = { oAuth, fail ->
                     receivedFail = fail
@@ -398,9 +397,9 @@ public abstract class BaseAuthTest(
         before {
             vkidBuilder()
                 .mockApiSuccess()
-                .overrideOAuthToNull()
-                .overrideDeviceId(DEVICE_ID)
                 .build()
+            overrideOAuthToNull()
+            overrideDeviceId(DEVICE_ID)
             setContent(
                 onFail = { oAuth, fail ->
                     receivedFail = fail
@@ -436,8 +435,8 @@ public abstract class BaseAuthTest(
         before {
             vkidBuilder()
                 .mockApiSuccess()
-                .overrideDeviceId(null)
                 .build()
+            deviceIdIsNull()
             setContent(
                 onFail = { oAuth, fail ->
                     receivedFail = fail
@@ -473,9 +472,9 @@ public abstract class BaseAuthTest(
         before {
             vkidBuilder()
                 .mockApiSuccess()
-                .overrideState("wrong state")
-                .overrideDeviceId(DEVICE_ID)
                 .build()
+            overrideState("wrong state")
+            overrideDeviceId(DEVICE_ID)
             setContent(
                 onFail = { oAuth, fail ->
                     receivedFail = fail
@@ -523,4 +522,6 @@ public abstract class BaseAuthTest(
     protected abstract fun TestContext<Unit>.startAuth()
 
     protected open fun vkidBuilder(): InternalVKIDTestBuilder = InternalVKIDTestBuilder(composeTestRule.activity)
+        .overridePackageManager(MockPmOnlyBrowser())
+        .overrideActivityStarter(MockProviderActivityStarter(composeTestRule.activity))
 }

@@ -1,6 +1,6 @@
 @file:OptIn(InternalVKIDApi::class)
 
-package com.vk.id.provider
+package com.vk.id.intents
 
 import android.app.Activity
 import android.app.Instrumentation
@@ -26,6 +26,11 @@ import com.vk.id.common.allure.Priority
 import com.vk.id.common.allure.Product
 import com.vk.id.common.allure.Project
 import com.vk.id.common.basetest.BaseUiTest
+import com.vk.id.common.mockprovider.pm.MockChrome
+import com.vk.id.common.mockprovider.pm.MockPmNoProvidersNoBrowsers
+import com.vk.id.common.mockprovider.pm.MockPmOnlyBrowser
+import com.vk.id.common.mockprovider.pm.MockPmVKProvider
+import com.vk.id.common.mockprovider.pm.MockVK
 import com.vk.id.internal.context.InternalVKIDPackageManager
 import com.vk.id.test.InternalVKIDTestBuilder
 import io.kotest.matchers.nulls.shouldBeNull

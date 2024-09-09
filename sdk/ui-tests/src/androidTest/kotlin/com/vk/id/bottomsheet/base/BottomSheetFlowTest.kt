@@ -13,16 +13,19 @@ import com.vk.id.bottomsheet.screen.BottomSheetRetryScreen
 import com.vk.id.bottomsheet.screen.BottomSheetScreen
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.common.activity.AutoTestActivityRule
+import com.vk.id.common.activity.MockProviderActivityStarter
 import com.vk.id.common.allure.Owners
 import com.vk.id.common.allure.Platform
 import com.vk.id.common.allure.Priority
 import com.vk.id.common.allure.Product
 import com.vk.id.common.allure.Project
-import com.vk.id.common.basetest.BaseUiTest
+import com.vk.id.common.basetest.BaseUiTestWithProvider
 import com.vk.id.common.mockapi.MockApi
 import com.vk.id.common.mockapi.mockApiError
 import com.vk.id.common.mockapi.mockApiSuccess
 import com.vk.id.common.mockprovider.ContinueAuthScenario
+import com.vk.id.common.mockprovider.pm.MockPmNoProvidersNoBrowsers
+import com.vk.id.common.mockprovider.pm.MockPmOnlyBrowser
 import com.vk.id.onetap.screen.OneTapScreen
 import com.vk.id.test.InternalVKIDTestBuilder
 import io.github.kakaocup.compose.node.element.ComposeScreen
@@ -39,7 +42,7 @@ import java.util.UUID
 @Owner(Owners.MAKSIM_SPIRIDONOV)
 @Priority(Priority.CRITICAL)
 @Suppress("LongMethod")
-public abstract class BottomSheetFlowTest : BaseUiTest() {
+public abstract class BottomSheetFlowTest : BaseUiTestWithProvider() {
 
     private companion object {
         val DEVICE_ID = UUID.randomUUID().toString()
@@ -57,9 +60,8 @@ public abstract class BottomSheetFlowTest : BaseUiTest() {
         var receivedAuthCodeSuccess: Boolean? = null
         val oAuth: OAuth? = null
         before {
-            vkidBuilder()
-                .overrideDeviceId(null)
-                .build()
+            vkidBuilder().build()
+            deviceIdIsNull()
             setContent(
                 onAuth = { oAuth, token ->
                     receivedOAuth = oAuth
@@ -75,8 +77,7 @@ public abstract class BottomSheetFlowTest : BaseUiTest() {
                 },
                 autoHideOnSuccess = true
             )
-        }.after {
-        }.run {
+        }.after {}.run {
             startAuth()
             continueAuth()
             step("Auth code не получен") {
@@ -94,9 +95,10 @@ public abstract class BottomSheetFlowTest : BaseUiTest() {
             step("Делаем мок новых данных") {
                 vkidBuilder()
                     .mockApiSuccess()
-                    .user(MockApi.mockApiUser())
-                    .overrideDeviceId(DEVICE_ID)
                     .build()
+                resetTestAuthProviderActivityConfig()
+                user(MockApi.mockApiUser())
+                overrideDeviceId(DEVICE_ID)
             }
             step("Нажимаем 'Попробовать снова'") {
                 retryAuth()
@@ -132,10 +134,10 @@ public abstract class BottomSheetFlowTest : BaseUiTest() {
         val oAuth: OAuth? = null
         before {
             vkidBuilder()
-                .notifyNoBrowserAvailable()
-                .requireUnsetUseAuthProviderIfPossible()
-                .overrideDeviceId(DEVICE_ID)
+                .overridePackageManager(MockPmNoProvidersNoBrowsers())
                 .build()
+            requireUnsetUseAuthProviderIfPossible()
+            overrideDeviceId(DEVICE_ID)
             setContent(
                 onFail = { oAuth, fail ->
                     receivedFail = fail
@@ -167,10 +169,9 @@ public abstract class BottomSheetFlowTest : BaseUiTest() {
                 }
             }
             step("Делаем мок новых данных") {
-                vkidBuilder()
-                    .requireUnsetUseAuthProviderIfPossible()
-                    .overrideDeviceId(DEVICE_ID)
-                    .build()
+                vkidBuilder().build()
+                requireUnsetUseAuthProviderIfPossible()
+                overrideDeviceId(DEVICE_ID)
             }
             step("Нажимаем 'Попробовать снова'") {
                 retryAuth()
@@ -200,8 +201,8 @@ public abstract class BottomSheetFlowTest : BaseUiTest() {
         before {
             vkidBuilder()
                 .mockApiError()
-                .overrideDeviceId(null)
                 .build()
+            deviceIdIsNull()
             setContent(
                 onAuth = { oAuth, token ->
                     receivedOAuth = oAuth
@@ -263,11 +264,9 @@ public abstract class BottomSheetFlowTest : BaseUiTest() {
         var receivedAuthCodeSuccess: Boolean? = null
         val oAuth: OAuth? = null
         before {
-            vkidBuilder()
-                .notifyNoBrowserAvailable()
-                .requireUnsetUseAuthProviderIfPossible()
-                .overrideDeviceId(DEVICE_ID)
-                .build()
+            vkidBuilder().overridePackageManager(MockPmNoProvidersNoBrowsers()).build()
+            requireUnsetUseAuthProviderIfPossible()
+            overrideDeviceId(DEVICE_ID)
             setContent(
                 onAuth = { oAuth, token ->
                     receivedOAuth = oAuth
@@ -299,10 +298,8 @@ public abstract class BottomSheetFlowTest : BaseUiTest() {
                 }
             }
             step("Делаем мок новых данных") {
-                vkidBuilder()
-                    .overrideDeviceId(null)
-                    .requireUnsetUseAuthProviderIfPossible()
-                    .build()
+                vkidBuilder().build()
+                deviceIdIsNull()
             }
             step("Нажимаем 'Попробовать снова'") {
                 retryAuth()
@@ -333,9 +330,9 @@ public abstract class BottomSheetFlowTest : BaseUiTest() {
         before {
             vkidBuilder()
                 .mockApiSuccess()
-                .user(MockApi.mockApiUser())
-                .overrideDeviceId(DEVICE_ID)
                 .build()
+            user(MockApi.mockApiUser())
+            overrideDeviceId(DEVICE_ID)
             setContent(
                 onAuth = { oAuth, token ->
                     receivedOAuth = oAuth
@@ -351,7 +348,8 @@ public abstract class BottomSheetFlowTest : BaseUiTest() {
                 },
                 autoHideOnSuccess = false
             )
-        }.after {}.run {
+        }.after {
+        }.run {
             startAuth()
             continueAuth()
             step("Получен auth code") {
@@ -391,9 +389,9 @@ public abstract class BottomSheetFlowTest : BaseUiTest() {
         before {
             vkidBuilder()
                 .mockApiSuccess()
-                .user(MockApi.mockApiUser())
-                .overrideDeviceId(DEVICE_ID)
                 .build()
+            user(MockApi.mockApiUser())
+            overrideDeviceId(DEVICE_ID)
             setContent(
                 onAuth = { oAuth, token ->
                     receivedOAuth = oAuth
@@ -409,7 +407,8 @@ public abstract class BottomSheetFlowTest : BaseUiTest() {
                 },
                 autoHideOnSuccess = true
             )
-        }.after {}.run {
+        }.after {
+        }.run {
             startAuth()
             continueAuth()
             step("Получен auth code") {
@@ -498,7 +497,10 @@ public abstract class BottomSheetFlowTest : BaseUiTest() {
         }
 
     @OptIn(InternalVKIDApi::class)
-    private fun vkidBuilder(): InternalVKIDTestBuilder = InternalVKIDTestBuilder(composeTestRule.activity)
+    private fun vkidBuilder(): InternalVKIDTestBuilder =
+        InternalVKIDTestBuilder(composeTestRule.activity)
+            .overridePackageManager(MockPmOnlyBrowser())
+            .overrideActivityStarter(MockProviderActivityStarter(composeTestRule.activity))
 
     private fun TestContext<Unit>.continueAuth() = scenario(ContinueAuthScenario(composeTestRule))
 }

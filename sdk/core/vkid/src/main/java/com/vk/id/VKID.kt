@@ -22,6 +22,7 @@ import com.vk.id.internal.auth.AuthProvidersChooser
 import com.vk.id.internal.auth.AuthResult
 import com.vk.id.internal.auth.device.InternalVKIDDeviceIdProvider
 import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
+import com.vk.id.internal.context.InternalVKIDActivityStarter
 import com.vk.id.internal.context.InternalVKIDPackageManager
 import com.vk.id.internal.di.VKIDDeps
 import com.vk.id.internal.di.VKIDDepsProd
@@ -46,8 +47,6 @@ import com.vk.id.storage.InternalVKIDEncryptedSharedPreferencesStorage
 import com.vk.id.storage.TokenStorage
 import com.vk.id.test.InternalVKIDImmediateApi
 import com.vk.id.test.InternalVKIDOverrideApi
-import com.vk.id.test.MockAuthProviderChooser
-import com.vk.id.test.MockAuthProviderConfig
 import com.vk.id.test.TestSilentAuthInfoProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -89,18 +88,13 @@ public class VKID {
         internal fun init(
             context: Context,
             mockApi: InternalVKIDOverrideApi,
-            mockAuthProviderConfig: MockAuthProviderConfig?,
             deviceIdStorage: InternalVKIDDeviceIdProvider.DeviceIdStorage?,
             prefsStore: InternalVKIDPrefsStore?,
             encryptedSharedPreferencesStorage: InternalVKIDEncryptedSharedPreferencesStorage?,
             packageManager: InternalVKIDPackageManager?,
+            activityStarter: InternalVKIDActivityStarter?,
         ): Unit = init(
             VKID(object : VKIDDepsProd(context) {
-                override val authProvidersChooser = lazy {
-                    mockAuthProviderConfig?.let {
-                        MockAuthProviderChooser(context, mockAuthProviderConfig)
-                    } ?: super.authProvidersChooser.value
-                }
                 override val api = lazy { InternalVKIDImmediateApi(mockApi) }
                 override val vkSilentAuthInfoProvider = lazy { TestSilentAuthInfoProvider() }
                 override val deviceIdStorage = lazy { deviceIdStorage ?: super.deviceIdStorage.value }
@@ -108,6 +102,7 @@ public class VKID {
                 override val encryptedSharedPreferencesStorage =
                     lazy { encryptedSharedPreferencesStorage ?: super.encryptedSharedPreferencesStorage.value }
                 override val vkidPackageManager = packageManager ?: super.vkidPackageManager
+                override val activityStarter = activityStarter ?: super.activityStarter
             })
         )
 

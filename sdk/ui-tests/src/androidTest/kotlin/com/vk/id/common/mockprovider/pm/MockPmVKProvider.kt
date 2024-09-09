@@ -1,6 +1,6 @@
 @file:OptIn(InternalVKIDApi::class)
 
-package com.vk.id.provider
+package com.vk.id.common.mockprovider.pm
 
 import android.content.Intent
 import android.content.pm.ActivityInfo
