@@ -91,7 +91,7 @@ internal fun VKIDButton(
             .clip(style.cornersStyle)
             .clipToBounds()
             .background(style.backgroundStyle)
-            .clickable(style, onClick),
+            .clickable(onClick),
     ) {
         // 0.001 and 0.999 because weight can't be null
         @Suppress("MagicNumber")
