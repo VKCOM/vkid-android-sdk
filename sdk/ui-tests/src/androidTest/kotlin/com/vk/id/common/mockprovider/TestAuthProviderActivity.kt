@@ -9,7 +9,7 @@ import androidx.compose.material3.Button
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 
-class TestAuthProviderActivity : ComponentActivity() {
+internal class TestAuthProviderActivity : ComponentActivity() {
 
     internal companion object {
         var mockAuthProviderConfig = MockAuthProviderConfig()
