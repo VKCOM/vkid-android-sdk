@@ -2,10 +2,12 @@
 
 package com.vk.id.internal.di
 
+import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Context
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
+import android.content.pm.PackageManager.ComponentInfoFlags
 import android.os.Build
 import android.os.Bundle
 import com.vk.id.AuthOptionsCreator
@@ -48,21 +50,9 @@ import com.vk.id.storage.TokenStorage
 internal open class VKIDDepsProd(
     private val appContext: Context
 ) : VKIDDeps {
-
     private val serviceCredentials: Lazy<ServiceCredentials> = lazy {
         val componentName = ComponentName(appContext, AuthActivity::class.java)
-        val flags = PackageManager.GET_META_DATA or PackageManager.GET_ACTIVITIES
-        val ai: ActivityInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            appContext.packageManager.getActivityInfo(
-                componentName,
-                PackageManager.ComponentInfoFlags.of(flags.toLong())
-            )
-        } else {
-            appContext.packageManager.getActivityInfo(
-                componentName,
-                flags
-            )
-        }
+        val ai = getActivityInfo(componentName)
         val clientID = ai.metaData.getIntOrThrow("VKIDClientID").toString()
         val clientSecret = ai.metaData.getStringOrThrow("VKIDClientSecret")
         val redirectScheme = ai.metaData.getStringOrThrow("VKIDRedirectScheme")
@@ -70,6 +60,16 @@ internal open class VKIDDepsProd(
         val redirectUri = "$redirectScheme://$redirectHost/blank.html"
 
         ServiceCredentials(clientID, clientSecret, redirectUri)
+    }
+
+    @SuppressLint("WrongConstant")
+    private fun getActivityInfo(componentName: ComponentName): ActivityInfo {
+        val flags = PackageManager.GET_META_DATA or PackageManager.GET_ACTIVITIES
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            appContext.packageManager.getActivityInfo(componentName, ComponentInfoFlags.of(flags.toLong()))
+        } else {
+            appContext.packageManager.getActivityInfo(componentName, flags)
+        }
     }
 
     private val silentAuthServicesProvider: Lazy<SilentAuthServicesProvider> = lazy {
