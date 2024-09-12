@@ -2,9 +2,11 @@
 
 package com.vk.id.common.baseauthtest
 
+import android.net.Uri
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import com.kaspersky.kaspresso.testcases.core.testcontext.TestContext
 import com.vk.id.AccessToken
+import com.vk.id.BuildConfig
 import com.vk.id.OAuth
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.AuthCodeData
@@ -28,8 +30,15 @@ import com.vk.id.common.mockprovider.ContinueAuthScenario
 import com.vk.id.common.mockprovider.pm.MockPmNoProvidersNoBrowsers
 import com.vk.id.common.mockprovider.pm.MockPmOnlyBrowser
 import com.vk.id.test.InternalVKIDTestBuilder
+import com.vk.id.util.ServiceCredentials
+import com.vk.id.util.readVKIDCredentials
+import com.vk.id.util.shouldHaveHost
+import com.vk.id.util.shouldHaveParameter
+import com.vk.id.util.shouldHavePath
+import com.vk.id.util.shouldHaveScheme
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldStartWith
 import io.kotest.matchers.types.shouldBeInstanceOf
 import io.qameta.allure.kotlin.Allure
 import io.qameta.allure.kotlin.Owner
@@ -63,17 +72,29 @@ public abstract class BaseAuthTest(
         }
     }
 
+    private lateinit var serviceCredentials: ServiceCredentials
+
+    @Before
+    public fun readCreds() {
+        serviceCredentials = readVKIDCredentials(composeTestRule.activity)
+    }
+
+    @Suppress("LongMethod")
     public open fun tokenIsReceived(): Unit = runIfShouldNotSkip {
         var accessToken: AccessToken? = null
         var receivedOAuth: OAuth? = null
         var receivedAuthCode: AuthCodeData? = null
         var receivedAuthCodeSuccess: Boolean? = null
+        var providerReceivedUri: Uri? = null
         before {
             vkidBuilder()
                 .mockApiSuccess()
                 .build()
             user(MockApi.mockApiUser())
             overrideDeviceId(DEVICE_ID)
+            onProviderReceivedUri {
+                providerReceivedUri = it
+            }
             setContent(
                 onAuth = { oAuth, token ->
                     receivedOAuth = oAuth
@@ -104,6 +125,27 @@ public abstract class BaseAuthTest(
                     accessToken?.token shouldBe MockApi.ACCESS_TOKEN
                     accessToken?.userID shouldBe MockApi.USER_ID
                     accessToken?.userData shouldBe MockApi.mockReturnedUser()
+                }
+            }
+            step("Провайдер получил нужные параметры в интенте") {
+                flakySafely {
+                    // https://id.vk.com/authorize?client_id=51925238&response_type=code&redirect_uri=vk51925238://vk.com/blank.html?oauth2_params=eyJzY29wZSI6IiJ9&code_challenge_method=s256&code_challenge=xAE&state=S7mzUv0QelTTWA9rvYiaiYglzbNlwbha&prompt=&stats_info=eyJmbG93X3NvdXJjZSI6ImZyb21fb25lX3RhcCIsInNlc3Npb25faWQiOiJhNzU1Y2E5OS01NTUxLTQ0NTUtOGJhZi0xMWZhZDkxNDJlMWYifQ==&sdk_type=vkid&v=2.2.0&lang_id=3&scheme=bright_light
+                    providerReceivedUri?.shouldHaveScheme("https")
+                    providerReceivedUri?.shouldHaveHost("id.vk.com")
+                    providerReceivedUri?.shouldHavePath("/authorize")
+                    providerReceivedUri?.shouldHaveParameter("client_id", serviceCredentials.clientID)
+                    providerReceivedUri?.shouldHaveParameter("response_type", "code")
+                    providerReceivedUri?.shouldHaveParameter("code_challenge")
+                    providerReceivedUri?.shouldHaveParameter("code_challenge_method", "s256")
+                    providerReceivedUri?.shouldHaveParameter("stats_info")
+                    providerReceivedUri?.shouldHaveParameter("sdk_type", "vkid")
+                    providerReceivedUri?.shouldHaveParameter("v", BuildConfig.VKID_VERSION_NAME)
+                    providerReceivedUri?.shouldHaveParameter("lang_id")
+                    providerReceivedUri?.shouldHaveParameter("scheme")
+                    providerReceivedUri?.shouldHaveParameter("code_challenge")
+                    providerReceivedUri?.shouldHaveParameter("state")
+                    val redirectUri = providerReceivedUri?.getQueryParameter("redirect_uri")
+                    redirectUri shouldStartWith serviceCredentials.redirectUri + "?oauth2_params="
                 }
             }
         }
