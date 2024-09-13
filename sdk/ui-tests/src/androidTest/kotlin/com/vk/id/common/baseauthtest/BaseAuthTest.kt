@@ -37,6 +37,7 @@ import com.vk.id.util.shouldHaveHost
 import com.vk.id.util.shouldHaveParameter
 import com.vk.id.util.shouldHavePath
 import com.vk.id.util.shouldHaveScheme
+import com.vk.id.util.systemLocaleForProviderParam
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldStartWith
@@ -46,6 +47,8 @@ import io.qameta.allure.kotlin.Owner
 import org.junit.Before
 import org.junit.Rule
 import java.util.UUID
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 
 @Platform(Platform.ANDROID_AUTO)
 @Product(Product.VKID_SDK)
@@ -131,7 +134,19 @@ public abstract class BaseAuthTest(
             step("Провайдер получил нужные параметры в интенте") {
                 flakySafely {
                     checkProviderReceivedUri(providerReceivedUri)
-                    providerReceivedUri?.shouldHaveExactSetOfParameters(supportedUriParams)
+
+                    val currentLangId = systemLocaleForProviderParam(composeTestRule.activity)
+                    if (currentLangId == null) {
+                        providerReceivedUri?.shouldHaveExactSetOfParameters(supportedUriParams)
+                    } else {
+                        providerReceivedUri?.shouldHaveExactSetOfParameters(
+                            supportedUriParams.let {
+                                it.toMutableSet().apply {
+                                    add("lang_id")
+                                }
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -542,10 +557,16 @@ public abstract class BaseAuthTest(
             "stats_info",
             "sdk_type",
             "v",
-            "lang_id",
             "scheme"
         )
 
+    protected open val expectedUriParams: Map<String, String> =
+        mapOf(
+            "prompt" to "",
+            "scheme" to "bright_light"
+        )
+
+    @OptIn(ExperimentalEncodingApi::class)
     protected open fun checkProviderReceivedUri(providerReceivedUri: Uri?) {
         providerReceivedUri?.shouldHaveScheme("https")
         providerReceivedUri?.shouldHaveHost("id.vk.com")
@@ -555,8 +576,20 @@ public abstract class BaseAuthTest(
         providerReceivedUri?.shouldHaveParameter("code_challenge_method", "s256")
         providerReceivedUri?.shouldHaveParameter("sdk_type", "vkid")
         providerReceivedUri?.shouldHaveParameter("v", BuildConfig.VKID_VERSION_NAME)
-        val redirectUri = providerReceivedUri?.getQueryParameter("redirect_uri")
-        redirectUri shouldStartWith serviceCredentials.redirectUri + "?oauth2_params="
+        providerReceivedUri?.shouldHaveParameter("scheme", expectedUriParams["scheme"]!!)
+        providerReceivedUri?.shouldHaveParameter("prompt", expectedUriParams["prompt"]!!)
+        val currentLangId = systemLocaleForProviderParam(composeTestRule.activity)
+        if (currentLangId != null) {
+            providerReceivedUri?.shouldHaveParameter("lang_id", currentLangId)
+        }
+
+        val redirectUriString = providerReceivedUri?.getQueryParameter("redirect_uri")
+        redirectUriString shouldStartWith serviceCredentials.redirectUri
+
+        val redirectUri = Uri.parse(redirectUriString)
+        redirectUri shouldHaveExactSetOfParameters setOf("oauth2_params")
+        val oauth2Params = Base64.Default.decode(redirectUri.getQueryParameter("oauth2_params") ?: "").decodeToString()
+        oauth2Params shouldBe "{\"scope\":\"\"}"
     }
 
     private fun runIfShouldNotSkip(

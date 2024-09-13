@@ -30,6 +30,11 @@ public abstract class ChangeAccountTest : OneTapTest() {
             add("screen")
         }
 
+    override val expectedUriParams: Map<String, String> =
+        super.expectedUriParams.toMutableMap().apply {
+            put("prompt", "login")
+        }
+
     protected override fun checkProviderReceivedUri(providerReceivedUri: Uri?) {
         super.checkProviderReceivedUri(providerReceivedUri)
         providerReceivedUri?.shouldHaveParameter("screen", "phone")

@@ -31,8 +31,8 @@ internal fun Uri.shouldHaveParameter(key: String, value: String) = this should h
 internal fun haveParameter(key: String, keyValue: String) = object : Matcher<Uri> {
     override fun test(value: Uri) = MatcherResult(
         value.getQueryParameter(key) == keyValue,
-        { "Uri $value should have query parameter $key" },
-        { "Uri $value should not have query parameter $key" }
+        { "Uri $value should have query parameter $key = $keyValue" },
+        { "Uri $value should not have query parameter $key = $keyValue" }
     )
 }
 

@@ -35,6 +35,11 @@ public abstract class MultibrandingTest(
         }
     }
 
+    protected override val expectedUriParams: Map<String, String> =
+        super.expectedUriParams.toMutableMap().apply {
+            put("prompt", "login")
+        }
+
     protected override val supportedUriParams: Set<String>
         get() = super.supportedUriParams.toMutableSet().apply {
             add("action")
