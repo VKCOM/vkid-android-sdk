@@ -35,23 +35,11 @@ public abstract class MultibrandingTest(
         }
     }
 
-    protected override val supportedUriParams: Set<String> =
-        setOf(
-            "client_id",
-            "response_type",
-            "redirect_uri",
-            "code_challenge_method",
-            "code_challenge",
-            "state",
-            "prompt",
-            "stats_info",
-            "sdk_type",
-            "v",
-            "lang_id",
-            "scheme",
-            "action",
-            "provider"
-        )
+    protected override val supportedUriParams: Set<String>
+        get() = super.supportedUriParams.toMutableSet().apply {
+            add("action")
+            add("provider")
+        }
 
     protected override fun checkProviderReceivedUri(providerReceivedUri: Uri?) {
         super.checkProviderReceivedUri(providerReceivedUri)
