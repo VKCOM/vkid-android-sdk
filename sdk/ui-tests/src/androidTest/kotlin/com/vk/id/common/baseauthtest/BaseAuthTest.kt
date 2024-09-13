@@ -34,6 +34,7 @@ import com.vk.id.util.ServiceCredentials
 import com.vk.id.util.readVKIDCredentials
 import com.vk.id.util.shouldHaveHost
 import com.vk.id.util.shouldHaveParameter
+import com.vk.id.util.shouldHaveParameters
 import com.vk.id.util.shouldHavePath
 import com.vk.id.util.shouldHaveScheme
 import io.kotest.matchers.nulls.shouldBeNull
@@ -60,6 +61,21 @@ public abstract class BaseAuthTest(
     private companion object {
         val DEVICE_ID = UUID.randomUUID().toString()
         val AUTH_CODE = AuthCodeData(code = "d654574949e8664ba1", deviceId = DEVICE_ID)
+        val supportedUriParams =
+            setOf(
+                "client_id",
+                "response_type",
+                "redirect_uri",
+                "code_challenge_method",
+                "code_challenge",
+                "state",
+                "prompt",
+                "stats_info",
+                "sdk_type",
+                "v",
+                "lang_id",
+                "scheme"
+            )
     }
 
     @get:Rule
@@ -135,17 +151,12 @@ public abstract class BaseAuthTest(
                     providerReceivedUri?.shouldHavePath("/authorize")
                     providerReceivedUri?.shouldHaveParameter("client_id", serviceCredentials.clientID)
                     providerReceivedUri?.shouldHaveParameter("response_type", "code")
-                    providerReceivedUri?.shouldHaveParameter("code_challenge")
                     providerReceivedUri?.shouldHaveParameter("code_challenge_method", "s256")
-                    providerReceivedUri?.shouldHaveParameter("stats_info")
                     providerReceivedUri?.shouldHaveParameter("sdk_type", "vkid")
                     providerReceivedUri?.shouldHaveParameter("v", BuildConfig.VKID_VERSION_NAME)
-                    providerReceivedUri?.shouldHaveParameter("lang_id")
-                    providerReceivedUri?.shouldHaveParameter("scheme")
-                    providerReceivedUri?.shouldHaveParameter("code_challenge")
-                    providerReceivedUri?.shouldHaveParameter("state")
                     val redirectUri = providerReceivedUri?.getQueryParameter("redirect_uri")
                     redirectUri shouldStartWith serviceCredentials.redirectUri + "?oauth2_params="
+                    providerReceivedUri?.shouldHaveParameters(supportedUriParams)
                 }
             }
         }
