@@ -54,7 +54,7 @@ internal fun havePath(path: String) = object : Matcher<Uri> {
     )
 }
 
-internal infix fun Uri.shouldHaveParameters(params: Set<String>) = this should haveParameters(params)
+internal infix fun Uri.shouldHaveExactSetOfParameters(params: Set<String>) = this should haveParameters(params)
 internal fun haveParameters(params: Set<String>) = object : Matcher<Uri> {
     override fun test(value: Uri) = MatcherResult(
         value.queryParameterNames == params,

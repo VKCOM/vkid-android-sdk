@@ -32,9 +32,9 @@ import com.vk.id.common.mockprovider.pm.MockPmOnlyBrowser
 import com.vk.id.test.InternalVKIDTestBuilder
 import com.vk.id.util.ServiceCredentials
 import com.vk.id.util.readVKIDCredentials
+import com.vk.id.util.shouldHaveExactSetOfParameters
 import com.vk.id.util.shouldHaveHost
 import com.vk.id.util.shouldHaveParameter
-import com.vk.id.util.shouldHaveParameters
 import com.vk.id.util.shouldHavePath
 import com.vk.id.util.shouldHaveScheme
 import io.kotest.matchers.nulls.shouldBeNull
@@ -61,21 +61,6 @@ public abstract class BaseAuthTest(
     private companion object {
         val DEVICE_ID = UUID.randomUUID().toString()
         val AUTH_CODE = AuthCodeData(code = "d654574949e8664ba1", deviceId = DEVICE_ID)
-        val supportedUriParams =
-            setOf(
-                "client_id",
-                "response_type",
-                "redirect_uri",
-                "code_challenge_method",
-                "code_challenge",
-                "state",
-                "prompt",
-                "stats_info",
-                "sdk_type",
-                "v",
-                "lang_id",
-                "scheme"
-            )
     }
 
     @get:Rule
@@ -88,7 +73,7 @@ public abstract class BaseAuthTest(
         }
     }
 
-    private lateinit var serviceCredentials: ServiceCredentials
+    internal lateinit var serviceCredentials: ServiceCredentials
 
     @Before
     public fun readCreds() {
@@ -145,18 +130,8 @@ public abstract class BaseAuthTest(
             }
             step("Провайдер получил нужные параметры в интенте") {
                 flakySafely {
-                    // https://id.vk.com/authorize?client_id=51925238&response_type=code&redirect_uri=vk51925238://vk.com/blank.html?oauth2_params=eyJzY29wZSI6IiJ9&code_challenge_method=s256&code_challenge=xAE&state=S7mzUv0QelTTWA9rvYiaiYglzbNlwbha&prompt=&stats_info=eyJmbG93X3NvdXJjZSI6ImZyb21fb25lX3RhcCIsInNlc3Npb25faWQiOiJhNzU1Y2E5OS01NTUxLTQ0NTUtOGJhZi0xMWZhZDkxNDJlMWYifQ==&sdk_type=vkid&v=2.2.0&lang_id=3&scheme=bright_light
-                    providerReceivedUri?.shouldHaveScheme("https")
-                    providerReceivedUri?.shouldHaveHost("id.vk.com")
-                    providerReceivedUri?.shouldHavePath("/authorize")
-                    providerReceivedUri?.shouldHaveParameter("client_id", serviceCredentials.clientID)
-                    providerReceivedUri?.shouldHaveParameter("response_type", "code")
-                    providerReceivedUri?.shouldHaveParameter("code_challenge_method", "s256")
-                    providerReceivedUri?.shouldHaveParameter("sdk_type", "vkid")
-                    providerReceivedUri?.shouldHaveParameter("v", BuildConfig.VKID_VERSION_NAME)
-                    val redirectUri = providerReceivedUri?.getQueryParameter("redirect_uri")
-                    redirectUri shouldStartWith serviceCredentials.redirectUri + "?oauth2_params="
-                    providerReceivedUri?.shouldHaveParameters(supportedUriParams)
+                    checkProviderReceivedUri(providerReceivedUri)
+                    providerReceivedUri?.shouldHaveExactSetOfParameters(supportedUriParams)
                 }
             }
         }
@@ -553,6 +528,35 @@ public abstract class BaseAuthTest(
                 }
             }
         }
+    }
+
+    protected open val supportedUriParams: Set<String> =
+        setOf(
+            "client_id",
+            "response_type",
+            "redirect_uri",
+            "code_challenge_method",
+            "code_challenge",
+            "state",
+            "prompt",
+            "stats_info",
+            "sdk_type",
+            "v",
+            "lang_id",
+            "scheme"
+        )
+
+    protected open fun checkProviderReceivedUri(providerReceivedUri: Uri?) {
+        providerReceivedUri?.shouldHaveScheme("https")
+        providerReceivedUri?.shouldHaveHost("id.vk.com")
+        providerReceivedUri?.shouldHavePath("/authorize")
+        providerReceivedUri?.shouldHaveParameter("client_id", serviceCredentials.clientID)
+        providerReceivedUri?.shouldHaveParameter("response_type", "code")
+        providerReceivedUri?.shouldHaveParameter("code_challenge_method", "s256")
+        providerReceivedUri?.shouldHaveParameter("sdk_type", "vkid")
+        providerReceivedUri?.shouldHaveParameter("v", BuildConfig.VKID_VERSION_NAME)
+        val redirectUri = providerReceivedUri?.getQueryParameter("redirect_uri")
+        redirectUri shouldStartWith serviceCredentials.redirectUri + "?oauth2_params="
     }
 
     private fun runIfShouldNotSkip(
