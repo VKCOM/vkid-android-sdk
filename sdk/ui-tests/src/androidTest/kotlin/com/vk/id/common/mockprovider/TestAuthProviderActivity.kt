@@ -12,6 +12,7 @@ import androidx.compose.ui.platform.testTag
 internal class TestAuthProviderActivity : ComponentActivity() {
 
     internal companion object {
+        var uriReceivedCallback: (Uri?) -> Unit = {}
         var mockAuthProviderConfig = MockAuthProviderConfig()
     }
 
@@ -30,7 +31,11 @@ internal class TestAuthProviderActivity : ComponentActivity() {
 
     private fun returnResult() {
         // parse intent from sdk
-        val data = intent.data!!
+        val data = intent.data
+        uriReceivedCallback(data)
+        if (data == null) {
+            return
+        }
         val redirectUri = data.getQueryParameter("redirect_uri")
         val state = data.getQueryParameter("state")
         val deviceId = data.getQueryParameter("device_id")

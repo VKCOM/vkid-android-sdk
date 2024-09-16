@@ -2,9 +2,11 @@
 
 package com.vk.id.common.baseauthtest
 
+import android.net.Uri
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import com.kaspersky.kaspresso.testcases.core.testcontext.TestContext
 import com.vk.id.AccessToken
+import com.vk.id.BuildConfig
 import com.vk.id.OAuth
 import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.AuthCodeData
@@ -28,14 +30,25 @@ import com.vk.id.common.mockprovider.ContinueAuthScenario
 import com.vk.id.common.mockprovider.pm.MockPmNoProvidersNoBrowsers
 import com.vk.id.common.mockprovider.pm.MockPmOnlyBrowser
 import com.vk.id.test.InternalVKIDTestBuilder
+import com.vk.id.util.ServiceCredentials
+import com.vk.id.util.readVKIDCredentials
+import com.vk.id.util.shouldHaveExactSetOfParameters
+import com.vk.id.util.shouldHaveHost
+import com.vk.id.util.shouldHaveParameter
+import com.vk.id.util.shouldHavePath
+import com.vk.id.util.shouldHaveScheme
+import com.vk.id.util.systemLocaleForProviderParam
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldStartWith
 import io.kotest.matchers.types.shouldBeInstanceOf
 import io.qameta.allure.kotlin.Allure
 import io.qameta.allure.kotlin.Owner
 import org.junit.Before
 import org.junit.Rule
 import java.util.UUID
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 
 @Platform(Platform.ANDROID_AUTO)
 @Product(Product.VKID_SDK)
@@ -63,17 +76,29 @@ public abstract class BaseAuthTest(
         }
     }
 
+    internal lateinit var serviceCredentials: ServiceCredentials
+
+    @Before
+    public fun readCreds() {
+        serviceCredentials = readVKIDCredentials(composeTestRule.activity)
+    }
+
+    @Suppress("LongMethod")
     public open fun tokenIsReceived(): Unit = runIfShouldNotSkip {
         var accessToken: AccessToken? = null
         var receivedOAuth: OAuth? = null
         var receivedAuthCode: AuthCodeData? = null
         var receivedAuthCodeSuccess: Boolean? = null
+        var providerReceivedUri: Uri? = null
         before {
             vkidBuilder()
                 .mockApiSuccess()
                 .build()
             user(MockApi.mockApiUser())
             overrideDeviceId(DEVICE_ID)
+            onProviderReceivedUri {
+                providerReceivedUri = it
+            }
             setContent(
                 onAuth = { oAuth, token ->
                     receivedOAuth = oAuth
@@ -104,6 +129,24 @@ public abstract class BaseAuthTest(
                     accessToken?.token shouldBe MockApi.ACCESS_TOKEN
                     accessToken?.userID shouldBe MockApi.USER_ID
                     accessToken?.userData shouldBe MockApi.mockReturnedUser()
+                }
+            }
+            step("Провайдер получил нужные параметры в интенте") {
+                flakySafely {
+                    checkProviderReceivedUri(providerReceivedUri)
+
+                    val currentLangId = systemLocaleForProviderParam(composeTestRule.activity)
+                    if (currentLangId == null) {
+                        providerReceivedUri?.shouldHaveExactSetOfParameters(supportedUriParams)
+                    } else {
+                        providerReceivedUri?.shouldHaveExactSetOfParameters(
+                            supportedUriParams.let {
+                                it.toMutableSet().apply {
+                                    add("lang_id")
+                                }
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -500,6 +543,53 @@ public abstract class BaseAuthTest(
                 }
             }
         }
+    }
+
+    protected open val supportedUriParams: Set<String> =
+        setOf(
+            "client_id",
+            "response_type",
+            "redirect_uri",
+            "code_challenge_method",
+            "code_challenge",
+            "state",
+            "prompt",
+            "stats_info",
+            "sdk_type",
+            "v",
+            "scheme"
+        )
+
+    protected open val expectedUriParams: Map<String, String> =
+        mapOf(
+            "prompt" to "",
+            "scheme" to "bright_light"
+        )
+
+    @OptIn(ExperimentalEncodingApi::class)
+    protected open fun checkProviderReceivedUri(providerReceivedUri: Uri?) {
+        providerReceivedUri?.shouldHaveScheme("https")
+        providerReceivedUri?.shouldHaveHost("id.vk.com")
+        providerReceivedUri?.shouldHavePath("/authorize")
+        providerReceivedUri?.shouldHaveParameter("client_id", serviceCredentials.clientID)
+        providerReceivedUri?.shouldHaveParameter("response_type", "code")
+        providerReceivedUri?.shouldHaveParameter("code_challenge_method", "s256")
+        providerReceivedUri?.shouldHaveParameter("sdk_type", "vkid")
+        providerReceivedUri?.shouldHaveParameter("v", BuildConfig.VKID_VERSION_NAME)
+        providerReceivedUri?.shouldHaveParameter("scheme", expectedUriParams["scheme"]!!)
+        providerReceivedUri?.shouldHaveParameter("prompt", expectedUriParams["prompt"]!!)
+        val currentLangId = systemLocaleForProviderParam(composeTestRule.activity)
+        if (currentLangId != null) {
+            providerReceivedUri?.shouldHaveParameter("lang_id", currentLangId)
+        }
+
+        val redirectUriString = providerReceivedUri?.getQueryParameter("redirect_uri")
+        redirectUriString shouldStartWith serviceCredentials.redirectUri
+
+        val redirectUri = Uri.parse(redirectUriString)
+        redirectUri shouldHaveExactSetOfParameters setOf("oauth2_params")
+        val oauth2Params = Base64.Default.decode(redirectUri.getQueryParameter("oauth2_params") ?: "").decodeToString()
+        oauth2Params shouldBe "{\"scope\":\"\"}"
     }
 
     private fun runIfShouldNotSkip(

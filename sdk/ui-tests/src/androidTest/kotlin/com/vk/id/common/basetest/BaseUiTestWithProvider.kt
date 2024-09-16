@@ -1,5 +1,6 @@
 package com.vk.id.common.basetest
 
+import android.net.Uri
 import com.vk.id.VKIDUser
 import com.vk.id.common.mockprovider.MockAuthProviderConfig
 import com.vk.id.common.mockprovider.TestAuthProviderActivity
@@ -34,5 +35,9 @@ public open class BaseUiTestWithProvider : BaseUiTest() {
 
     internal fun requireUnsetUseAuthProviderIfPossible() {
         TestAuthProviderActivity.mockAuthProviderConfig.requireUnsetUseAuthProviderIfPossible = true
+    }
+
+    internal fun onProviderReceivedUri(callback: (Uri?) -> Unit) {
+        TestAuthProviderActivity.uriReceivedCallback = callback
     }
 }
