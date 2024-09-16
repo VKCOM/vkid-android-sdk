@@ -13,6 +13,7 @@ import com.vk.id.onetap.common.auth.style.InternalVKIDButtonBorderStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
 import com.vk.id.onetap.compose.R
 
+@Suppress("ModifierComposed")
 internal fun Modifier.border(
     style: InternalVKIDButtonBorderStyle,
     cornersStyle: OneTapButtonCornersStyle,

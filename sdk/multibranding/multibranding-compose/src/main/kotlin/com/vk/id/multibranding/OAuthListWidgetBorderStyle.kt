@@ -13,6 +13,7 @@ import com.vk.id.multibranding.common.style.InternalVKIDOAuthListWidgetBorderSty
 import com.vk.id.multibranding.common.style.OAuthListWidgetCornersStyle
 
 @OptIn(InternalVKIDApi::class)
+@Suppress("ModifierComposed")
 internal fun Modifier.border(
     style: InternalVKIDOAuthListWidgetBorderStyle,
     cornersStyle: OAuthListWidgetCornersStyle,

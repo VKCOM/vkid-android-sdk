@@ -11,6 +11,7 @@ internal enum class OneTapSheetBackgroundStyle {
     DARK,
 }
 
+@Suppress("ModifierComposed")
 internal fun Modifier.background(style: OneTapSheetBackgroundStyle) = composed {
     val backgroundResource = when (style) {
         OneTapSheetBackgroundStyle.LIGHT -> R.color.vkid_white
