@@ -54,7 +54,7 @@ import kotlin.io.encoding.ExperimentalEncodingApi
 @Product(Product.VKID_SDK)
 @Project(Project.VKID_SDK)
 @Owner(Owners.DANIIL_KLIMCHUK)
-@Suppress("TooManyFunctions")
+@Suppress("TooManyFunctions", "LargeClass")
 @Priority(Priority.CRITICAL)
 public abstract class BaseAuthTest(
     private val oAuth: OAuth?,
@@ -83,7 +83,6 @@ public abstract class BaseAuthTest(
         serviceCredentials = readVKIDCredentials(composeTestRule.activity)
     }
 
-    @Suppress("LongMethod")
     public open fun tokenIsReceived(): Unit = runIfShouldNotSkip {
         var accessToken: AccessToken? = null
         var receivedOAuth: OAuth? = null
@@ -134,19 +133,7 @@ public abstract class BaseAuthTest(
             step("Провайдер получил нужные параметры в интенте") {
                 flakySafely {
                     checkProviderReceivedUri(providerReceivedUri)
-
-                    val currentLangId = systemLocaleForProviderParam(composeTestRule.activity)
-                    if (currentLangId == null) {
-                        providerReceivedUri?.shouldHaveExactSetOfParameters(supportedUriParams)
-                    } else {
-                        providerReceivedUri?.shouldHaveExactSetOfParameters(
-                            supportedUriParams.let {
-                                it.toMutableSet().apply {
-                                    add("lang_id")
-                                }
-                            }
-                        )
-                    }
+                    checkExactSetOfParameters(providerReceivedUri)
                 }
             }
         }
@@ -157,6 +144,7 @@ public abstract class BaseAuthTest(
         var receivedOAuth: OAuth? = null
         var receivedAuthCode: AuthCodeData? = null
         var receivedAuthCodeSuccess: Boolean? = null
+        var providerReceivedUri: Uri? = null
         before {
             vkidBuilder()
                 .mockApiSuccess()
@@ -164,6 +152,9 @@ public abstract class BaseAuthTest(
                 .build()
             user(MockApi.mockApiUser())
             overrideDeviceId(DEVICE_ID)
+            onProviderReceivedUri {
+                providerReceivedUri = it
+            }
             setContent(
                 onAuth = { oAuth, token ->
                     receivedOAuth = oAuth
@@ -196,6 +187,12 @@ public abstract class BaseAuthTest(
                     accessToken?.userData shouldBe MockApi.mockReturnedUser()
                 }
             }
+            step("Провайдер получил нужные параметры в интенте") {
+                flakySafely {
+                    checkProviderReceivedUri(providerReceivedUri)
+                    checkExactSetOfParameters(providerReceivedUri)
+                }
+            }
         }
     }
 
@@ -204,12 +201,16 @@ public abstract class BaseAuthTest(
         var receivedOAuth: OAuth? = null
         var receivedAuthCode: AuthCodeData? = null
         var receivedAuthCodeSuccess: Boolean? = null
+        var providerReceivedUri: Uri? = null
         before {
             vkidBuilder()
                 .mockApiSuccess()
                 .build()
             user(MockApi.mockApiUser())
             overrideDeviceId(DEVICE_ID)
+            onProviderReceivedUri {
+                providerReceivedUri = it
+            }
             setContent(
                 onAuth = { oAuth, token ->
                     receivedOAuth = oAuth
@@ -243,6 +244,12 @@ public abstract class BaseAuthTest(
                     accessToken.shouldBeNull()
                 }
             }
+            step("Провайдер получил нужные параметры в интенте") {
+                flakySafely {
+                    checkProviderReceivedUri(providerReceivedUri)
+                    checkExactSetOfParameters(providerReceivedUri)
+                }
+            }
         }
     }
 
@@ -251,6 +258,10 @@ public abstract class BaseAuthTest(
         var receivedOAuth: OAuth? = null
         var receivedAuthCode: AuthCodeData? = null
         var receivedAuthCodeSuccess: Boolean? = null
+        var providerReceivedUri: Uri? = null
+        onProviderReceivedUri {
+            providerReceivedUri = it
+        }
         before {
             vkidBuilder().build()
             deviceIdIsNull()
@@ -267,6 +278,12 @@ public abstract class BaseAuthTest(
         }.after {
         }.run {
             startAuth()
+            step("Провайдер получил нужные параметры в интенте") {
+                flakySafely {
+                    checkProviderReceivedUri(providerReceivedUri)
+                    checkExactSetOfParameters(providerReceivedUri)
+                }
+            }
             continueAuth()
             step("Auth code не получен") {
                 receivedAuthCode.shouldBeNull()
@@ -286,6 +303,10 @@ public abstract class BaseAuthTest(
         var receivedOAuth: OAuth? = null
         var receivedAuthCode: AuthCodeData? = null
         var receivedAuthCodeSuccess: Boolean? = null
+        var providerReceivedUri: Uri? = null
+        onProviderReceivedUri {
+            providerReceivedUri = it
+        }
         before {
             vkidBuilder().overridePackageManager(MockPmNoProvidersNoBrowsers()).build()
             setContent(
@@ -311,6 +332,9 @@ public abstract class BaseAuthTest(
                     receivedOAuth shouldBe oAuth
                 }
             }
+            step("Провайдер не получил никаких параметров") {
+                providerReceivedUri.shouldBeNull()
+            }
         }
     }
 
@@ -319,6 +343,10 @@ public abstract class BaseAuthTest(
         var receivedOAuth: OAuth? = null
         var receivedAuthCode: AuthCodeData? = null
         var receivedAuthCodeSuccess: Boolean? = null
+        var providerReceivedUri: Uri? = null
+        onProviderReceivedUri {
+            providerReceivedUri = it
+        }
         before {
             vkidBuilder()
                 .mockApiError()
@@ -337,6 +365,12 @@ public abstract class BaseAuthTest(
         }.after {
         }.run {
             startAuth()
+            step("Провайдер получил нужные параметры в интенте") {
+                flakySafely {
+                    checkProviderReceivedUri(providerReceivedUri)
+                    checkExactSetOfParameters(providerReceivedUri)
+                }
+            }
             continueAuth()
             step("Получен auth code") {
                 flakySafely {
@@ -358,6 +392,10 @@ public abstract class BaseAuthTest(
         var receivedOAuth: OAuth? = null
         var receivedAuthCode: AuthCodeData? = null
         var receivedAuthCodeSuccess: Boolean? = null
+        var providerReceivedUri: Uri? = null
+        onProviderReceivedUri {
+            providerReceivedUri = it
+        }
         before {
             vkidBuilder()
                 .mockGetTokenSuccess()
@@ -377,6 +415,12 @@ public abstract class BaseAuthTest(
         }.after {
         }.run {
             startAuth()
+            step("Провайдер получил нужные параметры в интенте") {
+                flakySafely {
+                    checkProviderReceivedUri(providerReceivedUri)
+                    checkExactSetOfParameters(providerReceivedUri)
+                }
+            }
             continueAuth()
             step("Получен auth code") {
                 flakySafely {
@@ -398,6 +442,10 @@ public abstract class BaseAuthTest(
         var receivedOAuth: OAuth? = null
         var receivedAuthCode: AuthCodeData? = null
         var receivedAuthCodeSuccess: Boolean? = null
+        var providerReceivedUri: Uri? = null
+        onProviderReceivedUri {
+            providerReceivedUri = it
+        }
         before {
             vkidBuilder()
                 .mockApiSuccess()
@@ -416,6 +464,12 @@ public abstract class BaseAuthTest(
         }.after {
         }.run {
             startAuth()
+            step("Провайдер получил нужные параметры в интенте") {
+                flakySafely {
+                    checkProviderReceivedUri(providerReceivedUri)
+                    checkExactSetOfParameters(providerReceivedUri)
+                }
+            }
             step("Нажатие кнопки 'назад'") {
                 device.uiDevice.pressBack()
             }
@@ -437,6 +491,10 @@ public abstract class BaseAuthTest(
         var receivedOAuth: OAuth? = null
         var receivedAuthCode: AuthCodeData? = null
         var receivedAuthCodeSuccess: Boolean? = null
+        var providerReceivedUri: Uri? = null
+        onProviderReceivedUri {
+            providerReceivedUri = it
+        }
         before {
             vkidBuilder()
                 .mockApiSuccess()
@@ -456,6 +514,12 @@ public abstract class BaseAuthTest(
         }.after {
         }.run {
             startAuth()
+            step("Провайдер получил нужные параметры в интенте") {
+                flakySafely {
+                    checkProviderReceivedUri(providerReceivedUri)
+                    checkExactSetOfParameters(providerReceivedUri)
+                }
+            }
             continueAuth()
             step("Auth code не получен") {
                 receivedAuthCode.shouldBeNull()
@@ -475,6 +539,10 @@ public abstract class BaseAuthTest(
         var receivedOAuth: OAuth? = null
         var receivedAuthCode: AuthCodeData? = null
         var receivedAuthCodeSuccess: Boolean? = null
+        var providerReceivedUri: Uri? = null
+        onProviderReceivedUri {
+            providerReceivedUri = it
+        }
         before {
             vkidBuilder()
                 .mockApiSuccess()
@@ -493,6 +561,12 @@ public abstract class BaseAuthTest(
         }.after {
         }.run {
             startAuth()
+            step("Провайдер получил нужные параметры в интенте") {
+                flakySafely {
+                    checkProviderReceivedUri(providerReceivedUri)
+                    checkExactSetOfParameters(providerReceivedUri)
+                }
+            }
             continueAuth()
             step("Auth code не получен") {
                 receivedAuthCode.shouldBeNull()
@@ -512,6 +586,10 @@ public abstract class BaseAuthTest(
         var receivedOAuth: OAuth? = null
         var receivedAuthCode: AuthCodeData? = null
         var receivedAuthCodeSuccess: Boolean? = null
+        var providerReceivedUri: Uri? = null
+        onProviderReceivedUri {
+            providerReceivedUri = it
+        }
         before {
             vkidBuilder()
                 .mockApiSuccess()
@@ -531,6 +609,12 @@ public abstract class BaseAuthTest(
         }.after {
         }.run {
             startAuth()
+            step("Провайдер получил нужные параметры в интенте") {
+                flakySafely {
+                    checkProviderReceivedUri(providerReceivedUri)
+                    checkExactSetOfParameters(providerReceivedUri)
+                }
+            }
             continueAuth()
             step("Получена ошибка") {
                 step("Auth code не получен") {
@@ -565,6 +649,21 @@ public abstract class BaseAuthTest(
             "prompt" to "",
             "scheme" to "bright_light"
         )
+
+    private fun checkExactSetOfParameters(providerReceivedUri: Uri?) {
+        val currentLangId = systemLocaleForProviderParam(composeTestRule.activity)
+        if (currentLangId == null) {
+            providerReceivedUri?.shouldHaveExactSetOfParameters(supportedUriParams)
+        } else {
+            providerReceivedUri?.shouldHaveExactSetOfParameters(
+                supportedUriParams.let {
+                    it.toMutableSet().apply {
+                        add("lang_id")
+                    }
+                }
+            )
+        }
+    }
 
     @OptIn(ExperimentalEncodingApi::class)
     protected open fun checkProviderReceivedUri(providerReceivedUri: Uri?) {

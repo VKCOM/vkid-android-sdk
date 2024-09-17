@@ -18,6 +18,7 @@ internal class TestAuthProviderActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        uriReceivedCallback(intent.data)
         setContent {
             Button(
                 modifier = Modifier.testTag("mock_auth_continue"),
@@ -31,11 +32,7 @@ internal class TestAuthProviderActivity : ComponentActivity() {
 
     private fun returnResult() {
         // parse intent from sdk
-        val data = intent.data
-        uriReceivedCallback(data)
-        if (data == null) {
-            return
-        }
+        val data = intent.data ?: return
         val redirectUri = data.getQueryParameter("redirect_uri")
         val state = data.getQueryParameter("state")
         val deviceId = data.getQueryParameter("device_id")
