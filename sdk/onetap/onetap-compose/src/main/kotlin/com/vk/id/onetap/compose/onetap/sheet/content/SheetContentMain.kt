@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -51,7 +50,7 @@ internal fun SheetContentMain(
     scenario: OneTapScenario,
     style: OneTapBottomSheetStyle,
     dismissSheet: () -> Unit,
-    authStatus: MutableState<OneTapBottomSheetAuthStatus>,
+    onAuthStatusChange: (OneTapBottomSheetAuthStatus) -> Unit,
     authParams: VKIDAuthUiParams,
     coroutineScope: CoroutineScope,
     fastAuthEnabled: Boolean,
@@ -96,7 +95,7 @@ internal fun SheetContentMain(
                             OneTapBottomSheetAnalytics.authError(extraAuthParams.uuidFromParams())
                             onFail(null, it)
                         },
-                        authStatus = authStatus,
+                        onAuthStatusChange = onAuthStatusChange,
                         authParams = authParams,
                         extraAuthParams = extraAuthParams,
                         fastAuthEnabled = fastAuthEnabled,
@@ -114,7 +113,7 @@ internal fun SheetContentMain(
                             OneTapBottomSheetAnalytics.authError(extraAuthParams.uuidFromParams())
                             onFail(null, it)
                         },
-                        authStatus = authStatus,
+                        onAuthStatusChange = onAuthStatusChange,
                         authParams = authParams,
                         extraAuthParams = extraAuthParams,
                     )
@@ -123,7 +122,7 @@ internal fun SheetContentMain(
                 onAuthCode = onAuthCode,
                 onFail = { oAuth, fail ->
                     check(oAuth != null) { error("oAuth is not provided in a multibranding flow error") }
-                    authStatus.value = OneTapBottomSheetAuthStatus.AuthFailedMultibranding(oAuth)
+                    onAuthStatusChange(OneTapBottomSheetAuthStatus.AuthFailedMultibranding(oAuth))
                     onFail(oAuth, fail)
                 },
                 authParams = authParams,

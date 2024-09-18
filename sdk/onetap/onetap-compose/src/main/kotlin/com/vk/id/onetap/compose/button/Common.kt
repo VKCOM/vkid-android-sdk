@@ -33,6 +33,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
+@Suppress("ModifierComposed")
 internal fun Modifier.clickable(
     onClick: () -> Unit
 ): Modifier = composed {

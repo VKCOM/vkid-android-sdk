@@ -128,7 +128,7 @@ internal fun OneTapBottomSheetScreen() {
             } else {
                 // Force state drop when changing the parameter
                 @Composable
-                fun renderBottomSheet(fastAuthEnabled: Boolean) {
+                fun RenderBottomSheet(fastAuthEnabled: Boolean) {
                     OneTapBottomSheet(
                         style = selectedStyle.value,
                         onAuth = getOneTapSuccessCallback(context) { token.value = it },
@@ -144,9 +144,9 @@ internal fun OneTapBottomSheetScreen() {
                     )
                 }
                 if (fastAuthEnabled.value) {
-                    renderBottomSheet(true)
+                    RenderBottomSheet(true)
                 } else {
-                    renderBottomSheet(false)
+                    RenderBottomSheet(false)
                 }
             }
         }
@@ -180,7 +180,7 @@ internal fun OneTapBottomSheetScreen() {
             isChecked = shouldUseXml.value,
             onCheckedChange = { shouldUseXml.value = it }
         )
-        EnumStateCheckboxSelector(state = selectedOAuths)
+        EnumStateCheckboxSelector(state = selectedOAuths, onNewState = { selectedOAuths.value = it })
         CheckboxSelector(
             title = "Auto hide on success",
             isChecked = autoHideSheetOnSuccess.value,

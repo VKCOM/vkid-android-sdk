@@ -21,6 +21,7 @@ andoridxUiTestJunit4 = "1.7.1"
 binary-compatibility-validator = "0.16.3"
 coil = "2.7.0"
 detekt = "1.23.7"
+detektCompose = "0.4.12"
 dokka = "1.9.20"
 espresso = "3.6.1"
 firebaseFirestore = "9.2.0"
@@ -114,6 +115,7 @@ detekt-metrics = { group = "io.gitlab.arturbosch.detekt", name = "detekt-metrics
 detekt-formatting = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "detekt" }
 detekt-libraries = { group = "io.gitlab.arturbosch.detekt", name = "detekt-rules-libraries", version.ref = "detekt" }
 detekt-gradlePlugin = { group = "io.gitlab.arturbosch.detekt", name = "detekt-gradle-plugin", version.ref = "detekt" }
+detekt-compose= { group = "io.nlopez.compose.rules", name = "detekt", version.ref = "detektCompose" }
 dokka-gradlePlugin = { group = "org.jetbrains.dokka", name = "dokka-gradle-plugin", version.ref = "dokka" }
 dokka-base = { group = "org.jetbrains.dokka", name = "dokka-base", version.ref = "dokka" }
 dokka-core = { group = "org.jetbrains.dokka", name = "dokka-core", version.ref = "dokka" }
