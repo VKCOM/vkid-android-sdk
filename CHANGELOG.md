@@ -13,31 +13,32 @@
 ### Added
 - Добавлен плагин плейсхолдеров как альтернативный способ инициализации SDK. Он позволяет инциализировать плейсхолдеры в одном месте, если у вас несколько application-модулей. Подробнее читайте в [документации](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/connection/start-integration/android/install).
 
-## 2.1.0
+## 2.1.0 (07-08-2024)
 
 ### Added
-- Добавлена возможность выбрать текст кнопки One Tap, который увидит пользователь. Это позволяет адаптировать кнопку для разных сценариев — например, для получения услуги отобразить текст «Записаться c VK ID» . Подробнее о настройке текста в кнопке читайте в [документации]https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/connection/elements/onetap-button/onetap-android).
+- Добавлена возможность выбрать текст кнопки One Tap, который увидит пользователь. Это позволяет адаптировать кнопку для разных сценариев — например, для получения услуги отобразить текст «Записаться c VK ID» . Подробнее о настройке текста в кнопке читайте в [документации](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/connection/elements/onetap-button/onetap-android).
 
-## 2.0.1
+## 2.0.1 (16-07-2024)
 
 ### Added
-- В поле data колбека onAuthCode добавлено поле deviceId со значением, которое нужно передавать в запрос получения токена при генерации параметров PKCE на стороне Backend вашего сервиса.
+- В параметр `data` коллбэка `onAuthCode` добавлено поле `deviceId` со значением, которое нужно передавать в запрос получения токена при генерации параметров PKCE на стороне Backend вашего сервиса. Подробнее читайте в [документации](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/connection/start-integration/auth-flow-android).
 
 ### Fixed
-- Исправлена адаптивность кнопки OneTap. Раньше кнопка превращалась в иконку раньше, чем заканчивалось свободное меcто. Так же не работал Modifier.fillMaxWidth(). 
+- Ранее кнопка One Tap могла сужаться в иконку прежде, чем заканчивалось свободное меcто. Также не работал `Modifier.fillMaxWidth()`. Исправлено. Теперь адаптивность кнопки работает корректно. 
 
-## 2.0.0
-В этой версии становится стабильной поддержка OAuth2.1 и авторизации 3в1 (через VK, OK и Mail).
-Сделано много изменений публичного интерфеса и он ломает обратную совместимость.
-Миграция описана в [статье](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id-2/connection/android/migration-on-oauth-2.1)
+## 2.0.0 (25-06-2024)
 
 ### Added
-- Добавлена возможность отключить быструю авторизацию параметром fastAuthEnabled в OneTap и OneTapBottomSheet.
-  Подробности смотрите в статьях [Кнопка One Tap](https://id.vk.com/about/business/go/docs/en/vkid/latest/vk-id-2/connection/android/onetap) и [Шторка авторизации](https://id.vk.com/about/business/go/docs/en/vkid/latest/vk-id-2/connection/android/floating-onetap) в разделе "Отключение быстрой авторизации".
-- Поддержка совместной работы с vk-android-sdk "из коробки" в модуле vk-sdk-support. [Статья с документацией](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id-2/connection/android/migration-on-oauth-2.1#Sovmestnoe-ispolzovanie-s-VK-ANDROID-SDK)
+- [VK ID](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/intro/plan) теперь поддерживает авторизацию по протоколу [OAuth 2.1](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-v2-1-10). За счет работы авторизации на передовом стандарте обеспечивается высокая защита пользовательских данных.
+- Для пользователя добавлена возможность входа через аккаунты «Одноклассников» и Mail.ru. Для отображения кнопок входа через эти сервисы интегрируйте [виджет 3 в 1](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/intro/main#Vidzhet-3-v-1) — блок с кнопками будет располагаться на окне авторизации вашего сервиса — или подключите [дополнительные OAuth](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/intro/main#Podklyuchenie-dopolnitelnyh-OAuth) — для показа кнопок на окне авторизации VK ID.
+- Добавлена возможность отключить быструю авторизацию c помощью параметра `fastAuthEnabled` в OneTap и OneTapBottomSheet. Подробнее читайте в статьях про кнопку [One Tap](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/connection/elements/onetap-button/onetap-android#Otklyuchenie-bystroj-avtorizacii) и [шторку авторизации](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/connection/elements/onetap-drawer/floating-onetap-android#Otklyuchenie-bystroj-avtorizacii). 
+- Поддержана совместная работа с vk-android-sdk «из коробки» в модуле vk-sdk-support. Подробнее читайте в [документации](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/connection/start-integration/android/joint-use-with-vksdk).
+
+### Breaking changes
+- Произошли изменения в публичном интерфейсе, связанные с поддержкой авторизации с OAuth 2.1. Для перехода с SDK предыдущей версии и поддержки этих изменений воспользуйтесь [инструкцией](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/connection/migration/android/migration-on-oauth-2.1).
 
 ### Fixed
-- Исправлена опечатка в названии maven репозитория. Часть урла изменена с "andorid" на "android". Поддерживаются оба варианта
+- Исправлена опечатка в названии maven-репозитория. Часть url изменена с «andorid» на «android». Поддерживаются оба варианта.
 
 ## 2.0.0-alpha04
 
