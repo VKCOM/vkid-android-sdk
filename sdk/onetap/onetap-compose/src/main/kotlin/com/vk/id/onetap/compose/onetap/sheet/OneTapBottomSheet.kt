@@ -9,7 +9,6 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -143,7 +142,7 @@ private fun OneTapBottomSheetInternal(
         mutableStateOf(false)
     }
     val coroutineScope = rememberCoroutineScope()
-    state.showSheet = processSheetShow(authStatus, showBottomSheet, coroutineScope, state)
+    state.showSheet = processSheetShow({ authStatus.value = it }, { showBottomSheet.value = it }, coroutineScope, state)
     if (showBottomSheet.value) {
         ModalBottomSheet(
             modifier = modifier.testTag("onetap_bottomsheet"),
@@ -168,7 +167,7 @@ private fun OneTapBottomSheetInternal(
                         scenario = scenario,
                         dismissSheet = dismissSheet,
                         style = style,
-                        authStatus = authStatus,
+                        onAuthStatusChange = { authStatus.value = it },
                         authParams = authParams,
                         coroutineScope = coroutineScope,
                         fastAuthEnabled = fastAuthEnabled,
@@ -194,7 +193,7 @@ private fun OneTapBottomSheetInternal(
                         onAuth = { onAuth(null, it) },
                         onAuthCode = onAuthCode,
                         onFail = { onFail(null, it) },
-                        authStatus = authStatus,
+                        onAuthStatusChange = { authStatus.value = it },
                         authParams = authParams,
                         extraAuthParams = extraAuthParams
                     )
@@ -212,7 +211,7 @@ private fun OneTapBottomSheetInternal(
                         onAuth = { onAuth(null, it) },
                         onAuthCode = onAuthCode,
                         onFail = { onFail(null, it) },
-                        authStatus = authStatus,
+                        onAuthStatusChange = { authStatus.value = it },
                         authParams = authParams,
                         extraAuthParams = extraAuthParams,
                         fastAuthEnabled = fastAuthEnabled,
@@ -233,6 +232,7 @@ private fun OneTapBottomSheetInternal(
                                     authStatus.value = OneTapBottomSheetAuthStatus.AuthSuccess
                                     onAuth(status.oAuth, accessToken)
                                 }
+
                                 override fun onAuthCode(
                                     data: AuthCodeData,
                                     isCompletion: Boolean
@@ -272,24 +272,24 @@ private fun OneTapBottomSheetInternal(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun processSheetShow(
-    authStatus: MutableState<OneTapBottomSheetAuthStatus>,
-    showBottomSheet: MutableState<Boolean>,
+    onAuthStatusChange: (OneTapBottomSheetAuthStatus) -> Unit,
+    onShowBottomSheetChange: (Boolean) -> Unit,
     coroutineScope: CoroutineScope,
     state: OneTapBottomSheetState
 ): (Boolean) -> Unit = remember {
     {
         val show = it
         if (show) {
-            authStatus.value = OneTapBottomSheetAuthStatus.Init
+            onAuthStatusChange(OneTapBottomSheetAuthStatus.Init)
         }
         if (show) {
-            showBottomSheet.value = true
+            onShowBottomSheetChange(true)
         } else {
             coroutineScope.launch {
                 state.materialSheetState.hide()
             }.invokeOnCompletion {
                 if (!state.isVisible) {
-                    showBottomSheet.value = false
+                    onShowBottomSheetChange(false)
                 }
             }
         }
@@ -356,7 +356,7 @@ private fun OneTapBottomSheetPreview() {
         scenario = OneTapScenario.EnterService,
         style = OneTapBottomSheetStyle.TransparentDark(),
         dismissSheet = {},
-        authStatus = remember { mutableStateOf(OneTapBottomSheetAuthStatus.Init) },
+        onAuthStatusChange = {},
         authParams = VKIDAuthUiParams {},
         rememberCoroutineScope(),
         fastAuthEnabled = true,

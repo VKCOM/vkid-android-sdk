@@ -184,7 +184,7 @@ internal fun OnetapStylingComposeScreen() {
                 } else {
                     // Force state drop when changing the parameter
                     @Composable
-                    fun renderOneTap(fastAuthEnabled: Boolean) {
+                    fun RenderOneTap(fastAuthEnabled: Boolean) {
                         OneTap(
                             modifier = Modifier.width(width.dp),
                             style = selectedStyle,
@@ -199,9 +199,9 @@ internal fun OnetapStylingComposeScreen() {
                         )
                     }
                     if (fastAuthEnabled.value) {
-                        renderOneTap(true)
+                        RenderOneTap(true)
                     } else {
-                        renderOneTap(false)
+                        RenderOneTap(false)
                     }
                 }
             }
@@ -234,7 +234,7 @@ internal fun OnetapStylingComposeScreen() {
                 isChecked = fastAuthEnabled.value,
                 onCheckedChange = { fastAuthEnabled.value = it }
             )
-            EnumStateCheckboxSelector(state = selectedOAuths)
+            EnumStateCheckboxSelector(state = selectedOAuths, onNewState = { selectedOAuths.value = it })
             DropdownSelector(
                 modifier = Modifier.padding(vertical = 16.dp),
                 values = styleConstructors,
@@ -244,9 +244,9 @@ internal fun OnetapStylingComposeScreen() {
                 },
                 label = { Text("style") },
             )
-            SliderSelector(title = "Width", selectedState = widthPercent)
-            SliderSelector(title = "Corners", selectedState = cornersStylePercent)
-            SliderSelector(title = "Elevation", selectedState = selectedElevationStyle)
+            SliderSelector(title = "Width", selectedState = widthPercent, onStateChange = { widthPercent.floatValue = it })
+            SliderSelector(title = "Corners", selectedState = cornersStylePercent, onStateChange = { cornersStylePercent.floatValue = it })
+            SliderSelector(title = "Elevation", selectedState = selectedElevationStyle, onStateChange = { selectedElevationStyle.floatValue = it })
             DropdownSelector(
                 values = OneTapButtonSizeStyle.entries.associateBy { it.name },
                 selectedValue = selectedSize.value.name,

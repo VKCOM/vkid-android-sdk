@@ -10,6 +10,7 @@ import com.vk.id.common.InternalVKIDApi
 import com.vk.id.onetap.common.auth.style.InternalVKIDButtonBackgroundStyle
 import com.vk.id.onetap.compose.R
 
+@Suppress("ModifierComposed")
 internal fun Modifier.background(style: InternalVKIDButtonBackgroundStyle) = composed {
     val backgroundResource = when (style) {
         InternalVKIDButtonBackgroundStyle.BLUE -> R.color.vkid_azure_A100

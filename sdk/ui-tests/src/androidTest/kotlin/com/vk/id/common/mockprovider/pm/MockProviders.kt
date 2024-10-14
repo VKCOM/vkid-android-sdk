@@ -1,4 +1,4 @@
-package com.vk.id.provider
+package com.vk.id.common.mockprovider.pm
 
 internal object MockChrome {
     const val PACKAGE_NAME = "com.android.chrome"

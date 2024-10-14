@@ -96,6 +96,11 @@ public class MultibrandingComposeTest(
         super.failedUserCallIsReceived()
     }
 
+    override val expectedUriParams: Map<String, String> =
+        super.expectedUriParams.toMutableMap().apply {
+            put("scheme", "space_gray")
+        }
+
     override fun setContent(
         onAuth: (OAuth?, AccessToken) -> Unit,
         onAuthCode: (AuthCodeData, Boolean) -> Unit,

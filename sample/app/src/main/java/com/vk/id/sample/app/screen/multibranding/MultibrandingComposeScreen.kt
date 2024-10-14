@@ -189,7 +189,7 @@ internal fun MultibrandingComposeScreen() {
                 isChecked = shouldUseXml.value,
                 onCheckedChange = { shouldUseXml.value = it }
             )
-            EnumStateCheckboxSelector(state = selectedOAuths)
+            EnumStateCheckboxSelector(state = selectedOAuths, onNewState = { selectedOAuths.value = it })
             DropdownSelector(
                 modifier = Modifier.padding(vertical = 16.dp),
                 values = styleConstructors,
@@ -197,8 +197,8 @@ internal fun MultibrandingComposeScreen() {
                 onValueSelected = { styleConstructor.value = it },
                 label = { Text("style") },
             )
-            SliderSelector(title = "Width", selectedState = widthPercent)
-            SliderSelector(title = "Corners", selectedState = cornersStylePercent)
+            SliderSelector(title = "Width", selectedState = widthPercent, onStateChange = { widthPercent.floatValue = it })
+            SliderSelector(title = "Corners", selectedState = cornersStylePercent, onStateChange = { cornersStylePercent.floatValue = it })
             DropdownSelector(
                 values = OAuthListWidgetSizeStyle.entries.associateBy { it.name },
                 selectedValue = selectedSize.value.name,

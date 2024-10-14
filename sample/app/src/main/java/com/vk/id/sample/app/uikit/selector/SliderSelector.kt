@@ -6,7 +6,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -14,7 +14,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 internal fun SliderSelector(
     title: String,
-    selectedState: MutableState<Float>
+    selectedState: State<Float>,
+    onStateChange: (Float) -> Unit,
 ) = Row(
     verticalAlignment = Alignment.CenterVertically
 ) {
@@ -25,6 +26,6 @@ internal fun SliderSelector(
     Slider(
         modifier = Modifier.padding(horizontal = 8.dp),
         value = selectedState.value,
-        onValueChange = { selectedState.value = it }
+        onValueChange = onStateChange,
     )
 }

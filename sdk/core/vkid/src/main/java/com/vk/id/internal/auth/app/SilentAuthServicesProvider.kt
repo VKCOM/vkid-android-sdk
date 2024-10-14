@@ -1,14 +1,17 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.internal.auth.app
 
-import android.annotation.SuppressLint
 import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.auth.basicCodeFlowUri
+import com.vk.id.internal.context.InternalVKIDPackageManager
 
 internal class SilentAuthServicesProvider(
-    private val context: Context,
+    private val packageManager: InternalVKIDPackageManager,
+    private val currentPackageName: String,
     private val cache: TrustedProvidersCache
 ) {
 
@@ -25,7 +28,7 @@ internal class SilentAuthServicesProvider(
     }
 
     private fun Sequence<VkAuthProviderInfo>.excludeCurrentApp() =
-        filter { it.componentName.packageName != context.packageName }
+        filter { it.componentName.packageName != currentPackageName }
 
     /**
      * Method that checks if provider with specific package name is allowed to open the web auth from
@@ -34,22 +37,21 @@ internal class SilentAuthServicesProvider(
     private fun VkAuthProviderInfo.isAllowedToOpenWebAuth(): Boolean {
         val appUri = basicCodeFlowUri(componentName.packageName)
         val appIntent = Intent(Intent.ACTION_VIEW, appUri)
-        val resolveInfo = context.packageManager.resolveActivity(appIntent, 0)?.activityInfo
+        val resolveInfo = packageManager.resolveActivity(appIntent, 0)?.activityInfo
         return resolveInfo != null && resolveInfo.packageName == componentName.packageName
     }
 
     private fun ServiceInfo.mapToProviderInfo(
         trustedProviders: List<VkAuthSilentAuthProvider>
     ): VkAuthProviderInfo? {
-        val sha = SilentAuthInfoUtils.calculateDigestHex(context, packageName)
+        val sha = SilentAuthInfoUtils.calculateDigestHex(packageManager, packageName)
         return trustedProviders
             .firstOrNull { packageName == it.appPackage && sha == it.appSha }
             ?.let { VkAuthProviderInfo(ComponentName(packageName, name), it.weight) }
     }
 
-    @SuppressLint("QueryPermissionsNeeded") // Registered in manifest
     private fun getAppsWithSilentAuthServices() =
-        context.applicationContext.packageManager.queryIntentServices(
+        packageManager.queryIntentServices(
             Intent(ACTION_GET_INFO),
             0
         )

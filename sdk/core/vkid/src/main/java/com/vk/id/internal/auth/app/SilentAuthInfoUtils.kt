@@ -26,20 +26,23 @@
  * THIRD PARTIES FOR ANY DAMAGE IN CONNECTION WITH USE OF THE SOFTWARE.
  */
 
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.internal.auth.app
 
-import android.content.Context
 import android.content.pm.PackageManager
 import android.content.pm.Signature
 import android.util.Base64
+import com.vk.id.common.InternalVKIDApi
+import com.vk.id.internal.context.InternalVKIDPackageManager
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.util.Locale
 
 internal object SilentAuthInfoUtils {
 
-    fun calculateDigestHex(context: Context, pkg: String): String? {
-        return calculateDigest(context, pkg, SilentAuthInfoUtils::calculateDigestHex)
+    fun calculateDigestHex(packageManager: InternalVKIDPackageManager, pkg: String): String? {
+        return calculateDigest(packageManager, pkg, SilentAuthInfoUtils::calculateDigestHex)
     }
 
     fun calculateDigestBase64(signature: Signature): String {
@@ -57,12 +60,12 @@ internal object SilentAuthInfoUtils {
 
     @Suppress("TooGenericExceptionCaught", "SwallowedException")
     private fun calculateDigest(
-        context: Context,
+        packageManager: InternalVKIDPackageManager,
         pkg: String,
         transform: (Signature) -> String
     ): String? {
         return try {
-            context.packageManager
+            packageManager
                 .getPackageInfo(pkg, PackageManager.GET_SIGNATURES)
                 .signatures
                 .firstOrNull()
