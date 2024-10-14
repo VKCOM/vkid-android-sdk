@@ -9,4 +9,5 @@ public open class BaseUiTest : TestCase(
     kaspressoBuilder = Kaspresso.Builder
         .withForcedAllureSupport(shouldRecordVideo = false)
         .addComposeSupport()
+
 )

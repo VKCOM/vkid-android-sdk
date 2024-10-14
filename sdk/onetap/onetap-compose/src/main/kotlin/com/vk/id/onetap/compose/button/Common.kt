@@ -7,7 +7,7 @@ import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
@@ -26,22 +26,21 @@ import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthCallback
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.onetap.common.auth.style.InternalVKIDButtonStyle
+import com.vk.id.onetap.common.auth.style.InternalVKIDButtonRippleStyle
 import com.vk.id.onetap.compose.button.auth.style.asColor
 import com.vk.id.onetap.compose.onetap.OneTapTitleScenario
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-@Suppress("LongParameterList")
+@Suppress("ModifierComposed")
 internal fun Modifier.clickable(
-    style: InternalVKIDButtonStyle,
     onClick: () -> Unit
 ): Modifier = composed {
     clickable(
         interactionSource = remember { MutableInteractionSource() },
-        indication = rememberRipple(
-            color = style.rippleStyle.asColor(),
+        indication = ripple(
+            color = InternalVKIDButtonRippleStyle.DARK.asColor(),
         ),
         role = Role.Button,
         onClick = onClick

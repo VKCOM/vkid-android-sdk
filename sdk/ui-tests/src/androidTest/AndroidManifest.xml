@@ -5,5 +5,8 @@
         <activity
             android:name="com.vk.id.common.activity.AutoTestActivity"
             android:theme="@style/Theme.AppCompat.Light" />
+        <activity
+            android:name="com.vk.id.common.mockprovider.TestAuthProviderActivity"
+            android:theme="@style/Theme.AppCompat.Light" />
     </application>
 </manifest>

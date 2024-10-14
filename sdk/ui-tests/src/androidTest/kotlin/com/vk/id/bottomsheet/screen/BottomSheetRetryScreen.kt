@@ -6,12 +6,12 @@ import com.vk.id.common.activity.AutoTestActivityRule
 import io.github.kakaocup.compose.node.element.ComposeScreen
 import io.github.kakaocup.compose.node.element.KNode
 
-class BottomSheetRetryScreen(
+internal class BottomSheetRetryScreen(
     semanticsProvider: SemanticsNodeInteractionsProvider
 ) : ComposeScreen<BottomSheetRetryScreen>(semanticsProvider) {
     val composeTestRule: AutoTestActivityRule = createAndroidComposeRule()
 
-    public val retryButton: KNode = child {
+    val retryButton: KNode = child {
         hasTestTag("vkid_retry_btn")
     }
 }

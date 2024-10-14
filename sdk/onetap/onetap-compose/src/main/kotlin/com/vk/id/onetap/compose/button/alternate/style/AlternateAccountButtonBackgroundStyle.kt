@@ -8,6 +8,7 @@ import com.vk.id.common.InternalVKIDApi
 import com.vk.id.onetap.common.alternate.style.InternalVKIDAlternateAccountButtonBackgroundStyle
 import com.vk.id.onetap.compose.R
 
+@Suppress("ModifierComposed")
 @OptIn(InternalVKIDApi::class)
 internal fun Modifier.background(style: InternalVKIDAlternateAccountButtonBackgroundStyle) = composed {
     val backgroundResource = when (style) {

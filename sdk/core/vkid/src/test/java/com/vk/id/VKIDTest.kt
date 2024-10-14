@@ -14,6 +14,8 @@ import com.vk.id.internal.auth.AuthResult
 import com.vk.id.internal.auth.VKIDAuthProvider
 import com.vk.id.internal.auth.device.InternalVKIDDeviceIdProvider
 import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
+import com.vk.id.internal.context.InternalVKIDActivityStarter
+import com.vk.id.internal.context.InternalVKIDPackageManager
 import com.vk.id.internal.di.VKIDDeps
 import com.vk.id.internal.ipc.VkSilentAuthInfoProvider
 import com.vk.id.internal.store.InternalVKIDPrefsStore
@@ -75,6 +77,8 @@ internal class VKIDTest : BehaviorSpec({
                 override val prefsStore: Lazy<InternalVKIDPrefsStore> = lazy { mockk() }
                 override val encryptedSharedPreferencesStorage: Lazy<InternalVKIDEncryptedSharedPreferencesStorage> =
                     lazy { mockk() }
+                override val vkidPackageManager: InternalVKIDPackageManager = mockk()
+                override val activityStarter: InternalVKIDActivityStarter = mockk()
             }
         )
 

@@ -25,4 +25,8 @@ dependencies {
     androidTestImplementation(libs.mockk.android)
     androidTestImplementation(libs.kotest.core)
     androidTestImplementation(libs.kotest.assertions)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.activity.compose)
+    androidTestImplementation(libs.androidx.compose.material3)
+
 }
