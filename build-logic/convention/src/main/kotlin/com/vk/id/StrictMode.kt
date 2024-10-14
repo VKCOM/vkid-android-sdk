@@ -8,7 +8,7 @@ fun Project.configureStrictMode() {
     with(extensions.getByType<KotlinAndroidProjectExtension>()) {
         compilerOptions {
             // Force implicit visibility modifiers to avoid mistakes like exposing internal api
-            freeCompilerArgs.set(listOf("-Xexplicit-api=strict"))
+            freeCompilerArgs.add("-Xexplicit-api=strict")
         }
     }
 }

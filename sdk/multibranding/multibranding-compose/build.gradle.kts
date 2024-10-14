@@ -21,5 +21,6 @@ dependencies {
     implementation(libs.androidx.compose.material.ripple)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.lifecycle.compose)
+    implementation(libs.androidx.material3.android)
     debugImplementation(libs.androidx.compose.ui.tooling)
 }

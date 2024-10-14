@@ -61,13 +61,14 @@ internal object OneTapBottomSheetAnalytics {
 
     @Composable
     private fun SheetScreenShown(fireAnalytics: () -> Unit) {
+        val rememberedFireAnalytics = rememberUpdatedState(fireAnalytics)
         val lifecycleOwner = rememberUpdatedState(LocalLifecycleOwner.current)
         DisposableEffect(lifecycleOwner.value) {
             val lifecycle = lifecycleOwner.value.lifecycle
             val observer = LifecycleEventObserver { _, event ->
                 when (event) {
                     Lifecycle.Event.ON_RESUME -> {
-                        fireAnalytics()
+                        rememberedFireAnalytics.value()
                     }
                     else -> {}
                 }

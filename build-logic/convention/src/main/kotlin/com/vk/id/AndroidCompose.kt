@@ -44,7 +44,7 @@ internal fun Project.configureAndroidCompose() {
     with(extensions.getByType<KotlinAndroidProjectExtension>()) {
         compilerOptions {
             // Force implicit visibility modifiers to avoid mistakes like exposing internal api
-            freeCompilerArgs.set(buildComposeMetricsParameters())
+            freeCompilerArgs.addAll(buildComposeMetricsParameters())
         }
     }
 }

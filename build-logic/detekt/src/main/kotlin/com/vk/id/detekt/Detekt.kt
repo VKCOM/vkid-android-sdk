@@ -49,6 +49,7 @@ internal fun Project.configureDetekt(isCompose: Boolean) {
         val libs = this@configureDetekt.extensions.getByType<VersionCatalogsExtension>().named("libs")
         addProvider("detektPlugins", provider { libs.findLibrary("detekt-formatting").get().get() })
         addProvider("detektPlugins", provider { libs.findLibrary("detekt-libraries").get().get() })
+        if (isCompose) addProvider("detektPlugins", provider { libs.findLibrary("detekt-compose").get().get() })
         if (findProject(":detekt-rules") != null) {
             add("detekt", project(":detekt-rules"))
         }

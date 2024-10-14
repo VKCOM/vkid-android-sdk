@@ -482,13 +482,6 @@ public final class com/vk/id/refreshuser/VKIDGetUserParamsKt {
 	public static final fun VKIDGetUserParams (Lkotlin/jvm/functions/Function1;)Lcom/vk/id/refreshuser/VKIDGetUserParams;
 }
 
-public final class com/vk/id/test/ComposableSingletons$TestAuthProviderActivityKt {
-	public static final field INSTANCE Lcom/vk/id/test/ComposableSingletons$TestAuthProviderActivityKt;
-	public static field lambda-1 Lkotlin/jvm/functions/Function3;
-	public fun <init> ()V
-	public final fun getLambda-1$vkid_release ()Lkotlin/jvm/functions/Function3;
-}
-
 public abstract interface class com/vk/silentauth/ISilentAuthInfoProvider : android/os/IInterface {
 	public static final field DESCRIPTOR Ljava/lang/String;
 	public abstract fun getSilentAuthInfos (ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/util/List;

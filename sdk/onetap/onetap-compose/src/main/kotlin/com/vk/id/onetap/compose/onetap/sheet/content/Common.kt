@@ -5,7 +5,6 @@ package com.vk.id.onetap.compose.onetap.sheet.content
 
 import android.os.Parcelable
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.MutableState
 import com.vk.id.AccessToken
 import com.vk.id.VKIDAuthFail
 import com.vk.id.VKIDUser
@@ -45,25 +44,25 @@ internal fun startVKIDAuth(
     onAuth: (AccessToken) -> Unit,
     onAuthCode: (AuthCodeData, Boolean) -> Unit,
     onFail: (VKIDAuthFail) -> Unit,
-    authStatus: MutableState<OneTapBottomSheetAuthStatus>,
+    onAuthStatusChange: (OneTapBottomSheetAuthStatus) -> Unit,
     authParams: VKIDAuthUiParams,
     extraAuthParams: Map<String, String>,
     fastAuthEnabled: Boolean,
     user: VKIDUser?,
 ) {
-    authStatus.value = OneTapBottomSheetAuthStatus.AuthStarted
+    onAuthStatusChange(OneTapBottomSheetAuthStatus.AuthStarted)
     startAuth(
         coroutineScope,
         onAuth = {
-            authStatus.value = OneTapBottomSheetAuthStatus.AuthSuccess
+            onAuthStatusChange(OneTapBottomSheetAuthStatus.AuthSuccess)
             onAuth(it)
         },
         onAuthCode = { data, isCompletion ->
-            if (isCompletion) authStatus.value = OneTapBottomSheetAuthStatus.AuthSuccess
+            if (isCompletion) onAuthStatusChange(OneTapBottomSheetAuthStatus.AuthSuccess)
             onAuthCode(data, isCompletion)
         },
         onFail = {
-            authStatus.value = OneTapBottomSheetAuthStatus.AuthFailedVKID(user = user)
+            onAuthStatusChange(OneTapBottomSheetAuthStatus.AuthFailedVKID(user = user))
             onFail(it)
         },
         authParams.asParamsBuilder {
@@ -86,20 +85,20 @@ internal fun startAlternateAuth(
     onAuth: (AccessToken) -> Unit,
     onAuthCode: (AuthCodeData, Boolean) -> Unit,
     onFail: (VKIDAuthFail) -> Unit,
-    authStatus: MutableState<OneTapBottomSheetAuthStatus>,
+    onAuthStatusChange: (OneTapBottomSheetAuthStatus) -> Unit,
     authParams: VKIDAuthUiParams,
     extraAuthParams: Map<String, String>
 ) {
-    authStatus.value = OneTapBottomSheetAuthStatus.AuthStarted
+    onAuthStatusChange(OneTapBottomSheetAuthStatus.AuthStarted)
     startAuth(
         coroutineScope,
         onAuth = {
-            authStatus.value = OneTapBottomSheetAuthStatus.AuthSuccess
+            onAuthStatusChange(OneTapBottomSheetAuthStatus.AuthSuccess)
             onAuth(it)
         },
         onAuthCode = onAuthCode,
         onFail = {
-            authStatus.value = OneTapBottomSheetAuthStatus.AuthFailedAlternate
+            onAuthStatusChange(OneTapBottomSheetAuthStatus.AuthFailedAlternate)
             onFail(it)
         },
         authParams.asParamsBuilder {

@@ -78,7 +78,7 @@ public class OneTap @JvmOverloads constructor(
      * Note: this parameter doesn't support changes in runtime and must be initialized when the view is constructed.
      * Note: This parameter will hide "change account" button because in this case OneTap will have the same behaviour.
      */
-    public var fastAuthEnabled = true
+    public var fastAuthEnabled: Boolean = true
 
     /**
      * Adds support multibranding auth. By default this widget is not displayed.

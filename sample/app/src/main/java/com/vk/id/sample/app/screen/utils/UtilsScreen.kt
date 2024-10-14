@@ -2,6 +2,7 @@
 
 package com.vk.id.sample.app.screen.utils
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ComponentName
 import android.content.Context
@@ -619,6 +620,7 @@ private fun StrictModeUtil() {
     )
 }
 
+@SuppressLint("WrongConstant")
 private fun getActivityInfo(context: Context): ActivityInfo {
     val componentName = ComponentName(context, MainActivity::class.java)
     val flags = PackageManager.GET_META_DATA or PackageManager.GET_ACTIVITIES

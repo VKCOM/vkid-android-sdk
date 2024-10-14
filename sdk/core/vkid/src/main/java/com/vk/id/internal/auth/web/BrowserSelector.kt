@@ -24,6 +24,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Build.VERSION_CODES
 import com.vk.id.common.InternalVKIDApi
+import com.vk.id.internal.context.InternalVKIDPackageManager
 import com.vk.id.logger.internalVKIDCreateLoggerForClass
 
 /**
@@ -63,8 +64,7 @@ internal object BrowserSelector {
      * (i.e. their default browser, if set, should be the first entry in the list).
      */
     @SuppressLint("PackageManagerGetSignatures")
-    fun getAllBrowsers(context: Context): List<BrowserDescriptor> {
-        val pm = context.packageManager
+    fun getAllBrowsers(pm: InternalVKIDPackageManager): List<BrowserDescriptor> {
         val browsers: MutableList<BrowserDescriptor> = ArrayList()
         var defaultBrowserPackage: String? = null
         var queryFlag = PackageManager.GET_RESOLVED_FILTER
@@ -79,7 +79,6 @@ internal object BrowserSelector {
         if (resolvedDefaultActivity != null) {
             defaultBrowserPackage = resolvedDefaultActivity.activityInfo.packageName
         }
-        @SuppressLint("QueryPermissionsNeeded") // Registered in manifest
         val resolvedActivityList = pm.queryIntentActivities(BROWSER_INTENT, queryFlag)
         for (info in resolvedActivityList) {
             // ignore handlers which are not browsers
@@ -129,8 +128,8 @@ internal object BrowserSelector {
      * @return The package name recommended to use for connecting to custom tabs related components.
      */
     @SuppressLint("PackageManagerGetSignatures")
-    fun select(context: Context, browserMatcher: BrowserMatcher): BrowserDescriptor? {
-        val allBrowsers = getAllBrowsers(context)
+    fun select(pm: InternalVKIDPackageManager, browserMatcher: BrowserMatcher): BrowserDescriptor? {
+        val allBrowsers = getAllBrowsers(pm)
         var bestMatch: BrowserDescriptor? = null
         for (browser in allBrowsers) {
             if (!browserMatcher.matches(browser)) {
@@ -149,7 +148,7 @@ internal object BrowserSelector {
         return bestMatch
     }
 
-    private fun hasWarmupService(pm: PackageManager, packageName: String): Boolean {
+    private fun hasWarmupService(pm: InternalVKIDPackageManager, packageName: String): Boolean {
         val serviceIntent = Intent()
         serviceIntent.action = ACTION_CUSTOM_TABS_CONNECTION
         serviceIntent.setPackage(packageName)

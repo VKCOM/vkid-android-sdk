@@ -1,6 +1,5 @@
 package com.vk.id.common.activity
 
-import android.content.pm.PackageManager
 import android.os.Handler
 import android.os.Looper
 import android.view.View
@@ -12,8 +11,4 @@ public class AutoTestActivity : ComponentActivity() {
             setContentView(view)
         }
     }
-
-    var mockPackageManager: PackageManager? = null
-
-    override fun getPackageManager(): PackageManager = mockPackageManager ?: super.getPackageManager()
 }

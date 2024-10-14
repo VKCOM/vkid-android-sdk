@@ -2,9 +2,10 @@ package com.vk.id.test
 
 import android.content.Context
 import com.vk.id.VKID
-import com.vk.id.VKIDUser
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.auth.device.InternalVKIDDeviceIdProvider
+import com.vk.id.internal.context.InternalVKIDActivityStarter
+import com.vk.id.internal.context.InternalVKIDPackageManager
 import com.vk.id.internal.store.InternalVKIDPrefsStore
 import com.vk.id.storage.InternalVKIDEncryptedSharedPreferencesStorage
 import java.util.concurrent.atomic.AtomicInteger
@@ -27,6 +28,8 @@ public class InternalVKIDTestBuilder(
     )
     private var logoutResponse = Result.success(InternalVKIDLogoutPayloadResponse())
     private var getSilentAuthProvidersResponse = Result.success(InternalVKIDSilentAuthProvidersResponse(emptyList()))
+    private var packageManager: InternalVKIDPackageManager? = null
+    private var activityStarter: InternalVKIDActivityStarter? = null
 
     private var mockApi: InternalVKIDOverrideApi = object : InternalVKIDOverrideApi {
         override fun refreshToken(
@@ -69,7 +72,6 @@ public class InternalVKIDTestBuilder(
 
         override fun getSilentAuthProviders(clientId: String, clientSecret: String) = getSilentAuthProvidersResponse
     }
-    private var authProviderConfig: MockAuthProviderConfig? = null
 
     public fun refreshTokenResponse(response: Result<InternalVKIDTokenPayloadResponse>): InternalVKIDTestBuilder = apply {
         this.refreshTokenResponse = response
@@ -104,20 +106,12 @@ public class InternalVKIDTestBuilder(
         this.exchangeTokenResponse = response
     }
 
-    public fun overrideDeviceId(deviceId: String?): InternalVKIDTestBuilder = updateConfig { copy(deviceId = deviceId) }
-    public fun overrideState(state: String): InternalVKIDTestBuilder = updateConfig { copy(overrideState = state) }
-    public fun overrideOAuthToNull(): InternalVKIDTestBuilder = updateConfig { copy(overrideOAuthToNull = true) }
-    public fun user(user: VKIDUser): InternalVKIDTestBuilder = updateConfig { copy(user = user) }
-    public fun notifyNoBrowserAvailable(): InternalVKIDTestBuilder = updateConfig { copy(notifyNoBrowserAvailable = true) }
-    public fun notifyFailedRedirect(): InternalVKIDTestBuilder = updateConfig { copy(notifyFailedRedirectActivity = true) }
-    public fun requireUnsetUseAuthProviderIfPossible(): InternalVKIDTestBuilder = updateConfig {
-        copy(requireUnsetUseAuthProviderIfPossible = true)
+    public fun overridePackageManager(pm: InternalVKIDPackageManager): InternalVKIDTestBuilder = apply {
+        this.packageManager = pm
     }
 
-    private fun updateConfig(update: MockAuthProviderConfig.() -> MockAuthProviderConfig): InternalVKIDTestBuilder = apply {
-        authProviderConfig = authProviderConfig?.let {
-            it.update()
-        } ?: MockAuthProviderConfig().update()
+    public fun overrideActivityStarter(starter: InternalVKIDActivityStarter): InternalVKIDTestBuilder = apply {
+        this.activityStarter = starter
     }
 
     public fun deviceIdStorage(storage: InternalVKIDDeviceIdProvider.DeviceIdStorage?): InternalVKIDTestBuilder = apply {
@@ -136,10 +130,11 @@ public class InternalVKIDTestBuilder(
         VKID.init(
             context = context,
             mockApi = mockApi,
-            mockAuthProviderConfig = authProviderConfig,
             deviceIdStorage = deviceIdStorage,
             prefsStore = prefsStore,
             encryptedSharedPreferencesStorage = encryptedSharedPreferencesStorage,
+            packageManager = packageManager,
+            activityStarter = activityStarter,
         )
     }
 }

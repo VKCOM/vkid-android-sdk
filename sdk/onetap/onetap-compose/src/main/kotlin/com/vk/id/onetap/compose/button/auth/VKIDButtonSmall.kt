@@ -92,7 +92,7 @@ internal fun VKIDButtonSmall(
             .border(style.borderStyle, style.cornersStyle)
             .clip(style.cornersStyle)
             .background(style.backgroundStyle)
-            .clickable(style, onClick)
+            .clickable(onClick)
             .onSizeChanged {
                 size = it
             },
