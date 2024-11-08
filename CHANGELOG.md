@@ -3,6 +3,11 @@
 > **Note**\
 > Описание основных изменений в релизах VK ID SDK. Наш SDK следует [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Placeholders plugin 1.1.0 (08.11.2024)
+
+### Fixed
+- Исправлен способ подключения через явное указание всех свойств в property. Ранее они были помечены как internal, то есть внутренние.
+
 ## 2.2.1 (14.10.2024)
 
 ### Fixed
