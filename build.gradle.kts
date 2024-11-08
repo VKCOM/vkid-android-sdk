@@ -22,7 +22,7 @@ plugins {
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.kover) apply true
     alias(libs.plugins.screenshot) apply false
-    id("vkid.manifest.placeholders") version "1.0.0" apply true
+    id("vkid.manifest.placeholders") version "1.1.0" apply true
 }
 
 dependencies {
