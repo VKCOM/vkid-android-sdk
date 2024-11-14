@@ -37,7 +37,7 @@ cd vkid-android-sdk
 ```bash
 git checkout master
 git pull
-git checkout -b feature/some-feature/ISSUE-0000
+git checkout -b feature/ISSUE-0000/some-feature
 ```
 
 ## 📝 Создание коммита
