@@ -82,7 +82,10 @@ public class VKID {
          *
          * @param context The context of the application.
          */
-        public fun init(context: Context): Unit = init(VKID(VKIDDepsProd(context)))
+        public fun init(context: Context): Unit = init(context, isFlutter = false)
+
+        @InternalVKIDApi
+        public fun init(context: Context, isFlutter: Boolean): Unit = init(VKID(VKIDDepsProd(context, isFlutter)))
 
         @Suppress("LongParameterList")
         internal fun init(
@@ -94,7 +97,7 @@ public class VKID {
             packageManager: InternalVKIDPackageManager?,
             activityStarter: InternalVKIDActivityStarter?,
         ): Unit = init(
-            VKID(object : VKIDDepsProd(context) {
+            VKID(object : VKIDDepsProd(context, isFlutter = false) {
                 override val api = lazy { InternalVKIDImmediateApi(mockApi) }
                 override val vkSilentAuthInfoProvider = lazy { TestSilentAuthInfoProvider() }
                 override val deviceIdStorage = lazy { deviceIdStorage ?: super.deviceIdStorage.value }
@@ -177,7 +180,7 @@ public class VKID {
         logger.info(
             "VKID initialized\nVersion name: ${BuildConfig.VKID_VERSION_NAME}\nCI build: ${BuildConfig.CI_BUILD_NUMBER} ${BuildConfig.CI_BUILD_TYPE}"
         )
-        VKIDAnalytics.trackEvent("vkid_sdk_init")
+        VKIDAnalytics.trackEvent("vkid_sdk_init", VKIDAnalytics.EventParam("wrapper_sdk_type", strValue = if (deps.isFlutter) "flutter" else "none"))
     }
 
     private val requestMutex = Mutex()

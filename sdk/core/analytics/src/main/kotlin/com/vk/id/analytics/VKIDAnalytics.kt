@@ -17,7 +17,8 @@ public class VKIDAnalytics private constructor() {
 
     /** Parameter for event **/
     @InternalVKIDApi
-    public class EventParam(
+    @Suppress("ForbiddenPublicDataClass")
+    public data class EventParam(
         public val name: String,
         public val strValue: String? = null,
         public val intValue: Int? = null

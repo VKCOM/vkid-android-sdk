@@ -48,8 +48,10 @@ import com.vk.id.storage.InternalVKIDEncryptedSharedPreferencesStorage
 import com.vk.id.storage.TokenStorage
 
 internal open class VKIDDepsProd(
-    private val appContext: Context
+    private val appContext: Context,
+    override val isFlutter: Boolean,
 ) : VKIDDeps {
+
     private val serviceCredentials: Lazy<ServiceCredentials> = lazy {
         val componentName = ComponentName(appContext, AuthActivity::class.java)
         val ai = getActivityInfo(componentName)
