@@ -48,6 +48,8 @@ import com.vk.id.storage.TokenStorage
 import com.vk.id.test.InternalVKIDImmediateApi
 import com.vk.id.test.InternalVKIDOverrideApi
 import com.vk.id.test.TestSilentAuthInfoProvider
+import com.vk.id.tracking.tracer.CrashReporter
+import com.vk.id.tracking.tracer.CrashReportingRunner
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.currentCoroutineContext
@@ -125,8 +127,10 @@ public class VKID {
         @Suppress("MemberVisibilityCanBePrivate")
         public var logEngine: LogEngine = InternalVKIDAndroidLogcatLogEngine()
             set(value) {
-                field = value
-                InternalVKIDLog.setLogEngine(value)
+                VKID.instance.crashReportingRunner.runReportingCrashes({}) {
+                    field = value
+                    InternalVKIDLog.setLogEngine(value)
+                }
             }
 
         /**
@@ -174,13 +178,24 @@ public class VKID {
         this.userRefresher = deps.userRefresher
         this.loggerOut = deps.loggerOut
         this.tokenStorage = deps.tokenStorage
+        this.crashReporter = deps.crashReporter
+        this.crashReportingRunner = CrashReportingRunner(crashReporter)
 
-        VKIDAnalytics.addTracker(deps.statTracker)
+        crashReportingRunner.runReportingCrashes({}) {
+            VKIDAnalytics.addTracker(deps.statTracker)
 
-        logger.info(
-            "VKID initialized\nVersion name: ${BuildConfig.VKID_VERSION_NAME}\nCI build: ${BuildConfig.CI_BUILD_NUMBER} ${BuildConfig.CI_BUILD_TYPE}"
-        )
-        VKIDAnalytics.trackEvent("vkid_sdk_init", VKIDAnalytics.EventParam("wrapper_sdk_type", strValue = if (deps.isFlutter) "flutter" else "none"))
+            logger.info(
+                """
+                    |VKID initialized
+                    |Version name: ${BuildConfig.VKID_VERSION_NAME}
+                    |CI build: ${BuildConfig.CI_BUILD_NUMBER} ${BuildConfig.CI_BUILD_TYPE}
+                """.trimMargin()
+            )
+            VKIDAnalytics.trackEvent(
+                "vkid_sdk_init",
+                VKIDAnalytics.EventParam("wrapper_sdk_type", strValue = if (deps.isFlutter) "flutter" else "none")
+            )
+        }
     }
 
     private val requestMutex = Mutex()
@@ -198,6 +213,12 @@ public class VKID {
     private val userRefresher: Lazy<VKIDUserRefresher>
     private val loggerOut: Lazy<VKIDLoggerOut>
     private val tokenStorage: TokenStorage
+
+    @InternalVKIDApi
+    public val crashReporter: CrashReporter
+
+    @InternalVKIDApi
+    public val crashReportingRunner: CrashReportingRunner
 
     /**
      * Initiates the authorization process.
@@ -249,38 +270,40 @@ public class VKID {
         callback: VKIDAuthCallback,
         params: VKIDAuthParams = VKIDAuthParams {}
     ) {
-        authCallbacksHolder.add(callback)
-        val authContext = currentCoroutineContext()
+        crashReportingRunner.runReportingCrashesSuspend({}) {
+            authCallbacksHolder.add(callback)
+            val authContext = currentCoroutineContext()
 
-        val statParams = if (!params.internalUse) {
-            CustomAuthAnalytics.customAuthStart(params)
-        } else {
-            StatParams(
-                flowSource = params.extraParams?.get(StatTracker.EXTERNAL_PARAM_FLOW_SOURCE) ?: "",
-                sessionId = params.extraParams?.get(StatTracker.EXTERNAL_PARAM_SESSION_ID) ?: ""
-            )
-        }
+            val statParams = if (!params.internalUse) {
+                CustomAuthAnalytics.customAuthStart(params)
+            } else {
+                StatParams(
+                    flowSource = params.extraParams?.get(StatTracker.EXTERNAL_PARAM_FLOW_SOURCE) ?: "",
+                    sessionId = params.extraParams?.get(StatTracker.EXTERNAL_PARAM_SESSION_ID) ?: ""
+                )
+            }
 
-        AuthEventBridge.listener = object : AuthEventBridge.Listener {
-            override fun onAuthResult(authResult: AuthResult) {
-                CoroutineScope(authContext + Job()).launch {
-                    authResultHandler.value.handle(authResult, onFail = {
-                        if (!params.internalUse) {
-                            CustomAuthAnalytics.customAuthError(statParams)
+            AuthEventBridge.listener = object : AuthEventBridge.Listener {
+                override fun onAuthResult(authResult: AuthResult) {
+                    CoroutineScope(authContext + Job()).launch {
+                        authResultHandler.value.handle(authResult, onFail = {
+                            if (!params.internalUse) {
+                                CustomAuthAnalytics.customAuthError(statParams)
+                            }
+                        })
+                        if (requestMutex.isLocked) {
+                            requestMutex.unlock()
                         }
-                    })
-                    if (requestMutex.isLocked) {
-                        requestMutex.unlock()
                     }
                 }
             }
-        }
 
-        withContext(dispatchers.io) {
-            requestMutex.lock()
-            val bestAuthProvider = authProvidersChooser.value.chooseBest(params)
-            val fullAuthOptions = authOptionsCreator.create(params, statParams)
-            bestAuthProvider.auth(fullAuthOptions)
+            withContext(dispatchers.io) {
+                requestMutex.lock()
+                val bestAuthProvider = authProvidersChooser.value.chooseBest(params)
+                val fullAuthOptions = authOptionsCreator.create(params, statParams)
+                bestAuthProvider.auth(fullAuthOptions)
+            }
         }
     }
 
@@ -309,8 +332,10 @@ public class VKID {
         callback: VKIDRefreshTokenCallback,
         params: VKIDRefreshTokenParams = VKIDRefreshTokenParams {},
     ) {
-        requestMutex.withLock {
-            tokenRefresher.value.refresh(callback, params)
+        crashReportingRunner.runReportingCrashesSuspend({}) {
+            requestMutex.withLock {
+                tokenRefresher.value.refresh(callback, params)
+            }
         }
     }
 
@@ -343,8 +368,10 @@ public class VKID {
         callback: VKIDExchangeTokenCallback,
         params: VKIDExchangeTokenParams = VKIDExchangeTokenParams {},
     ) {
-        requestMutex.withLock {
-            tokenExchanger.value.exchange(v1Token = v1Token, params = params, callback = callback)
+        crashReportingRunner.runReportingCrashesSuspend({}) {
+            requestMutex.withLock {
+                tokenExchanger.value.exchange(v1Token = v1Token, params = params, callback = callback)
+            }
         }
     }
 
@@ -373,8 +400,10 @@ public class VKID {
         callback: VKIDGetUserCallback,
         params: VKIDGetUserParams = VKIDGetUserParams {},
     ) {
-        requestMutex.withLock {
-            userRefresher.value.refresh(callback = callback, params = params)
+        crashReportingRunner.runReportingCrashesSuspend({}) {
+            requestMutex.withLock {
+                userRefresher.value.refresh(callback = callback, params = params)
+            }
         }
     }
 
@@ -403,8 +432,10 @@ public class VKID {
         callback: VKIDLogoutCallback,
         params: VKIDLogoutParams = VKIDLogoutParams {},
     ) {
-        requestMutex.withLock {
-            loggerOut.value.logout(callback = callback, params = params)
+        crashReportingRunner.runReportingCrashesSuspend({}) {
+            requestMutex.withLock {
+                loggerOut.value.logout(callback = callback, params = params)
+            }
         }
     }
 
@@ -412,13 +443,13 @@ public class VKID {
      * Returns current access token or null if auth wasn't passed.
      */
     public val accessToken: AccessToken?
-        get() = tokenStorage.accessToken
+        get() = crashReportingRunner.runReportingCrashes({ null }) { tokenStorage.accessToken }
 
     /**
      * Returns current refresh token or null if auth wasn't passed.
      */
     public val refreshToken: RefreshToken?
-        get() = tokenStorage.refreshToken
+        get() = crashReportingRunner.runReportingCrashes({ null }) { tokenStorage.refreshToken }
 
     /**
      * Fetches the user data.
@@ -426,6 +457,8 @@ public class VKID {
      * @return A Result object containing the fetched [VKIDUser] or an error.
      */
     public suspend fun fetchUserData(): Result<VKIDUser?> {
-        return Result.success(userDataFetcher.value.fetchUserData())
+        return crashReportingRunner.runReportingCrashesSuspend({ Result.failure(it) }) {
+            Result.success(userDataFetcher.value.fetchUserData())
+        }
     }
 }

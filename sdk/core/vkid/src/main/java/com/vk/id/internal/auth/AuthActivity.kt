@@ -10,6 +10,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import androidx.core.app.ActivityOptionsCompat
+import com.vk.id.VKID
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.internal.auth.web.ContextUtils.addNewTaskFlag
 import com.vk.id.logger.internalVKIDCreateLoggerForClass
@@ -38,33 +39,38 @@ internal class AuthActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         overridePendingTransition(0, 0)
         super.onCreate(savedInstanceState)
+        VKID.instance.crashReportingRunner.runReportingCrashes({}) {
+            authIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                savedInstanceState?.getParcelable(KEY_AUTH_INTENT, Intent::class.java)
+            } else {
+                @Suppress("DEPRECATION")
+                savedInstanceState?.getParcelable(KEY_AUTH_INTENT)
+            }
 
-        authIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            savedInstanceState?.getParcelable(KEY_AUTH_INTENT, Intent::class.java)
-        } else {
-            @Suppress("DEPRECATION")
-            savedInstanceState?.getParcelable(KEY_AUTH_INTENT)
+            isWaitingForAuthResult =
+                savedInstanceState?.getBoolean(KEY_WAITING_FOR_AUTH_RESULT, false) ?: false
+
+            processIntent(intent)
         }
-
-        isWaitingForAuthResult =
-            savedInstanceState?.getBoolean(KEY_WAITING_FOR_AUTH_RESULT, false) ?: false
-
-        processIntent(intent)
     }
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        processIntent(intent)
+        VKID.instance.crashReportingRunner.runReportingCrashes({}) {
+            processIntent(intent)
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        if (isWaitingForAuthResult && !authWasStarted) {
-            // We're waiting for auth result but user returns to activity. Okay. Just finish it.
-            AuthEventBridge.onAuthResult(
-                AuthResult.Canceled("User returns to auth activity without auth")
-            )
-            finish()
+        VKID.instance.crashReportingRunner.runReportingCrashes({}) {
+            if (isWaitingForAuthResult && !authWasStarted) {
+                // We're waiting for auth result but user returns to activity. Okay. Just finish it.
+                AuthEventBridge.onAuthResult(
+                    AuthResult.Canceled("User returns to auth activity without auth")
+                )
+                finish()
+            }
         }
     }
 
@@ -122,19 +128,25 @@ internal class AuthActivity : Activity() {
 
     override fun onPause() {
         super.onPause()
-        authWasStarted = false
+        VKID.instance.crashReportingRunner.runReportingCrashes({}) {
+            authWasStarted = false
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putBoolean(KEY_WAITING_FOR_AUTH_RESULT, isWaitingForAuthResult)
-        outState.putParcelable(KEY_AUTH_INTENT, authIntent)
+        VKID.instance.crashReportingRunner.runReportingCrashes({}) {
+            outState.putBoolean(KEY_WAITING_FOR_AUTH_RESULT, isWaitingForAuthResult)
+            outState.putParcelable(KEY_AUTH_INTENT, authIntent)
+        }
     }
 
     override fun finish() {
         super.finish()
-        setResult(RESULT_OK)
-        overridePendingTransition(0, 0)
+        VKID.instance.crashReportingRunner.runReportingCrashes({}) {
+            setResult(RESULT_OK)
+            overridePendingTransition(0, 0)
+        }
     }
 
     companion object {

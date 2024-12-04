@@ -21,6 +21,7 @@ android {
 
 dependencies {
     implementation(projects.common)
+    implementation(projects.trackingTracer)
     implementation(projects.analytics)
     implementation(projects.network)
     implementation(projects.logger)

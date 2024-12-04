@@ -46,11 +46,15 @@ import com.vk.id.refresh.VKIDTokenRefresher
 import com.vk.id.refreshuser.VKIDUserRefresher
 import com.vk.id.storage.InternalVKIDEncryptedSharedPreferencesStorage
 import com.vk.id.storage.TokenStorage
+import com.vk.id.tracking.tracer.CrashReporter
+import com.vk.id.tracking.tracer.TracerCrashReporter
 
 internal open class VKIDDepsProd(
     private val appContext: Context,
     override val isFlutter: Boolean,
 ) : VKIDDeps {
+
+    override val crashReporter: CrashReporter = TracerCrashReporter(appContext)
 
     private val serviceCredentials: Lazy<ServiceCredentials> = lazy {
         val componentName = ComponentName(appContext, AuthActivity::class.java)

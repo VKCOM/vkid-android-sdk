@@ -18,6 +18,7 @@ fun Project.configureAndroidLint() {
                 "PrivateResource",
                 "ObsoleteLintCustomCheck",
                 "IconLocation",
+                "UnusedResources",
             )
         }
     }

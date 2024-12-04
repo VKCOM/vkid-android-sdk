@@ -44,6 +44,7 @@ internal class UserAgentProvider(private val context: Context) {
         }
     }
 
+    @Suppress("DEPRECATION")
     private val displaySize by lazy {
         val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         Point().also { point -> windowManager.defaultDisplay.getRealSize(point) }
@@ -63,7 +64,7 @@ internal class UserAgentProvider(private val context: Context) {
             buffer.writeUtf8(string, 0, i)
             while (i < string.length) {
                 c = string.codePointAt(i)
-                buffer.writeUtf8CodePoint(if (c in 0x20..0x7e) c else '?'.toInt())
+                buffer.writeUtf8CodePoint(if (c in 0x20..0x7e) c else '?'.code)
                 i += Character.charCount(c)
             }
             return buffer.readUtf8()

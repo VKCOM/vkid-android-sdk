@@ -27,6 +27,7 @@ import com.vk.id.refresh.VKIDTokenRefresher
 import com.vk.id.refreshuser.VKIDUserRefresher
 import com.vk.id.storage.InternalVKIDEncryptedSharedPreferencesStorage
 import com.vk.id.storage.TokenStorage
+import com.vk.id.tracking.tracer.CrashReporter
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.testCoroutineScheduler
 import io.kotest.matchers.shouldBe
@@ -55,6 +56,8 @@ internal class VKIDTest : BehaviorSpec({
     val dispatchers = mockk<VKIDCoroutinesDispatchers>()
     val statTracker = mockk<StatTracker>(relaxed = true)
     var isFlutter = false
+    val crashReporter = mockk<CrashReporter>()
+    every { crashReporter.report(any()) } just runs
     val deps = object : VKIDDeps {
         override val authProvidersChooser: Lazy<AuthProvidersChooser> = lazy { authProvidersChooser }
         override val authOptionsCreator: AuthOptionsCreator = authOptionsCreator
@@ -78,6 +81,7 @@ internal class VKIDTest : BehaviorSpec({
         override val activityStarter: InternalVKIDActivityStarter = mockk()
         override val isFlutter: Boolean
             get() = isFlutter
+        override val crashReporter: CrashReporter = crashReporter
     }
 
     Given("VKID for flutter SDK") {
