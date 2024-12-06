@@ -50,6 +50,7 @@ import com.vk.id.test.InternalVKIDOverrideApi
 import com.vk.id.test.TestSilentAuthInfoProvider
 import com.vk.id.tracking.tracer.CrashReporter
 import com.vk.id.tracking.tracer.CrashReportingRunner
+import com.vk.id.tracking.tracer.TracerPerformanceTracker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.currentCoroutineContext
@@ -180,6 +181,7 @@ public class VKID {
         this.tokenStorage = deps.tokenStorage
         this.crashReporter = deps.crashReporter
         this.crashReportingRunner = CrashReportingRunner(crashReporter)
+        this.performanceTracker = deps.performanceTracker
 
         crashReportingRunner.runReportingCrashes({}) {
             VKIDAnalytics.addTracker(deps.statTracker)
@@ -213,6 +215,7 @@ public class VKID {
     private val userRefresher: Lazy<VKIDUserRefresher>
     private val loggerOut: Lazy<VKIDLoggerOut>
     private val tokenStorage: TokenStorage
+    internal val performanceTracker: TracerPerformanceTracker
 
     @InternalVKIDApi
     public val crashReporter: CrashReporter
@@ -271,6 +274,8 @@ public class VKID {
         params: VKIDAuthParams = VKIDAuthParams {}
     ) {
         crashReportingRunner.runReportingCrashesSuspend({}) {
+            val performanceKey = "Authorize"
+            performanceTracker.startTracking(performanceKey)
             authCallbacksHolder.add(callback)
             val authContext = currentCoroutineContext()
 
@@ -294,6 +299,7 @@ public class VKID {
                         if (requestMutex.isLocked) {
                             requestMutex.unlock()
                         }
+                        performanceTracker.endTracking(performanceKey)
                     }
                 }
             }
@@ -334,7 +340,9 @@ public class VKID {
     ) {
         crashReportingRunner.runReportingCrashesSuspend({}) {
             requestMutex.withLock {
-                tokenRefresher.value.refresh(callback, params)
+                performanceTracker.runTrackingSuspend("RefreshToken") {
+                    tokenRefresher.value.refresh(callback, params)
+                }
             }
         }
     }
@@ -370,7 +378,9 @@ public class VKID {
     ) {
         crashReportingRunner.runReportingCrashesSuspend({}) {
             requestMutex.withLock {
-                tokenExchanger.value.exchange(v1Token = v1Token, params = params, callback = callback)
+                performanceTracker.runTrackingSuspend("ExchangeTokenToV2") {
+                    tokenExchanger.value.exchange(v1Token = v1Token, params = params, callback = callback)
+                }
             }
         }
     }
@@ -402,7 +412,9 @@ public class VKID {
     ) {
         crashReportingRunner.runReportingCrashesSuspend({}) {
             requestMutex.withLock {
-                userRefresher.value.refresh(callback = callback, params = params)
+                performanceTracker.runTrackingSuspend("GetUserData") {
+                    userRefresher.value.refresh(callback = callback, params = params)
+                }
             }
         }
     }
@@ -434,7 +446,9 @@ public class VKID {
     ) {
         crashReportingRunner.runReportingCrashesSuspend({}) {
             requestMutex.withLock {
-                loggerOut.value.logout(callback = callback, params = params)
+                performanceTracker.runTrackingSuspend("Logout") {
+                    loggerOut.value.logout(callback = callback, params = params)
+                }
             }
         }
     }

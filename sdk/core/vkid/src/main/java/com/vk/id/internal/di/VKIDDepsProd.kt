@@ -48,13 +48,13 @@ import com.vk.id.storage.InternalVKIDEncryptedSharedPreferencesStorage
 import com.vk.id.storage.TokenStorage
 import com.vk.id.tracking.tracer.CrashReporter
 import com.vk.id.tracking.tracer.TracerCrashReporter
+import com.vk.id.tracking.tracer.TracerPerformanceTracker
+import ru.ok.tracer.lite.TracerLite
 
 internal open class VKIDDepsProd(
     private val appContext: Context,
     override val isFlutter: Boolean,
 ) : VKIDDeps {
-
-    override val crashReporter: CrashReporter = TracerCrashReporter(appContext)
 
     private val serviceCredentials: Lazy<ServiceCredentials> = lazy {
         val componentName = ComponentName(appContext, AuthActivity::class.java)
@@ -67,6 +67,18 @@ internal open class VKIDDepsProd(
 
         ServiceCredentials(clientID, clientSecret, redirectUri)
     }
+
+    private val tracer = TracerLite(
+        appContext,
+        libraryPackageName = "com.vk.id.tracking.tracer",
+    )
+
+    init {
+        tracer.setKey("ClientId", serviceCredentials.value.clientID)
+    }
+
+    override val crashReporter: CrashReporter = TracerCrashReporter(tracer)
+    override val performanceTracker: TracerPerformanceTracker = TracerPerformanceTracker(tracer)
 
     @SuppressLint("WrongConstant")
     private fun getActivityInfo(componentName: ComponentName): ActivityInfo {

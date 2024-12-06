@@ -24,4 +24,7 @@ dependencies {
     implementation(projects.common)
     implementation(libs.tracer.lite.crash.reporting)
     implementation(libs.tracer.lite.performance.metrics)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotest.core)
+    testImplementation(libs.kotest.assertions)
 }

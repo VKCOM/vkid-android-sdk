@@ -4,11 +4,17 @@ package com.vk.id.internal.auth
 
 import android.app.Activity
 import android.content.ActivityNotFoundException
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import androidx.browser.customtabs.CustomTabsCallback
+import androidx.browser.customtabs.CustomTabsClient
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.browser.customtabs.CustomTabsServiceConnection
+import androidx.browser.customtabs.CustomTabsSession
 import androidx.core.app.ActivityOptionsCompat
 import com.vk.id.VKID
 import com.vk.id.common.InternalVKIDApi
@@ -36,10 +42,34 @@ internal class AuthActivity : Activity() {
 
     private val logger = internalVKIDCreateLoggerForClass()
 
+    private var shouldReportCustomTabsPerformance = true
+    private var customTabsServiceConnection: CustomTabsServiceConnection? = null
+    private var customTabsSession: CustomTabsSession? = null
+    private val callback = object : CustomTabsCallback() {
+
+        override fun onNavigationEvent(navigationEvent: Int, extras: Bundle?) {
+            super.onNavigationEvent(navigationEvent, extras)
+            if (navigationEvent == NAVIGATION_FINISHED && shouldReportCustomTabsPerformance) {
+                VKID.instance.performanceTracker.endTracking(PERFORMANCE_KEY_CUSTOM_TABS)
+                shouldReportCustomTabsPerformance = false
+            }
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        VKID.instance.crashReportingRunner.runReportingCrashes({}) {
+            if (customTabsServiceConnection == null) return@runReportingCrashes
+            unbindService(customTabsServiceConnection!!)
+            customTabsServiceConnection = null
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         overridePendingTransition(0, 0)
         super.onCreate(savedInstanceState)
         VKID.instance.crashReportingRunner.runReportingCrashes({}) {
+            shouldReportCustomTabsPerformance = true
             authIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 savedInstanceState?.getParcelable(KEY_AUTH_INTENT, Intent::class.java)
             } else {
@@ -150,6 +180,7 @@ internal class AuthActivity : Activity() {
     }
 
     companion object {
+        private const val PERFORMANCE_KEY_CUSTOM_TABS = "CustomTabsAuth"
         private const val KEY_AUTH_INTENT = "KEY_AUTH_INTENT"
         private const val KEY_START_AUTH = "KEY_START_AUTH"
         private const val KEY_WAITING_FOR_AUTH_RESULT = "KEY_WAITING_FOR_AUTH_RESULT"
@@ -208,18 +239,53 @@ internal class AuthActivity : Activity() {
             intent.getParcelableExtra(KEY_AUTH_INTENT)
         }
         return try {
-            startActivity(
-                authIntent,
-                ActivityOptionsCompat.makeCustomAnimation(
-                    this,
-                    android.R.anim.fade_in,
-                    android.R.anim.fade_out
-                ).toBundle()
-            )
+            if (authIntent!!.`package` == CustomTabsClient.getPackageName(this, null)) {
+                VKID.instance.performanceTracker.startTracking(PERFORMANCE_KEY_CUSTOM_TABS)
+                customTabsServiceConnection = object : CustomTabsServiceConnection() {
+                    override fun onCustomTabsServiceConnected(
+                        name: ComponentName,
+                        client: CustomTabsClient
+                    ) {
+                        VKID.instance.crashReportingRunner.runReportingCrashes({}) {
+                            customTabsSession = client.newSession(callback)
+                            client.warmup(0)
+                            launchAuth(
+                                CustomTabsIntent.Builder(customTabsSession)
+                                    .setShowTitle(true)
+                                    .addDefaultShareMenuItem()
+                                    .enableUrlBarHiding()
+                                    .build()
+                                    .intent.apply { data = authIntent!!.data }
+                            )
+                        }
+                    }
+
+                    override fun onServiceDisconnected(name: ComponentName?) = Unit
+                }
+                val packageName = CustomTabsClient.getPackageName(this, null)
+                if (packageName != null) {
+                    CustomTabsClient.bindCustomTabsService(this, packageName, customTabsServiceConnection!!)
+                } else {
+                    return false
+                }
+            } else {
+                launchAuth(authIntent!!)
+            }
             true
         } catch (e: ActivityNotFoundException) {
             logger.error("Can't start auth", e)
             false
         }
+    }
+
+    private fun launchAuth(intent: Intent) {
+        startActivity(
+            intent,
+            ActivityOptionsCompat.makeCustomAnimation(
+                this,
+                android.R.anim.fade_in,
+                android.R.anim.fade_out
+            ).toBundle()
+        )
     }
 }
