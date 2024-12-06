@@ -9,6 +9,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.vk.id.OAuth
+import com.vk.id.VKID
 import com.vk.id.analytics.VKIDAnalytics
 import com.vk.id.analytics.stat.StatTracker
 import com.vk.id.common.InternalVKIDApi
@@ -18,16 +19,18 @@ import java.util.UUID
 internal class OAuthListWidgetAnalytics(private val screen: String, private val paused: Boolean) {
 
     fun oauthAdded(oAuths: Set<OAuth>) {
-        val oauthParam: (String, OAuth) -> VKIDAnalytics.EventParam = { name, oauth ->
-            val value = if (oAuths.contains(oauth)) "1" else "0"
-            VKIDAnalytics.EventParam(name, value)
+        VKID.instance.crashReportingRunner.runReportingCrashes({}) {
+            val oauthParam: (String, OAuth) -> VKIDAnalytics.EventParam = { name, oauth ->
+                val value = if (oAuths.contains(oauth)) "1" else "0"
+                VKIDAnalytics.EventParam(name, value)
+            }
+            track(
+                "multibranding_oauth_added",
+                oauthParam("ok_ru", OAuth.OK),
+                oauthParam("mail_ru", OAuth.MAIL),
+                oauthParam("vk", OAuth.VK)
+            )
         }
-        track(
-            "multibranding_oauth_added",
-            oauthParam("ok_ru", OAuth.OK),
-            oauthParam("mail_ru", OAuth.MAIL),
-            oauthParam("vk", OAuth.VK)
-        )
     }
 
     @Composable
@@ -38,13 +41,16 @@ internal class OAuthListWidgetAnalytics(private val screen: String, private val 
             val observer = LifecycleEventObserver { _, event ->
                 when (event) {
                     Lifecycle.Event.ON_RESUME -> {
-                        val name = when (oAuth) {
-                            OAuth.VK -> "vk_button_show"
-                            OAuth.MAIL -> "mail_button_show"
-                            OAuth.OK -> "ok_button_show"
+                        VKID.instance.crashReportingRunner.runReportingCrashes({}) {
+                            val name = when (oAuth) {
+                                OAuth.VK -> "vk_button_show"
+                                OAuth.MAIL -> "mail_button_show"
+                                OAuth.OK -> "ok_button_show"
+                            }
+                            track(name, isIconParam(isText))
                         }
-                        track(name, isIconParam(isText))
                     }
+
                     else -> {}
                 }
             }
@@ -58,31 +64,35 @@ internal class OAuthListWidgetAnalytics(private val screen: String, private val 
 
     fun onOAuthTap(oAuth: OAuth, isText: Boolean): Map<String, String> {
         val uuid = UUID.randomUUID().toString()
-        val name = when (oAuth) {
-            OAuth.VK -> "vk_button_tap"
-            OAuth.MAIL -> "mail_button_tap"
-            OAuth.OK -> "ok_button_tap"
+        VKID.instance.crashReportingRunner.runReportingCrashes({}) {
+            val name = when (oAuth) {
+                OAuth.VK -> "vk_button_tap"
+                OAuth.MAIL -> "mail_button_tap"
+                OAuth.OK -> "ok_button_tap"
+            }
+            track(name, isIconParam(isText), uuidParam(uuid))
         }
-        track(name, isIconParam(isText), uuidParam(uuid))
         return mapOf(StatTracker.EXTERNAL_PARAM_SESSION_ID to uuid, flowSource)
     }
 
     fun onAuthError(sessionId: String, oAuth: OAuth) {
-        if (!paused) {
-            val oAuthParam = when (oAuth) {
-                OAuth.VK -> "vk"
-                OAuth.MAIL -> "mail_ru"
-                OAuth.OK -> "ok_ru"
+        VKID.instance.crashReportingRunner.runReportingCrashes({}) {
+            if (!paused) {
+                val oAuthParam = when (oAuth) {
+                    OAuth.VK -> "vk"
+                    OAuth.MAIL -> "mail_ru"
+                    OAuth.OK -> "ok_ru"
+                }
+                VKIDAnalytics.trackEvent(
+                    "sdk_auth_error",
+                    VKIDAnalytics.EventParam("sdk_type", "vkid"),
+                    uuidParam(sessionId),
+                    VKIDAnalytics.EventParam("error", "sdk_auth_error"),
+                    VKIDAnalytics.EventParam("from_multibranding", "true"),
+                    VKIDAnalytics.EventParam("oauth_service", oAuthParam),
+                    VKIDAnalytics.EventParam("screen", screen)
+                )
             }
-            VKIDAnalytics.trackEvent(
-                "sdk_auth_error",
-                VKIDAnalytics.EventParam("sdk_type", "vkid"),
-                uuidParam(sessionId),
-                VKIDAnalytics.EventParam("error", "sdk_auth_error"),
-                VKIDAnalytics.EventParam("from_multibranding", "true"),
-                VKIDAnalytics.EventParam("oauth_service", oAuthParam),
-                VKIDAnalytics.EventParam("screen", screen)
-            )
         }
     }
 
@@ -103,6 +113,7 @@ internal class OAuthListWidgetAnalytics(private val screen: String, private val 
     }
 
     private val flowSource = StatTracker.EXTERNAL_PARAM_FLOW_SOURCE to "from_multibranding"
+
     private companion object {
         const val UNIQUE_SESSION_PARAM_NAME = "unique_session_id"
     }
