@@ -71,6 +71,8 @@ include(":network")
 project(":network").projectDir = File("sdk/core/network")
 include(":tracking-tracer")
 project(":tracking-tracer").projectDir = File("sdk/core/tracking-tracer")
+include(":tracking-noop")
+project(":tracking-noop").projectDir = File("sdk/core/tracking-noop")
 include(":vk-sdk-support")
 project(":vk-sdk-support").projectDir = File("sdk/core/vk-sdk-support")
 
