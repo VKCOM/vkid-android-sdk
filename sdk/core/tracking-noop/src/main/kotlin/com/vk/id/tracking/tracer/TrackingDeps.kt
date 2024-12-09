@@ -24,7 +24,7 @@ public class TrackingDeps(
     public val performanceTracker: PerformanceTracker = object : PerformanceTracker {
         override fun startTracking(key: String) = Unit
         override fun endTracking(key: String) = Unit
-        override fun runTracking(key: String, action: () -> Unit) = Unit
-        override suspend fun runTrackingSuspend(key: String, action: suspend () -> Unit) = Unit
+        override fun runTracking(key: String, action: () -> Unit) = action()
+        override suspend fun runTrackingSuspend(key: String, action: suspend () -> Unit) = action()
     }
 }

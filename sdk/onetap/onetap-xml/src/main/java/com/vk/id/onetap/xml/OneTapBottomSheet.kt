@@ -74,6 +74,13 @@ public class OneTapBottomSheet @JvmOverloads constructor(
      */
     public var fastAuthEnabled: Boolean = true
 
+    /**
+     * Delay in millis after which sheet will be automatically shown.
+     * Examples:
+     * - null: not shown automatically
+     * - 0: shown automatically immediately
+     * - 1000: show automatically after 1 second
+     */
     public var autoShowDelayMillis: Long? = null
         set(value) {
             field = value

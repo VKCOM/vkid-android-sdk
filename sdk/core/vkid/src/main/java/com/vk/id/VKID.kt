@@ -108,6 +108,23 @@ public class VKID {
                     lazy { encryptedSharedPreferencesStorage ?: super.encryptedSharedPreferencesStorage.value }
                 override val vkidPackageManager = packageManager ?: super.vkidPackageManager
                 override val activityStarter = activityStarter ?: super.activityStarter
+                override val performanceTracker: PerformanceTracker = object : PerformanceTracker {
+                    override fun startTracking(key: String) = Unit
+                    override fun endTracking(key: String) = Unit
+                    override fun runTracking(key: String, action: () -> Unit) = action()
+                    override suspend fun runTrackingSuspend(key: String, action: suspend () -> Unit) = action()
+                }
+                override val crashReporter: CrashReporter = object : CrashReporter {
+                    override fun report(crash: Throwable) = Unit
+                    override fun <T> runReportingCrashes(
+                        errorValueProvider: (error: Throwable) -> T,
+                        action: () -> T
+                    ): T = action()
+                    override suspend fun <T> runReportingCrashesSuspend(
+                        errorValueProvider: suspend (error: Throwable) -> T,
+                        action: suspend () -> T
+                    ): T = action()
+                }
             })
         )
 
@@ -132,8 +149,8 @@ public class VKID {
                     override val performanceTracker: PerformanceTracker = object : PerformanceTracker {
                         override fun startTracking(key: String) = Unit
                         override fun endTracking(key: String) = Unit
-                        override fun runTracking(key: String, action: () -> Unit) = Unit
-                        override suspend fun runTrackingSuspend(key: String, action: suspend () -> Unit) = Unit
+                        override fun runTracking(key: String, action: () -> Unit) = action()
+                        override suspend fun runTrackingSuspend(key: String, action: suspend () -> Unit) = action()
                     }
                 })
             )
