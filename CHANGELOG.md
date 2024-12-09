@@ -3,6 +3,11 @@
 > **Note**\
 > Описание основных изменений в релизах VK ID SDK. Наш SDK следует [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.2.2 (10.10.2024)
+
+### Changed
+Технический релиз — поработали над внутренними улучшениями SDK.
+
 ## Placeholders plugin 1.1.0 (08.11.2024)
 
 ### Fixed
