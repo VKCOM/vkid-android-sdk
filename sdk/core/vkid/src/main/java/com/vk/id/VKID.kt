@@ -111,6 +111,34 @@ public class VKID {
             })
         )
 
+        @InternalVKIDApi
+        public fun initForScreenshotTests(context: Context) {
+            init(
+                VKID(object : VKIDDepsProd(context, isFlutter = false) {
+                    override val statTracker: VKIDAnalytics.Tracker = object : VKIDAnalytics.Tracker {
+                        override fun trackEvent(name: String, vararg params: VKIDAnalytics.EventParam) = Unit
+                    }
+                    override val crashReporter: CrashReporter = object : CrashReporter {
+                        override fun report(crash: Throwable) = Unit
+                        override fun <T> runReportingCrashes(
+                            errorValueProvider: (error: Throwable) -> T,
+                            action: () -> T
+                        ): T = action()
+                        override suspend fun <T> runReportingCrashesSuspend(
+                            errorValueProvider: suspend (error: Throwable) -> T,
+                            action: suspend () -> T
+                        ): T = action()
+                    }
+                    override val performanceTracker: PerformanceTracker = object : PerformanceTracker {
+                        override fun startTracking(key: String) = Unit
+                        override fun endTracking(key: String) = Unit
+                        override fun runTracking(key: String, action: () -> Unit) = Unit
+                        override suspend fun runTrackingSuspend(key: String, action: suspend () -> Unit) = Unit
+                    }
+                })
+            )
+        }
+
         /**
          * Returns a VKID Instance.
          * You must call [init] before accessing this property.

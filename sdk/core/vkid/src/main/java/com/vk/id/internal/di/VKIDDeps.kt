@@ -4,7 +4,7 @@ package com.vk.id.internal.di
 
 import com.vk.id.AuthOptionsCreator
 import com.vk.id.AuthResultHandler
-import com.vk.id.analytics.stat.StatTracker
+import com.vk.id.analytics.VKIDAnalytics
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.exchangetoken.VKIDTokenExchanger
 import com.vk.id.internal.auth.AuthCallbacksHolder
@@ -44,7 +44,7 @@ internal interface VKIDDeps {
     val deviceIdStorage: Lazy<InternalVKIDDeviceIdProvider.DeviceIdStorage>
     val prefsStore: Lazy<InternalVKIDPrefsStore>
     val encryptedSharedPreferencesStorage: Lazy<InternalVKIDEncryptedSharedPreferencesStorage>
-    val statTracker: StatTracker
+    val statTracker: VKIDAnalytics.Tracker
     val vkidPackageManager: InternalVKIDPackageManager
     val activityStarter: InternalVKIDActivityStarter
     val isFlutter: Boolean
