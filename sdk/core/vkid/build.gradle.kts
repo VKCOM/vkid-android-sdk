@@ -41,4 +41,5 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.kotest.core)
     testImplementation(libs.kotest.assertions)
+    testImplementation(kotlin("reflect"))
 }

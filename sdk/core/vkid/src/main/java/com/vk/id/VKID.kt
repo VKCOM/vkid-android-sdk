@@ -274,6 +274,7 @@ public class VKID {
         params: VKIDAuthParams = VKIDAuthParams {}
     ) {
         crashReportingRunner.runReportingCrashesSuspend({}) {
+            requestMutex.lock()
             val performanceKey = "Authorize"
             performanceTracker.startTracking(performanceKey)
             authCallbacksHolder.add(callback)
@@ -296,16 +297,15 @@ public class VKID {
                                 CustomAuthAnalytics.customAuthError(statParams)
                             }
                         })
+                        performanceTracker.endTracking(performanceKey)
                         if (requestMutex.isLocked) {
                             requestMutex.unlock()
                         }
-                        performanceTracker.endTracking(performanceKey)
                     }
                 }
             }
 
             withContext(dispatchers.io) {
-                requestMutex.lock()
                 val bestAuthProvider = authProvidersChooser.value.chooseBest(params)
                 val fullAuthOptions = authOptionsCreator.create(params, statParams)
                 bestAuthProvider.auth(fullAuthOptions)

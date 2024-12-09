@@ -9,7 +9,12 @@ public class TracerCrashReporter(
     tracer: TracerLite
 ) : CrashReporter {
 
-    private val crashReporter = TracerCrashReportLite(tracer)
+    private val crashReporter = TracerCrashReportLite(
+        tracer,
+        TracerCrashReportLite.Configuration.Builder()
+            .apply { obfuscatedNonFatalsEnabled = true }
+            .build()
+    )
 
     override fun report(crash: Throwable) {
         crashReporter.report(crash)
