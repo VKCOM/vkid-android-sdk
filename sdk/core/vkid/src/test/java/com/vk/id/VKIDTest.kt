@@ -67,6 +67,7 @@ internal class VKIDTest : BehaviorSpec({
     coEvery { crashReporter.runReportingCrashesSuspend<Any>(any(), any()) } coAnswers {
         secondArg<suspend () -> Any>()()
     }
+    val trackingTracker = mockk<VKIDAnalytics.Tracker>(relaxed = true)
     val deps = object : VKIDDeps {
         override val authProvidersChooser: Lazy<AuthProvidersChooser> = lazy { authProvidersChooser }
         override val authOptionsCreator: AuthOptionsCreator = authOptionsCreator
@@ -92,23 +93,22 @@ internal class VKIDTest : BehaviorSpec({
             get() = isFlutter
         override val crashReporter: CrashReporter = crashReporter
         override val performanceTracker: PerformanceTracker = performanceTracker
+        override val trackingTracker: VKIDAnalytics.Tracker = trackingTracker
     }
+    val sdkInitEvent = "vkid_sdk_init"
 
     Given("VKID for flutter SDK") {
         val scheduler = testCoroutineScheduler
         val testDispatcher = StandardTestDispatcher(scheduler)
+        val flutterParam = VKIDAnalytics.EventParam("wrapper_sdk_type", strValue = "flutter")
         every { dispatchers.io } returns testDispatcher
         isFlutter = true
         VKID(deps)
 
         When("VKID initialized") {
             Then("Analytics vkid_sdk_init event is send") {
-                verify {
-                    statTracker.trackEvent(
-                        "vkid_sdk_init",
-                        VKIDAnalytics.EventParam("wrapper_sdk_type", strValue = "flutter")
-                    )
-                }
+                verify { statTracker.trackEvent(sdkInitEvent, flutterParam) }
+                verify { trackingTracker.trackEvent(sdkInitEvent, flutterParam) }
             }
         }
     }
@@ -116,18 +116,15 @@ internal class VKIDTest : BehaviorSpec({
     Given("Auth with VK is called") {
         val scheduler = testCoroutineScheduler
         val testDispatcher = StandardTestDispatcher(scheduler)
+        val flutterParam = VKIDAnalytics.EventParam("wrapper_sdk_type", strValue = "none")
         every { dispatchers.io } returns testDispatcher
         isFlutter = false
         val vkid = VKID(deps)
 
         When("VKID initialized") {
             Then("Analytics vkid_sdk_init event is send") {
-                verify {
-                    statTracker.trackEvent(
-                        "vkid_sdk_init",
-                        VKIDAnalytics.EventParam("wrapper_sdk_type", strValue = "none")
-                    )
-                }
+                verify { statTracker.trackEvent(sdkInitEvent, flutterParam) }
+                verify { trackingTracker.trackEvent(sdkInitEvent, flutterParam) }
             }
         }
 

@@ -125,6 +125,9 @@ public class VKID {
                         action: suspend () -> T
                     ): T = action()
                 }
+                override val trackingTracker: VKIDAnalytics.Tracker = object : VKIDAnalytics.Tracker {
+                    override fun trackEvent(name: String, vararg params: VKIDAnalytics.EventParam) = Unit
+                }
             })
         )
 
@@ -151,6 +154,9 @@ public class VKID {
                         override fun endTracking(key: String) = Unit
                         override fun runTracking(key: String, action: () -> Unit) = action()
                         override suspend fun runTrackingSuspend(key: String, action: suspend () -> Unit) = action()
+                    }
+                    override val trackingTracker: VKIDAnalytics.Tracker = object : VKIDAnalytics.Tracker {
+                        override fun trackEvent(name: String, vararg params: VKIDAnalytics.EventParam) = Unit
                     }
                 })
             )
@@ -228,6 +234,7 @@ public class VKID {
 
         this.crashReporter.runReportingCrashes({}) {
             VKIDAnalytics.addTracker(deps.statTracker)
+            VKIDAnalytics.addTracker(deps.trackingTracker)
 
             logger.info(
                 """

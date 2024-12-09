@@ -2,6 +2,7 @@ package com.vk.id.tracking.tracer
 
 import android.content.Context
 import com.vk.id.common.InternalVKIDApi
+import com.vk.id.tracking.core.AnalyticsTracking
 import com.vk.id.tracking.core.CrashReporter
 import com.vk.id.tracking.core.PerformanceTracker
 import ru.ok.tracer.lite.TracerLite
@@ -18,6 +19,8 @@ public class TrackingDeps(
     init {
         tracer.setKey("ClientId", clientId)
     }
-    public val crashReporter: CrashReporter = TracerCrashReporter(tracer)
+    private val crashReporterInternal = TracerCrashReporter(tracer)
+    public val crashReporter: CrashReporter = crashReporterInternal
     public val performanceTracker: PerformanceTracker = TracerPerformanceTracker(tracer)
+    public val analyticsTracking: AnalyticsTracking = crashReporterInternal
 }

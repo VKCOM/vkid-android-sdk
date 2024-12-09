@@ -101,7 +101,6 @@ mockk-android = { group = "io.mockk", name = "mockk-android", version.ref = "moc
 okhttp3-okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okHttpVersion" }
 okhttp3-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okHttpVersion" }
 soloader = { group = "com.facebook.soloader", name = "soloader", version.ref = "soLoader" }
-tracer-lite-commons = { group = "ru.ok.tracer", name = "tracer-lite-commons", version.ref = "tracer" }
 tracer-lite-crash-reporting = { group = "ru.ok.tracer", name = "tracer-lite-crash-report", version.ref = "tracer" }
 tracer-lite-performance-metrics = { group = "ru.ok.tracer", name = "tracer-lite-performance-metrics", version.ref = "tracer" }
 vk-userid = { group = "com.vk", name = "android-sdk-id", version.ref = "vkUserIdVersion" }

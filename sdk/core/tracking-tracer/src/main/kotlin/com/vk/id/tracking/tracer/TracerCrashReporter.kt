@@ -3,13 +3,14 @@
 package com.vk.id.tracking.tracer
 
 import com.vk.id.common.InternalVKIDApi
+import com.vk.id.tracking.core.AnalyticsTracking
 import com.vk.id.tracking.core.CrashReporter
 import ru.ok.tracer.lite.TracerLite
 import ru.ok.tracer.lite.crash.report.TracerCrashReportLite
 
 internal class TracerCrashReporter(
     tracer: TracerLite
-) : CrashReporter {
+) : CrashReporter, AnalyticsTracking {
 
     private val crashReporter = TracerCrashReportLite(
         tracer,
@@ -17,6 +18,10 @@ internal class TracerCrashReporter(
             .apply { obfuscatedNonFatalsEnabled = true }
             .build()
     )
+
+    override fun log(message: String) {
+        crashReporter.log(message)
+    }
 
     override fun report(crash: Throwable) {
         crashReporter.report(crash)
