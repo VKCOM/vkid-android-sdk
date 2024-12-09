@@ -58,7 +58,7 @@ internal class AuthActivity : Activity() {
 
     override fun onStop() {
         super.onStop()
-        VKID.instance.crashReportingRunner.runReportingCrashes({}) {
+        VKID.instance.crashReporter.runReportingCrashes({}) {
             if (customTabsServiceConnection == null) return@runReportingCrashes
             unbindService(customTabsServiceConnection!!)
             customTabsServiceConnection = null
@@ -68,7 +68,7 @@ internal class AuthActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         overridePendingTransition(0, 0)
         super.onCreate(savedInstanceState)
-        VKID.instance.crashReportingRunner.runReportingCrashes({}) {
+        VKID.instance.crashReporter.runReportingCrashes({}) {
             shouldReportCustomTabsPerformance = true
             authIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 savedInstanceState?.getParcelable(KEY_AUTH_INTENT, Intent::class.java)
@@ -86,14 +86,14 @@ internal class AuthActivity : Activity() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        VKID.instance.crashReportingRunner.runReportingCrashes({}) {
+        VKID.instance.crashReporter.runReportingCrashes({}) {
             processIntent(intent)
         }
     }
 
     override fun onResume() {
         super.onResume()
-        VKID.instance.crashReportingRunner.runReportingCrashes({}) {
+        VKID.instance.crashReporter.runReportingCrashes({}) {
             if (isWaitingForAuthResult && !authWasStarted) {
                 // We're waiting for auth result but user returns to activity. Okay. Just finish it.
                 AuthEventBridge.onAuthResult(
@@ -158,14 +158,14 @@ internal class AuthActivity : Activity() {
 
     override fun onPause() {
         super.onPause()
-        VKID.instance.crashReportingRunner.runReportingCrashes({}) {
+        VKID.instance.crashReporter.runReportingCrashes({}) {
             authWasStarted = false
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        VKID.instance.crashReportingRunner.runReportingCrashes({}) {
+        VKID.instance.crashReporter.runReportingCrashes({}) {
             outState.putBoolean(KEY_WAITING_FOR_AUTH_RESULT, isWaitingForAuthResult)
             outState.putParcelable(KEY_AUTH_INTENT, authIntent)
         }
@@ -173,7 +173,7 @@ internal class AuthActivity : Activity() {
 
     override fun finish() {
         super.finish()
-        VKID.instance.crashReportingRunner.runReportingCrashes({}) {
+        VKID.instance.crashReporter.runReportingCrashes({}) {
             setResult(RESULT_OK)
             overridePendingTransition(0, 0)
         }
@@ -246,7 +246,7 @@ internal class AuthActivity : Activity() {
                         name: ComponentName,
                         client: CustomTabsClient
                     ) {
-                        VKID.instance.crashReportingRunner.runReportingCrashes({}) {
+                        VKID.instance.crashReporter.runReportingCrashes({}) {
                             customTabsSession = client.newSession(callback)
                             client.warmup(0)
                             launchAuth(

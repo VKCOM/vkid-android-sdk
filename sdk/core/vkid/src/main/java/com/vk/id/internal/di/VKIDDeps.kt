@@ -22,12 +22,12 @@ import com.vk.id.refresh.VKIDTokenRefresher
 import com.vk.id.refreshuser.VKIDUserRefresher
 import com.vk.id.storage.InternalVKIDEncryptedSharedPreferencesStorage
 import com.vk.id.storage.TokenStorage
-import com.vk.id.tracking.tracer.CrashReporter
-import com.vk.id.tracking.tracer.TracerPerformanceTracker
+import com.vk.id.tracking.core.CrashReporter
+import com.vk.id.tracking.core.PerformanceTracker
 
 internal interface VKIDDeps {
     val crashReporter: CrashReporter
-    val performanceTracker: TracerPerformanceTracker
+    val performanceTracker: PerformanceTracker
     val authCallbacksHolder: AuthCallbacksHolder
     val authOptionsCreator: AuthOptionsCreator
     val authProvidersChooser: Lazy<AuthProvidersChooser>

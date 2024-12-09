@@ -21,10 +21,11 @@ android {
 
 dependencies {
     implementation(projects.common)
-    implementation(projects.trackingTracer)
     implementation(projects.analytics)
     implementation(projects.network)
     implementation(projects.logger)
+    implementation(projects.trackingCore)
+    implementation(projects.trackingTracer)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.annotation)

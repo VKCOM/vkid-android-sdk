@@ -18,7 +18,7 @@ dependencies {
     implementation(projects.analytics)
     implementation(projects.common)
     implementation(projects.multibrandingInternal)
-    implementation(projects.trackingTracer)
+    implementation(projects.trackingCore)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.material.ripple)

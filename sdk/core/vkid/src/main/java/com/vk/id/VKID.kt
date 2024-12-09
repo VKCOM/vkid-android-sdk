@@ -48,9 +48,8 @@ import com.vk.id.storage.TokenStorage
 import com.vk.id.test.InternalVKIDImmediateApi
 import com.vk.id.test.InternalVKIDOverrideApi
 import com.vk.id.test.TestSilentAuthInfoProvider
-import com.vk.id.tracking.tracer.CrashReporter
-import com.vk.id.tracking.tracer.CrashReportingRunner
-import com.vk.id.tracking.tracer.TracerPerformanceTracker
+import com.vk.id.tracking.core.CrashReporter
+import com.vk.id.tracking.core.PerformanceTracker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.currentCoroutineContext
@@ -128,7 +127,7 @@ public class VKID {
         @Suppress("MemberVisibilityCanBePrivate")
         public var logEngine: LogEngine = InternalVKIDAndroidLogcatLogEngine()
             set(value) {
-                VKID.instance.crashReportingRunner.runReportingCrashes({}) {
+                VKID.instance.crashReporter.runReportingCrashes({}) {
                     field = value
                     InternalVKIDLog.setLogEngine(value)
                 }
@@ -180,10 +179,9 @@ public class VKID {
         this.loggerOut = deps.loggerOut
         this.tokenStorage = deps.tokenStorage
         this.crashReporter = deps.crashReporter
-        this.crashReportingRunner = CrashReportingRunner(crashReporter)
         this.performanceTracker = deps.performanceTracker
 
-        crashReportingRunner.runReportingCrashes({}) {
+        this.crashReporter.runReportingCrashes({}) {
             VKIDAnalytics.addTracker(deps.statTracker)
 
             logger.info(
@@ -215,13 +213,10 @@ public class VKID {
     private val userRefresher: Lazy<VKIDUserRefresher>
     private val loggerOut: Lazy<VKIDLoggerOut>
     private val tokenStorage: TokenStorage
-    internal val performanceTracker: TracerPerformanceTracker
+    internal val performanceTracker: PerformanceTracker
 
     @InternalVKIDApi
     public val crashReporter: CrashReporter
-
-    @InternalVKIDApi
-    public val crashReportingRunner: CrashReportingRunner
 
     /**
      * Initiates the authorization process.
@@ -273,7 +268,7 @@ public class VKID {
         callback: VKIDAuthCallback,
         params: VKIDAuthParams = VKIDAuthParams {}
     ) {
-        crashReportingRunner.runReportingCrashesSuspend({}) {
+        this.crashReporter.runReportingCrashesSuspend({}) {
             requestMutex.lock()
             val performanceKey = "Authorize"
             performanceTracker.startTracking(performanceKey)
@@ -338,7 +333,7 @@ public class VKID {
         callback: VKIDRefreshTokenCallback,
         params: VKIDRefreshTokenParams = VKIDRefreshTokenParams {},
     ) {
-        crashReportingRunner.runReportingCrashesSuspend({}) {
+        this.crashReporter.runReportingCrashesSuspend({}) {
             requestMutex.withLock {
                 performanceTracker.runTrackingSuspend("RefreshToken") {
                     tokenRefresher.value.refresh(callback, params)
@@ -376,7 +371,7 @@ public class VKID {
         callback: VKIDExchangeTokenCallback,
         params: VKIDExchangeTokenParams = VKIDExchangeTokenParams {},
     ) {
-        crashReportingRunner.runReportingCrashesSuspend({}) {
+        this.crashReporter.runReportingCrashesSuspend({}) {
             requestMutex.withLock {
                 performanceTracker.runTrackingSuspend("ExchangeTokenToV2") {
                     tokenExchanger.value.exchange(v1Token = v1Token, params = params, callback = callback)
@@ -410,7 +405,7 @@ public class VKID {
         callback: VKIDGetUserCallback,
         params: VKIDGetUserParams = VKIDGetUserParams {},
     ) {
-        crashReportingRunner.runReportingCrashesSuspend({}) {
+        this.crashReporter.runReportingCrashesSuspend({}) {
             requestMutex.withLock {
                 performanceTracker.runTrackingSuspend("GetUserData") {
                     userRefresher.value.refresh(callback = callback, params = params)
@@ -444,7 +439,7 @@ public class VKID {
         callback: VKIDLogoutCallback,
         params: VKIDLogoutParams = VKIDLogoutParams {},
     ) {
-        crashReportingRunner.runReportingCrashesSuspend({}) {
+        this.crashReporter.runReportingCrashesSuspend({}) {
             requestMutex.withLock {
                 performanceTracker.runTrackingSuspend("Logout") {
                     loggerOut.value.logout(callback = callback, params = params)
@@ -457,13 +452,13 @@ public class VKID {
      * Returns current access token or null if auth wasn't passed.
      */
     public val accessToken: AccessToken?
-        get() = crashReportingRunner.runReportingCrashes({ null }) { tokenStorage.accessToken }
+        get() = this.crashReporter.runReportingCrashes({ null }) { tokenStorage.accessToken }
 
     /**
      * Returns current refresh token or null if auth wasn't passed.
      */
     public val refreshToken: RefreshToken?
-        get() = crashReportingRunner.runReportingCrashes({ null }) { tokenStorage.refreshToken }
+        get() = this.crashReporter.runReportingCrashes({ null }) { tokenStorage.refreshToken }
 
     /**
      * Fetches the user data.
@@ -471,7 +466,7 @@ public class VKID {
      * @return A Result object containing the fetched [VKIDUser] or an error.
      */
     public suspend fun fetchUserData(): Result<VKIDUser?> {
-        return crashReportingRunner.runReportingCrashesSuspend({ Result.failure(it) }) {
+        return this.crashReporter.runReportingCrashesSuspend({ Result.failure(it) }) {
             Result.success(userDataFetcher.value.fetchUserData())
         }
     }

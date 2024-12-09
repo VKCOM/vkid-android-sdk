@@ -5,10 +5,9 @@ plugins {
 }
 
 android {
-    namespace = "com.vk.id.tracking.noop"
+    namespace = "com.vk.id.tracking.core"
 }
 
 dependencies {
     implementation(projects.common)
-    implementation(projects.trackingCore)
 }

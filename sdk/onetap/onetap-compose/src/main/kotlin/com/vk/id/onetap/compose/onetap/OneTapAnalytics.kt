@@ -33,7 +33,7 @@ internal object OneTapAnalytics {
     private const val EVENT_ONETAP_NO_USER_TAP = "onetap_button_no_user_tap"
 
     internal fun sessionNotFound() {
-        VKID.instance.crashReportingRunner.runReportingCrashes({}) {
+        VKID.instance.crashReporter.runReportingCrashes({}) {
             track(EVENT_NO_SESSION_FOUND)
         }
     }
@@ -43,7 +43,7 @@ internal object OneTapAnalytics {
     }
 
     internal fun userWasFound(signInAnotherAccountButton: Boolean, icon: Boolean = false) {
-        VKID.instance.crashReportingRunner.runReportingCrashes({}) {
+        VKID.instance.crashReporter.runReportingCrashes({}) {
             track(
                 EVENT_USER_FOUND,
                 alternateParam(signInAnotherAccountButton),
@@ -57,7 +57,7 @@ internal object OneTapAnalytics {
     }
 
     internal fun userNotFound(icon: Boolean = false) {
-        VKID.instance.crashReportingRunner.runReportingCrashes({}) {
+        VKID.instance.crashReporter.runReportingCrashes({}) {
             track(
                 EVENT_NO_USER_SHOW,
                 iconParam(icon)
@@ -79,7 +79,7 @@ internal object OneTapAnalytics {
             val observer = LifecycleEventObserver { _, event ->
                 when (event) {
                     Lifecycle.Event.ON_RESUME -> {
-                        VKID.instance.crashReportingRunner.runReportingCrashes({}) {
+                        VKID.instance.crashReporter.runReportingCrashes({}) {
                             track(
                                 EVENT_SCREEN_PROCEED,
                                 iconParam(icon),
@@ -108,7 +108,7 @@ internal object OneTapAnalytics {
 
     internal fun oneTapPressed(user: VKIDUser?, icon: Boolean = false): Map<String, String> {
         val uuid = UUID.randomUUID().toString()
-        VKID.instance.crashReportingRunner.runReportingCrashes({}) {
+        VKID.instance.crashReporter.runReportingCrashes({}) {
             if (user != null) {
                 track(EVENT_ONETAP_TAP, iconParam(icon), uuidParam(uuid))
             } else {
@@ -120,7 +120,7 @@ internal object OneTapAnalytics {
 
     internal fun alternatePressed(): Map<String, String> {
         val uuid = UUID.randomUUID().toString()
-        VKID.instance.crashReportingRunner.runReportingCrashes({}) {
+        VKID.instance.crashReporter.runReportingCrashes({}) {
             track(EVENT_ONETAP_ALTERNATIVE_SIGN_IN_TAP, uuidParam(uuid))
         }
         return mapOf(StatTracker.EXTERNAL_PARAM_SESSION_ID to uuid, FLOW_SOURCE)
@@ -131,7 +131,7 @@ internal object OneTapAnalytics {
     }
 
     internal fun authError(uuid: String, icon: Boolean = false) {
-        VKID.instance.crashReportingRunner.runReportingCrashes({}) {
+        VKID.instance.crashReporter.runReportingCrashes({}) {
             track(
                 EVENT_ONETAP_AUTH_ERROR,
                 iconParam(icon),

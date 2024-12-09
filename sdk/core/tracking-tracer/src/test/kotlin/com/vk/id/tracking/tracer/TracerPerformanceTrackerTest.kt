@@ -1,8 +1,5 @@
-@file:OptIn(InternalVKIDApi::class)
-
 package com.vk.id.tracking.tracer
 
-import com.vk.id.common.InternalVKIDApi
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.Runs

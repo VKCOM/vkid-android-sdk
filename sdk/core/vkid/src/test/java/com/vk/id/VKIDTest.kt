@@ -27,8 +27,9 @@ import com.vk.id.refresh.VKIDTokenRefresher
 import com.vk.id.refreshuser.VKIDUserRefresher
 import com.vk.id.storage.InternalVKIDEncryptedSharedPreferencesStorage
 import com.vk.id.storage.TokenStorage
-import com.vk.id.tracking.tracer.CrashReporter
-import com.vk.id.tracking.tracer.TracerPerformanceTracker
+import com.vk.id.tracking.core.CrashReporter
+import com.vk.id.tracking.core.PerformanceTracker
+import io.kotest.assertions.any
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.testCoroutineScheduler
 import io.kotest.matchers.shouldBe
@@ -58,8 +59,14 @@ internal class VKIDTest : BehaviorSpec({
     val statTracker = mockk<StatTracker>(relaxed = true)
     var isFlutter = false
     val crashReporter = mockk<CrashReporter>()
-    val performanceTracker = mockk<TracerPerformanceTracker>()
+    val performanceTracker = mockk<PerformanceTracker>()
     every { crashReporter.report(any()) } just runs
+    every { crashReporter.runReportingCrashes<Unit>(any(), any()) } answers {
+        secondArg<() -> Unit>()()
+    }
+    coEvery { crashReporter.runReportingCrashesSuspend<Any>(any(), any()) } coAnswers {
+        secondArg<suspend () -> Any>()()
+    }
     val deps = object : VKIDDeps {
         override val authProvidersChooser: Lazy<AuthProvidersChooser> = lazy { authProvidersChooser }
         override val authOptionsCreator: AuthOptionsCreator = authOptionsCreator
@@ -84,7 +91,7 @@ internal class VKIDTest : BehaviorSpec({
         override val isFlutter: Boolean
             get() = isFlutter
         override val crashReporter: CrashReporter = crashReporter
-        override val performanceTracker: TracerPerformanceTracker = performanceTracker
+        override val performanceTracker: PerformanceTracker = performanceTracker
     }
 
     Given("VKID for flutter SDK") {

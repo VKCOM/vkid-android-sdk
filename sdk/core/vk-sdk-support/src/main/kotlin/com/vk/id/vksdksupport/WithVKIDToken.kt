@@ -49,7 +49,7 @@ public fun <T> ApiCommand<T>.withVKIDToken(
         }
 
         override fun onExecute(manager: VKApiManager): T {
-            return VKID.instance.crashReportingRunner.runReportingCrashes({ throw it }) { onExecuteInternal(manager) }
+            return VKID.instance.crashReporter.runReportingCrashes({ throw it }) { onExecuteInternal(manager) }
         }
 
         private fun onExecuteInternal(manager: VKApiManager): T {

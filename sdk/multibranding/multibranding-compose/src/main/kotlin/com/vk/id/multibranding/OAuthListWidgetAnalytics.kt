@@ -19,7 +19,7 @@ import java.util.UUID
 internal class OAuthListWidgetAnalytics(private val screen: String, private val paused: Boolean) {
 
     fun oauthAdded(oAuths: Set<OAuth>) {
-        VKID.instance.crashReportingRunner.runReportingCrashes({}) {
+        VKID.instance.crashReporter.runReportingCrashes({}) {
             val oauthParam: (String, OAuth) -> VKIDAnalytics.EventParam = { name, oauth ->
                 val value = if (oAuths.contains(oauth)) "1" else "0"
                 VKIDAnalytics.EventParam(name, value)
@@ -41,7 +41,7 @@ internal class OAuthListWidgetAnalytics(private val screen: String, private val 
             val observer = LifecycleEventObserver { _, event ->
                 when (event) {
                     Lifecycle.Event.ON_RESUME -> {
-                        VKID.instance.crashReportingRunner.runReportingCrashes({}) {
+                        VKID.instance.crashReporter.runReportingCrashes({}) {
                             val name = when (oAuth) {
                                 OAuth.VK -> "vk_button_show"
                                 OAuth.MAIL -> "mail_button_show"
@@ -64,7 +64,7 @@ internal class OAuthListWidgetAnalytics(private val screen: String, private val 
 
     fun onOAuthTap(oAuth: OAuth, isText: Boolean): Map<String, String> {
         val uuid = UUID.randomUUID().toString()
-        VKID.instance.crashReportingRunner.runReportingCrashes({}) {
+        VKID.instance.crashReporter.runReportingCrashes({}) {
             val name = when (oAuth) {
                 OAuth.VK -> "vk_button_tap"
                 OAuth.MAIL -> "mail_button_tap"
@@ -76,7 +76,7 @@ internal class OAuthListWidgetAnalytics(private val screen: String, private val 
     }
 
     fun onAuthError(sessionId: String, oAuth: OAuth) {
-        VKID.instance.crashReportingRunner.runReportingCrashes({}) {
+        VKID.instance.crashReporter.runReportingCrashes({}) {
             if (!paused) {
                 val oAuthParam = when (oAuth) {
                     OAuth.VK -> "vk"
