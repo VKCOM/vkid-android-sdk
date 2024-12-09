@@ -10,14 +10,20 @@ import ru.ok.tracer.lite.performance.metrics.TracerPerformanceMetricsLite
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
 
-internal class TracerPerformanceTracker internal constructor(
-    private val reporter: TracerPerformanceMetricsLite,
+internal class TracerPerformanceTracker(
+    private val reporter: TracerPerformanceMetricsLite?,
     private val systemClockProvider: () -> Long = { SystemClock.elapsedRealtimeNanos() }
 ) : PerformanceTracker {
 
     constructor(
-        tracerLite: TracerLite,
-    ) : this(TracerPerformanceMetricsLite(tracerLite))
+        tracerLite: TracerLite?,
+    ) : this(
+        try {
+            tracerLite?.let(::TracerPerformanceMetricsLite)
+        } catch (@Suppress("TooGenericExceptionCaught") _: Throwable) {
+            null
+        }
+    )
 
     private val startTimes = ConcurrentHashMap<String, Long>()
 
@@ -30,11 +36,14 @@ internal class TracerPerformanceTracker internal constructor(
     override fun endTracking(key: String) {
         val startTime = startTimes.remove(key) ?: return
         val trackedTime = systemClockProvider() - startTime
-        reporter.sample(
-            key,
-            trackedTime,
-            TimeUnit.NANOSECONDS
-        )
+        try {
+            reporter?.sample(
+                key,
+                trackedTime,
+                TimeUnit.NANOSECONDS
+            )
+        } catch (@Suppress("TooGenericExceptionCaught") _: Throwable) {
+        }
     }
 
     override fun runTracking(key: String, action: () -> Unit) {
