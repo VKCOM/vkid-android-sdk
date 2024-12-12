@@ -43,4 +43,5 @@ internal interface VKIDDeps {
     val statTracker: StatTracker
     val vkidPackageManager: InternalVKIDPackageManager
     val activityStarter: InternalVKIDActivityStarter
+    val isFlutter: Boolean
 }

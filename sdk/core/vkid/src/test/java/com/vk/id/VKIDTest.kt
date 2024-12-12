@@ -2,6 +2,7 @@
 
 package com.vk.id
 
+import com.vk.id.analytics.VKIDAnalytics
 import com.vk.id.analytics.stat.StatTracker
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.common.InternalVKIDApi
@@ -45,48 +46,72 @@ internal class VKIDTest : BehaviorSpec({
 
     coroutineTestScope = true
 
-    Given("Auth with VK is called") {
-        val authProvidersChooser = mockk<AuthProvidersChooser>()
-        val authProvider = mockk<VKIDAuthProvider>()
-        val authOptionsCreator = mockk<AuthOptionsCreator>()
-        val authCallbacksHolder = mockk<AuthCallbacksHolder>()
-        val authResultHandler = mockk<AuthResultHandler>()
+    val authProvidersChooser = mockk<AuthProvidersChooser>()
+    val authProvider = mockk<VKIDAuthProvider>()
+    val authOptionsCreator = mockk<AuthOptionsCreator>()
+    val authCallbacksHolder = mockk<AuthCallbacksHolder>()
+    val authResultHandler = mockk<AuthResultHandler>()
+    val userDataFetcher = mockk<UserDataFetcher>()
+    val dispatchers = mockk<VKIDCoroutinesDispatchers>()
+    val statTracker = mockk<StatTracker>(relaxed = true)
+    var isFlutter = false
+    val deps = object : VKIDDeps {
+        override val authProvidersChooser: Lazy<AuthProvidersChooser> = lazy { authProvidersChooser }
+        override val authOptionsCreator: AuthOptionsCreator = authOptionsCreator
+        override val authCallbacksHolder: AuthCallbacksHolder = authCallbacksHolder
+        override val authResultHandler: Lazy<AuthResultHandler> = lazy { authResultHandler }
+        override val dispatchers: VKIDCoroutinesDispatchers = dispatchers
+        override val statTracker: StatTracker = statTracker
+        override val vkSilentAuthInfoProvider: Lazy<VkSilentAuthInfoProvider> = mockk()
+        override val userDataFetcher: Lazy<UserDataFetcher> = lazy { userDataFetcher }
+        override val api: Lazy<InternalVKIDApiContract> = lazy { mockk() }
+        override val tokenRefresher: Lazy<VKIDTokenRefresher> = lazy { mockk() }
+        override val tokenExchanger: Lazy<VKIDTokenExchanger> = lazy { mockk() }
+        override val userRefresher: Lazy<VKIDUserRefresher> = lazy { mockk() }
+        override val loggerOut: Lazy<VKIDLoggerOut> = lazy { mockk() }
+        override val tokenStorage: TokenStorage = mockk()
+        override val deviceIdStorage: Lazy<InternalVKIDDeviceIdProvider.DeviceIdStorage> = lazy { mockk() }
+        override val prefsStore: Lazy<InternalVKIDPrefsStore> = lazy { mockk() }
+        override val encryptedSharedPreferencesStorage: Lazy<InternalVKIDEncryptedSharedPreferencesStorage> =
+            lazy { mockk() }
+        override val vkidPackageManager: InternalVKIDPackageManager = mockk()
+        override val activityStarter: InternalVKIDActivityStarter = mockk()
+        override val isFlutter: Boolean
+            get() = isFlutter
+    }
+
+    Given("VKID for flutter SDK") {
         val scheduler = testCoroutineScheduler
         val testDispatcher = StandardTestDispatcher(scheduler)
-        val userDataFetcher = mockk<UserDataFetcher>()
-        val dispatchers = mockk<VKIDCoroutinesDispatchers>()
-        val statTracker = mockk<StatTracker>(relaxed = true)
         every { dispatchers.io } returns testDispatcher
-        val vkid = VKID(
-            object : VKIDDeps {
-                override val authProvidersChooser: Lazy<AuthProvidersChooser> = lazy { authProvidersChooser }
-                override val authOptionsCreator: AuthOptionsCreator = authOptionsCreator
-                override val authCallbacksHolder: AuthCallbacksHolder = authCallbacksHolder
-                override val authResultHandler: Lazy<AuthResultHandler> = lazy { authResultHandler }
-                override val dispatchers: VKIDCoroutinesDispatchers = dispatchers
-                override val statTracker: StatTracker = statTracker
-                override val vkSilentAuthInfoProvider: Lazy<VkSilentAuthInfoProvider> = mockk()
-                override val userDataFetcher: Lazy<UserDataFetcher> = lazy { userDataFetcher }
-                override val api: Lazy<InternalVKIDApiContract> = lazy { mockk() }
-                override val tokenRefresher: Lazy<VKIDTokenRefresher> = lazy { mockk() }
-                override val tokenExchanger: Lazy<VKIDTokenExchanger> = lazy { mockk() }
-                override val userRefresher: Lazy<VKIDUserRefresher> = lazy { mockk() }
-                override val loggerOut: Lazy<VKIDLoggerOut> = lazy { mockk() }
-                override val tokenStorage: TokenStorage = mockk()
-                override val deviceIdStorage: Lazy<InternalVKIDDeviceIdProvider.DeviceIdStorage> = lazy { mockk() }
-                override val prefsStore: Lazy<InternalVKIDPrefsStore> = lazy { mockk() }
-                override val encryptedSharedPreferencesStorage: Lazy<InternalVKIDEncryptedSharedPreferencesStorage> =
-                    lazy { mockk() }
-                override val vkidPackageManager: InternalVKIDPackageManager = mockk()
-                override val activityStarter: InternalVKIDActivityStarter = mockk()
-            }
-        )
+        isFlutter = true
+        VKID(deps)
 
         When("VKID initialized") {
-            Then("Analytics vkid_init event is send") {
+            Then("Analytics vkid_sdk_init event is send") {
                 verify {
                     statTracker.trackEvent(
-                        "vkid_sdk_init"
+                        "vkid_sdk_init",
+                        VKIDAnalytics.EventParam("wrapper_sdk_type", strValue = "flutter")
+                    )
+                }
+            }
+        }
+    }
+
+    Given("Auth with VK is called") {
+        val scheduler = testCoroutineScheduler
+        val testDispatcher = StandardTestDispatcher(scheduler)
+        every { dispatchers.io } returns testDispatcher
+        isFlutter = false
+        val vkid = VKID(deps)
+
+        When("VKID initialized") {
+            Then("Analytics vkid_sdk_init event is send") {
+                verify {
+                    statTracker.trackEvent(
+                        "vkid_sdk_init",
+                        VKIDAnalytics.EventParam("wrapper_sdk_type", strValue = "none")
                     )
                 }
             }
