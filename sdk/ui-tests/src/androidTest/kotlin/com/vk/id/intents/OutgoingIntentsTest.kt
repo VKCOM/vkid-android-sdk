@@ -21,6 +21,7 @@ import com.vk.id.common.allure.Priority
 import com.vk.id.common.allure.Product
 import com.vk.id.common.allure.Project
 import com.vk.id.common.basetest.BaseUiTest
+import com.vk.id.common.feature.TestFeature
 import com.vk.id.common.mockprovider.pm.MockChrome
 import com.vk.id.common.mockprovider.pm.MockPmNoProvidersNoBrowsers
 import com.vk.id.common.mockprovider.pm.MockPmOnlyBrowser
@@ -33,7 +34,10 @@ import com.vk.id.util.readVKIDCredentials
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.types.shouldBeInstanceOf
 import io.mockk.mockk
+import io.qameta.allure.kotlin.AllureId
+import io.qameta.allure.kotlin.Feature
 import io.qameta.allure.kotlin.Owner
+import io.qameta.allure.kotlin.junit4.DisplayName
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
@@ -48,7 +52,9 @@ import org.junit.Test
 @Product(Product.VKID_SDK)
 @Project(Project.VKID_SDK)
 @Owner(Owners.SERGEY_GOLOVIN)
+@Feature(TestFeature.OAUTH_2_1)
 @Priority(Priority.CRITICAL)
+@DisplayName("Интерфейс авторизации")
 public class OutgoingIntentsTest : BaseUiTest() {
 
     @get:Rule
@@ -62,6 +68,8 @@ public class OutgoingIntentsTest : BaseUiTest() {
     }
 
     @Test
+    @AllureId("2361814")
+    @DisplayName("Авторизация без провайдеров и установленных браузеров")
     public fun noProviderNoBrowserAvailable() {
         var receivedFail: VKIDAuthFail? = null
         var receivedToken: AccessToken? = null
@@ -90,6 +98,8 @@ public class OutgoingIntentsTest : BaseUiTest() {
     }
 
     @Test
+    @AllureId("2361815")
+    @DisplayName("Авторизация без провайдеров, но с установленным браузером")
     public fun noProviderOnlyBrowserAvailable() {
         before {
             vkidBuilder(MockPmOnlyBrowser()).build()
@@ -133,6 +143,8 @@ public class OutgoingIntentsTest : BaseUiTest() {
     }
 
     @Test
+    @AllureId("2361816")
+    @DisplayName("Авторизация с установленным VK провайдером")
     public fun providerAvailableVK() {
         before {
             vkidBuilder(MockPmVKProvider()).build()

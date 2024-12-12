@@ -64,6 +64,7 @@ import com.vk.id.sample.app.screen.UseToken
 import com.vk.id.sample.app.uikit.expandablecard.ExpandableCard
 import com.vk.id.sample.app.uikit.selector.CheckboxSelector
 import com.vk.id.sample.app.uikit.selector.DropdownSelector
+import com.vk.id.sample.xml.flutter.IsFlutterHandler
 import com.vk.id.sample.xml.sctrictmode.StrictModeHandler
 import com.vk.id.sample.xml.uikit.common.copyToClipboard
 import com.vk.id.sample.xml.uikit.common.onVKIDAuthSuccess
@@ -107,6 +108,8 @@ internal fun UtilsScreen(navController: NavController) {
         OldSdkSample(navController)
         Spacer(modifier = Modifier.height(8.dp))
         StrictModeUtil()
+        Spacer(modifier = Modifier.height(8.dp))
+        IsFlutterUtil()
         Spacer(modifier = Modifier.height(8.dp))
     }
 }
@@ -588,6 +591,36 @@ private fun RevokeUtil() {
             }
         }
     }
+}
+
+@Composable
+private fun IsFlutterUtil() {
+    val context = LocalContext.current
+    var isFlutter by remember { mutableStateOf<Boolean?>(null) }
+    LaunchedEffect(Unit) {
+        launch(Dispatchers.IO) {
+            isFlutter = IsFlutterHandler.isFlutter(context)
+        }
+    }
+    val coroutineScope = rememberCoroutineScope()
+    CheckboxSelector(
+        title = "Is Flutter",
+        isChecked = isFlutter ?: true,
+        onCheckedChange = {
+            isFlutter = it
+            coroutineScope.launch(Dispatchers.IO) {
+                IsFlutterHandler.setIsFlutter(context, it)
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        context,
+                        "Flutter flag ${if (it) "enabled" else "disabled"}. Killing app to apply changes.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                context.toActivitySafe()?.finishAffinity()
+            }
+        }
+    )
 }
 
 @Composable

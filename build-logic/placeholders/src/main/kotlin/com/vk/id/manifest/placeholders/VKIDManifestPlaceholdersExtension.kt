@@ -5,16 +5,16 @@ package com.vk.id.manifest.placeholders
  */
 public open class VKIDManifestPlaceholdersExtension {
     /** Specifies redirect host manifest placeholder */
-    internal var vkidRedirectHost: String? = null
+    public var vkidRedirectHost: String? = null
 
     /** Specifies redirect scheme manifest placeholder */
-    internal var vkidRedirectScheme: String? = null
+    public var vkidRedirectScheme: String? = null
 
     /** Specifies client id manifest placeholder */
-    internal var vkidClientId: String? = null
+    public var vkidClientId: String? = null
 
     /** Specifies client secret manifest placeholder */
-    internal var vkidClientSecret: String? = null
+    public var vkidClientSecret: String? = null
 
     /**
      * Generates placeholders based on the client id and client secret.
