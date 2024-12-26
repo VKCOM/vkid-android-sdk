@@ -10,4 +10,6 @@ android {
 }
 
 dependencies {
+    implementation(projects.groupSubscriptionCompose)
+    implementation(libs.androidx.compose.ui)
 }

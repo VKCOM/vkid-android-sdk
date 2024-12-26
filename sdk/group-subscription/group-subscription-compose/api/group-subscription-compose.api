@@ -9,3 +9,72 @@ public final class com/vk/id/group/subscription/compose/BuildConfig {
 	public fun <init> ()V
 }
 
+public final class com/vk/id/group/subscription/compose/ComposableSingletons$GroupSubscriptionSheetKt {
+	public static final field INSTANCE Lcom/vk/id/group/subscription/compose/ComposableSingletons$GroupSubscriptionSheetKt;
+	public static field lambda-1 Lkotlin/jvm/functions/Function2;
+	public static field lambda-2 Lkotlin/jvm/functions/Function2;
+	public static field lambda-3 Lkotlin/jvm/functions/Function3;
+	public static field lambda-4 Lkotlin/jvm/functions/Function3;
+	public static field lambda-5 Lkotlin/jvm/functions/Function3;
+	public static field lambda-6 Lkotlin/jvm/functions/Function2;
+	public fun <init> ()V
+	public final fun getLambda-1$group_subscription_compose_release ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda-2$group_subscription_compose_release ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda-3$group_subscription_compose_release ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda-4$group_subscription_compose_release ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda-5$group_subscription_compose_release ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda-6$group_subscription_compose_release ()Lkotlin/jvm/functions/Function2;
+}
+
+public final class com/vk/id/group/subscription/compose/GroupSubscriptionSheetKt {
+	public static final fun GroupSubscriptionSheet (Landroidx/compose/ui/Modifier;Lcom/vk/id/group/subscription/compose/GroupSubscriptionSheetState;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function0;Landroidx/compose/runtime/Composer;II)V
+	public static final fun rememberGroupSubscriptionSheetState (Landroidx/compose/runtime/Composer;I)Lcom/vk/id/group/subscription/compose/GroupSubscriptionSheetState;
+}
+
+public final class com/vk/id/group/subscription/compose/GroupSubscriptionSheetState {
+	public static final field $stable I
+	public final fun hide ()V
+	public final fun isVisible ()Z
+	public final fun show ()V
+}
+
+public final class com/vk/id/group/subscription/compose/GroupSubscriptionSheetStatus$Failure$Creator : android/os/Parcelable$Creator {
+	public fun <init> ()V
+	public final fun createFromParcel (Landroid/os/Parcel;)Lcom/vk/id/group/subscription/compose/GroupSubscriptionSheetStatus$Failure;
+	public synthetic fun createFromParcel (Landroid/os/Parcel;)Ljava/lang/Object;
+	public final fun newArray (I)[Lcom/vk/id/group/subscription/compose/GroupSubscriptionSheetStatus$Failure;
+	public synthetic fun newArray (I)[Ljava/lang/Object;
+}
+
+public final class com/vk/id/group/subscription/compose/GroupSubscriptionSheetStatus$Init$Creator : android/os/Parcelable$Creator {
+	public fun <init> ()V
+	public final fun createFromParcel (Landroid/os/Parcel;)Lcom/vk/id/group/subscription/compose/GroupSubscriptionSheetStatus$Init;
+	public synthetic fun createFromParcel (Landroid/os/Parcel;)Ljava/lang/Object;
+	public final fun newArray (I)[Lcom/vk/id/group/subscription/compose/GroupSubscriptionSheetStatus$Init;
+	public synthetic fun newArray (I)[Ljava/lang/Object;
+}
+
+public final class com/vk/id/group/subscription/compose/GroupSubscriptionSheetStatus$Loaded$Creator : android/os/Parcelable$Creator {
+	public fun <init> ()V
+	public final fun createFromParcel (Landroid/os/Parcel;)Lcom/vk/id/group/subscription/compose/GroupSubscriptionSheetStatus$Loaded;
+	public synthetic fun createFromParcel (Landroid/os/Parcel;)Ljava/lang/Object;
+	public final fun newArray (I)[Lcom/vk/id/group/subscription/compose/GroupSubscriptionSheetStatus$Loaded;
+	public synthetic fun newArray (I)[Ljava/lang/Object;
+}
+
+public final class com/vk/id/group/subscription/compose/GroupSubscriptionSheetStatus$Subscribing$Creator : android/os/Parcelable$Creator {
+	public fun <init> ()V
+	public final fun createFromParcel (Landroid/os/Parcel;)Lcom/vk/id/group/subscription/compose/GroupSubscriptionSheetStatus$Subscribing;
+	public synthetic fun createFromParcel (Landroid/os/Parcel;)Ljava/lang/Object;
+	public final fun newArray (I)[Lcom/vk/id/group/subscription/compose/GroupSubscriptionSheetStatus$Subscribing;
+	public synthetic fun newArray (I)[Ljava/lang/Object;
+}
+
+public final class com/vk/id/group/subscription/compose/GroupSubscriptionSheetStatusData$Creator : android/os/Parcelable$Creator {
+	public fun <init> ()V
+	public final fun createFromParcel (Landroid/os/Parcel;)Lcom/vk/id/group/subscription/compose/GroupSubscriptionSheetStatusData;
+	public synthetic fun createFromParcel (Landroid/os/Parcel;)Ljava/lang/Object;
+	public final fun newArray (I)[Lcom/vk/id/group/subscription/compose/GroupSubscriptionSheetStatusData;
+	public synthetic fun newArray (I)[Ljava/lang/Object;
+}
+
