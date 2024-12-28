@@ -37,7 +37,7 @@ import com.vk.id.logger.internalVKIDCreateLoggerForClass
 import com.vk.id.logout.VKIDLoggerOut
 import com.vk.id.logout.VKIDLogoutCallback
 import com.vk.id.logout.VKIDLogoutParams
-import com.vk.id.network.groupsubscription.GroupSubscriptionApiService
+import com.vk.id.network.groupsubscription.InternalVKIDGroupSubscriptionApiService
 import com.vk.id.refresh.VKIDRefreshTokenCallback
 import com.vk.id.refresh.VKIDRefreshTokenParams
 import com.vk.id.refresh.VKIDTokenRefresher
@@ -199,13 +199,13 @@ public class VKID {
     private val tokenExchanger: Lazy<VKIDTokenExchanger>
     private val userRefresher: Lazy<VKIDUserRefresher>
     private val loggerOut: Lazy<VKIDLoggerOut>
-    private val groupSubscriptionApiServiceInternal: Lazy<GroupSubscriptionApiService>
+    private val groupSubscriptionApiServiceInternal: Lazy<InternalVKIDGroupSubscriptionApiService>
 
     @InternalVKIDApi
     public val tokenStorage: InternalVKIDTokenStorage
 
     @InternalVKIDApi
-    public val groupSubscriptionApiService: GroupSubscriptionApiService
+    public val groupSubscriptionApiService: InternalVKIDGroupSubscriptionApiService
         get() = groupSubscriptionApiServiceInternal.value
 
     /**

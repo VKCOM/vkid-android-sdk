@@ -78,6 +78,7 @@ import com.vk.id.common.InternalVKIDApi
 import com.vk.id.group.subscription.common.VKIDGroupSubscriptionFail
 import com.vk.id.group.subscription.compose.interactor.InternalVKIDGroupSubscriptionInteractor
 import com.vk.id.group.subscription.compose.interactor.ServiceAccountException
+import com.vk.id.network.groupsubscription.exception.InternalVKIDAlreadyGroupMemberException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -140,6 +141,9 @@ public fun GroupSubscriptionSheet(
                         )
                     )
                 }
+            } catch (@Suppress("SwallowedException") e: InternalVKIDAlreadyGroupMemberException) {
+                state.hide()
+                rememberedOnFail(VKIDGroupSubscriptionFail.AlreadyGroupMember())
             } catch (@Suppress("SwallowedException") e: ServiceAccountException) {
                 state.hide()
                 rememberedOnFail(VKIDGroupSubscriptionFail.ServiceAccount())

@@ -43,8 +43,8 @@ import com.vk.id.logout.VKIDLoggerOut
 import com.vk.id.network.InternalVKIDApiContract
 import com.vk.id.network.InternalVKIDRealApi
 import com.vk.id.network.OkHttpClientProvider
-import com.vk.id.network.groupsubscription.GroupSubscriptionApi
-import com.vk.id.network.groupsubscription.GroupSubscriptionApiService
+import com.vk.id.network.groupsubscription.InternalVKIDGroupSubscriptionApi
+import com.vk.id.network.groupsubscription.InternalVKIDGroupSubscriptionApiService
 import com.vk.id.refresh.VKIDTokenRefresher
 import com.vk.id.refreshuser.VKIDUserRefresher
 import com.vk.id.storage.InternalVKIDEncryptedSharedPreferencesStorage
@@ -245,12 +245,12 @@ internal open class VKIDDepsProd(
             StatTracker(clientID, clientSecret, api, dispatchers.io)
         }
 
-    private val groupSubscriptionApi: GroupSubscriptionApi by lazy {
-        GroupSubscriptionApi(client = okHttpClient)
+    private val groupSubscriptionApi: InternalVKIDGroupSubscriptionApi by lazy {
+        InternalVKIDGroupSubscriptionApi(client = okHttpClient)
     }
 
-    override val groupSubscriptionApiService: Lazy<GroupSubscriptionApiService> = lazy {
-        GroupSubscriptionApiService(groupSubscriptionApi)
+    override val groupSubscriptionApiService: Lazy<InternalVKIDGroupSubscriptionApiService> = lazy {
+        InternalVKIDGroupSubscriptionApiService(groupSubscriptionApi)
     }
 }
 

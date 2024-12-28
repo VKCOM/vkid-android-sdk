@@ -18,11 +18,24 @@ public sealed class VKIDGroupSubscriptionFail(
     }
 
     public class ServiceAccount : VKIDGroupSubscriptionFail(
-        description = "You can't subscribe to group with service account"
+        description = "User can't subscribe to group with service account"
     ) {
 
         override fun equals(other: Any?): Boolean {
             return other is ServiceAccount && description == other.description
+        }
+
+        override fun hashCode(): Int {
+            return description.hashCode()
+        }
+    }
+
+    public class AlreadyGroupMember : VKIDGroupSubscriptionFail(
+        description = "User can't subscribe to group he's already a member of"
+    ) {
+
+        override fun equals(other: Any?): Boolean {
+            return other is AlreadyGroupMember && description == other.description
         }
 
         override fun hashCode(): Int {

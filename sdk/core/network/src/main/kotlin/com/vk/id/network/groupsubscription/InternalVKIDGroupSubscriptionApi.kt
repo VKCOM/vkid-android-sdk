@@ -7,7 +7,7 @@ import okhttp3.FormBody
 import okhttp3.OkHttpClient
 
 @InternalVKIDApi
-public class GroupSubscriptionApi(
+public class InternalVKIDGroupSubscriptionApi(
     private val client: OkHttpClient,
 ) {
     public fun getProfileShortInfo(
@@ -26,7 +26,7 @@ public class GroupSubscriptionApi(
         path = PATH_GROUPS_GET_BY_ID,
         requestBody = bodyBuilder(accessToken)
             .add("group_ids", groupId)
-            .add("fields", """description,verified""")
+            .add("fields", """description,verified,is_member""")
             .build()
     )
 
@@ -38,7 +38,7 @@ public class GroupSubscriptionApi(
         host = HOST_VK_API,
         path = PATH_GROUPS_GET_MEMBERS,
         requestBody = bodyBuilder(accessToken)
-            .add("group_id", groupId)
+            .add(FIELD_GROUP_ID, groupId)
             .add("sort", "id_asc")
             .add("count", "3")
             .add("fields", "photo_200")
@@ -53,7 +53,7 @@ public class GroupSubscriptionApi(
         host = HOST_VK_API,
         path = PATH_GROUPS_JOIN,
         requestBody = bodyBuilder(accessToken)
-            .add("group_id", groupId)
+            .add(FIELD_GROUP_ID, groupId)
             .build()
     )
 
@@ -70,6 +70,7 @@ public class GroupSubscriptionApi(
 
         private const val FIELD_API_VERSION = "v"
         private const val FIELD_ACCESS_TOKEN = "access_token"
+        private const val FIELD_GROUP_ID = "group_id"
         private const val API_VERSION_VALUE = "5.220"
     }
 }

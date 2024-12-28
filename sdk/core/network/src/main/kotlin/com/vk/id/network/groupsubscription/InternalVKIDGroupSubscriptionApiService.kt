@@ -4,14 +4,15 @@ import com.vk.id.common.InternalVKIDApi
 import com.vk.id.network.groupsubscription.data.InternalVKIDGroupByIdData
 import com.vk.id.network.groupsubscription.data.InternalVKIDGroupMembersData
 import com.vk.id.network.groupsubscription.data.InternalVKIDMemberData
+import com.vk.id.network.groupsubscription.exception.InternalVKIDAlreadyGroupMemberException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.io.IOException
 
 @InternalVKIDApi
-public class GroupSubscriptionApiService(
-    private val api: GroupSubscriptionApi,
+public class InternalVKIDGroupSubscriptionApiService(
+    private val api: InternalVKIDGroupSubscriptionApi,
 ) {
     public suspend fun isServiceAccount(
         accessToken: String,
@@ -36,6 +37,7 @@ public class GroupSubscriptionApiService(
             val body = JSONObject(requireNotNull(response.body).string())
             if (body.isNull("error")) {
                 with(body.getJSONObject("response").getJSONArray("groups").get(0) as JSONObject) {
+                    if (getInt("is_member") == 1) throw InternalVKIDAlreadyGroupMemberException()
                     InternalVKIDGroupByIdData(
                         groupId = getString("id"),
                         name = getString("name"),

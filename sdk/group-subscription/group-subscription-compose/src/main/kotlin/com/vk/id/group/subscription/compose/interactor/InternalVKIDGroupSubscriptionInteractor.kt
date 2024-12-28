@@ -1,9 +1,9 @@
 package com.vk.id.group.subscription.compose.interactor
 
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.network.groupsubscription.GroupSubscriptionApiService
-import com.vk.id.network.groupsubscription.data.GroupData
+import com.vk.id.network.groupsubscription.InternalVKIDGroupSubscriptionApiService
 import com.vk.id.network.groupsubscription.data.InternalVKIDGroupByIdData
+import com.vk.id.network.groupsubscription.data.InternalVKIDGroupData
 import com.vk.id.network.groupsubscription.data.InternalVKIDGroupMembersData
 import com.vk.id.storage.InternalVKIDTokenStorage
 import kotlinx.coroutines.Dispatchers
@@ -13,7 +13,7 @@ import kotlinx.coroutines.withContext
 
 @InternalVKIDApi
 public class InternalVKIDGroupSubscriptionInteractor(
-    private val apiService: GroupSubscriptionApiService,
+    private val apiService: InternalVKIDGroupSubscriptionApiService,
     private val tokenStorage: InternalVKIDTokenStorage,
     private val groupId: String,
     private val externalAccessToken: String?,
@@ -25,7 +25,7 @@ public class InternalVKIDGroupSubscriptionInteractor(
     private val accessToken: String
         get() = externalAccessToken ?: tokenStorage.currentAccessToken?.token ?: throw NotAuthorizedException()
 
-    public suspend fun loadGroup(): GroupData {
+    public suspend fun loadGroup(): InternalVKIDGroupData {
         if (!apiService.isServiceAccount(accessToken)) {
             return getGroup()
         } else {
@@ -37,7 +37,7 @@ public class InternalVKIDGroupSubscriptionInteractor(
         apiService.subscribeToGroup(accessToken = accessToken, groupId = groupId)
     }
 
-    private suspend fun getGroup(): GroupData {
+    private suspend fun getGroup(): InternalVKIDGroupData {
         return withContext(Dispatchers.IO) {
             val (group, members, friends) = awaitAll(
                 async { apiService.getGroup(accessToken = accessToken, groupId = groupId) },
@@ -47,7 +47,7 @@ public class InternalVKIDGroupSubscriptionInteractor(
             group as InternalVKIDGroupByIdData
             members as InternalVKIDGroupMembersData
             friends as InternalVKIDGroupMembersData
-            GroupData(
+            InternalVKIDGroupData(
                 imageUrl = group.imageUrl,
                 name = group.name,
                 description = group.description,

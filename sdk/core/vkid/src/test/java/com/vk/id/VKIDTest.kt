@@ -23,7 +23,7 @@ import com.vk.id.internal.store.InternalVKIDPrefsStore
 import com.vk.id.internal.user.UserDataFetcher
 import com.vk.id.logout.VKIDLoggerOut
 import com.vk.id.network.InternalVKIDApiContract
-import com.vk.id.network.groupsubscription.GroupSubscriptionApiService
+import com.vk.id.network.groupsubscription.InternalVKIDGroupSubscriptionApiService
 import com.vk.id.refresh.VKIDTokenRefresher
 import com.vk.id.refreshuser.VKIDUserRefresher
 import com.vk.id.storage.InternalVKIDEncryptedSharedPreferencesStorage
@@ -79,7 +79,7 @@ internal class VKIDTest : BehaviorSpec({
         override val activityStarter: InternalVKIDActivityStarter = mockk()
         override val isFlutter: Boolean
             get() = isFlutter
-        override val groupSubscriptionApiService: Lazy<GroupSubscriptionApiService>
+        override val groupSubscriptionApiService: Lazy<InternalVKIDGroupSubscriptionApiService>
             get() = lazy { mockk() }
     }
 

@@ -18,7 +18,7 @@ import com.vk.id.internal.store.InternalVKIDPrefsStore
 import com.vk.id.internal.user.UserDataFetcher
 import com.vk.id.logout.VKIDLoggerOut
 import com.vk.id.network.InternalVKIDApiContract
-import com.vk.id.network.groupsubscription.GroupSubscriptionApiService
+import com.vk.id.network.groupsubscription.InternalVKIDGroupSubscriptionApiService
 import com.vk.id.refresh.VKIDTokenRefresher
 import com.vk.id.refreshuser.VKIDUserRefresher
 import com.vk.id.storage.InternalVKIDEncryptedSharedPreferencesStorage
@@ -45,5 +45,5 @@ internal interface VKIDDeps {
     val vkidPackageManager: InternalVKIDPackageManager
     val activityStarter: InternalVKIDActivityStarter
     val isFlutter: Boolean
-    val groupSubscriptionApiService: Lazy<GroupSubscriptionApiService>
+    val groupSubscriptionApiService: Lazy<InternalVKIDGroupSubscriptionApiService>
 }
