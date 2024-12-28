@@ -19,7 +19,7 @@ public final class com/vk/id/group/subscription/xml/GroupSubscriptionSheet : and
 	public final fun getGroupId ()Ljava/lang/String;
 	public final fun hide ()V
 	public final fun setAccessToken (Ljava/lang/String;)V
-	public final fun setCallbacks (Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function0;)V
+	public final fun setCallbacks (Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;)V
 	public final fun setGroupId (Ljava/lang/String;)V
 	public final fun show ()V
 }

@@ -17,7 +17,7 @@ public class GroupSubscriptionActivity : AppCompatActivity() {
             VKID.instance.accessToken?.token?.let { widget.accessToken = it } ?: showToast(this, "Not authorized")
             widget.setCallbacks(
                 onSuccess = { showToast(this, "Success") },
-                onCancel = { showToast(this, "Cancel") },
+                onFail = { showToast(this, "Cancel") },
             )
             findViewById<View>(R.id.show_sheet_button).setOnClickListener {
                 widget.show()

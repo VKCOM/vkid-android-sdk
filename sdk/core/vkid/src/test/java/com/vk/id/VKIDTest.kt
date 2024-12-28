@@ -23,10 +23,11 @@ import com.vk.id.internal.store.InternalVKIDPrefsStore
 import com.vk.id.internal.user.UserDataFetcher
 import com.vk.id.logout.VKIDLoggerOut
 import com.vk.id.network.InternalVKIDApiContract
+import com.vk.id.network.groupsubscription.GroupSubscriptionApiService
 import com.vk.id.refresh.VKIDTokenRefresher
 import com.vk.id.refreshuser.VKIDUserRefresher
 import com.vk.id.storage.InternalVKIDEncryptedSharedPreferencesStorage
-import com.vk.id.storage.TokenStorage
+import com.vk.id.storage.InternalVKIDTokenStorage
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.testCoroutineScheduler
 import io.kotest.matchers.shouldBe
@@ -69,7 +70,7 @@ internal class VKIDTest : BehaviorSpec({
         override val tokenExchanger: Lazy<VKIDTokenExchanger> = lazy { mockk() }
         override val userRefresher: Lazy<VKIDUserRefresher> = lazy { mockk() }
         override val loggerOut: Lazy<VKIDLoggerOut> = lazy { mockk() }
-        override val tokenStorage: TokenStorage = mockk()
+        override val tokenStorage: InternalVKIDTokenStorage = mockk()
         override val deviceIdStorage: Lazy<InternalVKIDDeviceIdProvider.DeviceIdStorage> = lazy { mockk() }
         override val prefsStore: Lazy<InternalVKIDPrefsStore> = lazy { mockk() }
         override val encryptedSharedPreferencesStorage: Lazy<InternalVKIDEncryptedSharedPreferencesStorage> =
@@ -78,6 +79,8 @@ internal class VKIDTest : BehaviorSpec({
         override val activityStarter: InternalVKIDActivityStarter = mockk()
         override val isFlutter: Boolean
             get() = isFlutter
+        override val groupSubscriptionApiService: Lazy<GroupSubscriptionApiService>
+            get() = lazy { mockk() }
     }
 
     Given("VKID for flutter SDK") {

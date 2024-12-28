@@ -8,10 +8,10 @@ import kotlinx.parcelize.Parcelize
 @Stable
 internal data class GroupSubscriptionSheetStatusData(
     val groupImageUrl: String,
-    val groupName: String,
     val groupDescription: String,
+    val groupName: String,
     val userImageUrls: List<String>,
-    val numberOfSubscribers: Int,
-    val numberOfFriends: Int,
+    val subscriberCount: Int,
+    val friendsCount: Int,
     val isGroupVerified: Boolean,
 ) : Parcelable

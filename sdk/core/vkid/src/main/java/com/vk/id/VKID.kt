@@ -37,6 +37,7 @@ import com.vk.id.logger.internalVKIDCreateLoggerForClass
 import com.vk.id.logout.VKIDLoggerOut
 import com.vk.id.logout.VKIDLogoutCallback
 import com.vk.id.logout.VKIDLogoutParams
+import com.vk.id.network.groupsubscription.GroupSubscriptionApiService
 import com.vk.id.refresh.VKIDRefreshTokenCallback
 import com.vk.id.refresh.VKIDRefreshTokenParams
 import com.vk.id.refresh.VKIDTokenRefresher
@@ -44,7 +45,7 @@ import com.vk.id.refreshuser.VKIDGetUserCallback
 import com.vk.id.refreshuser.VKIDGetUserParams
 import com.vk.id.refreshuser.VKIDUserRefresher
 import com.vk.id.storage.InternalVKIDEncryptedSharedPreferencesStorage
-import com.vk.id.storage.TokenStorage
+import com.vk.id.storage.InternalVKIDTokenStorage
 import com.vk.id.test.InternalVKIDImmediateApi
 import com.vk.id.test.InternalVKIDOverrideApi
 import com.vk.id.test.TestSilentAuthInfoProvider
@@ -174,6 +175,7 @@ public class VKID {
         this.userRefresher = deps.userRefresher
         this.loggerOut = deps.loggerOut
         this.tokenStorage = deps.tokenStorage
+        this.groupSubscriptionApiServiceInternal = deps.groupSubscriptionApiService
 
         VKIDAnalytics.addTracker(deps.statTracker)
 
@@ -197,7 +199,14 @@ public class VKID {
     private val tokenExchanger: Lazy<VKIDTokenExchanger>
     private val userRefresher: Lazy<VKIDUserRefresher>
     private val loggerOut: Lazy<VKIDLoggerOut>
-    private val tokenStorage: TokenStorage
+    private val groupSubscriptionApiServiceInternal: Lazy<GroupSubscriptionApiService>
+
+    @InternalVKIDApi
+    public val tokenStorage: InternalVKIDTokenStorage
+
+    @InternalVKIDApi
+    public val groupSubscriptionApiService: GroupSubscriptionApiService
+        get() = groupSubscriptionApiServiceInternal.value
 
     /**
      * Initiates the authorization process.

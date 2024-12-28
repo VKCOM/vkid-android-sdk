@@ -1,0 +1,35 @@
+public final class com/vk/id/group/subscription/common/BuildConfig {
+	public static final field BUILD_TYPE Ljava/lang/String;
+	public static final field CI_BUILD_NUMBER Ljava/lang/Integer;
+	public static final field CI_BUILD_TYPE Ljava/lang/String;
+	public static final field DEBUG Z
+	public static final field LIBRARY_PACKAGE_NAME Ljava/lang/String;
+	public static final field VKID_BUILD_TIME Ljava/lang/Long;
+	public static final field VKID_VERSION_NAME Ljava/lang/String;
+	public fun <init> ()V
+}
+
+public abstract class com/vk/id/group/subscription/common/VKIDGroupSubscriptionFail {
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getDescription ()Ljava/lang/String;
+}
+
+public final class com/vk/id/group/subscription/common/VKIDGroupSubscriptionFail$Cancel : com/vk/id/group/subscription/common/VKIDGroupSubscriptionFail {
+	public fun <init> ()V
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+}
+
+public final class com/vk/id/group/subscription/common/VKIDGroupSubscriptionFail$Other : com/vk/id/group/subscription/common/VKIDGroupSubscriptionFail {
+	public fun <init> (Ljava/lang/Throwable;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getThrowable ()Ljava/lang/Throwable;
+	public fun hashCode ()I
+}
+
+public final class com/vk/id/group/subscription/common/VKIDGroupSubscriptionFail$ServiceAccount : com/vk/id/group/subscription/common/VKIDGroupSubscriptionFail {
+	public fun <init> ()V
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+}
+

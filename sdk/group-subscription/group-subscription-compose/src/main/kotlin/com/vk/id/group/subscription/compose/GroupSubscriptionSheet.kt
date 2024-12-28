@@ -1,3 +1,5 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.group.subscription.compose
 
 import androidx.annotation.DrawableRes
@@ -42,10 +44,12 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -69,8 +73,12 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
+import com.vk.id.VKID
+import com.vk.id.common.InternalVKIDApi
+import com.vk.id.group.subscription.common.VKIDGroupSubscriptionFail
+import com.vk.id.group.subscription.compose.interactor.InternalVKIDGroupSubscriptionInteractor
+import com.vk.id.group.subscription.compose.interactor.ServiceAccountException
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 private const val THOUSAND = 1000
@@ -88,39 +96,58 @@ public fun rememberGroupSubscriptionSheetState(): GroupSubscriptionSheetState {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+@Suppress("LongMethod")
 public fun GroupSubscriptionSheet(
     modifier: Modifier = Modifier,
     state: GroupSubscriptionSheetState = rememberGroupSubscriptionSheetState(),
     @Suppress("UnusedParameter") accessToken: String,
     @Suppress("UnusedParameter") groupId: String,
     @Suppress("UnusedParameter") onSuccess: () -> Unit,
-    @Suppress("UnusedParameter") onCancel: () -> Unit
+    @Suppress("UnusedParameter") onFail: (VKIDGroupSubscriptionFail) -> Unit,
 ) {
-    var status by rememberSaveable { mutableStateOf<GroupSubscriptionSheetStatus>(GroupSubscriptionSheetStatus.Init) }
+    var status = rememberSaveable { mutableStateOf<GroupSubscriptionSheetStatus>(GroupSubscriptionSheetStatus.Init) }
     var showBottomSheet by rememberSaveable { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
-    state.showSheet = processSheetShow({ status = it }, { showBottomSheet = it }, coroutineScope, state)
-    LaunchedEffect(Unit) {
-        delay(@Suppress("MagicNumber") 1000)
-        status = GroupSubscriptionSheetStatus.Failure
-        delay(@Suppress("MagicNumber") 3000)
-        val placeholderImage = "https://trkslon.ru/upload/shop_1/3/3/3/item_3337/item_image3337.jpg"
-        val data = GroupSubscriptionSheetStatusData(
-            groupImageUrl = placeholderImage,
-            groupName = "Создание сайтов",
-            groupDescription = "Официальная группа крпнейшей в России сети магазинов детских товаров",
-            userImageUrls = listOf(
-                placeholderImage,
-                placeholderImage,
-                placeholderImage,
-            ),
-            numberOfSubscribers = @Suppress("MagicNumber") 143,
-            numberOfFriends = @Suppress("MagicNumber") 12,
-            isGroupVerified = true,
+    val rememberedOnFail by rememberUpdatedState(onFail)
+    state.showSheet = processSheetShow(
+        { status.value = it },
+        { showBottomSheet = it },
+        coroutineScope,
+        state,
+    )
+    val interactor = remember {
+        InternalVKIDGroupSubscriptionInteractor(
+            apiService = VKID.instance.groupSubscriptionApiService,
+            tokenStorage = VKID.instance.tokenStorage,
+            groupId = groupId,
+            externalAccessToken = accessToken,
         )
-        status = GroupSubscriptionSheetStatus.Loaded(data)
-        delay(@Suppress("MagicNumber") 1000)
-        status = GroupSubscriptionSheetStatus.Subscribing(data)
+    }
+    LaunchedEffect(showBottomSheet) {
+        if (!showBottomSheet) return@LaunchedEffect
+        launch {
+            try {
+                with(interactor.loadGroup()) {
+                    status.value = GroupSubscriptionSheetStatus.Loaded(
+                        GroupSubscriptionSheetStatusData(
+                            groupImageUrl = imageUrl,
+                            groupName = name,
+                            groupDescription = description,
+                            userImageUrls = userImageUrls,
+                            friendsCount = friendsCount,
+                            subscriberCount = subscriberCount,
+                            isGroupVerified = isVerified,
+                        )
+                    )
+                }
+            } catch (@Suppress("SwallowedException") e: ServiceAccountException) {
+                state.hide()
+                rememberedOnFail(VKIDGroupSubscriptionFail.ServiceAccount())
+            } catch (@Suppress("TooGenericExceptionCaught") t: Throwable) {
+                state.hide()
+                rememberedOnFail(VKIDGroupSubscriptionFail.Other(throwable = t))
+            }
+        }
     }
     if (showBottomSheet) {
         ModalBottomSheet(
@@ -142,13 +169,53 @@ public fun GroupSubscriptionSheet(
                     .background(colorResource(R.color.vkid_white)),
                 contentAlignment = Alignment.Center,
             ) {
-                when (val actualStatus = status) {
+                when (val actualStatus = status.value) {
                     is GroupSubscriptionSheetStatus.Init -> InitState(state)
-                    is GroupSubscriptionSheetStatus.Loaded -> LoadedState(state, actualStatus)
+                    is GroupSubscriptionSheetStatus.Loaded -> LoadedState(state, actualStatus) {
+                        subscribeToGroup(
+                            status,
+                            actualStatus.data,
+                            state,
+                            coroutineScope,
+                            interactor,
+                            onSuccess,
+                        )
+                    }
+
                     is GroupSubscriptionSheetStatus.Subscribing -> SubscribingState(state, actualStatus)
-                    is GroupSubscriptionSheetStatus.Failure -> FailureState(state)
+                    is GroupSubscriptionSheetStatus.Failure -> FailureState(state) {
+                        subscribeToGroup(
+                            status,
+                            actualStatus.data,
+                            state,
+                            coroutineScope,
+                            interactor,
+                            onSuccess,
+                        )
+                    }
                 }
             }
+        }
+    }
+}
+
+@Suppress("LongParameterList")
+private fun subscribeToGroup(
+    status: MutableState<GroupSubscriptionSheetStatus>,
+    data: GroupSubscriptionSheetStatusData,
+    state: GroupSubscriptionSheetState,
+    coroutineScope: CoroutineScope,
+    interactor: InternalVKIDGroupSubscriptionInteractor,
+    onSuccess: () -> Unit
+) {
+    status.value = GroupSubscriptionSheetStatus.Subscribing(data)
+    coroutineScope.launch {
+        try {
+            interactor.subscribeToGroup()
+            onSuccess()
+            state.hide()
+        } catch (@Suppress("TooGenericExceptionCaught", "SwallowedException") t: Throwable) {
+            status.value = GroupSubscriptionSheetStatus.Failure(data)
         }
     }
 }
@@ -168,8 +235,12 @@ private fun InitState(state: GroupSubscriptionSheetState) {
 }
 
 @Composable
-private fun LoadedState(state: GroupSubscriptionSheetState, status: GroupSubscriptionSheetStatus.Loaded) {
-    DataState(state, status.data) {
+private fun LoadedState(
+    state: GroupSubscriptionSheetState,
+    status: GroupSubscriptionSheetStatus.Loaded,
+    onSubscribeButtonClick: () -> Unit,
+) {
+    DataState(state, status.data, onSubscribeButtonClick) {
         Text(
             text = "Подписаться на сообщество",
             modifier = Modifier,
@@ -185,8 +256,11 @@ private fun LoadedState(state: GroupSubscriptionSheetState, status: GroupSubscri
 }
 
 @Composable
-private fun SubscribingState(state: GroupSubscriptionSheetState, status: GroupSubscriptionSheetStatus.Subscribing) {
-    DataState(state, status.data) {
+private fun SubscribingState(
+    state: GroupSubscriptionSheetState,
+    status: GroupSubscriptionSheetStatus.Subscribing,
+) {
+    DataState(state, status.data, {}) {
         Box(modifier = Modifier.size(24.dp)) {
             CircleProgress(R.drawable.vkid_sheet_spinner_white)
         }
@@ -195,7 +269,10 @@ private fun SubscribingState(state: GroupSubscriptionSheetState, status: GroupSu
 
 @Composable
 @Suppress("LongMethod")
-private fun FailureState(state: GroupSubscriptionSheetState) {
+private fun FailureState(
+    state: GroupSubscriptionSheetState,
+    onRetry: () -> Unit,
+) {
     Column(
         modifier = Modifier.padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -231,7 +308,7 @@ private fun FailureState(state: GroupSubscriptionSheetState) {
         )
         Spacer(Modifier.height(32.dp))
         Button(
-            onClick = {},
+            onClick = onRetry,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(44.dp),
@@ -276,7 +353,8 @@ private fun FailureState(state: GroupSubscriptionSheetState) {
 private fun DataState(
     state: GroupSubscriptionSheetState,
     data: GroupSubscriptionSheetStatusData,
-    mainButtonContent: @Composable () -> Unit
+    onSubscribeButtonClick: () -> Unit,
+    subscribeButtonContent: @Composable () -> Unit
 ) {
     Column(
         modifier = Modifier.padding(16.dp),
@@ -288,7 +366,7 @@ private fun DataState(
         Spacer(modifier = Modifier.height(8.dp))
         DataStateSubscribers(data)
         Spacer(Modifier.height(20.dp))
-        DataStateButtons(state, mainButtonContent)
+        DataStateButtons(onSubscribeButtonClick, state, subscribeButtonContent)
     }
 }
 
@@ -317,17 +395,18 @@ private fun CircleProgress(
 
 @Composable
 private fun ColumnScope.DataStateButtons(
+    onSubscribeButtonClick: () -> Unit,
     state: GroupSubscriptionSheetState,
-    mainButtonContent: @Composable () -> Unit
+    subscribeButtonContent: @Composable () -> Unit
 ) {
     Button(
-        onClick = {},
+        onClick = onSubscribeButtonClick,
         modifier = Modifier
             .fillMaxWidth()
             .height(44.dp),
         shape = RoundedCornerShape(8.dp)
     ) {
-        mainButtonContent()
+        subscribeButtonContent()
     }
     Spacer(Modifier.height(12.dp))
     FilledTonalButton(
@@ -387,12 +466,12 @@ private fun ColumnScope.DataStateSubscribers(
         Spacer(modifier = Modifier.width(8.dp))
         FlowRow(verticalArrangement = Arrangement.Center) {
             val numberOfSubs = when {
-                data.numberOfSubscribers < THOUSAND -> data.numberOfSubscribers
-                data.numberOfSubscribers < MILLION -> (data.numberOfSubscribers / THOUSAND).toString() + "K"
-                else -> (data.numberOfSubscribers / MILLION).toString() + "M"
+                data.subscriberCount < THOUSAND -> data.subscriberCount
+                data.subscriberCount < MILLION -> (data.subscriberCount / THOUSAND).toString() + "K"
+                else -> (data.subscriberCount / MILLION).toString() + "M"
             }
             val subscribersText = "$numberOfSubs подписчиков "
-            val friendsText = "· ${data.numberOfFriends} друзей"
+            val friendsText = "· ${data.friendsCount} друзей"
             Text(
                 text = subscribersText,
                 modifier = Modifier,
@@ -404,7 +483,7 @@ private fun ColumnScope.DataStateSubscribers(
                     fontWeight = FontWeight.Normal,
                 ),
             )
-            if (data.numberOfFriends > 0) {
+            if (data.friendsCount > 0) {
                 Text(
                     text = friendsText,
                     modifier = Modifier,
@@ -574,10 +653,11 @@ private fun DataStatePreview() {
                 placeholderImage,
                 placeholderImage,
             ),
-            numberOfSubscribers = 143,
-            numberOfFriends = 12,
+            subscriberCount = 143,
+            friendsCount = 12,
             isGroupVerified = true,
-        )
+        ),
+        {},
     ) {
         Text("button text")
     }

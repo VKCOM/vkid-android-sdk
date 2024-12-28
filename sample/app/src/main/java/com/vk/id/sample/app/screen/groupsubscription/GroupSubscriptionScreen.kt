@@ -21,9 +21,9 @@ internal fun GroupSubscriptionScreen() {
                 showToast(context, "Not authorized")
                 ""
             },
-            groupId = "1",
+            groupId = "149641071",
             onSuccess = { showToast(context, "Success") },
-            onCancel = { showToast(context, "Cancelled") },
+            onFail = { showToast(context, "Fail: ${it.description}") },
         )
         Button("Show") { state.show() }
     }

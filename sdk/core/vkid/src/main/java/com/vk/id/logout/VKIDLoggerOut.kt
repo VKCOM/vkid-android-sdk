@@ -8,12 +8,12 @@ import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.auth.device.InternalVKIDDeviceIdProvider
 import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
-import com.vk.id.storage.TokenStorage
+import com.vk.id.storage.InternalVKIDTokenStorage
 import kotlinx.coroutines.withContext
 
 internal class VKIDLoggerOut(
     private val api: VKIDApiService,
-    private val tokenStorage: TokenStorage,
+    private val tokenStorage: InternalVKIDTokenStorage,
     private val deviceIdProvider: InternalVKIDDeviceIdProvider,
     private val serviceCredentials: ServiceCredentials,
     private val dispatchers: VKIDCoroutinesDispatchers,
