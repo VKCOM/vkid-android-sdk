@@ -3,4 +3,6 @@
     <color name="vkid_white">#FFFFFF</color>
     <color name="vkid_sheet_secondary">#6D7885</color>
     <color name="vkid_azure_300">#2688EB</color>
+    <color name="vkid_group_subscription_background">#FFF</color>
+    <color name="vkid_green">#4BB34B</color>
 </resources>

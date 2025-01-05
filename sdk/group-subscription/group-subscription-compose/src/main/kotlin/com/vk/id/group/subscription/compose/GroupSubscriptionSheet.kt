@@ -2,17 +2,8 @@
 
 package com.vk.id.group.subscription.compose
 
-import androidx.annotation.DrawableRes
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -22,6 +13,7 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -39,6 +31,9 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SnackbarData
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -56,7 +51,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -76,8 +70,14 @@ import coil.transform.CircleCropTransformation
 import com.vk.id.VKID
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.group.subscription.common.VKIDGroupSubscriptionFail
+import com.vk.id.group.subscription.compose.close.CloseIcon
 import com.vk.id.group.subscription.compose.interactor.InternalVKIDGroupSubscriptionInteractor
 import com.vk.id.group.subscription.compose.interactor.ServiceAccountException
+import com.vk.id.group.subscription.compose.progress.CircleProgressBlue
+import com.vk.id.group.subscription.compose.progress.CircleProgressWhite
+import com.vk.id.group.subscription.compose.snackbar.GroupSubscriptionSnackbar
+import com.vk.id.group.subscription.compose.util.TightWrapText
+import com.vk.id.group.subscription.compose.util.UserImageTransformation
 import com.vk.id.network.groupsubscription.exception.InternalVKIDAlreadyGroupMemberException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -86,13 +86,13 @@ private const val THOUSAND = 1000
 private const val MILLION = 1000000
 
 /**
- * Composable function which creates a state for [OneTapBottomSheet] and can be used as `state` parameter.
+ * Composable function which creates a state for [GroupSubscriptionSheet] and can be used as `state` parameter.
  *
  * It provides [GroupSubscriptionSheetState] which can, for example, trigger hiding and showing the bottom sheet.
  */
 @Composable
 public fun rememberGroupSubscriptionSheetState(): GroupSubscriptionSheetState {
-    return rememberGroupSubscrptionSheetStateInternal()
+    return rememberGroupSubscriptionSheetStateInternal()
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -101,15 +101,22 @@ public fun rememberGroupSubscriptionSheetState(): GroupSubscriptionSheetState {
 public fun GroupSubscriptionSheet(
     modifier: Modifier = Modifier,
     state: GroupSubscriptionSheetState = rememberGroupSubscriptionSheetState(),
-    @Suppress("UnusedParameter") accessToken: String,
-    @Suppress("UnusedParameter") groupId: String,
-    @Suppress("UnusedParameter") onSuccess: () -> Unit,
-    @Suppress("UnusedParameter") onFail: (VKIDGroupSubscriptionFail) -> Unit,
+    accessToken: String,
+    groupId: String,
+    onSuccess: () -> Unit,
+    onFail: (VKIDGroupSubscriptionFail) -> Unit = {},
 ) {
-    var status = rememberSaveable { mutableStateOf<GroupSubscriptionSheetStatus>(GroupSubscriptionSheetStatus.Init) }
-    var showBottomSheet by rememberSaveable { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
+    val status = rememberSaveable { mutableStateOf<GroupSubscriptionSheetStatus>(GroupSubscriptionSheetStatus.Init) }
+    var showBottomSheet by rememberSaveable { mutableStateOf(false) }
     val rememberedOnFail by rememberUpdatedState(onFail)
+    val snackbarState = remember { SnackbarHostState() }
+    val actualOnSuccess by rememberUpdatedState {
+        coroutineScope.launch {
+            snackbarState.showSnackbar("Вы подписаны на сообщество")
+        }
+        onSuccess()
+    }
     state.showSheet = processSheetShow(
         { status.value = it },
         { showBottomSheet = it },
@@ -123,6 +130,18 @@ public fun GroupSubscriptionSheet(
             groupId = groupId,
             externalAccessToken = accessToken,
         )
+    }
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(8.dp)
+    ) {
+        SnackbarHost(
+            modifier = Modifier.align(Alignment.BottomCenter),
+            hostState = snackbarState
+        ) { snackbarData: SnackbarData ->
+            GroupSubscriptionSnackbar(snackbarData.visuals.message)
+        }
     }
     LaunchedEffect(showBottomSheet) {
         if (!showBottomSheet) return@LaunchedEffect
@@ -182,7 +201,7 @@ public fun GroupSubscriptionSheet(
                             state,
                             coroutineScope,
                             interactor,
-                            onSuccess,
+                            actualOnSuccess,
                         )
                     }
 
@@ -194,7 +213,7 @@ public fun GroupSubscriptionSheet(
                             state,
                             coroutineScope,
                             interactor,
-                            onSuccess,
+                            actualOnSuccess,
                         )
                     }
                 }
@@ -234,7 +253,7 @@ private fun InitState(state: GroupSubscriptionSheetState) {
             Spacer(Modifier.weight(1f))
             CloseIcon(state::hide)
         }
-        CircleProgress(R.drawable.vkid_sheet_spinner)
+        CircleProgressBlue("Loading group subscription info")
     }
 }
 
@@ -266,7 +285,7 @@ private fun SubscribingState(
 ) {
     DataState(state, status.data, {}) {
         Box(modifier = Modifier.size(24.dp)) {
-            CircleProgress(R.drawable.vkid_sheet_spinner_white)
+            CircleProgressWhite("Subscribing to group spinner")
         }
     }
 }
@@ -372,29 +391,6 @@ private fun DataState(
         Spacer(Modifier.height(20.dp))
         DataStateButtons(onSubscribeButtonClick, state, subscribeButtonContent)
     }
-}
-
-@Composable
-private fun CircleProgress(
-    @DrawableRes progressRes: Int
-) {
-    val infiniteTransition = rememberInfiniteTransition(label = "vkid_auth_in_progress_spinner")
-    val angle by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 360f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 1000, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = "VKID Auth in progress"
-    )
-    Image(
-        modifier = Modifier.graphicsLayer {
-            rotationZ = angle
-        },
-        painter = painterResource(progressRes),
-        contentDescription = null,
-    )
 }
 
 @Composable
@@ -585,25 +581,9 @@ private fun ColumnScope.DataStateHeader(
     }
 }
 
-@Composable
-private fun CloseIcon(dismissSheet: () -> Unit) {
-    Box(
-        modifier = Modifier.clickable(interactionSource = remember { MutableInteractionSource() }, indication = null, onClick = {
-            dismissSheet()
-        })
-    ) {
-        Image(
-            painter = painterResource(R.drawable.vkid_group_subscription_close),
-            contentDescription = null,
-            contentScale = ContentScale.Fit,
-        )
-    }
-}
-
 /**
  * Manages the state of the One Tap Bottom Sheet. Should be created with [rememberOneTapBottomSheetState]
  */
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun processSheetShow(
@@ -633,7 +613,7 @@ private fun processSheetShow(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun rememberGroupSubscrptionSheetStateInternal(): GroupSubscriptionSheetState {
+private fun rememberGroupSubscriptionSheetStateInternal(): GroupSubscriptionSheetState {
     val materialSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     return remember(materialSheetState) {
         GroupSubscriptionSheetState(

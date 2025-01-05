@@ -11,19 +11,21 @@ public final class com/vk/id/group/subscription/compose/BuildConfig {
 
 public final class com/vk/id/group/subscription/compose/ComposableSingletons$GroupSubscriptionSheetKt {
 	public static final field INSTANCE Lcom/vk/id/group/subscription/compose/ComposableSingletons$GroupSubscriptionSheetKt;
-	public static field lambda-1 Lkotlin/jvm/functions/Function2;
+	public static field lambda-1 Lkotlin/jvm/functions/Function3;
 	public static field lambda-2 Lkotlin/jvm/functions/Function2;
-	public static field lambda-3 Lkotlin/jvm/functions/Function3;
+	public static field lambda-3 Lkotlin/jvm/functions/Function2;
 	public static field lambda-4 Lkotlin/jvm/functions/Function3;
 	public static field lambda-5 Lkotlin/jvm/functions/Function3;
-	public static field lambda-6 Lkotlin/jvm/functions/Function2;
+	public static field lambda-6 Lkotlin/jvm/functions/Function3;
+	public static field lambda-7 Lkotlin/jvm/functions/Function2;
 	public fun <init> ()V
-	public final fun getLambda-1$group_subscription_compose_release ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda-1$group_subscription_compose_release ()Lkotlin/jvm/functions/Function3;
 	public final fun getLambda-2$group_subscription_compose_release ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda-3$group_subscription_compose_release ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda-3$group_subscription_compose_release ()Lkotlin/jvm/functions/Function2;
 	public final fun getLambda-4$group_subscription_compose_release ()Lkotlin/jvm/functions/Function3;
 	public final fun getLambda-5$group_subscription_compose_release ()Lkotlin/jvm/functions/Function3;
-	public final fun getLambda-6$group_subscription_compose_release ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda-6$group_subscription_compose_release ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda-7$group_subscription_compose_release ()Lkotlin/jvm/functions/Function2;
 }
 
 public final class com/vk/id/group/subscription/compose/GroupSubscriptionSheetKt {
@@ -76,5 +78,12 @@ public final class com/vk/id/group/subscription/compose/GroupSubscriptionSheetSt
 	public synthetic fun createFromParcel (Landroid/os/Parcel;)Ljava/lang/Object;
 	public final fun newArray (I)[Lcom/vk/id/group/subscription/compose/GroupSubscriptionSheetStatusData;
 	public synthetic fun newArray (I)[Ljava/lang/Object;
+}
+
+public final class com/vk/id/group/subscription/compose/snackbar/ComposableSingletons$GroupSubscriptionSnackbarKt {
+	public static final field INSTANCE Lcom/vk/id/group/subscription/compose/snackbar/ComposableSingletons$GroupSubscriptionSnackbarKt;
+	public static field lambda-1 Lkotlin/jvm/functions/Function2;
+	public fun <init> ()V
+	public final fun getLambda-1$group_subscription_compose_release ()Lkotlin/jvm/functions/Function2;
 }
 

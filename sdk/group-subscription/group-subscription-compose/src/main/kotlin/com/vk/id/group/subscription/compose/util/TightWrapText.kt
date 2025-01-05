@@ -1,4 +1,4 @@
-package com.vk.id.group.subscription.compose
+package com.vk.id.group.subscription.compose.util
 
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable

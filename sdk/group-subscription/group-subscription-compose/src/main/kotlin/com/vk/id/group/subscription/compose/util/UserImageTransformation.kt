@@ -1,4 +1,4 @@
-package com.vk.id.group.subscription.compose
+package com.vk.id.group.subscription.compose.util
 
 import android.graphics.Bitmap
 import android.graphics.Canvas

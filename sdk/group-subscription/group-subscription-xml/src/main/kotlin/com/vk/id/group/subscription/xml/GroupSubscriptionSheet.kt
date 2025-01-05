@@ -51,7 +51,7 @@ public class GroupSubscriptionSheet @JvmOverloads constructor(
 
     public fun setCallbacks(
         onSuccess: () -> Unit,
-        onFail: (VKIDGroupSubscriptionFail) -> Unit
+        onFail: (VKIDGroupSubscriptionFail) -> Unit = {}
     ) {
         this.onSuccess = onSuccess
         this.onFail = onFail
