@@ -23,4 +23,9 @@ internal sealed class GroupSubscriptionSheetStatus : Parcelable {
     internal data class Failure(
         val data: GroupSubscriptionSheetStatusData
     ) : GroupSubscriptionSheetStatus()
+
+    @Parcelize
+    data class Resubscribing(
+        val data: GroupSubscriptionSheetStatusData
+    ) : GroupSubscriptionSheetStatus()
 }

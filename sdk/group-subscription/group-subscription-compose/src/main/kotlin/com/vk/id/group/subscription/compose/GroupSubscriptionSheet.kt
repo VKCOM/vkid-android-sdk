@@ -26,16 +26,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -76,6 +72,8 @@ import com.vk.id.group.subscription.compose.interactor.ServiceAccountException
 import com.vk.id.group.subscription.compose.progress.CircleProgressBlue
 import com.vk.id.group.subscription.compose.progress.CircleProgressWhite
 import com.vk.id.group.subscription.compose.snackbar.GroupSubscriptionSnackbar
+import com.vk.id.group.subscription.compose.util.PrimaryButton
+import com.vk.id.group.subscription.compose.util.SecondaryButton
 import com.vk.id.group.subscription.compose.util.TightWrapText
 import com.vk.id.group.subscription.compose.util.UserImageTransformation
 import com.vk.id.network.groupsubscription.exception.InternalVKIDAlreadyGroupMemberException
@@ -202,6 +200,7 @@ public fun GroupSubscriptionSheet(
                             coroutineScope,
                             interactor,
                             actualOnSuccess,
+                            GroupSubscriptionSheetStatus.Subscribing(actualStatus.data)
                         )
                     }
 
@@ -214,6 +213,18 @@ public fun GroupSubscriptionSheet(
                             coroutineScope,
                             interactor,
                             actualOnSuccess,
+                            GroupSubscriptionSheetStatus.Resubscribing(actualStatus.data)
+                        )
+                    }
+                    is GroupSubscriptionSheetStatus.Resubscribing -> ResubscribingState(state) {
+                        subscribeToGroup(
+                            status,
+                            actualStatus.data,
+                            state,
+                            coroutineScope,
+                            interactor,
+                            actualOnSuccess,
+                            GroupSubscriptionSheetStatus.Resubscribing(actualStatus.data)
                         )
                     }
                 }
@@ -229,9 +240,10 @@ private fun subscribeToGroup(
     state: GroupSubscriptionSheetState,
     coroutineScope: CoroutineScope,
     interactor: InternalVKIDGroupSubscriptionInteractor,
-    onSuccess: () -> Unit
+    onSuccess: () -> Unit,
+    progressStatus: GroupSubscriptionSheetStatus
 ) {
-    status.value = GroupSubscriptionSheetStatus.Subscribing(data)
+    status.value = progressStatus
     coroutineScope.launch {
         try {
             interactor.subscribeToGroup()
@@ -246,14 +258,16 @@ private fun subscribeToGroup(
 @Composable
 private fun InitState(state: GroupSubscriptionSheetState) {
     Column(
-        modifier = Modifier.padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier.padding(16.dp).fillMaxWidth().height(340.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Spacer(Modifier.weight(1f))
             CloseIcon(state::hide)
         }
+        Spacer(modifier = Modifier.weight(1f))
         CircleProgressBlue("Loading group subscription info")
+        Spacer(modifier = Modifier.weight(1f))
     }
 }
 
@@ -291,10 +305,43 @@ private fun SubscribingState(
 }
 
 @Composable
-@Suppress("LongMethod")
+private fun ResubscribingState(
+    state: GroupSubscriptionSheetState,
+    onRetry: () -> Unit,
+) {
+    FailureDataState(state, onRetry) {
+        Box(modifier = Modifier.size(24.dp)) {
+            CircleProgressWhite("Resubscribing to group spinner")
+        }
+    }
+}
+
+@Composable
 private fun FailureState(
     state: GroupSubscriptionSheetState,
     onRetry: () -> Unit,
+) {
+    FailureDataState(state, onRetry) {
+        Text(
+            text = "Повторить попытку",
+            modifier = Modifier,
+            style = TextStyle(
+                textAlign = TextAlign.Center,
+                color = Color.White,
+                fontSize = 16.sp,
+                lineHeight = 20.sp,
+                fontWeight = FontWeight.Medium,
+            ),
+        )
+    }
+}
+
+@Composable
+@Suppress("LongMethod")
+private fun FailureDataState(
+    state: GroupSubscriptionSheetState,
+    onRetry: () -> Unit,
+    retryButtonContent: @Composable () -> Unit,
 ) {
     Column(
         modifier = Modifier.padding(16.dp),
@@ -330,45 +377,11 @@ private fun FailureState(
             ),
         )
         Spacer(Modifier.height(32.dp))
-        Button(
-            onClick = onRetry,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(44.dp),
-            shape = RoundedCornerShape(8.dp)
-        ) {
-            Text(
-                text = "Попробуйте еще раз",
-                modifier = Modifier,
-                style = TextStyle(
-                    textAlign = TextAlign.Center,
-                    color = Color.White,
-                    fontSize = 16.sp,
-                    lineHeight = 20.sp,
-                    fontWeight = FontWeight.Medium,
-                ),
-            )
+        PrimaryButton(onRetry) {
+            retryButtonContent()
         }
         Spacer(Modifier.height(12.dp))
-        TextButton(
-            onClick = state::hide,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(44.dp),
-            shape = RoundedCornerShape(8.dp)
-        ) {
-            Text(
-                text = "Отмена",
-                modifier = Modifier,
-                style = TextStyle(
-                    textAlign = TextAlign.Center,
-                    color = colorResource(R.color.vkid_azure_300),
-                    fontSize = 16.sp,
-                    lineHeight = 20.sp,
-                    fontWeight = FontWeight.Medium,
-                ),
-            )
-        }
+        SecondaryButton("Отмена", state::hide)
     }
 }
 
@@ -399,38 +412,11 @@ private fun ColumnScope.DataStateButtons(
     state: GroupSubscriptionSheetState,
     subscribeButtonContent: @Composable () -> Unit
 ) {
-    Button(
-        onClick = onSubscribeButtonClick,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(44.dp),
-        shape = RoundedCornerShape(8.dp)
-    ) {
+    PrimaryButton(onClick = onSubscribeButtonClick) {
         subscribeButtonContent()
     }
     Spacer(Modifier.height(12.dp))
-    FilledTonalButton(
-        onClick = state::hide,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(44.dp),
-        shape = RoundedCornerShape(8.dp),
-        colors = ButtonDefaults.filledTonalButtonColors().copy(
-            containerColor = Color(red = 0, green = 0, blue = 0, alpha = 0x0A)
-        ),
-    ) {
-        Text(
-            text = "В другой раз",
-            modifier = Modifier,
-            style = TextStyle(
-                textAlign = TextAlign.Center,
-                color = colorResource(R.color.vkid_azure_300),
-                fontSize = 16.sp,
-                lineHeight = 20.sp,
-                fontWeight = FontWeight.Medium,
-            ),
-        )
-    }
+    SecondaryButton("В другой раз", state::hide)
 }
 
 @OptIn(ExperimentalLayoutApi::class)
