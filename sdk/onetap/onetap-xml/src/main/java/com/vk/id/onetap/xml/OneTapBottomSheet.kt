@@ -16,6 +16,8 @@ import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.InternalVKIDApi
+import com.vk.id.group.subscription.common.VKIDGroupSubscriptionFail
+import com.vk.id.group.subscription.xml.GroupSubscriptionSnackbarHost
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.compose.onetap.sheet.OneTapBottomSheet
 import com.vk.id.onetap.compose.onetap.sheet.OneTapBottomSheetState
@@ -74,6 +76,11 @@ public class OneTapBottomSheet @JvmOverloads constructor(
      */
     public var fastAuthEnabled: Boolean = true
 
+    public var groupId: String? = null
+    private var onSuccessSubscribingToGroup: (() -> Unit)? = null
+    private var onFailSubscribingToGroup: ((VKIDGroupSubscriptionFail) -> Unit)? = null
+    public var snackbarHost: GroupSubscriptionSnackbarHost? = null
+
     init {
         val sheetSettings = parseOneTapBottomSheetAttrs(context, attrs)
         this.oAuths = sheetSettings.oAuths
@@ -92,21 +99,43 @@ public class OneTapBottomSheet @JvmOverloads constructor(
         onOAuthsChange = { oAuths = it }
         var authParams by remember { mutableStateOf(authParams) }
         onAuthParamsChange = { authParams = it }
-        OneTapBottomSheet(
-            state = rememberOneTapBottomSheetState().also {
-                state = it
-            },
-            style = sheetSettings.style,
-            serviceName = sheetSettings.serviceName,
-            scenario = sheetSettings.scenario,
-            onAuth = { oAuth, accessToken -> onAuth(oAuth, accessToken) },
-            onAuthCode = { data, isCompletion -> onAuthCode(data, isCompletion) },
-            onFail = { oAuth, fail -> onFail(oAuth, fail) },
-            autoHideOnSuccess = sheetSettings.autoHideOnSuccess,
-            oAuths = oAuths,
-            authParams = authParams,
-            fastAuthEnabled = fastAuthEnabled,
-        )
+        if (groupId != null) {
+            OneTapBottomSheet(
+                state = rememberOneTapBottomSheetState().also {
+                    state = it
+                },
+                style = sheetSettings.style,
+                serviceName = sheetSettings.serviceName,
+                scenario = sheetSettings.scenario,
+                onAuth = { oAuth, accessToken -> onAuth(oAuth, accessToken) },
+                onAuthCode = { data, isCompletion -> onAuthCode(data, isCompletion) },
+                onFail = { oAuth, fail -> onFail(oAuth, fail) },
+                autoHideOnSuccess = sheetSettings.autoHideOnSuccess,
+                oAuths = oAuths,
+                authParams = authParams,
+                fastAuthEnabled = fastAuthEnabled,
+                subscribeToGroupId = groupId!!,
+                onSuccessSubscribingToGroup = onSuccessSubscribingToGroup ?: error("setGroupSubscriptionCallbacks was not called"),
+                onFailSubscribingToGroup = onFailSubscribingToGroup ?: error("setGroupSubscriptionCallbacks was not called"),
+                groupSubscriptionSnackbarHostState = snackbarHost?.snackbarHostState ?: error("snackbarHostState is not provided")
+            )
+        } else {
+            OneTapBottomSheet(
+                state = rememberOneTapBottomSheetState().also {
+                    state = it
+                },
+                style = sheetSettings.style,
+                serviceName = sheetSettings.serviceName,
+                scenario = sheetSettings.scenario,
+                onAuth = { oAuth, accessToken -> onAuth(oAuth, accessToken) },
+                onAuthCode = { data, isCompletion -> onAuthCode(data, isCompletion) },
+                onFail = { oAuth, fail -> onFail(oAuth, fail) },
+                autoHideOnSuccess = sheetSettings.autoHideOnSuccess,
+                oAuths = oAuths,
+                authParams = authParams,
+                fastAuthEnabled = fastAuthEnabled,
+            )
+        }
     }
 
     /**
@@ -125,6 +154,14 @@ public class OneTapBottomSheet @JvmOverloads constructor(
         this.onAuth = onAuth
         this.onAuthCode = onAuthCode
         this.onFail = onFail
+    }
+
+    public fun setGroupSubscriptionCallbacks(
+        onSuccess: () -> Unit,
+        onFail: (VKIDGroupSubscriptionFail) -> Unit = {}
+    ) {
+        this.onSuccessSubscribingToGroup = onSuccess
+        this.onFailSubscribingToGroup = onFail
     }
 
     /**

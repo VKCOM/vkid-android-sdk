@@ -5,6 +5,7 @@ package com.vk.id.onetap.compose.onetap.sheet
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -15,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
@@ -27,6 +29,9 @@ import com.vk.id.auth.Prompt
 import com.vk.id.auth.VKIDAuthCallback
 import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.InternalVKIDApi
+import com.vk.id.group.subscription.common.VKIDGroupSubscriptionFail
+import com.vk.id.group.subscription.compose.GroupSubscriptionSheet
+import com.vk.id.group.subscription.compose.rememberGroupSubscriptionSheetState
 import com.vk.id.multibranding.internal.LocalMultibrandingAnalyticsContext
 import com.vk.id.multibranding.internal.MultibrandingAnalyticsContext
 import com.vk.id.onetap.common.OneTapOAuth
@@ -52,6 +57,59 @@ import kotlin.time.Duration.Companion.seconds
 @Composable
 public fun rememberOneTapBottomSheetState(): OneTapBottomSheetState {
     return rememberOneTapBottomSheetStateInternal()
+}
+
+@Composable
+public fun OneTapBottomSheet(
+    modifier: Modifier = Modifier,
+    state: OneTapBottomSheetState = rememberOneTapBottomSheetState(),
+    serviceName: String,
+    scenario: OneTapScenario = OneTapScenario.EnterService,
+    autoHideOnSuccess: Boolean = true,
+    onAuth: (oAuth: OneTapOAuth?, accessToken: AccessToken) -> Unit,
+    onAuthCode: (data: AuthCodeData, isCompletion: Boolean) -> Unit = { _, _ -> },
+    onFail: (oAuth: OneTapOAuth?, fail: VKIDAuthFail) -> Unit = { _, _ -> },
+    oAuths: Set<OneTapOAuth> = emptySet(),
+    style: OneTapBottomSheetStyle = OneTapBottomSheetStyle.Light(),
+    authParams: VKIDAuthUiParams = VKIDAuthUiParams {},
+    fastAuthEnabled: Boolean = true,
+    subscribeToGroupId: String,
+    onSuccessSubscribingToGroup: () -> Unit,
+    onFailSubscribingToGroup: (VKIDGroupSubscriptionFail) -> Unit = {},
+    groupSubscriptionSnackbarHostState: SnackbarHostState,
+) {
+    var isSuccessfulAuth by remember { mutableStateOf("") }
+    OneTapBottomSheet(
+        modifier = modifier,
+        state = state,
+        serviceName = serviceName,
+        scenario = scenario,
+        autoHideOnSuccess = autoHideOnSuccess,
+        onAuth = { oAuth, accessToken ->
+            onAuth(oAuth, accessToken)
+            isSuccessfulAuth = System.currentTimeMillis().toString()
+        },
+        onAuthCode = onAuthCode,
+        onFail = onFail,
+        oAuths = oAuths,
+        style = style,
+        authParams = authParams,
+        fastAuthEnabled = fastAuthEnabled,
+    )
+    if (isSuccessfulAuth.isNotBlank()) {
+        val groupSubscriptionSheetState = rememberGroupSubscriptionSheetState()
+        GroupSubscriptionSheet(
+            state = groupSubscriptionSheetState,
+            accessTokenProvider = { VKID.instance.accessToken?.token ?: error("Not authorized") },
+            groupId = subscribeToGroupId,
+            onSuccess = onSuccessSubscribingToGroup,
+            onFail = onFailSubscribingToGroup,
+            snackbarHostState = groupSubscriptionSnackbarHostState
+        )
+        LaunchedEffect(isSuccessfulAuth) {
+            groupSubscriptionSheetState.show()
+        }
+    }
 }
 
 /**
