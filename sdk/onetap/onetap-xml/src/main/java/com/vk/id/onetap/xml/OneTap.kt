@@ -17,6 +17,8 @@ import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.InternalVKIDApi
+import com.vk.id.group.subscription.common.VKIDGroupSubscriptionFail
+import com.vk.id.group.subscription.xml.GroupSubscriptionSnackbarHost
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.compose.onetap.OneTap
@@ -101,6 +103,11 @@ public class OneTap @JvmOverloads constructor(
         }
     private var onScenarioChange: (OneTapTitleScenario) -> Unit = {}
 
+    public var groupId: String? = null
+    private var onSuccessSubscribingToGroup: (() -> Unit)? = null
+    private var onFailSubscribingToGroup: ((VKIDGroupSubscriptionFail) -> Unit)? = null
+    public var snackbarHost: GroupSubscriptionSnackbarHost? = null
+
     init {
         val params = parseOneTapAttrs(context, attrs)
         this.style = params.style
@@ -128,18 +135,37 @@ public class OneTap @JvmOverloads constructor(
         onOAuthsChange = { oAuths = it }
         var scenario by remember { mutableStateOf(scenario) }
         onScenarioChange = { scenario = it }
-        OneTap(
-            modifier = Modifier,
-            style = style,
-            onAuth = { oAuth, accessToken -> onAuth(oAuth, accessToken) },
-            onAuthCode = { data, isCompletion -> onAuthCode(data, isCompletion) },
-            onFail = { oAuth, fail -> onFail(oAuth, fail) },
-            oAuths = oAuths,
-            signInAnotherAccountButtonEnabled = isSignInToAnotherAccountEnabled,
-            authParams = authParams,
-            fastAuthEnabled = fastAuthEnabled,
-            scenario = scenario,
-        )
+        if (groupId != null) {
+            OneTap(
+                modifier = Modifier,
+                style = style,
+                onAuth = { oAuth, accessToken -> onAuth(oAuth, accessToken) },
+                onAuthCode = { data, isCompletion -> onAuthCode(data, isCompletion) },
+                onFail = { oAuth, fail -> onFail(oAuth, fail) },
+                oAuths = oAuths,
+                signInAnotherAccountButtonEnabled = isSignInToAnotherAccountEnabled,
+                authParams = authParams,
+                fastAuthEnabled = fastAuthEnabled,
+                scenario = scenario,
+                subscribeToGroupId = groupId!!,
+                onSuccessSubscribingToGroup = onSuccessSubscribingToGroup ?: error("setGroupSubscriptionCallbacks was not called"),
+                onFailSubscribingToGroup = onFailSubscribingToGroup ?: error("setGroupSubscriptionCallbacks was not called"),
+                groupSubscriptionSnackbarHostState = snackbarHost?.snackbarHostState ?: error("snackbarHostState is not provided")
+            )
+        } else {
+            OneTap(
+                modifier = Modifier,
+                style = style,
+                onAuth = { oAuth, accessToken -> onAuth(oAuth, accessToken) },
+                onAuthCode = { data, isCompletion -> onAuthCode(data, isCompletion) },
+                onFail = { oAuth, fail -> onFail(oAuth, fail) },
+                oAuths = oAuths,
+                signInAnotherAccountButtonEnabled = isSignInToAnotherAccountEnabled,
+                authParams = authParams,
+                fastAuthEnabled = fastAuthEnabled,
+                scenario = scenario,
+            )
+        }
     }
 
     /**
@@ -161,5 +187,13 @@ public class OneTap @JvmOverloads constructor(
         this.onAuth = onAuth
         this.onAuthCode = onAuthCode
         this.onFail = onFail
+    }
+
+    public fun setGroupSubscriptionCallbacks(
+        onSuccess: () -> Unit,
+        onFail: (VKIDGroupSubscriptionFail) -> Unit = {}
+    ) {
+        this.onSuccessSubscribingToGroup = onSuccess
+        this.onFailSubscribingToGroup = onFail
     }
 }

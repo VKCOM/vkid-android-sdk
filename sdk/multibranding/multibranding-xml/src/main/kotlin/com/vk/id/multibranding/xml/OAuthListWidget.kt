@@ -22,6 +22,8 @@ import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.InternalVKIDApi
+import com.vk.id.group.subscription.common.VKIDGroupSubscriptionFail
+import com.vk.id.group.subscription.xml.GroupSubscriptionSnackbarHost
 import com.vk.id.multibranding.OAuthListWidget
 import com.vk.id.multibranding.common.style.OAuthListWidgetCornersStyle
 import com.vk.id.multibranding.common.style.OAuthListWidgetSizeStyle
@@ -69,6 +71,11 @@ public class OAuthListWidget @JvmOverloads constructor(
     private var onAuthCode: (AuthCodeData, Boolean) -> Unit = { _, _ -> }
     private var onFail: (OAuth, VKIDAuthFail) -> Unit = { _, _ -> }
 
+    public var groupId: String? = null
+    private var onSuccessSubscribingToGroup: (() -> Unit)? = null
+    private var onFailSubscribingToGroup: ((VKIDGroupSubscriptionFail) -> Unit)? = null
+    public var snackbarHost: GroupSubscriptionSnackbarHost? = null
+
     init {
         val (style, oAuths, scopes) = parseAttrs(context, attrs)
         this.style = style
@@ -87,15 +94,31 @@ public class OAuthListWidget @JvmOverloads constructor(
         onOAuthsChange = { oAuths = it }
         var authParams by remember { mutableStateOf(authParams) }
         onAuthParamsChange = { authParams = it }
-        OAuthListWidget(
-            modifier = Modifier,
-            style = style,
-            onAuth = { oAuth, accessToken -> onAuth(oAuth, accessToken) },
-            onAuthCode = { data, isCompletion -> onAuthCode(data, isCompletion) },
-            onFail = { oAuth, fail -> onFail(oAuth, fail) },
-            oAuths = oAuths,
-            authParams = authParams,
-        )
+        if (groupId != null) {
+            OAuthListWidget(
+                modifier = Modifier,
+                style = style,
+                onAuth = { oAuth, accessToken -> onAuth(oAuth, accessToken) },
+                onAuthCode = { data, isCompletion -> onAuthCode(data, isCompletion) },
+                onFail = { oAuth, fail -> onFail(oAuth, fail) },
+                oAuths = oAuths,
+                authParams = authParams,
+                subscribeToGroupId = groupId!!,
+                onSuccessSubscribingToGroup = onSuccessSubscribingToGroup ?: error("setGroupSubscriptionCallbacks was not called"),
+                onFailSubscribingToGroup = onFailSubscribingToGroup ?: error("setGroupSubscriptionCallbacks was not called"),
+                groupSubscriptionSnackbarHostState = snackbarHost?.snackbarHostState ?: error("snackbarHostState is not provided")
+            )
+        } else {
+            OAuthListWidget(
+                modifier = Modifier,
+                style = style,
+                onAuth = { oAuth, accessToken -> onAuth(oAuth, accessToken) },
+                onAuthCode = { data, isCompletion -> onAuthCode(data, isCompletion) },
+                onFail = { oAuth, fail -> onFail(oAuth, fail) },
+                oAuths = oAuths,
+                authParams = authParams,
+            )
+        }
     }
 
     /**
@@ -116,6 +139,14 @@ public class OAuthListWidget @JvmOverloads constructor(
         this.onAuth = onAuth
         this.onAuthCode = onAuthCode
         this.onFail = onFail
+    }
+
+    public fun setGroupSubscriptionCallbacks(
+        onSuccess: () -> Unit,
+        onFail: (VKIDGroupSubscriptionFail) -> Unit = {}
+    ) {
+        this.onSuccessSubscribingToGroup = onSuccess
+        this.onFailSubscribingToGroup = onFail
     }
 }
 

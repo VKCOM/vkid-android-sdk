@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -18,6 +20,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.vk.id.AccessToken
+import com.vk.id.VKID
 import com.vk.id.VKIDAuthFail
 import com.vk.id.VKIDUser
 import com.vk.id.auth.AuthCodeData
@@ -25,6 +28,9 @@ import com.vk.id.auth.Prompt
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.InternalVKIDApi
+import com.vk.id.group.subscription.common.VKIDGroupSubscriptionFail
+import com.vk.id.group.subscription.compose.GroupSubscriptionSheet
+import com.vk.id.group.subscription.compose.rememberGroupSubscriptionSheetState
 import com.vk.id.multibranding.OAuthListWidget
 import com.vk.id.multibranding.internal.LocalMultibrandingAnalyticsContext
 import com.vk.id.multibranding.internal.MultibrandingAnalyticsContext
@@ -89,6 +95,55 @@ public fun OneTap(
         authParams = authParams,
         scenario = OneTapTitleScenario.SignIn,
     )
+}
+
+@Composable
+public fun OneTap(
+    modifier: Modifier = Modifier,
+    style: OneTapStyle = OneTapStyle.Light(),
+    onAuth: (oAuth: OneTapOAuth?, accessToken: AccessToken) -> Unit,
+    onAuthCode: (data: AuthCodeData, isCompletion: Boolean) -> Unit = { _, _ -> },
+    onFail: (oAuth: OneTapOAuth?, fail: VKIDAuthFail) -> Unit = { _, _ -> },
+    oAuths: Set<OneTapOAuth> = emptySet(),
+    fastAuthEnabled: Boolean = true,
+    signInAnotherAccountButtonEnabled: Boolean = false,
+    authParams: VKIDAuthUiParams = VKIDAuthUiParams {},
+    scenario: OneTapTitleScenario = OneTapTitleScenario.SignIn,
+    subscribeToGroupId: String,
+    onSuccessSubscribingToGroup: () -> Unit,
+    onFailSubscribingToGroup: (VKIDGroupSubscriptionFail) -> Unit = {},
+    groupSubscriptionSnackbarHostState: SnackbarHostState,
+) {
+    var isSuccessfulAuth by remember { mutableStateOf("") }
+    OneTap(
+        modifier = modifier,
+        style = style,
+        onAuth = { oAuth, accessToken ->
+            onAuth(oAuth, accessToken)
+            isSuccessfulAuth = System.currentTimeMillis().toString()
+        },
+        onAuthCode = onAuthCode,
+        onFail = onFail,
+        oAuths = oAuths,
+        fastAuthEnabled = fastAuthEnabled,
+        signInAnotherAccountButtonEnabled = signInAnotherAccountButtonEnabled,
+        authParams = authParams,
+        scenario = scenario,
+    )
+    if (isSuccessfulAuth.isNotBlank()) {
+        val state = rememberGroupSubscriptionSheetState()
+        GroupSubscriptionSheet(
+            state = state,
+            accessTokenProvider = { VKID.instance.accessToken?.token ?: error("Not authorized") },
+            groupId = subscribeToGroupId,
+            onSuccess = onSuccessSubscribingToGroup,
+            onFail = onFailSubscribingToGroup,
+            snackbarHostState = groupSubscriptionSnackbarHostState
+        )
+        LaunchedEffect(isSuccessfulAuth) {
+            state.show()
+        }
+    }
 }
 
 /**

@@ -19,7 +19,7 @@ public class GroupSubscriptionSheet @JvmOverloads constructor(
     private val composeView = ComposeView(context)
     private var state: GroupSubscriptionSheetState? = null
 
-    public var accessToken: String? = null
+    public var accessTokenProvider: (() -> String)? = null
     public var groupId: String? = null
     private var onSuccess: (() -> Unit)? = null
     private var onFail: ((VKIDGroupSubscriptionFail) -> Unit)? = null
@@ -42,7 +42,7 @@ public class GroupSubscriptionSheet @JvmOverloads constructor(
     private fun Content() {
         GroupSubscriptionSheet(
             state = rememberGroupSubscriptionSheetState().also { state = it },
-            accessToken = accessToken ?: error("accessToken is not specified"),
+            accessTokenProvider = accessTokenProvider,
             groupId = groupId ?: error("groupId is not specified"),
             onSuccess = onSuccess ?: error("setCallbacks was not called"),
             onFail = onFail ?: error("setCallbacks was not called"),

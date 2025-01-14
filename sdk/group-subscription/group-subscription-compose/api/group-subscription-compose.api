@@ -27,7 +27,9 @@ public final class com/vk/id/group/subscription/compose/ComposableSingletons$Gro
 }
 
 public final class com/vk/id/group/subscription/compose/GroupSubscriptionSheetKt {
-	public static final fun GroupSubscriptionSheet (Landroidx/compose/ui/Modifier;Lcom/vk/id/group/subscription/compose/GroupSubscriptionSheetState;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;II)V
+	public static final fun GroupSubscriptionSheet (Landroidx/compose/ui/Modifier;Lcom/vk/id/group/subscription/compose/GroupSubscriptionSheetState;Lkotlin/jvm/functions/Function0;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Landroidx/compose/material3/SnackbarHostState;Landroidx/compose/runtime/Composer;II)V
+	public static final fun GroupSubscriptionSheet (Landroidx/compose/ui/Modifier;Lcom/vk/id/group/subscription/compose/GroupSubscriptionSheetState;Lkotlin/jvm/functions/Function0;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;II)V
+	public static final fun GroupSubscriptionSnackbarHost (Landroidx/compose/material3/SnackbarHostState;Landroidx/compose/runtime/Composer;I)V
 	public static final fun rememberGroupSubscriptionSheetState (Landroidx/compose/runtime/Composer;I)Lcom/vk/id/group/subscription/compose/GroupSubscriptionSheetState;
 }
 

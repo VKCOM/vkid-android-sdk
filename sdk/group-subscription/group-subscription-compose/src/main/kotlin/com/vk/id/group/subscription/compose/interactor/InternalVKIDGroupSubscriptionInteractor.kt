@@ -16,14 +16,14 @@ public class InternalVKIDGroupSubscriptionInteractor(
     private val apiService: InternalVKIDGroupSubscriptionApiService,
     private val tokenStorage: InternalVKIDTokenStorage,
     private val groupId: String,
-    private val externalAccessToken: String?,
+    private val externalAccessTokenProvider: (() -> String)?,
 ) {
     private companion object {
         const val IMAGE_NUMBER = 3
     }
 
     private val accessToken: String
-        get() = externalAccessToken ?: tokenStorage.currentAccessToken?.token ?: throw NotAuthorizedException()
+        get() = externalAccessTokenProvider?.invoke() ?: tokenStorage.currentAccessToken?.token ?: throw NotAuthorizedException()
 
     public suspend fun loadGroup(): InternalVKIDGroupData {
         if (!apiService.isServiceAccount(accessToken)) {

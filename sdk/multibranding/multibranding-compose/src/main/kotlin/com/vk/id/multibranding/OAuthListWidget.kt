@@ -16,11 +16,15 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicText
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -47,6 +51,9 @@ import com.vk.id.auth.VKIDAuthCallback
 import com.vk.id.auth.VKIDAuthParams.Theme
 import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.InternalVKIDApi
+import com.vk.id.group.subscription.common.VKIDGroupSubscriptionFail
+import com.vk.id.group.subscription.compose.GroupSubscriptionSheet
+import com.vk.id.group.subscription.compose.rememberGroupSubscriptionSheetState
 import com.vk.id.multibranding.common.style.OAuthListWidgetStyle
 import com.vk.id.multibranding.internal.LocalMultibrandingAnalyticsContext
 import kotlinx.coroutines.CoroutineScope
@@ -83,6 +90,50 @@ public fun OAuthListWidget(
         authParams = authParams,
         measureInProgress = false,
     )
+}
+
+@Composable
+public fun OAuthListWidget(
+    modifier: Modifier = Modifier,
+    style: OAuthListWidgetStyle = OAuthListWidgetStyle.Dark(),
+    onAuth: (oAuth: OAuth, accessToken: AccessToken) -> Unit,
+    onAuthCode: (data: AuthCodeData, isCompletion: Boolean) -> Unit = { _, _ -> },
+    onFail: (oAuth: OAuth, fail: VKIDAuthFail) -> Unit,
+    oAuths: Set<OAuth> = OAuth.entries.toSet(),
+    authParams: VKIDAuthUiParams = VKIDAuthUiParams {},
+    subscribeToGroupId: String,
+    onSuccessSubscribingToGroup: () -> Unit,
+    onFailSubscribingToGroup: (VKIDGroupSubscriptionFail) -> Unit = {},
+    groupSubscriptionSnackbarHostState: SnackbarHostState,
+) {
+    var isSuccessfulAuth by remember { mutableStateOf("") }
+    OAuthListWidget(
+        modifier = modifier,
+        style = style,
+        onAuth = { oAuth, accessToken ->
+            onAuth(oAuth, accessToken)
+            isSuccessfulAuth = System.currentTimeMillis().toString()
+        },
+        onAuthCode = onAuthCode,
+        onFail = onFail,
+        oAuths = oAuths,
+        authParams = authParams,
+        measureInProgress = false,
+    )
+    if (isSuccessfulAuth.isNotBlank()) {
+        val state = rememberGroupSubscriptionSheetState()
+        GroupSubscriptionSheet(
+            state = state,
+            accessTokenProvider = { VKID.instance.accessToken?.token ?: error("Not authorized") },
+            groupId = subscribeToGroupId,
+            onSuccess = onSuccessSubscribingToGroup,
+            onFail = onFailSubscribingToGroup,
+            snackbarHostState = groupSubscriptionSnackbarHostState
+        )
+        LaunchedEffect(isSuccessfulAuth) {
+            state.show()
+        }
+    }
 }
 
 @InternalVKIDApi

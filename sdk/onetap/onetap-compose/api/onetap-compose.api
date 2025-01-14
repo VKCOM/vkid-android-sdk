@@ -12,6 +12,7 @@ public final class com/vk/id/onetap/compose/BuildConfig {
 public final class com/vk/id/onetap/compose/onetap/OneTapKt {
 	public static final fun OneTap (Landroidx/compose/ui/Modifier;Lcom/vk/id/onetap/common/OneTapStyle;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Ljava/util/Set;ZZLcom/vk/id/auth/VKIDAuthUiParams;Landroidx/compose/runtime/Composer;II)V
 	public static final fun OneTap (Landroidx/compose/ui/Modifier;Lcom/vk/id/onetap/common/OneTapStyle;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Ljava/util/Set;ZZLcom/vk/id/auth/VKIDAuthUiParams;Lcom/vk/id/onetap/compose/onetap/OneTapTitleScenario;Landroidx/compose/runtime/Composer;II)V
+	public static final fun OneTap (Landroidx/compose/ui/Modifier;Lcom/vk/id/onetap/common/OneTapStyle;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Ljava/util/Set;ZZLcom/vk/id/auth/VKIDAuthUiParams;Lcom/vk/id/onetap/compose/onetap/OneTapTitleScenario;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Landroidx/compose/material3/SnackbarHostState;Landroidx/compose/runtime/Composer;III)V
 }
 
 public final class com/vk/id/onetap/compose/onetap/OneTapTitleScenario : java/lang/Enum {

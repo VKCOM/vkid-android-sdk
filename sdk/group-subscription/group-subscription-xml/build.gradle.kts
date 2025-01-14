@@ -10,6 +10,7 @@ android {
 }
 
 dependencies {
-    implementation(projects.groupSubscriptionCompose)
+    api(projects.groupSubscriptionCompose)
     implementation(libs.androidx.compose.ui)
+    api(libs.androidx.material3.android)
 }

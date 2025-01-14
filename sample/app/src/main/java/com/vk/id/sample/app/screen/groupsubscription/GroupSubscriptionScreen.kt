@@ -17,9 +17,11 @@ internal fun GroupSubscriptionScreen() {
     Box(contentAlignment = Alignment.Center) {
         GroupSubscriptionSheet(
             state = state,
-            accessToken = VKID.instance.accessToken?.token ?: run {
-                showToast(context, "Not authorized")
-                ""
+            accessTokenProvider = {
+                VKID.instance.accessToken?.token ?: run {
+                    showToast(context, "Not authorized")
+                    ""
+                }
             },
             groupId = "1",
             onSuccess = { showToast(context, "Success") },

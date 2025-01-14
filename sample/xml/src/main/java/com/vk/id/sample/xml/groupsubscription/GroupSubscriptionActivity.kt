@@ -14,7 +14,12 @@ public class GroupSubscriptionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.vkid_activity_group_subscription)
         findViewById<View>(android.R.id.content).rootView.forEachView(GroupSubscriptionSheet::class) { widget ->
-            VKID.instance.accessToken?.token?.let { widget.accessToken = it } ?: showToast(this, "Not authorized")
+            widget.accessTokenProvider = {
+                VKID.instance.accessToken?.token ?: run {
+                    showToast(this, "Not authorized")
+                    ""
+                }
+            }
             widget.setCallbacks(
                 onSuccess = { showToast(this, "Success") },
                 onFail = { showToast(this, "Fail") },

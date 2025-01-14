@@ -93,25 +93,68 @@ public fun rememberGroupSubscriptionSheetState(): GroupSubscriptionSheetState {
     return rememberGroupSubscriptionSheetStateInternal()
 }
 
+@Composable
+public fun GroupSubscriptionSnackbarHost(
+    snackbarHostState: SnackbarHostState
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(8.dp)
+    ) {
+        SnackbarHost(
+            modifier = Modifier.align(Alignment.BottomCenter),
+            hostState = snackbarHostState
+        ) { snackbarData: SnackbarData ->
+            GroupSubscriptionSnackbar(snackbarData.visuals.message)
+        }
+    }
+}
+
+@Composable
+@Suppress("ModifierNotUsedAtRoot")
+public fun GroupSubscriptionSheet(
+    modifier: Modifier = Modifier,
+    state: GroupSubscriptionSheetState = rememberGroupSubscriptionSheetState(),
+    accessTokenProvider: (() -> String)? = null,
+    groupId: String,
+    onSuccess: () -> Unit,
+    onFail: (VKIDGroupSubscriptionFail) -> Unit = {},
+) {
+    val snackbarHostState = remember { SnackbarHostState() }
+    Box {
+        GroupSubscriptionSnackbarHost(snackbarHostState)
+        GroupSubscriptionSheet(
+            modifier = modifier,
+            state = state,
+            accessTokenProvider = accessTokenProvider,
+            groupId = groupId,
+            onSuccess = onSuccess,
+            onFail = onFail,
+            snackbarHostState = snackbarHostState,
+        )
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Suppress("LongMethod")
 public fun GroupSubscriptionSheet(
     modifier: Modifier = Modifier,
     state: GroupSubscriptionSheetState = rememberGroupSubscriptionSheetState(),
-    accessToken: String,
+    accessTokenProvider: (() -> String)? = null,
     groupId: String,
     onSuccess: () -> Unit,
     onFail: (VKIDGroupSubscriptionFail) -> Unit = {},
+    snackbarHostState: SnackbarHostState,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val status = rememberSaveable { mutableStateOf<GroupSubscriptionSheetStatus>(GroupSubscriptionSheetStatus.Init) }
     var showBottomSheet by rememberSaveable { mutableStateOf(false) }
     val rememberedOnFail by rememberUpdatedState(onFail)
-    val snackbarState = remember { SnackbarHostState() }
     val actualOnSuccess by rememberUpdatedState {
         coroutineScope.launch {
-            snackbarState.showSnackbar("Вы подписаны на сообщество")
+            snackbarHostState.showSnackbar("Вы подписаны на сообщество")
         }
         onSuccess()
     }
@@ -126,20 +169,8 @@ public fun GroupSubscriptionSheet(
             apiService = VKID.instance.groupSubscriptionApiService,
             tokenStorage = VKID.instance.tokenStorage,
             groupId = groupId,
-            externalAccessToken = accessToken,
+            externalAccessTokenProvider = accessTokenProvider,
         )
-    }
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(8.dp)
-    ) {
-        SnackbarHost(
-            modifier = Modifier.align(Alignment.BottomCenter),
-            hostState = snackbarState
-        ) { snackbarData: SnackbarData ->
-            GroupSubscriptionSnackbar(snackbarData.visuals.message)
-        }
     }
     LaunchedEffect(showBottomSheet) {
         if (!showBottomSheet) return@LaunchedEffect

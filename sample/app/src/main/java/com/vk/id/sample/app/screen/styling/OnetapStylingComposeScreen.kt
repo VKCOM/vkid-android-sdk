@@ -4,6 +4,7 @@ import android.view.ViewGroup.LayoutParams
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -36,6 +38,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.vk.id.AccessToken
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthUiParams
+import com.vk.id.group.subscription.compose.GroupSubscriptionSnackbarHost
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
@@ -93,6 +96,7 @@ internal fun OnetapStylingComposeScreen() {
     var state by remember { mutableStateOf("") }
     var codeChallenge by remember { mutableStateOf("") }
     var selectedStyle by remember { mutableStateOf(OneTapStyle.system(context)) }
+    val groupSubscription = remember { mutableStateOf(false) }
     LaunchedEffect(
         styleConstructor.value to cornersStylePercent.floatValue,
         selectedSize.value to selectedElevationStyle.floatValue
@@ -122,165 +126,197 @@ internal fun OnetapStylingComposeScreen() {
     AppTheme(
         useDarkTheme = useDarkTheme
     ) {
-        Column(
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.background)
-                .padding(horizontal = 8.dp)
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.Start,
-        ) {
-            Spacer(modifier = Modifier.height(16.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
+        val snackbarHostState = remember { SnackbarHostState() }
+        Box {
+            Column(
+                modifier = Modifier
+                    .background(MaterialTheme.colorScheme.background)
+                    .padding(horizontal = 8.dp)
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.Start,
             ) {
-                val width = maxOf(MIN_WIDTH_DP, (screenWidth * widthPercent.floatValue))
-                val onAuthCode = { data: AuthCodeData, isCompletion: Boolean ->
-                    code = data.code
-                    token.value = null
-                    if (isCompletion) {
-                        showToast(context, "Received auth code")
+                Spacer(modifier = Modifier.height(16.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    val width = maxOf(MIN_WIDTH_DP, (screenWidth * widthPercent.floatValue))
+                    val onAuthCode = { data: AuthCodeData, isCompletion: Boolean ->
+                        code = data.code
+                        token.value = null
+                        if (isCompletion) {
+                            showToast(context, "Received auth code")
+                        }
                     }
-                }
-                val authParams = VKIDAuthUiParams {
-                    this.scopes = scopes.split(' ', ',').toSet()
-                    this.state = state.takeIf { it.isNotBlank() }
-                    this.codeChallenge = codeChallenge.takeIf { it.isNotBlank() }
-                }
-                if (shouldUseXml.value) {
-                    @Composable
-                    fun OneTapAndroidView(fastAuthEnabled: Boolean) {
-                        var oneTapView: OneTap? by remember { mutableStateOf(null) }
-                        AndroidView(factory = { context ->
-                            OneTap(context).apply {
-                                setCallbacks(
+                    val authParams = VKIDAuthUiParams {
+                        this.scopes = scopes.split(' ', ',').toSet()
+                        this.state = state.takeIf { it.isNotBlank() }
+                        this.codeChallenge = codeChallenge.takeIf { it.isNotBlank() }
+                    }
+                    if (shouldUseXml.value) {
+                        @Composable
+                        fun OneTapAndroidView(fastAuthEnabled: Boolean) {
+                            var oneTapView: OneTap? by remember { mutableStateOf(null) }
+                            AndroidView(factory = { context ->
+                                OneTap(context).apply {
+                                    setCallbacks(
+                                        onAuth = getOneTapSuccessCallback(context) { token.value = it },
+                                        onAuthCode = onAuthCode,
+                                        onFail = getOneTapFailCallback(context),
+                                    )
+                                    oneTapView = this
+                                    this.fastAuthEnabled = fastAuthEnabled
+                                }
+                            })
+                            oneTapView?.apply {
+                                this.layoutParams = LayoutParams(
+                                    if (selectedStyle is OneTapStyle.Icon) WRAP_CONTENT else context.dpToPixels(width.toInt()),
+                                    WRAP_CONTENT,
+                                )
+                                this.style = selectedStyle
+                                this.oAuths = selectedOAuths.value
+                                this.isSignInToAnotherAccountEnabled = signInToAnotherAccountEnabled.value
+                                this.authParams = authParams
+                                this.scenario = scenario
+                            }
+                        }
+                        if (fastAuthEnabled.value) {
+                            OneTapAndroidView(fastAuthEnabled = true)
+                        } else {
+                            OneTapAndroidView(fastAuthEnabled = false)
+                        }
+                    } else {
+                        // Force state drop when changing the parameter
+                        @Composable
+                        fun RenderOneTap(fastAuthEnabled: Boolean) {
+                            if (groupSubscription.value) {
+                                OneTap(
+                                    modifier = Modifier.width(width.dp),
+                                    style = selectedStyle,
                                     onAuth = getOneTapSuccessCallback(context) { token.value = it },
                                     onAuthCode = onAuthCode,
                                     onFail = getOneTapFailCallback(context),
+                                    oAuths = selectedOAuths.value,
+                                    signInAnotherAccountButtonEnabled = signInToAnotherAccountEnabled.value,
+                                    authParams = authParams,
+                                    fastAuthEnabled = fastAuthEnabled,
+                                    scenario = scenario,
+                                    subscribeToGroupId = "1",
+                                    onSuccessSubscribingToGroup = { showToast(context, "Subscribed") },
+                                    onFailSubscribingToGroup = { showToast(context, "Fail: ${it.description}") },
+                                    groupSubscriptionSnackbarHostState = snackbarHostState,
                                 )
-                                oneTapView = this
-                                this.fastAuthEnabled = fastAuthEnabled
+                            } else {
+                                OneTap(
+                                    modifier = Modifier.width(width.dp),
+                                    style = selectedStyle,
+                                    onAuth = getOneTapSuccessCallback(context) { token.value = it },
+                                    onAuthCode = onAuthCode,
+                                    onFail = getOneTapFailCallback(context),
+                                    oAuths = selectedOAuths.value,
+                                    signInAnotherAccountButtonEnabled = signInToAnotherAccountEnabled.value,
+                                    authParams = authParams,
+                                    fastAuthEnabled = fastAuthEnabled,
+                                    scenario = scenario,
+                                )
                             }
-                        })
-                        oneTapView?.apply {
-                            this.layoutParams = LayoutParams(
-                                if (selectedStyle is OneTapStyle.Icon) WRAP_CONTENT else context.dpToPixels(width.toInt()),
-                                WRAP_CONTENT,
-                            )
-                            this.style = selectedStyle
-                            this.oAuths = selectedOAuths.value
-                            this.isSignInToAnotherAccountEnabled = signInToAnotherAccountEnabled.value
-                            this.authParams = authParams
-                            this.scenario = scenario
+                        }
+                        if (fastAuthEnabled.value) {
+                            RenderOneTap(true)
+                        } else {
+                            RenderOneTap(false)
                         }
                     }
-                    if (fastAuthEnabled.value) {
-                        OneTapAndroidView(fastAuthEnabled = true)
-                    } else {
-                        OneTapAndroidView(fastAuthEnabled = false)
-                    }
-                } else {
-                    // Force state drop when changing the parameter
-                    @Composable
-                    fun RenderOneTap(fastAuthEnabled: Boolean) {
-                        OneTap(
-                            modifier = Modifier.width(width.dp),
-                            style = selectedStyle,
-                            onAuth = getOneTapSuccessCallback(context) { token.value = it },
-                            onAuthCode = onAuthCode,
-                            onFail = getOneTapFailCallback(context),
-                            oAuths = selectedOAuths.value,
-                            signInAnotherAccountButtonEnabled = signInToAnotherAccountEnabled.value,
-                            authParams = authParams,
-                            fastAuthEnabled = fastAuthEnabled,
-                            scenario = scenario,
-                        )
-                    }
-                    if (fastAuthEnabled.value) {
-                        RenderOneTap(true)
-                    } else {
-                        RenderOneTap(false)
-                    }
                 }
-            }
-            code?.let { value ->
-                Spacer(modifier = Modifier.height(8.dp))
+                code?.let { value ->
+                    Spacer(modifier = Modifier.height(8.dp))
+                    TextField(
+                        modifier = Modifier.fillMaxWidth(),
+                        value = value,
+                        onValueChange = { code = it },
+                        label = { Text("Resulting auth code") },
+                        maxLines = 1,
+                    )
+                }
+                token.value?.let {
+                    UseToken(accessToken = it)
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+                CheckboxSelector(
+                    title = "XML",
+                    isChecked = shouldUseXml.value,
+                    onCheckedChange = { shouldUseXml.value = it }
+                )
+                CheckboxSelector(
+                    title = "Change account",
+                    isChecked = signInToAnotherAccountEnabled.value,
+                    onCheckedChange = { signInToAnotherAccountEnabled.value = it }
+                )
+                CheckboxSelector(
+                    title = "Fetch user",
+                    isChecked = fastAuthEnabled.value,
+                    onCheckedChange = { fastAuthEnabled.value = it }
+                )
+                CheckboxSelector(
+                    title = "Group Subscription",
+                    isChecked = groupSubscription.value,
+                    onCheckedChange = { groupSubscription.value = it }
+                )
+                EnumStateCheckboxSelector(state = selectedOAuths, onNewState = { selectedOAuths.value = it })
+                DropdownSelector(
+                    modifier = Modifier.padding(vertical = 16.dp),
+                    values = styleConstructors,
+                    selectedValue = selectedStyle::class.simpleName ?: error("Can get simple style"),
+                    onValueSelected = {
+                        styleConstructor.value = it
+                    },
+                    label = { Text("style") },
+                )
+                SliderSelector(title = "Width", selectedState = widthPercent, onStateChange = { widthPercent.floatValue = it })
+                SliderSelector(title = "Corners", selectedState = cornersStylePercent, onStateChange = { cornersStylePercent.floatValue = it })
+                SliderSelector(
+                    title = "Elevation",
+                    selectedState = selectedElevationStyle,
+                    onStateChange = { selectedElevationStyle.floatValue = it }
+                )
+                DropdownSelector(
+                    values = OneTapButtonSizeStyle.entries.associateBy { it.name },
+                    selectedValue = selectedSize.value.name,
+                    onValueSelected = { selectedSize.value = it },
+                    label = { Text("size") },
+                )
+                DropdownSelector(
+                    values = OneTapTitleScenario.entries.associateBy { it.name },
+                    selectedValue = scenario.name,
+                    onValueSelected = { scenario = it },
+                    label = { Text("scenario") },
+                )
+
                 TextField(
                     modifier = Modifier.fillMaxWidth(),
-                    value = value,
-                    onValueChange = { code = it },
-                    label = { Text("Resulting auth code") },
-                    maxLines = 1,
+                    value = scopes,
+                    onValueChange = { scopes = it },
+                    label = { Text("Scopes (Space-separated)") },
                 )
+                TextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = state,
+                    onValueChange = { state = it },
+                    label = { Text("State (Optional)") },
+                    shape = RectangleShape,
+                )
+                TextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = codeChallenge,
+                    onValueChange = { codeChallenge = it },
+                    label = { Text("Code challenge (Optional)") },
+                    shape = RectangleShape,
+                )
+                Spacer(modifier = Modifier.height(16.dp))
             }
-            token.value?.let {
-                UseToken(accessToken = it)
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-            CheckboxSelector(
-                title = "XML",
-                isChecked = shouldUseXml.value,
-                onCheckedChange = { shouldUseXml.value = it }
-            )
-            CheckboxSelector(
-                title = "Change account",
-                isChecked = signInToAnotherAccountEnabled.value,
-                onCheckedChange = { signInToAnotherAccountEnabled.value = it }
-            )
-            CheckboxSelector(
-                title = "Fetch user",
-                isChecked = fastAuthEnabled.value,
-                onCheckedChange = { fastAuthEnabled.value = it }
-            )
-            EnumStateCheckboxSelector(state = selectedOAuths, onNewState = { selectedOAuths.value = it })
-            DropdownSelector(
-                modifier = Modifier.padding(vertical = 16.dp),
-                values = styleConstructors,
-                selectedValue = selectedStyle::class.simpleName ?: error("Can get simple style"),
-                onValueSelected = {
-                    styleConstructor.value = it
-                },
-                label = { Text("style") },
-            )
-            SliderSelector(title = "Width", selectedState = widthPercent, onStateChange = { widthPercent.floatValue = it })
-            SliderSelector(title = "Corners", selectedState = cornersStylePercent, onStateChange = { cornersStylePercent.floatValue = it })
-            SliderSelector(title = "Elevation", selectedState = selectedElevationStyle, onStateChange = { selectedElevationStyle.floatValue = it })
-            DropdownSelector(
-                values = OneTapButtonSizeStyle.entries.associateBy { it.name },
-                selectedValue = selectedSize.value.name,
-                onValueSelected = { selectedSize.value = it },
-                label = { Text("size") },
-            )
-            DropdownSelector(
-                values = OneTapTitleScenario.entries.associateBy { it.name },
-                selectedValue = scenario.name,
-                onValueSelected = { scenario = it },
-                label = { Text("scenario") },
-            )
-
-            TextField(
-                modifier = Modifier.fillMaxWidth(),
-                value = scopes,
-                onValueChange = { scopes = it },
-                label = { Text("Scopes (Space-separated)") },
-            )
-            TextField(
-                modifier = Modifier.fillMaxWidth(),
-                value = state,
-                onValueChange = { state = it },
-                label = { Text("State (Optional)") },
-                shape = RectangleShape,
-            )
-            TextField(
-                modifier = Modifier.fillMaxWidth(),
-                value = codeChallenge,
-                onValueChange = { codeChallenge = it },
-                label = { Text("Code challenge (Optional)") },
-                shape = RectangleShape,
-            )
-            Spacer(modifier = Modifier.height(16.dp))
+            GroupSubscriptionSnackbarHost(snackbarHostState = snackbarHostState)
         }
     }
 }
