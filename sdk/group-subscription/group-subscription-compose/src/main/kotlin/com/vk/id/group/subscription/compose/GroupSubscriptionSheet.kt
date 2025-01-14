@@ -164,7 +164,7 @@ public fun GroupSubscriptionSheet(
         coroutineScope,
         state,
     )
-    val interactor = remember {
+    val interactor = remember(groupId) {
         InternalVKIDGroupSubscriptionInteractor(
             apiService = VKID.instance.groupSubscriptionApiService,
             tokenStorage = VKID.instance.tokenStorage,
@@ -172,7 +172,7 @@ public fun GroupSubscriptionSheet(
             externalAccessTokenProvider = accessTokenProvider,
         )
     }
-    LaunchedEffect(showBottomSheet) {
+    LaunchedEffect(showBottomSheet, groupId) {
         if (!showBottomSheet) return@LaunchedEffect
         launch {
             try {
