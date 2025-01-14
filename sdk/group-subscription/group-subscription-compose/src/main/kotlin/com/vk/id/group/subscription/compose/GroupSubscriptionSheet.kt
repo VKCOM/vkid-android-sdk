@@ -52,6 +52,8 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -150,9 +152,10 @@ public fun GroupSubscriptionSheet(
     val status = rememberSaveable { mutableStateOf<GroupSubscriptionSheetStatus>(GroupSubscriptionSheetStatus.Init) }
     var showBottomSheet by rememberSaveable { mutableStateOf(false) }
     val rememberedOnFail by rememberUpdatedState(onFail)
+    val snackbarLabel = stringResource(R.string.vkid_group_subscription_snackbar_label)
     val actualOnSuccess by rememberUpdatedState {
         coroutineScope.launch {
-            snackbarHostState.showSnackbar("Вы подписаны на сообщество")
+            snackbarHostState.showSnackbar(snackbarLabel)
         }
         onSuccess()
     }
@@ -304,7 +307,7 @@ private fun LoadedState(
 ) {
     DataState(state, status.data, onSubscribeButtonClick) {
         Text(
-            text = "Подписаться на сообщество",
+            text = stringResource(R.string.vkid_group_subscription_primary),
             modifier = Modifier,
             style = TextStyle(
                 textAlign = TextAlign.Center,
@@ -348,7 +351,7 @@ private fun FailureState(
 ) {
     FailureDataState(state, onRetry) {
         Text(
-            text = "Повторить попытку",
+            text = stringResource(R.string.vkid_group_subscription_fail_primary),
             modifier = Modifier,
             style = TextStyle(
                 textAlign = TextAlign.Center,
@@ -379,7 +382,7 @@ private fun FailureDataState(
             contentScale = ContentScale.Fit,
         )
         Text(
-            text = "Не удалось подписаться",
+            text = stringResource(R.string.vkid_group_subscription_fail_title),
             modifier = Modifier,
             style = TextStyle(
                 textAlign = TextAlign.Center,
@@ -391,7 +394,7 @@ private fun FailureDataState(
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = "Попробуйте еще раз",
+            text = stringResource(R.string.vkid_group_subscription_fail_description),
             modifier = Modifier,
             style = TextStyle(
                 textAlign = TextAlign.Center,
@@ -406,7 +409,7 @@ private fun FailureDataState(
             retryButtonContent()
         }
         Spacer(Modifier.height(12.dp))
-        SecondaryButton("Отмена", state::hide)
+        SecondaryButton(stringResource(R.string.vkid_group_subscription_fail_secondary), state::hide)
     }
 }
 
@@ -441,7 +444,7 @@ private fun ColumnScope.DataStateButtons(
         subscribeButtonContent()
     }
     Spacer(Modifier.height(12.dp))
-    SecondaryButton("В другой раз", state::hide)
+    SecondaryButton(stringResource(R.string.vkid_group_subscription_secondary), state::hide)
 }
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -474,12 +477,12 @@ private fun ColumnScope.DataStateSubscribers(
         Spacer(modifier = Modifier.width(8.dp))
         FlowRow(verticalArrangement = Arrangement.Center) {
             val numberOfSubs = when {
-                data.subscriberCount < THOUSAND -> data.subscriberCount
+                data.subscriberCount < THOUSAND -> data.subscriberCount.toString()
                 data.subscriberCount < MILLION -> (data.subscriberCount / THOUSAND).toString() + "K"
                 else -> (data.subscriberCount / MILLION).toString() + "M"
             }
-            val subscribersText = "$numberOfSubs подписчиков "
-            val friendsText = "· ${data.friendsCount} друзей"
+            val subscribersText = numberOfSubs + " " + pluralStringResource(R.plurals.vkid_group_subscription_subscribers, data.subscriberCount) + " "
+            val friendsText = "· ${data.friendsCount} " + pluralStringResource(R.plurals.vkid_group_subscription_friends, data.friendsCount)
             Text(
                 text = subscribersText,
                 modifier = Modifier,
