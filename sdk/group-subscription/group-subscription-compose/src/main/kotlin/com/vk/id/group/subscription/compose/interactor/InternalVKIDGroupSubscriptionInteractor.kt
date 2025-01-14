@@ -6,9 +6,9 @@ import com.vk.id.network.groupsubscription.data.InternalVKIDGroupByIdData
 import com.vk.id.network.groupsubscription.data.InternalVKIDGroupData
 import com.vk.id.network.groupsubscription.data.InternalVKIDGroupMembersData
 import com.vk.id.storage.InternalVKIDTokenStorage
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.withContext
 
 @InternalVKIDApi
@@ -38,7 +38,7 @@ public class InternalVKIDGroupSubscriptionInteractor(
     }
 
     private suspend fun getGroup(): InternalVKIDGroupData {
-        return withContext(Dispatchers.IO) {
+        return withContext(currentCoroutineContext()) {
             val (group, members, friends) = awaitAll(
                 async { apiService.getGroup(accessToken = accessToken, groupId = groupId) },
                 async { apiService.getMembers(accessToken = accessToken, groupId = groupId, justFriends = false) },

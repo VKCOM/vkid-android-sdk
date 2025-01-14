@@ -34,7 +34,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -69,7 +68,6 @@ import com.vk.id.group.subscription.common.VKIDGroupSubscriptionFail
 import com.vk.id.group.subscription.compose.close.CloseIcon
 import com.vk.id.group.subscription.compose.interactor.InternalVKIDGroupSubscriptionInteractor
 import com.vk.id.group.subscription.compose.interactor.ServiceAccountException
-import com.vk.id.group.subscription.compose.progress.CircleProgressBlue
 import com.vk.id.group.subscription.compose.progress.CircleProgressWhite
 import com.vk.id.group.subscription.compose.snackbar.GroupSubscriptionSnackbar
 import com.vk.id.group.subscription.compose.util.PrimaryButton
@@ -158,7 +156,7 @@ public fun GroupSubscriptionSheet(
         }
         onSuccess()
     }
-    state.showSheet = processSheetShow(
+    processSheetShow(
         { status.value = it },
         { showBottomSheet = it },
         coroutineScope,
@@ -172,34 +170,45 @@ public fun GroupSubscriptionSheet(
             externalAccessTokenProvider = accessTokenProvider,
         )
     }
-    LaunchedEffect(showBottomSheet, groupId) {
-        if (!showBottomSheet) return@LaunchedEffect
-        launch {
-            try {
-                with(interactor.loadGroup()) {
-                    status.value = GroupSubscriptionSheetStatus.Loaded(
-                        GroupSubscriptionSheetStatusData(
-                            groupImageUrl = imageUrl,
-                            groupName = name,
-                            groupDescription = description,
-                            userImageUrls = userImageUrls,
-                            friendsCount = friendsCount,
-                            subscriberCount = subscriberCount,
-                            isGroupVerified = isVerified,
-                        )
-                    )
+    remember {
+        state.showSheet = {
+            if (it) {
+                status.value = GroupSubscriptionSheetStatus.Init
+                coroutineScope.launch {
+                    try {
+                        with(interactor.loadGroup()) {
+                            status.value = GroupSubscriptionSheetStatus.Loaded(
+                                GroupSubscriptionSheetStatusData(
+                                    groupImageUrl = imageUrl,
+                                    groupName = name,
+                                    groupDescription = description,
+                                    userImageUrls = userImageUrls,
+                                    friendsCount = friendsCount,
+                                    subscriberCount = subscriberCount,
+                                    isGroupVerified = isVerified,
+                                )
+                            )
+                            showBottomSheet = true
+                        }
+                    } catch (@Suppress("SwallowedException") e: InternalVKIDAlreadyGroupMemberException) {
+                        state.hide()
+                        rememberedOnFail(VKIDGroupSubscriptionFail.AlreadyGroupMember())
+                        showBottomSheet = false
+                    } catch (@Suppress("SwallowedException") e: ServiceAccountException) {
+                        state.hide()
+                        rememberedOnFail(VKIDGroupSubscriptionFail.ServiceAccount())
+                        showBottomSheet = false
+                    } catch (@Suppress("TooGenericExceptionCaught") t: Throwable) {
+                        state.hide()
+                        rememberedOnFail(VKIDGroupSubscriptionFail.Other(throwable = t))
+                        showBottomSheet = false
+                    }
                 }
-            } catch (@Suppress("SwallowedException") e: InternalVKIDAlreadyGroupMemberException) {
-                state.hide()
-                rememberedOnFail(VKIDGroupSubscriptionFail.AlreadyGroupMember())
-            } catch (@Suppress("SwallowedException") e: ServiceAccountException) {
-                state.hide()
-                rememberedOnFail(VKIDGroupSubscriptionFail.ServiceAccount())
-            } catch (@Suppress("TooGenericExceptionCaught") t: Throwable) {
-                state.hide()
-                rememberedOnFail(VKIDGroupSubscriptionFail.Other(throwable = t))
+            } else {
+                showBottomSheet = false
             }
         }
+        1 // Ignore result, just make sync LaunchedEffect(Unit)
     }
     if (showBottomSheet) {
         ModalBottomSheet(
@@ -222,7 +231,7 @@ public fun GroupSubscriptionSheet(
                 contentAlignment = Alignment.Center,
             ) {
                 when (val actualStatus = status.value) {
-                    is GroupSubscriptionSheetStatus.Init -> InitState(state)
+                    is GroupSubscriptionSheetStatus.Init -> Unit
                     is GroupSubscriptionSheetStatus.Loaded -> LoadedState(state, actualStatus) {
                         subscribeToGroup(
                             status,
@@ -247,6 +256,7 @@ public fun GroupSubscriptionSheet(
                             GroupSubscriptionSheetStatus.Resubscribing(actualStatus.data)
                         )
                     }
+
                     is GroupSubscriptionSheetStatus.Resubscribing -> ResubscribingState(state) {
                         subscribeToGroup(
                             status,
@@ -283,22 +293,6 @@ private fun subscribeToGroup(
         } catch (@Suppress("TooGenericExceptionCaught", "SwallowedException") t: Throwable) {
             status.value = GroupSubscriptionSheetStatus.Failure(data)
         }
-    }
-}
-
-@Composable
-private fun InitState(state: GroupSubscriptionSheetState) {
-    Column(
-        modifier = Modifier.padding(16.dp).fillMaxWidth().height(340.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Spacer(Modifier.weight(1f))
-            CloseIcon(state::hide)
-        }
-        Spacer(modifier = Modifier.weight(1f))
-        CircleProgressBlue("Loading group subscription info")
-        Spacer(modifier = Modifier.weight(1f))
     }
 }
 
@@ -470,10 +464,7 @@ private fun ColumnScope.DataStateSubscribers(
                         modifier = Modifier
                             .height(24.dp)
                             .width(24.dp),
-                        model = ImageRequest.Builder(LocalContext.current)
-                            .data(userImageUrl)
-                            .transformations(transformation)
-                            .build(),
+                        model = ImageRequest.Builder(LocalContext.current).data(userImageUrl).transformations(transformation).build(),
                         contentDescription = null,
                         contentScale = ContentScale.FillHeight,
                     )
