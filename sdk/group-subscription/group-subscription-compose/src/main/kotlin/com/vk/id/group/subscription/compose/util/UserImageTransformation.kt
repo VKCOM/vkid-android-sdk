@@ -8,7 +8,9 @@ import android.graphics.PorterDuffXfermode
 import coil.size.Size
 import coil.transform.Transformation
 
-internal class UserImageTransformation : Transformation {
+internal class UserImageTransformation(
+    private val backgroundColor: Int
+) : Transformation {
 
     companion object {
         private const val IMAGE_WIDTH_DP = 24
@@ -16,7 +18,7 @@ internal class UserImageTransformation : Transformation {
     }
 
     override val cacheKey: String
-        get() = javaClass.name
+        get() = backgroundColor.toString()
 
     override suspend fun transform(input: Bitmap, size: Size): Bitmap {
         val paint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG)
@@ -28,7 +30,7 @@ internal class UserImageTransformation : Transformation {
             drawCircle(radius, radius, radius, paint)
             paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
             drawBitmap(input, radius - input.width / 2f, radius - input.height / 2f, paint)
-            drawWhiteCircle(input, radius)
+            drawSurroundingCircle(input, radius)
         }
 
         return output
@@ -40,13 +42,13 @@ internal class UserImageTransformation : Transformation {
         return this
     }
 
-    private fun Canvas.drawWhiteCircle(input: Bitmap, radius: Float) {
+    private fun Canvas.drawSurroundingCircle(input: Bitmap, radius: Float) {
         drawCircle(
             -input.width / IMAGE_WIDTH_DP.toFloat() * WHITE_CIRCLE_OFFSET_DP,
             input.height / 2f,
             radius,
             Paint().apply {
-                color = android.graphics.Color.WHITE
+                color = backgroundColor
                 style = Paint.Style.FILL
             }
         )

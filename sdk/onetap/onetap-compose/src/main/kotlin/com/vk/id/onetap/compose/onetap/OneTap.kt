@@ -28,7 +28,8 @@ import com.vk.id.auth.Prompt
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.group.subscription.common.VKIDGroupSubscriptionFail
+import com.vk.id.group.subscription.common.fail.VKIDGroupSubscriptionFail
+import com.vk.id.group.subscription.common.style.GroupSubscriptionStyle
 import com.vk.id.group.subscription.compose.GroupSubscriptionSheet
 import com.vk.id.group.subscription.compose.rememberGroupSubscriptionSheetState
 import com.vk.id.multibranding.OAuthListWidget
@@ -113,6 +114,7 @@ public fun OneTap(
     onSuccessSubscribingToGroup: () -> Unit,
     onFailSubscribingToGroup: (VKIDGroupSubscriptionFail) -> Unit = {},
     groupSubscriptionSnackbarHostState: SnackbarHostState,
+    groupSubscriptionStyle: GroupSubscriptionStyle = GroupSubscriptionStyle.Light(),
 ) {
     var isSuccessfulAuth by remember { mutableStateOf("") }
     OneTap(
@@ -138,7 +140,8 @@ public fun OneTap(
             groupId = subscribeToGroupId,
             onSuccess = onSuccessSubscribingToGroup,
             onFail = onFailSubscribingToGroup,
-            snackbarHostState = groupSubscriptionSnackbarHostState
+            snackbarHostState = groupSubscriptionSnackbarHostState,
+            style = groupSubscriptionStyle,
         )
         LaunchedEffect(isSuccessfulAuth) {
             state.show()

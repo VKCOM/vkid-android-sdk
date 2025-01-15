@@ -1,3 +1,5 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.group.subscription.compose.util
 
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,10 +16,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.vk.id.common.InternalVKIDApi
+import com.vk.id.group.subscription.common.style.GroupSubscriptionStyle
 import com.vk.id.group.subscription.compose.R
 
 @Composable
 internal fun SecondaryButton(
+    style: GroupSubscriptionStyle,
     text: String,
     onClick: () -> Unit
 ) {
@@ -25,10 +30,10 @@ internal fun SecondaryButton(
         onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
-            .height(44.dp),
-        shape = RoundedCornerShape(8.dp),
+            .height(style.buttonsSizeStyle.heightDp.dp),
+        shape = RoundedCornerShape(style.buttonsCornersStyle.radiusDp.dp),
         colors = ButtonDefaults.filledTonalButtonColors().copy(
-            containerColor = Color(red = 0, green = 0, blue = 0, alpha = 0x0A)
+            containerColor = textSecondaryButtonBackgroundColor(style),
         ),
     ) {
         Text(
@@ -36,8 +41,11 @@ internal fun SecondaryButton(
             modifier = Modifier,
             style = TextStyle(
                 textAlign = TextAlign.Center,
-                color = colorResource(R.color.vkid_azure_300),
-                fontSize = 16.sp,
+                color = when (style) {
+                    is GroupSubscriptionStyle.Light -> colorResource(R.color.vkid_azure_300)
+                    is GroupSubscriptionStyle.Dark -> Color.White
+                },
+                fontSize = style.buttonsSizeStyle.textSizeSp.sp,
                 lineHeight = 20.sp,
                 fontWeight = FontWeight.Medium,
             ),

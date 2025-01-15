@@ -1,4 +1,4 @@
-package com.vk.id.group.subscription.common
+package com.vk.id.group.subscription.common.fail
 
 public sealed class VKIDGroupSubscriptionFail(
     public val description: String

@@ -18,6 +18,7 @@ public final class com/vk/id/onetap/xml/OneTap : android/widget/FrameLayout {
 	public final fun getAuthParams ()Lcom/vk/id/auth/VKIDAuthUiParams;
 	public final fun getFastAuthEnabled ()Z
 	public final fun getGroupId ()Ljava/lang/String;
+	public final fun getGroupSubscriptionStyle ()Lcom/vk/id/group/subscription/common/style/GroupSubscriptionStyle;
 	public final fun getOAuths ()Ljava/util/Set;
 	public final fun getScenario ()Lcom/vk/id/onetap/compose/onetap/OneTapTitleScenario;
 	public final fun getSnackbarHost ()Lcom/vk/id/group/subscription/xml/GroupSubscriptionSnackbarHost;
@@ -30,6 +31,7 @@ public final class com/vk/id/onetap/xml/OneTap : android/widget/FrameLayout {
 	public final fun setGroupId (Ljava/lang/String;)V
 	public final fun setGroupSubscriptionCallbacks (Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;)V
 	public static synthetic fun setGroupSubscriptionCallbacks$default (Lcom/vk/id/onetap/xml/OneTap;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public final fun setGroupSubscriptionStyle (Lcom/vk/id/group/subscription/common/style/GroupSubscriptionStyle;)V
 	public final fun setOAuths (Ljava/util/Set;)V
 	public final fun setScenario (Lcom/vk/id/onetap/compose/onetap/OneTapTitleScenario;)V
 	public final fun setSignInToAnotherAccountEnabled (Z)V
@@ -46,6 +48,7 @@ public final class com/vk/id/onetap/xml/OneTapBottomSheet : android/widget/Frame
 	public final fun getAuthParams ()Lcom/vk/id/auth/VKIDAuthUiParams;
 	public final fun getFastAuthEnabled ()Z
 	public final fun getGroupId ()Ljava/lang/String;
+	public final fun getGroupSubscriptionStyle ()Lcom/vk/id/group/subscription/common/style/GroupSubscriptionStyle;
 	public final fun getOAuths ()Ljava/util/Set;
 	public final fun getSnackbarHost ()Lcom/vk/id/group/subscription/xml/GroupSubscriptionSnackbarHost;
 	public final fun hide ()V
@@ -57,6 +60,7 @@ public final class com/vk/id/onetap/xml/OneTapBottomSheet : android/widget/Frame
 	public final fun setGroupId (Ljava/lang/String;)V
 	public final fun setGroupSubscriptionCallbacks (Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;)V
 	public static synthetic fun setGroupSubscriptionCallbacks$default (Lcom/vk/id/onetap/xml/OneTapBottomSheet;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public final fun setGroupSubscriptionStyle (Lcom/vk/id/group/subscription/common/style/GroupSubscriptionStyle;)V
 	public final fun setOAuths (Ljava/util/Set;)V
 	public final fun setSnackbarHost (Lcom/vk/id/group/subscription/xml/GroupSubscriptionSnackbarHost;)V
 	public final fun show ()V

@@ -15,14 +15,18 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import com.vk.id.group.subscription.common.style.GroupSubscriptionStyle
 import com.vk.id.group.subscription.compose.R
+import com.vk.id.group.subscription.compose.util.backgroundColor
+import com.vk.id.group.subscription.compose.util.textPrimaryColor
 
 @Composable
 internal fun GroupSubscriptionSnackbar(
+    style: GroupSubscriptionStyle,
     message: String,
 ) {
     Snackbar(
-        containerColor = colorResource(R.color.vkid_group_subscription_background),
+        containerColor = backgroundColor(style),
         shape = ShapeDefaults.Small,
         action = {
             Spacer(modifier = Modifier.height(56.dp))
@@ -40,7 +44,7 @@ internal fun GroupSubscriptionSnackbar(
             Text(
                 text = message,
                 style = TextStyle(
-                    color = colorResource(R.color.vkid_white)
+                    color = textPrimaryColor(style)
                 ),
                 modifier = Modifier.padding(horizontal = 12.dp)
             )

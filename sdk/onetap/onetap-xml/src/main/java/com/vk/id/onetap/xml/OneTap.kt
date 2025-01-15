@@ -17,7 +17,8 @@ import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.group.subscription.common.VKIDGroupSubscriptionFail
+import com.vk.id.group.subscription.common.fail.VKIDGroupSubscriptionFail
+import com.vk.id.group.subscription.common.style.GroupSubscriptionStyle
 import com.vk.id.group.subscription.xml.GroupSubscriptionSnackbarHost
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.common.OneTapStyle
@@ -107,6 +108,7 @@ public class OneTap @JvmOverloads constructor(
     private var onSuccessSubscribingToGroup: (() -> Unit)? = null
     private var onFailSubscribingToGroup: ((VKIDGroupSubscriptionFail) -> Unit)? = null
     public var snackbarHost: GroupSubscriptionSnackbarHost? = null
+    public var groupSubscriptionStyle: GroupSubscriptionStyle = GroupSubscriptionStyle.Light()
 
     init {
         val params = parseOneTapAttrs(context, attrs)
@@ -150,7 +152,8 @@ public class OneTap @JvmOverloads constructor(
                 subscribeToGroupId = groupId!!,
                 onSuccessSubscribingToGroup = onSuccessSubscribingToGroup ?: error("setGroupSubscriptionCallbacks was not called"),
                 onFailSubscribingToGroup = onFailSubscribingToGroup ?: error("setGroupSubscriptionCallbacks was not called"),
-                groupSubscriptionSnackbarHostState = snackbarHost?.snackbarHostState ?: error("snackbarHostState is not provided")
+                groupSubscriptionSnackbarHostState = snackbarHost?.snackbarHostState ?: error("snackbarHostState is not provided"),
+                groupSubscriptionStyle = groupSubscriptionStyle,
             )
         } else {
             OneTap(

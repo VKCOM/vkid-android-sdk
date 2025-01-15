@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import android.widget.FrameLayout
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
-import com.vk.id.group.subscription.common.VKIDGroupSubscriptionFail
+import com.vk.id.group.subscription.common.fail.VKIDGroupSubscriptionFail
 import com.vk.id.group.subscription.compose.GroupSubscriptionSheet
 import com.vk.id.group.subscription.compose.GroupSubscriptionSheetState
 import com.vk.id.group.subscription.compose.rememberGroupSubscriptionSheetState

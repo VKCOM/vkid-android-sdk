@@ -46,11 +46,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -66,7 +66,8 @@ import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
 import com.vk.id.VKID
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.group.subscription.common.VKIDGroupSubscriptionFail
+import com.vk.id.group.subscription.common.fail.VKIDGroupSubscriptionFail
+import com.vk.id.group.subscription.common.style.GroupSubscriptionStyle
 import com.vk.id.group.subscription.compose.close.CloseIcon
 import com.vk.id.group.subscription.compose.interactor.InternalVKIDGroupSubscriptionInteractor
 import com.vk.id.group.subscription.compose.interactor.ServiceAccountException
@@ -76,6 +77,10 @@ import com.vk.id.group.subscription.compose.util.PrimaryButton
 import com.vk.id.group.subscription.compose.util.SecondaryButton
 import com.vk.id.group.subscription.compose.util.TightWrapText
 import com.vk.id.group.subscription.compose.util.UserImageTransformation
+import com.vk.id.group.subscription.compose.util.backgroundColor
+import com.vk.id.group.subscription.compose.util.textPrimaryButtonColor
+import com.vk.id.group.subscription.compose.util.textPrimaryColor
+import com.vk.id.group.subscription.compose.util.textSecondaryColor
 import com.vk.id.network.groupsubscription.exception.InternalVKIDAlreadyGroupMemberException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -95,7 +100,8 @@ public fun rememberGroupSubscriptionSheetState(): GroupSubscriptionSheetState {
 
 @Composable
 public fun GroupSubscriptionSnackbarHost(
-    snackbarHostState: SnackbarHostState
+    snackbarHostState: SnackbarHostState,
+    style: GroupSubscriptionStyle = GroupSubscriptionStyle.Light(),
 ) {
     Box(
         modifier = Modifier
@@ -106,7 +112,7 @@ public fun GroupSubscriptionSnackbarHost(
             modifier = Modifier.align(Alignment.BottomCenter),
             hostState = snackbarHostState
         ) { snackbarData: SnackbarData ->
-            GroupSubscriptionSnackbar(snackbarData.visuals.message)
+            GroupSubscriptionSnackbar(style, snackbarData.visuals.message)
         }
     }
 }
@@ -120,6 +126,7 @@ public fun GroupSubscriptionSheet(
     groupId: String,
     onSuccess: () -> Unit,
     onFail: (VKIDGroupSubscriptionFail) -> Unit = {},
+    style: GroupSubscriptionStyle = GroupSubscriptionStyle.Light(),
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     Box {
@@ -132,6 +139,7 @@ public fun GroupSubscriptionSheet(
             onSuccess = onSuccess,
             onFail = onFail,
             snackbarHostState = snackbarHostState,
+            style = style,
         )
     }
 }
@@ -147,6 +155,7 @@ public fun GroupSubscriptionSheet(
     onSuccess: () -> Unit,
     onFail: (VKIDGroupSubscriptionFail) -> Unit = {},
     snackbarHostState: SnackbarHostState,
+    style: GroupSubscriptionStyle = GroupSubscriptionStyle.Light(),
 ) {
     val coroutineScope = rememberCoroutineScope()
     val status = rememberSaveable { mutableStateOf<GroupSubscriptionSheetStatus>(GroupSubscriptionSheetStatus.Init) }
@@ -229,13 +238,13 @@ public fun GroupSubscriptionSheet(
                     .fillMaxWidth()
                     .widthIn(min = 344.dp, max = 800.dp)
                     .padding(16.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(colorResource(R.color.vkid_white)),
+                    .clip(RoundedCornerShape(style.cornersStyle.radiusDp.dp))
+                    .background(backgroundColor(style)),
                 contentAlignment = Alignment.Center,
             ) {
                 when (val actualStatus = status.value) {
                     is GroupSubscriptionSheetStatus.Init -> Unit
-                    is GroupSubscriptionSheetStatus.Loaded -> LoadedState(state, actualStatus) {
+                    is GroupSubscriptionSheetStatus.Loaded -> LoadedState(style, state, actualStatus) {
                         subscribeToGroup(
                             status,
                             actualStatus.data,
@@ -247,8 +256,8 @@ public fun GroupSubscriptionSheet(
                         )
                     }
 
-                    is GroupSubscriptionSheetStatus.Subscribing -> SubscribingState(state, actualStatus)
-                    is GroupSubscriptionSheetStatus.Failure -> FailureState(state) {
+                    is GroupSubscriptionSheetStatus.Subscribing -> SubscribingState(style, state, actualStatus)
+                    is GroupSubscriptionSheetStatus.Failure -> FailureState(style, state) {
                         subscribeToGroup(
                             status,
                             actualStatus.data,
@@ -260,7 +269,7 @@ public fun GroupSubscriptionSheet(
                         )
                     }
 
-                    is GroupSubscriptionSheetStatus.Resubscribing -> ResubscribingState(state) {
+                    is GroupSubscriptionSheetStatus.Resubscribing -> ResubscribingState(style, state) {
                         subscribeToGroup(
                             status,
                             actualStatus.data,
@@ -301,18 +310,19 @@ private fun subscribeToGroup(
 
 @Composable
 private fun LoadedState(
+    style: GroupSubscriptionStyle,
     state: GroupSubscriptionSheetState,
     status: GroupSubscriptionSheetStatus.Loaded,
     onSubscribeButtonClick: () -> Unit,
 ) {
-    DataState(state, status.data, onSubscribeButtonClick) {
+    DataState(style, state, status.data, onSubscribeButtonClick) {
         Text(
             text = stringResource(R.string.vkid_group_subscription_primary),
             modifier = Modifier,
             style = TextStyle(
                 textAlign = TextAlign.Center,
-                color = Color.White,
-                fontSize = 16.sp,
+                color = textPrimaryButtonColor(style),
+                fontSize = style.buttonsSizeStyle.textSizeSp.sp,
                 lineHeight = 20.sp,
                 fontWeight = FontWeight.Medium,
             ),
@@ -322,10 +332,11 @@ private fun LoadedState(
 
 @Composable
 private fun SubscribingState(
+    style: GroupSubscriptionStyle,
     state: GroupSubscriptionSheetState,
     status: GroupSubscriptionSheetStatus.Subscribing,
 ) {
-    DataState(state, status.data, {}) {
+    DataState(style, state, status.data, {}) {
         Box(modifier = Modifier.size(24.dp)) {
             CircleProgressWhite("Subscribing to group spinner")
         }
@@ -334,10 +345,11 @@ private fun SubscribingState(
 
 @Composable
 private fun ResubscribingState(
+    style: GroupSubscriptionStyle,
     state: GroupSubscriptionSheetState,
     onRetry: () -> Unit,
 ) {
-    FailureDataState(state, onRetry) {
+    FailureDataState(style, state, onRetry) {
         Box(modifier = Modifier.size(24.dp)) {
             CircleProgressWhite("Resubscribing to group spinner")
         }
@@ -346,17 +358,18 @@ private fun ResubscribingState(
 
 @Composable
 private fun FailureState(
+    style: GroupSubscriptionStyle,
     state: GroupSubscriptionSheetState,
     onRetry: () -> Unit,
 ) {
-    FailureDataState(state, onRetry) {
+    FailureDataState(style, state, onRetry) {
         Text(
             text = stringResource(R.string.vkid_group_subscription_fail_primary),
             modifier = Modifier,
             style = TextStyle(
                 textAlign = TextAlign.Center,
-                color = Color.White,
-                fontSize = 16.sp,
+                color = textPrimaryButtonColor(style),
+                fontSize = style.buttonsSizeStyle.textSizeSp.sp,
                 lineHeight = 20.sp,
                 fontWeight = FontWeight.Medium,
             ),
@@ -367,6 +380,7 @@ private fun FailureState(
 @Composable
 @Suppress("LongMethod")
 private fun FailureDataState(
+    style: GroupSubscriptionStyle,
     state: GroupSubscriptionSheetState,
     onRetry: () -> Unit,
     retryButtonContent: @Composable () -> Unit,
@@ -386,7 +400,7 @@ private fun FailureDataState(
             modifier = Modifier,
             style = TextStyle(
                 textAlign = TextAlign.Center,
-                color = Color.Black,
+                color = textPrimaryColor(style),
                 fontSize = 20.sp,
                 lineHeight = 24.sp,
                 fontWeight = FontWeight.Medium,
@@ -398,23 +412,24 @@ private fun FailureDataState(
             modifier = Modifier,
             style = TextStyle(
                 textAlign = TextAlign.Center,
-                color = colorResource(R.color.vkid_sheet_secondary),
+                color = textSecondaryColor(style),
                 fontSize = 14.sp,
                 lineHeight = 18.sp,
                 fontWeight = FontWeight.Normal,
             ),
         )
         Spacer(Modifier.height(32.dp))
-        PrimaryButton(onRetry) {
+        PrimaryButton(style, onRetry) {
             retryButtonContent()
         }
         Spacer(Modifier.height(12.dp))
-        SecondaryButton(stringResource(R.string.vkid_group_subscription_fail_secondary), state::hide)
+        SecondaryButton(style, stringResource(R.string.vkid_group_subscription_fail_secondary), state::hide)
     }
 }
 
 @Composable
 private fun DataState(
+    style: GroupSubscriptionStyle,
     state: GroupSubscriptionSheetState,
     data: GroupSubscriptionSheetStatusData,
     onSubscribeButtonClick: () -> Unit,
@@ -426,31 +441,33 @@ private fun DataState(
     ) {
         DataStateHeader(state, data)
         Spacer(modifier = Modifier.height(12.dp))
-        DataStateLabels(data)
+        DataStateLabels(style, data)
         Spacer(modifier = Modifier.height(8.dp))
-        DataStateSubscribers(data)
+        DataStateSubscribers(style, data)
         Spacer(Modifier.height(20.dp))
-        DataStateButtons(onSubscribeButtonClick, state, subscribeButtonContent)
+        DataStateButtons(style, onSubscribeButtonClick, state, subscribeButtonContent)
     }
 }
 
 @Composable
 private fun ColumnScope.DataStateButtons(
+    style: GroupSubscriptionStyle,
     onSubscribeButtonClick: () -> Unit,
     state: GroupSubscriptionSheetState,
     subscribeButtonContent: @Composable () -> Unit
 ) {
-    PrimaryButton(onClick = onSubscribeButtonClick) {
+    PrimaryButton(style, onClick = onSubscribeButtonClick) {
         subscribeButtonContent()
     }
     Spacer(Modifier.height(12.dp))
-    SecondaryButton(stringResource(R.string.vkid_group_subscription_secondary), state::hide)
+    SecondaryButton(style, stringResource(R.string.vkid_group_subscription_secondary), state::hide)
 }
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 @Suppress("LongMethod")
 private fun ColumnScope.DataStateSubscribers(
+    style: GroupSubscriptionStyle,
     data: GroupSubscriptionSheetStatusData
 ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -460,7 +477,7 @@ private fun ColumnScope.DataStateSubscribers(
                 .height(24.dp)
         ) {
             data.userImageUrls.forEachIndexed { index, userImageUrl ->
-                val transformation = if (index > 0) UserImageTransformation() else CircleCropTransformation()
+                val transformation = if (index > 0) UserImageTransformation(backgroundColor(style).toArgb()) else CircleCropTransformation()
                 Row {
                     Spacer(modifier = Modifier.width(24.dp * index))
                     AsyncImage(
@@ -488,7 +505,7 @@ private fun ColumnScope.DataStateSubscribers(
                 modifier = Modifier,
                 style = TextStyle(
                     textAlign = TextAlign.Center,
-                    color = colorResource(R.color.vkid_sheet_secondary),
+                    color = textSecondaryColor(style),
                     fontSize = 15.sp,
                     lineHeight = 20.sp,
                     fontWeight = FontWeight.Normal,
@@ -500,19 +517,21 @@ private fun ColumnScope.DataStateSubscribers(
                     modifier = Modifier,
                     style = TextStyle(
                         textAlign = TextAlign.Center,
-                        color = colorResource(R.color.vkid_sheet_secondary),
+                        color = textSecondaryColor(style),
                         fontSize = 15.sp,
                         lineHeight = 20.sp,
                         fontWeight = FontWeight.Normal,
                     ),
                 )
             }
+            Spacer(modifier = Modifier.weight(1f))
         }
     }
 }
 
 @Composable
 private fun ColumnScope.DataStateLabels(
+    style: GroupSubscriptionStyle,
     data: GroupSubscriptionSheetStatusData
 ) {
     Row(
@@ -525,7 +544,7 @@ private fun ColumnScope.DataStateLabels(
                 modifier = Modifier.widthIn(max = maxWidth - (if (data.isGroupVerified) 20.dp else 0.dp)),
                 style = TextStyle(
                     textAlign = TextAlign.Center,
-                    color = Color.Black,
+                    color = textPrimaryColor(style),
                     fontSize = 23.sp,
                     lineHeight = 28.sp,
                     fontWeight = FontWeight.SemiBold,
@@ -535,7 +554,7 @@ private fun ColumnScope.DataStateLabels(
             )
         }
         if (data.isGroupVerified) {
-            Spacer(modifier = Modifier.width(2.dp))
+            Spacer(modifier = Modifier.width(6.dp))
             val paddingBottom = with(LocalDensity.current) { 4.sp.toDp() }
             Image(
                 modifier = Modifier
@@ -548,19 +567,22 @@ private fun ColumnScope.DataStateLabels(
         }
     }
     Spacer(modifier = Modifier.height(12.dp))
-    Text(
-        text = data.groupDescription,
-        modifier = Modifier,
-        style = TextStyle(
-            textAlign = TextAlign.Start,
-            color = colorResource(R.color.vkid_sheet_secondary),
-            fontSize = 16.sp,
-            lineHeight = 20.sp,
-            fontWeight = FontWeight.Normal,
-        ),
-        maxLines = 3,
-        overflow = TextOverflow.Ellipsis,
-    )
+    Row {
+        Text(
+            text = data.groupDescription,
+            modifier = Modifier,
+            style = TextStyle(
+                textAlign = TextAlign.Start,
+                color = textSecondaryColor(style),
+                fontSize = 16.sp,
+                lineHeight = 20.sp,
+                fontWeight = FontWeight.Normal,
+            ),
+            maxLines = 3,
+            overflow = TextOverflow.Ellipsis,
+        )
+        Spacer(modifier = Modifier.weight(1f))
+    }
 }
 
 @Composable
@@ -638,6 +660,7 @@ private fun rememberGroupSubscriptionSheetStateInternal(): GroupSubscriptionShee
 private fun DataStatePreview() {
     val placeholderImage = "https://trkslon.ru/upload/shop_1/3/3/3/item_3337/item_image3337.jpg"
     DataState(
+        style = GroupSubscriptionStyle.Light(),
         rememberGroupSubscriptionSheetState(),
         GroupSubscriptionSheetStatusData(
             groupImageUrl = placeholderImage,

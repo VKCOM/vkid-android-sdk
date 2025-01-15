@@ -13,4 +13,5 @@ dependencies {
     api(projects.common)
     implementation(projects.vkid)
     implementation(projects.network)
+    implementation(libs.androidx.compose.runtime)
 }
