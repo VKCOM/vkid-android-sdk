@@ -86,7 +86,7 @@ public class InternalVKIDGroupSubscriptionApiService(
         withContext(Dispatchers.IO) {
             val response = api.subscribeToGroup(accessToken = accessToken, groupId = groupId).execute()
             val body = JSONObject(requireNotNull(response.body).string())
-            if (!body.isNull("error")) {
+            if (!body.has("response") || body.getInt("response") != 1) {
                 throw IOException(body.getString("error"))
             }
         }

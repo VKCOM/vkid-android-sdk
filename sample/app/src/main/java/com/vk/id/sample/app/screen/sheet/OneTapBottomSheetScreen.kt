@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -81,7 +80,6 @@ internal fun OneTapBottomSheetScreen() {
             styleConstructors = OneTapBottomSheetStyle::class.styleConstructors(context)
         }
     }
-    val snackbarHostState = remember { SnackbarHostState() }
     Box {
         var host: GroupSubscriptionSnackbarHost? by remember { mutableStateOf(null) }
         Column(
@@ -159,7 +157,6 @@ internal fun OneTapBottomSheetScreen() {
                                 subscribeToGroupId = "1",
                                 onSuccessSubscribingToGroup = { showToast(context, "Subscribed") },
                                 onFailSubscribingToGroup = { showToast(context, "Fail: ${it.description}") },
-                                groupSubscriptionSnackbarHostState = snackbarHostState,
                             )
                         } else {
                             OneTapBottomSheet(
@@ -272,7 +269,6 @@ internal fun OneTapBottomSheetScreen() {
             )
             Spacer(modifier = Modifier.height(16.dp))
         }
-        GroupSubscriptionSnackbarHost(snackbarHostState = snackbarHostState)
         AndroidView({ context ->
             GroupSubscriptionSnackbarHost(context).also { host = it }
         }, modifier = Modifier.fillMaxSize())

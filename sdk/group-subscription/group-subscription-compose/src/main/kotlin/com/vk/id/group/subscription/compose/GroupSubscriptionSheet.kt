@@ -71,7 +71,7 @@ import com.vk.id.group.subscription.common.style.GroupSubscriptionStyle
 import com.vk.id.group.subscription.compose.close.CloseIcon
 import com.vk.id.group.subscription.compose.interactor.InternalVKIDGroupSubscriptionInteractor
 import com.vk.id.group.subscription.compose.interactor.ServiceAccountException
-import com.vk.id.group.subscription.compose.progress.CircleProgressWhite
+import com.vk.id.group.subscription.compose.progress.CircleProgress
 import com.vk.id.group.subscription.compose.snackbar.GroupSubscriptionSnackbar
 import com.vk.id.group.subscription.compose.util.PrimaryButton
 import com.vk.id.group.subscription.compose.util.SecondaryButton
@@ -182,7 +182,7 @@ public fun GroupSubscriptionSheet(
             externalAccessTokenProvider = accessTokenProvider,
         )
     }
-    remember {
+    remember(groupId) {
         state.showSheet = {
             if (it) {
                 status.value = GroupSubscriptionSheetStatus.Init
@@ -338,7 +338,7 @@ private fun SubscribingState(
 ) {
     DataState(style, state, status.data, {}) {
         Box(modifier = Modifier.size(24.dp)) {
-            CircleProgressWhite("Subscribing to group spinner")
+            CircleProgress(style, "Subscribing to group spinner")
         }
     }
 }
@@ -351,7 +351,7 @@ private fun ResubscribingState(
 ) {
     FailureDataState(style, state, onRetry) {
         Box(modifier = Modifier.size(24.dp)) {
-            CircleProgressWhite("Resubscribing to group spinner")
+            CircleProgress(style, "Resubscribing to group spinner")
         }
     }
 }
@@ -566,22 +566,24 @@ private fun ColumnScope.DataStateLabels(
             )
         }
     }
-    Spacer(modifier = Modifier.height(12.dp))
-    Row {
-        Text(
-            text = data.groupDescription,
-            modifier = Modifier,
-            style = TextStyle(
-                textAlign = TextAlign.Start,
-                color = textSecondaryColor(style),
-                fontSize = 16.sp,
-                lineHeight = 20.sp,
-                fontWeight = FontWeight.Normal,
-            ),
-            maxLines = 3,
-            overflow = TextOverflow.Ellipsis,
-        )
-        Spacer(modifier = Modifier.weight(1f))
+    if (data.groupDescription.isNotBlank()) {
+        Spacer(modifier = Modifier.height(12.dp))
+        Row {
+            Text(
+                text = data.groupDescription,
+                modifier = Modifier,
+                style = TextStyle(
+                    textAlign = TextAlign.Start,
+                    color = textSecondaryColor(style),
+                    fontSize = 16.sp,
+                    lineHeight = 20.sp,
+                    fontWeight = FontWeight.Normal,
+                ),
+                maxLines = 3,
+                overflow = TextOverflow.Ellipsis,
+            )
+            Spacer(modifier = Modifier.weight(1f))
+        }
     }
 }
 

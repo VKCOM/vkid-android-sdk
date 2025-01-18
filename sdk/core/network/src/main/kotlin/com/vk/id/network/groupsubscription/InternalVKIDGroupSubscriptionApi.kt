@@ -1,6 +1,8 @@
 package com.vk.id.network.groupsubscription
 
 import com.vk.id.common.InternalVKIDApi
+import com.vk.id.network.common.ApiConstants.API_VERSION_VALUE
+import com.vk.id.network.common.ApiConstants.FIELD_API_VERSION
 import com.vk.id.network.util.createRequest
 import okhttp3.Call
 import okhttp3.FormBody
@@ -68,9 +70,7 @@ public class InternalVKIDGroupSubscriptionApi(
         private const val PATH_GROUPS_GET_MEMBERS = "method/groups.getMembers"
         private const val PATH_GROUPS_JOIN = "method/groups.join"
 
-        private const val FIELD_API_VERSION = "v"
         private const val FIELD_ACCESS_TOKEN = "access_token"
         private const val FIELD_GROUP_ID = "group_id"
-        private const val API_VERSION_VALUE = "5.220"
     }
 }

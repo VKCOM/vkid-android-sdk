@@ -12,12 +12,8 @@ public final class com/vk/id/group/subscription/compose/BuildConfig {
 public final class com/vk/id/group/subscription/compose/ComposableSingletons$GroupSubscriptionSheetKt {
 	public static final field INSTANCE Lcom/vk/id/group/subscription/compose/ComposableSingletons$GroupSubscriptionSheetKt;
 	public static field lambda-1 Lkotlin/jvm/functions/Function2;
-	public static field lambda-2 Lkotlin/jvm/functions/Function2;
-	public static field lambda-3 Lkotlin/jvm/functions/Function2;
 	public fun <init> ()V
 	public final fun getLambda-1$group_subscription_compose_release ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda-2$group_subscription_compose_release ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda-3$group_subscription_compose_release ()Lkotlin/jvm/functions/Function2;
 }
 
 public final class com/vk/id/group/subscription/compose/GroupSubscriptionSheetKt {

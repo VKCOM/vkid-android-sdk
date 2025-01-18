@@ -1,6 +1,8 @@
 package com.vk.id.network
 
 import com.vk.id.common.InternalVKIDApi
+import com.vk.id.network.common.ApiConstants.API_VERSION_VALUE
+import com.vk.id.network.common.ApiConstants.FIELD_API_VERSION
 import com.vk.id.network.util.createRequest
 import okhttp3.Call
 import okhttp3.FormBody
@@ -153,8 +155,6 @@ public class InternalVKIDRealApi(
         private const val FIELD_ACCESS_TOKEN = "access_token"
         private const val FIELD_RESPONSE_TYPE = "response_type"
 
-        private const val FIELD_API_VERSION = "v"
-        private const val API_VERSION_VALUE = "5.220"
         private const val VALUE_AUTHORIZATION_CODE = "authorization_code"
         private const val VALUE_REFRESH_TOKEN = "refresh_token"
         private const val VALUE_CODE = "code"

@@ -13,10 +13,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
+import com.vk.id.group.subscription.common.style.GroupSubscriptionStyle
 import com.vk.id.group.subscription.compose.R
 
 @Composable
-internal fun CircleProgressWhite(
+internal fun CircleProgress(
+    style: GroupSubscriptionStyle,
+    label: String
+) {
+    when (style) {
+        is GroupSubscriptionStyle.Light -> CircleProgressWhite(label = label)
+        is GroupSubscriptionStyle.Dark -> CircleProgressBlue(label = label)
+    }
+}
+
+@Composable
+private fun CircleProgressWhite(
     label: String,
 ) {
     CircleProgress(
@@ -26,7 +38,7 @@ internal fun CircleProgressWhite(
 }
 
 @Composable
-internal fun CircleProgressBlue(
+private fun CircleProgressBlue(
     label: String,
 ) {
     CircleProgress(

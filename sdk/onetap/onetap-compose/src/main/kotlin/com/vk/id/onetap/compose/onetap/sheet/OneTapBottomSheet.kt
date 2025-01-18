@@ -2,6 +2,7 @@
 
 package com.vk.id.onetap.compose.onetap.sheet
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
@@ -32,6 +33,7 @@ import com.vk.id.common.InternalVKIDApi
 import com.vk.id.group.subscription.common.fail.VKIDGroupSubscriptionFail
 import com.vk.id.group.subscription.common.style.GroupSubscriptionStyle
 import com.vk.id.group.subscription.compose.GroupSubscriptionSheet
+import com.vk.id.group.subscription.compose.GroupSubscriptionSnackbarHost
 import com.vk.id.group.subscription.compose.rememberGroupSubscriptionSheetState
 import com.vk.id.multibranding.internal.LocalMultibrandingAnalyticsContext
 import com.vk.id.multibranding.internal.MultibrandingAnalyticsContext
@@ -58,6 +60,51 @@ import kotlin.time.Duration.Companion.seconds
 @Composable
 public fun rememberOneTapBottomSheetState(): OneTapBottomSheetState {
     return rememberOneTapBottomSheetStateInternal()
+}
+
+@Composable
+@Suppress("ModifierNotUsedAtRoot")
+public fun OneTapBottomSheet(
+    modifier: Modifier = Modifier,
+    state: OneTapBottomSheetState = rememberOneTapBottomSheetState(),
+    serviceName: String,
+    scenario: OneTapScenario = OneTapScenario.EnterService,
+    autoHideOnSuccess: Boolean = true,
+    onAuth: (oAuth: OneTapOAuth?, accessToken: AccessToken) -> Unit,
+    onAuthCode: (data: AuthCodeData, isCompletion: Boolean) -> Unit = { _, _ -> },
+    onFail: (oAuth: OneTapOAuth?, fail: VKIDAuthFail) -> Unit = { _, _ -> },
+    oAuths: Set<OneTapOAuth> = emptySet(),
+    style: OneTapBottomSheetStyle = OneTapBottomSheetStyle.Light(),
+    authParams: VKIDAuthUiParams = VKIDAuthUiParams {},
+    fastAuthEnabled: Boolean = true,
+    subscribeToGroupId: String,
+    onSuccessSubscribingToGroup: () -> Unit,
+    onFailSubscribingToGroup: (VKIDGroupSubscriptionFail) -> Unit = {},
+    groupSubscriptionStyle: GroupSubscriptionStyle = GroupSubscriptionStyle.Light(),
+) {
+    val snackbarHostState = remember { SnackbarHostState() }
+    Box {
+        GroupSubscriptionSnackbarHost(snackbarHostState)
+        OneTapBottomSheet(
+            modifier = modifier,
+            state = state,
+            serviceName = serviceName,
+            scenario = scenario,
+            autoHideOnSuccess = autoHideOnSuccess,
+            onAuth = onAuth,
+            onAuthCode = onAuthCode,
+            onFail = onFail,
+            oAuths = oAuths,
+            style = style,
+            authParams = authParams,
+            fastAuthEnabled = fastAuthEnabled,
+            subscribeToGroupId = subscribeToGroupId,
+            onSuccessSubscribingToGroup = onSuccessSubscribingToGroup,
+            onFailSubscribingToGroup = onFailSubscribingToGroup,
+            groupSubscriptionSnackbarHostState = snackbarHostState,
+            groupSubscriptionStyle = groupSubscriptionStyle,
+        )
+    }
 }
 
 @Composable
