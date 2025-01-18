@@ -22,7 +22,6 @@ public class MultibrandingXmlLayoutActivity : AppCompatActivity() {
             )
 
             widget.snackbarHost = findViewById(R.id.group_subscription_snackbar_host)
-            widget.groupId = "1"
             widget.setGroupSubscriptionCallbacks(
                 onSuccess = { showToast(this, "Subscribed") },
                 onFail = { showToast(this, "Fail: ${it.description}") },

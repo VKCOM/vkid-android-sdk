@@ -39,6 +39,7 @@ import com.vk.id.AccessToken
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.group.subscription.compose.GroupSubscriptionSnackbarHost
+import com.vk.id.group.subscription.xml.GroupSubscriptionSnackbarHost
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
@@ -128,6 +129,7 @@ internal fun OnetapStylingComposeScreen() {
     ) {
         val snackbarHostState = remember { SnackbarHostState() }
         Box {
+            var host: GroupSubscriptionSnackbarHost? by remember { mutableStateOf(null) }
             Column(
                 modifier = Modifier
                     .background(MaterialTheme.colorScheme.background)
@@ -180,6 +182,12 @@ internal fun OnetapStylingComposeScreen() {
                                 this.isSignInToAnotherAccountEnabled = signInToAnotherAccountEnabled.value
                                 this.authParams = authParams
                                 this.scenario = scenario
+                                this.groupId = "1".takeIf { groupSubscription.value }
+                                this.snackbarHost = host
+                                this.setGroupSubscriptionCallbacks(
+                                    onSuccess = { showToast(context, "Subscribed") },
+                                    onFail = { showToast(context, "Fail: ${it.description}") },
+                                )
                             }
                         }
                         if (fastAuthEnabled.value) {
@@ -317,6 +325,9 @@ internal fun OnetapStylingComposeScreen() {
                 Spacer(modifier = Modifier.height(16.dp))
             }
             GroupSubscriptionSnackbarHost(snackbarHostState = snackbarHostState)
+            AndroidView({ context ->
+                GroupSubscriptionSnackbarHost(context).also { host = it }
+            }, modifier = Modifier.fillMaxSize())
         }
     }
 }

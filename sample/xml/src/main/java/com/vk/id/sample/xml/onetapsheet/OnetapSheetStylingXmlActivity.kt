@@ -27,7 +27,6 @@ public class OnetapSheetStylingXmlActivity : AppCompatActivity() {
         )
         findViewById<Button>(buttonId).setOnClickListener { vkidOneTapBottomSheet.show() }
         vkidOneTapBottomSheet.snackbarHost = findViewById(R.id.group_subscription_snackbar_host)
-        vkidOneTapBottomSheet.groupId = "1"
         vkidOneTapBottomSheet.setGroupSubscriptionCallbacks(
             onSuccess = { showToast(this, "Subscribed") },
             onFail = { showToast(this, "Fail: ${it.description}") },

@@ -1,4 +1,4 @@
-@file:OptIn(InternalVKIDApi::class)
+@file:Suppress("TooManyFunctions")
 
 package com.vk.id.onetap.xml
 
@@ -7,7 +7,10 @@ import android.content.res.TypedArray
 import android.util.AttributeSet
 import android.util.DisplayMetrics
 import android.util.TypedValue
-import com.vk.id.common.InternalVKIDApi
+import com.vk.id.group.subscription.common.style.GroupSubscriptionButtonsCornersStyle
+import com.vk.id.group.subscription.common.style.GroupSubscriptionButtonsSizeStyle
+import com.vk.id.group.subscription.common.style.GroupSubscriptionSheetCornersStyle
+import com.vk.id.group.subscription.common.style.GroupSubscriptionStyle
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
@@ -39,7 +42,13 @@ internal fun parseOneTapAttrs(
                 oAuths = getOAuths(),
                 scopes = getScopes(),
                 fastAuthEnabled = getFastAuthEnabled(),
-                scenario = getOneTapScenario()
+                scenario = getOneTapScenario(),
+                groupId = getGroupId(),
+                groupSubscriptionStyle = getGroupSubscriptionStyleConstructor(context)(
+                    GroupSubscriptionSheetCornersStyle.Custom(context.pixelsToDp(getGroupSubscriptionCornerRadius(context))),
+                    GroupSubscriptionButtonsCornersStyle.Custom(context.pixelsToDp(getGroupSubscriptionButtonCornerRadius(context))),
+                    getGroupSubscriptionButtonSize(),
+                ),
             )
         } finally {
             recycle()
@@ -54,6 +63,8 @@ internal data class OneTapParsedAttrs(
     val scopes: Set<String>,
     val fastAuthEnabled: Boolean,
     val scenario: OneTapTitleScenario,
+    val groupId: String?,
+    val groupSubscriptionStyle: GroupSubscriptionStyle,
 )
 
 @Suppress("LongParameterList")
@@ -65,6 +76,8 @@ internal class OneTapBottomSheetAttributeSettings(
     val oAuths: Set<OneTapOAuth>,
     val scopes: Set<String>,
     val fastAuthEnabled: Boolean,
+    val groupId: String?,
+    val groupSubscriptionStyle: GroupSubscriptionStyle,
 )
 
 internal fun parseOneTapBottomSheetAttrs(
@@ -90,6 +103,12 @@ internal fun parseOneTapBottomSheetAttrs(
                 oAuths = getOAuths(),
                 scopes = getScopes(),
                 fastAuthEnabled = getFastAuthEnabled(),
+                groupId = getGroupId(),
+                groupSubscriptionStyle = getGroupSubscriptionStyleConstructor(context)(
+                    GroupSubscriptionSheetCornersStyle.Custom(context.pixelsToDp(getGroupSubscriptionCornerRadius(context))),
+                    GroupSubscriptionButtonsCornersStyle.Custom(context.pixelsToDp(getGroupSubscriptionButtonCornerRadius(context))),
+                    getGroupSubscriptionButtonSize(),
+                ),
             )
         } finally {
             recycle()
@@ -247,6 +266,56 @@ private fun TypedArray.getOneTapScenario(): OneTapTitleScenario {
         8 -> OneTapTitleScenario.Participate
         else -> OneTapTitleScenario.SignIn
     }
+}
+
+private fun TypedArray.getGroupId(): String? {
+    return getString(R.styleable.vkid_OneTap_vkid_group_id)
+}
+
+private fun TypedArray.getGroupSubscriptionStyleConstructor(
+    context: Context
+) = when (getInt(R.styleable.vkid_OneTap_vkid_group_subscription_style, 0)) {
+    1 -> GroupSubscriptionStyle::Dark
+    2 -> { cornersStyle: GroupSubscriptionSheetCornersStyle,
+            buttonsCornersStyle: GroupSubscriptionButtonsCornersStyle,
+            buttonsSizeStyle: GroupSubscriptionButtonsSizeStyle ->
+        GroupSubscriptionStyle.system(
+            context = context,
+            cornersStyle = cornersStyle,
+            buttonsCornersStyle = buttonsCornersStyle,
+            buttonsSizeStyle = buttonsSizeStyle,
+        )
+    }
+
+    else -> GroupSubscriptionStyle::Light
+}
+
+private fun TypedArray.getGroupSubscriptionCornerRadius(context: Context) = getDimension(
+    R.styleable.vkid_OneTap_vkid_group_subscription_corners,
+    context.dpToPixels(GroupSubscriptionSheetCornersStyle.Default.radiusDp)
+)
+
+private fun TypedArray.getGroupSubscriptionButtonCornerRadius(context: Context) = getDimension(
+    R.styleable.vkid_OneTap_vkid_group_subscription_button_corners,
+    context.dpToPixels(GroupSubscriptionButtonsCornersStyle.Default.radiusDp)
+)
+
+@Suppress("MagicNumber", "CyclomaticComplexMethod")
+private fun TypedArray.getGroupSubscriptionButtonSize() = when (getInt(R.styleable.vkid_OneTap_vkid_group_subscription_button_size, 0)) {
+    1 -> GroupSubscriptionButtonsSizeStyle.SMALL_32
+    2 -> GroupSubscriptionButtonsSizeStyle.SMALL_34
+    3 -> GroupSubscriptionButtonsSizeStyle.SMALL_36
+    4 -> GroupSubscriptionButtonsSizeStyle.SMALL_38
+    5 -> GroupSubscriptionButtonsSizeStyle.MEDIUM_40
+    6 -> GroupSubscriptionButtonsSizeStyle.MEDIUM_42
+    7 -> GroupSubscriptionButtonsSizeStyle.MEDIUM_44
+    8 -> GroupSubscriptionButtonsSizeStyle.MEDIUM_46
+    9 -> GroupSubscriptionButtonsSizeStyle.LARGE_48
+    10 -> GroupSubscriptionButtonsSizeStyle.LARGE_50
+    11 -> GroupSubscriptionButtonsSizeStyle.LARGE_52
+    12 -> GroupSubscriptionButtonsSizeStyle.LARGE_54
+    13 -> GroupSubscriptionButtonsSizeStyle.LARGE_56
+    else -> GroupSubscriptionButtonsSizeStyle.DEFAULT
 }
 
 private fun Context.pixelsToDp(

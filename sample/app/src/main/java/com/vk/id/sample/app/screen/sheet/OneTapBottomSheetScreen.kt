@@ -33,6 +33,7 @@ import com.vk.id.AccessToken
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.group.subscription.compose.GroupSubscriptionSnackbarHost
+import com.vk.id.group.subscription.xml.GroupSubscriptionSnackbarHost
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonSizeStyle
@@ -82,6 +83,7 @@ internal fun OneTapBottomSheetScreen() {
     }
     val snackbarHostState = remember { SnackbarHostState() }
     Box {
+        var host: GroupSubscriptionSnackbarHost? by remember { mutableStateOf(null) }
         Column(
             modifier = Modifier
                 .padding(horizontal = 8.dp)
@@ -124,6 +126,12 @@ internal fun OneTapBottomSheetScreen() {
                         bottomSheetView?.apply {
                             this.oAuths = selectedOAuths.value
                             this.authParams = authParams
+                            this.groupId = "1".takeIf { groupSubscription.value }
+                            this.snackbarHost = host
+                            this.setGroupSubscriptionCallbacks(
+                                onSuccess = { showToast(context, "Subscribed") },
+                                onFail = { showToast(context, "Fail: ${it.description}") },
+                            )
                         }
                     }
                     if (fastAuthEnabled.value) {
@@ -265,5 +273,8 @@ internal fun OneTapBottomSheetScreen() {
             Spacer(modifier = Modifier.height(16.dp))
         }
         GroupSubscriptionSnackbarHost(snackbarHostState = snackbarHostState)
+        AndroidView({ context ->
+            GroupSubscriptionSnackbarHost(context).also { host = it }
+        }, modifier = Modifier.fillMaxSize())
     }
 }

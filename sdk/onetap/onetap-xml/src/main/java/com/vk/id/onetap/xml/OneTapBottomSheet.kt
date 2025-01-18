@@ -78,18 +78,39 @@ public class OneTapBottomSheet @JvmOverloads constructor(
     public var fastAuthEnabled: Boolean = true
 
     public var groupId: String? = null
-    private var onSuccessSubscribingToGroup: (() -> Unit)? = null
-    private var onFailSubscribingToGroup: ((VKIDGroupSubscriptionFail) -> Unit)? = null
+        set(value) {
+            field = value
+            onGroupIdChange(value)
+        }
+    private var onGroupIdChange: (String?) -> Unit = {}
+    private var onSuccessSubscribingToGroup: () -> Unit = {
+        error("setGroupSubscriptionCallbacks was not called")
+    }
+    private var onFailSubscribingToGroup: (VKIDGroupSubscriptionFail) -> Unit = {
+        error("setGroupSubscriptionCallbacks was not called")
+    }
     public var snackbarHost: GroupSubscriptionSnackbarHost? = null
+        set(value) {
+            field = value
+            onSnackbarHostChange(value)
+        }
+    private var onSnackbarHostChange: (GroupSubscriptionSnackbarHost?) -> Unit = {}
     public var groupSubscriptionStyle: GroupSubscriptionStyle = GroupSubscriptionStyle.Light()
+        set(value) {
+            field = value
+            onGroupSubscriptionStyleChange(value)
+        }
+    private var onGroupSubscriptionStyleChange: (GroupSubscriptionStyle) -> Unit = {}
 
     init {
-        val sheetSettings = parseOneTapBottomSheetAttrs(context, attrs)
-        this.oAuths = sheetSettings.oAuths
-        this.authParams = authParams.newBuilder { this.scopes = sheetSettings.scopes }
-        this.fastAuthEnabled = sheetSettings.fastAuthEnabled
+        val params = parseOneTapBottomSheetAttrs(context, attrs)
+        this.oAuths = params.oAuths
+        this.authParams = authParams.newBuilder { this.scopes = params.scopes }
+        this.fastAuthEnabled = params.fastAuthEnabled
+        this.groupId = params.groupId
+        this.groupSubscriptionStyle = params.groupSubscriptionStyle
         composeView.setContent {
-            Content(sheetSettings)
+            Content(params)
         }
         addView(composeView)
     }
@@ -101,6 +122,12 @@ public class OneTapBottomSheet @JvmOverloads constructor(
         onOAuthsChange = { oAuths = it }
         var authParams by remember { mutableStateOf(authParams) }
         onAuthParamsChange = { authParams = it }
+        var groupId by remember { mutableStateOf(groupId) }
+        onGroupIdChange = { groupId = it }
+        var snackbarHost by remember { mutableStateOf(snackbarHost) }
+        onSnackbarHostChange = { snackbarHost = it }
+        var groupSubscriptionStyle by remember { mutableStateOf(groupSubscriptionStyle) }
+        onGroupSubscriptionStyleChange = { groupSubscriptionStyle = it }
         if (groupId != null) {
             OneTapBottomSheet(
                 state = rememberOneTapBottomSheetState().also {
@@ -117,8 +144,8 @@ public class OneTapBottomSheet @JvmOverloads constructor(
                 authParams = authParams,
                 fastAuthEnabled = fastAuthEnabled,
                 subscribeToGroupId = groupId!!,
-                onSuccessSubscribingToGroup = onSuccessSubscribingToGroup ?: error("setGroupSubscriptionCallbacks was not called"),
-                onFailSubscribingToGroup = onFailSubscribingToGroup ?: error("setGroupSubscriptionCallbacks was not called"),
+                onSuccessSubscribingToGroup = { onSuccessSubscribingToGroup() },
+                onFailSubscribingToGroup = { onFailSubscribingToGroup(it) },
                 groupSubscriptionSnackbarHostState = snackbarHost?.snackbarHostState ?: error("snackbarHostState is not provided"),
                 groupSubscriptionStyle = groupSubscriptionStyle,
             )

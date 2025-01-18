@@ -39,6 +39,7 @@ import com.vk.id.OAuth
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.group.subscription.compose.GroupSubscriptionSnackbarHost
+import com.vk.id.group.subscription.xml.GroupSubscriptionSnackbarHost
 import com.vk.id.multibranding.OAuthListWidget
 import com.vk.id.multibranding.common.style.OAuthListWidgetCornersStyle
 import com.vk.id.multibranding.common.style.OAuthListWidgetSizeStyle
@@ -114,6 +115,7 @@ internal fun MultibrandingComposeScreen() {
     ) {
         val snackbarHostState = remember { SnackbarHostState() }
         Box {
+            var host: GroupSubscriptionSnackbarHost? by remember { mutableStateOf(null) }
             Column(
                 modifier = Modifier
                     .background(MaterialTheme.colorScheme.background)
@@ -162,6 +164,12 @@ internal fun MultibrandingComposeScreen() {
                                 this.style = selectedStyle
                                 this.oAuths = selectedOAuths.value
                                 this.authParams = authParams
+                                this.groupId = "1".takeIf { groupSubscription.value }
+                                this.snackbarHost = host
+                                this.setGroupSubscriptionCallbacks(
+                                    onSuccess = { showToast(context, "Subscribed") },
+                                    onFail = { showToast(context, "Fail: ${it.description}") },
+                                )
                             }
                         } else {
                             if (groupSubscription.value) {
@@ -256,6 +264,9 @@ internal fun MultibrandingComposeScreen() {
                 Spacer(modifier = Modifier.height(16.dp))
             }
             GroupSubscriptionSnackbarHost(snackbarHostState = snackbarHostState)
+            AndroidView({ context ->
+                GroupSubscriptionSnackbarHost(context).also { host = it }
+            }, modifier = Modifier.fillMaxSize())
         }
     }
 }

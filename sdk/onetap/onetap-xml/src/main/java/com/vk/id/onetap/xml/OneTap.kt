@@ -105,10 +105,29 @@ public class OneTap @JvmOverloads constructor(
     private var onScenarioChange: (OneTapTitleScenario) -> Unit = {}
 
     public var groupId: String? = null
-    private var onSuccessSubscribingToGroup: (() -> Unit)? = null
-    private var onFailSubscribingToGroup: ((VKIDGroupSubscriptionFail) -> Unit)? = null
+        set(value) {
+            field = value
+            onGroupIdChange(value)
+        }
+    private var onGroupIdChange: (String?) -> Unit = {}
+    private var onSuccessSubscribingToGroup: () -> Unit = {
+        error("setGroupSubscriptionCallbacks was not called")
+    }
+    private var onFailSubscribingToGroup: (VKIDGroupSubscriptionFail) -> Unit = {
+        error("setGroupSubscriptionCallbacks was not called")
+    }
     public var snackbarHost: GroupSubscriptionSnackbarHost? = null
+        set(value) {
+            field = value
+            onSnackbarHostChange(value)
+        }
+    private var onSnackbarHostChange: (GroupSubscriptionSnackbarHost?) -> Unit = {}
     public var groupSubscriptionStyle: GroupSubscriptionStyle = GroupSubscriptionStyle.Light()
+        set(value) {
+            field = value
+            onGroupSubscriptionStyleChange(value)
+        }
+    private var onGroupSubscriptionStyleChange: (GroupSubscriptionStyle) -> Unit = {}
 
     init {
         val params = parseOneTapAttrs(context, attrs)
@@ -118,6 +137,8 @@ public class OneTap @JvmOverloads constructor(
         this.authParams = authParams.newBuilder { scopes = params.scopes }
         this.fastAuthEnabled = params.fastAuthEnabled
         this.scenario = params.scenario
+        this.groupId = params.groupId
+        this.groupSubscriptionStyle = params.groupSubscriptionStyle
         addView(composeView)
         composeView.setContent { Content() }
         clipChildren = false
@@ -137,6 +158,13 @@ public class OneTap @JvmOverloads constructor(
         onOAuthsChange = { oAuths = it }
         var scenario by remember { mutableStateOf(scenario) }
         onScenarioChange = { scenario = it }
+        var groupId by remember { mutableStateOf(groupId) }
+        onGroupIdChange = { groupId = it }
+        var snackbarHost by remember { mutableStateOf(snackbarHost) }
+        onSnackbarHostChange = { snackbarHost = it }
+        var groupSubscriptionStyle by remember { mutableStateOf(groupSubscriptionStyle) }
+        onGroupSubscriptionStyleChange = { groupSubscriptionStyle = it }
+
         if (groupId != null) {
             OneTap(
                 modifier = Modifier,
@@ -150,8 +178,8 @@ public class OneTap @JvmOverloads constructor(
                 fastAuthEnabled = fastAuthEnabled,
                 scenario = scenario,
                 subscribeToGroupId = groupId!!,
-                onSuccessSubscribingToGroup = onSuccessSubscribingToGroup ?: error("setGroupSubscriptionCallbacks was not called"),
-                onFailSubscribingToGroup = onFailSubscribingToGroup ?: error("setGroupSubscriptionCallbacks was not called"),
+                onSuccessSubscribingToGroup = { onSuccessSubscribingToGroup() },
+                onFailSubscribingToGroup = { onFailSubscribingToGroup(it) },
                 groupSubscriptionSnackbarHostState = snackbarHost?.snackbarHostState ?: error("snackbarHostState is not provided"),
                 groupSubscriptionStyle = groupSubscriptionStyle,
             )

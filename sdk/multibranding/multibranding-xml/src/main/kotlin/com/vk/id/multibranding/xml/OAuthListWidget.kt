@@ -23,6 +23,9 @@ import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.group.subscription.common.fail.VKIDGroupSubscriptionFail
+import com.vk.id.group.subscription.common.style.GroupSubscriptionButtonsCornersStyle
+import com.vk.id.group.subscription.common.style.GroupSubscriptionButtonsSizeStyle
+import com.vk.id.group.subscription.common.style.GroupSubscriptionSheetCornersStyle
 import com.vk.id.group.subscription.common.style.GroupSubscriptionStyle
 import com.vk.id.group.subscription.xml.GroupSubscriptionSnackbarHost
 import com.vk.id.multibranding.OAuthListWidget
@@ -73,16 +76,37 @@ public class OAuthListWidget @JvmOverloads constructor(
     private var onFail: (OAuth, VKIDAuthFail) -> Unit = { _, _ -> }
 
     public var groupId: String? = null
-    private var onSuccessSubscribingToGroup: (() -> Unit)? = null
-    private var onFailSubscribingToGroup: ((VKIDGroupSubscriptionFail) -> Unit)? = null
+        set(value) {
+            field = value
+            onGroupIdChange(value)
+        }
+    private var onGroupIdChange: (String?) -> Unit = {}
+    private var onSuccessSubscribingToGroup: () -> Unit = {
+        error("setGroupSubscriptionCallbacks was not called")
+    }
+    private var onFailSubscribingToGroup: (VKIDGroupSubscriptionFail) -> Unit = {
+        error("setGroupSubscriptionCallbacks was not called")
+    }
     public var snackbarHost: GroupSubscriptionSnackbarHost? = null
+        set(value) {
+            field = value
+            onSnackbarHostChange(value)
+        }
+    private var onSnackbarHostChange: (GroupSubscriptionSnackbarHost?) -> Unit = {}
     public var groupSubscriptionStyle: GroupSubscriptionStyle = GroupSubscriptionStyle.Light()
+        set(value) {
+            field = value
+            onGroupSubscriptionStyleChange(value)
+        }
+    private var onGroupSubscriptionStyleChange: (GroupSubscriptionStyle) -> Unit = {}
 
     init {
-        val (style, oAuths, scopes) = parseAttrs(context, attrs)
-        this.style = style
-        this.oAuths = oAuths
-        this.authParams = authParams.newBuilder { this.scopes = scopes }
+        val params = parseAttrs(context, attrs)
+        this.style = params.style
+        this.oAuths = params.oAuths
+        this.authParams = authParams.newBuilder { this.scopes = params.scopes }
+        this.groupId = params.groupId
+        this.groupSubscriptionStyle = params.groupSubscriptionStyle
         addView(composeView)
         composeView.setContent { Content() }
     }
@@ -96,6 +120,13 @@ public class OAuthListWidget @JvmOverloads constructor(
         onOAuthsChange = { oAuths = it }
         var authParams by remember { mutableStateOf(authParams) }
         onAuthParamsChange = { authParams = it }
+        var groupId by remember { mutableStateOf(groupId) }
+        onGroupIdChange = { groupId = it }
+        var snackbarHost by remember { mutableStateOf(snackbarHost) }
+        onSnackbarHostChange = { snackbarHost = it }
+        var groupSubscriptionStyle by remember { mutableStateOf(groupSubscriptionStyle) }
+        onGroupSubscriptionStyleChange = { groupSubscriptionStyle = it }
+
         if (groupId != null) {
             OAuthListWidget(
                 modifier = Modifier,
@@ -106,8 +137,8 @@ public class OAuthListWidget @JvmOverloads constructor(
                 oAuths = oAuths,
                 authParams = authParams,
                 subscribeToGroupId = groupId!!,
-                onSuccessSubscribingToGroup = onSuccessSubscribingToGroup ?: error("setGroupSubscriptionCallbacks was not called"),
-                onFailSubscribingToGroup = onFailSubscribingToGroup ?: error("setGroupSubscriptionCallbacks was not called"),
+                onSuccessSubscribingToGroup = { onSuccessSubscribingToGroup() },
+                onFailSubscribingToGroup = { onFailSubscribingToGroup(it) },
                 groupSubscriptionSnackbarHostState = snackbarHost?.snackbarHostState ?: error("snackbarHostState is not provided"),
                 groupSubscriptionStyle = groupSubscriptionStyle,
             )
@@ -153,10 +184,18 @@ public class OAuthListWidget @JvmOverloads constructor(
     }
 }
 
+internal data class OAuthListWidgetParsedAttrs(
+    val style: OAuthListWidgetStyle,
+    val oAuths: Set<OAuth>,
+    val scopes: Set<String>,
+    val groupId: String?,
+    val groupSubscriptionStyle: GroupSubscriptionStyle,
+)
+
 private fun parseAttrs(
     context: Context,
     attrs: AttributeSet?,
-): Triple<OAuthListWidgetStyle, Set<OAuth>, Set<String>> {
+): OAuthListWidgetParsedAttrs {
     context.theme.obtainStyledAttributes(
         attrs,
         R.styleable.vkid_OAuthListWidget,
@@ -164,13 +203,19 @@ private fun parseAttrs(
         0
     ).apply {
         try {
-            return Triple(
-                getStyleConstructor(context = context)(
+            return OAuthListWidgetParsedAttrs(
+                style = getStyleConstructor(context = context)(
                     OAuthListWidgetCornersStyle.Custom(context.pixelsToDp(getCornerRadius(context))),
                     getSize(),
                 ),
-                getOAuths(),
-                getScopes(),
+                oAuths = getOAuths(),
+                scopes = getScopes(),
+                groupId = getGroupId(),
+                groupSubscriptionStyle = getGroupSubscriptionStyleConstructor(context)(
+                    GroupSubscriptionSheetCornersStyle.Custom(context.pixelsToDp(getGroupSubscriptionCornerRadius(context))),
+                    GroupSubscriptionButtonsCornersStyle.Custom(context.pixelsToDp(getGroupSubscriptionButtonCornerRadius(context))),
+                    getGroupSubscriptionButtonSize(),
+                ),
             )
         } finally {
             recycle()
@@ -231,6 +276,61 @@ private fun TypedArray.getScopes(): Set<String> {
         .split(',', ' ')
         .filter { it.isNotBlank() }
         .toSet()
+}
+
+private fun TypedArray.getGroupId(): String? {
+    return getString(R.styleable.vkid_OAuthListWidget_vkid_OAuthList_group_id)
+}
+
+private fun TypedArray.getGroupSubscriptionStyleConstructor(
+    context: Context
+) = when (getInt(R.styleable.vkid_OAuthListWidget_vkid_OAuthList_group_subscription_style, 0)) {
+    1 -> GroupSubscriptionStyle::Dark
+    2 -> { cornersStyle: GroupSubscriptionSheetCornersStyle,
+            buttonsCornersStyle: GroupSubscriptionButtonsCornersStyle,
+            buttonsSizeStyle: GroupSubscriptionButtonsSizeStyle ->
+        GroupSubscriptionStyle.system(
+            context = context,
+            cornersStyle = cornersStyle,
+            buttonsCornersStyle = buttonsCornersStyle,
+            buttonsSizeStyle = buttonsSizeStyle,
+        )
+    }
+
+    else -> GroupSubscriptionStyle::Light
+}
+
+private fun TypedArray.getGroupSubscriptionCornerRadius(context: Context) = getDimension(
+    R.styleable.vkid_OAuthListWidget_vkid_OAuthList_group_subscription_corners,
+    context.dpToPixels(GroupSubscriptionSheetCornersStyle.Default.radiusDp)
+)
+
+private fun TypedArray.getGroupSubscriptionButtonCornerRadius(context: Context) = getDimension(
+    R.styleable.vkid_OAuthListWidget_vkid_OAuthList_group_subscription_button_corners,
+    context.dpToPixels(GroupSubscriptionButtonsCornersStyle.Default.radiusDp)
+)
+
+@Suppress("MagicNumber", "CyclomaticComplexMethod")
+private fun TypedArray.getGroupSubscriptionButtonSize() = when (
+    getInt(
+        R.styleable.vkid_OAuthListWidget_vkid_OAuthList_group_subscription_button_size,
+        0
+    )
+) {
+    1 -> GroupSubscriptionButtonsSizeStyle.SMALL_32
+    2 -> GroupSubscriptionButtonsSizeStyle.SMALL_34
+    3 -> GroupSubscriptionButtonsSizeStyle.SMALL_36
+    4 -> GroupSubscriptionButtonsSizeStyle.SMALL_38
+    5 -> GroupSubscriptionButtonsSizeStyle.MEDIUM_40
+    6 -> GroupSubscriptionButtonsSizeStyle.MEDIUM_42
+    7 -> GroupSubscriptionButtonsSizeStyle.MEDIUM_44
+    8 -> GroupSubscriptionButtonsSizeStyle.MEDIUM_46
+    9 -> GroupSubscriptionButtonsSizeStyle.LARGE_48
+    10 -> GroupSubscriptionButtonsSizeStyle.LARGE_50
+    11 -> GroupSubscriptionButtonsSizeStyle.LARGE_52
+    12 -> GroupSubscriptionButtonsSizeStyle.LARGE_54
+    13 -> GroupSubscriptionButtonsSizeStyle.LARGE_56
+    else -> GroupSubscriptionButtonsSizeStyle.DEFAULT
 }
 
 private fun Context.pixelsToDp(
