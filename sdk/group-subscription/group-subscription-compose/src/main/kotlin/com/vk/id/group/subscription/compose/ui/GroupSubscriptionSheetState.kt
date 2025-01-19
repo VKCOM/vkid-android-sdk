@@ -1,4 +1,4 @@
-package com.vk.id.group.subscription.compose
+package com.vk.id.group.subscription.compose.ui
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetState

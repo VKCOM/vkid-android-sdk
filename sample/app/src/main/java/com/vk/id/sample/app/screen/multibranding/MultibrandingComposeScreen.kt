@@ -38,7 +38,7 @@ import com.vk.id.AccessToken
 import com.vk.id.OAuth
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthUiParams
-import com.vk.id.group.subscription.compose.GroupSubscriptionSnackbarHost
+import com.vk.id.group.subscription.compose.ui.GroupSubscriptionSnackbarHost
 import com.vk.id.group.subscription.xml.GroupSubscriptionSnackbarHost
 import com.vk.id.multibranding.OAuthListWidget
 import com.vk.id.multibranding.common.style.OAuthListWidgetCornersStyle

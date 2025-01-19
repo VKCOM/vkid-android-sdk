@@ -1,6 +1,6 @@
 @file:OptIn(InternalVKIDApi::class)
 
-package com.vk.id.group.subscription.compose
+package com.vk.id.group.subscription.compose.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -28,6 +28,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -68,6 +69,8 @@ import com.vk.id.VKID
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.group.subscription.common.fail.VKIDGroupSubscriptionFail
 import com.vk.id.group.subscription.common.style.GroupSubscriptionStyle
+import com.vk.id.group.subscription.compose.R
+import com.vk.id.group.subscription.compose.analytics.GroupSubscriptionAnalytics
 import com.vk.id.group.subscription.compose.close.CloseIcon
 import com.vk.id.group.subscription.compose.interactor.InternalVKIDGroupSubscriptionInteractor
 import com.vk.id.group.subscription.compose.interactor.ServiceAccountException
@@ -129,10 +132,8 @@ public fun GroupSubscriptionSheet(
     style: GroupSubscriptionStyle = GroupSubscriptionStyle.Light(),
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
-    Box {
-        GroupSubscriptionSnackbarHost(snackbarHostState)
+    Box(modifier = modifier) {
         GroupSubscriptionSheet(
-            modifier = modifier,
             state = state,
             accessTokenProvider = accessTokenProvider,
             groupId = groupId,
@@ -141,6 +142,7 @@ public fun GroupSubscriptionSheet(
             snackbarHostState = snackbarHostState,
             style = style,
         )
+        GroupSubscriptionSnackbarHost(snackbarHostState)
     }
 }
 
@@ -164,6 +166,7 @@ public fun GroupSubscriptionSheet(
     val snackbarLabel = stringResource(R.string.vkid_group_subscription_snackbar_label)
     val actualOnSuccess by rememberUpdatedState {
         coroutineScope.launch {
+            GroupSubscriptionAnalytics.successShown()
             snackbarHostState.showSnackbar(snackbarLabel)
         }
         onSuccess()
@@ -242,9 +245,12 @@ public fun GroupSubscriptionSheet(
                     .background(backgroundColor(style)),
                 contentAlignment = Alignment.Center,
             ) {
+                GroupSubscriptionAnalytics.isErrorState
+                    .set(status.value is GroupSubscriptionSheetStatus.Failure || status.value is GroupSubscriptionSheetStatus.Resubscribing)
                 when (val actualStatus = status.value) {
                     is GroupSubscriptionSheetStatus.Init -> Unit
                     is GroupSubscriptionSheetStatus.Loaded -> LoadedState(style, state, actualStatus) {
+                        GroupSubscriptionAnalytics.subscribeToGroupClick()
                         subscribeToGroup(
                             status,
                             actualStatus.data,
@@ -258,6 +264,7 @@ public fun GroupSubscriptionSheet(
 
                     is GroupSubscriptionSheetStatus.Subscribing -> SubscribingState(style, state, actualStatus)
                     is GroupSubscriptionSheetStatus.Failure -> FailureState(style, state) {
+                        GroupSubscriptionAnalytics.retryClick()
                         subscribeToGroup(
                             status,
                             actualStatus.data,
@@ -315,6 +322,7 @@ private fun LoadedState(
     status: GroupSubscriptionSheetStatus.Loaded,
     onSubscribeButtonClick: () -> Unit,
 ) {
+    GroupSubscriptionAnalytics.SheetShown()
     DataState(style, state, status.data, onSubscribeButtonClick) {
         Text(
             text = stringResource(R.string.vkid_group_subscription_primary),
@@ -362,6 +370,7 @@ private fun FailureState(
     state: GroupSubscriptionSheetState,
     onRetry: () -> Unit,
 ) {
+    GroupSubscriptionAnalytics.ErrorShown()
     FailureDataState(style, state, onRetry) {
         Text(
             text = stringResource(R.string.vkid_group_subscription_fail_primary),
@@ -423,7 +432,10 @@ private fun FailureDataState(
             retryButtonContent()
         }
         Spacer(Modifier.height(12.dp))
-        SecondaryButton(style, stringResource(R.string.vkid_group_subscription_fail_secondary), state::hide)
+        SecondaryButton(style, stringResource(R.string.vkid_group_subscription_fail_secondary)) {
+            state.hide()
+            GroupSubscriptionAnalytics.cancelClick()
+        }
     }
 }
 
@@ -460,7 +472,10 @@ private fun ColumnScope.DataStateButtons(
         subscribeButtonContent()
     }
     Spacer(Modifier.height(12.dp))
-    SecondaryButton(style, stringResource(R.string.vkid_group_subscription_secondary), state::hide)
+    SecondaryButton(style, stringResource(R.string.vkid_group_subscription_secondary)) {
+        GroupSubscriptionAnalytics.nextTimeClick()
+        state.hide()
+    }
 }
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -594,7 +609,10 @@ private fun ColumnScope.DataStateHeader(
 ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Spacer(Modifier.weight(1f))
-        CloseIcon(state::hide)
+        CloseIcon {
+            GroupSubscriptionAnalytics.close()
+            state.hide()
+        }
     }
     Box(modifier = Modifier.size(76.dp), contentAlignment = Alignment.TopStart) {
         AsyncImage(
@@ -649,7 +667,14 @@ private fun processSheetShow(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun rememberGroupSubscriptionSheetStateInternal(): GroupSubscriptionSheetState {
-    val materialSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var previousValue by remember { mutableStateOf(SheetValue.Hidden) }
+    val materialSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true, confirmValueChange = {
+        if (it == SheetValue.Hidden && it != previousValue) {
+            GroupSubscriptionAnalytics.close()
+        }
+        previousValue = it
+        true
+    })
     return remember(materialSheetState) {
         GroupSubscriptionSheetState(
             materialSheetState = materialSheetState

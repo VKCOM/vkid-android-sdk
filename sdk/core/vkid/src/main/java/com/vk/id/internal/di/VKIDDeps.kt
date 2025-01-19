@@ -9,6 +9,7 @@ import com.vk.id.common.InternalVKIDApi
 import com.vk.id.exchangetoken.VKIDTokenExchanger
 import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthProvidersChooser
+import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.auth.device.InternalVKIDDeviceIdProvider
 import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
 import com.vk.id.internal.context.InternalVKIDActivityStarter
@@ -25,6 +26,7 @@ import com.vk.id.storage.InternalVKIDEncryptedSharedPreferencesStorage
 import com.vk.id.storage.InternalVKIDTokenStorage
 
 internal interface VKIDDeps {
+    val serviceCredentials: Lazy<ServiceCredentials>
     val authCallbacksHolder: AuthCallbacksHolder
     val authOptionsCreator: AuthOptionsCreator
     val authProvidersChooser: Lazy<AuthProvidersChooser>

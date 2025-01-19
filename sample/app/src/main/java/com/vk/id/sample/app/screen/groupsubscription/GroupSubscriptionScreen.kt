@@ -23,8 +23,8 @@ import com.vk.id.group.subscription.common.style.GroupSubscriptionButtonsCorners
 import com.vk.id.group.subscription.common.style.GroupSubscriptionButtonsSizeStyle
 import com.vk.id.group.subscription.common.style.GroupSubscriptionSheetCornersStyle
 import com.vk.id.group.subscription.common.style.GroupSubscriptionStyle
-import com.vk.id.group.subscription.compose.GroupSubscriptionSheet
-import com.vk.id.group.subscription.compose.rememberGroupSubscriptionSheetState
+import com.vk.id.group.subscription.compose.ui.GroupSubscriptionSheet
+import com.vk.id.group.subscription.compose.ui.rememberGroupSubscriptionSheetState
 import com.vk.id.sample.app.screen.Button
 import com.vk.id.sample.app.uikit.selector.DropdownSelector
 import com.vk.id.sample.app.uikit.selector.SliderSelector
@@ -71,19 +71,6 @@ internal fun GroupSubscriptionScreen() {
         useDarkTheme = useDarkTheme
     ) {
         Box(contentAlignment = Alignment.Center) {
-            GroupSubscriptionSheet(
-                state = state,
-                accessTokenProvider = {
-                    VKID.instance.accessToken?.token ?: run {
-                        showToast(context, "Not authorized")
-                        ""
-                    }
-                },
-                groupId = "1",
-                onSuccess = { showToast(context, "Success") },
-                onFail = { showToast(context, "Fail: ${it.description}") },
-                style = selectedStyle,
-            )
             Column(
                 modifier = Modifier
                     .background(MaterialTheme.colorScheme.background)
@@ -117,6 +104,20 @@ internal fun GroupSubscriptionScreen() {
                 )
                 Button("Show") { state.show() }
             }
+            GroupSubscriptionSheet(
+                modifier = Modifier.fillMaxSize(),
+                state = state,
+                accessTokenProvider = {
+                    VKID.instance.accessToken?.token ?: run {
+                        showToast(context, "Not authorized")
+                        ""
+                    }
+                },
+                groupId = "1",
+                onSuccess = { showToast(context, "Success") },
+                onFail = { showToast(context, "Fail: ${it.description}") },
+                style = selectedStyle,
+            )
         }
     }
 }

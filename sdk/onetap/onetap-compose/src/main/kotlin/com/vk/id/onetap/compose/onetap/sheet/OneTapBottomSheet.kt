@@ -32,9 +32,9 @@ import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.group.subscription.common.fail.VKIDGroupSubscriptionFail
 import com.vk.id.group.subscription.common.style.GroupSubscriptionStyle
-import com.vk.id.group.subscription.compose.GroupSubscriptionSheet
-import com.vk.id.group.subscription.compose.GroupSubscriptionSnackbarHost
-import com.vk.id.group.subscription.compose.rememberGroupSubscriptionSheetState
+import com.vk.id.group.subscription.compose.ui.GroupSubscriptionSheet
+import com.vk.id.group.subscription.compose.ui.GroupSubscriptionSnackbarHost
+import com.vk.id.group.subscription.compose.ui.rememberGroupSubscriptionSheetState
 import com.vk.id.multibranding.internal.LocalMultibrandingAnalyticsContext
 import com.vk.id.multibranding.internal.MultibrandingAnalyticsContext
 import com.vk.id.onetap.common.OneTapOAuth

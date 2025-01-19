@@ -1,4 +1,4 @@
-package com.vk.id.group.subscription.compose
+package com.vk.id.group.subscription.compose.ui
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

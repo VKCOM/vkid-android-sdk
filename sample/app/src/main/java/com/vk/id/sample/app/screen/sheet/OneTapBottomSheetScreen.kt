@@ -31,7 +31,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.vk.id.AccessToken
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthUiParams
-import com.vk.id.group.subscription.compose.GroupSubscriptionSnackbarHost
 import com.vk.id.group.subscription.xml.GroupSubscriptionSnackbarHost
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle

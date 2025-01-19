@@ -9,7 +9,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.group.subscription.compose.GroupSubscriptionSnackbarHost
+import com.vk.id.group.subscription.compose.ui.GroupSubscriptionSnackbarHost
 
 public class GroupSubscriptionSnackbarHost @JvmOverloads constructor(
     context: Context,

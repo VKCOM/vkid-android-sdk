@@ -176,6 +176,7 @@ public class VKID {
         this.loggerOut = deps.loggerOut
         this.tokenStorage = deps.tokenStorage
         this.groupSubscriptionApiServiceInternal = deps.groupSubscriptionApiService
+        this.clientId = deps.serviceCredentials.value.clientID
 
         VKIDAnalytics.addTracker(deps.statTracker)
 
@@ -207,6 +208,9 @@ public class VKID {
     @InternalVKIDApi
     public val groupSubscriptionApiService: InternalVKIDGroupSubscriptionApiService
         get() = groupSubscriptionApiServiceInternal.value
+
+    @InternalVKIDApi
+    public val clientId: String
 
     /**
      * Initiates the authorization process.

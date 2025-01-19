@@ -55,7 +55,7 @@ internal open class VKIDDepsProd(
     override val isFlutter: Boolean,
 ) : VKIDDeps {
 
-    private val serviceCredentials: Lazy<ServiceCredentials> = lazy {
+    override val serviceCredentials: Lazy<ServiceCredentials> = lazy {
         val componentName = ComponentName(appContext, AuthActivity::class.java)
         val ai = getActivityInfo(componentName)
         val clientID = ai.metaData.getIntOrThrow("VKIDClientID").toString()

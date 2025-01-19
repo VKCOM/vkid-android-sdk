@@ -12,6 +12,7 @@ import com.vk.id.internal.auth.AuthEventBridge
 import com.vk.id.internal.auth.AuthOptions
 import com.vk.id.internal.auth.AuthProvidersChooser
 import com.vk.id.internal.auth.AuthResult
+import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.auth.VKIDAuthProvider
 import com.vk.id.internal.auth.device.InternalVKIDDeviceIdProvider
 import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
@@ -56,9 +57,12 @@ internal class VKIDTest : BehaviorSpec({
     val dispatchers = mockk<VKIDCoroutinesDispatchers>()
     val statTracker = mockk<StatTracker>(relaxed = true)
     var isFlutter = false
+    val serviceCredentials = mockk<ServiceCredentials>()
+    every { serviceCredentials.clientID } returns "1"
     val deps = object : VKIDDeps {
         override val authProvidersChooser: Lazy<AuthProvidersChooser> = lazy { authProvidersChooser }
         override val authOptionsCreator: AuthOptionsCreator = authOptionsCreator
+        override val serviceCredentials: Lazy<ServiceCredentials> = lazy { serviceCredentials }
         override val authCallbacksHolder: AuthCallbacksHolder = authCallbacksHolder
         override val authResultHandler: Lazy<AuthResultHandler> = lazy { authResultHandler }
         override val dispatchers: VKIDCoroutinesDispatchers = dispatchers

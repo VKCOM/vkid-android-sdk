@@ -15,6 +15,7 @@ dependencies {
     api(projects.vkid)
     api(projects.common)
     api(projects.groupSubscriptionCommon)
+    api(projects.analytics)
     implementation(projects.network)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.foundation)

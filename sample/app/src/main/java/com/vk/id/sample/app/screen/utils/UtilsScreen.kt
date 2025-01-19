@@ -52,9 +52,9 @@ import com.vk.id.common.InternalVKIDApi
 import com.vk.id.exchangetoken.VKIDExchangeTokenCallback
 import com.vk.id.exchangetoken.VKIDExchangeTokenFail
 import com.vk.id.exchangetoken.VKIDExchangeTokenParams
-import com.vk.id.group.subscription.compose.GroupSubscriptionSheet
-import com.vk.id.group.subscription.compose.GroupSubscriptionSnackbarHost
-import com.vk.id.group.subscription.compose.rememberGroupSubscriptionSheetState
+import com.vk.id.group.subscription.compose.ui.GroupSubscriptionSheet
+import com.vk.id.group.subscription.compose.ui.GroupSubscriptionSnackbarHost
+import com.vk.id.group.subscription.compose.ui.rememberGroupSubscriptionSheetState
 import com.vk.id.logout.VKIDLogoutCallback
 import com.vk.id.logout.VKIDLogoutFail
 import com.vk.id.refresh.VKIDRefreshTokenCallback
