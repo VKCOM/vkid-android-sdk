@@ -193,7 +193,7 @@ private fun AuthUtil(
                         }
                     },
                     params = VKIDAuthParams {
-                        this.scopes = scopes.split(' ', ',').toSet()
+                        this.scopes = scopes.split(' ', ',').toSet() + (if (groupId.isNotBlank()) setOf("groups") else emptySet())
                         this.prompt = prompt
                         if (prompt != Prompt.BLANK) this.useOAuthProviderIfPossible = false
                         this.state = state.takeIf { it.isNotBlank() }

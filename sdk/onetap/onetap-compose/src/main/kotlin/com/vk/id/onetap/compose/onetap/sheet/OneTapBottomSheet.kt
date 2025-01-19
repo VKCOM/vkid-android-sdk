@@ -142,7 +142,9 @@ public fun OneTapBottomSheet(
         onFail = onFail,
         oAuths = oAuths,
         style = style,
-        authParams = authParams,
+        authParams = authParams.newBuilder {
+            scopes += "groups"
+        },
         fastAuthEnabled = fastAuthEnabled,
     )
     if (isSuccessfulAuth.isNotBlank()) {

@@ -129,7 +129,9 @@ public fun OneTap(
         oAuths = oAuths,
         fastAuthEnabled = fastAuthEnabled,
         signInAnotherAccountButtonEnabled = signInAnotherAccountButtonEnabled,
-        authParams = authParams,
+        authParams = authParams.newBuilder {
+            scopes += "groups"
+        },
         scenario = scenario,
     )
     if (isSuccessfulAuth.isNotBlank()) {

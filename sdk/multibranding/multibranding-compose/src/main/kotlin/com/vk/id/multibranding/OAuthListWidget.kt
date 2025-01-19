@@ -119,7 +119,9 @@ public fun OAuthListWidget(
         onAuthCode = onAuthCode,
         onFail = onFail,
         oAuths = oAuths,
-        authParams = authParams,
+        authParams = authParams.newBuilder {
+            scopes += "groups"
+        },
         measureInProgress = false,
     )
     if (isSuccessfulAuth.isNotBlank()) {
