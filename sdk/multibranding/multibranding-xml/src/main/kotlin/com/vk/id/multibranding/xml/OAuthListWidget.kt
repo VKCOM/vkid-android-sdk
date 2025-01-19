@@ -24,10 +24,14 @@ import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.group.subscription.common.fail.VKIDGroupSubscriptionFail
 import com.vk.id.group.subscription.common.style.GroupSubscriptionButtonsCornersStyle
-import com.vk.id.group.subscription.common.style.GroupSubscriptionButtonsSizeStyle
 import com.vk.id.group.subscription.common.style.GroupSubscriptionSheetCornersStyle
 import com.vk.id.group.subscription.common.style.GroupSubscriptionStyle
 import com.vk.id.group.subscription.xml.GroupSubscriptionSnackbarHost
+import com.vk.id.group.subscription.xml.vkidInternalGetGroupId
+import com.vk.id.group.subscription.xml.vkidInternalGetGroupSubscriptionButtonCornerRadius
+import com.vk.id.group.subscription.xml.vkidInternalGetGroupSubscriptionButtonSize
+import com.vk.id.group.subscription.xml.vkidInternalGetGroupSubscriptionCornerRadius
+import com.vk.id.group.subscription.xml.vkidInternalGetGroupSubscriptionStyleConstructor
 import com.vk.id.multibranding.OAuthListWidget
 import com.vk.id.multibranding.common.style.OAuthListWidgetCornersStyle
 import com.vk.id.multibranding.common.style.OAuthListWidgetSizeStyle
@@ -198,27 +202,42 @@ private fun parseAttrs(
 ): OAuthListWidgetParsedAttrs {
     context.theme.obtainStyledAttributes(
         attrs,
-        R.styleable.vkid_OAuthListWidget,
+        com.vk.id.group.subscription.xml.R.styleable.vkid_GroupSubscription,
         0,
         0
-    ).apply {
+    ).also { groupSubscriptionTypedArray ->
         try {
-            return OAuthListWidgetParsedAttrs(
-                style = getStyleConstructor(context = context)(
-                    OAuthListWidgetCornersStyle.Custom(context.pixelsToDp(getCornerRadius(context))),
-                    getSize(),
-                ),
-                oAuths = getOAuths(),
-                scopes = getScopes(),
-                groupId = getGroupId(),
-                groupSubscriptionStyle = getGroupSubscriptionStyleConstructor(context)(
-                    GroupSubscriptionSheetCornersStyle.Custom(context.pixelsToDp(getGroupSubscriptionCornerRadius(context))),
-                    GroupSubscriptionButtonsCornersStyle.Custom(context.pixelsToDp(getGroupSubscriptionButtonCornerRadius(context))),
-                    getGroupSubscriptionButtonSize(),
-                ),
-            )
+            context.theme.obtainStyledAttributes(
+                attrs,
+                R.styleable.vkid_OAuthListWidget,
+                0,
+                0
+            ).also { oAuthListWidgetTypedArray ->
+                try {
+                    return OAuthListWidgetParsedAttrs(
+                        style = oAuthListWidgetTypedArray.getStyleConstructor(context = context)(
+                            OAuthListWidgetCornersStyle.Custom(context.pixelsToDp(oAuthListWidgetTypedArray.getCornerRadius(context))),
+                            oAuthListWidgetTypedArray.getSize(),
+                        ),
+                        oAuths = oAuthListWidgetTypedArray.getOAuths(),
+                        scopes = oAuthListWidgetTypedArray.getScopes(),
+                        groupId = groupSubscriptionTypedArray.vkidInternalGetGroupId(),
+                        groupSubscriptionStyle = groupSubscriptionTypedArray.vkidInternalGetGroupSubscriptionStyleConstructor(context)(
+                            GroupSubscriptionSheetCornersStyle.Custom(
+                                context.pixelsToDp(groupSubscriptionTypedArray.vkidInternalGetGroupSubscriptionCornerRadius(context))
+                            ),
+                            GroupSubscriptionButtonsCornersStyle.Custom(
+                                context.pixelsToDp(groupSubscriptionTypedArray.vkidInternalGetGroupSubscriptionButtonCornerRadius(context))
+                            ),
+                            groupSubscriptionTypedArray.vkidInternalGetGroupSubscriptionButtonSize(),
+                        ),
+                    )
+                } finally {
+                    oAuthListWidgetTypedArray.close()
+                }
+            }
         } finally {
-            recycle()
+            groupSubscriptionTypedArray.close()
         }
     }
 }
@@ -276,61 +295,6 @@ private fun TypedArray.getScopes(): Set<String> {
         .split(',', ' ')
         .filter { it.isNotBlank() }
         .toSet()
-}
-
-private fun TypedArray.getGroupId(): String? {
-    return getString(R.styleable.vkid_OAuthListWidget_vkid_OAuthList_group_id)
-}
-
-private fun TypedArray.getGroupSubscriptionStyleConstructor(
-    context: Context
-) = when (getInt(R.styleable.vkid_OAuthListWidget_vkid_OAuthList_group_subscription_style, 0)) {
-    1 -> GroupSubscriptionStyle::Dark
-    2 -> { cornersStyle: GroupSubscriptionSheetCornersStyle,
-            buttonsCornersStyle: GroupSubscriptionButtonsCornersStyle,
-            buttonsSizeStyle: GroupSubscriptionButtonsSizeStyle ->
-        GroupSubscriptionStyle.system(
-            context = context,
-            cornersStyle = cornersStyle,
-            buttonsCornersStyle = buttonsCornersStyle,
-            buttonsSizeStyle = buttonsSizeStyle,
-        )
-    }
-
-    else -> GroupSubscriptionStyle::Light
-}
-
-private fun TypedArray.getGroupSubscriptionCornerRadius(context: Context) = getDimension(
-    R.styleable.vkid_OAuthListWidget_vkid_OAuthList_group_subscription_corners,
-    context.dpToPixels(GroupSubscriptionSheetCornersStyle.Default.radiusDp)
-)
-
-private fun TypedArray.getGroupSubscriptionButtonCornerRadius(context: Context) = getDimension(
-    R.styleable.vkid_OAuthListWidget_vkid_OAuthList_group_subscription_button_corners,
-    context.dpToPixels(GroupSubscriptionButtonsCornersStyle.Default.radiusDp)
-)
-
-@Suppress("MagicNumber", "CyclomaticComplexMethod")
-private fun TypedArray.getGroupSubscriptionButtonSize() = when (
-    getInt(
-        R.styleable.vkid_OAuthListWidget_vkid_OAuthList_group_subscription_button_size,
-        0
-    )
-) {
-    1 -> GroupSubscriptionButtonsSizeStyle.SMALL_32
-    2 -> GroupSubscriptionButtonsSizeStyle.SMALL_34
-    3 -> GroupSubscriptionButtonsSizeStyle.SMALL_36
-    4 -> GroupSubscriptionButtonsSizeStyle.SMALL_38
-    5 -> GroupSubscriptionButtonsSizeStyle.MEDIUM_40
-    6 -> GroupSubscriptionButtonsSizeStyle.MEDIUM_42
-    7 -> GroupSubscriptionButtonsSizeStyle.MEDIUM_44
-    8 -> GroupSubscriptionButtonsSizeStyle.MEDIUM_46
-    9 -> GroupSubscriptionButtonsSizeStyle.LARGE_48
-    10 -> GroupSubscriptionButtonsSizeStyle.LARGE_50
-    11 -> GroupSubscriptionButtonsSizeStyle.LARGE_52
-    12 -> GroupSubscriptionButtonsSizeStyle.LARGE_54
-    13 -> GroupSubscriptionButtonsSizeStyle.LARGE_56
-    else -> GroupSubscriptionButtonsSizeStyle.DEFAULT
 }
 
 private fun Context.pixelsToDp(

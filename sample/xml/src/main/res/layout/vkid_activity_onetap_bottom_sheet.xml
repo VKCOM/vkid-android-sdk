@@ -31,11 +31,11 @@
             app:vkid_bottomSheetServiceName="Sample xml"
             app:vkid_bottomSheetStyle="system"
             app:vkid_onetapOAuths="mail,ok"
-            app:vkid_group_id="1"
-            app:vkid_group_subscription_style="system"
-            app:vkid_group_subscription_corners="0dp"
-            app:vkid_group_subscription_button_corners="0dp"
-            app:vkid_group_subscription_button_size="small32"
+            app:vkid_groupId="1"
+            app:vkid_groupSubscriptionStyle="system"
+            app:vkid_groupSubscriptionCorners="0dp"
+            app:vkid_groupSubscriptionButtonCorners="0dp"
+            app:vkid_groupSubscriptionButtonSize="small32"
             app:vkid_onetapScopes="email messages groups" />
 
         <Button

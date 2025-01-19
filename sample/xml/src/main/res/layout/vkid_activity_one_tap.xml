@@ -40,12 +40,12 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/no_multibranding_title_spacer"
                 app:layout_constraintWidth_max="355dp"
-                app:vkid_onetapScopes="email messages groups"
-                app:vkid_group_id="1"
-                app:vkid_group_subscription_style="system"
-                app:vkid_group_subscription_corners="0dp"
-                app:vkid_group_subscription_button_corners="0dp"
-                app:vkid_group_subscription_button_size="small32"
+                app:vkid_onetapScopes="email messages"
+                app:vkid_groupId="1"
+                app:vkid_groupSubscriptionStyle="system"
+                app:vkid_groupSubscriptionCorners="1dp"
+                app:vkid_groupSubscriptionButtonCorners="0dp"
+                app:vkid_groupSubscriptionButtonSize="small32"
                 app:vkid_onetapShowSignInToAnotherAccount="true"
                 app:vkid_onetapStyle="system" />
 

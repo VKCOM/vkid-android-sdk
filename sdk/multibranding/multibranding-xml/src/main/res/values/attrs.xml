@@ -25,29 +25,5 @@
         </attr>
         <attr name="vkid_oAuthListOAuths" format="string"/>
         <attr name="vkid_oAuthListScopes" format="string"/>
-        <attr name="vkid_OAuthList_group_id" format="string"/>
-        <attr name="vkid_OAuthList_group_subscription_style" format="enum">
-            <enum name="light" value="0"/>
-            <enum name="dark" value="1"/>
-            <enum name="system" value="2"/>
-        </attr>
-        <attr name="vkid_OAuthList_group_subscription_corners" format="dimension"/>
-        <attr name="vkid_OAuthList_group_subscription_button_corners" format="dimension"/>
-        <attr name="vkid_OAuthList_group_subscription_button_size" format="enum">
-            <enum name="standard" value="0"/>
-            <enum name="small32" value="1"/>
-            <enum name="small34" value="2"/>
-            <enum name="small36" value="3"/>
-            <enum name="small38" value="4"/>
-            <enum name="medium40" value="5"/>
-            <enum name="medium42" value="6"/>
-            <enum name="medium44" value="7"/>
-            <enum name="medium46" value="8"/>
-            <enum name="large48" value="9"/>
-            <enum name="large50" value="10"/>
-            <enum name="large52" value="11"/>
-            <enum name="large54" value="12"/>
-            <enum name="large56" value="13"/>
-        </attr>
     </declare-styleable>
 </resources>
