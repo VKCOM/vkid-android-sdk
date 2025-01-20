@@ -79,6 +79,9 @@ public class OAuthListWidget @JvmOverloads constructor(
     private var onAuthCode: (AuthCodeData, Boolean) -> Unit = { _, _ -> }
     private var onFail: (OAuth, VKIDAuthFail) -> Unit = { _, _ -> }
 
+    /**
+     * The id of the group the user will be subscribed to.
+     */
     public var groupId: String? = null
         set(value) {
             field = value
@@ -91,12 +94,20 @@ public class OAuthListWidget @JvmOverloads constructor(
     private var onFailSubscribingToGroup: (VKIDGroupSubscriptionFail) -> Unit = {
         error("setGroupSubscriptionCallbacks was not called")
     }
+
+    /**
+     * The host for snackbars. Pass the view after placing it on screen.
+     */
     public var snackbarHost: GroupSubscriptionSnackbarHost? = null
         set(value) {
             field = value
             onSnackbarHostChange(value)
         }
     private var onSnackbarHostChange: (GroupSubscriptionSnackbarHost?) -> Unit = {}
+
+    /**
+     * The widget style, can change appearance.
+     */
     public var groupSubscriptionStyle: GroupSubscriptionStyle = GroupSubscriptionStyle.Light()
         set(value) {
             field = value
@@ -179,6 +190,12 @@ public class OAuthListWidget @JvmOverloads constructor(
         this.onFail = onFail
     }
 
+    /**
+     * Callbacks that provide Group Subscription result.
+     *
+     * @param onSuccess Will be called upon successful subscription.
+     * @param onFail Will be called upon any unsuccessful flow completion along with an description of the specific encountered error.
+     */
     public fun setGroupSubscriptionCallbacks(
         onSuccess: () -> Unit,
         onFail: (VKIDGroupSubscriptionFail) -> Unit = {}

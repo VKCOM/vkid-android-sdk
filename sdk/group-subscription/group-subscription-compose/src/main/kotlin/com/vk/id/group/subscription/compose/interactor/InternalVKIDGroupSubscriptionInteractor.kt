@@ -1,3 +1,5 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.group.subscription.compose.interactor
 
 import com.vk.id.common.InternalVKIDApi
@@ -11,8 +13,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.withContext
 
-@InternalVKIDApi
-public class InternalVKIDGroupSubscriptionInteractor(
+internal class InternalVKIDGroupSubscriptionInteractor(
     private val apiService: InternalVKIDGroupSubscriptionApiService,
     private val tokenStorage: InternalVKIDTokenStorage,
     private val groupId: String,
@@ -25,7 +26,7 @@ public class InternalVKIDGroupSubscriptionInteractor(
     private val accessToken: String
         get() = externalAccessTokenProvider?.invoke() ?: tokenStorage.currentAccessToken?.token ?: throw NotAuthorizedException()
 
-    public suspend fun loadGroup(): InternalVKIDGroupData {
+    internal suspend fun loadGroup(): InternalVKIDGroupData {
         if (!apiService.isServiceAccount(accessToken)) {
             return getGroup()
         } else {
@@ -33,7 +34,7 @@ public class InternalVKIDGroupSubscriptionInteractor(
         }
     }
 
-    public suspend fun subscribeToGroup() {
+    internal suspend fun subscribeToGroup() {
         apiService.subscribeToGroup(accessToken = accessToken, groupId = groupId)
     }
 

@@ -31,6 +31,7 @@ import com.vk.id.common.InternalVKIDApi
 import com.vk.id.group.subscription.common.fail.VKIDGroupSubscriptionFail
 import com.vk.id.group.subscription.common.style.GroupSubscriptionStyle
 import com.vk.id.group.subscription.compose.ui.GroupSubscriptionSheet
+import com.vk.id.group.subscription.compose.ui.GroupSubscriptionSnackbarHost
 import com.vk.id.group.subscription.compose.ui.rememberGroupSubscriptionSheetState
 import com.vk.id.multibranding.OAuthListWidget
 import com.vk.id.multibranding.internal.LocalMultibrandingAnalyticsContext
@@ -98,6 +99,40 @@ public fun OneTap(
     )
 }
 
+/**
+ * Composable function to display a VKID One Tap login interface with multibranding.
+ * For more information how to integrate VK ID Authentication check docs https://id.vk.com/business/go/docs/ru/vkid/latest/vk-id/intro/plan
+ *
+ * This version integrates Group Subscription flow. The flow will be shown right after successful auth.
+ * NOTE: The "groups" scope will be added automatically to the set of requested scopes.
+ *
+ * @param modifier Modifier for this composable.
+ * @param style The styling for the One Tap interface, default is [OneTapStyle.Light]
+ * @param onAuth Callback function invoked on successful authentication with an [OneTapOAuth] and an [AccessToken].
+ * The first parameter is the OAuth which was used for authorization or null if the main flow with OneTap was used.
+ * The second parameter is the access token to be used for working with VK API.
+ * @param onAuthCode A callback to be invoked upon successful first step of auth - receiving auth code
+ * which can later be exchanged to access token.
+ * isCompletion is true if [onAuth] won't be called.
+ * This will happen if you passed auth parameters and implement their validation yourself.
+ * In that case we can't exchange auth code for access token and you should do this yourself.
+ * @param onFail Callback function invoked on authentication failure with on [OneTapOAuth] and a [VKIDAuthFail] object.
+ * The first parameter is the OAuth which was used for authorization or null if the main flow with OneTap was used.
+ * The second parameter is the error which happened during authorization.
+ * @param oAuths A set of OAuths to be displayed.
+ * @param signInAnotherAccountButtonEnabled Flag to enable a button for signing into another account.
+ *  Note that if text doesn't fit the available width the view will be hidden regardless of the flag.
+ * @param authParams Optional params to be passed to auth. See [VKIDAuthUiParams.Builder] for more info.
+ * @param fastAuthEnabled Whether to fetch user. Defaults to true.
+ * In case this parameter is set to false the user data won't be fetched and user will have to confirm authorization on click.
+ * Note that this parameter doesn't support changes in runtime.
+ * @param subscribeToGroupId The id of the group the user will be subscribed to.
+ * @param onSuccessSubscribingToGroup Will be called upon successful subscription.
+ * @param onFailSubscribingToGroup Will be called upon any unsuccessful flow completion along with an description of the specific encountered error.
+ * @param groupSubscriptionSnackbarHostState The host state for snackbars.
+ * Use along with [GroupSubscriptionSnackbarHost] and pass the same state as there.
+ * @param groupSubscriptionStyle The widget style, can change appearance.
+ */
 @Composable
 public fun OneTap(
     modifier: Modifier = Modifier,

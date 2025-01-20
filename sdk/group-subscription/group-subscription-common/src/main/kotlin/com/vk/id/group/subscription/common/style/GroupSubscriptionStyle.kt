@@ -8,6 +8,10 @@ import com.vk.id.common.util.internalVkIdIsDarkTheme
 
 /**
  * Base class for defining the style of the Group Subscription Sheet.
+ *
+ * @param cornersStyle The style for sheet corners.
+ * @param buttonsCornersStyle The style for button corners.
+ * @param buttonsSizeStyle The style for button size.
  */
 public sealed class GroupSubscriptionStyle @InternalVKIDApi constructor(
     public val cornersStyle: GroupSubscriptionSheetCornersStyle = GroupSubscriptionSheetCornersStyle.Default,
@@ -18,6 +22,10 @@ public sealed class GroupSubscriptionStyle @InternalVKIDApi constructor(
 
     /**
      * Represents the light style theme for the Group Subscription Sheet.
+     *
+     * @param cornersStyle The style for sheet corners.
+     * @param buttonsCornersStyle The style for button corners.
+     * @param buttonsSizeStyle The style for button size.
      */
     public class Light(
         cornersStyle: GroupSubscriptionSheetCornersStyle = GroupSubscriptionSheetCornersStyle.Default,
@@ -31,6 +39,10 @@ public sealed class GroupSubscriptionStyle @InternalVKIDApi constructor(
 
     /**
      * Represents the dark style theme for the Group Subscription Sheet.
+     *
+     * @param cornersStyle The style for sheet corners.
+     * @param buttonsCornersStyle The style for button corners.
+     * @param buttonsSizeStyle The style for button size.
      */
     public class Dark(
         cornersStyle: GroupSubscriptionSheetCornersStyle = GroupSubscriptionSheetCornersStyle.Default,
@@ -47,6 +59,11 @@ public sealed class GroupSubscriptionStyle @InternalVKIDApi constructor(
         /**
          * Create a style for the Group Subscription Bottomsheet that
          * varies between [Light] and [Dark] based on system settings.
+         *
+         * @param context The [Context] that can be used to retrieve system theme.
+         * @param cornersStyle The style for sheet corners.
+         * @param buttonsCornersStyle The style for button corners.
+         * @param buttonsSizeStyle The style for button size.
          */
         public fun system(
             context: Context,

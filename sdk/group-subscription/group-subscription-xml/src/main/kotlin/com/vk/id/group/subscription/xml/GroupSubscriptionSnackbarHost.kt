@@ -11,6 +11,11 @@ import androidx.compose.ui.platform.ComposeView
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.group.subscription.compose.ui.GroupSubscriptionSnackbarHost
 
+/**
+ * The host for Group Subscription snackbars.
+ *
+ * Must be placed where you want snackbars to appear, respecting screen insets.
+ */
 public class GroupSubscriptionSnackbarHost @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,

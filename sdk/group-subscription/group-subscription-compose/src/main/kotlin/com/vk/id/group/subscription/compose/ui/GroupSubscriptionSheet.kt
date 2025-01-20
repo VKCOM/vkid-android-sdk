@@ -98,6 +98,15 @@ public fun rememberGroupSubscriptionSheetState(): GroupSubscriptionSheetState {
     return rememberGroupSubscriptionSheetStateInternal()
 }
 
+/**
+ * Composable that displays and host for Group Subscription snackbars.
+ *
+ * In most cases you need to use it along with a widget that provides Group Subscription functionality. The only exception
+ * is when widget constructor doesn't accept [SnackbarHostState]. You should place it where you want snackbars to appear, respecting screen insets.
+ *
+ * @param snackbarHostState The host state for snackbars. You need to pass this value to the widget as well in the corresponding parameter.
+ * @param style The style of the widget, will be used for styling snackbars. You need to pass the same value as the one use pass to the widget.
+ */
 @Composable
 public fun GroupSubscriptionSnackbarHost(
     snackbarHostState: SnackbarHostState,
@@ -117,6 +126,23 @@ public fun GroupSubscriptionSnackbarHost(
     }
 }
 
+/**
+ * A bottomsheet that provides Group Subscription functionality.
+ *
+ * Launches VK group subscription flow.
+ * This version puts [GroupSubscriptionSnackbarHost] in place you put this Composable and passed the state automatically.
+ *
+ * @param modifier Modifier for the widget, most likely should not be changed.
+ * @param state Sheet state, can be used for showing and hiding the sheet.
+ * @param accessTokenProvider The function that provides an access token that will be used for retrieving group information and subscribing the user.
+ * NOTE: The token must have "groups" scope, otherwise you'll get an error.
+ * NOTE: The token won't be automatically refreshed, in case it's outdated you'll get an error.
+ * NOTE: In case you will pass null, the last token you received with the SDK will be used.
+ * @param groupId The id of the group the user will be subscribed to.
+ * @param onSuccess Will be called upon successful subscription.
+ * @param onFail Will be called upon any unsuccessful flow completion along with an description of the specific encountered error.
+ * @param style The widget style, can change appearance.
+ */
 @Composable
 @Suppress("ModifierNotUsedAtRoot")
 public fun GroupSubscriptionSheet(
@@ -143,6 +169,22 @@ public fun GroupSubscriptionSheet(
     }
 }
 
+/**
+ * A bottomsheet that provides Group Subscription functionality.
+ *
+ * Launches VK group subscription flow.
+ *
+ * @param modifier Modifier for the widget, most likely should not be changed.
+ * @param state Sheet state, can be used for showing and hiding the sheet.
+ * @param accessTokenProvider The function that provides an access token that will be used for retrieving group information and subscribing the user.
+ * NOTE: The token must have "groups" scope, otherwise you'll get an error.
+ * NOTE: The token won't be automatically refreshed, in case it's outdated you'll get an error.
+ * NOTE: In case you will pass null, the last token you received with the SDK will be used.
+ * @param groupId The id of the group the user will be subscribed to.
+ * @param onSuccess Will be called upon successful subscription.
+ * @param onFail Will be called upon any unsuccessful flow completion along with an description of the specific encountered error.
+ * @param style The widget style, can change appearance.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Suppress("LongMethod")
