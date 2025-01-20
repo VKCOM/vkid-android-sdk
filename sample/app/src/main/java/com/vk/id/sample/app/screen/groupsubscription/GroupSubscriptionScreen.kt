@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import com.vk.id.VKID
 import com.vk.id.group.subscription.common.style.GroupSubscriptionButtonsCornersStyle
 import com.vk.id.group.subscription.common.style.GroupSubscriptionButtonsSizeStyle
@@ -27,7 +28,10 @@ import com.vk.id.group.subscription.common.style.GroupSubscriptionStyle
 import com.vk.id.group.subscription.compose.ui.GroupSubscriptionSheet
 import com.vk.id.group.subscription.compose.ui.GroupSubscriptionSnackbarHost
 import com.vk.id.group.subscription.compose.ui.rememberGroupSubscriptionSheetState
+import com.vk.id.group.subscription.xml.GroupSubscriptionSheet
+import com.vk.id.group.subscription.xml.GroupSubscriptionSnackbarHost
 import com.vk.id.sample.app.screen.Button
+import com.vk.id.sample.app.uikit.selector.CheckboxSelector
 import com.vk.id.sample.app.uikit.selector.DropdownSelector
 import com.vk.id.sample.app.uikit.selector.SliderSelector
 import com.vk.id.sample.app.uikit.selector.styleConstructors
@@ -52,6 +56,7 @@ internal fun GroupSubscriptionScreen() {
     val selectedSize = remember { mutableStateOf(GroupSubscriptionButtonsSizeStyle.DEFAULT) }
     val useDarkTheme = selectedStyle is GroupSubscriptionStyle.Dark
     var styleConstructors by remember { mutableStateOf<Map<String, KCallable<GroupSubscriptionStyle>>>(emptyMap()) }
+    val shouldUseXml = remember { mutableStateOf(false) }
     LaunchedEffect(Unit) {
         withContext(Dispatchers.IO) {
             styleConstructors = GroupSubscriptionStyle::class.styleConstructors(context)
@@ -74,12 +79,19 @@ internal fun GroupSubscriptionScreen() {
     ) {
         val snackbarHostState = remember { SnackbarHostState() }
         Box(contentAlignment = Alignment.Center) {
+            var host: GroupSubscriptionSnackbarHost? by remember { mutableStateOf(null) }
+            var androidView: GroupSubscriptionSheet? by remember { mutableStateOf(null) }
             Column(
                 modifier = Modifier
                     .background(MaterialTheme.colorScheme.background)
                     .fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                CheckboxSelector(
+                    title = "XML",
+                    isChecked = shouldUseXml.value,
+                    onCheckedChange = { shouldUseXml.value = it }
+                )
                 DropdownSelector(
                     modifier = Modifier.padding(vertical = 16.dp),
                     values = styleConstructors,
@@ -105,26 +117,61 @@ internal fun GroupSubscriptionScreen() {
                     selectedState = buttonsCornersStylePercent,
                     onStateChange = { buttonsCornersStylePercent.floatValue = it }
                 )
-                Button("Show") { state.show() }
+                Button("Show") {
+                    state.show()
+                    androidView?.show()
+                }
             }
-            GroupSubscriptionSheet(
-                state = state,
-                accessTokenProvider = {
-                    VKID.instance.accessToken?.token ?: run {
-                        showToast(context, "Not authorized")
-                        ""
+            if (shouldUseXml.value) {
+                AndroidView(factory = { context ->
+                    GroupSubscriptionSheet(context).apply {
+                        setCallbacks(
+                            onSuccess = { showToast(context, "Success") },
+                            onFail = { showToast(context, "Fail: ${it.description}") },
+                        )
+                        this.groupId = "1"
+                        this.snackbarHost = host ?: GroupSubscriptionSnackbarHost(context)
+                        androidView = this
                     }
-                },
-                groupId = "1",
-                onSuccess = { showToast(context, "Success") },
-                onFail = { showToast(context, "Fail: ${it.description}") },
+                })
+                androidView?.apply {
+                    this.snackbarHost = host
+                    this.style = selectedStyle
+                    this.setCallbacks(
+                        onSuccess = { showToast(context, "Subscribed") },
+                        onFail = { showToast(context, "Fail: ${it.description}") },
+                    )
+                }
+            } else {
+                androidView = null
+                GroupSubscriptionSheet(
+                    state = state,
+                    accessTokenProvider = {
+                        VKID.instance.accessToken?.token ?: run {
+                            showToast(context, "Not authorized")
+                            ""
+                        }
+                    },
+                    groupId = "1",
+                    onSuccess = { showToast(context, "Success") },
+                    onFail = { showToast(context, "Fail: ${it.description}") },
+                    style = selectedStyle,
+                    snackbarHostState = snackbarHostState
+                )
+            }
+            GroupSubscriptionSnackbarHost(
+                snackbarHostState = snackbarHostState,
                 style = selectedStyle,
-                snackbarHostState = snackbarHostState
             )
+            if (shouldUseXml.value) {
+                AndroidView({ context ->
+                    GroupSubscriptionSnackbarHost(context).also {
+                        host = it
+                        it.style = selectedStyle
+                    }
+                }, modifier = Modifier.fillMaxSize())
+                host?.style = selectedStyle
+            }
         }
-        GroupSubscriptionSnackbarHost(
-            snackbarHostState = snackbarHostState,
-            style = selectedStyle,
-        )
     }
 }

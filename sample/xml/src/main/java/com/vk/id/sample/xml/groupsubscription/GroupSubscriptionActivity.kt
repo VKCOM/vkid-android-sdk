@@ -24,6 +24,7 @@ public class GroupSubscriptionActivity : AppCompatActivity() {
                 onSuccess = { showToast(this, "Success") },
                 onFail = { showToast(this, "Fail") },
             )
+            widget.snackbarHost = findViewById(R.id.group_subscription_snackbar_host)
             findViewById<View>(R.id.show_sheet_button).setOnClickListener {
                 widget.show()
             }
