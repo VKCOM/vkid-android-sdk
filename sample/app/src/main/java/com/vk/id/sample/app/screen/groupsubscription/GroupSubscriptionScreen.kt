@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -24,6 +25,7 @@ import com.vk.id.group.subscription.common.style.GroupSubscriptionButtonsSizeSty
 import com.vk.id.group.subscription.common.style.GroupSubscriptionSheetCornersStyle
 import com.vk.id.group.subscription.common.style.GroupSubscriptionStyle
 import com.vk.id.group.subscription.compose.ui.GroupSubscriptionSheet
+import com.vk.id.group.subscription.compose.ui.GroupSubscriptionSnackbarHost
 import com.vk.id.group.subscription.compose.ui.rememberGroupSubscriptionSheetState
 import com.vk.id.sample.app.screen.Button
 import com.vk.id.sample.app.uikit.selector.DropdownSelector
@@ -70,6 +72,7 @@ internal fun GroupSubscriptionScreen() {
     AppTheme(
         useDarkTheme = useDarkTheme
     ) {
+        val snackbarHostState = remember { SnackbarHostState() }
         Box(contentAlignment = Alignment.Center) {
             Column(
                 modifier = Modifier
@@ -105,7 +108,6 @@ internal fun GroupSubscriptionScreen() {
                 Button("Show") { state.show() }
             }
             GroupSubscriptionSheet(
-                modifier = Modifier.fillMaxSize(),
                 state = state,
                 accessTokenProvider = {
                     VKID.instance.accessToken?.token ?: run {
@@ -117,7 +119,12 @@ internal fun GroupSubscriptionScreen() {
                 onSuccess = { showToast(context, "Success") },
                 onFail = { showToast(context, "Fail: ${it.description}") },
                 style = selectedStyle,
+                snackbarHostState = snackbarHostState
             )
         }
+        GroupSubscriptionSnackbarHost(
+            snackbarHostState = snackbarHostState,
+            style = selectedStyle,
+        )
     }
 }
