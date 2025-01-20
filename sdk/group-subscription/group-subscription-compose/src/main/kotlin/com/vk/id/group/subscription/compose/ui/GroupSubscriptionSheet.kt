@@ -88,9 +88,6 @@ import com.vk.id.network.groupsubscription.exception.InternalVKIDAlreadyGroupMem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-private const val THOUSAND = 1000
-private const val MILLION = 1000000
-
 /**
  * Composable function which creates a state for [GroupSubscriptionSheet] and can be used as `state` parameter.
  *
@@ -508,11 +505,7 @@ private fun ColumnScope.DataStateSubscribers(
         }
         Spacer(modifier = Modifier.width(8.dp))
         FlowRow(verticalArrangement = Arrangement.Center) {
-            val numberOfSubs = when {
-                data.subscriberCount < THOUSAND -> data.subscriberCount.toString()
-                data.subscriberCount < MILLION -> (data.subscriberCount / THOUSAND).toString() + "K"
-                else -> (data.subscriberCount / MILLION).toString() + "M"
-            }
+            val numberOfSubs = SubscriberCountFormatter.format(data.subscriberCount)
             val subscribersText = numberOfSubs + " " + pluralStringResource(R.plurals.vkid_group_subscription_subscribers, data.subscriberCount) + " "
             val friendsText = "· ${data.friendsCount} " + pluralStringResource(R.plurals.vkid_group_subscription_friends, data.friendsCount)
             Text(
