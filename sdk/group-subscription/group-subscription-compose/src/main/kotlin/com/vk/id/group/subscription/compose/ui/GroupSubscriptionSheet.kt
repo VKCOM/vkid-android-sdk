@@ -506,8 +506,8 @@ private fun ColumnScope.DataStateSubscribers(
         Spacer(modifier = Modifier.width(8.dp))
         FlowRow(verticalArrangement = Arrangement.Center) {
             val numberOfSubs = SubscriberCountFormatter.format(data.subscriberCount)
-            val subscribersText = numberOfSubs + " " + pluralStringResource(R.plurals.vkid_group_subscription_subscribers, data.subscriberCount) + " "
-            val friendsText = "· ${data.friendsCount} " + pluralStringResource(R.plurals.vkid_group_subscription_friends, data.friendsCount)
+            val subscribersText = pluralStringResource(R.plurals.vkid_group_subscription_subscribers, data.subscriberCount, numberOfSubs) + " "
+            val friendsText = "· " + pluralStringResource(R.plurals.vkid_group_subscription_friends, data.friendsCount, data.friendsCount)
             Text(
                 text = subscribersText,
                 modifier = Modifier,

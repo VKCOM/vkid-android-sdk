@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="vkid_group_subscription_primary">Suivre la communauté</string>
+    <string name="vkid_group_subscription_secondary">Plus tard</string>
+    <plurals name="vkid_group_subscription_subscribers">
+        <item quantity="one">%1$s abonné</item>
+        <item quantity="many">%1$s abonnés</item>
+        <item quantity="other">%1$s abonnés</item>
+    </plurals>
+    <plurals name="vkid_group_subscription_friends">
+        <item quantity="one">%1$d ami</item>
+        <item quantity="many">%1$d amis</item>
+        <item quantity="other">%1$d amis</item>
+    </plurals>
+    <string name="vkid_group_subscription_snackbar_label">Vous suivez la communauté</string>
+    <string name="vkid_group_subscription_fail_title">Impossible de s\'abonner</string>
+    <string name="vkid_group_subscription_fail_description">Veuillez réessayer</string>
+    <string name="vkid_group_subscription_fail_primary">Réessayer</string>
+    <string name="vkid_group_subscription_fail_secondary">Annuler</string>
+</resources>
