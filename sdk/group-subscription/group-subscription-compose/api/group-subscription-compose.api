@@ -25,7 +25,6 @@ public final class com/vk/id/group/subscription/compose/ui/ComposableSingletons$
 
 public final class com/vk/id/group/subscription/compose/ui/GroupSubscriptionSheetKt {
 	public static final fun GroupSubscriptionSheet (Landroidx/compose/ui/Modifier;Lcom/vk/id/group/subscription/compose/ui/GroupSubscriptionSheetState;Lkotlin/jvm/functions/Function0;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Landroidx/compose/material3/SnackbarHostState;Lcom/vk/id/group/subscription/common/style/GroupSubscriptionStyle;Landroidx/compose/runtime/Composer;II)V
-	public static final fun GroupSubscriptionSheet (Landroidx/compose/ui/Modifier;Lcom/vk/id/group/subscription/compose/ui/GroupSubscriptionSheetState;Lkotlin/jvm/functions/Function0;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Lcom/vk/id/group/subscription/common/style/GroupSubscriptionStyle;Landroidx/compose/runtime/Composer;II)V
 	public static final fun GroupSubscriptionSnackbarHost (Landroidx/compose/material3/SnackbarHostState;Lcom/vk/id/group/subscription/common/style/GroupSubscriptionStyle;Landroidx/compose/runtime/Composer;II)V
 	public static final fun rememberGroupSubscriptionSheetState (Landroidx/compose/runtime/Composer;I)Lcom/vk/id/group/subscription/compose/ui/GroupSubscriptionSheetState;
 }

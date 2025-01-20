@@ -130,34 +130,35 @@ public fun OAuthListWidget(
     groupSubscriptionStyle: GroupSubscriptionStyle = GroupSubscriptionStyle.Light(),
 ) {
     var isSuccessfulAuth by remember { mutableStateOf("") }
-    OAuthListWidget(
-        modifier = modifier,
-        style = style,
-        onAuth = { oAuth, accessToken ->
-            onAuth(oAuth, accessToken)
-            isSuccessfulAuth = System.currentTimeMillis().toString()
-        },
-        onAuthCode = onAuthCode,
-        onFail = onFail,
-        oAuths = oAuths,
-        authParams = authParams.newBuilder {
-            scopes += "groups"
-        },
-        measureInProgress = false,
-    )
-    if (isSuccessfulAuth.isNotBlank()) {
-        val state = rememberGroupSubscriptionSheetState()
-        GroupSubscriptionSheet(
-            state = state,
-            accessTokenProvider = { VKID.instance.accessToken?.token ?: error("Not authorized") },
-            groupId = subscribeToGroupId,
-            onSuccess = onSuccessSubscribingToGroup,
-            onFail = onFailSubscribingToGroup,
-            snackbarHostState = groupSubscriptionSnackbarHostState,
-            style = groupSubscriptionStyle,
+    Box(modifier = modifier) {
+        OAuthListWidget(
+            style = style,
+            onAuth = { oAuth, accessToken ->
+                onAuth(oAuth, accessToken)
+                isSuccessfulAuth = System.currentTimeMillis().toString()
+            },
+            onAuthCode = onAuthCode,
+            onFail = onFail,
+            oAuths = oAuths,
+            authParams = authParams.newBuilder {
+                scopes += "groups"
+            },
+            measureInProgress = false,
         )
-        LaunchedEffect(isSuccessfulAuth) {
-            state.show()
+        if (isSuccessfulAuth.isNotBlank()) {
+            val state = rememberGroupSubscriptionSheetState()
+            GroupSubscriptionSheet(
+                state = state,
+                accessTokenProvider = { VKID.instance.accessToken?.token ?: error("Not authorized") },
+                groupId = subscribeToGroupId,
+                onSuccess = onSuccessSubscribingToGroup,
+                onFail = onFailSubscribingToGroup,
+                snackbarHostState = groupSubscriptionSnackbarHostState,
+                style = groupSubscriptionStyle,
+            )
+            LaunchedEffect(isSuccessfulAuth) {
+                state.show()
+            }
         }
     }
 }

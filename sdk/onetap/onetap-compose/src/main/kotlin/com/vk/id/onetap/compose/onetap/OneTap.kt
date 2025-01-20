@@ -2,6 +2,7 @@
 
 package com.vk.id.onetap.compose.onetap
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -152,36 +153,37 @@ public fun OneTap(
     groupSubscriptionStyle: GroupSubscriptionStyle = GroupSubscriptionStyle.Light(),
 ) {
     var isSuccessfulAuth by remember { mutableStateOf("") }
-    OneTap(
-        modifier = modifier,
-        style = style,
-        onAuth = { oAuth, accessToken ->
-            onAuth(oAuth, accessToken)
-            isSuccessfulAuth = System.currentTimeMillis().toString()
-        },
-        onAuthCode = onAuthCode,
-        onFail = onFail,
-        oAuths = oAuths,
-        fastAuthEnabled = fastAuthEnabled,
-        signInAnotherAccountButtonEnabled = signInAnotherAccountButtonEnabled,
-        authParams = authParams.newBuilder {
-            scopes += "groups"
-        },
-        scenario = scenario,
-    )
-    if (isSuccessfulAuth.isNotBlank()) {
-        val state = rememberGroupSubscriptionSheetState()
-        GroupSubscriptionSheet(
-            state = state,
-            accessTokenProvider = { VKID.instance.accessToken?.token ?: error("Not authorized") },
-            groupId = subscribeToGroupId,
-            onSuccess = onSuccessSubscribingToGroup,
-            onFail = onFailSubscribingToGroup,
-            snackbarHostState = groupSubscriptionSnackbarHostState,
-            style = groupSubscriptionStyle,
+    Box(modifier = modifier) {
+        OneTap(
+            style = style,
+            onAuth = { oAuth, accessToken ->
+                onAuth(oAuth, accessToken)
+                isSuccessfulAuth = System.currentTimeMillis().toString()
+            },
+            onAuthCode = onAuthCode,
+            onFail = onFail,
+            oAuths = oAuths,
+            fastAuthEnabled = fastAuthEnabled,
+            signInAnotherAccountButtonEnabled = signInAnotherAccountButtonEnabled,
+            authParams = authParams.newBuilder {
+                scopes += "groups"
+            },
+            scenario = scenario,
         )
-        LaunchedEffect(isSuccessfulAuth) {
-            state.show()
+        if (isSuccessfulAuth.isNotBlank()) {
+            val state = rememberGroupSubscriptionSheetState()
+            GroupSubscriptionSheet(
+                state = state,
+                accessTokenProvider = { VKID.instance.accessToken?.token ?: error("Not authorized") },
+                groupId = subscribeToGroupId,
+                onSuccess = onSuccessSubscribingToGroup,
+                onFail = onFailSubscribingToGroup,
+                snackbarHostState = groupSubscriptionSnackbarHostState,
+                style = groupSubscriptionStyle,
+            )
+            LaunchedEffect(isSuccessfulAuth) {
+                state.show()
+            }
         }
     }
 }

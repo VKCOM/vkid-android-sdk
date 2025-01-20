@@ -130,7 +130,6 @@ public fun GroupSubscriptionSnackbarHost(
  * A bottomsheet that provides Group Subscription functionality.
  *
  * Launches VK group subscription flow.
- * This version puts [GroupSubscriptionSnackbarHost] in place you put this Composable and passed the state automatically.
  *
  * @param modifier Modifier for the widget, most likely should not be changed.
  * @param state Sheet state, can be used for showing and hiding the sheet.
@@ -141,53 +140,13 @@ public fun GroupSubscriptionSnackbarHost(
  * @param groupId The id of the group the user will be subscribed to.
  * @param onSuccess Will be called upon successful subscription.
  * @param onFail Will be called upon any unsuccessful flow completion along with an description of the specific encountered error.
- * @param style The widget style, can change appearance.
- */
-@Composable
-@Suppress("ModifierNotUsedAtRoot")
-public fun GroupSubscriptionSheet(
-    modifier: Modifier = Modifier,
-    state: GroupSubscriptionSheetState = rememberGroupSubscriptionSheetState(),
-    accessTokenProvider: (() -> String)? = null,
-    groupId: String,
-    onSuccess: () -> Unit,
-    onFail: (VKIDGroupSubscriptionFail) -> Unit = {},
-    style: GroupSubscriptionStyle = GroupSubscriptionStyle.Light(),
-) {
-    val snackbarHostState = remember { SnackbarHostState() }
-    Box(modifier = modifier) {
-        GroupSubscriptionSheet(
-            state = state,
-            accessTokenProvider = accessTokenProvider,
-            groupId = groupId,
-            onSuccess = onSuccess,
-            onFail = onFail,
-            snackbarHostState = snackbarHostState,
-            style = style,
-        )
-        GroupSubscriptionSnackbarHost(snackbarHostState)
-    }
-}
-
-/**
- * A bottomsheet that provides Group Subscription functionality.
- *
- * Launches VK group subscription flow.
- *
- * @param modifier Modifier for the widget, most likely should not be changed.
- * @param state Sheet state, can be used for showing and hiding the sheet.
- * @param accessTokenProvider The function that provides an access token that will be used for retrieving group information and subscribing the user.
- * NOTE: The token must have "groups" scope, otherwise you'll get an error.
- * NOTE: The token won't be automatically refreshed, in case it's outdated you'll get an error.
- * NOTE: In case you will pass null, the last token you received with the SDK will be used.
- * @param groupId The id of the group the user will be subscribed to.
- * @param onSuccess Will be called upon successful subscription.
- * @param onFail Will be called upon any unsuccessful flow completion along with an description of the specific encountered error.
+ * @param snackbarHostState The host state, should be the same as [GroupSubscriptionSnackbarHost].
+ * NOTE: In case you pass null, the host will be put in the place you put this Composable.
  * @param style The widget style, can change appearance.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@Suppress("LongMethod")
+@Suppress("LongMethod", "CyclomaticComplexMethod")
 public fun GroupSubscriptionSheet(
     modifier: Modifier = Modifier,
     state: GroupSubscriptionSheetState = rememberGroupSubscriptionSheetState(),
@@ -195,9 +154,10 @@ public fun GroupSubscriptionSheet(
     groupId: String,
     onSuccess: () -> Unit,
     onFail: (VKIDGroupSubscriptionFail) -> Unit = {},
-    snackbarHostState: SnackbarHostState,
+    snackbarHostState: SnackbarHostState? = null,
     style: GroupSubscriptionStyle = GroupSubscriptionStyle.Light(),
 ) {
+    val actualSnackbarHostState = snackbarHostState ?: remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
     val status = rememberSaveable { mutableStateOf<GroupSubscriptionSheetStatus>(GroupSubscriptionSheetStatus.Init) }
     var showBottomSheet by rememberSaveable { mutableStateOf(false) }
@@ -206,7 +166,7 @@ public fun GroupSubscriptionSheet(
     val actualOnSuccess by rememberUpdatedState {
         coroutineScope.launch {
             GroupSubscriptionAnalytics.successShown()
-            snackbarHostState.showSnackbar(snackbarLabel)
+            actualSnackbarHostState.showSnackbar(snackbarLabel)
         }
         onSuccess()
     }
@@ -264,70 +224,75 @@ public fun GroupSubscriptionSheet(
         }
         1 // Ignore result, just make sync LaunchedEffect(Unit)
     }
-    if (showBottomSheet) {
-        ModalBottomSheet(
-            modifier = modifier.testTag("onetap_bottomsheet"),
-            onDismissRequest = state::hide,
-            sheetState = state.materialSheetState,
-            containerColor = Color.Transparent,
-            dragHandle = null
-        ) {
-            Box(
-                modifier = Modifier
-                    .verticalScroll(rememberScrollState())
-                    .safeContentPadding()
-                    .wrapContentHeight()
-                    .fillMaxWidth()
-                    .widthIn(min = 344.dp, max = 800.dp)
-                    .padding(16.dp)
-                    .clip(RoundedCornerShape(style.cornersStyle.radiusDp.dp))
-                    .background(backgroundColor(style)),
-                contentAlignment = Alignment.Center,
+    Box(modifier = modifier) {
+        if (showBottomSheet) {
+            ModalBottomSheet(
+                modifier = Modifier.testTag("onetap_bottomsheet"),
+                onDismissRequest = state::hide,
+                sheetState = state.materialSheetState,
+                containerColor = Color.Transparent,
+                dragHandle = null
             ) {
-                GroupSubscriptionAnalytics.isErrorState
-                    .set(status.value is GroupSubscriptionSheetStatus.Failure || status.value is GroupSubscriptionSheetStatus.Resubscribing)
-                when (val actualStatus = status.value) {
-                    is GroupSubscriptionSheetStatus.Init -> Unit
-                    is GroupSubscriptionSheetStatus.Loaded -> LoadedState(style, state, actualStatus) {
-                        GroupSubscriptionAnalytics.subscribeToGroupClick()
-                        subscribeToGroup(
-                            status,
-                            actualStatus.data,
-                            state,
-                            coroutineScope,
-                            interactor,
-                            actualOnSuccess,
-                            GroupSubscriptionSheetStatus.Subscribing(actualStatus.data)
-                        )
-                    }
+                Box(
+                    modifier = Modifier
+                        .verticalScroll(rememberScrollState())
+                        .safeContentPadding()
+                        .wrapContentHeight()
+                        .fillMaxWidth()
+                        .widthIn(min = 344.dp, max = 800.dp)
+                        .padding(16.dp)
+                        .clip(RoundedCornerShape(style.cornersStyle.radiusDp.dp))
+                        .background(backgroundColor(style)),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    GroupSubscriptionAnalytics.isErrorState
+                        .set(status.value is GroupSubscriptionSheetStatus.Failure || status.value is GroupSubscriptionSheetStatus.Resubscribing)
+                    when (val actualStatus = status.value) {
+                        is GroupSubscriptionSheetStatus.Init -> Unit
+                        is GroupSubscriptionSheetStatus.Loaded -> LoadedState(style, state, actualStatus) {
+                            GroupSubscriptionAnalytics.subscribeToGroupClick()
+                            subscribeToGroup(
+                                status,
+                                actualStatus.data,
+                                state,
+                                coroutineScope,
+                                interactor,
+                                actualOnSuccess,
+                                GroupSubscriptionSheetStatus.Subscribing(actualStatus.data)
+                            )
+                        }
 
-                    is GroupSubscriptionSheetStatus.Subscribing -> SubscribingState(style, state, actualStatus)
-                    is GroupSubscriptionSheetStatus.Failure -> FailureState(style, state) {
-                        GroupSubscriptionAnalytics.retryClick()
-                        subscribeToGroup(
-                            status,
-                            actualStatus.data,
-                            state,
-                            coroutineScope,
-                            interactor,
-                            actualOnSuccess,
-                            GroupSubscriptionSheetStatus.Resubscribing(actualStatus.data)
-                        )
-                    }
+                        is GroupSubscriptionSheetStatus.Subscribing -> SubscribingState(style, state, actualStatus)
+                        is GroupSubscriptionSheetStatus.Failure -> FailureState(style, state) {
+                            GroupSubscriptionAnalytics.retryClick()
+                            subscribeToGroup(
+                                status,
+                                actualStatus.data,
+                                state,
+                                coroutineScope,
+                                interactor,
+                                actualOnSuccess,
+                                GroupSubscriptionSheetStatus.Resubscribing(actualStatus.data)
+                            )
+                        }
 
-                    is GroupSubscriptionSheetStatus.Resubscribing -> ResubscribingState(style, state) {
-                        subscribeToGroup(
-                            status,
-                            actualStatus.data,
-                            state,
-                            coroutineScope,
-                            interactor,
-                            actualOnSuccess,
-                            GroupSubscriptionSheetStatus.Resubscribing(actualStatus.data)
-                        )
+                        is GroupSubscriptionSheetStatus.Resubscribing -> ResubscribingState(style, state) {
+                            subscribeToGroup(
+                                status,
+                                actualStatus.data,
+                                state,
+                                coroutineScope,
+                                interactor,
+                                actualOnSuccess,
+                                GroupSubscriptionSheetStatus.Resubscribing(actualStatus.data)
+                            )
+                        }
                     }
                 }
             }
+        }
+        if (snackbarHostState == null) {
+            GroupSubscriptionSnackbarHost(actualSnackbarHostState)
         }
     }
 }
