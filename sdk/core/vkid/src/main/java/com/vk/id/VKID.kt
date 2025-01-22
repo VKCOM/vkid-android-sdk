@@ -20,6 +20,7 @@ import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthEventBridge
 import com.vk.id.internal.auth.AuthProvidersChooser
 import com.vk.id.internal.auth.AuthResult
+import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.auth.device.InternalVKIDDeviceIdProvider
 import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
 import com.vk.id.internal.context.InternalVKIDActivityStarter
@@ -110,6 +111,24 @@ public class VKID {
             })
         )
 
+        @InternalVKIDApi
+        public fun initForScreenshotTests(context: Context) {
+            init(
+                VKID(object : VKIDDepsProd(context, isFlutter = false) {
+                    override val serviceCredentials: Lazy<ServiceCredentials> = lazy {
+                        ServiceCredentials(
+                            clientID = "",
+                            clientSecret = "",
+                            redirectUri = "",
+                        )
+                    }
+                    override val statTracker: VKIDAnalytics.Tracker = object : VKIDAnalytics.Tracker {
+                        override fun trackEvent(name: String, vararg params: VKIDAnalytics.EventParam) = Unit
+                    }
+                })
+            )
+        }
+
         /**
          * Returns a VKID Instance.
          * You must call [init] before accessing this property.
@@ -176,7 +195,7 @@ public class VKID {
         this.loggerOut = deps.loggerOut
         this.tokenStorage = deps.tokenStorage
         this.groupSubscriptionApiServiceInternal = deps.groupSubscriptionApiService
-        this.clientId = deps.serviceCredentials.value.clientID
+        this.clientIdProvider = { deps.serviceCredentials.value.clientID }
         this.context = deps.context
 
         VKIDAnalytics.addTracker(deps.statTracker)
@@ -210,8 +229,10 @@ public class VKID {
     public val groupSubscriptionApiService: InternalVKIDGroupSubscriptionApiService
         get() = groupSubscriptionApiServiceInternal.value
 
+    private val clientIdProvider: () -> String
+
     @InternalVKIDApi
-    public val clientId: String
+    public val clientId: String get() = clientIdProvider()
 
     @InternalVKIDApi
     public val context: Context

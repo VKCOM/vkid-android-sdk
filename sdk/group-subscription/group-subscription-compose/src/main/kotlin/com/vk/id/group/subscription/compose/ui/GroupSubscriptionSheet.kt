@@ -321,7 +321,7 @@ private fun subscribeToGroup(
 }
 
 @Composable
-private fun LoadedState(
+internal fun LoadedState(
     style: GroupSubscriptionStyle,
     state: GroupSubscriptionSheetState,
     status: GroupSubscriptionSheetStatus.Loaded,
@@ -344,7 +344,7 @@ private fun LoadedState(
 }
 
 @Composable
-private fun SubscribingState(
+internal fun SubscribingState(
     style: GroupSubscriptionStyle,
     state: GroupSubscriptionSheetState,
     status: GroupSubscriptionSheetStatus.Subscribing,
@@ -357,7 +357,7 @@ private fun SubscribingState(
 }
 
 @Composable
-private fun ResubscribingState(
+internal fun ResubscribingState(
     style: GroupSubscriptionStyle,
     state: GroupSubscriptionSheetState,
     onRetry: () -> Unit,
@@ -370,7 +370,7 @@ private fun ResubscribingState(
 }
 
 @Composable
-private fun FailureState(
+internal fun FailureState(
     style: GroupSubscriptionStyle,
     state: GroupSubscriptionSheetState,
     onRetry: () -> Unit,
