@@ -119,7 +119,7 @@ public class GroupSubscriptionSheet @JvmOverloads constructor(
             groupId = groupId ?: error("groupId is not specified"),
             onSuccess = { onSuccess() },
             onFail = { onFail(it) },
-            snackbarHostState = snackbarHost?.snackbarHostState ?: error("snackbarHostState is not provided"),
+            snackbarHostState = snackbarHost?.snackbarHostState,
             style = style,
         )
     }

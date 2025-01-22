@@ -45,6 +45,7 @@ import com.vk.id.network.InternalVKIDApiContract
 import com.vk.id.network.InternalVKIDRealApi
 import com.vk.id.network.OkHttpClientProvider
 import com.vk.id.network.groupsubscription.InternalVKIDGroupSubscriptionApi
+import com.vk.id.network.groupsubscription.InternalVKIDGroupSubscriptionApiContract
 import com.vk.id.network.groupsubscription.InternalVKIDGroupSubscriptionApiService
 import com.vk.id.refresh.VKIDTokenRefresher
 import com.vk.id.refreshuser.VKIDUserRefresher
@@ -252,7 +253,7 @@ internal open class VKIDDepsProd(
         InternalVKIDGroupSubscriptionApi(client = okHttpClient)
     }
 
-    override val groupSubscriptionApiService: Lazy<InternalVKIDGroupSubscriptionApiService> = lazy {
+    override val groupSubscriptionApiService: Lazy<InternalVKIDGroupSubscriptionApiContract> = lazy {
         InternalVKIDGroupSubscriptionApiService(groupSubscriptionApi)
     }
 }

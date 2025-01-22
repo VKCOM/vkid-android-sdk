@@ -10,24 +10,6 @@ public sealed class VKIDGroupSubscriptionFail(
 ) {
 
     /**
-     * Represents the case when the user cancelled the flow.
-     */
-    public class Cancel : VKIDGroupSubscriptionFail(
-        description = "User cancelled the flow"
-    ) {
-
-        /** @suppress */
-        override fun equals(other: Any?): Boolean {
-            return other is Cancel && description == other.description
-        }
-
-        /** @suppress */
-        override fun hashCode(): Int {
-            return description.hashCode()
-        }
-    }
-
-    /**
      * Represents the case when you passed access token from service account to the flow.
      */
     public class ServiceAccount : VKIDGroupSubscriptionFail(
