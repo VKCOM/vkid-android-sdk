@@ -166,7 +166,7 @@ public fun GroupSubscriptionSheet(
     val snackbarLabel = stringResource(R.string.vkid_group_subscription_snackbar_label)
     val actualOnSuccess by rememberUpdatedState {
         coroutineScope.launch {
-            GroupSubscriptionAnalytics.successShown()
+            GroupSubscriptionAnalytics.successShown(accessTokenProvider?.invoke() ?: VKID.instance.accessToken?.token)
             actualSnackbarHostState.showSnackbar(snackbarLabel)
         }
         onSuccess()

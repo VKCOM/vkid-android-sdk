@@ -52,10 +52,11 @@ internal object GroupSubscriptionAnalytics {
 
     internal fun cancelClick() = track("community_follow_error_cancel_click")
 
-    internal fun successShown() = track("community_follow_success")
+    internal fun successShown(accessToken: String?) = track("community_follow_success", accessToken = accessToken)
 
-    private fun track(eventName: String) {
+    private fun track(eventName: String, accessToken: String? = null) {
         VKIDAnalytics.trackEvent(
+            accessToken = accessToken,
             eventName,
             nowhereScreen(),
             appIdParam(),
