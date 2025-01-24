@@ -21,6 +21,7 @@ internal object GroupSubscriptionAnalytics {
 
     internal val isErrorState = AtomicBoolean(false)
     internal val style = AtomicReference<GroupSubscriptionStyle?>(null)
+    internal val groupId = AtomicReference<String?>(null)
 
     @Composable
     internal fun SheetShown() {
@@ -62,11 +63,13 @@ internal object GroupSubscriptionAnalytics {
             appIdParam(),
             vkidInternalLanguageParam(VKID.instance.context),
             themeParam(),
+            groupIdParam()
         )
     }
 
     private fun appIdParam() = VKIDAnalytics.EventParam("app_id", intValue = VKID.instance.clientId.toIntOrNull())
     private fun nowhereScreen() = VKIDAnalytics.EventParam("screen_current", "nowhere")
+    private fun groupIdParam() = VKIDAnalytics.EventParam("group_id", intValue = groupId.get()?.toIntOrNull())
     private fun themeParam() = VKIDAnalytics.EventParam(
         "theme_type",
         when (style.get()) {

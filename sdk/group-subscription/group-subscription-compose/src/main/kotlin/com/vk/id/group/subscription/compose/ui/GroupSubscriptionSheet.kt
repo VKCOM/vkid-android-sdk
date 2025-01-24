@@ -158,6 +158,7 @@ public fun GroupSubscriptionSheet(
     style: GroupSubscriptionStyle = GroupSubscriptionStyle.Light(),
 ) {
     GroupSubscriptionAnalytics.style.set(style)
+    GroupSubscriptionAnalytics.groupId.set(groupId)
     val actualSnackbarHostState = snackbarHostState ?: remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
     val status = rememberSaveable { mutableStateOf<GroupSubscriptionSheetStatus>(GroupSubscriptionSheetStatus.Init) }
