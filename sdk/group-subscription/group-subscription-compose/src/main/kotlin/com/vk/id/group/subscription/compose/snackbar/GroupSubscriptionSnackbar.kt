@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -26,6 +27,7 @@ internal fun GroupSubscriptionSnackbar(
     message: String,
 ) {
     Snackbar(
+        modifier = Modifier.testTag("group_subscription_snackbar"),
         containerColor = backgroundColor(style),
         shape = ShapeDefaults.Small,
         action = {

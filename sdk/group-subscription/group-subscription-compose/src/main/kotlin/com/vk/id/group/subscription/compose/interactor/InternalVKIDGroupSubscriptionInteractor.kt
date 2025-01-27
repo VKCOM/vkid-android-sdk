@@ -3,7 +3,7 @@
 package com.vk.id.group.subscription.compose.interactor
 
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.network.groupsubscription.InternalVKIDGroupSubscriptionApiService
+import com.vk.id.network.groupsubscription.InternalVKIDGroupSubscriptionApiContract
 import com.vk.id.network.groupsubscription.data.InternalVKIDGroupByIdData
 import com.vk.id.network.groupsubscription.data.InternalVKIDGroupData
 import com.vk.id.network.groupsubscription.data.InternalVKIDGroupMembersData
@@ -14,7 +14,7 @@ import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.withContext
 
 internal class InternalVKIDGroupSubscriptionInteractor(
-    private val apiService: InternalVKIDGroupSubscriptionApiService,
+    private val apiService: InternalVKIDGroupSubscriptionApiContract,
     private val tokenStorage: InternalVKIDTokenStorage,
     private val groupId: String,
     private val externalAccessTokenProvider: (() -> String)?,

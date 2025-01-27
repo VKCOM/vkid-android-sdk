@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -23,12 +24,14 @@ import com.vk.id.group.subscription.compose.R
 @Composable
 internal fun SecondaryButton(
     style: GroupSubscriptionStyle,
+    testTag: String,
     text: String,
     onClick: () -> Unit
 ) {
     androidx.compose.material3.FilledTonalButton(
         onClick = onClick,
         modifier = Modifier
+            .testTag(testTag)
             .fillMaxWidth()
             .height(style.buttonsSizeStyle.heightDp.dp),
         shape = RoundedCornerShape(style.buttonsCornersStyle.radiusDp.dp),

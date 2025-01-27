@@ -228,7 +228,7 @@ public fun GroupSubscriptionSheet(
     Box(modifier = modifier) {
         if (showBottomSheet) {
             ModalBottomSheet(
-                modifier = Modifier.testTag("onetap_bottomsheet"),
+                modifier = Modifier.testTag("group_subscription_sheet"),
                 onDismissRequest = state::hide,
                 sheetState = state.materialSheetState,
                 containerColor = Color.Transparent,
@@ -433,11 +433,11 @@ private fun FailureDataState(
             ),
         )
         Spacer(Modifier.height(32.dp))
-        PrimaryButton(style, onRetry) {
+        PrimaryButton(style, testTag = "group_subscription_retry", onClick = onRetry) {
             retryButtonContent()
         }
         Spacer(Modifier.height(12.dp))
-        SecondaryButton(style, stringResource(R.string.vkid_group_subscription_fail_secondary)) {
+        SecondaryButton(style, testTag = "group_subscription_cancel", text = stringResource(R.string.vkid_group_subscription_fail_secondary)) {
             state.hide()
             GroupSubscriptionAnalytics.cancelClick()
         }
@@ -473,11 +473,11 @@ private fun ColumnScope.DataStateButtons(
     state: GroupSubscriptionSheetState,
     subscribeButtonContent: @Composable () -> Unit
 ) {
-    PrimaryButton(style, onClick = onSubscribeButtonClick) {
+    PrimaryButton(style, testTag = "group_subscription_subscribe", onClick = onSubscribeButtonClick) {
         subscribeButtonContent()
     }
     Spacer(Modifier.height(12.dp))
-    SecondaryButton(style, stringResource(R.string.vkid_group_subscription_secondary)) {
+    SecondaryButton(style, testTag = "group_subscription_later", text = stringResource(R.string.vkid_group_subscription_secondary)) {
         GroupSubscriptionAnalytics.nextTimeClick()
         state.hide()
     }

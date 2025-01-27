@@ -38,7 +38,7 @@ import com.vk.id.logger.internalVKIDCreateLoggerForClass
 import com.vk.id.logout.VKIDLoggerOut
 import com.vk.id.logout.VKIDLogoutCallback
 import com.vk.id.logout.VKIDLogoutParams
-import com.vk.id.network.groupsubscription.InternalVKIDGroupSubscriptionApiService
+import com.vk.id.network.groupsubscription.InternalVKIDGroupSubscriptionApiContract
 import com.vk.id.refresh.VKIDRefreshTokenCallback
 import com.vk.id.refresh.VKIDRefreshTokenParams
 import com.vk.id.refresh.VKIDTokenRefresher
@@ -93,6 +93,7 @@ public class VKID {
         internal fun init(
             context: Context,
             mockApi: InternalVKIDOverrideApi,
+            groupSubscriptionApiContract: InternalVKIDGroupSubscriptionApiContract,
             deviceIdStorage: InternalVKIDDeviceIdProvider.DeviceIdStorage?,
             prefsStore: InternalVKIDPrefsStore?,
             encryptedSharedPreferencesStorage: InternalVKIDEncryptedSharedPreferencesStorage?,
@@ -101,6 +102,8 @@ public class VKID {
         ): Unit = init(
             VKID(object : VKIDDepsProd(context, isFlutter = false) {
                 override val api = lazy { InternalVKIDImmediateApi(mockApi) }
+                override val groupSubscriptionApiService: Lazy<InternalVKIDGroupSubscriptionApiContract> =
+                    lazy { groupSubscriptionApiContract }
                 override val vkSilentAuthInfoProvider = lazy { TestSilentAuthInfoProvider() }
                 override val deviceIdStorage = lazy { deviceIdStorage ?: super.deviceIdStorage.value }
                 override val prefsStore = lazy { prefsStore ?: super.prefsStore.value }
@@ -220,13 +223,13 @@ public class VKID {
     private val tokenExchanger: Lazy<VKIDTokenExchanger>
     private val userRefresher: Lazy<VKIDUserRefresher>
     private val loggerOut: Lazy<VKIDLoggerOut>
-    private val groupSubscriptionApiServiceInternal: Lazy<InternalVKIDGroupSubscriptionApiService>
+    private val groupSubscriptionApiServiceInternal: Lazy<InternalVKIDGroupSubscriptionApiContract>
 
     @InternalVKIDApi
     public val tokenStorage: InternalVKIDTokenStorage
 
     @InternalVKIDApi
-    public val groupSubscriptionApiService: InternalVKIDGroupSubscriptionApiService
+    public val groupSubscriptionApiService: InternalVKIDGroupSubscriptionApiContract
         get() = groupSubscriptionApiServiceInternal.value
 
     private val clientIdProvider: () -> String
@@ -451,6 +454,21 @@ public class VKID {
      */
     public val accessToken: AccessToken?
         get() = tokenStorage.accessToken
+
+    @InternalVKIDApi
+    public fun mockAuthorized() {
+        tokenStorage.accessToken = AccessToken(
+            token = "",
+            idToken = null,
+            userID = 0,
+            expireTime = 0,
+            userData = VKIDUser(
+                firstName = "",
+                lastName = "",
+            ),
+            scopes = null,
+        )
+    }
 
     /**
      * Returns current refresh token or null if auth wasn't passed.

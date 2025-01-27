@@ -13,8 +13,9 @@ import java.io.IOException
 @InternalVKIDApi
 public class InternalVKIDGroupSubscriptionApiService(
     private val api: InternalVKIDGroupSubscriptionApi,
-) {
-    public suspend fun isServiceAccount(
+) : InternalVKIDGroupSubscriptionApiContract {
+
+    override suspend fun isServiceAccount(
         accessToken: String,
     ): Boolean {
         return withContext(Dispatchers.IO) {
@@ -28,7 +29,7 @@ public class InternalVKIDGroupSubscriptionApiService(
         }
     }
 
-    public suspend fun getGroup(
+    override suspend fun getGroup(
         accessToken: String,
         groupId: String
     ): InternalVKIDGroupByIdData {
@@ -52,7 +53,7 @@ public class InternalVKIDGroupSubscriptionApiService(
         }
     }
 
-    public suspend fun getMembers(
+    override suspend fun getMembers(
         accessToken: String,
         groupId: String,
         justFriends: Boolean
@@ -79,7 +80,7 @@ public class InternalVKIDGroupSubscriptionApiService(
         }
     }
 
-    public suspend fun subscribeToGroup(
+    override suspend fun subscribeToGroup(
         accessToken: String,
         groupId: String,
     ) {

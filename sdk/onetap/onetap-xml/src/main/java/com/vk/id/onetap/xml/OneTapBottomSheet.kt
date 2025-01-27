@@ -157,7 +157,7 @@ public class OneTapBottomSheet @JvmOverloads constructor(
                 subscribeToGroupId = groupId!!,
                 onSuccessSubscribingToGroup = { onSuccessSubscribingToGroup() },
                 onFailSubscribingToGroup = { onFailSubscribingToGroup(it) },
-                groupSubscriptionSnackbarHostState = snackbarHost?.snackbarHostState ?: error("snackbarHostState is not provided"),
+                groupSubscriptionSnackbarHostState = snackbarHost?.snackbarHostState,
                 groupSubscriptionStyle = groupSubscriptionStyle,
             )
         } else {
