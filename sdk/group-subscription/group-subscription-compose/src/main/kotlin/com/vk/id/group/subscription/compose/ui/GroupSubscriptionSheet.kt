@@ -525,7 +525,7 @@ private fun ColumnScope.DataStateSubscribers(
                     color = textSecondaryColor(style),
                     fontSize = 15.sp,
                     lineHeight = 20.sp,
-                    fontWeight = FontWeight.Normal,
+                    fontWeight = FontWeight.Medium,
                 ),
             )
             if (data.friendsCount > 0) {
@@ -537,7 +537,7 @@ private fun ColumnScope.DataStateSubscribers(
                         color = textSecondaryColor(style),
                         fontSize = 15.sp,
                         lineHeight = 20.sp,
-                        fontWeight = FontWeight.Normal,
+                        fontWeight = FontWeight.Medium,
                     ),
                 )
             }
