@@ -81,6 +81,8 @@ internal fun OneTapBottomSheetScreen() {
     }
     Box {
         var host: GroupSubscriptionSnackbarHost? by remember { mutableStateOf(null) }
+        val bottomSheetState = rememberOneTapBottomSheetState()
+        var bottomSheetView: OneTapBottomSheet? by remember { mutableStateOf(null) }
         Column(
             modifier = Modifier
                 .padding(horizontal = 8.dp)
@@ -88,98 +90,6 @@ internal fun OneTapBottomSheetScreen() {
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.Start
         ) {
-            val bottomSheetState = rememberOneTapBottomSheetState()
-            var bottomSheetView: OneTapBottomSheet? by remember { mutableStateOf(null) }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                val onAuthCode = { data: AuthCodeData, isCompletion: Boolean ->
-                    code = data.code
-                    token.value = null
-                    if (isCompletion) {
-                        showToast(context, "Received auth code")
-                    }
-                }
-                val authParams = VKIDAuthUiParams {
-                    this.scopes = scopes.split(' ', ',').toSet()
-                    this.state = state.takeIf { it.isNotBlank() }
-                    this.codeChallenge = codeChallenge.takeIf { it.isNotBlank() }
-                }
-                if (shouldUseXml.value) {
-                    @Composable
-                    fun BottomSheetAndroidView(fastAuthEnabled: Boolean) {
-                        AndroidView(factory = { context ->
-                            OneTapBottomSheet(context).apply {
-                                setCallbacks(
-                                    onAuth = getOneTapSuccessCallback(context) { token.value = it },
-                                    onAuthCode = onAuthCode,
-                                    onFail = getOneTapFailCallback(context),
-                                )
-                                bottomSheetView = this
-                                this.fastAuthEnabled = fastAuthEnabled
-                            }
-                        })
-                        bottomSheetView?.apply {
-                            this.oAuths = selectedOAuths.value
-                            this.authParams = authParams
-                            this.groupId = "1".takeIf { groupSubscription.value }
-                            this.snackbarHost = host
-                            this.setGroupSubscriptionCallbacks(
-                                onSuccess = { showToast(context, "Subscribed") },
-                                onFail = { showToast(context, "Fail: ${it.description}") },
-                            )
-                        }
-                    }
-                    if (fastAuthEnabled.value) {
-                        BottomSheetAndroidView(fastAuthEnabled = true)
-                    } else {
-                        BottomSheetAndroidView(fastAuthEnabled = false)
-                    }
-                } else {
-                    // Force state drop when changing the parameter
-                    @Composable
-                    fun RenderBottomSheet(fastAuthEnabled: Boolean) {
-                        if (groupSubscription.value) {
-                            OneTapBottomSheet(
-                                style = selectedStyle.value,
-                                onAuth = getOneTapSuccessCallback(context) { token.value = it },
-                                onAuthCode = onAuthCode,
-                                onFail = getOneTapFailCallback(context),
-                                state = bottomSheetState,
-                                scenario = selectedScenario.value,
-                                autoHideOnSuccess = autoHideSheetOnSuccess.value,
-                                serviceName = "VKID Sample",
-                                oAuths = selectedOAuths.value,
-                                authParams = authParams,
-                                fastAuthEnabled = fastAuthEnabled,
-                                subscribeToGroupId = "1",
-                                onSuccessSubscribingToGroup = { showToast(context, "Subscribed") },
-                                onFailSubscribingToGroup = { showToast(context, "Fail: ${it.description}") },
-                            )
-                        } else {
-                            OneTapBottomSheet(
-                                style = selectedStyle.value,
-                                onAuth = getOneTapSuccessCallback(context) { token.value = it },
-                                onAuthCode = onAuthCode,
-                                onFail = getOneTapFailCallback(context),
-                                state = bottomSheetState,
-                                scenario = selectedScenario.value,
-                                autoHideOnSuccess = autoHideSheetOnSuccess.value,
-                                serviceName = "VKID Sample",
-                                oAuths = selectedOAuths.value,
-                                authParams = authParams,
-                                fastAuthEnabled = fastAuthEnabled,
-                            )
-                        }
-                    }
-                    if (fastAuthEnabled.value) {
-                        RenderBottomSheet(true)
-                    } else {
-                        RenderBottomSheet(false)
-                    }
-                }
-            }
             Spacer(Modifier.padding(8.dp))
             Button(
                 text = "Show",
@@ -267,6 +177,97 @@ internal fun OneTapBottomSheetScreen() {
                 shape = RectangleShape,
             )
             Spacer(modifier = Modifier.height(16.dp))
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            val onAuthCode = { data: AuthCodeData, isCompletion: Boolean ->
+                code = data.code
+                token.value = null
+                if (isCompletion) {
+                    showToast(context, "Received auth code")
+                }
+            }
+            val authParams = VKIDAuthUiParams {
+                this.scopes = scopes.split(' ', ',').toSet()
+                this.state = state.takeIf { it.isNotBlank() }
+                this.codeChallenge = codeChallenge.takeIf { it.isNotBlank() }
+            }
+            if (shouldUseXml.value) {
+                @Composable
+                fun BottomSheetAndroidView(fastAuthEnabled: Boolean) {
+                    AndroidView(factory = { context ->
+                        OneTapBottomSheet(context).apply {
+                            setCallbacks(
+                                onAuth = getOneTapSuccessCallback(context) { token.value = it },
+                                onAuthCode = onAuthCode,
+                                onFail = getOneTapFailCallback(context),
+                            )
+                            bottomSheetView = this
+                            this.fastAuthEnabled = fastAuthEnabled
+                        }
+                    })
+                    bottomSheetView?.apply {
+                        this.oAuths = selectedOAuths.value
+                        this.authParams = authParams
+                        this.groupId = "1".takeIf { groupSubscription.value }
+                        this.snackbarHost = host
+                        this.setGroupSubscriptionCallbacks(
+                            onSuccess = { showToast(context, "Subscribed") },
+                            onFail = { showToast(context, "Fail: ${it.description}") },
+                        )
+                    }
+                }
+                if (fastAuthEnabled.value) {
+                    BottomSheetAndroidView(fastAuthEnabled = true)
+                } else {
+                    BottomSheetAndroidView(fastAuthEnabled = false)
+                }
+            } else {
+                // Force state drop when changing the parameter
+                @Composable
+                fun RenderBottomSheet(fastAuthEnabled: Boolean) {
+                    if (groupSubscription.value) {
+                        OneTapBottomSheet(
+                            modifier = Modifier.fillMaxSize(),
+                            style = selectedStyle.value,
+                            onAuth = getOneTapSuccessCallback(context) { token.value = it },
+                            onAuthCode = onAuthCode,
+                            onFail = getOneTapFailCallback(context),
+                            state = bottomSheetState,
+                            scenario = selectedScenario.value,
+                            autoHideOnSuccess = autoHideSheetOnSuccess.value,
+                            serviceName = "VKID Sample",
+                            oAuths = selectedOAuths.value,
+                            authParams = authParams,
+                            fastAuthEnabled = fastAuthEnabled,
+                            subscribeToGroupId = "1",
+                            onSuccessSubscribingToGroup = { showToast(context, "Subscribed") },
+                            onFailSubscribingToGroup = { showToast(context, "Fail: ${it.description}") },
+                        )
+                    } else {
+                        OneTapBottomSheet(
+                            style = selectedStyle.value,
+                            onAuth = getOneTapSuccessCallback(context) { token.value = it },
+                            onAuthCode = onAuthCode,
+                            onFail = getOneTapFailCallback(context),
+                            state = bottomSheetState,
+                            scenario = selectedScenario.value,
+                            autoHideOnSuccess = autoHideSheetOnSuccess.value,
+                            serviceName = "VKID Sample",
+                            oAuths = selectedOAuths.value,
+                            authParams = authParams,
+                            fastAuthEnabled = fastAuthEnabled,
+                        )
+                    }
+                }
+                if (fastAuthEnabled.value) {
+                    RenderBottomSheet(true)
+                } else {
+                    RenderBottomSheet(false)
+                }
+            }
         }
         AndroidView({ context ->
             GroupSubscriptionSnackbarHost(context).also { host = it }
