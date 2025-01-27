@@ -15,7 +15,7 @@ import com.vk.id.logger.internalVKIDCreateLoggerForClass
 import com.vk.id.logout.VKIDLoggerOut
 import com.vk.id.logout.VKIDLogoutCallback
 import com.vk.id.logout.VKIDLogoutFail
-import com.vk.id.storage.TokenStorage
+import com.vk.id.storage.InternalVKIDTokenStorage
 import kotlinx.coroutines.withContext
 
 @Suppress("LongParameterList")
@@ -28,7 +28,7 @@ internal class AuthResultHandler(
     private val api: VKIDApiService,
     private val tokensHandler: TokensHandler,
     private val loggerOut: VKIDLoggerOut,
-    private val tokenStorage: TokenStorage,
+    private val tokenStorage: InternalVKIDTokenStorage,
 ) {
 
     private val logger = internalVKIDCreateLoggerForClass()

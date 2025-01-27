@@ -14,9 +14,14 @@ android {
 dependencies {
     api(projects.vkid)
     api(projects.common)
+    api(projects.groupSubscriptionCommon)
+    api(projects.analytics)
+    implementation(projects.network)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.material3.android)
+    implementation(libs.coil)
+    implementation(libs.coil.compose)
     debugImplementation(libs.androidx.compose.ui.tooling)
 }

@@ -22,6 +22,16 @@ import com.vk.id.VKIDAuthFail
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.InternalVKIDApi
+import com.vk.id.group.subscription.common.fail.VKIDGroupSubscriptionFail
+import com.vk.id.group.subscription.common.style.GroupSubscriptionButtonsCornersStyle
+import com.vk.id.group.subscription.common.style.GroupSubscriptionSheetCornersStyle
+import com.vk.id.group.subscription.common.style.GroupSubscriptionStyle
+import com.vk.id.group.subscription.xml.GroupSubscriptionSnackbarHost
+import com.vk.id.group.subscription.xml.vkidInternalGetGroupId
+import com.vk.id.group.subscription.xml.vkidInternalGetGroupSubscriptionButtonCornerRadius
+import com.vk.id.group.subscription.xml.vkidInternalGetGroupSubscriptionButtonSize
+import com.vk.id.group.subscription.xml.vkidInternalGetGroupSubscriptionCornerRadius
+import com.vk.id.group.subscription.xml.vkidInternalGetGroupSubscriptionStyleConstructor
 import com.vk.id.multibranding.OAuthListWidget
 import com.vk.id.multibranding.common.style.OAuthListWidgetCornersStyle
 import com.vk.id.multibranding.common.style.OAuthListWidgetSizeStyle
@@ -69,11 +79,49 @@ public class OAuthListWidget @JvmOverloads constructor(
     private var onAuthCode: (AuthCodeData, Boolean) -> Unit = { _, _ -> }
     private var onFail: (OAuth, VKIDAuthFail) -> Unit = { _, _ -> }
 
+    /**
+     * The id of the group the user will be subscribed to.
+     */
+    public var groupId: String? = null
+        set(value) {
+            field = value
+            onGroupIdChange(value)
+        }
+    private var onGroupIdChange: (String?) -> Unit = {}
+    private var onSuccessSubscribingToGroup: () -> Unit = {
+        error("setGroupSubscriptionCallbacks was not called")
+    }
+    private var onFailSubscribingToGroup: (VKIDGroupSubscriptionFail) -> Unit = {
+        error("setGroupSubscriptionCallbacks was not called")
+    }
+
+    /**
+     * The host for snackbars. Pass the view after placing it on screen.
+     */
+    public var snackbarHost: GroupSubscriptionSnackbarHost? = null
+        set(value) {
+            field = value
+            onSnackbarHostChange(value)
+        }
+    private var onSnackbarHostChange: (GroupSubscriptionSnackbarHost?) -> Unit = {}
+
+    /**
+     * The widget style, can change appearance.
+     */
+    public var groupSubscriptionStyle: GroupSubscriptionStyle = GroupSubscriptionStyle.Light()
+        set(value) {
+            field = value
+            onGroupSubscriptionStyleChange(value)
+        }
+    private var onGroupSubscriptionStyleChange: (GroupSubscriptionStyle) -> Unit = {}
+
     init {
-        val (style, oAuths, scopes) = parseAttrs(context, attrs)
-        this.style = style
-        this.oAuths = oAuths
-        this.authParams = authParams.newBuilder { this.scopes = scopes }
+        val params = parseAttrs(context, attrs)
+        this.style = params.style
+        this.oAuths = params.oAuths
+        this.authParams = authParams.newBuilder { this.scopes = params.scopes }
+        this.groupId = params.groupId
+        this.groupSubscriptionStyle = params.groupSubscriptionStyle
         addView(composeView)
         composeView.setContent { Content() }
     }
@@ -87,15 +135,39 @@ public class OAuthListWidget @JvmOverloads constructor(
         onOAuthsChange = { oAuths = it }
         var authParams by remember { mutableStateOf(authParams) }
         onAuthParamsChange = { authParams = it }
-        OAuthListWidget(
-            modifier = Modifier,
-            style = style,
-            onAuth = { oAuth, accessToken -> onAuth(oAuth, accessToken) },
-            onAuthCode = { data, isCompletion -> onAuthCode(data, isCompletion) },
-            onFail = { oAuth, fail -> onFail(oAuth, fail) },
-            oAuths = oAuths,
-            authParams = authParams,
-        )
+        var groupId by remember { mutableStateOf(groupId) }
+        onGroupIdChange = { groupId = it }
+        var snackbarHost by remember { mutableStateOf(snackbarHost) }
+        onSnackbarHostChange = { snackbarHost = it }
+        var groupSubscriptionStyle by remember { mutableStateOf(groupSubscriptionStyle) }
+        onGroupSubscriptionStyleChange = { groupSubscriptionStyle = it }
+
+        if (groupId != null) {
+            OAuthListWidget(
+                modifier = Modifier,
+                style = style,
+                onAuth = { oAuth, accessToken -> onAuth(oAuth, accessToken) },
+                onAuthCode = { data, isCompletion -> onAuthCode(data, isCompletion) },
+                onFail = { oAuth, fail -> onFail(oAuth, fail) },
+                oAuths = oAuths,
+                authParams = authParams,
+                subscribeToGroupId = groupId!!,
+                onSuccessSubscribingToGroup = { onSuccessSubscribingToGroup() },
+                onFailSubscribingToGroup = { onFailSubscribingToGroup(it) },
+                groupSubscriptionSnackbarHostState = snackbarHost?.snackbarHostState ?: error("snackbarHostState is not provided"),
+                groupSubscriptionStyle = groupSubscriptionStyle,
+            )
+        } else {
+            OAuthListWidget(
+                modifier = Modifier,
+                style = style,
+                onAuth = { oAuth, accessToken -> onAuth(oAuth, accessToken) },
+                onAuthCode = { data, isCompletion -> onAuthCode(data, isCompletion) },
+                onFail = { oAuth, fail -> onFail(oAuth, fail) },
+                oAuths = oAuths,
+                authParams = authParams,
+            )
+        }
     }
 
     /**
@@ -117,29 +189,72 @@ public class OAuthListWidget @JvmOverloads constructor(
         this.onAuthCode = onAuthCode
         this.onFail = onFail
     }
+
+    /**
+     * Callbacks that provide Group Subscription result.
+     *
+     * @param onSuccess Will be called upon successful subscription.
+     * @param onFail Will be called upon any unsuccessful flow completion along with an description of the specific encountered error.
+     */
+    public fun setGroupSubscriptionCallbacks(
+        onSuccess: () -> Unit,
+        onFail: (VKIDGroupSubscriptionFail) -> Unit = {}
+    ) {
+        this.onSuccessSubscribingToGroup = onSuccess
+        this.onFailSubscribingToGroup = onFail
+    }
 }
+
+internal data class OAuthListWidgetParsedAttrs(
+    val style: OAuthListWidgetStyle,
+    val oAuths: Set<OAuth>,
+    val scopes: Set<String>,
+    val groupId: String?,
+    val groupSubscriptionStyle: GroupSubscriptionStyle,
+)
 
 private fun parseAttrs(
     context: Context,
     attrs: AttributeSet?,
-): Triple<OAuthListWidgetStyle, Set<OAuth>, Set<String>> {
+): OAuthListWidgetParsedAttrs {
     context.theme.obtainStyledAttributes(
         attrs,
-        R.styleable.vkid_OAuthListWidget,
+        com.vk.id.group.subscription.xml.R.styleable.vkid_GroupSubscription,
         0,
         0
-    ).apply {
+    ).also { groupSubscriptionTypedArray ->
         try {
-            return Triple(
-                getStyleConstructor(context = context)(
-                    OAuthListWidgetCornersStyle.Custom(context.pixelsToDp(getCornerRadius(context))),
-                    getSize(),
-                ),
-                getOAuths(),
-                getScopes(),
-            )
+            context.theme.obtainStyledAttributes(
+                attrs,
+                R.styleable.vkid_OAuthListWidget,
+                0,
+                0
+            ).also { oAuthListWidgetTypedArray ->
+                try {
+                    return OAuthListWidgetParsedAttrs(
+                        style = oAuthListWidgetTypedArray.getStyleConstructor(context = context)(
+                            OAuthListWidgetCornersStyle.Custom(context.pixelsToDp(oAuthListWidgetTypedArray.getCornerRadius(context))),
+                            oAuthListWidgetTypedArray.getSize(),
+                        ),
+                        oAuths = oAuthListWidgetTypedArray.getOAuths(),
+                        scopes = oAuthListWidgetTypedArray.getScopes(),
+                        groupId = groupSubscriptionTypedArray.vkidInternalGetGroupId(),
+                        groupSubscriptionStyle = groupSubscriptionTypedArray.vkidInternalGetGroupSubscriptionStyleConstructor(context)(
+                            GroupSubscriptionSheetCornersStyle.Custom(
+                                context.pixelsToDp(groupSubscriptionTypedArray.vkidInternalGetGroupSubscriptionCornerRadius(context))
+                            ),
+                            GroupSubscriptionButtonsCornersStyle.Custom(
+                                context.pixelsToDp(groupSubscriptionTypedArray.vkidInternalGetGroupSubscriptionButtonCornerRadius(context))
+                            ),
+                            groupSubscriptionTypedArray.vkidInternalGetGroupSubscriptionButtonSize(),
+                        ),
+                    )
+                } finally {
+                    oAuthListWidgetTypedArray.close()
+                }
+            }
         } finally {
-            recycle()
+            groupSubscriptionTypedArray.close()
         }
     }
 }

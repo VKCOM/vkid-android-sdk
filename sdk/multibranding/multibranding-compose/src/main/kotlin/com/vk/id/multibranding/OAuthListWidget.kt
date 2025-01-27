@@ -16,11 +16,15 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicText
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -47,6 +51,11 @@ import com.vk.id.auth.VKIDAuthCallback
 import com.vk.id.auth.VKIDAuthParams.Theme
 import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.InternalVKIDApi
+import com.vk.id.group.subscription.common.fail.VKIDGroupSubscriptionFail
+import com.vk.id.group.subscription.common.style.GroupSubscriptionStyle
+import com.vk.id.group.subscription.compose.ui.GroupSubscriptionSheet
+import com.vk.id.group.subscription.compose.ui.GroupSubscriptionSnackbarHost
+import com.vk.id.group.subscription.compose.ui.rememberGroupSubscriptionSheetState
 import com.vk.id.multibranding.common.style.OAuthListWidgetStyle
 import com.vk.id.multibranding.internal.LocalMultibrandingAnalyticsContext
 import kotlinx.coroutines.CoroutineScope
@@ -83,6 +92,74 @@ public fun OAuthListWidget(
         authParams = authParams,
         measureInProgress = false,
     )
+}
+
+/**
+ * Constructs a multibranding widget that supports auth with multiple [OAuth]s.
+ *
+ * This version integrates Group Subscription flow. The flow will be shown right after successful auth.
+ * NOTE: The "groups" scope will be added automatically to the set of requested scopes.
+ *
+ * @param modifier Layout configuration for the widget.
+ * @param style Styling widget configuration.
+ * @param onAuth A callback to be invoked upon a successful auth.
+ * @param onAuthCode A callback to be invoked upon successful first step of auth - receiving auth code which can later be exchanged to access token.
+ * @param onFail A callback to be invoked upon an error during auth.
+ * @param oAuths A set of [OAuth]s the should be displayed to the user.
+ * @param authParams Optional params to be passed to auth. See [VKIDAuthUiParams.Builder] for more info.
+ * @param subscribeToGroupId The id of the group the user will be subscribed to.
+ * @param onSuccessSubscribingToGroup Will be called upon successful subscription.
+ * @param onFailSubscribingToGroup Will be called upon any unsuccessful flow completion along with an description of the specific encountered error.
+ * @param groupSubscriptionSnackbarHostState The host state for snackbars.
+ * Use along with [GroupSubscriptionSnackbarHost] and pass the same state as there.
+ * @param groupSubscriptionStyle The widget style, can change appearance.
+ */
+@Composable
+public fun OAuthListWidget(
+    modifier: Modifier = Modifier,
+    style: OAuthListWidgetStyle = OAuthListWidgetStyle.Dark(),
+    onAuth: (oAuth: OAuth, accessToken: AccessToken) -> Unit,
+    onAuthCode: (data: AuthCodeData, isCompletion: Boolean) -> Unit = { _, _ -> },
+    onFail: (oAuth: OAuth, fail: VKIDAuthFail) -> Unit,
+    oAuths: Set<OAuth> = OAuth.entries.toSet(),
+    authParams: VKIDAuthUiParams = VKIDAuthUiParams {},
+    subscribeToGroupId: String,
+    onSuccessSubscribingToGroup: () -> Unit,
+    onFailSubscribingToGroup: (VKIDGroupSubscriptionFail) -> Unit = {},
+    groupSubscriptionSnackbarHostState: SnackbarHostState,
+    groupSubscriptionStyle: GroupSubscriptionStyle = GroupSubscriptionStyle.Light(),
+) {
+    var isSuccessfulAuth by remember { mutableStateOf("") }
+    OAuthListWidget(
+        modifier = modifier,
+        style = style,
+        onAuth = { oAuth, accessToken ->
+            onAuth(oAuth, accessToken)
+            isSuccessfulAuth = System.currentTimeMillis().toString()
+        },
+        onAuthCode = onAuthCode,
+        onFail = onFail,
+        oAuths = oAuths,
+        authParams = authParams.newBuilder {
+            scopes += "groups"
+        },
+        measureInProgress = false,
+    )
+    if (isSuccessfulAuth.isNotBlank()) {
+        val state = rememberGroupSubscriptionSheetState()
+        GroupSubscriptionSheet(
+            state = state,
+            accessTokenProvider = { VKID.instance.accessToken?.token ?: error("Not authorized") },
+            groupId = subscribeToGroupId,
+            onSuccess = onSuccessSubscribingToGroup,
+            onFail = onFailSubscribingToGroup,
+            snackbarHostState = groupSubscriptionSnackbarHostState,
+            style = groupSubscriptionStyle,
+        )
+        LaunchedEffect(isSuccessfulAuth) {
+            state.show()
+        }
+    }
 }
 
 @InternalVKIDApi

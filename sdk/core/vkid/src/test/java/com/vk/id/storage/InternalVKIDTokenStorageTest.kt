@@ -100,11 +100,11 @@ private val V2_REFRESH_TOKEN = RefreshToken(
     scopes = setOf("phone", "email"),
 )
 
-internal class TokenStorageTest : BehaviorSpec({
+internal class InternalVKIDTokenStorageTest : BehaviorSpec({
     isolationMode = IsolationMode.InstancePerLeaf
     Given("A token storage") {
         val prefs = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
-        val storage = TokenStorage(prefs)
+        val storage = InternalVKIDTokenStorage(prefs)
         When("Saves access token") {
             every { prefs.set(ACCESS_TOKEN_KEY, V2_ACCESS_TOKEN_JSON) } just runs
             storage.accessToken = V2_ACCESS_TOKEN

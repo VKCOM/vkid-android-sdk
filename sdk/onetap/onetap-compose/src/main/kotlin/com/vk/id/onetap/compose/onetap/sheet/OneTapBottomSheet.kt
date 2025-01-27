@@ -2,9 +2,11 @@
 
 package com.vk.id.onetap.compose.onetap.sheet
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -15,6 +17,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
@@ -27,6 +30,11 @@ import com.vk.id.auth.Prompt
 import com.vk.id.auth.VKIDAuthCallback
 import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.InternalVKIDApi
+import com.vk.id.group.subscription.common.fail.VKIDGroupSubscriptionFail
+import com.vk.id.group.subscription.common.style.GroupSubscriptionStyle
+import com.vk.id.group.subscription.compose.ui.GroupSubscriptionSheet
+import com.vk.id.group.subscription.compose.ui.GroupSubscriptionSnackbarHost
+import com.vk.id.group.subscription.compose.ui.rememberGroupSubscriptionSheetState
 import com.vk.id.multibranding.internal.LocalMultibrandingAnalyticsContext
 import com.vk.id.multibranding.internal.MultibrandingAnalyticsContext
 import com.vk.id.onetap.common.OneTapOAuth
@@ -52,6 +60,180 @@ import kotlin.time.Duration.Companion.seconds
 @Composable
 public fun rememberOneTapBottomSheetState(): OneTapBottomSheetState {
     return rememberOneTapBottomSheetStateInternal()
+}
+
+/**
+ * Composable function to display a bottom sheet for VKID One Tap authentication with multibranding.
+ *
+ * This version integrates Group Subscription flow. The flow will be shown right after successful auth.
+ * NOTE: The "groups" scope will be added automatically to the set of requested scopes.
+ *
+ * This version puts [GroupSubscriptionSnackbarHost] in place you put this Composable and passed the state automatically.
+ *
+ * @param modifier Modifier for this composable.
+ * @param state The state of the bottom sheet. To control sheet create state instance with [rememberOneTapBottomSheetState] and pass it here.
+ * @param serviceName The name of the service for authentication. Will be displayed as title of sheet.
+ * @param scenario The [OneTapScenario] under which the authentication is being performed. It reflects on the texts of the button and sheet.
+ * @param autoHideOnSuccess Automatically hide the sheet on successful authentication.
+ * @param onAuth Callback function invoked on successful authentication with an [OneTapOAuth] and an [AccessToken].
+ * The first parameter is the OAuth which was used for authorization or null if the main flow with OneTap was used.
+ * The second parameter is the access token to be used for working with VK API.
+ * @param onAuthCode A callback to be invoked upon successful first step of auth - receiving auth code
+ * which can later be exchanged to access token.
+ * isCompletion is true if [onAuth] won't be called.
+ * This will happen if you passed auth parameters and implement their validation yourself.
+ * In that case we can't exchange auth code for access token and you should do this yourself.
+ * @param onFail Callback function invoked on authentication failure with an [OneTapOAuth] and a [VKIDAuthFail] object.
+ * The first parameter is the OAuth which was used for authorization or null if the main flow with OneTap was used.
+ * The second parameter is the error which happened during authorization.
+ * @param style The [OneTapBottomSheetStyle] of the bottom sheet. Default is [OneTapBottomSheetStyle.Light]
+ * @param authParams Optional params to be passed to auth. See [VKIDAuthUiParams.Builder] for more info.
+ * @param fastAuthEnabled Whether to fetch user. Defaults to true.
+ * In case this parameter is set to false the user data won't be fetched and user will have to confirm authorization on click.
+ * Note: this parameter doesn't support changes in runtime.
+ * Note: This parameter will hide "change account" button because in this case OneTap will have the same behaviour.
+ * @param subscribeToGroupId The id of the group the user will be subscribed to.
+ * @param onSuccessSubscribingToGroup Will be called upon successful subscription.
+ * @param onFailSubscribingToGroup Will be called upon any unsuccessful flow completion along with an description of the specific encountered error.
+ * @param groupSubscriptionSnackbarHostState The host state for snackbars.
+ * Use along with [GroupSubscriptionSnackbarHost] and pass the same state as there.
+ * @param groupSubscriptionStyle The widget style, can change appearance.
+ */
+@Composable
+@Suppress("ModifierNotUsedAtRoot")
+public fun OneTapBottomSheet(
+    modifier: Modifier = Modifier,
+    state: OneTapBottomSheetState = rememberOneTapBottomSheetState(),
+    serviceName: String,
+    scenario: OneTapScenario = OneTapScenario.EnterService,
+    autoHideOnSuccess: Boolean = true,
+    onAuth: (oAuth: OneTapOAuth?, accessToken: AccessToken) -> Unit,
+    onAuthCode: (data: AuthCodeData, isCompletion: Boolean) -> Unit = { _, _ -> },
+    onFail: (oAuth: OneTapOAuth?, fail: VKIDAuthFail) -> Unit = { _, _ -> },
+    oAuths: Set<OneTapOAuth> = emptySet(),
+    style: OneTapBottomSheetStyle = OneTapBottomSheetStyle.Light(),
+    authParams: VKIDAuthUiParams = VKIDAuthUiParams {},
+    fastAuthEnabled: Boolean = true,
+    subscribeToGroupId: String,
+    onSuccessSubscribingToGroup: () -> Unit,
+    onFailSubscribingToGroup: (VKIDGroupSubscriptionFail) -> Unit = {},
+    groupSubscriptionStyle: GroupSubscriptionStyle = GroupSubscriptionStyle.Light(),
+) {
+    val snackbarHostState = remember { SnackbarHostState() }
+    Box {
+        GroupSubscriptionSnackbarHost(snackbarHostState)
+        OneTapBottomSheet(
+            modifier = modifier,
+            state = state,
+            serviceName = serviceName,
+            scenario = scenario,
+            autoHideOnSuccess = autoHideOnSuccess,
+            onAuth = onAuth,
+            onAuthCode = onAuthCode,
+            onFail = onFail,
+            oAuths = oAuths,
+            style = style,
+            authParams = authParams,
+            fastAuthEnabled = fastAuthEnabled,
+            subscribeToGroupId = subscribeToGroupId,
+            onSuccessSubscribingToGroup = onSuccessSubscribingToGroup,
+            onFailSubscribingToGroup = onFailSubscribingToGroup,
+            groupSubscriptionSnackbarHostState = snackbarHostState,
+            groupSubscriptionStyle = groupSubscriptionStyle,
+        )
+    }
+}
+
+/**
+ * Composable function to display a bottom sheet for VKID One Tap authentication with multibranding.
+ *
+ * This version integrates Group Subscription flow. The flow will be shown right after successful auth.
+ * NOTE: The "groups" scope will be added automatically to the set of requested scopes.
+ *
+ * @param modifier Modifier for this composable.
+ * @param state The state of the bottom sheet. To control sheet create state instance with [rememberOneTapBottomSheetState] and pass it here.
+ * @param serviceName The name of the service for authentication. Will be displayed as title of sheet.
+ * @param scenario The [OneTapScenario] under which the authentication is being performed. It reflects on the texts of the button and sheet.
+ * @param autoHideOnSuccess Automatically hide the sheet on successful authentication.
+ * @param onAuth Callback function invoked on successful authentication with an [OneTapOAuth] and an [AccessToken].
+ * The first parameter is the OAuth which was used for authorization or null if the main flow with OneTap was used.
+ * The second parameter is the access token to be used for working with VK API.
+ * @param onAuthCode A callback to be invoked upon successful first step of auth - receiving auth code
+ * which can later be exchanged to access token.
+ * isCompletion is true if [onAuth] won't be called.
+ * This will happen if you passed auth parameters and implement their validation yourself.
+ * In that case we can't exchange auth code for access token and you should do this yourself.
+ * @param onFail Callback function invoked on authentication failure with an [OneTapOAuth] and a [VKIDAuthFail] object.
+ * The first parameter is the OAuth which was used for authorization or null if the main flow with OneTap was used.
+ * The second parameter is the error which happened during authorization.
+ * @param style The [OneTapBottomSheetStyle] of the bottom sheet. Default is [OneTapBottomSheetStyle.Light]
+ * @param authParams Optional params to be passed to auth. See [VKIDAuthUiParams.Builder] for more info.
+ * @param fastAuthEnabled Whether to fetch user. Defaults to true.
+ * In case this parameter is set to false the user data won't be fetched and user will have to confirm authorization on click.
+ * Note: this parameter doesn't support changes in runtime.
+ * Note: This parameter will hide "change account" button because in this case OneTap will have the same behaviour.
+ * @param subscribeToGroupId The id of the group the user will be subscribed to.
+ * @param onSuccessSubscribingToGroup Will be called upon successful subscription.
+ * @param onFailSubscribingToGroup Will be called upon any unsuccessful flow completion along with an description of the specific encountered error.
+ * @param groupSubscriptionSnackbarHostState The host state for snackbars.
+ * Use along with [GroupSubscriptionSnackbarHost] and pass the same state as there.
+ * @param groupSubscriptionStyle The widget style, can change appearance.
+ */
+@Composable
+public fun OneTapBottomSheet(
+    modifier: Modifier = Modifier,
+    state: OneTapBottomSheetState = rememberOneTapBottomSheetState(),
+    serviceName: String,
+    scenario: OneTapScenario = OneTapScenario.EnterService,
+    autoHideOnSuccess: Boolean = true,
+    onAuth: (oAuth: OneTapOAuth?, accessToken: AccessToken) -> Unit,
+    onAuthCode: (data: AuthCodeData, isCompletion: Boolean) -> Unit = { _, _ -> },
+    onFail: (oAuth: OneTapOAuth?, fail: VKIDAuthFail) -> Unit = { _, _ -> },
+    oAuths: Set<OneTapOAuth> = emptySet(),
+    style: OneTapBottomSheetStyle = OneTapBottomSheetStyle.Light(),
+    authParams: VKIDAuthUiParams = VKIDAuthUiParams {},
+    fastAuthEnabled: Boolean = true,
+    subscribeToGroupId: String,
+    onSuccessSubscribingToGroup: () -> Unit,
+    onFailSubscribingToGroup: (VKIDGroupSubscriptionFail) -> Unit = {},
+    groupSubscriptionSnackbarHostState: SnackbarHostState,
+    groupSubscriptionStyle: GroupSubscriptionStyle = GroupSubscriptionStyle.Light(),
+) {
+    var isSuccessfulAuth by remember { mutableStateOf("") }
+    OneTapBottomSheet(
+        modifier = modifier,
+        state = state,
+        serviceName = serviceName,
+        scenario = scenario,
+        autoHideOnSuccess = autoHideOnSuccess,
+        onAuth = { oAuth, accessToken ->
+            onAuth(oAuth, accessToken)
+            isSuccessfulAuth = System.currentTimeMillis().toString()
+        },
+        onAuthCode = onAuthCode,
+        onFail = onFail,
+        oAuths = oAuths,
+        style = style,
+        authParams = authParams.newBuilder {
+            scopes += "groups"
+        },
+        fastAuthEnabled = fastAuthEnabled,
+    )
+    if (isSuccessfulAuth.isNotBlank()) {
+        val groupSubscriptionSheetState = rememberGroupSubscriptionSheetState()
+        GroupSubscriptionSheet(
+            state = groupSubscriptionSheetState,
+            accessTokenProvider = { VKID.instance.accessToken?.token ?: error("Not authorized") },
+            groupId = subscribeToGroupId,
+            onSuccess = onSuccessSubscribingToGroup,
+            onFail = onFailSubscribingToGroup,
+            snackbarHostState = groupSubscriptionSnackbarHostState,
+            style = groupSubscriptionStyle,
+        )
+        LaunchedEffect(isSuccessfulAuth) {
+            groupSubscriptionSheetState.show()
+        }
+    }
 }
 
 /**

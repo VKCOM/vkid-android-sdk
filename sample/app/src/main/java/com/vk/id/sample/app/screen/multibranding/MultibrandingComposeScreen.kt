@@ -3,6 +3,7 @@ package com.vk.id.sample.app.screen.multibranding
 import android.view.ViewGroup
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -36,6 +38,8 @@ import com.vk.id.AccessToken
 import com.vk.id.OAuth
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthUiParams
+import com.vk.id.group.subscription.compose.ui.GroupSubscriptionSnackbarHost
+import com.vk.id.group.subscription.xml.GroupSubscriptionSnackbarHost
 import com.vk.id.multibranding.OAuthListWidget
 import com.vk.id.multibranding.common.style.OAuthListWidgetCornersStyle
 import com.vk.id.multibranding.common.style.OAuthListWidgetSizeStyle
@@ -81,6 +85,7 @@ internal fun MultibrandingComposeScreen() {
     }
     val shouldUseXml = remember { mutableStateOf(false) }
     var selectedStyle by remember { mutableStateOf(OAuthListWidgetStyle.system(context)) }
+    val groupSubscription = remember { mutableStateOf(false) }
     LaunchedEffect(
         styleConstructor.value,
         cornersStylePercent.floatValue,
@@ -108,125 +113,160 @@ internal fun MultibrandingComposeScreen() {
     AppTheme(
         useDarkTheme = selectedStyle is OAuthListWidgetStyle.Dark
     ) {
-        Column(
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.background)
-                .padding(horizontal = 8.dp)
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.Start,
-        ) {
-            if (selectedOAuths.value.isNotEmpty()) {
-                Spacer(modifier = Modifier.height(16.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    val width = maxOf(MIN_WIDTH_DP, (screenWidth * widthPercent.floatValue))
-                    val onAuthCode = { data: AuthCodeData, isCompletion: Boolean ->
-                        code = data.code
-                        token.value = null
-                        if (isCompletion) {
-                            showToast(context, "Received auth code")
+        val snackbarHostState = remember { SnackbarHostState() }
+        Box {
+            var host: GroupSubscriptionSnackbarHost? by remember { mutableStateOf(null) }
+            Column(
+                modifier = Modifier
+                    .background(MaterialTheme.colorScheme.background)
+                    .padding(horizontal = 8.dp)
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.Start,
+            ) {
+                if (selectedOAuths.value.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        val width = maxOf(MIN_WIDTH_DP, (screenWidth * widthPercent.floatValue))
+                        val onAuthCode = { data: AuthCodeData, isCompletion: Boolean ->
+                            code = data.code
+                            token.value = null
+                            if (isCompletion) {
+                                showToast(context, "Received auth code")
+                            }
                         }
-                    }
-                    val authParams = VKIDAuthUiParams {
-                        this.scopes = scopes.split(' ', ',').toSet()
-                        this.state = state.takeIf { it.isNotBlank() }
-                        this.codeChallenge = codeChallenge.takeIf { it.isNotBlank() }
-                    }
-                    if (shouldUseXml.value) {
-                        var oAuthListWidget: OAuthListWidget? by remember { mutableStateOf(null) }
-                        AndroidView(factory = { context ->
-                            OAuthListWidget(context).apply {
-                                setCallbacks(
-                                    onAuth = getMultibrandingSuccessCallback(context) {},
+                        val authParams = VKIDAuthUiParams {
+                            this.scopes = scopes.split(' ', ',').toSet()
+                            this.state = state.takeIf { it.isNotBlank() }
+                            this.codeChallenge = codeChallenge.takeIf { it.isNotBlank() }
+                        }
+                        if (shouldUseXml.value) {
+                            var oAuthListWidget: OAuthListWidget? by remember { mutableStateOf(null) }
+                            AndroidView(factory = { context ->
+                                OAuthListWidget(context).apply {
+                                    setCallbacks(
+                                        onAuth = getMultibrandingSuccessCallback(context) {},
+                                        onAuthCode = onAuthCode,
+                                        onFail = getMultibrandingFailCallback(context),
+                                    )
+                                    oAuthListWidget = this
+                                }
+                            })
+                            oAuthListWidget?.apply {
+                                this.layoutParams = ViewGroup.LayoutParams(
+                                    context.dpToPixels(width.toInt()),
+                                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                                )
+                                this.style = selectedStyle
+                                this.oAuths = selectedOAuths.value
+                                this.authParams = authParams
+                                this.groupId = "1".takeIf { groupSubscription.value }
+                                this.snackbarHost = host
+                                this.setGroupSubscriptionCallbacks(
+                                    onSuccess = { showToast(context, "Subscribed") },
+                                    onFail = { showToast(context, "Fail: ${it.description}") },
+                                )
+                            }
+                        } else {
+                            if (groupSubscription.value) {
+                                OAuthListWidget(
+                                    modifier = Modifier.width(width.dp),
+                                    style = selectedStyle,
+                                    onAuth = getMultibrandingSuccessCallback(context) { token.value = it },
                                     onAuthCode = onAuthCode,
                                     onFail = getMultibrandingFailCallback(context),
+                                    oAuths = selectedOAuths.value,
+                                    authParams = authParams,
+                                    subscribeToGroupId = "1",
+                                    onSuccessSubscribingToGroup = { showToast(context, "Subscribed") },
+                                    onFailSubscribingToGroup = { showToast(context, "Fail: ${it.description}") },
+                                    groupSubscriptionSnackbarHostState = snackbarHostState,
                                 )
-                                oAuthListWidget = this
+                            } else {
+                                OAuthListWidget(
+                                    modifier = Modifier.width(width.dp),
+                                    style = selectedStyle,
+                                    onAuth = getMultibrandingSuccessCallback(context) { token.value = it },
+                                    onAuthCode = onAuthCode,
+                                    onFail = getMultibrandingFailCallback(context),
+                                    oAuths = selectedOAuths.value,
+                                    authParams = authParams,
+                                )
                             }
-                        })
-                        oAuthListWidget?.apply {
-                            this.layoutParams = ViewGroup.LayoutParams(
-                                context.dpToPixels(width.toInt()),
-                                ViewGroup.LayoutParams.WRAP_CONTENT,
-                            )
-                            this.style = selectedStyle
-                            this.oAuths = selectedOAuths.value
-                            this.authParams = authParams
                         }
-                    } else {
-                        OAuthListWidget(
-                            modifier = Modifier.width(width.dp),
-                            style = selectedStyle,
-                            onAuth = getMultibrandingSuccessCallback(context) { token.value = it },
-                            onAuthCode = onAuthCode,
-                            onFail = getMultibrandingFailCallback(context),
-                            oAuths = selectedOAuths.value,
-                            authParams = authParams,
-                        )
                     }
                 }
-            }
-            code?.let { value ->
-                Spacer(modifier = Modifier.height(8.dp))
+                code?.let { value ->
+                    Spacer(modifier = Modifier.height(8.dp))
+                    TextField(
+                        modifier = Modifier.fillMaxWidth(),
+                        value = value,
+                        onValueChange = { code = it },
+                        label = { Text("Resulting auth code") },
+                        maxLines = 1,
+                    )
+                }
+                token.value?.let {
+                    UseToken(accessToken = it)
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+                CheckboxSelector(
+                    title = "XML",
+                    isChecked = shouldUseXml.value,
+                    onCheckedChange = { shouldUseXml.value = it }
+                )
+                CheckboxSelector(
+                    title = "Group Subscription",
+                    isChecked = groupSubscription.value,
+                    onCheckedChange = { groupSubscription.value = it }
+                )
+                EnumStateCheckboxSelector(state = selectedOAuths, onNewState = { selectedOAuths.value = it })
+                DropdownSelector(
+                    modifier = Modifier.padding(vertical = 16.dp),
+                    values = styleConstructors,
+                    selectedValue = selectedStyle::class.simpleName ?: error("Can get simple style"),
+                    onValueSelected = { styleConstructor.value = it },
+                    label = { Text("style") },
+                )
+                SliderSelector(title = "Width", selectedState = widthPercent, onStateChange = { widthPercent.floatValue = it })
+                SliderSelector(title = "Corners", selectedState = cornersStylePercent, onStateChange = { cornersStylePercent.floatValue = it })
+                DropdownSelector(
+                    values = OAuthListWidgetSizeStyle.entries.associateBy { it.name },
+                    selectedValue = selectedSize.value.name,
+                    onValueSelected = { selectedSize.value = it },
+                    label = { Text("size") },
+                )
+
                 TextField(
                     modifier = Modifier.fillMaxWidth(),
-                    value = value,
-                    onValueChange = { code = it },
-                    label = { Text("Resulting auth code") },
-                    maxLines = 1,
+                    value = scopes,
+                    onValueChange = { scopes = it },
+                    label = { Text("Scopes (Space-separated)") },
                 )
+                TextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = state,
+                    onValueChange = { state = it },
+                    label = { Text("State (Optional)") },
+                    shape = RectangleShape,
+                )
+                TextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = codeChallenge,
+                    onValueChange = { codeChallenge = it },
+                    label = { Text("Code challenge (Optional)") },
+                    shape = RectangleShape,
+                )
+                Spacer(modifier = Modifier.height(16.dp))
             }
-            token.value?.let {
-                UseToken(accessToken = it)
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-            CheckboxSelector(
-                title = "XML",
-                isChecked = shouldUseXml.value,
-                onCheckedChange = { shouldUseXml.value = it }
-            )
-            EnumStateCheckboxSelector(state = selectedOAuths, onNewState = { selectedOAuths.value = it })
-            DropdownSelector(
-                modifier = Modifier.padding(vertical = 16.dp),
-                values = styleConstructors,
-                selectedValue = selectedStyle::class.simpleName ?: error("Can get simple style"),
-                onValueSelected = { styleConstructor.value = it },
-                label = { Text("style") },
-            )
-            SliderSelector(title = "Width", selectedState = widthPercent, onStateChange = { widthPercent.floatValue = it })
-            SliderSelector(title = "Corners", selectedState = cornersStylePercent, onStateChange = { cornersStylePercent.floatValue = it })
-            DropdownSelector(
-                values = OAuthListWidgetSizeStyle.entries.associateBy { it.name },
-                selectedValue = selectedSize.value.name,
-                onValueSelected = { selectedSize.value = it },
-                label = { Text("size") },
-            )
-
-            TextField(
-                modifier = Modifier.fillMaxWidth(),
-                value = scopes,
-                onValueChange = { scopes = it },
-                label = { Text("Scopes (Space-separated)") },
-            )
-            TextField(
-                modifier = Modifier.fillMaxWidth(),
-                value = state,
-                onValueChange = { state = it },
-                label = { Text("State (Optional)") },
-                shape = RectangleShape,
-            )
-            TextField(
-                modifier = Modifier.fillMaxWidth(),
-                value = codeChallenge,
-                onValueChange = { codeChallenge = it },
-                label = { Text("Code challenge (Optional)") },
-                shape = RectangleShape,
-            )
-            Spacer(modifier = Modifier.height(16.dp))
+            GroupSubscriptionSnackbarHost(snackbarHostState = snackbarHostState)
+            AndroidView({ context ->
+                GroupSubscriptionSnackbarHost(context).also { host = it }
+            }, modifier = Modifier.fillMaxSize())
         }
     }
 }

@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.vk.id.sample.app.screen.bottomnav.BottomNavigation
 import com.vk.id.sample.app.screen.bottomnav.Screen
+import com.vk.id.sample.app.screen.groupsubscription.GroupSubscriptionScreen
 import com.vk.id.sample.app.screen.home.HomeScreen
 import com.vk.id.sample.app.screen.multibranding.MultibrandingComposeScreen
 import com.vk.id.sample.app.screen.sheet.OneTapBottomSheetScreen
@@ -21,6 +22,7 @@ import com.vk.id.sample.app.screen.styling.OnetapStylingComposeScreen
 import com.vk.id.sample.app.screen.utils.UtilsScreen
 import com.vk.id.sample.app.uikit.theme.AppTheme
 import com.vk.id.sample.oldsdk.OldSdkScreen
+import com.vk.id.sample.xml.groupsubscription.GroupSubscriptionActivity
 import com.vk.id.sample.xml.multibranding.MultibrandingXmlLayoutActivity
 import com.vk.id.sample.xml.onetap.OneTapStylingXmlLayoutActivity
 import com.vk.id.sample.xml.onetapsheet.OnetapSheetStylingXmlActivity
@@ -48,6 +50,8 @@ internal class MainActivity : ComponentActivity() {
                             activity("multibranding-xml-layout") { activityClass = MultibrandingXmlLayoutActivity::class }
                             composable("onetap-bottom-sheet") { OneTapBottomSheetScreen() }
                             activity("onetap-bottom-sheet-xml") { activityClass = OnetapSheetStylingXmlActivity::class }
+                            composable("group-subscription-compose") { GroupSubscriptionScreen() }
+                            activity("group-subscription-xml") { activityClass = GroupSubscriptionActivity::class }
                             composable("old-sdk-sample") { OldSdkScreen() }
                         }
                     }
