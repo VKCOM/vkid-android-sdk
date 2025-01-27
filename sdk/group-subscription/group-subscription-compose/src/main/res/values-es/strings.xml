@@ -12,7 +12,7 @@
         <item quantity="many">%1$d amigos</item>
         <item quantity="other">%1$d amigos</item>
     </plurals>
-    <string name="vkid_group_subscription_snackbar_label"></string>
+    <string name="vkid_group_subscription_snackbar_label">Ahora sigues a esta comunidad</string>
     <string name="vkid_group_subscription_fail_title">No se pudo seguir a la comunidad</string>
     <string name="vkid_group_subscription_fail_description">Prueba de nuevo</string>
     <string name="vkid_group_subscription_fail_primary">Probar de nuevo</string>

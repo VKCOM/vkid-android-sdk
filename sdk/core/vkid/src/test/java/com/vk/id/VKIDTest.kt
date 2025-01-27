@@ -2,6 +2,7 @@
 
 package com.vk.id
 
+import android.content.Context
 import com.vk.id.analytics.VKIDAnalytics
 import com.vk.id.analytics.stat.StatTracker
 import com.vk.id.auth.VKIDAuthParams
@@ -60,6 +61,7 @@ internal class VKIDTest : BehaviorSpec({
     val serviceCredentials = mockk<ServiceCredentials>()
     every { serviceCredentials.clientID } returns "1"
     val deps = object : VKIDDeps {
+        override val context: Context = mockk()
         override val authProvidersChooser: Lazy<AuthProvidersChooser> = lazy { authProvidersChooser }
         override val authOptionsCreator: AuthOptionsCreator = authOptionsCreator
         override val serviceCredentials: Lazy<ServiceCredentials> = lazy { serviceCredentials }

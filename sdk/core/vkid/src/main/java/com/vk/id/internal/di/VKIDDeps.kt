@@ -2,6 +2,7 @@
 
 package com.vk.id.internal.di
 
+import android.content.Context
 import com.vk.id.AuthOptionsCreator
 import com.vk.id.AuthResultHandler
 import com.vk.id.analytics.stat.StatTracker
@@ -26,6 +27,7 @@ import com.vk.id.storage.InternalVKIDEncryptedSharedPreferencesStorage
 import com.vk.id.storage.InternalVKIDTokenStorage
 
 internal interface VKIDDeps {
+    val context: Context
     val serviceCredentials: Lazy<ServiceCredentials>
     val authCallbacksHolder: AuthCallbacksHolder
     val authOptionsCreator: AuthOptionsCreator
