@@ -130,6 +130,25 @@ public class InternalVKIDRealApi(
         return client.createRequest(HOST_API, "method/statEvents.addVKIDAnonymously", formBody)
     }
 
+    override fun sendStatEvents(
+        accessToken: String,
+        clientId: String,
+        clientSecret: String,
+        sakVersion: String,
+        events: JSONArray
+    ): Call {
+        val formBody = FormBody.Builder()
+            .add(FIELD_ACCESS_TOKEN, accessToken)
+            .add(FIELD_API_VERSION, API_VERSION_VALUE)
+            .add(FIELD_CLIENT_ID, clientId)
+            .add(FIELD_CLIENT_SECRET, clientSecret)
+            .add("sak_version", sakVersion)
+            .add("events", events.toString())
+            .build()
+
+        return client.createRequest(HOST_API, "method/statEvents.addVKID", formBody)
+    }
+
     @InternalVKIDApi
     public companion object {
 

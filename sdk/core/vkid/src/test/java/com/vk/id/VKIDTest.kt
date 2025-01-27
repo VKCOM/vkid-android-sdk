@@ -100,6 +100,7 @@ internal class VKIDTest : BehaviorSpec({
             Then("Analytics vkid_sdk_init event is send") {
                 verify {
                     statTracker.trackEvent(
+                        null,
                         "vkid_sdk_init",
                         VKIDAnalytics.EventParam("wrapper_sdk_type", strValue = "flutter")
                     )
@@ -119,6 +120,7 @@ internal class VKIDTest : BehaviorSpec({
             Then("Analytics vkid_sdk_init event is send") {
                 verify {
                     statTracker.trackEvent(
+                        null,
                         "vkid_sdk_init",
                         VKIDAnalytics.EventParam("wrapper_sdk_type", strValue = "none")
                     )

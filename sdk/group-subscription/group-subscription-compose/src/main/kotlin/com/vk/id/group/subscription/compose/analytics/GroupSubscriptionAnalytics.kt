@@ -21,6 +21,7 @@ internal object GroupSubscriptionAnalytics {
 
     internal val isErrorState = AtomicBoolean(false)
     internal val style = AtomicReference<GroupSubscriptionStyle?>(null)
+    internal val groupId = AtomicReference<String?>(null)
 
     @Composable
     internal fun SheetShown() {
@@ -52,20 +53,23 @@ internal object GroupSubscriptionAnalytics {
 
     internal fun cancelClick() = track("community_follow_error_cancel_click")
 
-    internal fun successShown() = track("community_follow_success")
+    internal fun successShown(accessToken: String?) = track("community_follow_success", accessToken = accessToken)
 
-    private fun track(eventName: String) {
+    private fun track(eventName: String, accessToken: String? = null) {
         VKIDAnalytics.trackEvent(
+            accessToken = accessToken,
             eventName,
             nowhereScreen(),
             appIdParam(),
             vkidInternalLanguageParam(VKID.instance.context),
             themeParam(),
+            groupIdParam()
         )
     }
 
     private fun appIdParam() = VKIDAnalytics.EventParam("app_id", intValue = VKID.instance.clientId.toIntOrNull())
     private fun nowhereScreen() = VKIDAnalytics.EventParam("screen_current", "nowhere")
+    private fun groupIdParam() = VKIDAnalytics.EventParam("group_id", intValue = groupId.get()?.toIntOrNull())
     private fun themeParam() = VKIDAnalytics.EventParam(
         "theme_type",
         when (style.get()) {

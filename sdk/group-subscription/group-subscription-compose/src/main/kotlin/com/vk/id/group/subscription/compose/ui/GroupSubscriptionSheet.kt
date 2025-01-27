@@ -158,6 +158,7 @@ public fun GroupSubscriptionSheet(
     style: GroupSubscriptionStyle = GroupSubscriptionStyle.Light(),
 ) {
     GroupSubscriptionAnalytics.style.set(style)
+    GroupSubscriptionAnalytics.groupId.set(groupId)
     val actualSnackbarHostState = snackbarHostState ?: remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
     val status = rememberSaveable { mutableStateOf<GroupSubscriptionSheetStatus>(GroupSubscriptionSheetStatus.Init) }
@@ -166,7 +167,7 @@ public fun GroupSubscriptionSheet(
     val snackbarLabel = stringResource(R.string.vkid_group_subscription_snackbar_label)
     val actualOnSuccess by rememberUpdatedState {
         coroutineScope.launch {
-            GroupSubscriptionAnalytics.successShown()
+            GroupSubscriptionAnalytics.successShown(accessTokenProvider?.invoke() ?: VKID.instance.accessToken?.token)
             actualSnackbarHostState.showSnackbar(snackbarLabel)
         }
         onSuccess()

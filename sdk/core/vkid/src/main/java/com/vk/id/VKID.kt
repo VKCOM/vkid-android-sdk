@@ -126,7 +126,11 @@ public class VKID {
                         )
                     }
                     override val statTracker: VKIDAnalytics.Tracker = object : VKIDAnalytics.Tracker {
-                        override fun trackEvent(name: String, vararg params: VKIDAnalytics.EventParam) = Unit
+                        override fun trackEvent(
+                            accessToken: String?,
+                            name: String,
+                            vararg params: VKIDAnalytics.EventParam
+                        ) = Unit
                     }
                 })
             )
