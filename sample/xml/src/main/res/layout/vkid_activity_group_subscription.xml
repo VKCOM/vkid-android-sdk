@@ -10,8 +10,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:vkid_groupId="1"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:vkid_groupId="1" />
+
+    <com.vk.id.group.subscription.xml.GroupSubscriptionSnackbarHost
+        android:id="@+id/group_subscription_snackbar_host"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:vkid_groupSubscriptionButtonCorners="0dp"
+        app:vkid_groupSubscriptionButtonSize="small32"
+        app:vkid_groupSubscriptionCorners="1dp"
+        app:vkid_groupSubscriptionStyle="system" />
 
     <Button
         android:id="@+id/show_sheet_button"
