@@ -69,7 +69,7 @@ internal object GroupSubscriptionAnalytics {
 
     private fun appIdParam() = VKIDAnalytics.EventParam("app_id", intValue = VKID.instance.clientId.toIntOrNull())
     private fun nowhereScreen() = VKIDAnalytics.EventParam("screen_current", "nowhere")
-    private fun groupIdParam() = VKIDAnalytics.EventParam("group_id", intValue = groupId.get()?.toIntOrNull())
+    private fun groupIdParam() = VKIDAnalytics.EventParam("group_id", strValue = groupId.get())
     private fun themeParam() = VKIDAnalytics.EventParam(
         "theme_type",
         when (style.get()) {

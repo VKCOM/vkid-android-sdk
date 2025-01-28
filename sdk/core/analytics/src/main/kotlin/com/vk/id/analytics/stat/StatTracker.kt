@@ -65,11 +65,13 @@ public class StatTracker(
                     )
                 },
             )
-            sendEvents(
-                accessToken = accessToken.orEmpty(),
-                batchEvents = personalizedBatchEvents,
-                apiMethod = api.value::sendStatEvents,
-            )
+            if (accessToken != null) {
+                sendEvents(
+                    accessToken = accessToken,
+                    batchEvents = personalizedBatchEvents,
+                    apiMethod = api.value::sendStatEvents,
+                )
+            }
         }
     }
 
