@@ -56,6 +56,7 @@ public class InternalVKIDGroupSubscriptionApi(
         path = PATH_GROUPS_JOIN,
         requestBody = bodyBuilder(accessToken)
             .add(FIELD_GROUP_ID, groupId)
+            .add(FIELD_SOURCE, "vkid_sdk")
             .build()
     )
 
@@ -72,5 +73,6 @@ public class InternalVKIDGroupSubscriptionApi(
 
         private const val FIELD_ACCESS_TOKEN = "access_token"
         private const val FIELD_GROUP_ID = "group_id"
+        private const val FIELD_SOURCE = "source"
     }
 }
