@@ -15,10 +15,11 @@ import okhttp3.logging.HttpLoggingInterceptor
 import java.io.BufferedInputStream
 import java.util.concurrent.TimeUnit
 
-internal class OkHttpClientProvider(
+@InternalVKIDApi
+public class OkHttpClientProvider(
     private val context: Context
 ) {
-    fun provide() = provideBuilderWithSslPinning()
+    public fun provide(): OkHttpClient = provideBuilderWithSslPinning()
         .readTimeout(OKHTTP_TIMEOUT_SECONDS, TimeUnit.SECONDS)
         .writeTimeout(OKHTTP_TIMEOUT_SECONDS, TimeUnit.SECONDS)
         .connectTimeout(OKHTTP_TIMEOUT_SECONDS, TimeUnit.SECONDS)
@@ -28,7 +29,7 @@ internal class OkHttpClientProvider(
         .build()
 
     @VisibleForTesting
-    fun provideBuilderWithSslPinning(): OkHttpClient.Builder {
+    public fun provideBuilderWithSslPinning(): OkHttpClient.Builder {
         val client = OkHttpClient.Builder()
         if (!isDebuggable()) {
             client.addVKPins()

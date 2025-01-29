@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="vkid_group_subscription_primary">Подписаться на сообщество</string>
+    <string name="vkid_group_subscription_secondary">В другой раз</string>
+    <plurals name="vkid_group_subscription_subscribers">
+        <item quantity="one">%1$s подписчик</item>
+        <item quantity="few">%1$s подписчика</item>
+        <item quantity="many">%1$s подписчиков</item>
+        <item quantity="other">%1$s подписчиков</item>
+    </plurals>
+    <plurals name="vkid_group_subscription_friends">
+        <item quantity="one">%1$d друг</item>
+        <item quantity="few">%1$d друга</item>
+        <item quantity="many">%1$d друзей</item>
+        <item quantity="other">%1$d друзей</item>
+    </plurals>
+    <string name="vkid_group_subscription_snackbar_label">Вы подписаны на сообщество</string>
+    <string name="vkid_group_subscription_fail_title">Не удалось подписаться</string>
+    <string name="vkid_group_subscription_fail_description">Попробуйте еще раз</string>
+    <string name="vkid_group_subscription_fail_primary">Повторить попытку</string>
+    <string name="vkid_group_subscription_fail_secondary">Отмена</string>
+</resources>

@@ -20,6 +20,7 @@ import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthEventBridge
 import com.vk.id.internal.auth.AuthProvidersChooser
 import com.vk.id.internal.auth.AuthResult
+import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.auth.device.InternalVKIDDeviceIdProvider
 import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
 import com.vk.id.internal.context.InternalVKIDActivityStarter
@@ -37,6 +38,7 @@ import com.vk.id.logger.internalVKIDCreateLoggerForClass
 import com.vk.id.logout.VKIDLoggerOut
 import com.vk.id.logout.VKIDLogoutCallback
 import com.vk.id.logout.VKIDLogoutParams
+import com.vk.id.network.groupsubscription.InternalVKIDGroupSubscriptionApiContract
 import com.vk.id.refresh.VKIDRefreshTokenCallback
 import com.vk.id.refresh.VKIDRefreshTokenParams
 import com.vk.id.refresh.VKIDTokenRefresher
@@ -44,7 +46,7 @@ import com.vk.id.refreshuser.VKIDGetUserCallback
 import com.vk.id.refreshuser.VKIDGetUserParams
 import com.vk.id.refreshuser.VKIDUserRefresher
 import com.vk.id.storage.InternalVKIDEncryptedSharedPreferencesStorage
-import com.vk.id.storage.TokenStorage
+import com.vk.id.storage.InternalVKIDTokenStorage
 import com.vk.id.test.InternalVKIDImmediateApi
 import com.vk.id.test.InternalVKIDOverrideApi
 import com.vk.id.test.TestSilentAuthInfoProvider
@@ -91,6 +93,7 @@ public class VKID {
         internal fun init(
             context: Context,
             mockApi: InternalVKIDOverrideApi,
+            groupSubscriptionApiContract: InternalVKIDGroupSubscriptionApiContract,
             deviceIdStorage: InternalVKIDDeviceIdProvider.DeviceIdStorage?,
             prefsStore: InternalVKIDPrefsStore?,
             encryptedSharedPreferencesStorage: InternalVKIDEncryptedSharedPreferencesStorage?,
@@ -99,6 +102,8 @@ public class VKID {
         ): Unit = init(
             VKID(object : VKIDDepsProd(context, isFlutter = false) {
                 override val api = lazy { InternalVKIDImmediateApi(mockApi) }
+                override val groupSubscriptionApiService: Lazy<InternalVKIDGroupSubscriptionApiContract> =
+                    lazy { groupSubscriptionApiContract }
                 override val vkSilentAuthInfoProvider = lazy { TestSilentAuthInfoProvider() }
                 override val deviceIdStorage = lazy { deviceIdStorage ?: super.deviceIdStorage.value }
                 override val prefsStore = lazy { prefsStore ?: super.prefsStore.value }
@@ -108,6 +113,28 @@ public class VKID {
                 override val activityStarter = activityStarter ?: super.activityStarter
             })
         )
+
+        @InternalVKIDApi
+        public fun initForScreenshotTests(context: Context) {
+            init(
+                VKID(object : VKIDDepsProd(context, isFlutter = false) {
+                    override val serviceCredentials: Lazy<ServiceCredentials> = lazy {
+                        ServiceCredentials(
+                            clientID = "",
+                            clientSecret = "",
+                            redirectUri = "",
+                        )
+                    }
+                    override val statTracker: VKIDAnalytics.Tracker = object : VKIDAnalytics.Tracker {
+                        override fun trackEvent(
+                            accessToken: String?,
+                            name: String,
+                            vararg params: VKIDAnalytics.EventParam
+                        ) = Unit
+                    }
+                })
+            )
+        }
 
         /**
          * Returns a VKID Instance.
@@ -174,6 +201,9 @@ public class VKID {
         this.userRefresher = deps.userRefresher
         this.loggerOut = deps.loggerOut
         this.tokenStorage = deps.tokenStorage
+        this.groupSubscriptionApiServiceInternal = deps.groupSubscriptionApiService
+        this.clientIdProvider = { deps.serviceCredentials.value.clientID }
+        this.context = deps.context
 
         VKIDAnalytics.addTracker(deps.statTracker)
 
@@ -197,7 +227,22 @@ public class VKID {
     private val tokenExchanger: Lazy<VKIDTokenExchanger>
     private val userRefresher: Lazy<VKIDUserRefresher>
     private val loggerOut: Lazy<VKIDLoggerOut>
-    private val tokenStorage: TokenStorage
+    private val groupSubscriptionApiServiceInternal: Lazy<InternalVKIDGroupSubscriptionApiContract>
+
+    @InternalVKIDApi
+    public val tokenStorage: InternalVKIDTokenStorage
+
+    @InternalVKIDApi
+    public val groupSubscriptionApiService: InternalVKIDGroupSubscriptionApiContract
+        get() = groupSubscriptionApiServiceInternal.value
+
+    private val clientIdProvider: () -> String
+
+    @InternalVKIDApi
+    public val clientId: String get() = clientIdProvider()
+
+    @InternalVKIDApi
+    public val context: Context
 
     /**
      * Initiates the authorization process.
@@ -413,6 +458,21 @@ public class VKID {
      */
     public val accessToken: AccessToken?
         get() = tokenStorage.accessToken
+
+    @InternalVKIDApi
+    public fun mockAuthorized() {
+        tokenStorage.accessToken = AccessToken(
+            token = "",
+            idToken = null,
+            userID = 0,
+            expireTime = 0,
+            userData = VKIDUser(
+                firstName = "",
+                lastName = "",
+            ),
+            scopes = null,
+        )
+    }
 
     /**
      * Returns current refresh token or null if auth wasn't passed.

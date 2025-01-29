@@ -14,6 +14,7 @@ dependencies {
     api(projects.vkid)
     api(projects.common)
     api(projects.multibrandingCommon)
+    api(projects.groupSubscriptionCompose)
     implementation(projects.analytics)
     implementation(projects.multibrandingInternal)
     implementation(platform(libs.androidx.compose.bom))

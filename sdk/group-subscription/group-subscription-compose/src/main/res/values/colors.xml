@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="vkid_white">#FFFFFF</color>
+    <color name="vkid_black">#000000</color>
+    <color name="vkid_azure_300">#2688EB</color>
+    <color name="vkid_background_dark">#1C1D1E</color>
+    <color name="vkid_green">#4BB34B</color>
+    <color name="vkid_text_dark_primary">#E1E3E6</color>
+    <color name="vkid_text_light_subhead">#6D7885</color>
+    <color name="vkid_text_dark_subhead">#969A9F</color>
+    <color name="vkid_background_secondary_button_light">#0A000000</color>
+    <color name="vkid_background_secondary_button_dark">#1AFFFFFF</color>
+</resources>

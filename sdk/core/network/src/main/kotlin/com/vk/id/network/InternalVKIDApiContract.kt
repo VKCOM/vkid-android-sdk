@@ -55,4 +55,12 @@ public interface InternalVKIDApiContract {
         sakVersion: String,
         events: JSONArray
     ): Call
+
+    public fun sendStatEvents(
+        accessToken: String,
+        clientId: String,
+        clientSecret: String,
+        sakVersion: String,
+        events: JSONArray
+    ): Call
 }
