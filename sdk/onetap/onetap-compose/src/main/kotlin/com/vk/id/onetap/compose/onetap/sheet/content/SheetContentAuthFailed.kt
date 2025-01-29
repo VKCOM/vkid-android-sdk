@@ -40,14 +40,12 @@ import com.vk.id.onetap.compose.onetap.style.clip
 
 @Composable
 internal fun SheetContentAuthFailed(
-    serviceName: String,
     style: OneTapBottomSheetStyle,
     dismissSheet: () -> Unit,
     repeatClicked: () -> Unit,
 ) {
     OneTapBottomSheetAnalytics.BottomSheetErrorShown()
     SheetContentBox(
-        serviceName,
         style,
         dismissSheet,
     ) {
@@ -110,7 +108,6 @@ private fun RepeatButton(style: InternalVKIDAlternateAccountButtonStyle, repeatC
 @Composable
 private fun OneTapBottomSheetProgressPreview() {
     SheetContentAuthFailed(
-        "<Название сервиса>",
         OneTapBottomSheetStyle.Light(),
         dismissSheet = {},
         repeatClicked = {},

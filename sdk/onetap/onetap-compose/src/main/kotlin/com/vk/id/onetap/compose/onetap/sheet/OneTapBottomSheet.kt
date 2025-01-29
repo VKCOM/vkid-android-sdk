@@ -176,13 +176,11 @@ private fun OneTapBottomSheetInternal(
                 }
 
                 is OneTapBottomSheetAuthStatus.AuthStarted -> SheetContentAuthInProgress(
-                    serviceName,
                     style,
                     dismissSheet
                 )
 
                 is OneTapBottomSheetAuthStatus.AuthFailedAlternate -> SheetContentAuthFailed(
-                    serviceName,
                     style,
                     dismissSheet
                 ) {
@@ -200,7 +198,6 @@ private fun OneTapBottomSheetInternal(
                 }
 
                 is OneTapBottomSheetAuthStatus.AuthFailedVKID -> SheetContentAuthFailed(
-                    serviceName,
                     style,
                     dismissSheet
                 ) {
@@ -220,7 +217,6 @@ private fun OneTapBottomSheetInternal(
                 }
 
                 is OneTapBottomSheetAuthStatus.AuthFailedMultibranding -> SheetContentAuthFailed(
-                    serviceName,
                     style,
                     dismissSheet
                 ) {
@@ -262,7 +258,7 @@ private fun OneTapBottomSheetInternal(
                             state.hide()
                         }
                     }
-                    SheetContentAuthSuccess(serviceName, style, dismissSheet)
+                    SheetContentAuthSuccess(style, dismissSheet)
                 }
             }
         }
@@ -368,7 +364,6 @@ private fun OneTapBottomSheetPreview() {
 @Composable
 private fun OneTapBottomSheetSuccessPreview() {
     SheetContentAuthSuccess(
-        "<Название сервиса>",
         OneTapBottomSheetStyle.TransparentDark(),
         dismissSheet = {},
     )
@@ -378,7 +373,6 @@ private fun OneTapBottomSheetSuccessPreview() {
 @Composable
 private fun OneTapBottomSheetFailedPreview() {
     SheetContentAuthFailed(
-        "<Название сервиса>",
         OneTapBottomSheetStyle.TransparentDark(),
         dismissSheet = {},
         repeatClicked = {}

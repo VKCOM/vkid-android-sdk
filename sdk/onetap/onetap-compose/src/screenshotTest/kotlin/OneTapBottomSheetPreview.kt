@@ -16,7 +16,6 @@ import com.vk.id.onetap.compose.onetap.sheet.style.OneTapBottomSheetStyle
 @Composable
 private fun OneTapBottomSheetFailedPreview() {
     SheetContentAuthFailed(
-        "<Название сервиса>",
         OneTapBottomSheetStyle.TransparentDark(),
         dismissSheet = {},
         repeatClicked = {}
@@ -27,7 +26,6 @@ private fun OneTapBottomSheetFailedPreview() {
 @Composable
 private fun OneTapBottomSheetSuccessPreview() {
     SheetContentAuthSuccess(
-        "Другое название сервиса",
         OneTapBottomSheetStyle.TransparentDark(),
         dismissSheet = {},
     )

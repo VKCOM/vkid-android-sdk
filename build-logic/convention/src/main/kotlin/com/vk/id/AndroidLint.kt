@@ -17,6 +17,7 @@ fun Project.configureAndroidLint() {
                 "AndroidGradlePluginVersion",
                 "PrivateResource",
                 "ObsoleteLintCustomCheck",
+                "IconLocation",
             )
         }
     }

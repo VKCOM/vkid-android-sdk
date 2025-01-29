@@ -29,10 +29,9 @@ import com.vk.id.onetap.compose.onetap.sheet.OneTapBottomSheetAnalytics
 import com.vk.id.onetap.compose.onetap.sheet.style.OneTapBottomSheetStyle
 
 @Composable
-internal fun SheetContentAuthInProgress(serviceName: String, style: OneTapBottomSheetStyle, dismissSheet: () -> Unit) {
+internal fun SheetContentAuthInProgress(style: OneTapBottomSheetStyle, dismissSheet: () -> Unit) {
     OneTapBottomSheetAnalytics.BottomSheetInProgressShown()
     SheetContentBox(
-        serviceName,
         style,
         dismissSheet,
     ) {
@@ -82,7 +81,6 @@ private fun CircleProgress(
 @Composable
 private fun OneTapBottomSheetProgressPreview() {
     SheetContentAuthInProgress(
-        "<Название сервиса>",
         OneTapBottomSheetStyle.TransparentDark(),
         dismissSheet = {},
     )
