@@ -63,7 +63,7 @@ public sealed class OneTapBottomSheetStyle @InternalVKIDApi constructor(
         oneTapStyle = OneTapStyle.Dark(cornersStyle = buttonsCornersStyle, sizeStyle = buttonsSizeStyle),
         backgroundStyle = OneTapSheetBackgroundStyle.DARK,
         vkidIcon = 0,
-        contentTextColor = R.color.vkid_gray_500,
+        contentTextColor = R.color.vkid_gray_subhead_dark,
         contentTitleTextColor = R.color.vkid_gray_100,
     )
 
@@ -95,7 +95,7 @@ public sealed class OneTapBottomSheetStyle @InternalVKIDApi constructor(
         oneTapStyle = OneTapStyle.TransparentDark(cornersStyle = buttonsCornersStyle, sizeStyle = buttonsSizeStyle),
         backgroundStyle = OneTapSheetBackgroundStyle.DARK,
         vkidIcon = 0,
-        contentTextColor = R.color.vkid_gray_500,
+        contentTextColor = R.color.vkid_gray_subhead_dark,
         contentTitleTextColor = R.color.vkid_gray_100,
     )
 

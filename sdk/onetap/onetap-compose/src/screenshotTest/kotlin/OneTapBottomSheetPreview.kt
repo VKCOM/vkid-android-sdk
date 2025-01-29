@@ -1,12 +1,9 @@
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.tooling.preview.Preview
 import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.compose.onetap.sheet.OneTapScenario
-import com.vk.id.onetap.compose.onetap.sheet.content.OneTapBottomSheetAuthStatus
 import com.vk.id.onetap.compose.onetap.sheet.content.SheetContentAuthFailed
 import com.vk.id.onetap.compose.onetap.sheet.content.SheetContentAuthSuccess
 import com.vk.id.onetap.compose.onetap.sheet.content.SheetContentMain
@@ -14,9 +11,39 @@ import com.vk.id.onetap.compose.onetap.sheet.style.OneTapBottomSheetStyle
 
 @Preview
 @Composable
-private fun OneTapBottomSheetFailedPreview() {
+private fun OneTapBottomSheetFailedDartPreview() {
+    SheetContentAuthFailed(
+        OneTapBottomSheetStyle.Dark(),
+        dismissSheet = {},
+        repeatClicked = {}
+    )
+}
+
+@Preview
+@Composable
+private fun OneTapBottomSheetFailedLightPreview() {
+    SheetContentAuthFailed(
+        OneTapBottomSheetStyle.Light(),
+        dismissSheet = {},
+        repeatClicked = {}
+    )
+}
+
+@Preview
+@Composable
+private fun OneTapBottomSheetFailedTransparentDartPreview() {
     SheetContentAuthFailed(
         OneTapBottomSheetStyle.TransparentDark(),
+        dismissSheet = {},
+        repeatClicked = {}
+    )
+}
+
+@Preview
+@Composable
+private fun OneTapBottomSheetFailedTransparentLightPreview() {
+    SheetContentAuthFailed(
+        OneTapBottomSheetStyle.TransparentLight(),
         dismissSheet = {},
         repeatClicked = {}
     )
