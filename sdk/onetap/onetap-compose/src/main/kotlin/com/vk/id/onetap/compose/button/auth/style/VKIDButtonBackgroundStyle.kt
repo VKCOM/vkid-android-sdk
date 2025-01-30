@@ -14,6 +14,7 @@ import com.vk.id.onetap.compose.R
 internal fun Modifier.background(style: InternalVKIDButtonBackgroundStyle) = composed {
     val backgroundResource = when (style) {
         InternalVKIDButtonBackgroundStyle.BLUE -> R.color.vkid_azure_A100
+        InternalVKIDButtonBackgroundStyle.WHITE -> R.color.vkid_white
         InternalVKIDButtonBackgroundStyle.TRANSPARENT -> R.color.vkid_transparent
     }
     background(colorResource(backgroundResource))

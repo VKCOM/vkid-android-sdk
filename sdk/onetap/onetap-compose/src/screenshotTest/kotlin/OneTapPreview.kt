@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.vk.id.common.InternalVKIDApi
@@ -20,9 +22,24 @@ private fun OneTapIconStylePreview() {
 
 @Preview
 @Composable
+private fun OneTapSecondaryLightStylePreview() {
+    OneTap(
+        style = OneTapStyle.SecondaryLight(),
+        onAuth = { _, _ -> },
+        signInAnotherAccountButtonEnabled = true,
+        oAuths = setOf(OneTapOAuth.OK, OneTapOAuth.MAIL),
+    )
+}
+
+@Preview
+@Composable
 private fun OneTapTransparentLightStylePreview() {
-    OneTap(style = OneTapStyle.TransparentLight(),
-        onAuth = { _, _ -> })
+    OneTap(
+        style = OneTapStyle.TransparentLight(),
+        onAuth = { _, _ -> },
+        signInAnotherAccountButtonEnabled = true,
+        oAuths = setOf(OneTapOAuth.OK, OneTapOAuth.MAIL),
+    )
 }
 
 @Preview
@@ -33,9 +50,24 @@ private fun OneTapLightStylePreview() {
 
 @Preview
 @Composable
+private fun OneTapSecondaryDarkStylePreview() {
+    OneTap(
+        style = OneTapStyle.SecondaryDark(),
+        onAuth = { _, _ -> },
+        signInAnotherAccountButtonEnabled = true,
+        oAuths = setOf(OneTapOAuth.OK, OneTapOAuth.MAIL),
+    )
+}
+
+@Preview
+@Composable
 private fun OneTapTransparentDarkStylePreview() {
-    OneTap(style = OneTapStyle.TransparentDark(),
-        onAuth = { _, _ -> })
+    OneTap(
+        style = OneTapStyle.TransparentDark(),
+        onAuth = { _, _ -> },
+        signInAnotherAccountButtonEnabled = true,
+        oAuths = setOf(OneTapOAuth.OK, OneTapOAuth.MAIL),
+    )
 }
 
 @Preview

@@ -123,7 +123,7 @@
             android:id="@+id/onetap_secondary_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Secondary light"
+            android:text="Secondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/onetap_primary_round_spacer" />
@@ -146,7 +146,7 @@
             app:vkid_buttonsCornerRadius="0dp"
             app:vkid_onetapOAuths="mail,ok"
             app:vkid_onetapShowSignInToAnotherAccount="true"
-            app:vkid_onetapStyle="transparentSystem" />
+            app:vkid_onetapStyle="secondarySystem" />
 
         <View
             android:id="@+id/onetap_secondary_no_rounding_spacer"
@@ -166,7 +166,7 @@
             app:vkid_buttonsCornerRadius="8dp"
             app:vkid_onetapOAuths="mail,ok"
             app:vkid_onetapShowSignInToAnotherAccount="true"
-            app:vkid_onetapStyle="transparentSystem" />
+            app:vkid_onetapStyle="secondarySystem" />
 
         <View
             android:id="@+id/onetap_secondary_rounded_spacer"
@@ -186,7 +186,7 @@
             app:vkid_buttonsCornerRadius="1000dp"
             app:vkid_onetapOAuths="mail,ok"
             app:vkid_onetapShowSignInToAnotherAccount="true"
-            app:vkid_onetapStyle="transparentSystem" />
+            app:vkid_onetapStyle="secondarySystem" />
 
         <View
             android:id="@+id/onetap_secondary_round_spacer"

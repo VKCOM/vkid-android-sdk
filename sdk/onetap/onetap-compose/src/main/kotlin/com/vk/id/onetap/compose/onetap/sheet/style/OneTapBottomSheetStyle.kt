@@ -70,6 +70,10 @@ public sealed class OneTapBottomSheetStyle @InternalVKIDApi constructor(
     /**
      * Represents the transparent light style theme for the One Tap Bottom Sheet.
      */
+    @Deprecated(
+        "This style will be removed in future releases. Please, use Light instead.",
+        ReplaceWith("Light", " com.vk.id.onetap.compose.onetap.sheet.style.Light"),
+    )
     public class TransparentLight(
         cornersStyle: OneTapSheetCornersStyle = OneTapSheetCornersStyle.Default,
         buttonsCornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
@@ -86,6 +90,10 @@ public sealed class OneTapBottomSheetStyle @InternalVKIDApi constructor(
     /**
      * Represents the transparent dark style theme for the One Tap Bottom Sheet.
      */
+    @Deprecated(
+        "This style will be removed in future releases. Please, use Dark instead.",
+        ReplaceWith("Dark", " com.vk.id.onetap.compose.onetap.sheet.style.Dark"),
+    )
     public class TransparentDark(
         cornersStyle: OneTapSheetCornersStyle = OneTapSheetCornersStyle.Default,
         buttonsCornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
@@ -122,6 +130,10 @@ public sealed class OneTapBottomSheetStyle @InternalVKIDApi constructor(
          * Create a transparent style for the OneTap Bottomsheet that
          * varies between [TransparentLight] and [TransparentDark] depending on the system settings.
          */
+        @Deprecated(
+            "This style will be removed in future releases. Please, use system instead.",
+            ReplaceWith("OneTapBottomSheetStyle.system(context, cornersStyle, buttonsCornersStyle, buttonsSizeStyle)"),
+        )
         public fun transparentSystem(
             context: Context,
             cornersStyle: OneTapSheetCornersStyle = OneTapSheetCornersStyle.Default,

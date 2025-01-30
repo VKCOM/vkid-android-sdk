@@ -62,6 +62,7 @@ private fun CircleProgress(
 @Preview
 @Composable
 private fun OneTapBottomSheetProgressPreview() {
+    @Suppress("DEPRECATION")
     SheetContentAuthInProgress(
         OneTapBottomSheetStyle.TransparentDark(),
         dismissSheet = {},
