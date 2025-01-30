@@ -47,7 +47,7 @@ internal fun SheetContentBox(
             .safeContentPadding()
             .wrapContentHeight()
             .fillMaxWidth()
-            .widthIn(min = 344.dp, max = 800.dp)
+            .widthIn(min = 200.dp, max = 416.dp)
             .padding(8.dp)
             .clip(style.cornersStyle)
             .background(style.backgroundStyle),
