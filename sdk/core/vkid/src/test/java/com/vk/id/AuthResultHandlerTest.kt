@@ -18,7 +18,7 @@ import com.vk.id.logout.VKIDLogoutCallback
 import com.vk.id.logout.VKIDLogoutFail
 import com.vk.id.logout.VKIDLogoutParams
 import com.vk.id.network.InternalVKIDCall
-import com.vk.id.storage.InternalVKIDTokenStorage
+import com.vk.id.storage.TokenStorage
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.spec.style.scopes.BehaviorSpecGivenContainerScope
@@ -90,7 +90,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
         val serviceCredentials = mockk<ServiceCredentials>()
         val tokensHandler = mockk<TokensHandler>()
         val loggerOut = mockk<VKIDLoggerOut>()
-        val tokenStorage = mockk<InternalVKIDTokenStorage>()
+        val tokenStorage = mockk<TokenStorage>()
         val onFailCallback = mockk<() -> Unit>()
         every { onFailCallback() } just runs
         val handler = AuthResultHandler(

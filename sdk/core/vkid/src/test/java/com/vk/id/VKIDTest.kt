@@ -2,7 +2,6 @@
 
 package com.vk.id
 
-import android.content.Context
 import com.vk.id.analytics.VKIDAnalytics
 import com.vk.id.analytics.stat.StatTracker
 import com.vk.id.auth.VKIDAuthParams
@@ -13,7 +12,6 @@ import com.vk.id.internal.auth.AuthEventBridge
 import com.vk.id.internal.auth.AuthOptions
 import com.vk.id.internal.auth.AuthProvidersChooser
 import com.vk.id.internal.auth.AuthResult
-import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.auth.VKIDAuthProvider
 import com.vk.id.internal.auth.device.InternalVKIDDeviceIdProvider
 import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
@@ -25,11 +23,10 @@ import com.vk.id.internal.store.InternalVKIDPrefsStore
 import com.vk.id.internal.user.UserDataFetcher
 import com.vk.id.logout.VKIDLoggerOut
 import com.vk.id.network.InternalVKIDApiContract
-import com.vk.id.network.groupsubscription.InternalVKIDGroupSubscriptionApiService
 import com.vk.id.refresh.VKIDTokenRefresher
 import com.vk.id.refreshuser.VKIDUserRefresher
 import com.vk.id.storage.InternalVKIDEncryptedSharedPreferencesStorage
-import com.vk.id.storage.InternalVKIDTokenStorage
+import com.vk.id.storage.TokenStorage
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.testCoroutineScheduler
 import io.kotest.matchers.shouldBe
@@ -58,13 +55,9 @@ internal class VKIDTest : BehaviorSpec({
     val dispatchers = mockk<VKIDCoroutinesDispatchers>()
     val statTracker = mockk<StatTracker>(relaxed = true)
     var isFlutter = false
-    val serviceCredentials = mockk<ServiceCredentials>()
-    every { serviceCredentials.clientID } returns "1"
     val deps = object : VKIDDeps {
-        override val context: Context = mockk()
         override val authProvidersChooser: Lazy<AuthProvidersChooser> = lazy { authProvidersChooser }
         override val authOptionsCreator: AuthOptionsCreator = authOptionsCreator
-        override val serviceCredentials: Lazy<ServiceCredentials> = lazy { serviceCredentials }
         override val authCallbacksHolder: AuthCallbacksHolder = authCallbacksHolder
         override val authResultHandler: Lazy<AuthResultHandler> = lazy { authResultHandler }
         override val dispatchers: VKIDCoroutinesDispatchers = dispatchers
@@ -76,7 +69,7 @@ internal class VKIDTest : BehaviorSpec({
         override val tokenExchanger: Lazy<VKIDTokenExchanger> = lazy { mockk() }
         override val userRefresher: Lazy<VKIDUserRefresher> = lazy { mockk() }
         override val loggerOut: Lazy<VKIDLoggerOut> = lazy { mockk() }
-        override val tokenStorage: InternalVKIDTokenStorage = mockk()
+        override val tokenStorage: TokenStorage = mockk()
         override val deviceIdStorage: Lazy<InternalVKIDDeviceIdProvider.DeviceIdStorage> = lazy { mockk() }
         override val prefsStore: Lazy<InternalVKIDPrefsStore> = lazy { mockk() }
         override val encryptedSharedPreferencesStorage: Lazy<InternalVKIDEncryptedSharedPreferencesStorage> =
@@ -85,8 +78,6 @@ internal class VKIDTest : BehaviorSpec({
         override val activityStarter: InternalVKIDActivityStarter = mockk()
         override val isFlutter: Boolean
             get() = isFlutter
-        override val groupSubscriptionApiService: Lazy<InternalVKIDGroupSubscriptionApiService>
-            get() = lazy { mockk() }
     }
 
     Given("VKID for flutter SDK") {
@@ -100,7 +91,6 @@ internal class VKIDTest : BehaviorSpec({
             Then("Analytics vkid_sdk_init event is send") {
                 verify {
                     statTracker.trackEvent(
-                        null,
                         "vkid_sdk_init",
                         VKIDAnalytics.EventParam("wrapper_sdk_type", strValue = "flutter")
                     )
@@ -120,7 +110,6 @@ internal class VKIDTest : BehaviorSpec({
             Then("Analytics vkid_sdk_init event is send") {
                 verify {
                     statTracker.trackEvent(
-                        null,
                         "vkid_sdk_init",
                         VKIDAnalytics.EventParam("wrapper_sdk_type", strValue = "none")
                     )

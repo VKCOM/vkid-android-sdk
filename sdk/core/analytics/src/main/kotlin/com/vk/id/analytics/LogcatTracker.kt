@@ -9,7 +9,7 @@ import com.vk.id.common.InternalVKIDApi
 @InternalVKIDApi
 public class LogcatTracker(private val tag: String = "VKID Analytics") : VKIDAnalytics.Tracker {
     /** Log event to logcat with format 'event name' { param1name: param1value, ... } **/
-    override fun trackEvent(accessToken: String?, name: String, vararg params: VKIDAnalytics.EventParam) {
+    override fun trackEvent(name: String, vararg params: VKIDAnalytics.EventParam) {
         var paramsString = "{ "
         var first = true
         for (p in params) {
@@ -28,7 +28,6 @@ public class LogcatTracker(private val tag: String = "VKID Analytics") : VKIDAna
             }
         }
         paramsString += " }"
-        val anonymous = if (accessToken == null) "Anonymous: " else "Personalized: "
-        Log.d(tag, "$anonymous $name $paramsString")
+        Log.d(tag, "$name $paramsString")
     }
 }

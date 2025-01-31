@@ -17,13 +17,10 @@ android {
 
 dependencies {
     androidTestImplementation(projects.vkid)
-    androidTestImplementation(projects.network)
-    androidTestImplementation(projects.onetapCompose)
     androidTestImplementation(projects.onetapXml)
-    androidTestImplementation(projects.multibrandingCompose)
+    androidTestImplementation(projects.onetapCompose)
     androidTestImplementation(projects.multibrandingXml)
-    androidTestImplementation(projects.groupSubscriptionCompose)
-    androidTestImplementation(projects.groupSubscriptionXml)
+    androidTestImplementation(projects.multibrandingCompose)
     androidTestImplementation(libs.espresso.intents)
     androidTestImplementation(libs.mockk.android)
     androidTestImplementation(libs.kotest.core)
