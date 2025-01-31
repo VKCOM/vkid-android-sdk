@@ -376,7 +376,8 @@
             app:vkid_buttonsElevation="0dp"
             app:vkid_buttonsSize="medium40"
             app:vkid_onetapOAuths="mail,ok"
-            app:vkid_onetapShowSignInToAnotherAccount="true" />
+            app:vkid_onetapShowSignInToAnotherAccount="true"
+            app:vkid_onetapStyle="system" />
 
         <View
             android:id="@+id/onetap_medium40_spacer"

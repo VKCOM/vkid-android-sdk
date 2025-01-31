@@ -46,22 +46,24 @@ internal fun SheetContentBox(
             .verticalScroll(rememberScrollState())
             .safeContentPadding()
             .wrapContentHeight()
-            .fillMaxWidth()
-            .widthIn(min = 200.dp, max = 416.dp)
-            .padding(8.dp)
+            .widthIn(min = 200.dp, max = 420.dp)
             .clip(style.cornersStyle)
             .background(style.backgroundStyle),
         contentAlignment = Alignment.Center,
     ) {
         Column(
-            modifier = Modifier
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Row(verticalAlignment = Alignment.Top) {
                 rowContent()
             }
-            content()
+            Column(
+                modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                content()
+            }
         }
     }
 }
@@ -86,13 +88,16 @@ internal fun SheetContentBox(
 internal fun CloseIcon(dismissSheet: () -> Unit) {
     Box(
         modifier = Modifier
+            .padding(4.dp)
+            .size(44.dp)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
                 onClick = {
                     dismissSheet()
                 }
-            )
+            ),
+        contentAlignment = Alignment.Center,
     ) {
         Image(
             painter = painterResource(R.drawable.vkid_onetap_bottomsheet_close),
@@ -111,7 +116,7 @@ private fun SheetContentBoxPreview() {
             Spacer(modifier = Modifier.width(12.dp))
             Spacer(modifier = Modifier.weight(1f))
             Image(
-                painter = painterResource(R.drawable.vkid_sheet_logo),
+                painter = painterResource(R.drawable.vkid_sheet_logo_light),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
