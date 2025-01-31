@@ -15,7 +15,7 @@ import com.vk.id.network.InternalVKIDCall
 import com.vk.id.refresh.VKIDRefreshTokenCallback
 import com.vk.id.refresh.VKIDRefreshTokenFail
 import com.vk.id.refresh.VKIDTokenRefresher
-import com.vk.id.storage.InternalVKIDTokenStorage
+import com.vk.id.storage.TokenStorage
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.testCoroutineScheduler
@@ -93,7 +93,7 @@ internal class VKIDUserRefresherTest : BehaviorSpec({
 
     Given("User info fetcher") {
         val api = mockk<VKIDApiService>()
-        val tokenStorage = mockk<InternalVKIDTokenStorage>()
+        val tokenStorage = mockk<TokenStorage>()
         val deviceIdProvider = mockk<InternalVKIDDeviceIdProvider>()
         every { deviceIdProvider.getDeviceId() } returns DEVICE_ID
         val serviceCredentials = ServiceCredentials(

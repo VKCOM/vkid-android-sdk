@@ -7,9 +7,6 @@ import com.vk.id.internal.auth.device.InternalVKIDDeviceIdProvider
 import com.vk.id.internal.context.InternalVKIDActivityStarter
 import com.vk.id.internal.context.InternalVKIDPackageManager
 import com.vk.id.internal.store.InternalVKIDPrefsStore
-import com.vk.id.network.groupsubscription.InternalVKIDGroupSubscriptionApiContract
-import com.vk.id.network.groupsubscription.data.InternalVKIDGroupByIdData
-import com.vk.id.network.groupsubscription.data.InternalVKIDGroupMembersData
 import com.vk.id.storage.InternalVKIDEncryptedSharedPreferencesStorage
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -33,33 +30,6 @@ public class InternalVKIDTestBuilder(
     private var getSilentAuthProvidersResponse = Result.success(InternalVKIDSilentAuthProvidersResponse(emptyList()))
     private var packageManager: InternalVKIDPackageManager? = null
     private var activityStarter: InternalVKIDActivityStarter? = null
-
-    private var isServiceAccountResponse = Result.failure<Boolean>(UnsupportedOperationException("Not mocked"))
-    private var getGroupResponse = Result.failure<InternalVKIDGroupByIdData>(UnsupportedOperationException("Not mocked"))
-    private var getMembersResponses =
-        listOf(Result.failure<InternalVKIDGroupMembersData>(UnsupportedOperationException("Not mocked")))
-    private var subscribeToGroupResponses = listOf(Result.failure<Unit>(UnsupportedOperationException("Not mocked")))
-    private val mockGroupSubscriptionApi = object : InternalVKIDGroupSubscriptionApiContract {
-        override suspend fun isServiceAccount(accessToken: String): Boolean {
-            return isServiceAccountResponse.getOrThrow()
-        }
-
-        override suspend fun getGroup(accessToken: String, groupId: String): InternalVKIDGroupByIdData {
-            return getGroupResponse.getOrThrow()
-        }
-
-        private val getMembersResponseIndex = AtomicInteger(0)
-
-        override suspend fun getMembers(accessToken: String, groupId: String, justFriends: Boolean): InternalVKIDGroupMembersData {
-            return getMembersResponses[getMembersResponseIndex.getAndIncrement()].getOrThrow()
-        }
-
-        private val subscribeToGroupResponseIndex = AtomicInteger(0)
-
-        override suspend fun subscribeToGroup(accessToken: String, groupId: String) {
-            return subscribeToGroupResponses[subscribeToGroupResponseIndex.getAndIncrement()].getOrThrow()
-        }
-    }
 
     private var mockApi: InternalVKIDOverrideApi = object : InternalVKIDOverrideApi {
         override fun refreshToken(
@@ -156,34 +126,10 @@ public class InternalVKIDTestBuilder(
         this.encryptedSharedPreferencesStorage = storage
     }
 
-    public fun isServiceAccountResponse(response: Result<Boolean>): InternalVKIDTestBuilder = apply {
-        isServiceAccountResponse = response
-    }
-
-    public fun getGroupResponse(response: Result<InternalVKIDGroupByIdData>): InternalVKIDTestBuilder = apply {
-        getGroupResponse = response
-    }
-
-    public fun getMembersResponses(
-        response1: Result<InternalVKIDGroupMembersData>,
-        response2: Result<InternalVKIDGroupMembersData>,
-    ): InternalVKIDTestBuilder = apply {
-        getMembersResponses = listOf(response1, response2)
-    }
-
-    public fun subscribeToGroupResponse(response: Result<Unit>): InternalVKIDTestBuilder = apply {
-        subscribeToGroupResponses = listOf(response)
-    }
-
-    public fun subscribeToGroupResponses(responses: List<Result<Unit>>): InternalVKIDTestBuilder = apply {
-        subscribeToGroupResponses = responses
-    }
-
     public fun build() {
         VKID.init(
             context = context,
             mockApi = mockApi,
-            groupSubscriptionApiContract = mockGroupSubscriptionApi,
             deviceIdStorage = deviceIdStorage,
             prefsStore = prefsStore,
             encryptedSharedPreferencesStorage = encryptedSharedPreferencesStorage,

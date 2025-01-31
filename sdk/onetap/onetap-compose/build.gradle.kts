@@ -15,7 +15,6 @@ dependencies {
     api(projects.vkid)
     api(projects.multibrandingCompose)
     api(projects.onetapCommon)
-    api(projects.groupSubscriptionCompose)
     implementation(projects.common)
     implementation(projects.analytics)
     implementation(projects.multibrandingInternal)

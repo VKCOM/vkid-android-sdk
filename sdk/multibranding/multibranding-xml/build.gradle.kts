@@ -12,7 +12,6 @@ android {
 dependencies {
     api(projects.vkid)
     api(projects.multibrandingCommon)
-    api(projects.groupSubscriptionXml)
     implementation(projects.multibrandingCompose)
     implementation(libs.androidx.compose.ui)
 }
