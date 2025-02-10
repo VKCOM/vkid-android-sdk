@@ -74,13 +74,21 @@ public class OneTapBottomSheet @JvmOverloads constructor(
      */
     public var fastAuthEnabled: Boolean = true
 
+    public var autoShowDelayMillis: Long? = null
+        set(value) {
+            field = value
+            onAutoShowDelayMillisChange(value)
+        }
+    private var onAutoShowDelayMillisChange: (Long?) -> Unit = {}
+
     init {
-        val sheetSettings = parseOneTapBottomSheetAttrs(context, attrs)
-        this.oAuths = sheetSettings.oAuths
-        this.authParams = authParams.newBuilder { this.scopes = sheetSettings.scopes }
-        this.fastAuthEnabled = sheetSettings.fastAuthEnabled
+        val params = parseOneTapBottomSheetAttrs(context, attrs)
+        this.oAuths = params.oAuths
+        this.authParams = authParams.newBuilder { this.scopes = params.scopes }
+        this.fastAuthEnabled = params.fastAuthEnabled
+        this.autoShowDelayMillis = params.autoShowDelayMillis
         composeView.setContent {
-            Content(sheetSettings)
+            Content(params)
         }
         addView(composeView)
     }
@@ -92,6 +100,8 @@ public class OneTapBottomSheet @JvmOverloads constructor(
         onOAuthsChange = { oAuths = it }
         var authParams by remember { mutableStateOf(authParams) }
         onAuthParamsChange = { authParams = it }
+        var autoShowDelayMillis by remember { mutableStateOf(autoShowDelayMillis) }
+        onAutoShowDelayMillisChange = { autoShowDelayMillis = it }
         OneTapBottomSheet(
             state = rememberOneTapBottomSheetState().also {
                 state = it
@@ -106,6 +116,7 @@ public class OneTapBottomSheet @JvmOverloads constructor(
             oAuths = oAuths,
             authParams = authParams,
             fastAuthEnabled = fastAuthEnabled,
+            autoShowSheetDelayMillis = autoShowDelayMillis,
         )
     }
 

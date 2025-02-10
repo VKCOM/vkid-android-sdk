@@ -65,5 +65,6 @@
             <enum name="SendRequest" value="7"/>
             <enum name="Participate" value="8"/>
         </attr>
+        <attr name="vkid_autoShowDelayMillis" format="integer"/>
     </declare-styleable>
 </resources>
