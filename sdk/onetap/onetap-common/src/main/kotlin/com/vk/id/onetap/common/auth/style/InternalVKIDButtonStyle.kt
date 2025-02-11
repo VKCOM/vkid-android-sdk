@@ -24,6 +24,7 @@ public sealed class InternalVKIDButtonStyle(
     public val sizeStyle: OneTapButtonSizeStyle,
     public val elevationStyle: OneTapButtonElevationStyle,
 ) {
+    @InternalVKIDApi
     public class Light(
         cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
         sizeStyle: OneTapButtonSizeStyle = OneTapButtonSizeStyle.MEDIUM_44,
@@ -43,6 +44,7 @@ public sealed class InternalVKIDButtonStyle(
         elevationStyle = elevationStyle,
     )
 
+    @InternalVKIDApi
     public class Dark(
         cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
         sizeStyle: OneTapButtonSizeStyle = OneTapButtonSizeStyle.MEDIUM_44,
@@ -62,6 +64,27 @@ public sealed class InternalVKIDButtonStyle(
         elevationStyle = elevationStyle,
     )
 
+    @InternalVKIDApi
+    public class Secondary(
+        cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
+        sizeStyle: OneTapButtonSizeStyle = OneTapButtonSizeStyle.MEDIUM_44,
+        elevationStyle: OneTapButtonElevationStyle = OneTapButtonElevationStyle.Default,
+    ) : InternalVKIDButtonStyle(
+        backgroundStyle = InternalVKIDButtonBackgroundStyle.WHITE,
+        rippleStyle = InternalVKIDButtonRippleStyle.DARK,
+        borderStyle = InternalVKIDButtonBorderStyle.DARK,
+        iconStyle = InternalVKIconStyle(
+            colorStyle = InternalVKIconColorStyle.BLUE,
+            sizeStyle = sizeStyle.internalVKIDAsIconSizeStyle(),
+        ),
+        textStyle = InternalVKIDButtonTextStyle.DARK,
+        progressStyle = InternalCircleProgressStyle.DARK,
+        cornersStyle = cornersStyle,
+        sizeStyle = sizeStyle,
+        elevationStyle = elevationStyle,
+    )
+
+    @InternalVKIDApi
     public class TransparentLight(
         cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
         sizeStyle: OneTapButtonSizeStyle = OneTapButtonSizeStyle.MEDIUM_44,
@@ -81,6 +104,7 @@ public sealed class InternalVKIDButtonStyle(
         elevationStyle = elevationStyle,
     )
 
+    @InternalVKIDApi
     public class TransparentDark(
         cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
         sizeStyle: OneTapButtonSizeStyle = OneTapButtonSizeStyle.MEDIUM_44,

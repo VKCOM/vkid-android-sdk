@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.tooling.preview.Preview

@@ -112,7 +112,7 @@ private fun TypedArray.getOneTapButtonsElevation(context: Context) = getDimensio
     context.dpToPixels(OneTapButtonElevationStyle.Default.elevationDp)
 )
 
-@Suppress("MagicNumber")
+@Suppress("MagicNumber", "DEPRECATION")
 private fun TypedArray.getOneTapStyleConstructor(
     context: Context
 ) = when (getInt(R.styleable.vkid_OneTap_vkid_onetapStyle, 0)) {
@@ -137,11 +137,21 @@ private fun TypedArray.getOneTapStyleConstructor(
             elevationStyle = elevationStyle
         )
     }
+    7 -> OneTapStyle::SecondaryLight
+    8 -> OneTapStyle::SecondaryDark
+    9 -> { cornersStyle: OneTapButtonCornersStyle, sizeStyle: OneTapButtonSizeStyle, elevationStyle: OneTapButtonElevationStyle ->
+        OneTapStyle.secondarySystem(
+            context = context,
+            cornersStyle = cornersStyle,
+            sizeStyle = sizeStyle,
+            elevationStyle = elevationStyle
+        )
+    }
 
     else -> OneTapStyle::Light
 }
 
-@Suppress("MagicNumber")
+@Suppress("MagicNumber", "DEPRECATION")
 private fun TypedArray.getSheetStyleConstructor(
     context: Context
 ) = when (getInt(R.styleable.vkid_OneTap_vkid_bottomSheetStyle, 0)) {

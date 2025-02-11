@@ -9,6 +9,9 @@
             <enum name="icon" value="4"/>
             <enum name="system" value="5"/>
             <enum name="transparentSystem" value="6"/>
+            <enum name="secondaryLight" value="7"/>
+            <enum name="secondaryDark" value="8"/>
+            <enum name="secondarySystem" value="9"/>
         </attr>
         <attr name="vkid_buttonsCornerRadius" format="dimension"/>
         <attr name="vkid_buttonsElevation" format="dimension"/>

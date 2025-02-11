@@ -130,11 +130,15 @@ internal object OneTapAnalytics {
     private fun themeParam(style: OneTapStyle): VKIDAnalytics.EventParam =
         VKIDAnalytics.EventParam(
             "theme_type",
+            @Suppress("DEPRECATION")
             when (style) {
                 is OneTapStyle.Dark,
                 is OneTapStyle.TransparentDark,
+                is OneTapStyle.SecondaryDark,
                 is OneTapStyle.Icon -> "dark"
+
                 is OneTapStyle.Light,
+                is OneTapStyle.SecondaryLight,
                 is OneTapStyle.TransparentLight -> "light"
             }
         )
@@ -142,10 +146,14 @@ internal object OneTapAnalytics {
     private fun styleParam(style: OneTapStyle): VKIDAnalytics.EventParam =
         VKIDAnalytics.EventParam(
             "style_type",
+            @Suppress("DEPRECATION")
             when (style) {
                 is OneTapStyle.Dark,
                 is OneTapStyle.Icon,
                 is OneTapStyle.Light -> "primary"
+
+                is OneTapStyle.SecondaryDark,
+                is OneTapStyle.SecondaryLight,
                 is OneTapStyle.TransparentDark,
                 is OneTapStyle.TransparentLight -> "secondary"
             }
