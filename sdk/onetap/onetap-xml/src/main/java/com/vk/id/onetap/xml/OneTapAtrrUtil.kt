@@ -65,6 +65,7 @@ internal class OneTapBottomSheetAttributeSettings(
     val oAuths: Set<OneTapOAuth>,
     val scopes: Set<String>,
     val fastAuthEnabled: Boolean,
+    val autoShowDelayMillis: Long?,
 )
 
 internal fun parseOneTapBottomSheetAttrs(
@@ -90,6 +91,9 @@ internal fun parseOneTapBottomSheetAttrs(
                 oAuths = getOAuths(),
                 scopes = getScopes(),
                 fastAuthEnabled = getFastAuthEnabled(),
+                autoShowDelayMillis = getInt(R.styleable.vkid_OneTap_vkid_autoShowDelayMillis, -1)
+                    .takeIf { it >= 0 }
+                    ?.toLong(),
             )
         } finally {
             recycle()
