@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -27,23 +28,24 @@ internal fun SheetContentAuthSuccess(
         style,
         dismissSheet,
     ) {
-        Spacer(modifier = Modifier.height(48.dp))
+        Spacer(modifier = Modifier.height(60.dp))
         Image(
             painter = painterResource(R.drawable.vkid_sheet_content_success),
             contentDescription = null,
+            colorFilter = ColorFilter.tint(colorResource(id = R.color.vkid_azure_300))
         )
         BasicText(
             text = stringResource(id = R.string.vkid_sheet_state_auth_success),
             modifier = Modifier.padding(top = 12.dp),
             style = TextStyle(
                 color = colorResource(style.contentTextColor),
-                fontSize = 16.sp,
+                fontSize = 15.sp,
                 fontWeight = FontWeight.W400,
                 letterSpacing = 0.1.sp,
                 lineHeight = 20.sp
             )
         )
-        Spacer(modifier = Modifier.height(48.dp))
+        Spacer(modifier = Modifier.height(72.dp))
     }
 }
 
