@@ -38,13 +38,13 @@ public sealed class OneTapStyle(
             is Icon,
             is TransparentLight,
             is SecondaryLight,
-            is SecondaryDark,
             is Light -> OAuthListWidgetStyle.Light(
                 cornersStyle = cornersStyle.toOAuthListWidgetStyle(),
                 sizeStyle = sizeStyle.toOAuthListWidgetStyle(),
             )
 
             is TransparentDark,
+            is SecondaryDark,
             is Dark -> OAuthListWidgetStyle.Dark(
                 cornersStyle = cornersStyle.toOAuthListWidgetStyle(),
                 sizeStyle = sizeStyle.toOAuthListWidgetStyle(),

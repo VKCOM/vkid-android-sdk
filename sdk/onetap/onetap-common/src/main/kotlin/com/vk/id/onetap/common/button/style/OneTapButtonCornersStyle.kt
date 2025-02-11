@@ -15,7 +15,7 @@ public sealed class OneTapButtonCornersStyle(
     /**
      * The recommended style.
      */
-    public object Default : OneTapButtonCornersStyle(ROUNDED_RADIUS_DP)
+    public object Default : OneTapButtonCornersStyle(DEFAULT_RADIUS_DP)
 
     /**
      * A style without rounding.
@@ -41,6 +41,7 @@ public sealed class OneTapButtonCornersStyle(
 
     private companion object {
         private const val ROUNDED_RADIUS_DP = 8f
+        private const val DEFAULT_RADIUS_DP = 12f
         private const val NONE_RADIUS_DP = 0f
         private const val ROUND_RADIUS_DP = 1000f
     }
