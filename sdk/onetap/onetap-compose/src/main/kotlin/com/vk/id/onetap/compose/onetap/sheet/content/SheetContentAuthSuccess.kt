@@ -20,12 +20,10 @@ import com.vk.id.onetap.compose.onetap.sheet.style.OneTapBottomSheetStyle
 
 @Composable
 internal fun SheetContentAuthSuccess(
-    serviceName: String,
     style: OneTapBottomSheetStyle,
     dismissSheet: () -> Unit,
 ) {
     SheetContentBox(
-        serviceName,
         style,
         dismissSheet,
     ) {
@@ -53,7 +51,6 @@ internal fun SheetContentAuthSuccess(
 @Composable
 private fun OneTapBottomSheetProgressPreview() {
     SheetContentAuthSuccess(
-        "<Название сервиса>",
         OneTapBottomSheetStyle.TransparentLight(),
         dismissSheet = {},
     )

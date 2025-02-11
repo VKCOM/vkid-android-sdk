@@ -46,8 +46,8 @@ public sealed class OneTapBottomSheetStyle @InternalVKIDApi constructor(
         cornersStyle = cornersStyle,
         oneTapStyle = OneTapStyle.Light(cornersStyle = buttonsCornersStyle, sizeStyle = buttonsSizeStyle),
         backgroundStyle = OneTapSheetBackgroundStyle.LIGHT,
-        vkidIcon = R.drawable.vkid_onetap_bottomsheet_logo_light,
-        contentTextColor = R.color.vkid_steel_gray_400,
+        vkidIcon = 0,
+        contentTextColor = R.color.vkid_gray_subhead,
         contentTitleTextColor = R.color.vkid_black,
     )
 
@@ -62,7 +62,7 @@ public sealed class OneTapBottomSheetStyle @InternalVKIDApi constructor(
         cornersStyle = cornersStyle,
         oneTapStyle = OneTapStyle.Dark(cornersStyle = buttonsCornersStyle, sizeStyle = buttonsSizeStyle),
         backgroundStyle = OneTapSheetBackgroundStyle.DARK,
-        vkidIcon = R.drawable.vkid_onetap_bottomsheet_logo_dark,
+        vkidIcon = 0,
         contentTextColor = R.color.vkid_gray_500,
         contentTitleTextColor = R.color.vkid_gray_100,
     )
@@ -78,8 +78,8 @@ public sealed class OneTapBottomSheetStyle @InternalVKIDApi constructor(
         cornersStyle = cornersStyle,
         oneTapStyle = OneTapStyle.TransparentLight(cornersStyle = buttonsCornersStyle, sizeStyle = buttonsSizeStyle),
         backgroundStyle = OneTapSheetBackgroundStyle.LIGHT,
-        vkidIcon = R.drawable.vkid_onetap_bottomsheet_logo_light,
-        contentTextColor = R.color.vkid_steel_gray_400,
+        vkidIcon = 0,
+        contentTextColor = R.color.vkid_gray_subhead,
         contentTitleTextColor = R.color.vkid_black,
     )
 
@@ -94,7 +94,7 @@ public sealed class OneTapBottomSheetStyle @InternalVKIDApi constructor(
         cornersStyle = cornersStyle,
         oneTapStyle = OneTapStyle.TransparentDark(cornersStyle = buttonsCornersStyle, sizeStyle = buttonsSizeStyle),
         backgroundStyle = OneTapSheetBackgroundStyle.DARK,
-        vkidIcon = R.drawable.vkid_onetap_bottomsheet_logo_dark,
+        vkidIcon = 0,
         contentTextColor = R.color.vkid_gray_500,
         contentTitleTextColor = R.color.vkid_gray_100,
     )

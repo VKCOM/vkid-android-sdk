@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="vkid_gray_100">#E1E3E6</color>
-    <color name="vkid_steel_gray_400">#818C99</color>
     <color name="vkid_gray_500">#76787A</color>
 </resources>

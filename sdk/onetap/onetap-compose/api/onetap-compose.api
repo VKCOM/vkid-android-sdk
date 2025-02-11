@@ -56,8 +56,10 @@ public final class com/vk/id/onetap/compose/onetap/sheet/OneTapScenario : java/l
 public final class com/vk/id/onetap/compose/onetap/sheet/content/ComposableSingletons$SheetContentBoxKt {
 	public static final field INSTANCE Lcom/vk/id/onetap/compose/onetap/sheet/content/ComposableSingletons$SheetContentBoxKt;
 	public static field lambda-1 Lkotlin/jvm/functions/Function3;
+	public static field lambda-2 Lkotlin/jvm/functions/Function3;
 	public fun <init> ()V
 	public final fun getLambda-1$onetap_compose_release ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda-2$onetap_compose_release ()Lkotlin/jvm/functions/Function3;
 }
 
 public final class com/vk/id/onetap/compose/onetap/sheet/content/OneTapBottomSheetAuthStatus$AuthFailedVKID$Creator : android/os/Parcelable$Creator {

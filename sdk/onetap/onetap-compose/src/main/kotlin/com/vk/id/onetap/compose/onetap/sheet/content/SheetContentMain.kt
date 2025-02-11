@@ -1,11 +1,15 @@
 package com.vk.id.onetap.compose.onetap.sheet.content
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -13,8 +17,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -57,21 +63,33 @@ internal fun SheetContentMain(
     signInAnotherAccountButtonEnabled: Boolean,
 ) {
     SheetContentBox(
-        serviceName = serviceName,
         style = style,
-        dismissSheet = dismissSheet,
+        rowContent = {
+            Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = Modifier.weight(1f))
+            Image(
+                painter = painterResource(R.drawable.vkid_sheet_logo),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(120.dp)
+                    .padding(top = 8.dp)
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            CloseIcon(dismissSheet)
+        }
     ) {
         var user by remember { mutableStateOf<VKIDUser?>(null) }
         OneTapBottomSheetAnalytics.OneTapBottomSheetShown(style.toProviderTheme(), scenario)
         val resources = LocalContext.current.resources
         Column(
-            Modifier.padding(horizontal = 32.dp, vertical = 36.dp)
+            Modifier.padding(horizontal = 8.dp, vertical = 16.dp)
         ) {
             val title = remember(scenario) {
                 scenario.scenarioTitle(serviceName = serviceName, resources = resources)
             }
             ContentTitle(title, style)
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(12.dp))
             ContentDescription(stringResource(id = R.string.vkid_scenario_common_description), style)
         }
         @Composable
@@ -79,67 +97,71 @@ internal fun SheetContentMain(
             measureInProgress: Boolean,
             largeText: Boolean,
         ) {
-            OneTap(
-                style = style.oneTapStyle,
-                signInAnotherAccountButtonEnabled = signInAnotherAccountButtonEnabled,
-                oAuths = oAuths,
-                vkidButtonTextProvider = remember(scenario) { scenario.vkidButtonTextProvider(resources) },
-                onVKIDButtonClick = {
-                    val extraAuthParams = OneTapBottomSheetAnalytics.oneTapPressed(user)
-                    startVKIDAuth(
-                        coroutineScope = coroutineScope,
-                        style = style,
-                        onAuth = { onAuth(null, it) },
-                        onAuthCode = onAuthCode,
-                        onFail = {
-                            OneTapBottomSheetAnalytics.authError(extraAuthParams.uuidFromParams())
-                            onFail(null, it)
-                        },
-                        onAuthStatusChange = onAuthStatusChange,
-                        authParams = authParams,
-                        extraAuthParams = extraAuthParams,
-                        fastAuthEnabled = fastAuthEnabled,
-                        user = user,
-                    )
-                },
-                onAlternateButtonClick = {
-                    val extraAuthParams = OneTapBottomSheetAnalytics.alternatePressed()
-                    startAlternateAuth(
-                        coroutineScope = coroutineScope,
-                        style = style,
-                        onAuth = { onAuth(null, it) },
-                        onAuthCode = onAuthCode,
-                        onFail = {
-                            OneTapBottomSheetAnalytics.authError(extraAuthParams.uuidFromParams())
-                            onFail(null, it)
-                        },
-                        onAuthStatusChange = onAuthStatusChange,
-                        authParams = authParams,
-                        extraAuthParams = extraAuthParams,
-                    )
-                },
-                onAuth = onAuth,
-                onAuthCode = onAuthCode,
-                onFail = { oAuth, fail ->
-                    check(oAuth != null) { error("oAuth is not provided in a multibranding flow error") }
-                    onAuthStatusChange(OneTapBottomSheetAuthStatus.AuthFailedMultibranding(oAuth))
-                    onFail(oAuth, fail)
-                },
-                authParams = authParams,
-                onUserFetched = {
-                    user = it
-                    if (it == null) {
-                        OneTapBottomSheetAnalytics.noActiveSession()
-                        OneTapBottomSheetAnalytics.noUserButtonShown()
-                    } else {
-                        OneTapBottomSheetAnalytics.userWasFound(true)
-                    }
-                },
-                fastAuthEnabled = fastAuthEnabled,
-                largeText = largeText,
-                measureInProgress = measureInProgress,
-                scenario = OneTapTitleScenario.SignIn,
-            )
+            Box(
+                modifier = Modifier.padding(8.dp)
+            ) {
+                OneTap(
+                    style = style.oneTapStyle,
+                    signInAnotherAccountButtonEnabled = signInAnotherAccountButtonEnabled,
+                    oAuths = oAuths,
+                    vkidButtonTextProvider = remember(scenario) { scenario.vkidButtonTextProvider(resources) },
+                    onVKIDButtonClick = {
+                        val extraAuthParams = OneTapBottomSheetAnalytics.oneTapPressed(user)
+                        startVKIDAuth(
+                            coroutineScope = coroutineScope,
+                            style = style,
+                            onAuth = { onAuth(null, it) },
+                            onAuthCode = onAuthCode,
+                            onFail = {
+                                OneTapBottomSheetAnalytics.authError(extraAuthParams.uuidFromParams())
+                                onFail(null, it)
+                            },
+                            onAuthStatusChange = onAuthStatusChange,
+                            authParams = authParams,
+                            extraAuthParams = extraAuthParams,
+                            fastAuthEnabled = fastAuthEnabled,
+                            user = user,
+                        )
+                    },
+                    onAlternateButtonClick = {
+                        val extraAuthParams = OneTapBottomSheetAnalytics.alternatePressed()
+                        startAlternateAuth(
+                            coroutineScope = coroutineScope,
+                            style = style,
+                            onAuth = { onAuth(null, it) },
+                            onAuthCode = onAuthCode,
+                            onFail = {
+                                OneTapBottomSheetAnalytics.authError(extraAuthParams.uuidFromParams())
+                                onFail(null, it)
+                            },
+                            onAuthStatusChange = onAuthStatusChange,
+                            authParams = authParams,
+                            extraAuthParams = extraAuthParams,
+                        )
+                    },
+                    onAuth = onAuth,
+                    onAuthCode = onAuthCode,
+                    onFail = { oAuth, fail ->
+                        check(oAuth != null) { error("oAuth is not provided in a multibranding flow error") }
+                        onAuthStatusChange(OneTapBottomSheetAuthStatus.AuthFailedMultibranding(oAuth))
+                        onFail(oAuth, fail)
+                    },
+                    authParams = authParams,
+                    onUserFetched = {
+                        user = it
+                        if (it == null) {
+                            OneTapBottomSheetAnalytics.noActiveSession()
+                            OneTapBottomSheetAnalytics.noUserButtonShown()
+                        } else {
+                            OneTapBottomSheetAnalytics.userWasFound(true)
+                        }
+                    },
+                    fastAuthEnabled = fastAuthEnabled,
+                    largeText = largeText,
+                    measureInProgress = measureInProgress,
+                    scenario = OneTapTitleScenario.SignIn,
+                )
+            }
         }
         BoxWithConstraints {
             MeasureUnconstrainedViewWidth(viewToMeasure = {
@@ -159,9 +181,9 @@ private fun ContentTitle(text: String, style: OneTapBottomSheetStyle) {
         style = TextStyle(
             color = colorResource(id = style.contentTitleTextColor),
             textAlign = TextAlign.Center,
-            fontSize = 20.sp,
-            fontWeight = FontWeight.W500,
-            lineHeight = 24.sp,
+            fontSize = 23.sp,
+            fontWeight = FontWeight.W600,
+            lineHeight = 28.sp,
         )
     )
 }
