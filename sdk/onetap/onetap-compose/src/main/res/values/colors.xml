@@ -14,5 +14,5 @@
     <color name="vkid_background_modal_inverse">#2C2D2E</color>
     <color name="vkid_gray_100">#E1E3E6</color>
     <color name="vkid_gray_subhead">#6D7885</color>
-    <color name="vkid_gray_500">#76787A</color>
+    <color name="vkid_gray_subhead_dark">#969A9F</color>
 </resources>
