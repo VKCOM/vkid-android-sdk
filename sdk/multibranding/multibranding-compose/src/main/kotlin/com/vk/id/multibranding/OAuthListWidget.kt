@@ -156,7 +156,7 @@ private fun OAuthTitle() = BasicText(
 )
 
 @OptIn(InternalVKIDApi::class)
-@Suppress("LongParameterList")
+@Suppress("LongParameterList", "NonSkippableComposable")
 @Composable
 private fun OAuthButton(
     modifier: Modifier,
@@ -177,6 +177,7 @@ private fun OAuthButton(
             .height(style.sizeStyle)
             .border(style.borderStyle, style.cornersStyle)
             .clip(style.cornersStyle)
+            .background(style)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(

@@ -3,5 +3,7 @@
     <color name="vkid_azure_A100" tools:override="true">#0077FF</color>
     <color name="vkid_gray900_alpha50" tools:override="true">#8019191A</color>
     <color name="vkid_white" tools:override="true">#FFFFFF</color>
+    <color name="vkid_background_light">#F5F5F5</color>
+    <color name="vkid_background_dark">#232324</color>
     <color name="splash_background">@color/vkid_white</color>
 </resources>
