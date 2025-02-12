@@ -48,6 +48,8 @@ import com.vk.id.storage.TokenStorage
 import com.vk.id.test.InternalVKIDImmediateApi
 import com.vk.id.test.InternalVKIDOverrideApi
 import com.vk.id.test.TestSilentAuthInfoProvider
+import com.vk.id.tracking.core.CrashReporter
+import com.vk.id.tracking.core.PerformanceTracker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.currentCoroutineContext
@@ -106,8 +108,53 @@ public class VKID {
                     lazy { encryptedSharedPreferencesStorage ?: super.encryptedSharedPreferencesStorage.value }
                 override val vkidPackageManager = packageManager ?: super.vkidPackageManager
                 override val activityStarter = activityStarter ?: super.activityStarter
+                override val performanceTracker: PerformanceTracker = object : PerformanceTracker {
+                    override fun startTracking(key: String) = Unit
+                    override fun endTracking(key: String) = Unit
+                    override fun runTracking(key: String, action: () -> Unit) = action()
+                    override suspend fun runTrackingSuspend(key: String, action: suspend () -> Unit) = action()
+                }
+                override val crashReporter: CrashReporter = object : CrashReporter {
+                    override fun report(crash: Throwable) = Unit
+                    override fun <T> runReportingCrashes(
+                        errorValueProvider: (error: Throwable) -> T,
+                        action: () -> T
+                    ): T = action()
+                    override suspend fun <T> runReportingCrashesSuspend(
+                        errorValueProvider: suspend (error: Throwable) -> T,
+                        action: suspend () -> T
+                    ): T = action()
+                }
             })
         )
+
+        @InternalVKIDApi
+        public fun initForScreenshotTests(context: Context) {
+            init(
+                VKID(object : VKIDDepsProd(context, isFlutter = false) {
+                    override val statTracker: VKIDAnalytics.Tracker = object : VKIDAnalytics.Tracker {
+                        override fun trackEvent(name: String, vararg params: VKIDAnalytics.EventParam) = Unit
+                    }
+                    override val crashReporter: CrashReporter = object : CrashReporter {
+                        override fun report(crash: Throwable) = Unit
+                        override fun <T> runReportingCrashes(
+                            errorValueProvider: (error: Throwable) -> T,
+                            action: () -> T
+                        ): T = action()
+                        override suspend fun <T> runReportingCrashesSuspend(
+                            errorValueProvider: suspend (error: Throwable) -> T,
+                            action: suspend () -> T
+                        ): T = action()
+                    }
+                    override val performanceTracker: PerformanceTracker = object : PerformanceTracker {
+                        override fun startTracking(key: String) = Unit
+                        override fun endTracking(key: String) = Unit
+                        override fun runTracking(key: String, action: () -> Unit) = action()
+                        override suspend fun runTrackingSuspend(key: String, action: suspend () -> Unit) = action()
+                    }
+                })
+            )
+        }
 
         /**
          * Returns a VKID Instance.
@@ -125,8 +172,10 @@ public class VKID {
         @Suppress("MemberVisibilityCanBePrivate")
         public var logEngine: LogEngine = InternalVKIDAndroidLogcatLogEngine()
             set(value) {
-                field = value
-                InternalVKIDLog.setLogEngine(value)
+                VKID.instance.crashReporter.runReportingCrashes({}) {
+                    field = value
+                    InternalVKIDLog.setLogEngine(value)
+                }
             }
 
         /**
@@ -174,13 +223,24 @@ public class VKID {
         this.userRefresher = deps.userRefresher
         this.loggerOut = deps.loggerOut
         this.tokenStorage = deps.tokenStorage
+        this.crashReporter = deps.crashReporter
+        this.performanceTracker = deps.performanceTracker
 
-        VKIDAnalytics.addTracker(deps.statTracker)
+        this.crashReporter.runReportingCrashes({}) {
+            VKIDAnalytics.addTracker(deps.statTracker)
 
-        logger.info(
-            "VKID initialized\nVersion name: ${BuildConfig.VKID_VERSION_NAME}\nCI build: ${BuildConfig.CI_BUILD_NUMBER} ${BuildConfig.CI_BUILD_TYPE}"
-        )
-        VKIDAnalytics.trackEvent("vkid_sdk_init", VKIDAnalytics.EventParam("wrapper_sdk_type", strValue = if (deps.isFlutter) "flutter" else "none"))
+            logger.info(
+                """
+                    |VKID initialized
+                    |Version name: ${BuildConfig.VKID_VERSION_NAME}
+                    |CI build: ${BuildConfig.CI_BUILD_NUMBER} ${BuildConfig.CI_BUILD_TYPE}
+                """.trimMargin()
+            )
+            VKIDAnalytics.trackEvent(
+                "vkid_sdk_init",
+                VKIDAnalytics.EventParam("wrapper_sdk_type", strValue = if (deps.isFlutter) "flutter" else "none")
+            )
+        }
     }
 
     private val requestMutex = Mutex()
@@ -198,6 +258,10 @@ public class VKID {
     private val userRefresher: Lazy<VKIDUserRefresher>
     private val loggerOut: Lazy<VKIDLoggerOut>
     private val tokenStorage: TokenStorage
+    internal val performanceTracker: PerformanceTracker
+
+    @InternalVKIDApi
+    public val crashReporter: CrashReporter
 
     /**
      * Initiates the authorization process.
@@ -249,38 +313,43 @@ public class VKID {
         callback: VKIDAuthCallback,
         params: VKIDAuthParams = VKIDAuthParams {}
     ) {
-        authCallbacksHolder.add(callback)
-        val authContext = currentCoroutineContext()
+        this.crashReporter.runReportingCrashesSuspend({}) {
+            requestMutex.lock()
+            val performanceKey = "Authorize"
+            performanceTracker.startTracking(performanceKey)
+            authCallbacksHolder.add(callback)
+            val authContext = currentCoroutineContext()
 
-        val statParams = if (!params.internalUse) {
-            CustomAuthAnalytics.customAuthStart(params)
-        } else {
-            StatParams(
-                flowSource = params.extraParams?.get(StatTracker.EXTERNAL_PARAM_FLOW_SOURCE) ?: "",
-                sessionId = params.extraParams?.get(StatTracker.EXTERNAL_PARAM_SESSION_ID) ?: ""
-            )
-        }
+            val statParams = if (!params.internalUse) {
+                CustomAuthAnalytics.customAuthStart(params)
+            } else {
+                StatParams(
+                    flowSource = params.extraParams?.get(StatTracker.EXTERNAL_PARAM_FLOW_SOURCE) ?: "",
+                    sessionId = params.extraParams?.get(StatTracker.EXTERNAL_PARAM_SESSION_ID) ?: ""
+                )
+            }
 
-        AuthEventBridge.listener = object : AuthEventBridge.Listener {
-            override fun onAuthResult(authResult: AuthResult) {
-                CoroutineScope(authContext + Job()).launch {
-                    authResultHandler.value.handle(authResult, onFail = {
-                        if (!params.internalUse) {
-                            CustomAuthAnalytics.customAuthError(statParams)
+            AuthEventBridge.listener = object : AuthEventBridge.Listener {
+                override fun onAuthResult(authResult: AuthResult) {
+                    CoroutineScope(authContext + Job()).launch {
+                        authResultHandler.value.handle(authResult, onFail = {
+                            if (!params.internalUse) {
+                                CustomAuthAnalytics.customAuthError(statParams)
+                            }
+                        })
+                        performanceTracker.endTracking(performanceKey)
+                        if (requestMutex.isLocked) {
+                            requestMutex.unlock()
                         }
-                    })
-                    if (requestMutex.isLocked) {
-                        requestMutex.unlock()
                     }
                 }
             }
-        }
 
-        withContext(dispatchers.io) {
-            requestMutex.lock()
-            val bestAuthProvider = authProvidersChooser.value.chooseBest(params)
-            val fullAuthOptions = authOptionsCreator.create(params, statParams)
-            bestAuthProvider.auth(fullAuthOptions)
+            withContext(dispatchers.io) {
+                val bestAuthProvider = authProvidersChooser.value.chooseBest(params)
+                val fullAuthOptions = authOptionsCreator.create(params, statParams)
+                bestAuthProvider.auth(fullAuthOptions)
+            }
         }
     }
 
@@ -309,8 +378,12 @@ public class VKID {
         callback: VKIDRefreshTokenCallback,
         params: VKIDRefreshTokenParams = VKIDRefreshTokenParams {},
     ) {
-        requestMutex.withLock {
-            tokenRefresher.value.refresh(callback, params)
+        this.crashReporter.runReportingCrashesSuspend({}) {
+            requestMutex.withLock {
+                performanceTracker.runTrackingSuspend("RefreshToken") {
+                    tokenRefresher.value.refresh(callback, params)
+                }
+            }
         }
     }
 
@@ -343,8 +416,12 @@ public class VKID {
         callback: VKIDExchangeTokenCallback,
         params: VKIDExchangeTokenParams = VKIDExchangeTokenParams {},
     ) {
-        requestMutex.withLock {
-            tokenExchanger.value.exchange(v1Token = v1Token, params = params, callback = callback)
+        this.crashReporter.runReportingCrashesSuspend({}) {
+            requestMutex.withLock {
+                performanceTracker.runTrackingSuspend("ExchangeTokenToV2") {
+                    tokenExchanger.value.exchange(v1Token = v1Token, params = params, callback = callback)
+                }
+            }
         }
     }
 
@@ -373,8 +450,12 @@ public class VKID {
         callback: VKIDGetUserCallback,
         params: VKIDGetUserParams = VKIDGetUserParams {},
     ) {
-        requestMutex.withLock {
-            userRefresher.value.refresh(callback = callback, params = params)
+        this.crashReporter.runReportingCrashesSuspend({}) {
+            requestMutex.withLock {
+                performanceTracker.runTrackingSuspend("GetUserData") {
+                    userRefresher.value.refresh(callback = callback, params = params)
+                }
+            }
         }
     }
 
@@ -403,8 +484,12 @@ public class VKID {
         callback: VKIDLogoutCallback,
         params: VKIDLogoutParams = VKIDLogoutParams {},
     ) {
-        requestMutex.withLock {
-            loggerOut.value.logout(callback = callback, params = params)
+        this.crashReporter.runReportingCrashesSuspend({}) {
+            requestMutex.withLock {
+                performanceTracker.runTrackingSuspend("Logout") {
+                    loggerOut.value.logout(callback = callback, params = params)
+                }
+            }
         }
     }
 
@@ -412,13 +497,13 @@ public class VKID {
      * Returns current access token or null if auth wasn't passed.
      */
     public val accessToken: AccessToken?
-        get() = tokenStorage.accessToken
+        get() = this.crashReporter.runReportingCrashes({ null }) { tokenStorage.accessToken }
 
     /**
      * Returns current refresh token or null if auth wasn't passed.
      */
     public val refreshToken: RefreshToken?
-        get() = tokenStorage.refreshToken
+        get() = this.crashReporter.runReportingCrashes({ null }) { tokenStorage.refreshToken }
 
     /**
      * Fetches the user data.
@@ -426,6 +511,8 @@ public class VKID {
      * @return A Result object containing the fetched [VKIDUser] or an error.
      */
     public suspend fun fetchUserData(): Result<VKIDUser?> {
-        return Result.success(userDataFetcher.value.fetchUserData())
+        return this.crashReporter.runReportingCrashesSuspend({ Result.failure(it) }) {
+            Result.success(userDataFetcher.value.fetchUserData())
+        }
     }
 }

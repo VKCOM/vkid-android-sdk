@@ -11,6 +11,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import com.vk.id.VKID
 import com.vk.id.VKIDUser
 import com.vk.id.analytics.VKIDAnalytics
 import com.vk.id.analytics.stat.StatTracker
@@ -32,7 +33,9 @@ internal object OneTapAnalytics {
     private const val EVENT_ONETAP_NO_USER_TAP = "onetap_button_no_user_tap"
 
     internal fun sessionNotFound() {
-        track(EVENT_NO_SESSION_FOUND)
+        VKID.instance.crashReporter.runReportingCrashes({}) {
+            track(EVENT_NO_SESSION_FOUND)
+        }
     }
 
     internal fun userWasFoundIcon() {
@@ -40,11 +43,13 @@ internal object OneTapAnalytics {
     }
 
     internal fun userWasFound(signInAnotherAccountButton: Boolean, icon: Boolean = false) {
-        track(
-            EVENT_USER_FOUND,
-            alternateParam(signInAnotherAccountButton),
-            iconParam(icon)
-        )
+        VKID.instance.crashReporter.runReportingCrashes({}) {
+            track(
+                EVENT_USER_FOUND,
+                alternateParam(signInAnotherAccountButton),
+                iconParam(icon)
+            )
+        }
     }
 
     internal fun userNotFoundIcon() {
@@ -52,10 +57,12 @@ internal object OneTapAnalytics {
     }
 
     internal fun userNotFound(icon: Boolean = false) {
-        track(
-            EVENT_NO_USER_SHOW,
-            iconParam(icon)
-        )
+        VKID.instance.crashReporter.runReportingCrashes({}) {
+            track(
+                EVENT_NO_USER_SHOW,
+                iconParam(icon)
+            )
+        }
     }
 
     @Composable
@@ -72,14 +79,16 @@ internal object OneTapAnalytics {
             val observer = LifecycleEventObserver { _, event ->
                 when (event) {
                     Lifecycle.Event.ON_RESUME -> {
-                        track(
-                            EVENT_SCREEN_PROCEED,
-                            iconParam(icon),
-                            textTypeParam(scenario),
-                            themeParam(style),
-                            styleParam(style),
-                            langParam(context)
-                        )
+                        VKID.instance.crashReporter.runReportingCrashes({}) {
+                            track(
+                                EVENT_SCREEN_PROCEED,
+                                iconParam(icon),
+                                textTypeParam(scenario),
+                                themeParam(style),
+                                styleParam(style),
+                                langParam(context)
+                            )
+                        }
                     }
 
                     else -> {}
@@ -99,17 +108,21 @@ internal object OneTapAnalytics {
 
     internal fun oneTapPressed(user: VKIDUser?, icon: Boolean = false): Map<String, String> {
         val uuid = UUID.randomUUID().toString()
-        if (user != null) {
-            track(EVENT_ONETAP_TAP, iconParam(icon), uuidParam(uuid))
-        } else {
-            track(EVENT_ONETAP_NO_USER_TAP, iconParam(icon), uuidParam(uuid))
+        VKID.instance.crashReporter.runReportingCrashes({}) {
+            if (user != null) {
+                track(EVENT_ONETAP_TAP, iconParam(icon), uuidParam(uuid))
+            } else {
+                track(EVENT_ONETAP_NO_USER_TAP, iconParam(icon), uuidParam(uuid))
+            }
         }
         return mapOf(StatTracker.EXTERNAL_PARAM_SESSION_ID to uuid, FLOW_SOURCE)
     }
 
     internal fun alternatePressed(): Map<String, String> {
         val uuid = UUID.randomUUID().toString()
-        track(EVENT_ONETAP_ALTERNATIVE_SIGN_IN_TAP, uuidParam(uuid))
+        VKID.instance.crashReporter.runReportingCrashes({}) {
+            track(EVENT_ONETAP_ALTERNATIVE_SIGN_IN_TAP, uuidParam(uuid))
+        }
         return mapOf(StatTracker.EXTERNAL_PARAM_SESSION_ID to uuid, FLOW_SOURCE)
     }
 
@@ -118,13 +131,15 @@ internal object OneTapAnalytics {
     }
 
     internal fun authError(uuid: String, icon: Boolean = false) {
-        track(
-            EVENT_ONETAP_AUTH_ERROR,
-            iconParam(icon),
-            uuidParam(uuid),
-            VKIDAnalytics.EventParam("from_one_tap", "true"),
-            VKIDAnalytics.EventParam("error", "sdk_auth_error")
-        )
+        VKID.instance.crashReporter.runReportingCrashes({}) {
+            track(
+                EVENT_ONETAP_AUTH_ERROR,
+                iconParam(icon),
+                uuidParam(uuid),
+                VKIDAnalytics.EventParam("from_one_tap", "true"),
+                VKIDAnalytics.EventParam("error", "sdk_auth_error")
+            )
+        }
     }
 
     private fun themeParam(style: OneTapStyle): VKIDAnalytics.EventParam =

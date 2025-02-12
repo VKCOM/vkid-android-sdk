@@ -4,7 +4,7 @@ package com.vk.id.internal.di
 
 import com.vk.id.AuthOptionsCreator
 import com.vk.id.AuthResultHandler
-import com.vk.id.analytics.stat.StatTracker
+import com.vk.id.analytics.VKIDAnalytics
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.exchangetoken.VKIDTokenExchanger
 import com.vk.id.internal.auth.AuthCallbacksHolder
@@ -22,8 +22,12 @@ import com.vk.id.refresh.VKIDTokenRefresher
 import com.vk.id.refreshuser.VKIDUserRefresher
 import com.vk.id.storage.InternalVKIDEncryptedSharedPreferencesStorage
 import com.vk.id.storage.TokenStorage
+import com.vk.id.tracking.core.CrashReporter
+import com.vk.id.tracking.core.PerformanceTracker
 
 internal interface VKIDDeps {
+    val crashReporter: CrashReporter
+    val performanceTracker: PerformanceTracker
     val authCallbacksHolder: AuthCallbacksHolder
     val authOptionsCreator: AuthOptionsCreator
     val authProvidersChooser: Lazy<AuthProvidersChooser>
@@ -40,7 +44,7 @@ internal interface VKIDDeps {
     val deviceIdStorage: Lazy<InternalVKIDDeviceIdProvider.DeviceIdStorage>
     val prefsStore: Lazy<InternalVKIDPrefsStore>
     val encryptedSharedPreferencesStorage: Lazy<InternalVKIDEncryptedSharedPreferencesStorage>
-    val statTracker: StatTracker
+    val statTracker: VKIDAnalytics.Tracker
     val vkidPackageManager: InternalVKIDPackageManager
     val activityStarter: InternalVKIDActivityStarter
     val isFlutter: Boolean

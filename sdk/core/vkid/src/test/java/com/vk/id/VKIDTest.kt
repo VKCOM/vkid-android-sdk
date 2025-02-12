@@ -27,6 +27,9 @@ import com.vk.id.refresh.VKIDTokenRefresher
 import com.vk.id.refreshuser.VKIDUserRefresher
 import com.vk.id.storage.InternalVKIDEncryptedSharedPreferencesStorage
 import com.vk.id.storage.TokenStorage
+import com.vk.id.tracking.core.CrashReporter
+import com.vk.id.tracking.core.PerformanceTracker
+import io.kotest.assertions.any
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.testCoroutineScheduler
 import io.kotest.matchers.shouldBe
@@ -55,6 +58,15 @@ internal class VKIDTest : BehaviorSpec({
     val dispatchers = mockk<VKIDCoroutinesDispatchers>()
     val statTracker = mockk<StatTracker>(relaxed = true)
     var isFlutter = false
+    val crashReporter = mockk<CrashReporter>()
+    val performanceTracker = mockk<PerformanceTracker>()
+    every { crashReporter.report(any()) } just runs
+    every { crashReporter.runReportingCrashes<Unit>(any(), any()) } answers {
+        secondArg<() -> Unit>()()
+    }
+    coEvery { crashReporter.runReportingCrashesSuspend<Any>(any(), any()) } coAnswers {
+        secondArg<suspend () -> Any>()()
+    }
     val deps = object : VKIDDeps {
         override val authProvidersChooser: Lazy<AuthProvidersChooser> = lazy { authProvidersChooser }
         override val authOptionsCreator: AuthOptionsCreator = authOptionsCreator
@@ -78,6 +90,8 @@ internal class VKIDTest : BehaviorSpec({
         override val activityStarter: InternalVKIDActivityStarter = mockk()
         override val isFlutter: Boolean
             get() = isFlutter
+        override val crashReporter: CrashReporter = crashReporter
+        override val performanceTracker: PerformanceTracker = performanceTracker
     }
 
     Given("VKID for flutter SDK") {
@@ -139,6 +153,8 @@ internal class VKIDTest : BehaviorSpec({
         every { authOptionsCreator.create(authParams, any()) } returns authOptions
         every { authProvider.auth(authOptions) } just runs
         every { authCallbacksHolder.add(any()) } just runs
+        every { performanceTracker.startTracking("Authorize") } just runs
+        every { performanceTracker.endTracking("Authorize") } just runs
         coEvery { authResultHandler.handle(any(), any()) } just runs
         runTest(scheduler) {
             vkid.authorize(callback = mockk(), params = authParams)
@@ -154,6 +170,10 @@ internal class VKIDTest : BehaviorSpec({
                 )
             }
 
+            Then("Starts measuring authorize performance") {
+                verify { performanceTracker.startTracking("Authorize") }
+            }
+
             Then("Auth result is handled") {
                 coVerify { authResultHandler.handle(any(), any()) }
             }
@@ -164,6 +184,10 @@ internal class VKIDTest : BehaviorSpec({
 
             Then("Auth provider is selected") {
                 coVerify { authProvider.auth(authOptions) }
+            }
+
+            Then("Ends measuring authorize performance") {
+                verify { performanceTracker.endTracking("Authorize") }
             }
         }
         When("Fetch user data is called") {

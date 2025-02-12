@@ -24,6 +24,8 @@ dependencies {
     implementation(projects.analytics)
     implementation(projects.network)
     implementation(projects.logger)
+    implementation(projects.trackingCore)
+    implementation(projects.trackingTracer)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.annotation)
@@ -36,7 +38,9 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.vk.userid)
+    implementation(libs.tracer.lite.commons)
     testImplementation(libs.mockk)
     testImplementation(libs.kotest.core)
     testImplementation(libs.kotest.assertions)
+    testImplementation(kotlin("reflect"))
 }
