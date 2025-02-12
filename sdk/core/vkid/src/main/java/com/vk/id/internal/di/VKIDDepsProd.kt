@@ -248,6 +248,12 @@ internal open class VKIDDepsProd(
         get() = with(serviceCredentials.value) {
             StatTracker(clientID, clientSecret, api, dispatchers.io)
         }
+    override val trackingTracker: VKIDAnalytics.Tracker
+        get() = object : VKIDAnalytics.Tracker {
+            override fun trackEvent(name: String, vararg params: VKIDAnalytics.EventParam) {
+                trackingDeps.analyticsTracking.log(name + " " + params.joinToString())
+            }
+        }
 }
 
 private const val MISSED_PLACEHOLDER_ERROR_MESSAGE =

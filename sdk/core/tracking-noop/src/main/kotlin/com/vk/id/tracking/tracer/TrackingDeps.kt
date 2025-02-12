@@ -2,6 +2,7 @@ package com.vk.id.tracking.tracer
 
 import android.content.Context
 import com.vk.id.common.InternalVKIDApi
+import com.vk.id.tracking.core.AnalyticsTracking
 import com.vk.id.tracking.core.CrashReporter
 import com.vk.id.tracking.core.PerformanceTracker
 
@@ -26,5 +27,8 @@ public class TrackingDeps(
         override fun endTracking(key: String) = Unit
         override fun runTracking(key: String, action: () -> Unit) = action()
         override suspend fun runTrackingSuspend(key: String, action: suspend () -> Unit) = action()
+    }
+    public val analyticsTracking: AnalyticsTracking = object : AnalyticsTracking {
+        override fun log(message: String) = Unit
     }
 }

@@ -45,6 +45,7 @@ internal interface VKIDDeps {
     val prefsStore: Lazy<InternalVKIDPrefsStore>
     val encryptedSharedPreferencesStorage: Lazy<InternalVKIDEncryptedSharedPreferencesStorage>
     val statTracker: VKIDAnalytics.Tracker
+    val trackingTracker: VKIDAnalytics.Tracker
     val vkidPackageManager: InternalVKIDPackageManager
     val activityStarter: InternalVKIDActivityStarter
     val isFlutter: Boolean

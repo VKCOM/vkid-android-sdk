@@ -38,7 +38,6 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.vk.userid)
-    implementation(libs.tracer.lite.commons)
     testImplementation(libs.mockk)
     testImplementation(libs.kotest.core)
     testImplementation(libs.kotest.assertions)
