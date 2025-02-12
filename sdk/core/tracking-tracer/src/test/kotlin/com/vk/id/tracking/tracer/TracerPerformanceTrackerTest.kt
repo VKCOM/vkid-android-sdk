@@ -32,6 +32,19 @@ internal class TracerPerformanceTrackerTest : BehaviorSpec({
                     verify { tracer.sample("1", 1000, TimeUnit.NANOSECONDS) }
                 }
             }
+            And("Finishes tracking after 1 milli") {
+                every { systemClockProvider() } returns 1000
+                And("Reporting throws an error") {
+                    every { tracer.sample(any(), any(), any<TimeUnit>()) } throws IllegalStateException("Some error")
+                    tracker.endTracking("1")
+                    Then("Requests time twice") {
+                        verify(exactly = 2) { systemClockProvider() }
+                    }
+                    Then("Tries to report performance metric") {
+                        verify { tracer.sample("1", 1000, TimeUnit.NANOSECONDS) }
+                    }
+                }
+            }
             And("Starts another tracking") {
                 every { systemClockProvider() } returns 0
                 tracker.startTracking("2")

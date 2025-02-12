@@ -9,22 +9,34 @@ import ru.ok.tracer.lite.TracerLite
 import ru.ok.tracer.lite.crash.report.TracerCrashReportLite
 
 internal class TracerCrashReporter(
-    tracer: TracerLite
+    tracer: TracerLite?
 ) : CrashReporter, AnalyticsTracking {
 
-    private val crashReporter = TracerCrashReportLite(
-        tracer,
-        TracerCrashReportLite.Configuration.Builder()
-            .apply { obfuscatedNonFatalsEnabled = true }
-            .build()
-    )
+    private val crashReporter = try {
+        tracer?.let {
+            TracerCrashReportLite(
+                it,
+                TracerCrashReportLite.Configuration.Builder()
+                    .apply { obfuscatedNonFatalsEnabled = true }
+                    .build()
+            )
+        }
+    } catch (@Suppress("TooGenericExceptionCaught") _: Throwable) {
+        null
+    }
 
     override fun log(message: String) {
-        crashReporter.log(message)
+        try {
+            crashReporter?.log(message)
+        } catch (@Suppress("TooGenericExceptionCaught") _: Throwable) {
+        }
     }
 
     override fun report(crash: Throwable) {
-        crashReporter.report(crash)
+        try {
+            crashReporter?.report(crash)
+        } catch (@Suppress("TooGenericExceptionCaught") _: Throwable) {
+        }
     }
 
     override fun <T> runReportingCrashes(
@@ -34,11 +46,7 @@ internal class TracerCrashReporter(
         try {
             return action()
         } catch (@Suppress("TooGenericExceptionCaught") t: Throwable) {
-            try {
-                crashReporter.report(t)
-            } catch (@Suppress("TooGenericExceptionCaught") t: Throwable) {
-                throw FailedTracerReportingException(t)
-            }
+            report(t)
             return errorValueProvider(t)
         }
     }
@@ -50,11 +58,7 @@ internal class TracerCrashReporter(
         try {
             return action()
         } catch (@Suppress("TooGenericExceptionCaught") t: Throwable) {
-            try {
-                crashReporter.report(t)
-            } catch (@Suppress("TooGenericExceptionCaught") t: Throwable) {
-                throw FailedTracerReportingException(t)
-            }
+            report(t)
             return errorValueProvider(t)
         }
     }
