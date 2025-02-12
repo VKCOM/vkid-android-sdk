@@ -112,6 +112,7 @@ public fun OneTapBottomSheet(
         style = style,
         authParams = authParams,
         fastAuthEnabled = fastAuthEnabled,
+        autoShowSheetDelayMillis = null,
     )
 }
 
