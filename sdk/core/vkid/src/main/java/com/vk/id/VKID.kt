@@ -4,6 +4,7 @@ package com.vk.id
 
 import android.content.Context
 import androidx.annotation.VisibleForTesting
+import androidx.lifecycle.AtomicReference
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.vk.id.analytics.LogcatTracker
@@ -57,6 +58,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import java.util.Locale
 
 /**
  * VKID is the main entry point for integrating VK ID authentication into an Android application.
@@ -120,6 +122,7 @@ public class VKID {
                         errorValueProvider: (error: Throwable) -> T,
                         action: () -> T
                     ): T = action()
+
                     override suspend fun <T> runReportingCrashesSuspend(
                         errorValueProvider: suspend (error: Throwable) -> T,
                         action: suspend () -> T
@@ -144,6 +147,7 @@ public class VKID {
                             errorValueProvider: (error: Throwable) -> T,
                             action: () -> T
                         ): T = action()
+
                         override suspend fun <T> runReportingCrashesSuspend(
                             errorValueProvider: suspend (error: Throwable) -> T,
                             action: suspend () -> T
@@ -269,6 +273,17 @@ public class VKID {
 
     @InternalVKIDApi
     public val crashReporter: CrashReporter
+
+    @InternalVKIDApi
+    public val internalVKIDLocale: AtomicReference<Locale?> = AtomicReference(null)
+
+    /**
+     * Sets the language for all ui components of the SDK.
+     * @param locale The locale which will be used for all ui components. Null means that the default locale will be used.
+     */
+    public fun setLocale(locale: Locale?) {
+        internalVKIDLocale.set(locale)
+    }
 
     /**
      * Initiates the authorization process.
