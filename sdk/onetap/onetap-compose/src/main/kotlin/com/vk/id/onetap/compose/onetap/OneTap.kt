@@ -38,6 +38,7 @@ import com.vk.id.onetap.compose.button.auth.VKIDButtonTextProvider
 import com.vk.id.onetap.compose.button.startAuth
 import com.vk.id.onetap.compose.onetap.OneTapAnalytics.uuidFromParams
 import com.vk.id.onetap.compose.util.MeasureUnconstrainedViewWidth
+import com.vk.id.util.InternalVKIDWithUpdatedLocale
 
 /**
  * Composable function to display a VKID One Tap login interface with multibranding.
@@ -131,76 +132,20 @@ public fun OneTap(
     authParams: VKIDAuthUiParams = VKIDAuthUiParams {},
     scenario: OneTapTitleScenario = OneTapTitleScenario.SignIn,
 ) {
-    val coroutineScope = rememberCoroutineScope()
-    var user by remember { mutableStateOf<VKIDUser?>(null) }
-    val fastAuthEnabledValue by remember { mutableStateOf(fastAuthEnabled) }
-    if (fastAuthEnabledValue != fastAuthEnabled) {
-        error("You can't change fastAuthEnabled in runtime")
-    }
-    @Composable
-    fun IconOneTap() {
-        OneTapAnalytics.OneTapIconShown(scenario = scenario, style = style)
-        VKIDButtonSmall(
-            style = style.vkidButtonStyle,
-            onClick = {
-                val extraAuthParams = OneTapAnalytics.oneTapPressedIcon(user)
-                startAuth(
-                    coroutineScope,
-                    {
-                        onAuth(null, it)
-                    },
-                    onAuthCode,
-                    {
-                        val uuid = extraAuthParams.uuidFromParams()
-                        OneTapAnalytics.authErrorIcon(uuid)
-                        onFail(null, it)
-                    },
-                    params = authParams.asParamsBuilder {
-                        extraParams = extraAuthParams
-                        if (!fastAuthEnabled) {
-                            useOAuthProviderIfPossible = false
-                            prompt = Prompt.LOGIN
-                        } else if (user == null) {
-                            prompt = Prompt.CONSENT
-                        }
-                    },
-                )
-            },
-            onUserFetched = {
-                user = it
-                if (user == null) {
-                    OneTapAnalytics.sessionNotFound()
-                    OneTapAnalytics.userNotFoundIcon()
-                } else {
-                    OneTapAnalytics.userWasFoundIcon()
-                }
-            },
-            fastAuthEnabled = fastAuthEnabled,
-        )
-    }
-
-    @Composable
-    fun LargeOneTap(
-        measureInProgress: Boolean,
-        largeText: Boolean,
-    ) {
-        if (!measureInProgress) {
-            OneTapAnalytics.OneTapShown(scenario = scenario, style = style)
+    InternalVKIDWithUpdatedLocale {
+        val coroutineScope = rememberCoroutineScope()
+        var user by remember { mutableStateOf<VKIDUser?>(null) }
+        val fastAuthEnabledValue by remember { mutableStateOf(fastAuthEnabled) }
+        if (fastAuthEnabledValue != fastAuthEnabled) {
+            error("You can't change fastAuthEnabled in runtime")
         }
-        CompositionLocalProvider(
-            LocalMultibrandingAnalyticsContext provides MultibrandingAnalyticsContext(
-                screen = "nowhere",
-                isPaused = measureInProgress
-            )
-        ) {
-            OneTap(
-                modifier = Modifier,
-                style = style,
-                oAuths = oAuths,
-                signInAnotherAccountButtonEnabled = signInAnotherAccountButtonEnabled,
-                vkidButtonTextProvider = null,
-                onVKIDButtonClick = {
-                    val extraAuthParams = OneTapAnalytics.oneTapPressed(user)
+        @Composable
+        fun IconOneTap() {
+            OneTapAnalytics.OneTapIconShown(scenario = scenario, style = style)
+            VKIDButtonSmall(
+                style = style.vkidButtonStyle,
+                onClick = {
+                    val extraAuthParams = OneTapAnalytics.oneTapPressedIcon(user)
                     startAuth(
                         coroutineScope,
                         {
@@ -209,11 +154,10 @@ public fun OneTap(
                         onAuthCode,
                         {
                             val uuid = extraAuthParams.uuidFromParams()
-                            OneTapAnalytics.authError(uuid)
+                            OneTapAnalytics.authErrorIcon(uuid)
                             onFail(null, it)
                         },
-                        authParams.asParamsBuilder {
-                            theme = style.toProviderTheme()
+                        params = authParams.asParamsBuilder {
                             extraParams = extraAuthParams
                             if (!fastAuthEnabled) {
                                 useOAuthProviderIfPossible = false
@@ -221,69 +165,128 @@ public fun OneTap(
                             } else if (user == null) {
                                 prompt = Prompt.CONSENT
                             }
-                        }
-                    )
-                },
-                onAlternateButtonClick = {
-                    val extraAuthParams = OneTapAnalytics.alternatePressed()
-                    startAuth(
-                        coroutineScope,
-                        { onAuth(null, it) },
-                        onAuthCode,
-                        {
-                            val uuid = extraAuthParams.uuidFromParams()
-                            OneTapAnalytics.authError(uuid)
-                            onFail(null, it)
                         },
-                        authParams.asParamsBuilder {
-                            useOAuthProviderIfPossible = false
-                            theme = style.toProviderTheme()
-                            prompt = Prompt.LOGIN
-                            extraParams = extraAuthParams
-                        }
                     )
                 },
-                onAuth = onAuth,
-                onAuthCode = onAuthCode,
-                onFail = onFail,
-                authParams = authParams,
                 onUserFetched = {
-                    if (!measureInProgress) {
-                        user = it
-                        if (user == null) {
-                            OneTapAnalytics.sessionNotFound()
-                            OneTapAnalytics.userNotFound()
-                        } else {
-                            OneTapAnalytics.userWasFound(signInAnotherAccountButtonEnabled)
-                        }
+                    user = it
+                    if (user == null) {
+                        OneTapAnalytics.sessionNotFound()
+                        OneTapAnalytics.userNotFoundIcon()
+                    } else {
+                        OneTapAnalytics.userWasFoundIcon()
                     }
                 },
                 fastAuthEnabled = fastAuthEnabled,
-                largeText = largeText,
-                measureInProgress = measureInProgress,
-                scenario = scenario,
             )
         }
-    }
-    if (style is OneTapStyle.Icon) {
-        IconOneTap()
-    } else {
-        BoxWithConstraints(
-            modifier = modifier,
+
+        @Composable
+        fun LargeOneTap(
+            measureInProgress: Boolean,
+            largeText: Boolean,
         ) {
-            MeasureUnconstrainedViewWidth(viewToMeasure = {
-                LargeOneTap(measureInProgress = true, largeText = true)
-            }) { largeTextWidth ->
-                if (largeTextWidth <= maxWidth) {
-                    LargeOneTap(measureInProgress = false, largeText = true)
-                } else {
-                    MeasureUnconstrainedViewWidth(viewToMeasure = {
-                        LargeOneTap(measureInProgress = true, largeText = false)
-                    }) { smallTextWidth ->
-                        if (smallTextWidth <= maxWidth) {
-                            LargeOneTap(measureInProgress = false, largeText = false)
-                        } else {
-                            IconOneTap()
+            if (!measureInProgress) {
+                OneTapAnalytics.OneTapShown(scenario = scenario, style = style)
+            }
+            CompositionLocalProvider(
+                LocalMultibrandingAnalyticsContext provides MultibrandingAnalyticsContext(
+                    screen = "nowhere",
+                    isPaused = measureInProgress
+                )
+            ) {
+                OneTap(
+                    modifier = Modifier,
+                    style = style,
+                    oAuths = oAuths,
+                    signInAnotherAccountButtonEnabled = signInAnotherAccountButtonEnabled,
+                    vkidButtonTextProvider = null,
+                    onVKIDButtonClick = {
+                        val extraAuthParams = OneTapAnalytics.oneTapPressed(user)
+                        startAuth(
+                            coroutineScope,
+                            {
+                                onAuth(null, it)
+                            },
+                            onAuthCode,
+                            {
+                                val uuid = extraAuthParams.uuidFromParams()
+                                OneTapAnalytics.authError(uuid)
+                                onFail(null, it)
+                            },
+                            authParams.asParamsBuilder {
+                                theme = style.toProviderTheme()
+                                extraParams = extraAuthParams
+                                if (!fastAuthEnabled) {
+                                    useOAuthProviderIfPossible = false
+                                    prompt = Prompt.LOGIN
+                                } else if (user == null) {
+                                    prompt = Prompt.CONSENT
+                                }
+                            }
+                        )
+                    },
+                    onAlternateButtonClick = {
+                        val extraAuthParams = OneTapAnalytics.alternatePressed()
+                        startAuth(
+                            coroutineScope,
+                            { onAuth(null, it) },
+                            onAuthCode,
+                            {
+                                val uuid = extraAuthParams.uuidFromParams()
+                                OneTapAnalytics.authError(uuid)
+                                onFail(null, it)
+                            },
+                            authParams.asParamsBuilder {
+                                useOAuthProviderIfPossible = false
+                                theme = style.toProviderTheme()
+                                prompt = Prompt.LOGIN
+                                extraParams = extraAuthParams
+                            }
+                        )
+                    },
+                    onAuth = onAuth,
+                    onAuthCode = onAuthCode,
+                    onFail = onFail,
+                    authParams = authParams,
+                    onUserFetched = {
+                        if (!measureInProgress) {
+                            user = it
+                            if (user == null) {
+                                OneTapAnalytics.sessionNotFound()
+                                OneTapAnalytics.userNotFound()
+                            } else {
+                                OneTapAnalytics.userWasFound(signInAnotherAccountButtonEnabled)
+                            }
+                        }
+                    },
+                    fastAuthEnabled = fastAuthEnabled,
+                    largeText = largeText,
+                    measureInProgress = measureInProgress,
+                    scenario = scenario,
+                )
+            }
+        }
+        if (style is OneTapStyle.Icon) {
+            IconOneTap()
+        } else {
+            BoxWithConstraints(
+                modifier = modifier,
+            ) {
+                MeasureUnconstrainedViewWidth(viewToMeasure = {
+                    LargeOneTap(measureInProgress = true, largeText = true)
+                }) { largeTextWidth ->
+                    if (largeTextWidth <= maxWidth) {
+                        LargeOneTap(measureInProgress = false, largeText = true)
+                    } else {
+                        MeasureUnconstrainedViewWidth(viewToMeasure = {
+                            LargeOneTap(measureInProgress = true, largeText = false)
+                        }) { smallTextWidth ->
+                            if (smallTextWidth <= maxWidth) {
+                                LargeOneTap(measureInProgress = false, largeText = false)
+                            } else {
+                                IconOneTap()
+                            }
                         }
                     }
                 }
