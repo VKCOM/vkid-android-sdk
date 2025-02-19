@@ -65,6 +65,7 @@ internal class OneTapBottomSheetAttributeSettings(
     val oAuths: Set<OneTapOAuth>,
     val scopes: Set<String>,
     val fastAuthEnabled: Boolean,
+    val autoShowDelayMillis: Long?,
 )
 
 internal fun parseOneTapBottomSheetAttrs(
@@ -90,6 +91,9 @@ internal fun parseOneTapBottomSheetAttrs(
                 oAuths = getOAuths(),
                 scopes = getScopes(),
                 fastAuthEnabled = getFastAuthEnabled(),
+                autoShowDelayMillis = getInt(R.styleable.vkid_OneTap_vkid_autoShowDelayMillis, -1)
+                    .takeIf { it >= 0 }
+                    ?.toLong(),
             )
         } finally {
             recycle()
@@ -112,7 +116,7 @@ private fun TypedArray.getOneTapButtonsElevation(context: Context) = getDimensio
     context.dpToPixels(OneTapButtonElevationStyle.Default.elevationDp)
 )
 
-@Suppress("MagicNumber")
+@Suppress("MagicNumber", "DEPRECATION")
 private fun TypedArray.getOneTapStyleConstructor(
     context: Context
 ) = when (getInt(R.styleable.vkid_OneTap_vkid_onetapStyle, 0)) {
@@ -137,11 +141,21 @@ private fun TypedArray.getOneTapStyleConstructor(
             elevationStyle = elevationStyle
         )
     }
+    7 -> OneTapStyle::SecondaryLight
+    8 -> OneTapStyle::SecondaryDark
+    9 -> { cornersStyle: OneTapButtonCornersStyle, sizeStyle: OneTapButtonSizeStyle, elevationStyle: OneTapButtonElevationStyle ->
+        OneTapStyle.secondarySystem(
+            context = context,
+            cornersStyle = cornersStyle,
+            sizeStyle = sizeStyle,
+            elevationStyle = elevationStyle
+        )
+    }
 
     else -> OneTapStyle::Light
 }
 
-@Suppress("MagicNumber")
+@Suppress("MagicNumber", "DEPRECATION")
 private fun TypedArray.getSheetStyleConstructor(
     context: Context
 ) = when (getInt(R.styleable.vkid_OneTap_vkid_bottomSheetStyle, 0)) {

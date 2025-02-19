@@ -49,6 +49,7 @@ import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.multibranding.common.style.OAuthListWidgetStyle
 import com.vk.id.multibranding.internal.LocalMultibrandingAnalyticsContext
+import com.vk.id.util.InternalVKIDWithUpdatedLocale
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -97,46 +98,48 @@ public fun OAuthListWidget(
     authParams: VKIDAuthUiParams = VKIDAuthUiParams {},
     measureInProgress: Boolean,
 ) {
-    val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
-    if (oAuths.isEmpty()) {
-        error("You need to add at least one oAuth to display the widget")
-    }
-
-    val analyticsContext = LocalMultibrandingAnalyticsContext.current
-    val analytics = remember { OAuthListWidgetAnalytics(analyticsContext.screen, analyticsContext.isPaused) }
-
-    LaunchedEffect(oAuths) {
-        analytics.oauthAdded(oAuths)
-    }
-
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        if (!measureInProgress) {
-            OAuthTitle()
+    InternalVKIDWithUpdatedLocale {
+        val context = LocalContext.current
+        val coroutineScope = rememberCoroutineScope()
+        if (oAuths.isEmpty()) {
+            error("You need to add at least one oAuth to display the widget")
         }
-        Spacer(modifier = Modifier.height(16.dp))
-        Row {
-            oAuths.forEachIndexed { index, item ->
-                OAuthButton(
-                    modifier = Modifier
-                        .testTag("oauth_button_${item.name.lowercase()}")
-                        .weight(1f),
-                    context = context,
-                    style = style,
-                    item = item,
-                    showText = oAuths.size == 1,
-                    coroutineScope = coroutineScope,
-                    analytics = analytics,
-                    onAuth = onAuth,
-                    onAuthCode = onAuthCode,
-                    onFail = { onFail(item, it) },
-                    authParams = authParams,
-                )
-                if (index != oAuths.size - 1) {
-                    Spacer(modifier = Modifier.width(12.dp))
+
+        val analyticsContext = LocalMultibrandingAnalyticsContext.current
+        val analytics = remember { OAuthListWidgetAnalytics(analyticsContext.screen, analyticsContext.isPaused) }
+
+        LaunchedEffect(oAuths) {
+            analytics.oauthAdded(oAuths)
+        }
+
+        Column(
+            modifier = modifier,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            if (!measureInProgress) {
+                OAuthTitle()
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            Row {
+                oAuths.forEachIndexed { index, item ->
+                    OAuthButton(
+                        modifier = Modifier
+                            .testTag("oauth_button_${item.name.lowercase()}")
+                            .weight(1f),
+                        context = context,
+                        style = style,
+                        item = item,
+                        showText = oAuths.size == 1,
+                        coroutineScope = coroutineScope,
+                        analytics = analytics,
+                        onAuth = onAuth,
+                        onAuthCode = onAuthCode,
+                        onFail = { onFail(item, it) },
+                        authParams = authParams,
+                    )
+                    if (index != oAuths.size - 1) {
+                        Spacer(modifier = Modifier.width(12.dp))
+                    }
                 }
             }
         }
@@ -156,7 +159,7 @@ private fun OAuthTitle() = BasicText(
 )
 
 @OptIn(InternalVKIDApi::class)
-@Suppress("LongParameterList")
+@Suppress("LongParameterList", "NonSkippableComposable")
 @Composable
 private fun OAuthButton(
     modifier: Modifier,
@@ -177,6 +180,7 @@ private fun OAuthButton(
             .height(style.sizeStyle)
             .border(style.borderStyle, style.cornersStyle)
             .clip(style.cornersStyle)
+            .background(style)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(

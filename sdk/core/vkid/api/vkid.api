@@ -75,6 +75,7 @@ public final class com/vk/id/VKID {
 	public final fun refreshToken (Lcom/vk/id/refresh/VKIDRefreshTokenCallback;Lcom/vk/id/refresh/VKIDRefreshTokenParams;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun refreshToken$default (Lcom/vk/id/VKID;Landroidx/lifecycle/LifecycleOwner;Lcom/vk/id/refresh/VKIDRefreshTokenCallback;Lcom/vk/id/refresh/VKIDRefreshTokenParams;ILjava/lang/Object;)V
 	public static synthetic fun refreshToken$default (Lcom/vk/id/VKID;Lcom/vk/id/refresh/VKIDRefreshTokenCallback;Lcom/vk/id/refresh/VKIDRefreshTokenParams;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public final fun setLocale (Ljava/util/Locale;)V
 }
 
 public final class com/vk/id/VKID$Companion {

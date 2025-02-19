@@ -59,7 +59,6 @@
 
     <string name="vkid_scenario_common_description">После этого вам станут доступны все возможности сервиса. Ваши данные будут надёжно защищены.</string>
 
-    <string name="vkid_sheet_state_auth_in_progress">Авторизация…</string>
     <string name="vkid_sheet_state_auth_success">Успешно</string>
     <string name="vkid_sheet_state_auth_failed_retry">Повторить попытку</string>
     <string name="vkid_sheet_state_auth_failed">Не удалось авторизоваться</string>

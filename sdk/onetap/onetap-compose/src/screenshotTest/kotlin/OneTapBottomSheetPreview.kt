@@ -1,12 +1,15 @@
+@file:Suppress("DEPRECATION")
+@file:OptIn(InternalVKIDApi::class)
+
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import com.vk.id.VKID
 import com.vk.id.auth.VKIDAuthUiParams
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.compose.onetap.sheet.OneTapScenario
-import com.vk.id.onetap.compose.onetap.sheet.content.OneTapBottomSheetAuthStatus
 import com.vk.id.onetap.compose.onetap.sheet.content.SheetContentAuthFailed
 import com.vk.id.onetap.compose.onetap.sheet.content.SheetContentAuthSuccess
 import com.vk.id.onetap.compose.onetap.sheet.content.SheetContentMain
@@ -14,9 +17,31 @@ import com.vk.id.onetap.compose.onetap.sheet.style.OneTapBottomSheetStyle
 
 @Preview
 @Composable
-private fun OneTapBottomSheetFailedPreview() {
+private fun OneTapBottomSheetFailedDartPreview() {
+    VKID.Companion.initForScreenshotTests(LocalContext.current)
     SheetContentAuthFailed(
-        "<Название сервиса>",
+        OneTapBottomSheetStyle.Dark(),
+        dismissSheet = {},
+        repeatClicked = {}
+    )
+}
+
+@Preview
+@Composable
+private fun OneTapBottomSheetFailedLightPreview() {
+    VKID.Companion.initForScreenshotTests(LocalContext.current)
+    SheetContentAuthFailed(
+        OneTapBottomSheetStyle.Light(),
+        dismissSheet = {},
+        repeatClicked = {}
+    )
+}
+
+@Preview
+@Composable
+private fun OneTapBottomSheetFailedTransparentDarkPreview() {
+    VKID.Companion.initForScreenshotTests(LocalContext.current)
+    SheetContentAuthFailed(
         OneTapBottomSheetStyle.TransparentDark(),
         dismissSheet = {},
         repeatClicked = {}
@@ -25,9 +50,20 @@ private fun OneTapBottomSheetFailedPreview() {
 
 @Preview
 @Composable
+private fun OneTapBottomSheetFailedTransparentLightPreview() {
+    VKID.Companion.initForScreenshotTests(LocalContext.current)
+    SheetContentAuthFailed(
+        OneTapBottomSheetStyle.TransparentLight(),
+        dismissSheet = {},
+        repeatClicked = {}
+    )
+}
+
+@Preview
+@Composable
 private fun OneTapBottomSheetSuccessPreview() {
+    VKID.Companion.initForScreenshotTests(LocalContext.current)
     SheetContentAuthSuccess(
-        "Другое название сервиса",
         OneTapBottomSheetStyle.TransparentDark(),
         dismissSheet = {},
     )
@@ -36,6 +72,7 @@ private fun OneTapBottomSheetSuccessPreview() {
 @Preview
 @Composable
 private fun OneTapBottomSheetTransparentDarkPreview() {
+    VKID.Companion.initForScreenshotTests(LocalContext.current)
     SheetContentMain(
         onAuth = { _, _ -> },
         onAuthCode = { _, _ -> },
@@ -56,6 +93,7 @@ private fun OneTapBottomSheetTransparentDarkPreview() {
 @Preview
 @Composable
 private fun OneTapBottomSheetDarkPreview() {
+    VKID.Companion.initForScreenshotTests(LocalContext.current)
     SheetContentMain(
         onAuth = { _, _ -> },
         onAuthCode = { _, _ -> },
@@ -76,6 +114,7 @@ private fun OneTapBottomSheetDarkPreview() {
 @Preview
 @Composable
 private fun OneTapBottomSheetTransparentLightPreview() {
+    VKID.Companion.initForScreenshotTests(LocalContext.current)
     SheetContentMain(
         onAuth = { _, _ -> },
         onAuthCode = { _, _ -> },
@@ -96,6 +135,7 @@ private fun OneTapBottomSheetTransparentLightPreview() {
 @Preview
 @Composable
 private fun OneTapBottomSheetLightPreview() {
+    VKID.Companion.initForScreenshotTests(LocalContext.current)
     SheetContentMain(
         onAuth = { _, _ -> },
         onAuthCode = { _, _ -> },
@@ -116,6 +156,7 @@ private fun OneTapBottomSheetLightPreview() {
 @Preview
 @Composable
 private fun OneTapBottomSheetOauthMailPreview() {
+    VKID.Companion.initForScreenshotTests(LocalContext.current)
     SheetContentMain(
         onAuth = { _, _ -> },
         onAuthCode = { _, _ -> },
@@ -136,6 +177,7 @@ private fun OneTapBottomSheetOauthMailPreview() {
 @Preview
 @Composable
 private fun OneTapBottomSheetOauthOKPreview() {
+    VKID.Companion.initForScreenshotTests(LocalContext.current)
     SheetContentMain(
         onAuth = { _, _ -> },
         onAuthCode = { _, _ -> },
@@ -156,6 +198,7 @@ private fun OneTapBottomSheetOauthOKPreview() {
 @Preview
 @Composable
 private fun OneTapBottomSheetOauthMailAndOKPreview() {
+    VKID.Companion.initForScreenshotTests(LocalContext.current)
     SheetContentMain(
         onAuth = { _, _ -> },
         onAuthCode = { _, _ -> },
@@ -176,6 +219,7 @@ private fun OneTapBottomSheetOauthMailAndOKPreview() {
 @Preview
 @Composable
 private fun OneTapBottomSheetOauthOKAndMailPreview() {
+    VKID.Companion.initForScreenshotTests(LocalContext.current)
     SheetContentMain(
         onAuth = { _, _ -> },
         onAuthCode = { _, _ -> },
@@ -196,6 +240,7 @@ private fun OneTapBottomSheetOauthOKAndMailPreview() {
 @Preview
 @Composable
 private fun OneTapBottomSheetsignInAnotherAccountButtonEnabledPreview() {
+    VKID.Companion.initForScreenshotTests(LocalContext.current)
     SheetContentMain(
         onAuth = { _, _ -> },
         onAuthCode = { _, _ -> },
@@ -216,6 +261,7 @@ private fun OneTapBottomSheetsignInAnotherAccountButtonEnabledPreview() {
 @Preview
 @Composable
 private fun OneTapBottomSheetFastAuthEnabledPreview() {
+    VKID.Companion.initForScreenshotTests(LocalContext.current)
     SheetContentMain(
         onAuth = { _, _ -> },
         onAuthCode = { _, _ -> },
@@ -236,6 +282,7 @@ private fun OneTapBottomSheetFastAuthEnabledPreview() {
 @Preview
 @Composable
 private fun OneTapBottomSheetScenarioOrderPreview() {
+    VKID.Companion.initForScreenshotTests(LocalContext.current)
     SheetContentMain(
         onAuth = { _, _ -> },
         onAuthCode = { _, _ -> },
@@ -276,6 +323,7 @@ private fun OneTapBottomSheetScenarioApplicationPreview() {
 @Preview
 @Composable
 private fun OneTapBottomSheetScenarioEnterToAccountPreview() {
+    VKID.Companion.initForScreenshotTests(LocalContext.current)
     SheetContentMain(
         onAuth = { _, _ -> },
         onAuthCode = { _, _ -> },
@@ -296,6 +344,7 @@ private fun OneTapBottomSheetScenarioEnterToAccountPreview() {
 @Preview
 @Composable
 private fun OneTapBottomSheetScenarioOrderInServicePreview() {
+    VKID.Companion.initForScreenshotTests(LocalContext.current)
     SheetContentMain(
         onAuth = { _, _ -> },
         onAuthCode = { _, _ -> },
@@ -316,6 +365,7 @@ private fun OneTapBottomSheetScenarioOrderInServicePreview() {
 @Preview
 @Composable
 private fun OneTapBottomSheetScenarioRegistrationForTheEventPreview() {
+    VKID.Companion.initForScreenshotTests(LocalContext.current)
     SheetContentMain(
         onAuth = { _, _ -> },
         onAuthCode = { _, _ -> },

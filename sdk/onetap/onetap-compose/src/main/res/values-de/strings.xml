@@ -59,7 +59,6 @@
 
     <string name="vkid_scenario_common_description">Anschließend stehen Ihnen alle Funktionen des Dienstes zur Verfügung. Ihre persönlichen Daten werden sorgfältig geschützt.</string>
 
-    <string name="vkid_sheet_state_auth_in_progress">Anmeldung</string>
     <string name="vkid_sheet_state_auth_success">Gelungen!</string>
     <string name="vkid_sheet_state_auth_failed_retry">Erneut versuchen</string>
     <string name="vkid_sheet_state_auth_failed">Anmeldung fehlgeschlagen</string>

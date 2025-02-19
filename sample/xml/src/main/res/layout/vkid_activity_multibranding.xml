@@ -34,7 +34,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/multibranding_title_spacer"
             app:layout_constraintWidth_max="355dp"
-            app:vkid_OAuthListStyle="transparentSystem"
+            app:vkid_OAuthListStyle="system"
             app:vkid_oAuthListCornerRadius="8dp"
             app:vkid_oAuthListOAuths="vk,mail,ok"
             app:vkid_oAuthListScopes="email messages"
@@ -55,7 +55,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/multibranding_3_spacer"
             app:layout_constraintWidth_max="355dp"
-            app:vkid_OAuthListStyle="transparentSystem"
+            app:vkid_OAuthListStyle="system"
             app:vkid_oAuthListCornerRadius="8dp"
             app:vkid_oAuthListOAuths="ok,mail"
             app:vkid_oAuthListSize="standard" />
@@ -75,7 +75,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/multibranding_2_spacer"
             app:layout_constraintWidth_max="355dp"
-            app:vkid_OAuthListStyle="transparentSystem"
+            app:vkid_OAuthListStyle="system"
             app:vkid_oAuthListCornerRadius="8dp"
             app:vkid_oAuthListOAuths="vk"
             app:vkid_oAuthListSize="standard" />
@@ -95,7 +95,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/multibranding_vk_spacer"
             app:layout_constraintWidth_max="355dp"
-            app:vkid_OAuthListStyle="transparentSystem"
+            app:vkid_OAuthListStyle="system"
             app:vkid_oAuthListCornerRadius="8dp"
             app:vkid_oAuthListOAuths="mail"
             app:vkid_oAuthListSize="standard" />
@@ -115,7 +115,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/multibranding_mail_spacer"
             app:layout_constraintWidth_max="355dp"
-            app:vkid_OAuthListStyle="transparentSystem"
+            app:vkid_OAuthListStyle="system"
             app:vkid_oAuthListCornerRadius="8dp"
             app:vkid_oAuthListOAuths="ok"
             app:vkid_oAuthListSize="standard" />

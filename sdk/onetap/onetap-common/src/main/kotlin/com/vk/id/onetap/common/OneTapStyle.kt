@@ -31,17 +31,20 @@ public sealed class OneTapStyle(
     @InternalVKIDApi public val vkidButtonStyle: InternalVKIDButtonStyle,
     @InternalVKIDApi public val alternateAccountButtonStyle: InternalVKIDAlternateAccountButtonStyle,
 ) {
+    @Suppress("DEPRECATION")
     @InternalVKIDApi
     public val oAuthListWidgetStyle: OAuthListWidgetStyle
         get() = when (this) {
             is Icon,
             is TransparentLight,
+            is SecondaryLight,
             is Light -> OAuthListWidgetStyle.Light(
                 cornersStyle = cornersStyle.toOAuthListWidgetStyle(),
                 sizeStyle = sizeStyle.toOAuthListWidgetStyle(),
             )
 
             is TransparentDark,
+            is SecondaryDark,
             is Dark -> OAuthListWidgetStyle.Dark(
                 cornersStyle = cornersStyle.toOAuthListWidgetStyle(),
                 sizeStyle = sizeStyle.toOAuthListWidgetStyle(),
@@ -87,12 +90,54 @@ public sealed class OneTapStyle(
     )
 
     /**
+     * Light version with white button, should be used for the dark layout.
+     *
+     * @param cornersStyle corner radius style.
+     * @param sizeStyle denotes the size of the widget.
+     * @param elevationStyle elevation of the button.
+     */
+    public class SecondaryLight(
+        cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
+        sizeStyle: OneTapButtonSizeStyle = OneTapButtonSizeStyle.DEFAULT,
+        elevationStyle: OneTapButtonElevationStyle = OneTapButtonElevationStyle.Default,
+    ) : OneTapStyle(
+        cornersStyle = cornersStyle,
+        sizeStyle = sizeStyle,
+        elevationStyle = elevationStyle,
+        vkidButtonStyle = InternalVKIDButtonStyle.Secondary(cornersStyle, sizeStyle, elevationStyle),
+        alternateAccountButtonStyle = InternalVKIDAlternateAccountButtonStyle.Light(cornersStyle, sizeStyle),
+    )
+
+    /**
+     * Dark version with white button, should be used for the light layout.
+     *
+     * @param cornersStyle corner radius style.
+     * @param sizeStyle denotes the size of the widget.
+     * @param elevationStyle elevation of the button.
+     */
+    public class SecondaryDark(
+        cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
+        sizeStyle: OneTapButtonSizeStyle = OneTapButtonSizeStyle.DEFAULT,
+        elevationStyle: OneTapButtonElevationStyle = OneTapButtonElevationStyle.Default,
+    ) : OneTapStyle(
+        cornersStyle = cornersStyle,
+        sizeStyle = sizeStyle,
+        elevationStyle = elevationStyle,
+        vkidButtonStyle = InternalVKIDButtonStyle.Secondary(cornersStyle, sizeStyle, elevationStyle),
+        alternateAccountButtonStyle = InternalVKIDAlternateAccountButtonStyle.Dark(cornersStyle, sizeStyle),
+    )
+
+    /**
      * Light version with transparent button, should be used for the dark layout.
      *
      * @param cornersStyle corner radius style.
      * @param sizeStyle denotes the size of the widget.
      * @param elevationStyle elevation of the button.
      */
+    @Deprecated(
+        "This style will be removed in future releases. Please, use SecondaryLight instead.",
+        ReplaceWith("SecondaryLight", "com.vk.id.onetap.common.SecondaryLight"),
+    )
     public class TransparentLight(
         cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
         sizeStyle: OneTapButtonSizeStyle = OneTapButtonSizeStyle.DEFAULT,
@@ -112,6 +157,10 @@ public sealed class OneTapStyle(
      * @param sizeStyle denotes the size of the widget.
      * @param elevationStyle elevation of the button.
      */
+    @Deprecated(
+        "This style will be removed in future releases. Please, use SecondaryDark instead.",
+        ReplaceWith("SecondaryDark", "com.vk.id.onetap.common.SecondaryDark"),
+    )
     public class TransparentDark(
         cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
         sizeStyle: OneTapButtonSizeStyle = OneTapButtonSizeStyle.DEFAULT,
@@ -146,7 +195,7 @@ public sealed class OneTapStyle(
     /** @suppress */
     public companion object {
         /**
-         * Returns a style which is based on the current them.
+         * Returns a style which is based on the current theme.
          * The return value is either [Dark] or [Light]
          *
          * @param context Context which can be used to retrieve dark theme status.
@@ -166,7 +215,27 @@ public sealed class OneTapStyle(
         )
 
         /**
-         * Returns a style which is based on the current them.
+         * Returns a style which is based on the current theme.
+         * The return value is either [SecondaryDark] or [SecondaryLight]
+         *
+         * @param context Context which can be used to retrieve dark theme status.
+         * @param cornersStyle corner radius style.
+         * @param sizeStyle denotes the size of the widget.
+         * @param elevationStyle elevation of the button.
+         */
+        public fun secondarySystem(
+            context: Context,
+            cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
+            sizeStyle: OneTapButtonSizeStyle = OneTapButtonSizeStyle.DEFAULT,
+            elevationStyle: OneTapButtonElevationStyle = OneTapButtonElevationStyle.Default,
+        ): OneTapStyle = (if (context.internalVkIdIsDarkTheme) ::SecondaryDark else ::SecondaryLight)(
+            cornersStyle,
+            sizeStyle,
+            elevationStyle,
+        )
+
+        /**
+         * Returns a style which is based on the current theme.
          * The return value is either [TransparentDark] or [TransparentLight]
          *
          * @param context Context which can be used to retrieve dark theme status.
@@ -174,6 +243,11 @@ public sealed class OneTapStyle(
          * @param sizeStyle denotes the size of the widget.
          * @param elevationStyle elevation of the button.
          */
+        @Deprecated(
+            "This style will be removed in future releases. Please, use secondarySystem instead.",
+            ReplaceWith("OneTapStyle.secondarySystem(context, cornersStyle, sizeStyle, elevationStyle)"),
+        )
+        @Suppress("DEPRECATION")
         public fun transparentSystem(
             context: Context,
             cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,

@@ -1,3 +1,5 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.vksdksupport
 
 import com.vk.api.sdk.VK
@@ -8,6 +10,7 @@ import com.vk.api.sdk.internal.ApiCommand
 import com.vk.dto.common.id.UserId
 import com.vk.id.AccessToken
 import com.vk.id.VKID
+import com.vk.id.common.InternalVKIDApi
 import com.vk.id.refresh.VKIDRefreshTokenCallback
 import com.vk.id.refresh.VKIDRefreshTokenFail
 import com.vk.id.refresh.VKIDRefreshTokenParams
@@ -46,8 +49,12 @@ public fun <T> ApiCommand<T>.withVKIDToken(
         }
 
         override fun onExecute(manager: VKApiManager): T {
+            return VKID.instance.crashReporter.runReportingCrashes({ throw it }) { onExecuteInternal(manager) }
+        }
+
+        private fun onExecuteInternal(manager: VKApiManager): T {
             try {
-                saveToken(VKID.instance.accessToken ?: error("Not authorized"))
+                saveToken(VKID.instance.accessToken ?: throw VKIDNotAuthorizedException())
                 return this@withVKIDToken.execute(manager)
             } catch (t: VKApiExecutionException) {
                 if (t.code == VKApiCodes.CODE_AUTHORIZATION_FAILED) {

@@ -4,6 +4,7 @@ import com.vk.id.health.metrics.storage.firestore
 import com.vk.id.health.metrics.apksize.apkSize
 import com.vk.id.health.metrics.apichange.publicApiChanges
 import com.vk.id.health.metrics.codecoverage.codeCoverage
+import org.jetbrains.kotlin.konan.util.substitute
 import java.util.Properties
 
 plugins {
@@ -24,6 +25,14 @@ plugins {
     alias(libs.plugins.screenshot) apply false
     id("vkid.manifest.placeholders") version "1.1.0" apply true
 }
+
+//subprojects {
+//    configurations.all {
+//        resolutionStrategy.dependencySubstitution {
+//            substitute(project(":tracking-tracer")).using(project(":tracking-noop"))
+//        }
+//    }
+//}
 
 dependencies {
     subprojects

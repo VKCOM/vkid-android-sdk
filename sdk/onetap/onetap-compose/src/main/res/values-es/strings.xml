@@ -86,7 +86,6 @@
 
     <string name="vkid_scenario_common_description">Después, tendrás acceso a todas las funciones del servicio. Tus datos personales estarán cuidadosamente protegidos.</string>
 
-    <string name="vkid_sheet_state_auth_in_progress">Iniciar sesión…</string>
     <string name="vkid_sheet_state_auth_success">Éxito</string>
     <string name="vkid_sheet_state_auth_failed_retry">Probar de nuevo</string>
     <string name="vkid_sheet_state_auth_failed">Error al iniciar sesión</string>
