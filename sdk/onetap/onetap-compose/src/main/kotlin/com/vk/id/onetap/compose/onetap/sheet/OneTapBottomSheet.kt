@@ -3,10 +3,10 @@
 package com.vk.id.onetap.compose.onetap.sheet
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -18,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
@@ -30,11 +31,6 @@ import com.vk.id.auth.Prompt
 import com.vk.id.auth.VKIDAuthCallback
 import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.InternalVKIDApi
-import com.vk.id.group.subscription.common.fail.VKIDGroupSubscriptionFail
-import com.vk.id.group.subscription.common.style.GroupSubscriptionStyle
-import com.vk.id.group.subscription.compose.ui.GroupSubscriptionSheet
-import com.vk.id.group.subscription.compose.ui.GroupSubscriptionSnackbarHost
-import com.vk.id.group.subscription.compose.ui.rememberGroupSubscriptionSheetState
 import com.vk.id.multibranding.internal.LocalMultibrandingAnalyticsContext
 import com.vk.id.multibranding.internal.MultibrandingAnalyticsContext
 import com.vk.id.onetap.common.OneTapOAuth
@@ -47,6 +43,7 @@ import com.vk.id.onetap.compose.onetap.sheet.content.startAlternateAuth
 import com.vk.id.onetap.compose.onetap.sheet.content.startVKIDAuth
 import com.vk.id.onetap.compose.onetap.sheet.content.toProviderTheme
 import com.vk.id.onetap.compose.onetap.sheet.style.OneTapBottomSheetStyle
+import com.vk.id.util.InternalVKIDWithUpdatedLocale
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -65,9 +62,6 @@ public fun rememberOneTapBottomSheetState(): OneTapBottomSheetState {
 /**
  * Composable function to display a bottom sheet for VKID One Tap authentication with multibranding.
  *
- * This version integrates Group Subscription flow. The flow will be shown right after successful auth.
- * NOTE: The "groups" scope will be added automatically to the set of requested scopes.
- *
  * @param modifier Modifier for this composable.
  * @param state The state of the bottom sheet. To control sheet create state instance with [rememberOneTapBottomSheetState] and pass it here.
  * @param serviceName The name of the service for authentication. Will be displayed as title of sheet.
@@ -90,13 +84,6 @@ public fun rememberOneTapBottomSheetState(): OneTapBottomSheetState {
  * In case this parameter is set to false the user data won't be fetched and user will have to confirm authorization on click.
  * Note: this parameter doesn't support changes in runtime.
  * Note: This parameter will hide "change account" button because in this case OneTap will have the same behaviour.
- * @param subscribeToGroupId The id of the group the user will be subscribed to.
- * @param onSuccessSubscribingToGroup Will be called upon successful subscription.
- * @param onFailSubscribingToGroup Will be called upon any unsuccessful flow completion along with an description of the specific encountered error.
- * @param groupSubscriptionSnackbarHostState The host state for snackbars.
- * Use along with [GroupSubscriptionSnackbarHost] and pass the same state as there.
- * NOTE: In case you pass null, the host will be put in the place you put this Composable.
- * @param groupSubscriptionStyle The widget style, can change appearance.
  */
 @Composable
 public fun OneTapBottomSheet(
@@ -112,52 +99,22 @@ public fun OneTapBottomSheet(
     style: OneTapBottomSheetStyle = OneTapBottomSheetStyle.Light(),
     authParams: VKIDAuthUiParams = VKIDAuthUiParams {},
     fastAuthEnabled: Boolean = true,
-    subscribeToGroupId: String,
-    onSuccessSubscribingToGroup: () -> Unit,
-    onFailSubscribingToGroup: (VKIDGroupSubscriptionFail) -> Unit = {},
-    groupSubscriptionSnackbarHostState: SnackbarHostState? = null,
-    groupSubscriptionStyle: GroupSubscriptionStyle = GroupSubscriptionStyle.Light(),
 ) {
-    val snackbarHostState = groupSubscriptionSnackbarHostState ?: remember { SnackbarHostState() }
-    var isSuccessfulAuth by remember { mutableStateOf("") }
-    Box(modifier = modifier) {
-        OneTapBottomSheet(
-            state = state,
-            serviceName = serviceName,
-            scenario = scenario,
-            autoHideOnSuccess = autoHideOnSuccess,
-            onAuth = { oAuth, accessToken ->
-                onAuth(oAuth, accessToken)
-                isSuccessfulAuth = System.currentTimeMillis().toString()
-            },
-            onAuthCode = onAuthCode,
-            onFail = onFail,
-            oAuths = oAuths,
-            style = style,
-            authParams = authParams.newBuilder {
-                scopes += "groups"
-            },
-            fastAuthEnabled = fastAuthEnabled,
-        )
-        if (isSuccessfulAuth.isNotBlank()) {
-            val groupSubscriptionSheetState = rememberGroupSubscriptionSheetState()
-            if (groupSubscriptionSnackbarHostState == null) {
-                GroupSubscriptionSnackbarHost(snackbarHostState)
-            }
-            GroupSubscriptionSheet(
-                state = groupSubscriptionSheetState,
-                accessTokenProvider = { VKID.instance.accessToken?.token ?: error("Not authorized") },
-                groupId = subscribeToGroupId,
-                onSuccess = onSuccessSubscribingToGroup,
-                onFail = onFailSubscribingToGroup,
-                snackbarHostState = snackbarHostState,
-                style = groupSubscriptionStyle,
-            )
-            LaunchedEffect(isSuccessfulAuth) {
-                groupSubscriptionSheetState.show()
-            }
-        }
-    }
+    OneTapBottomSheet(
+        modifier = modifier,
+        state = state,
+        serviceName = serviceName,
+        scenario = scenario,
+        autoHideOnSuccess = autoHideOnSuccess,
+        onAuth = onAuth,
+        onAuthCode = onAuthCode,
+        onFail = onFail,
+        oAuths = oAuths,
+        style = style,
+        authParams = authParams,
+        fastAuthEnabled = fastAuthEnabled,
+        autoShowSheetDelayMillis = null,
+    )
 }
 
 /**
@@ -185,6 +142,11 @@ public fun OneTapBottomSheet(
  * In case this parameter is set to false the user data won't be fetched and user will have to confirm authorization on click.
  * Note: this parameter doesn't support changes in runtime.
  * Note: This parameter will hide "change account" button because in this case OneTap will have the same behaviour.
+ * @param autoShowSheetDelayMillis Delay in millis after which sheet will be automatically shown.
+ * Examples:
+ * - null: not shown automatically
+ * - 0: shown automatically immediately
+ * - 1000: show automatically after 1 second
  */
 @OptIn(InternalVKIDApi::class)
 @Composable
@@ -201,27 +163,38 @@ public fun OneTapBottomSheet(
     style: OneTapBottomSheetStyle = OneTapBottomSheetStyle.Light(),
     authParams: VKIDAuthUiParams = VKIDAuthUiParams {},
     fastAuthEnabled: Boolean = true,
+    autoShowSheetDelayMillis: Long? = null,
 ) {
-    val rememberedFastAuthEnabledValue by remember { mutableStateOf(fastAuthEnabled) }
-    if (rememberedFastAuthEnabledValue != fastAuthEnabled) {
-        error("You can't change fastAuthEnabled in runtime")
-    }
-    CompositionLocalProvider(LocalMultibrandingAnalyticsContext provides MultibrandingAnalyticsContext(screen = "floating_one_tap")) {
-        OneTapBottomSheetInternal(
-            modifier = modifier,
-            state = state,
-            serviceName = serviceName,
-            scenario = scenario,
-            autoHideOnSuccess = autoHideOnSuccess,
-            onAuth = onAuth,
-            onAuthCode = onAuthCode,
-            onFail = onFail,
-            oAuths = oAuths,
-            style = style,
-            authParams = authParams,
-            fastAuthEnabled = fastAuthEnabled,
-            signInAnotherAccountButtonEnabled = fastAuthEnabled,
-        )
+    InternalVKIDWithUpdatedLocale {
+        val rememberedFastAuthEnabledValue by remember { mutableStateOf(fastAuthEnabled) }
+        if (rememberedFastAuthEnabledValue != fastAuthEnabled) {
+            error("You can't change fastAuthEnabled in runtime")
+        }
+        autoShowSheetDelayMillis?.let {
+            LaunchedEffect(it) {
+                launch {
+                    delay(it)
+                    state.show()
+                }
+            }
+        }
+        CompositionLocalProvider(LocalMultibrandingAnalyticsContext provides MultibrandingAnalyticsContext(screen = "floating_one_tap")) {
+            OneTapBottomSheetInternal(
+                modifier = modifier,
+                state = state,
+                serviceName = serviceName,
+                scenario = scenario,
+                autoHideOnSuccess = autoHideOnSuccess,
+                onAuth = onAuth,
+                onAuthCode = onAuthCode,
+                onFail = onFail,
+                oAuths = oAuths,
+                style = style,
+                authParams = authParams,
+                fastAuthEnabled = fastAuthEnabled,
+                signInAnotherAccountButtonEnabled = fastAuthEnabled,
+            )
+        }
     }
 }
 
@@ -257,118 +230,121 @@ private fun OneTapBottomSheetInternal(
             },
             sheetState = state.materialSheetState,
             containerColor = Color.Transparent,
-            dragHandle = null
+            dragHandle = null,
         ) {
-            val dismissSheet = {
-                state.hide()
-            }
-            when (val status = authStatus.value) {
-                is OneTapBottomSheetAuthStatus.Init -> {
-                    SheetContentMain(
-                        onAuth = onAuth,
-                        onAuthCode = onAuthCode,
-                        onFail = onFail,
-                        oAuths = oAuths,
-                        serviceName = serviceName,
-                        scenario = scenario,
-                        dismissSheet = dismissSheet,
-                        style = style,
-                        onAuthStatusChange = { authStatus.value = it },
-                        authParams = authParams,
-                        coroutineScope = coroutineScope,
-                        fastAuthEnabled = fastAuthEnabled,
-                        signInAnotherAccountButtonEnabled = signInAnotherAccountButtonEnabled,
-                    )
-                }
-
-                is OneTapBottomSheetAuthStatus.AuthStarted -> SheetContentAuthInProgress(
-                    serviceName,
-                    style,
-                    dismissSheet
-                )
-
-                is OneTapBottomSheetAuthStatus.AuthFailedAlternate -> SheetContentAuthFailed(
-                    serviceName,
-                    style,
-                    dismissSheet
+            InternalVKIDWithUpdatedLocale {
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center,
                 ) {
-                    val extraAuthParams = OneTapBottomSheetAnalytics.retryAuthTap()
-                    startAlternateAuth(
-                        coroutineScope = coroutineScope,
-                        style = style,
-                        onAuth = { onAuth(null, it) },
-                        onAuthCode = onAuthCode,
-                        onFail = { onFail(null, it) },
-                        onAuthStatusChange = { authStatus.value = it },
-                        authParams = authParams,
-                        extraAuthParams = extraAuthParams
-                    )
-                }
-
-                is OneTapBottomSheetAuthStatus.AuthFailedVKID -> SheetContentAuthFailed(
-                    serviceName,
-                    style,
-                    dismissSheet
-                ) {
-                    val extraAuthParams = OneTapBottomSheetAnalytics.retryAuthTap()
-                    startVKIDAuth(
-                        coroutineScope = coroutineScope,
-                        style = style,
-                        onAuth = { onAuth(null, it) },
-                        onAuthCode = onAuthCode,
-                        onFail = { onFail(null, it) },
-                        onAuthStatusChange = { authStatus.value = it },
-                        authParams = authParams,
-                        extraAuthParams = extraAuthParams,
-                        fastAuthEnabled = fastAuthEnabled,
-                        user = status.user,
-                    )
-                }
-
-                is OneTapBottomSheetAuthStatus.AuthFailedMultibranding -> SheetContentAuthFailed(
-                    serviceName,
-                    style,
-                    dismissSheet
-                ) {
-                    coroutineScope.launch {
-                        authStatus.value = OneTapBottomSheetAuthStatus.AuthStarted
-                        VKID.instance.authorize(
-                            object : VKIDAuthCallback {
-                                override fun onAuth(accessToken: AccessToken) {
-                                    authStatus.value = OneTapBottomSheetAuthStatus.AuthSuccess
-                                    onAuth(status.oAuth, accessToken)
-                                }
-
-                                override fun onAuthCode(
-                                    data: AuthCodeData,
-                                    isCompletion: Boolean
-                                ) {
-                                    if (isCompletion) authStatus.value = OneTapBottomSheetAuthStatus.AuthSuccess
-                                    onAuthCode(data, isCompletion)
-                                }
-
-                                override fun onFail(fail: VKIDAuthFail) {
-                                    authStatus.value = OneTapBottomSheetAuthStatus.AuthFailedMultibranding(status.oAuth)
-                                    onFail(status.oAuth, fail)
-                                }
-                            },
-                            authParams.asParamsBuilder {
-                                oAuth = status.oAuth.toOAuth()
-                                theme = style.toProviderTheme()
-                                prompt = Prompt.LOGIN
-                            }.build()
-                        )
+                    val dismissSheet = {
+                        state.hide()
                     }
-                }
+                    when (val status = authStatus.value) {
+                        is OneTapBottomSheetAuthStatus.Init -> {
+                            SheetContentMain(
+                                onAuth = onAuth,
+                                onAuthCode = onAuthCode,
+                                onFail = onFail,
+                                oAuths = oAuths,
+                                serviceName = serviceName,
+                                scenario = scenario,
+                                dismissSheet = dismissSheet,
+                                style = style,
+                                onAuthStatusChange = { authStatus.value = it },
+                                authParams = authParams,
+                                coroutineScope = coroutineScope,
+                                fastAuthEnabled = fastAuthEnabled,
+                                signInAnotherAccountButtonEnabled = signInAnotherAccountButtonEnabled,
+                            )
+                        }
 
-                is OneTapBottomSheetAuthStatus.AuthSuccess -> {
-                    if (autoHideOnSuccess) {
-                        LaunchedEffect(Unit) {
-                            delay(1.seconds)
-                            state.hide()
+                        is OneTapBottomSheetAuthStatus.AuthStarted -> SheetContentAuthInProgress(
+                            style,
+                            dismissSheet
+                        )
+
+                        is OneTapBottomSheetAuthStatus.AuthFailedAlternate -> SheetContentAuthFailed(
+                            style,
+                            dismissSheet
+                        ) {
+                            val extraAuthParams = OneTapBottomSheetAnalytics.retryAuthTap()
+                            startAlternateAuth(
+                                coroutineScope = coroutineScope,
+                                style = style,
+                                onAuth = { onAuth(null, it) },
+                                onAuthCode = onAuthCode,
+                                onFail = { onFail(null, it) },
+                                onAuthStatusChange = { authStatus.value = it },
+                                authParams = authParams,
+                                extraAuthParams = extraAuthParams
+                            )
+                        }
+
+                        is OneTapBottomSheetAuthStatus.AuthFailedVKID -> SheetContentAuthFailed(
+                            style,
+                            dismissSheet
+                        ) {
+                            val extraAuthParams = OneTapBottomSheetAnalytics.retryAuthTap()
+                            startVKIDAuth(
+                                coroutineScope = coroutineScope,
+                                style = style,
+                                onAuth = { onAuth(null, it) },
+                                onAuthCode = onAuthCode,
+                                onFail = { onFail(null, it) },
+                                onAuthStatusChange = { authStatus.value = it },
+                                authParams = authParams,
+                                extraAuthParams = extraAuthParams,
+                                fastAuthEnabled = fastAuthEnabled,
+                                user = status.user,
+                            )
+                        }
+
+                        is OneTapBottomSheetAuthStatus.AuthFailedMultibranding -> SheetContentAuthFailed(
+                            style,
+                            dismissSheet
+                        ) {
+                            coroutineScope.launch {
+                                authStatus.value = OneTapBottomSheetAuthStatus.AuthStarted
+                                VKID.instance.authorize(
+                                    object : VKIDAuthCallback {
+                                        override fun onAuth(accessToken: AccessToken) {
+                                            authStatus.value = OneTapBottomSheetAuthStatus.AuthSuccess
+                                            onAuth(status.oAuth, accessToken)
+                                        }
+
+                                        override fun onAuthCode(
+                                            data: AuthCodeData,
+                                            isCompletion: Boolean
+                                        ) {
+                                            if (isCompletion) authStatus.value = OneTapBottomSheetAuthStatus.AuthSuccess
+                                            onAuthCode(data, isCompletion)
+                                        }
+
+                                        override fun onFail(fail: VKIDAuthFail) {
+                                            authStatus.value = OneTapBottomSheetAuthStatus.AuthFailedMultibranding(status.oAuth)
+                                            onFail(status.oAuth, fail)
+                                        }
+                                    },
+                                    authParams.asParamsBuilder {
+                                        oAuth = status.oAuth.toOAuth()
+                                        theme = style.toProviderTheme()
+                                        prompt = Prompt.LOGIN
+                                    }.build()
+                                )
+                            }
+                        }
+
+                        is OneTapBottomSheetAuthStatus.AuthSuccess -> {
+                            if (autoHideOnSuccess) {
+                                LaunchedEffect(Unit) {
+                                    delay(1.seconds)
+                                    state.hide()
+                                }
+                            }
+                            SheetContentAuthSuccess(style, dismissSheet)
                         }
                     }
-                    SheetContentAuthSuccess(serviceName, style, dismissSheet)
                 }
             }
         }
@@ -474,7 +450,6 @@ private fun OneTapBottomSheetPreview() {
 @Composable
 private fun OneTapBottomSheetSuccessPreview() {
     SheetContentAuthSuccess(
-        "<Название сервиса>",
         OneTapBottomSheetStyle.TransparentDark(),
         dismissSheet = {},
     )
@@ -484,7 +459,6 @@ private fun OneTapBottomSheetSuccessPreview() {
 @Composable
 private fun OneTapBottomSheetFailedPreview() {
     SheetContentAuthFailed(
-        "<Название сервиса>",
         OneTapBottomSheetStyle.TransparentDark(),
         dismissSheet = {},
         repeatClicked = {}

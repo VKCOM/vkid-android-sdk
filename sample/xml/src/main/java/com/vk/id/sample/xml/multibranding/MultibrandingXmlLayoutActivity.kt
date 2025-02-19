@@ -8,7 +8,6 @@ import com.vk.id.sample.xml.R
 import com.vk.id.sample.xml.uikit.common.forEachView
 import com.vk.id.sample.xml.uikit.common.getMultibrandingFailCallback
 import com.vk.id.sample.xml.uikit.common.getMultibrandingSuccessCallback
-import com.vk.id.sample.xml.uikit.common.showToast
 
 public class MultibrandingXmlLayoutActivity : AppCompatActivity() {
 
@@ -19,12 +18,6 @@ public class MultibrandingXmlLayoutActivity : AppCompatActivity() {
             widget.setCallbacks(
                 onAuth = getMultibrandingSuccessCallback(this) {},
                 onFail = getMultibrandingFailCallback(this),
-            )
-
-            widget.snackbarHost = findViewById(R.id.group_subscription_snackbar_host)
-            widget.setGroupSubscriptionCallbacks(
-                onSuccess = { showToast(this, "Subscribed") },
-                onFail = { showToast(this, "Fail: ${it.description}") },
             )
         }
     }

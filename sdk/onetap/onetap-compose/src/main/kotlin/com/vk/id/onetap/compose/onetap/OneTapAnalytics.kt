@@ -2,6 +2,8 @@
 
 package com.vk.id.onetap.compose.onetap
 
+import android.content.Context
+import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.rememberUpdatedState
@@ -9,10 +11,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import com.vk.id.VKID
 import com.vk.id.VKIDUser
 import com.vk.id.analytics.VKIDAnalytics
-import com.vk.id.analytics.param.vkidInternalLanguageParam
 import com.vk.id.analytics.stat.StatTracker
+import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.onetap.common.OneTapStyle
 import java.util.UUID
@@ -30,7 +33,9 @@ internal object OneTapAnalytics {
     private const val EVENT_ONETAP_NO_USER_TAP = "onetap_button_no_user_tap"
 
     internal fun sessionNotFound() {
-        track(EVENT_NO_SESSION_FOUND)
+        VKID.instance.crashReporter.runReportingCrashes({}) {
+            track(EVENT_NO_SESSION_FOUND)
+        }
     }
 
     internal fun userWasFoundIcon() {
@@ -38,11 +43,13 @@ internal object OneTapAnalytics {
     }
 
     internal fun userWasFound(signInAnotherAccountButton: Boolean, icon: Boolean = false) {
-        track(
-            EVENT_USER_FOUND,
-            alternateParam(signInAnotherAccountButton),
-            iconParam(icon)
-        )
+        VKID.instance.crashReporter.runReportingCrashes({}) {
+            track(
+                EVENT_USER_FOUND,
+                alternateParam(signInAnotherAccountButton),
+                iconParam(icon)
+            )
+        }
     }
 
     internal fun userNotFoundIcon() {
@@ -50,10 +57,12 @@ internal object OneTapAnalytics {
     }
 
     internal fun userNotFound(icon: Boolean = false) {
-        track(
-            EVENT_NO_USER_SHOW,
-            iconParam(icon)
-        )
+        VKID.instance.crashReporter.runReportingCrashes({}) {
+            track(
+                EVENT_NO_USER_SHOW,
+                iconParam(icon)
+            )
+        }
     }
 
     @Composable
@@ -70,14 +79,16 @@ internal object OneTapAnalytics {
             val observer = LifecycleEventObserver { _, event ->
                 when (event) {
                     Lifecycle.Event.ON_RESUME -> {
-                        track(
-                            EVENT_SCREEN_PROCEED,
-                            iconParam(icon),
-                            textTypeParam(scenario),
-                            themeParam(style),
-                            styleParam(style),
-                            vkidInternalLanguageParam(context)
-                        )
+                        VKID.instance.crashReporter.runReportingCrashes({}) {
+                            track(
+                                EVENT_SCREEN_PROCEED,
+                                iconParam(icon),
+                                textTypeParam(scenario),
+                                themeParam(style),
+                                styleParam(style),
+                                langParam(context)
+                            )
+                        }
                     }
 
                     else -> {}
@@ -97,17 +108,21 @@ internal object OneTapAnalytics {
 
     internal fun oneTapPressed(user: VKIDUser?, icon: Boolean = false): Map<String, String> {
         val uuid = UUID.randomUUID().toString()
-        if (user != null) {
-            track(EVENT_ONETAP_TAP, iconParam(icon), uuidParam(uuid))
-        } else {
-            track(EVENT_ONETAP_NO_USER_TAP, iconParam(icon), uuidParam(uuid))
+        VKID.instance.crashReporter.runReportingCrashes({}) {
+            if (user != null) {
+                track(EVENT_ONETAP_TAP, iconParam(icon), uuidParam(uuid))
+            } else {
+                track(EVENT_ONETAP_NO_USER_TAP, iconParam(icon), uuidParam(uuid))
+            }
         }
         return mapOf(StatTracker.EXTERNAL_PARAM_SESSION_ID to uuid, FLOW_SOURCE)
     }
 
     internal fun alternatePressed(): Map<String, String> {
         val uuid = UUID.randomUUID().toString()
-        track(EVENT_ONETAP_ALTERNATIVE_SIGN_IN_TAP, uuidParam(uuid))
+        VKID.instance.crashReporter.runReportingCrashes({}) {
+            track(EVENT_ONETAP_ALTERNATIVE_SIGN_IN_TAP, uuidParam(uuid))
+        }
         return mapOf(StatTracker.EXTERNAL_PARAM_SESSION_ID to uuid, FLOW_SOURCE)
     }
 
@@ -116,23 +131,29 @@ internal object OneTapAnalytics {
     }
 
     internal fun authError(uuid: String, icon: Boolean = false) {
-        track(
-            EVENT_ONETAP_AUTH_ERROR,
-            iconParam(icon),
-            uuidParam(uuid),
-            VKIDAnalytics.EventParam("from_one_tap", "true"),
-            VKIDAnalytics.EventParam("error", "sdk_auth_error")
-        )
+        VKID.instance.crashReporter.runReportingCrashes({}) {
+            track(
+                EVENT_ONETAP_AUTH_ERROR,
+                iconParam(icon),
+                uuidParam(uuid),
+                VKIDAnalytics.EventParam("from_one_tap", "true"),
+                VKIDAnalytics.EventParam("error", "sdk_auth_error")
+            )
+        }
     }
 
     private fun themeParam(style: OneTapStyle): VKIDAnalytics.EventParam =
         VKIDAnalytics.EventParam(
             "theme_type",
+            @Suppress("DEPRECATION")
             when (style) {
                 is OneTapStyle.Dark,
                 is OneTapStyle.TransparentDark,
+                is OneTapStyle.SecondaryDark,
                 is OneTapStyle.Icon -> "dark"
+
                 is OneTapStyle.Light,
+                is OneTapStyle.SecondaryLight,
                 is OneTapStyle.TransparentLight -> "light"
             }
         )
@@ -140,10 +161,14 @@ internal object OneTapAnalytics {
     private fun styleParam(style: OneTapStyle): VKIDAnalytics.EventParam =
         VKIDAnalytics.EventParam(
             "style_type",
+            @Suppress("DEPRECATION")
             when (style) {
                 is OneTapStyle.Dark,
                 is OneTapStyle.Icon,
                 is OneTapStyle.Light -> "primary"
+
+                is OneTapStyle.SecondaryDark,
+                is OneTapStyle.SecondaryLight,
                 is OneTapStyle.TransparentDark,
                 is OneTapStyle.TransparentLight -> "secondary"
             }
@@ -173,6 +198,42 @@ internal object OneTapAnalytics {
             OneTapTitleScenario.Participate -> "take_part"
         }
     )
+
+    @Suppress("MagicNumber")
+    private fun VKIDAuthParams.Locale.toAnalyticsParam(): VKIDAnalytics.EventParam {
+        val langCode = when (this) {
+            VKIDAuthParams.Locale.RUS -> 0
+            VKIDAuthParams.Locale.UKR -> 1
+            VKIDAuthParams.Locale.ENG -> 3
+            VKIDAuthParams.Locale.SPA -> 4
+            VKIDAuthParams.Locale.GERMAN -> 6
+            VKIDAuthParams.Locale.POL -> 15
+            VKIDAuthParams.Locale.FRA -> 16
+            VKIDAuthParams.Locale.TURKEY -> 82
+        }
+        return VKIDAnalytics.EventParam("language", strValue = langCode.toString())
+    }
+
+    internal fun langParam(context: Context): VKIDAnalytics.EventParam {
+        val systemLocale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            context.resources.configuration.locales.get(0)
+        } else {
+            @Suppress("DEPRECATION")
+            context.resources.configuration.locale
+        }
+        val vkidLocale = when (systemLocale.language) {
+            "ru" -> VKIDAuthParams.Locale.RUS
+            "uk" -> VKIDAuthParams.Locale.UKR
+            "en" -> VKIDAuthParams.Locale.ENG
+            "es" -> VKIDAuthParams.Locale.SPA
+            "de" -> VKIDAuthParams.Locale.GERMAN
+            "pl" -> VKIDAuthParams.Locale.POL
+            "fr" -> VKIDAuthParams.Locale.FRA
+            "tr" -> VKIDAuthParams.Locale.TURKEY
+            else -> VKIDAuthParams.Locale.ENG
+        }
+        return vkidLocale.toAnalyticsParam()
+    }
 
     internal fun alternateParam(signInAnotherAccountButton: Boolean): VKIDAnalytics.EventParam =
         VKIDAnalytics.EventParam(

@@ -1,6 +1,5 @@
 package com.vk.id.storage
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
@@ -29,10 +28,7 @@ public class InternalVKIDEncryptedSharedPreferencesStorage public constructor(
         }
     }
 
-    @SuppressLint("ApplySharedPref")
-    public fun set(key: String, value: String?) {
-        sharedPreferences.edit().putString(key, value).commit()
-    }
+    public fun set(key: String, value: String?): Unit = sharedPreferences.edit().putString(key, value).apply()
 
     public fun getString(key: String): String? = sharedPreferences.getString(key, null)
 

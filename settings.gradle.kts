@@ -7,6 +7,7 @@ pluginManagement {
         google()
         mavenCentral()
         gradlePluginPortal()
+        maven { setUrl("https://artifactory-external.vkpartner.ru/artifactory/maven/") }
     }
 }
 dependencyResolutionManagement {
@@ -26,6 +27,7 @@ dependencyResolutionManagement {
                 }
             }
         }
+        maven { setUrl("https://artifactory-external.vkpartner.ru/artifactory/maven/") }
     }
 }
 rootProject.name = "VKIDSDK"
@@ -45,12 +47,6 @@ include(":logger")
 project(":logger").projectDir = File("sdk/core/logger")
 include(":detekt-rules")
 project(":detekt-rules").projectDir = File("sdk/core/detekt-rules")
-include(":group-subscription-common")
-project(":group-subscription-common").projectDir = File("sdk/group-subscription/group-subscription-common")
-include(":group-subscription-compose")
-project(":group-subscription-compose").projectDir = File("sdk/group-subscription/group-subscription-compose")
-include(":group-subscription-xml")
-project(":group-subscription-xml").projectDir = File("sdk/group-subscription/group-subscription-xml")
 include(":multibranding-common")
 project(":multibranding-common").projectDir = File("sdk/multibranding/multibranding-common")
 include(":multibranding-internal")
@@ -73,6 +69,12 @@ include(":analytics")
 project(":analytics").projectDir = File("sdk/core/analytics")
 include(":network")
 project(":network").projectDir = File("sdk/core/network")
+include(":tracking-core")
+project(":tracking-core").projectDir = File("sdk/core/tracking-core")
+include(":tracking-tracer")
+project(":tracking-tracer").projectDir = File("sdk/core/tracking-tracer")
+include(":tracking-noop")
+project(":tracking-noop").projectDir = File("sdk/core/tracking-noop")
 include(":vk-sdk-support")
 project(":vk-sdk-support").projectDir = File("sdk/core/vk-sdk-support")
 

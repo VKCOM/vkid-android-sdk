@@ -1,7 +1,6 @@
 package com.vk.id.sample.app.screen.sheet
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -31,7 +30,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.vk.id.AccessToken
 import com.vk.id.auth.AuthCodeData
 import com.vk.id.auth.VKIDAuthUiParams
-import com.vk.id.group.subscription.xml.GroupSubscriptionSnackbarHost
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonSizeStyle
@@ -70,114 +68,24 @@ internal fun OneTapBottomSheetScreen() {
     val selectedOAuths = rememberSaveable { mutableStateOf(setOf(OneTapOAuth.OK, OneTapOAuth.MAIL)) }
     val shouldUseXml = remember { mutableStateOf(false) }
     var scopes by remember { mutableStateOf("") }
+    var autoShowDelayMillis by remember { mutableStateOf<Long?>(null) }
     var state by remember { mutableStateOf("") }
     var codeChallenge by remember { mutableStateOf("") }
     var styleConstructors by remember { mutableStateOf<Map<String, KCallable<OneTapBottomSheetStyle>>>(emptyMap()) }
-    val groupSubscription = remember { mutableStateOf(false) }
     LaunchedEffect(Unit) {
         withContext(Dispatchers.IO) {
             styleConstructors = OneTapBottomSheetStyle::class.styleConstructors(context)
         }
     }
-    Box {
-        var host: GroupSubscriptionSnackbarHost? by remember { mutableStateOf(null) }
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 8.dp)
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
+        horizontalAlignment = Alignment.Start
+    ) {
         val bottomSheetState = rememberOneTapBottomSheetState()
         var bottomSheetView: OneTapBottomSheet? by remember { mutableStateOf(null) }
-        Column(
-            modifier = Modifier
-                .padding(horizontal = 8.dp)
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.Start
-        ) {
-            Spacer(Modifier.padding(8.dp))
-            Button(
-                text = "Show",
-                modifier = Modifier.width(100.dp)
-            ) {
-                if (bottomSheetState.isVisible) {
-                    bottomSheetState.hide()
-                } else {
-                    bottomSheetState.show()
-                }
-                bottomSheetView?.let { if (it.isVisible()) it.hide() else it.show() }
-            }
-            code?.let { value ->
-                Spacer(modifier = Modifier.height(8.dp))
-                TextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    value = value,
-                    onValueChange = { code = it },
-                    label = { Text("Resulting auth code") },
-                    maxLines = 1,
-                )
-            }
-            token.value?.let {
-                UseToken(accessToken = it)
-            }
-            CheckboxSelector(
-                title = "XML",
-                isChecked = shouldUseXml.value,
-                onCheckedChange = { shouldUseXml.value = it }
-            )
-            EnumStateCheckboxSelector(state = selectedOAuths, onNewState = { selectedOAuths.value = it })
-            CheckboxSelector(
-                title = "Auto hide on success",
-                isChecked = autoHideSheetOnSuccess.value,
-                onCheckedChange = { autoHideSheetOnSuccess.value = it }
-            )
-            CheckboxSelector(
-                title = "Fetch user",
-                isChecked = fastAuthEnabled.value,
-                onCheckedChange = { fastAuthEnabled.value = it }
-            )
-            CheckboxSelector(
-                title = "Group Subscription",
-                isChecked = groupSubscription.value,
-                onCheckedChange = { groupSubscription.value = it }
-            )
-            DropdownSelector(
-                values = enumEntries<OneTapScenario>().associateBy { it.name },
-                selectedValue = selectedScenario.value.name,
-                onValueSelected = { selectedScenario.value = it },
-                label = { Text("scenario") },
-            )
-            DropdownSelector(
-                values = styleConstructors,
-                selectedValue = selectedStyle.value::class.simpleName ?: error("Can get simple style"),
-                onValueSelected = {
-                    selectedStyle.value = it.call(
-                        OneTapSheetCornersStyle.Default,
-                        OneTapButtonCornersStyle.Default,
-                        OneTapButtonSizeStyle.DEFAULT,
-                    )
-                },
-                shape = RectangleShape,
-                label = { Text("style") },
-            )
-
-            TextField(
-                modifier = Modifier.fillMaxWidth(),
-                value = scopes,
-                onValueChange = { scopes = it },
-                label = { Text("Scopes (Space-separated)") },
-            )
-            TextField(
-                modifier = Modifier.fillMaxWidth(),
-                value = state,
-                onValueChange = { state = it },
-                label = { Text("State (Optional)") },
-                shape = RectangleShape,
-            )
-            TextField(
-                modifier = Modifier.fillMaxWidth(),
-                value = codeChallenge,
-                onValueChange = { codeChallenge = it },
-                label = { Text("Code challenge (Optional)") },
-                shape = RectangleShape,
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-        }
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
@@ -211,12 +119,7 @@ internal fun OneTapBottomSheetScreen() {
                     bottomSheetView?.apply {
                         this.oAuths = selectedOAuths.value
                         this.authParams = authParams
-                        this.groupId = "1".takeIf { groupSubscription.value }
-                        this.snackbarHost = host
-                        this.setGroupSubscriptionCallbacks(
-                            onSuccess = { showToast(context, "Subscribed") },
-                            onFail = { showToast(context, "Fail: ${it.description}") },
-                        )
+                        this.autoShowDelayMillis = autoShowDelayMillis
                     }
                 }
                 if (fastAuthEnabled.value) {
@@ -228,39 +131,20 @@ internal fun OneTapBottomSheetScreen() {
                 // Force state drop when changing the parameter
                 @Composable
                 fun RenderBottomSheet(fastAuthEnabled: Boolean) {
-                    if (groupSubscription.value) {
-                        OneTapBottomSheet(
-                            modifier = Modifier.fillMaxSize(),
-                            style = selectedStyle.value,
-                            onAuth = getOneTapSuccessCallback(context) { token.value = it },
-                            onAuthCode = onAuthCode,
-                            onFail = getOneTapFailCallback(context),
-                            state = bottomSheetState,
-                            scenario = selectedScenario.value,
-                            autoHideOnSuccess = autoHideSheetOnSuccess.value,
-                            serviceName = "VKID Sample",
-                            oAuths = selectedOAuths.value,
-                            authParams = authParams,
-                            fastAuthEnabled = fastAuthEnabled,
-                            subscribeToGroupId = "1",
-                            onSuccessSubscribingToGroup = { showToast(context, "Subscribed") },
-                            onFailSubscribingToGroup = { showToast(context, "Fail: ${it.description}") },
-                        )
-                    } else {
-                        OneTapBottomSheet(
-                            style = selectedStyle.value,
-                            onAuth = getOneTapSuccessCallback(context) { token.value = it },
-                            onAuthCode = onAuthCode,
-                            onFail = getOneTapFailCallback(context),
-                            state = bottomSheetState,
-                            scenario = selectedScenario.value,
-                            autoHideOnSuccess = autoHideSheetOnSuccess.value,
-                            serviceName = "VKID Sample",
-                            oAuths = selectedOAuths.value,
-                            authParams = authParams,
-                            fastAuthEnabled = fastAuthEnabled,
-                        )
-                    }
+                    OneTapBottomSheet(
+                        style = selectedStyle.value,
+                        onAuth = getOneTapSuccessCallback(context) { token.value = it },
+                        onAuthCode = onAuthCode,
+                        onFail = getOneTapFailCallback(context),
+                        state = bottomSheetState,
+                        scenario = selectedScenario.value,
+                        autoHideOnSuccess = autoHideSheetOnSuccess.value,
+                        serviceName = "VKID Sample",
+                        oAuths = selectedOAuths.value,
+                        authParams = authParams,
+                        fastAuthEnabled = fastAuthEnabled,
+                        autoShowSheetDelayMillis = autoShowDelayMillis,
+                    )
                 }
                 if (fastAuthEnabled.value) {
                     RenderBottomSheet(true)
@@ -269,8 +153,97 @@ internal fun OneTapBottomSheetScreen() {
                 }
             }
         }
-        AndroidView({ context ->
-            GroupSubscriptionSnackbarHost(context).also { host = it }
-        }, modifier = Modifier.fillMaxSize())
+        Spacer(Modifier.padding(8.dp))
+        Button(
+            text = "Show",
+            modifier = Modifier.width(100.dp)
+        ) {
+            if (bottomSheetState.isVisible) {
+                bottomSheetState.hide()
+            } else {
+                bottomSheetState.show()
+            }
+            bottomSheetView?.let { if (it.isVisible()) it.hide() else it.show() }
+        }
+        code?.let { value ->
+            Spacer(modifier = Modifier.height(8.dp))
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = value,
+                onValueChange = { code = it },
+                label = { Text("Resulting auth code") },
+                maxLines = 1,
+            )
+        }
+        token.value?.let {
+            UseToken(accessToken = it)
+        }
+        CheckboxSelector(
+            title = "XML",
+            isChecked = shouldUseXml.value,
+            onCheckedChange = { shouldUseXml.value = it }
+        )
+        EnumStateCheckboxSelector(state = selectedOAuths, onNewState = { selectedOAuths.value = it })
+        CheckboxSelector(
+            title = "Auto hide on success",
+            isChecked = autoHideSheetOnSuccess.value,
+            onCheckedChange = { autoHideSheetOnSuccess.value = it }
+        )
+        CheckboxSelector(
+            title = "Fetch user",
+            isChecked = fastAuthEnabled.value,
+            onCheckedChange = { fastAuthEnabled.value = it }
+        )
+        DropdownSelector(
+            values = enumEntries<OneTapScenario>().associateBy { it.name },
+            selectedValue = selectedScenario.value.name,
+            onValueSelected = { selectedScenario.value = it },
+            label = { Text("scenario") },
+        )
+        DropdownSelector(
+            values = styleConstructors,
+            selectedValue = selectedStyle.value::class.simpleName ?: error("Can get simple style"),
+            onValueSelected = {
+                selectedStyle.value = it.call(
+                    OneTapSheetCornersStyle.Default,
+                    OneTapButtonCornersStyle.Default,
+                    OneTapButtonSizeStyle.DEFAULT,
+                )
+            },
+            shape = RectangleShape,
+            label = { Text("style") },
+        )
+
+        TextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = scopes,
+            onValueChange = { scopes = it },
+            label = { Text("Scopes (Space-separated)") },
+        )
+        TextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = state,
+            onValueChange = { state = it },
+            label = { Text("State (Optional)") },
+            shape = RectangleShape,
+        )
+        TextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = codeChallenge,
+            onValueChange = { codeChallenge = it },
+            label = { Text("Code challenge (Optional)") },
+            shape = RectangleShape,
+        )
+        var autoShowDelayMillisPending by remember { mutableStateOf<Long?>(null) }
+        TextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = autoShowDelayMillisPending?.toString().orEmpty(),
+            onValueChange = { autoShowDelayMillisPending = it.toLongOrNull() },
+            label = { Text("Auto show delay (millis)") },
+        )
+        Button("Apply auto show delay") {
+            autoShowDelayMillis = autoShowDelayMillisPending
+        }
+        Spacer(modifier = Modifier.height(16.dp))
     }
 }

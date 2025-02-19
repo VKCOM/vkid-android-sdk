@@ -10,13 +10,13 @@ import com.vk.id.internal.auth.device.InternalVKIDDeviceIdProvider
 import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
 import com.vk.id.internal.state.StateGenerator
 import com.vk.id.internal.store.InternalVKIDPrefsStore
-import com.vk.id.storage.InternalVKIDTokenStorage
+import com.vk.id.storage.TokenStorage
 import kotlinx.coroutines.withContext
 
 @Suppress("LongParameterList")
 internal class VKIDTokenRefresher(
     private val api: VKIDApiService,
-    private val tokenStorage: InternalVKIDTokenStorage,
+    private val tokenStorage: TokenStorage,
     private val deviceIdProvider: InternalVKIDDeviceIdProvider,
     private val serviceCredentials: ServiceCredentials,
     private val stateGenerator: StateGenerator,

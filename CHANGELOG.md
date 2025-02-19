@@ -2,10 +2,15 @@
 
 > **Note**\
 > Описание основных изменений в релизах VK ID SDK. Наш SDK следует [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-## 2.3.0-alpha (29-01-2025)
+## 2.3.1 (19-02-2025)
 
 ### Added
-+ Запустили возможность предложить пользователю после авторизации в сервисе подписаться на сообщество ВКонтакте. С помощью настроек вы можете показать пользователю экран подписки на сообщество сразу после авторизации или в любой момент при использовании приложения. Пока функциональность доступна для нескольких партнёров.
++ Добавили возможность настроить язык для текстов UI-компонентов с помощью локали. Подробнее читайте в [документации](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/connection/start-integration/android/install). 
++ Добавили возможность автоподнятия шторки авторизации. Для интеграции воспользуйтесь [документацией](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/connection/elements/onetap-drawer/floating-onetap-android#Avtopodnyatie-shtorki-Compose) 
++ Добавили сбор крашей и статистики с помощью AppTracer. Если вам нужно отключить эту функциональность, воспользуйтесь [документацией]( https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/connection/start-integration/android/install). 
+
+### Changed
++ Сделали небольшой редизайн в SDK: теперь шторка авторизации выглядит более акцентно, а прозрачные виджеты имеют белый фон. Также классы XXXStyle.TransparentYYY теперь deprecated, но продолжают работать. Пожалуйста, обновите стили, если вы их использовали (XXXStyle.TransparentYYY → XXXStyle.SecondaryYYY), чтобы соответствовать гайдлайнам по дизайну VK.
 
 ## 2.2.2 (12.10.2024)
 

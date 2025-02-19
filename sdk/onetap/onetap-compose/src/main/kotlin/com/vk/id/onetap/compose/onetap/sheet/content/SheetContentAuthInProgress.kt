@@ -10,46 +10,27 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.vk.id.onetap.compose.R
 import com.vk.id.onetap.compose.onetap.sheet.OneTapBottomSheetAnalytics
 import com.vk.id.onetap.compose.onetap.sheet.style.OneTapBottomSheetStyle
 
 @Composable
-internal fun SheetContentAuthInProgress(serviceName: String, style: OneTapBottomSheetStyle, dismissSheet: () -> Unit) {
+internal fun SheetContentAuthInProgress(style: OneTapBottomSheetStyle, dismissSheet: () -> Unit) {
     OneTapBottomSheetAnalytics.BottomSheetInProgressShown()
     SheetContentBox(
-        serviceName,
         style,
         dismissSheet,
     ) {
-        Spacer(modifier = Modifier.height(48.dp))
+        Spacer(modifier = Modifier.height(76.dp))
         CircleProgress(R.drawable.vkid_sheet_spinner)
-        BasicText(
-            text = stringResource(id = R.string.vkid_sheet_state_auth_in_progress),
-            modifier = Modifier.padding(top = 12.dp),
-            style = TextStyle(
-                color = colorResource(style.contentTextColor),
-                fontSize = 16.sp,
-                fontWeight = FontWeight.W400,
-                letterSpacing = 0.1.sp,
-                lineHeight = 20.sp
-            )
-        )
-        Spacer(modifier = Modifier.height(48.dp))
+        Spacer(modifier = Modifier.height(88.dp))
     }
 }
 
@@ -81,8 +62,8 @@ private fun CircleProgress(
 @Preview
 @Composable
 private fun OneTapBottomSheetProgressPreview() {
+    @Suppress("DEPRECATION")
     SheetContentAuthInProgress(
-        "<Название сервиса>",
         OneTapBottomSheetStyle.TransparentDark(),
         dismissSheet = {},
     )

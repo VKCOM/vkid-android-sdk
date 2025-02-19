@@ -1,519 +1,503 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/vkid_background"
+    tools:ignore="HardcodedText,Overdraw">
 
-    <ScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/vkid_background"
-        tools:ignore="HardcodedText,Overdraw">
+        android:layout_height="wrap_content"
+        android:gravity="center">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.vk.id.sample.xml.uikit.item.TitleItemView
+            android:id="@+id/multibranding_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center">
+            android:text="Multibranding widget"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <com.vk.id.sample.xml.uikit.item.TitleItemView
-                android:id="@+id/multibranding_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Multibranding widget"
-                app:layout_constraintTop_toTopOf="parent" />
+        <View
+            android:id="@+id/multibranding_title_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_title" />
 
-            <View
-                android:id="@+id/multibranding_title_spacer"
-                android:layout_width="match_parent"
-                android:layout_height="12dp"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_title" />
+        <com.vk.id.multibranding.xml.OAuthListWidget
+            android:id="@+id/multibranding_3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_title_spacer"
+            app:layout_constraintWidth_max="355dp"
+            app:vkid_OAuthListStyle="system"
+            app:vkid_oAuthListCornerRadius="8dp"
+            app:vkid_oAuthListOAuths="vk,mail,ok"
+            app:vkid_oAuthListScopes="email messages"
+            app:vkid_oAuthListSize="standard" />
 
-            <com.vk.id.multibranding.xml.OAuthListWidget
-                android:id="@+id/multibranding_3"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_title_spacer"
-                app:layout_constraintWidth_max="355dp"
-                app:vkid_OAuthListStyle="transparentSystem"
-                app:vkid_groupId="1"
-                app:vkid_groupSubscriptionStyle="system"
-                app:vkid_groupSubscriptionCorners="1dp"
-                app:vkid_groupSubscriptionButtonCorners="0dp"
-                app:vkid_groupSubscriptionButtonSize="small32"
-                app:vkid_oAuthListCornerRadius="8dp"
-                app:vkid_oAuthListOAuths="vk,mail,ok"
-                app:vkid_oAuthListScopes="email messages groups"
-                app:vkid_oAuthListSize="standard" />
+        <View
+            android:id="@+id/multibranding_3_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_3" />
 
-            <View
-                android:id="@+id/multibranding_3_spacer"
-                android:layout_width="match_parent"
-                android:layout_height="24dp"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_3" />
+        <com.vk.id.multibranding.xml.OAuthListWidget
+            android:id="@+id/multibranding_2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_3_spacer"
+            app:layout_constraintWidth_max="355dp"
+            app:vkid_OAuthListStyle="system"
+            app:vkid_oAuthListCornerRadius="8dp"
+            app:vkid_oAuthListOAuths="ok,mail"
+            app:vkid_oAuthListSize="standard" />
 
-            <com.vk.id.multibranding.xml.OAuthListWidget
-                android:id="@+id/multibranding_2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_3_spacer"
-                app:layout_constraintWidth_max="355dp"
-                app:vkid_OAuthListStyle="transparentSystem"
-                app:vkid_oAuthListCornerRadius="8dp"
-                app:vkid_oAuthListOAuths="ok,mail"
-                app:vkid_oAuthListSize="standard" />
+        <View
+            android:id="@+id/multibranding_2_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_2" />
 
-            <View
-                android:id="@+id/multibranding_2_spacer"
-                android:layout_width="match_parent"
-                android:layout_height="24dp"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_2" />
+        <com.vk.id.multibranding.xml.OAuthListWidget
+            android:id="@+id/multibranding_vk"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_2_spacer"
+            app:layout_constraintWidth_max="355dp"
+            app:vkid_OAuthListStyle="system"
+            app:vkid_oAuthListCornerRadius="8dp"
+            app:vkid_oAuthListOAuths="vk"
+            app:vkid_oAuthListSize="standard" />
 
-            <com.vk.id.multibranding.xml.OAuthListWidget
-                android:id="@+id/multibranding_vk"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_2_spacer"
-                app:layout_constraintWidth_max="355dp"
-                app:vkid_OAuthListStyle="transparentSystem"
-                app:vkid_oAuthListCornerRadius="8dp"
-                app:vkid_oAuthListOAuths="vk"
-                app:vkid_oAuthListSize="standard" />
+        <View
+            android:id="@+id/multibranding_vk_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_vk" />
 
-            <View
-                android:id="@+id/multibranding_vk_spacer"
-                android:layout_width="match_parent"
-                android:layout_height="24dp"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_vk" />
+        <com.vk.id.multibranding.xml.OAuthListWidget
+            android:id="@+id/multibranding_mail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_vk_spacer"
+            app:layout_constraintWidth_max="355dp"
+            app:vkid_OAuthListStyle="system"
+            app:vkid_oAuthListCornerRadius="8dp"
+            app:vkid_oAuthListOAuths="mail"
+            app:vkid_oAuthListSize="standard" />
 
-            <com.vk.id.multibranding.xml.OAuthListWidget
-                android:id="@+id/multibranding_mail"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_vk_spacer"
-                app:layout_constraintWidth_max="355dp"
-                app:vkid_OAuthListStyle="transparentSystem"
-                app:vkid_oAuthListCornerRadius="8dp"
-                app:vkid_oAuthListOAuths="mail"
-                app:vkid_oAuthListSize="standard" />
+        <View
+            android:id="@+id/multibranding_mail_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_mail" />
 
-            <View
-                android:id="@+id/multibranding_mail_spacer"
-                android:layout_width="match_parent"
-                android:layout_height="24dp"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_mail" />
+        <com.vk.id.multibranding.xml.OAuthListWidget
+            android:id="@+id/multibranding_ok"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_mail_spacer"
+            app:layout_constraintWidth_max="355dp"
+            app:vkid_OAuthListStyle="system"
+            app:vkid_oAuthListCornerRadius="8dp"
+            app:vkid_oAuthListOAuths="ok"
+            app:vkid_oAuthListSize="standard" />
 
-            <com.vk.id.multibranding.xml.OAuthListWidget
-                android:id="@+id/multibranding_ok"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_mail_spacer"
-                app:layout_constraintWidth_max="355dp"
-                app:vkid_OAuthListStyle="transparentSystem"
-                app:vkid_oAuthListCornerRadius="8dp"
-                app:vkid_oAuthListOAuths="ok"
-                app:vkid_oAuthListSize="standard" />
+        <View
+            android:id="@+id/multibranding_ok_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_ok" />
 
-            <View
-                android:id="@+id/multibranding_ok_spacer"
-                android:layout_width="match_parent"
-                android:layout_height="12dp"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_ok" />
+        <com.vk.id.sample.xml.uikit.item.TitleItemView
+            android:id="@+id/multibranding_corner_radius_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Corner radius"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_ok_spacer" />
 
-            <com.vk.id.sample.xml.uikit.item.TitleItemView
-                android:id="@+id/multibranding_corner_radius_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Corner radius"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_ok_spacer" />
+        <View
+            android:id="@+id/multibranding_corner_radius_title_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_corner_radius_title" />
 
-            <View
-                android:id="@+id/multibranding_corner_radius_title_spacer"
-                android:layout_width="match_parent"
-                android:layout_height="12dp"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_corner_radius_title" />
+        <com.vk.id.multibranding.xml.OAuthListWidget
+            android:id="@+id/multibranding_no_rounding"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_corner_radius_title_spacer"
+            app:layout_constraintWidth_max="355dp"
+            app:vkid_oAuthListCornerRadius="0dp" />
 
-            <com.vk.id.multibranding.xml.OAuthListWidget
-                android:id="@+id/multibranding_no_rounding"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_corner_radius_title_spacer"
-                app:layout_constraintWidth_max="355dp"
-                app:vkid_oAuthListCornerRadius="0dp" />
+        <View
+            android:id="@+id/multibranding_no_rounding_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_no_rounding" />
 
-            <View
-                android:id="@+id/multibranding_no_rounding_spacer"
-                android:layout_width="match_parent"
-                android:layout_height="24dp"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_no_rounding" />
+        <com.vk.id.multibranding.xml.OAuthListWidget
+            android:id="@+id/multibranding_rounded"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_no_rounding_spacer"
+            app:layout_constraintWidth_max="355dp"
+            app:vkid_oAuthListCornerRadius="8dp" />
 
-            <com.vk.id.multibranding.xml.OAuthListWidget
-                android:id="@+id/multibranding_rounded"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_no_rounding_spacer"
-                app:layout_constraintWidth_max="355dp"
-                app:vkid_oAuthListCornerRadius="8dp" />
+        <View
+            android:id="@+id/multibranding_rounded_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_rounded" />
 
-            <View
-                android:id="@+id/multibranding_rounded_spacer"
-                android:layout_width="match_parent"
-                android:layout_height="24dp"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_rounded" />
+        <com.vk.id.multibranding.xml.OAuthListWidget
+            android:id="@+id/multibranding_round"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_rounded_spacer"
+            app:layout_constraintWidth_max="355dp"
+            app:vkid_oAuthListCornerRadius="1000dp" />
 
-            <com.vk.id.multibranding.xml.OAuthListWidget
-                android:id="@+id/multibranding_round"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_rounded_spacer"
-                app:layout_constraintWidth_max="355dp"
-                app:vkid_oAuthListCornerRadius="1000dp" />
+        <View
+            android:id="@+id/multibranding_round_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_round" />
 
-            <View
-                android:id="@+id/multibranding_round_spacer"
-                android:layout_width="match_parent"
-                android:layout_height="12dp"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_round" />
+        <com.vk.id.sample.xml.uikit.item.TitleItemView
+            android:id="@+id/multibranding_sizes_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sizes"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_round_spacer" />
 
-            <com.vk.id.sample.xml.uikit.item.TitleItemView
-                android:id="@+id/multibranding_sizes_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Sizes"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_round_spacer" />
+        <View
+            android:id="@+id/multibranding_sizes_title_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_sizes_title" />
 
-            <View
-                android:id="@+id/multibranding_sizes_title_spacer"
-                android:layout_width="match_parent"
-                android:layout_height="12dp"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_sizes_title" />
+        <com.vk.id.multibranding.xml.OAuthListWidget
+            android:id="@+id/multibranding_small32"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_sizes_title_spacer"
+            app:layout_constraintWidth_max="355dp"
+            app:vkid_oAuthListSize="small32" />
 
-            <com.vk.id.multibranding.xml.OAuthListWidget
-                android:id="@+id/multibranding_small32"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_sizes_title_spacer"
-                app:layout_constraintWidth_max="355dp"
-                app:vkid_oAuthListSize="small32" />
+        <View
+            android:id="@+id/multibranding_small32_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_small32" />
 
-            <View
-                android:id="@+id/multibranding_small32_spacer"
-                android:layout_width="match_parent"
-                android:layout_height="24dp"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_small32" />
+        <com.vk.id.multibranding.xml.OAuthListWidget
+            android:id="@+id/multibranding_small34"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_small32_spacer"
+            app:layout_constraintWidth_max="355dp"
+            app:vkid_oAuthListSize="small34" />
 
-            <com.vk.id.multibranding.xml.OAuthListWidget
-                android:id="@+id/multibranding_small34"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_small32_spacer"
-                app:layout_constraintWidth_max="355dp"
-                app:vkid_oAuthListSize="small34" />
+        <View
+            android:id="@+id/multibranding_small34_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_small34" />
 
-            <View
-                android:id="@+id/multibranding_small34_spacer"
-                android:layout_width="match_parent"
-                android:layout_height="24dp"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_small34" />
+        <com.vk.id.multibranding.xml.OAuthListWidget
+            android:id="@+id/multibranding_small36"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_small34_spacer"
+            app:layout_constraintWidth_max="355dp"
+            app:vkid_oAuthListSize="small36" />
 
-            <com.vk.id.multibranding.xml.OAuthListWidget
-                android:id="@+id/multibranding_small36"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_small34_spacer"
-                app:layout_constraintWidth_max="355dp"
-                app:vkid_oAuthListSize="small36" />
+        <View
+            android:id="@+id/multibranding_small36_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_small36" />
 
-            <View
-                android:id="@+id/multibranding_small36_spacer"
-                android:layout_width="match_parent"
-                android:layout_height="24dp"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_small36" />
+        <com.vk.id.multibranding.xml.OAuthListWidget
+            android:id="@+id/multibranding_small38"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_small36_spacer"
+            app:layout_constraintWidth_max="355dp"
+            app:vkid_oAuthListSize="small38" />
 
-            <com.vk.id.multibranding.xml.OAuthListWidget
-                android:id="@+id/multibranding_small38"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_small36_spacer"
-                app:layout_constraintWidth_max="355dp"
-                app:vkid_oAuthListSize="small38" />
+        <View
+            android:id="@+id/multibranding_small38_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_small38" />
 
-            <View
-                android:id="@+id/multibranding_small38_spacer"
-                android:layout_width="match_parent"
-                android:layout_height="24dp"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_small38" />
+        <com.vk.id.multibranding.xml.OAuthListWidget
+            android:id="@+id/multibranding_medium40"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_small38_spacer"
+            app:layout_constraintWidth_max="355dp"
+            app:vkid_oAuthListSize="medium40" />
 
-            <com.vk.id.multibranding.xml.OAuthListWidget
-                android:id="@+id/multibranding_medium40"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_small38_spacer"
-                app:layout_constraintWidth_max="355dp"
-                app:vkid_oAuthListSize="medium40" />
+        <View
+            android:id="@+id/multibranding_medium40_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_medium40" />
 
-            <View
-                android:id="@+id/multibranding_medium40_spacer"
-                android:layout_width="match_parent"
-                android:layout_height="24dp"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_medium40" />
+        <com.vk.id.multibranding.xml.OAuthListWidget
+            android:id="@+id/multibranding_medium42"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_medium40_spacer"
+            app:layout_constraintWidth_max="355dp"
+            app:vkid_oAuthListSize="medium42" />
 
-            <com.vk.id.multibranding.xml.OAuthListWidget
-                android:id="@+id/multibranding_medium42"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_medium40_spacer"
-                app:layout_constraintWidth_max="355dp"
-                app:vkid_oAuthListSize="medium42" />
+        <View
+            android:id="@+id/multibranding_medium42_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_medium42" />
 
-            <View
-                android:id="@+id/multibranding_medium42_spacer"
-                android:layout_width="match_parent"
-                android:layout_height="24dp"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_medium42" />
+        <com.vk.id.multibranding.xml.OAuthListWidget
+            android:id="@+id/multibranding_medium44"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_medium42_spacer"
+            app:layout_constraintWidth_max="355dp"
+            app:vkid_oAuthListSize="medium44" />
 
-            <com.vk.id.multibranding.xml.OAuthListWidget
-                android:id="@+id/multibranding_medium44"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_medium42_spacer"
-                app:layout_constraintWidth_max="355dp"
-                app:vkid_oAuthListSize="medium44" />
+        <View
+            android:id="@+id/multibranding_medium44_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_medium44" />
 
-            <View
-                android:id="@+id/multibranding_medium44_spacer"
-                android:layout_width="match_parent"
-                android:layout_height="24dp"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_medium44" />
+        <com.vk.id.multibranding.xml.OAuthListWidget
+            android:id="@+id/multibranding_medium46"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_medium44_spacer"
+            app:layout_constraintWidth_max="355dp"
+            app:vkid_oAuthListSize="medium46" />
 
-            <com.vk.id.multibranding.xml.OAuthListWidget
-                android:id="@+id/multibranding_medium46"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_medium44_spacer"
-                app:layout_constraintWidth_max="355dp"
-                app:vkid_oAuthListSize="medium46" />
+        <View
+            android:id="@+id/multibranding_medium46_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_medium46" />
 
-            <View
-                android:id="@+id/multibranding_medium46_spacer"
-                android:layout_width="match_parent"
-                android:layout_height="24dp"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_medium46" />
+        <com.vk.id.multibranding.xml.OAuthListWidget
+            android:id="@+id/multibranding_large48"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_medium46_spacer"
+            app:layout_constraintWidth_max="355dp"
+            app:vkid_oAuthListSize="large48" />
 
-            <com.vk.id.multibranding.xml.OAuthListWidget
-                android:id="@+id/multibranding_large48"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_medium46_spacer"
-                app:layout_constraintWidth_max="355dp"
-                app:vkid_oAuthListSize="large48" />
+        <View
+            android:id="@+id/multibranding_large48_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_large48" />
 
-            <View
-                android:id="@+id/multibranding_large48_spacer"
-                android:layout_width="match_parent"
-                android:layout_height="24dp"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_large48" />
+        <com.vk.id.multibranding.xml.OAuthListWidget
+            android:id="@+id/multibranding_large50"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_large48_spacer"
+            app:layout_constraintWidth_max="355dp"
+            app:vkid_oAuthListSize="large50" />
 
-            <com.vk.id.multibranding.xml.OAuthListWidget
-                android:id="@+id/multibranding_large50"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_large48_spacer"
-                app:layout_constraintWidth_max="355dp"
-                app:vkid_oAuthListSize="large50" />
+        <View
+            android:id="@+id/multibranding_large50_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_large50" />
 
-            <View
-                android:id="@+id/multibranding_large50_spacer"
-                android:layout_width="match_parent"
-                android:layout_height="24dp"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_large50" />
+        <com.vk.id.multibranding.xml.OAuthListWidget
+            android:id="@+id/multibranding_large52"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_large50_spacer"
+            app:layout_constraintWidth_max="355dp"
+            app:vkid_oAuthListSize="large52" />
 
-            <com.vk.id.multibranding.xml.OAuthListWidget
-                android:id="@+id/multibranding_large52"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_large50_spacer"
-                app:layout_constraintWidth_max="355dp"
-                app:vkid_oAuthListSize="large52" />
+        <View
+            android:id="@+id/multibranding_large52_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_large52" />
 
-            <View
-                android:id="@+id/multibranding_large52_spacer"
-                android:layout_width="match_parent"
-                android:layout_height="24dp"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_large52" />
+        <com.vk.id.multibranding.xml.OAuthListWidget
+            android:id="@+id/multibranding_large54"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_large52_spacer"
+            app:layout_constraintWidth_max="355dp"
+            app:vkid_oAuthListSize="large54" />
 
-            <com.vk.id.multibranding.xml.OAuthListWidget
-                android:id="@+id/multibranding_large54"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_large52_spacer"
-                app:layout_constraintWidth_max="355dp"
-                app:vkid_oAuthListSize="large54" />
+        <View
+            android:id="@+id/multibranding_large54_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_large54" />
 
-            <View
-                android:id="@+id/multibranding_large54_spacer"
-                android:layout_width="match_parent"
-                android:layout_height="24dp"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_large54" />
+        <com.vk.id.multibranding.xml.OAuthListWidget
+            android:id="@+id/multibranding_large56"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_large54_spacer"
+            app:layout_constraintWidth_max="355dp"
+            app:vkid_oAuthListSize="large56" />
 
-            <com.vk.id.multibranding.xml.OAuthListWidget
-                android:id="@+id/multibranding_large56"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_large54_spacer"
-                app:layout_constraintWidth_max="355dp"
-                app:vkid_oAuthListSize="large56" />
+        <View
+            android:id="@+id/multibranding_large56_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_large56" />
 
-            <View
-                android:id="@+id/multibranding_large56_spacer"
-                android:layout_width="match_parent"
-                android:layout_height="12dp"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_large56" />
+        <com.vk.id.sample.xml.uikit.item.TitleItemView
+            android:id="@+id/multibranding_small_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Small widget"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_large56_spacer" />
 
-            <com.vk.id.sample.xml.uikit.item.TitleItemView
-                android:id="@+id/multibranding_small_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Small widget"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_large56_spacer" />
+        <View
+            android:id="@+id/multibranding_small_title_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_small_title" />
 
-            <View
-                android:id="@+id/multibranding_small_title_spacer"
-                android:layout_width="match_parent"
-                android:layout_height="12dp"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_small_title" />
+        <com.vk.id.multibranding.xml.OAuthListWidget
+            android:id="@+id/multibranding_small_vk"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_small_title_spacer"
+            app:vkid_oAuthListOAuths="vk" />
 
-            <com.vk.id.multibranding.xml.OAuthListWidget
-                android:id="@+id/multibranding_small_vk"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_small_title_spacer"
-                app:vkid_oAuthListOAuths="vk" />
+        <View
+            android:id="@+id/multibranding_small_vk_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_small_vk" />
 
-            <View
-                android:id="@+id/multibranding_small_vk_spacer"
-                android:layout_width="match_parent"
-                android:layout_height="24dp"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_small_vk" />
+        <com.vk.id.multibranding.xml.OAuthListWidget
+            android:id="@+id/multibranding_small_vk_200"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_small_vk_spacer"
+            app:vkid_oAuthListOAuths="vk" />
 
-            <com.vk.id.multibranding.xml.OAuthListWidget
-                android:id="@+id/multibranding_small_vk_200"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_small_vk_spacer"
-                app:vkid_oAuthListOAuths="vk" />
+        <View
+            android:id="@+id/multibranding_small_vk_200_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_small_vk_200" />
 
-            <View
-                android:id="@+id/multibranding_small_vk_200_spacer"
-                android:layout_width="match_parent"
-                android:layout_height="24dp"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_small_vk_200" />
+        <com.vk.id.multibranding.xml.OAuthListWidget
+            android:id="@+id/multibranding_small_vk_240"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_small_vk_200_spacer"
+            app:vkid_oAuthListOAuths="vk" />
 
-            <com.vk.id.multibranding.xml.OAuthListWidget
-                android:id="@+id/multibranding_small_vk_240"
-                android:layout_width="240dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_small_vk_200_spacer"
-                app:vkid_oAuthListOAuths="vk" />
+        <View
+            android:id="@+id/multibranding_small_vk_240_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_small_vk_240" />
 
-            <View
-                android:id="@+id/multibranding_small_vk_240_spacer"
-                android:layout_width="match_parent"
-                android:layout_height="24dp"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_small_vk_240" />
+        <com.vk.id.multibranding.xml.OAuthListWidget
+            android:id="@+id/multibranding_small_vk_280"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_small_vk_240_spacer"
+            app:vkid_oAuthListOAuths="vk" />
 
-            <com.vk.id.multibranding.xml.OAuthListWidget
-                android:id="@+id/multibranding_small_vk_280"
-                android:layout_width="280dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_small_vk_240_spacer"
-                app:vkid_oAuthListOAuths="vk" />
+        <View
+            android:id="@+id/multibranding_small_vk_280_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/multibranding_small_vk_280" />
 
-            <View
-                android:id="@+id/multibranding_small_vk_280_spacer"
-                android:layout_width="match_parent"
-                android:layout_height="12dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/multibranding_small_vk_280" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </ScrollView>
-
-    <com.vk.id.group.subscription.xml.GroupSubscriptionSnackbarHost
-        android:id="@+id/group_subscription_snackbar_host"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-</merge>
+</ScrollView>

@@ -24,7 +24,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application android:name=".App">
-        <activity android:name=".groupsubscription.GroupSubscriptionActivity" />
         <activity android:name=".multibranding.MultibrandingXmlLayoutActivity" />
         <activity android:name=".onetap.OneTapStylingXmlLayoutActivity" />
         <activity android:name=".onetapsheet.OnetapSheetStylingXmlActivity" />

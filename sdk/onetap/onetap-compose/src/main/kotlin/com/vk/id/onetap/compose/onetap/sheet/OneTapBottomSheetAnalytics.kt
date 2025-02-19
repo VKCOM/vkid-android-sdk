@@ -9,14 +9,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import com.vk.id.VKID
 import com.vk.id.VKIDUser
 import com.vk.id.analytics.VKIDAnalytics
-import com.vk.id.analytics.param.vkidInternalLanguageParam
 import com.vk.id.analytics.stat.StatTracker
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.onetap.compose.onetap.OneTapAnalytics
 import com.vk.id.onetap.compose.onetap.OneTapAnalytics.SCREEN_PARAM_NAME
+import com.vk.id.onetap.compose.onetap.OneTapAnalytics.langParam
 import com.vk.id.onetap.compose.onetap.OneTapAnalytics.track
 import java.util.UUID
 
@@ -33,7 +34,7 @@ internal object OneTapBottomSheetAnalytics {
                 VKIDAnalytics.EventParam("screen_to", "floating_one_tap"),
                 theme.toAnalyticsParam(),
                 scenario.toAnalyticsParam(),
-                vkidInternalLanguageParam(context),
+                langParam(context)
             )
         }
     }
@@ -68,8 +69,11 @@ internal object OneTapBottomSheetAnalytics {
             val observer = LifecycleEventObserver { _, event ->
                 when (event) {
                     Lifecycle.Event.ON_RESUME -> {
-                        rememberedFireAnalytics.value()
+                        VKID.instance.crashReporter.runReportingCrashes({}) {
+                            rememberedFireAnalytics.value()
+                        }
                     }
+
                     else -> {}
                 }
             }
@@ -82,50 +86,64 @@ internal object OneTapBottomSheetAnalytics {
     }
 
     internal fun noActiveSession() {
-        track("no_active_session", screenParam)
+        VKID.instance.crashReporter.runReportingCrashes({}) {
+            track("no_active_session", screenParam)
+        }
     }
 
     internal fun noUserButtonShown() {
-        track("no_user_button_show", screenParam)
+        VKID.instance.crashReporter.runReportingCrashes({}) {
+            track("no_user_button_show", screenParam)
+        }
     }
 
     internal fun oneTapPressed(user: VKIDUser?): Map<String, String> {
         val uuid = UUID.randomUUID().toString()
-        if (user == null) {
-            track("no_user_button_tap", OneTapAnalytics.uuidParam(uuid), screenParam)
-        } else {
-            track("continue_as_tap", OneTapAnalytics.uuidParam(uuid), screenParam)
+        VKID.instance.crashReporter.runReportingCrashes({}) {
+            if (user == null) {
+                track("no_user_button_tap", OneTapAnalytics.uuidParam(uuid), screenParam)
+            } else {
+                track("continue_as_tap", OneTapAnalytics.uuidParam(uuid), screenParam)
+            }
         }
         return mapOf(StatTracker.EXTERNAL_PARAM_SESSION_ID to uuid, FLOW_SOURCE)
     }
 
     internal fun alternatePressed(): Map<String, String> {
         val uuid = UUID.randomUUID().toString()
-        track("alternative_sign_in_tap", OneTapAnalytics.uuidParam(uuid), screenParam)
+        VKID.instance.crashReporter.runReportingCrashes({}) {
+            track("alternative_sign_in_tap", OneTapAnalytics.uuidParam(uuid), screenParam)
+        }
         return mapOf(StatTracker.EXTERNAL_PARAM_SESSION_ID to uuid, FLOW_SOURCE)
     }
 
     internal fun userWasFound(signInAnotherAccountButton: Boolean) {
-        track(
-            "continue_as_show",
-            OneTapAnalytics.alternateParam(signInAnotherAccountButton),
-            screenParam
-        )
+        VKID.instance.crashReporter.runReportingCrashes({}) {
+            track(
+                "continue_as_show",
+                OneTapAnalytics.alternateParam(signInAnotherAccountButton),
+                screenParam
+            )
+        }
     }
 
     internal fun retryAuthTap(): Map<String, String> {
         val uuid = UUID.randomUUID().toString()
-        track("retry_auth_tap", screenParam)
+        VKID.instance.crashReporter.runReportingCrashes({}) {
+            track("retry_auth_tap", screenParam)
+        }
         return mapOf(StatTracker.EXTERNAL_PARAM_SESSION_ID to uuid, FLOW_SOURCE)
     }
 
     internal fun authError(uuid: String) {
-        track(
-            "sdk_auth_error",
-            OneTapAnalytics.uuidParam(uuid),
-            VKIDAnalytics.EventParam("from_floating_one_tap", "true"),
-            VKIDAnalytics.EventParam("error", "sdk_auth_error")
-        )
+        VKID.instance.crashReporter.runReportingCrashes({}) {
+            track(
+                "sdk_auth_error",
+                OneTapAnalytics.uuidParam(uuid),
+                VKIDAnalytics.EventParam("from_floating_one_tap", "true"),
+                VKIDAnalytics.EventParam("error", "sdk_auth_error")
+            )
+        }
     }
 
     private val screenParam = VKIDAnalytics.EventParam(SCREEN_PARAM_NAME, "floating_one_tap")

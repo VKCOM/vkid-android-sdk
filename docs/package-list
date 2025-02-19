@@ -1,15 +1,11 @@
 $dokka.format:html-v1
 $dokka.linkExtension:html
-$dokka.location:com.vk.id.analytics.param////PointingToDeclaration/analytics/com.vk.id.analytics.param.html
 $dokka.location:com.vk.id.analytics.stat////PointingToDeclaration/analytics/com.vk.id.analytics.stat.html
 $dokka.location:com.vk.id.analytics////PointingToDeclaration/analytics/com.vk.id.analytics.html
 $dokka.location:com.vk.id.common.util////PointingToDeclaration/common/com.vk.id.common.util.html
 $dokka.location:com.vk.id.internal.auth.device////PointingToDeclaration/vkid/com.vk.id.internal.auth.device.html
 $dokka.location:com.vk.id.internal.context////PointingToDeclaration/vkid/com.vk.id.internal.context.html
 $dokka.location:com.vk.id.internal.store////PointingToDeclaration/vkid/com.vk.id.internal.store.html
-$dokka.location:com.vk.id.network.groupsubscription.data////PointingToDeclaration/network/com.vk.id.network.groupsubscription.data.html
-$dokka.location:com.vk.id.network.groupsubscription.exception////PointingToDeclaration/network/com.vk.id.network.groupsubscription.exception.html
-$dokka.location:com.vk.id.network.groupsubscription////PointingToDeclaration/network/com.vk.id.network.groupsubscription.html
 $dokka.location:com.vk.id.network////PointingToDeclaration/network/com.vk.id.network.html
 $dokka.location:com.vk.id.onetap.common.alternate.style////PointingToDeclaration/onetap-common/com.vk.id.onetap.common.alternate.style.html
 $dokka.location:com.vk.id.onetap.common.auth.style////PointingToDeclaration/onetap-common/com.vk.id.onetap.common.auth.style.html
@@ -17,20 +13,13 @@ $dokka.location:com.vk.id.onetap.common.icon.style////PointingToDeclaration/one
 $dokka.location:com.vk.id.onetap.common.progress.style////PointingToDeclaration/onetap-common/com.vk.id.onetap.common.progress.style.html
 $dokka.location:com.vk.id.storage////PointingToDeclaration/vkid/com.vk.id.storage.html
 $dokka.location:com.vk.id.test////PointingToDeclaration/vkid/com.vk.id.test.html
+$dokka.location:com.vk.id.util////PointingToDeclaration/vkid/com.vk.id.util.html
 module:analytics
 com.vk.id.analytics
-com.vk.id.analytics.param
 com.vk.id.analytics.stat
 module:common
 com.vk.id.common
 com.vk.id.common.util
-module:group-subscription-common
-com.vk.id.group.subscription.common.fail
-com.vk.id.group.subscription.common.style
-module:group-subscription-compose
-com.vk.id.group.subscription.compose.ui
-module:group-subscription-xml
-com.vk.id.group.subscription.xml
 module:logger
 com.vk.id.logger
 module:multibranding-common
@@ -41,9 +30,6 @@ module:multibranding-xml
 com.vk.id.multibranding.xml
 module:network
 com.vk.id.network
-com.vk.id.network.groupsubscription
-com.vk.id.network.groupsubscription.data
-com.vk.id.network.groupsubscription.exception
 module:onetap-common
 com.vk.id.onetap.common
 com.vk.id.onetap.common.alternate.style
@@ -71,3 +57,4 @@ com.vk.id.refresh
 com.vk.id.refreshuser
 com.vk.id.storage
 com.vk.id.test
+com.vk.id.util

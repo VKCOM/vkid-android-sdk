@@ -15,7 +15,7 @@ import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
 import com.vk.id.internal.state.StateGenerator
 import com.vk.id.internal.store.InternalVKIDPrefsStore
 import com.vk.id.network.InternalVKIDCall
-import com.vk.id.storage.InternalVKIDTokenStorage
+import com.vk.id.storage.TokenStorage
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.testCoroutineScheduler
 import io.mockk.coEvery
@@ -96,7 +96,7 @@ internal class VKIDTokenRefresherTest : BehaviorSpec({
         val testDispatcher = StandardTestDispatcher(scheduler)
         every { dispatchers.io } returns testDispatcher
         val prefsStore = mockk<InternalVKIDPrefsStore>()
-        val tokenStorage = mockk<InternalVKIDTokenStorage>()
+        val tokenStorage = mockk<TokenStorage>()
         val refresher = VKIDTokenRefresher(
             api = api,
             deviceIdProvider = deviceIdProvider,

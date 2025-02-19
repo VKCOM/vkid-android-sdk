@@ -33,12 +33,7 @@ internal class WebAuthProvider(
         }
         logger.debug("Auth with browser ${bestBrowser.packageName}")
         val authIntent = if (bestBrowser.useCustomTab) {
-            CustomTabsIntent.Builder()
-                .setShowTitle(true)
-                .addDefaultShareMenuItem()
-                .enableUrlBarHiding()
-                .build()
-                .intent
+            CustomTabsIntent.Builder().build().intent
         } else {
             Intent(Intent.ACTION_VIEW)
                 .addCategory(Intent.CATEGORY_BROWSABLE)

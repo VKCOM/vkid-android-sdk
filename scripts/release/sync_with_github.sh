@@ -16,7 +16,7 @@ importCommon() {
 
 set -ex
 importCommon
-git checkout release/2.3.0-alpha
+git checkout master
 PUBLIC_REPO_URL="git@github.com:VKCOM/vkid-android-sdk.git"
 PUBLIC_TARGET_BRANCH="public"
 SDK_VERSION="$(fetchCurrentVersion)"
