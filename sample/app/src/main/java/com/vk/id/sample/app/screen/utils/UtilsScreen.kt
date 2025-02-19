@@ -76,6 +76,7 @@ import okhttp3.FormBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONObject
+import java.util.Locale
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 
@@ -100,6 +101,8 @@ internal fun UtilsScreen(navController: NavController) {
         GetPublicInfoUtil()
         Spacer(modifier = Modifier.height(8.dp))
         CurrentTokenUtil()
+        Spacer(modifier = Modifier.height(8.dp))
+        LocaleUtil()
         Spacer(modifier = Modifier.height(8.dp))
         RevokeUtil()
         Spacer(modifier = Modifier.height(8.dp))
@@ -537,6 +540,32 @@ private fun CurrentTokenUtil() {
         } ?: Text(
             modifier = Modifier.defaultMinSize(minHeight = 40.dp),
             text = "You are not authorized"
+        )
+    }
+}
+
+@Composable
+private fun LocaleUtil() {
+    ExpandableCard(title = "Locale", contentAlignment = Alignment.CenterHorizontally) {
+        var selectedLocale by remember { mutableStateOf(VKID.instance.internalVKIDLocale.get()) }
+        DropdownSelector(
+            values = mapOf(
+                "system" to null,
+                "en" to Locale("en"),
+                "de" to Locale("de"),
+                "es" to Locale("es"),
+                "fr" to Locale("fr"),
+                "pl" to Locale("pl"),
+                "ru" to Locale("ru"),
+                "tr" to Locale("tr"),
+                "uk" to Locale("uk"),
+            ),
+            selectedValue = selectedLocale?.language ?: "system",
+            onValueSelected = {
+                selectedLocale = it
+                VKID.instance.setLocale(it)
+            },
+            label = { Text("locale") },
         )
     }
 }

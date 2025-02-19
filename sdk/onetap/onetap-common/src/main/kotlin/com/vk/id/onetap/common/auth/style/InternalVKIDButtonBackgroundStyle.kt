@@ -5,5 +5,6 @@ import com.vk.id.common.InternalVKIDApi
 @InternalVKIDApi
 public enum class InternalVKIDButtonBackgroundStyle {
     BLUE,
+    WHITE,
     TRANSPARENT,
 }

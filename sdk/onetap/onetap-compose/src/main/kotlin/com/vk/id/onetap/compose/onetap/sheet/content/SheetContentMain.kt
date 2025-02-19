@@ -1,11 +1,14 @@
 package com.vk.id.onetap.compose.onetap.sheet.content
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -13,8 +16,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -57,21 +62,41 @@ internal fun SheetContentMain(
     signInAnotherAccountButtonEnabled: Boolean,
 ) {
     SheetContentBox(
-        serviceName = serviceName,
         style = style,
-        dismissSheet = dismissSheet,
+        rowContent = {
+            Spacer(modifier = Modifier.width(52.dp))
+            Spacer(modifier = Modifier.weight(1f))
+            Image(
+                painter = painterResource(
+                    when (style) {
+                        is OneTapBottomSheetStyle.Light,
+                        is OneTapBottomSheetStyle.TransparentLight -> R.drawable.vkid_sheet_logo_light
+
+                        is OneTapBottomSheetStyle.Dark,
+                        is OneTapBottomSheetStyle.TransparentDark -> R.drawable.vkid_sheet_logo_dark
+                    }
+                ),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .padding(top = 24.dp)
+                    .size(120.dp)
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            CloseIcon(dismissSheet)
+        }
     ) {
         var user by remember { mutableStateOf<VKIDUser?>(null) }
         OneTapBottomSheetAnalytics.OneTapBottomSheetShown(style.toProviderTheme(), scenario)
         val resources = LocalContext.current.resources
         Column(
-            Modifier.padding(horizontal = 32.dp, vertical = 36.dp)
+            Modifier.padding(top = 16.dp, bottom = 24.dp)
         ) {
             val title = remember(scenario) {
                 scenario.scenarioTitle(serviceName = serviceName, resources = resources)
             }
             ContentTitle(title, style)
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(12.dp))
             ContentDescription(stringResource(id = R.string.vkid_scenario_common_description), style)
         }
         @Composable
@@ -159,9 +184,9 @@ private fun ContentTitle(text: String, style: OneTapBottomSheetStyle) {
         style = TextStyle(
             color = colorResource(id = style.contentTitleTextColor),
             textAlign = TextAlign.Center,
-            fontSize = 20.sp,
-            fontWeight = FontWeight.W500,
-            lineHeight = 24.sp,
+            fontSize = 23.sp,
+            fontWeight = FontWeight.W600,
+            lineHeight = 28.sp,
         )
     )
 }

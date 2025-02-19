@@ -7,6 +7,7 @@ pluginManagement {
         google()
         mavenCentral()
         gradlePluginPortal()
+        maven { setUrl("https://artifactory-external.vkpartner.ru/artifactory/maven/") }
     }
 }
 dependencyResolutionManagement {
@@ -26,6 +27,7 @@ dependencyResolutionManagement {
                 }
             }
         }
+        maven { setUrl("https://artifactory-external.vkpartner.ru/artifactory/maven/") }
     }
 }
 rootProject.name = "VKIDSDK"
@@ -67,6 +69,12 @@ include(":analytics")
 project(":analytics").projectDir = File("sdk/core/analytics")
 include(":network")
 project(":network").projectDir = File("sdk/core/network")
+include(":tracking-core")
+project(":tracking-core").projectDir = File("sdk/core/tracking-core")
+include(":tracking-tracer")
+project(":tracking-tracer").projectDir = File("sdk/core/tracking-tracer")
+include(":tracking-noop")
+project(":tracking-noop").projectDir = File("sdk/core/tracking-noop")
 include(":vk-sdk-support")
 project(":vk-sdk-support").projectDir = File("sdk/core/vk-sdk-support")
 

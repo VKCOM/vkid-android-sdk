@@ -13,6 +13,7 @@ import android.os.Bundle
 import com.vk.id.AuthOptionsCreator
 import com.vk.id.AuthResultHandler
 import com.vk.id.TokensHandler
+import com.vk.id.analytics.VKIDAnalytics
 import com.vk.id.analytics.stat.StatTracker
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.exchangetoken.VKIDTokenExchanger
@@ -46,6 +47,9 @@ import com.vk.id.refresh.VKIDTokenRefresher
 import com.vk.id.refreshuser.VKIDUserRefresher
 import com.vk.id.storage.InternalVKIDEncryptedSharedPreferencesStorage
 import com.vk.id.storage.TokenStorage
+import com.vk.id.tracking.core.CrashReporter
+import com.vk.id.tracking.core.PerformanceTracker
+import com.vk.id.tracking.tracer.TrackingDeps
 
 internal open class VKIDDepsProd(
     private val appContext: Context,
@@ -63,6 +67,10 @@ internal open class VKIDDepsProd(
 
         ServiceCredentials(clientID, clientSecret, redirectUri)
     }
+
+    private val trackingDeps by lazy { TrackingDeps(appContext, serviceCredentials.value.clientID) }
+    override val crashReporter: CrashReporter by lazy { trackingDeps.crashReporter }
+    override val performanceTracker: PerformanceTracker by lazy { trackingDeps.performanceTracker }
 
     @SuppressLint("WrongConstant")
     private fun getActivityInfo(componentName: ComponentName): ActivityInfo {
@@ -236,9 +244,15 @@ internal open class VKIDDepsProd(
     override val dispatchers: VKIDCoroutinesDispatchers
         get() = CoroutinesDispatchersProd()
 
-    override val statTracker: StatTracker
+    override val statTracker: VKIDAnalytics.Tracker
         get() = with(serviceCredentials.value) {
             StatTracker(clientID, clientSecret, api, dispatchers.io)
+        }
+    override val trackingTracker: VKIDAnalytics.Tracker
+        get() = object : VKIDAnalytics.Tracker {
+            override fun trackEvent(name: String, vararg params: VKIDAnalytics.EventParam) {
+                trackingDeps.analyticsTracking.log(name + " " + params.joinToString())
+            }
         }
 }
 

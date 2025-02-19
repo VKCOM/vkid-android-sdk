@@ -23,6 +23,7 @@
 # ****************************************************************************** -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
     <uses-permission android:name="android.permission.INTERNET" />
 
     <queries>
@@ -40,25 +41,43 @@
     <application>
         <activity
             android:name=".internal.auth.AuthActivity"
+            android:configChanges="locale|orientation|screenSize|screenLayout|keyboardHidden|fontScale|fontWeightAdjustment|density"
             android:exported="false"
             android:launchMode="singleTask"
-            android:configChanges="locale|orientation|screenSize|screenLayout|keyboardHidden|fontScale|fontWeightAdjustment|density"
             android:theme="@style/VKID.Light.Transparent">
-            <meta-data android:name="VKIDClientID" android:value="${VKIDClientID}"/>
-            <meta-data android:name="VKIDClientSecret" android:value="${VKIDClientSecret}"/>
-            <meta-data android:name="VKIDRedirectHost" android:value="${VKIDRedirectHost}"/>
-            <meta-data android:name="VKIDRedirectScheme" android:value="${VKIDRedirectScheme}"/>
+            <meta-data
+                android:name="VKIDClientID"
+                android:value="${VKIDClientID}" />
+            <meta-data
+                android:name="VKIDClientSecret"
+                android:value="${VKIDClientSecret}" />
+            <meta-data
+                android:name="VKIDRedirectHost"
+                android:value="${VKIDRedirectHost}" />
+            <meta-data
+                android:name="VKIDRedirectScheme"
+                android:value="${VKIDRedirectScheme}" />
         </activity>
-        <activity android:name=".internal.auth.RedirectUriReceiverActivity" android:exported="true">
+        <activity
+            android:name=".internal.auth.RedirectUriReceiverActivity"
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
                     android:host="${VKIDRedirectHost}"
                     android:scheme="${VKIDRedirectScheme}" />
             </intent-filter>
         </activity>
     </application>
+
+    <queries>
+        <intent>
+            <action android:name="android.support.customtabs.action.CustomTabsService" />
+        </intent>
+    </queries>
 
 </manifest>
