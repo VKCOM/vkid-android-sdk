@@ -6,7 +6,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.lifecycle.AtomicReference
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.vk.id.VKID
@@ -15,6 +14,7 @@ import com.vk.id.analytics.param.vkidInternalLanguageParam
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.group.subscription.common.style.GroupSubscriptionStyle
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicReference
 
 @Suppress("TooManyFunctions")
 internal object GroupSubscriptionAnalytics {
