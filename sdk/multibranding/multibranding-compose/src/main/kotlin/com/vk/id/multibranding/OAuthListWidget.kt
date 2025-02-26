@@ -16,8 +16,8 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicText
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -257,7 +257,7 @@ private fun OAuthButton(
             .clip(style.cornersStyle)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
-                indication = ripple(
+                indication = rememberRipple(
                     color = style.rippleStyle.asColor(),
                 ),
                 role = Role.Button,

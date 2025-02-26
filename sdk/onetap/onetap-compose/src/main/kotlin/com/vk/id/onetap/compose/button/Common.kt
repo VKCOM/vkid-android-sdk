@@ -7,7 +7,7 @@ import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.material3.ripple
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
@@ -39,7 +39,7 @@ internal fun Modifier.clickable(
 ): Modifier = composed {
     clickable(
         interactionSource = remember { MutableInteractionSource() },
-        indication = ripple(
+        indication = rememberRipple(
             color = InternalVKIDButtonRippleStyle.DARK.asColor(),
         ),
         role = Role.Button,

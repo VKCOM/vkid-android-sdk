@@ -32,6 +32,9 @@ public class GroupSubscriptionSheet @JvmOverloads constructor(
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
     private val composeView = ComposeView(context)
+
+    @InternalVKIDApi
+    public val composeViewInternal: ComposeView = composeView
     private var state: GroupSubscriptionSheetState? = null
 
     /**
