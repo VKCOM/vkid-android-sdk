@@ -203,6 +203,9 @@ public final class com/vk/id/auth/VKIDAuthCallback$DefaultImpls {
 public final class com/vk/id/auth/VKIDAuthParams {
 	public static final field $stable I
 	public synthetic fun <init> (Lcom/vk/id/auth/VKIDAuthParams$Locale;Lcom/vk/id/auth/VKIDAuthParams$Theme;ZLcom/vk/id/OAuth;Lcom/vk/id/auth/Prompt;Ljava/lang/String;Ljava/lang/String;Ljava/util/Set;Ljava/util/Map;ZLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class com/vk/id/auth/VKIDAuthParams$Builder {
