@@ -1,8 +1,11 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.network
 
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.res.Resources
+import com.vk.id.common.InternalVKIDApi
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe

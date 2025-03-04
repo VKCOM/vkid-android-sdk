@@ -1,2 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application>
+        <provider
+            android:name="com.vk.id.captcha.init.SdkInitContentProvider"
+            android:authorities="com.vk.id.sample"
+            android:exported="false"
+            tools:replace="authorities" />
+    </application>
+</manifest>

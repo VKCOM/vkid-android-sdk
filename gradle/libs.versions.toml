@@ -49,6 +49,7 @@ screenshot = "0.0.1-alpha06"
 kover = "0.8.3"
 material3Android = "1.3.0"
 tracer = "1.0.0-beta.1"
+captcha = "0.0.4"
 
 [libraries]
 allure-kotlin-junit4 = { group = "io.qameta.allure", name = "allure-kotlin-junit4", version.ref = "allure" }
@@ -106,6 +107,8 @@ tracer-lite-performance-metrics = { group = "ru.ok.tracer", name = "tracer-lite-
 vk-userid = { group = "com.vk", name = "android-sdk-id", version.ref = "vkUserIdVersion" }
 vk-sdk-core = { group = "com.vk", name = "android-sdk-core", version.ref = "vkSdkVersion" }
 vk-sdk-api = { group = "com.vk", name = "android-sdk-api", version.ref = "vkSdkVersion" }
+captcha-core = { group = "com.vk.id.captcha", name = "vkid-captcha", version.ref = "captcha" }
+captcha-okhttp = { group = "com.vk.id.captcha", name = "okhttp-interceptors", version.ref = "captcha" }
 
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
@@ -118,7 +121,7 @@ detekt-metrics = { group = "io.gitlab.arturbosch.detekt", name = "detekt-metrics
 detekt-formatting = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "detekt" }
 detekt-libraries = { group = "io.gitlab.arturbosch.detekt", name = "detekt-rules-libraries", version.ref = "detekt" }
 detekt-gradlePlugin = { group = "io.gitlab.arturbosch.detekt", name = "detekt-gradle-plugin", version.ref = "detekt" }
-detekt-compose= { group = "io.nlopez.compose.rules", name = "detekt", version.ref = "detektCompose" }
+detekt-compose = { group = "io.nlopez.compose.rules", name = "detekt", version.ref = "detektCompose" }
 dokka-gradlePlugin = { group = "org.jetbrains.dokka", name = "dokka-gradle-plugin", version.ref = "dokka" }
 dokka-base = { group = "org.jetbrains.dokka", name = "dokka-base", version.ref = "dokka" }
 dokka-core = { group = "org.jetbrains.dokka", name = "dokka-core", version.ref = "dokka" }
@@ -142,6 +145,6 @@ kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref =
 androidTest = { id = "com.android.test", version.ref = "androidGradlePlugin" }
 baselineprofile = { id = "androidx.baselineprofile", version.ref = "baselineprofile" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-screenshot = { id = "com.android.compose.screenshot", version.ref = "screenshot"}
-kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover"}
-tracer = { id = "ru.ok.tracer", version.ref = "tracer"}
+screenshot = { id = "com.android.compose.screenshot", version.ref = "screenshot" }
+kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
+tracer = { id = "ru.ok.tracer", version.ref = "tracer" }
