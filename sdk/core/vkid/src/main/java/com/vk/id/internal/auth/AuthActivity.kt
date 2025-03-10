@@ -239,7 +239,8 @@ internal class AuthActivity : Activity() {
             intent.getParcelableExtra(KEY_AUTH_INTENT)
         }
         return try {
-            if (authIntent!!.`package` == CustomTabsClient.getPackageName(this, null)) {
+            val packageName = CustomTabsClient.getPackageName(this, null)
+            if (packageName != null && authIntent!!.`package` == packageName) {
                 VKID.instance.performanceTracker.startTracking(PERFORMANCE_KEY_CUSTOM_TABS)
                 customTabsServiceConnection = object : CustomTabsServiceConnection() {
                     override fun onCustomTabsServiceConnected(
@@ -262,12 +263,7 @@ internal class AuthActivity : Activity() {
 
                     override fun onServiceDisconnected(name: ComponentName?) = Unit
                 }
-                val packageName = CustomTabsClient.getPackageName(this, null)
-                if (packageName != null) {
-                    CustomTabsClient.bindCustomTabsService(this, packageName, customTabsServiceConnection!!)
-                } else {
-                    return false
-                }
+                CustomTabsClient.bindCustomTabsService(this, packageName, customTabsServiceConnection!!)
             } else {
                 launchAuth(authIntent!!)
             }
