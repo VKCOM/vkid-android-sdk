@@ -17,17 +17,19 @@
 
 ---
 
-:information_source: Версия VK ID SDK 2.0.0 поддерживает авторизацию по протоколу [OAuth 2.1](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-v2-1-10), а также способы входа через аккаунты Одноклассников и Mail.
+:information_source: Версия VK ID SDK 2.0.0 поддерживает авторизацию по
+протоколу [OAuth 2.1](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-v2-1-10), а также способы входа через аккаунты Одноклассников и Mail.
 
 ---
 
 ## Демонстрация
 
 SDK поставляется с [тестовым примером приложения](sample/app), где можно посмотреть работу авторизации.
-Чтобы тестовое приложение успешно собралось, сначала создайте файл `sample/app/secrets.properties` и пропишите в нем client_id и client_secret вашего приложения VK ID:
-
+Чтобы тестовое приложение успешно собралось, сначала создайте файл `sample/app/secrets.properties` и пропишите в нем client_id и client_secret вашего
+приложения VK ID:
 
 Файл `secrets.properties`:
+
 ```
 VKIDClientSecret=Ваш защищённый ключ
 VKIDClientID=Ваш ID приложения
@@ -35,15 +37,18 @@ VKIDClientID=Ваш ID приложения
 
 ## Предварительно
 
-Что такое VK ID и как интегрировать его в приложение читайте [в статье "Начало работы"](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/connection/android/install).
+Что такое VK ID и как интегрировать его в приложение
+читайте [в статье "Начало работы"](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/connection/android/install).
 
-Чтобы подключить VK ID SDK, сначала получите ID приложения (app_id) и защищенный ключ (client_secret). Для этого создайте приложение в [кабинете подключения VK ID](https://id.vk.com/business/go).
+Чтобы подключить VK ID SDK, сначала получите ID приложения (app_id) и защищенный ключ (client_secret). Для этого создайте приложение
+в [кабинете подключения VK ID](https://id.vk.com/business/go).
 
 Документация API SDK доступна [на Github](https://vkcom.github.io/vkid-android-sdk/).
 
 ## Установка
 
 Для начала работы добавьте репозиторий:
+
 ```kotlin
 maven {
     url("https://artifactory-external.vkpartner.ru/artifactory/vkid-sdk-android/")
@@ -51,11 +56,13 @@ maven {
 ```
 
 Подключите библиотеку:
+
 ```kotlin
 implementation("com.vk.id:vkid:${sdkVersion}")
 ```
 
 И пропишите плейсхолдеры манифеста в секции `android` в `build.gradle.kts`:
+
 ```kotlin
 android {
     //...
@@ -73,8 +80,11 @@ android {
 ```
 
 ## Интеграция
-### Инициализация VK ID SDK
+
+<details>
+<summary>Инициализация VK ID SDK</summary>
 Инициализируйте работу VK ID SDK через объект `VKID`.
+
 ```kotlin
 // В Application
 fun onCreate() {
@@ -82,15 +92,18 @@ fun onCreate() {
     VKID.init(this)
 }
 ```
-### Авторизация
+</details>
+<details>
+<summary>Авторизация</summary>
 Результат авторизации передается в коллбэк `VKIDAuthCallback`, поэтому его нужно объявить:
+
 ```kotlin
 private val vkAuthCallback = object : VKIDAuthCallback {
     override fun onSuccess(accessToken: AccessToken) {     
         val token = accessToken.token
         //...
     }
- 
+
     override fun onFail(fail: VKIDAuthFail) {
         when (fail) {
             is VKIDAuthFail.Canceled -> { /*...*/ }
@@ -99,7 +112,9 @@ private val vkAuthCallback = object : VKIDAuthCallback {
             }
         }
     }
+
 }
+
 ```
 Авторизация запускается с помощью метода authorize(), у которого есть два варианта вызова:
 ```kotlin
@@ -107,13 +122,19 @@ viewModelScope.launch {
     VKID.instance.authorize(vkAuthCallback)
 }
 ```
+
 или с передачей LifecycleOwner:
+
 ```kotlin
 VKID.instance.authorize(this@MainActivity, vkAuthCallback) // Первый параметр LifecycleOwner, например активити.
 ```
+</details>
 
-### Параметры aвторизации
+<details>
+<summary>Параметры aвторизации</summary>
+
 Вы можете передать дополнительные параметры авторизации с помощью вспомогаельной билдер-функции:
+
 ```kotlin
 VKID.instance.authorize(
     callback = vkAuthCallback,
@@ -122,9 +143,13 @@ VKID.instance.authorize(
     }
 )
 ```
+</details>
 
-### Обновление токена
+<details>
+<summary>Обновление токена</summary>
+
 Токен живет ограниченное количество времени, при получении ошибки от апи обновите его:
+
 ```kotlin
 viewModelScope.launch {
     VKID.instance.refreshToken(
@@ -145,25 +170,36 @@ viewModelScope.launch {
 ```
 
 Также есть версия с передачей LifecycleOwner:
+
 ```kotlin
 VKID.instance.refreshToken(
-    lifecycleOwner = MainActivity@this,
+    lifecycleOwner = MainActivity@ this,
     callback = ... // такой же, как в suspend версии
 )
 ```
+</details>
 
 ## Документация
 
 - [Что такое VK ID](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/intro/start-page)
 - [Создание приложения](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/connection/create-application)
 - [Требования к дизайну](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/connection/guidelines/design-rules-oauth)
+- [Кнопка OneTap](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/connection/elements/onetap-button/onetap-android)
+- [Шторка авторизации](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/connection/elements/onetap-drawer/floating-onetap-android)
+- [Виджет 3в1](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/connection/elements/widget-3-1/three-in-one-android)
 
 ## Локальная сборка
-Если проект не собирается со странными ошибками, то скореe всего нужно выставить в настройках проекта в студии **jdk-17**. Для того, чтобы работали градл-скрипты из консоли, также нужно прописать в переменной среды JAVA_HOME путь по которому находится jdk **17-й** версии.
+
+Если проект не собирается со странными ошибками, то скореe всего нужно выставить в настройках проекта в студии **jdk-17**. Для того, чтобы работали
+градл-скрипты из консоли, также нужно прописать в переменной среды JAVA_HOME путь по которому находится jdk **17-й** версии.
 
 ## Contributing
-Проект VK ID SDK имеет открытый исходный код на GitHub, и вы можете присоединиться к его доработке — мы будем благодарны за внесение улучшений и исправление возможных ошибок.
+
+Проект VK ID SDK имеет открытый исходный код на GitHub, и вы можете присоединиться к его доработке — мы будем благодарны за внесение улучшений и
+исправление возможных ошибок.
 
 ### Contributing Guide
-В [руководстве](CONTRIBUTING.md) вы можете подробно ознакомиться с процессом разработки и узнать, как предлагать улучшения и исправления, а ещё — как добавлять и тестировать свои изменения в VK ID SDK.
+
+В [руководстве](CONTRIBUTING.md) вы можете подробно ознакомиться с процессом разработки и узнать, как предлагать улучшения и исправления, а ещё — как
+добавлять и тестировать свои изменения в VK ID SDK.
 Также рекомендуем ознакомиться с общими [правилами оформления кода](CODE_STYLE.md) в проекте и [списком технических команд](TECHNICAL_COMMANDS.md).
