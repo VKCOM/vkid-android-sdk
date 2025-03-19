@@ -1,9 +1,13 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.auth
 
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
 import com.vk.id.OAuth
+import com.vk.id.auth.VKIDAuthParams.Locale
+import com.vk.id.auth.VKIDAuthParams.Theme
 import com.vk.id.common.InternalVKIDApi
 
 /**
@@ -81,18 +85,24 @@ public class VKIDAuthParams private constructor(
          */
         TURKEY;
 
-        internal companion object {
+        @InternalVKIDApi
+        public companion object {
             /**
              * Returns the current system locale.
              */
-            fun systemLocale(context: Context): Locale? {
+            internal fun systemLocale(context: Context): Locale? {
                 val systemLocale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     context.resources.configuration.locales.get(0)
                 } else {
                     @Suppress("DEPRECATION")
                     context.resources.configuration.locale
                 }
-                return when (systemLocale.language) {
+                return fromLocale(systemLocale)
+            }
+
+            @InternalVKIDApi
+            public fun fromLocale(locale: java.util.Locale?): Locale? {
+                return when (locale?.language) {
                     "ru" -> RUS
                     "uk" -> UKR
                     "en" -> ENG
@@ -210,5 +220,75 @@ public class VKIDAuthParams private constructor(
             extraParams = extraParams,
             internalUse = internalUse,
         )
+    }
+
+    @InternalVKIDApi
+    public fun newBuilder(initializer: Builder.() -> Unit): VKIDAuthParams {
+        val params = this
+        return VKIDAuthParams {
+            locale = params.locale
+            theme = params.theme
+            useOAuthProviderIfPossible = params.useOAuthProviderIfPossible
+            oAuth = params.oAuth
+            prompt = params.prompt
+            state = params.state
+            codeChallenge = params.codeChallenge
+            scopes = params.scopes
+            extraParams = params.extraParams
+            internalUse = params.internalUse
+            initializer()
+        }
+    }
+
+    /** @suppress */
+    override fun toString(): String {
+        return "VKIDAuthParams(" +
+            "locale=$locale, " +
+            "theme=$theme, " +
+            "useOAuthProviderIfPossible=$useOAuthProviderIfPossible, " +
+            "oAuth=$oAuth, " +
+            "prompt=$prompt, " +
+            "state=$state, " +
+            "codeChallenge=$codeChallenge, " +
+            "scopes=$scopes, " +
+            "extraParams=$extraParams, " +
+            "internalUse=$internalUse" +
+            ")"
+    }
+
+    /** @suppress */
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as VKIDAuthParams
+
+        if (locale != other.locale) return false
+        if (theme != other.theme) return false
+        if (useOAuthProviderIfPossible != other.useOAuthProviderIfPossible) return false
+        if (oAuth != other.oAuth) return false
+        if (prompt != other.prompt) return false
+        if (state != other.state) return false
+        if (codeChallenge != other.codeChallenge) return false
+        if (scopes != other.scopes) return false
+        if (extraParams != other.extraParams) return false
+        if (internalUse != other.internalUse) return false
+
+        return true
+    }
+
+    /** @suppress */
+    override fun hashCode(): Int {
+        var result = locale?.hashCode() ?: 0
+        result = 31 * result + (theme?.hashCode() ?: 0)
+        result = 31 * result + useOAuthProviderIfPossible.hashCode()
+        result = 31 * result + (oAuth?.hashCode() ?: 0)
+        result = 31 * result + prompt.hashCode()
+        result = 31 * result + (state?.hashCode() ?: 0)
+        result = 31 * result + (codeChallenge?.hashCode() ?: 0)
+        result = 31 * result + scopes.hashCode()
+        result = 31 * result + (extraParams?.hashCode() ?: 0)
+        result = 31 * result + internalUse.hashCode()
+        return result
     }
 }
