@@ -335,6 +335,9 @@ public class VKID {
         callback: VKIDAuthCallback,
         params: VKIDAuthParams = VKIDAuthParams {}
     ) {
+        val actualParams = params.newBuilder {
+            locale = params.locale ?: VKIDAuthParams.Locale.fromLocale(internalVKIDLocale.get())
+        }
         this.crashReporter.runReportingCrashesSuspend({}) {
             requestMutex.lock()
             val performanceKey = "Authorize"
@@ -342,12 +345,12 @@ public class VKID {
             authCallbacksHolder.add(callback)
             val authContext = currentCoroutineContext()
 
-            val statParams = if (!params.internalUse) {
-                CustomAuthAnalytics.customAuthStart(params)
+            val statParams = if (!actualParams.internalUse) {
+                CustomAuthAnalytics.customAuthStart(actualParams)
             } else {
                 StatParams(
-                    flowSource = params.extraParams?.get(StatTracker.EXTERNAL_PARAM_FLOW_SOURCE) ?: "",
-                    sessionId = params.extraParams?.get(StatTracker.EXTERNAL_PARAM_SESSION_ID) ?: ""
+                    flowSource = actualParams.extraParams?.get(StatTracker.EXTERNAL_PARAM_FLOW_SOURCE) ?: "",
+                    sessionId = actualParams.extraParams?.get(StatTracker.EXTERNAL_PARAM_SESSION_ID) ?: ""
                 )
             }
 
@@ -355,7 +358,7 @@ public class VKID {
                 override fun onAuthResult(authResult: AuthResult) {
                     CoroutineScope(authContext + Job()).launch {
                         authResultHandler.value.handle(authResult, onFail = {
-                            if (!params.internalUse) {
+                            if (!actualParams.internalUse) {
                                 CustomAuthAnalytics.customAuthError(statParams)
                             }
                         })
@@ -368,8 +371,8 @@ public class VKID {
             }
 
             withContext(dispatchers.io) {
-                val bestAuthProvider = authProvidersChooser.value.chooseBest(params)
-                val fullAuthOptions = authOptionsCreator.create(params, statParams)
+                val bestAuthProvider = authProvidersChooser.value.chooseBest(actualParams)
+                val fullAuthOptions = authOptionsCreator.create(actualParams, statParams)
                 bestAuthProvider.auth(fullAuthOptions)
             }
         }
