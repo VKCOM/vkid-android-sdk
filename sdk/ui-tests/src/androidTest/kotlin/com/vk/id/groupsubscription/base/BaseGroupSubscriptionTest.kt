@@ -300,7 +300,7 @@ public abstract class BaseGroupSubscriptionTest : BaseUiTest() {
             }
             step("Не приходит ошибок") {
                 flakySafely {
-                    fail.shouldBeNull()
+                    fail.shouldBeInstanceOf<VKIDGroupSubscriptionFail.Close>()
                 }
             }
             step("Шторка скрыта") {
@@ -347,7 +347,7 @@ public abstract class BaseGroupSubscriptionTest : BaseUiTest() {
             }
             step("Не приходит ошибок") {
                 flakySafely {
-                    fail.shouldBeNull()
+                    fail.shouldBeInstanceOf<VKIDGroupSubscriptionFail.Cancel>()
                 }
             }
             step("Шторка скрыта") {
@@ -397,7 +397,7 @@ public abstract class BaseGroupSubscriptionTest : BaseUiTest() {
             }
             step("Не приходит ошибок") {
                 flakySafely {
-                    fail.shouldBeNull()
+                    fail.shouldBeInstanceOf<VKIDGroupSubscriptionFail.Cancel>()
                 }
             }
             step("Шторка скрыта") {

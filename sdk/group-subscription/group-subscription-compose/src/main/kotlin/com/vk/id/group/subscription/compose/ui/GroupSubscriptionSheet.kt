@@ -35,6 +35,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,6 +44,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -86,6 +88,7 @@ import com.vk.id.group.subscription.compose.util.textPrimaryColor
 import com.vk.id.group.subscription.compose.util.textSecondaryColor
 import com.vk.id.network.groupsubscription.exception.InternalVKIDAlreadyGroupMemberException
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
 /**
@@ -165,12 +168,26 @@ public fun GroupSubscriptionSheet(
     var showBottomSheet by rememberSaveable { mutableStateOf(false) }
     val rememberedOnFail by rememberUpdatedState(onFail)
     val snackbarLabel = stringResource(R.string.vkid_group_subscription_snackbar_label)
+    var isSuccess by remember { mutableStateOf(false) }
     val actualOnSuccess by rememberUpdatedState {
+        isSuccess = true
         coroutineScope.launch {
             GroupSubscriptionAnalytics.successShown(accessTokenProvider?.invoke() ?: VKID.instance.accessToken?.token)
             actualSnackbarHostState.showSnackbar(snackbarLabel)
         }
         onSuccess()
+    }
+    var wasVisible by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        snapshotFlow { state.isVisible }.distinctUntilChanged().collect { isVisible ->
+            if (isVisible) {
+                isSuccess = false
+            }
+            if (!isVisible && wasVisible && !isSuccess) {
+                rememberedOnFail(VKIDGroupSubscriptionFail.Dismiss())
+            }
+            wasVisible = isVisible
+        }
     }
     processSheetShow(
         { status.value = it },
@@ -251,7 +268,7 @@ public fun GroupSubscriptionSheet(
                         .set(status.value is GroupSubscriptionSheetStatus.Failure || status.value is GroupSubscriptionSheetStatus.Resubscribing)
                     when (val actualStatus = status.value) {
                         is GroupSubscriptionSheetStatus.Init -> Unit
-                        is GroupSubscriptionSheetStatus.Loaded -> LoadedState(style, state, actualStatus) {
+                        is GroupSubscriptionSheetStatus.Loaded -> LoadedState(onFail, style, state, actualStatus) {
                             GroupSubscriptionAnalytics.subscribeToGroupClick()
                             subscribeToGroup(
                                 status,
@@ -264,8 +281,8 @@ public fun GroupSubscriptionSheet(
                             )
                         }
 
-                        is GroupSubscriptionSheetStatus.Subscribing -> SubscribingState(style, state, actualStatus)
-                        is GroupSubscriptionSheetStatus.Failure -> FailureState(style, state) {
+                        is GroupSubscriptionSheetStatus.Subscribing -> SubscribingState(style, state, actualStatus, onFail)
+                        is GroupSubscriptionSheetStatus.Failure -> FailureState(style, state, onFail) {
                             GroupSubscriptionAnalytics.retryClick()
                             subscribeToGroup(
                                 status,
@@ -278,7 +295,7 @@ public fun GroupSubscriptionSheet(
                             )
                         }
 
-                        is GroupSubscriptionSheetStatus.Resubscribing -> ResubscribingState(style, state) {
+                        is GroupSubscriptionSheetStatus.Resubscribing -> ResubscribingState(style, state, onFail) {
                             subscribeToGroup(
                                 status,
                                 actualStatus.data,
@@ -323,13 +340,14 @@ private fun subscribeToGroup(
 
 @Composable
 internal fun LoadedState(
+    onFail: (VKIDGroupSubscriptionFail) -> Unit,
     style: GroupSubscriptionStyle,
     state: GroupSubscriptionSheetState,
     status: GroupSubscriptionSheetStatus.Loaded,
     onSubscribeButtonClick: () -> Unit,
 ) {
     GroupSubscriptionAnalytics.SheetShown()
-    DataState(style, state, status.data, onSubscribeButtonClick) {
+    DataState(style, state, status.data, onFail, onSubscribeButtonClick) {
         Text(
             text = stringResource(R.string.vkid_group_subscription_primary),
             modifier = Modifier,
@@ -349,8 +367,9 @@ internal fun SubscribingState(
     style: GroupSubscriptionStyle,
     state: GroupSubscriptionSheetState,
     status: GroupSubscriptionSheetStatus.Subscribing,
+    onFail: (VKIDGroupSubscriptionFail) -> Unit,
 ) {
-    DataState(style, state, status.data, {}) {
+    DataState(style, state, status.data, onFail, {}) {
         Box(modifier = Modifier.size(24.dp)) {
             CircleProgress(style, "Subscribing to group spinner")
         }
@@ -361,9 +380,10 @@ internal fun SubscribingState(
 internal fun ResubscribingState(
     style: GroupSubscriptionStyle,
     state: GroupSubscriptionSheetState,
+    onFail: (VKIDGroupSubscriptionFail) -> Unit,
     onRetry: () -> Unit,
 ) {
-    FailureDataState(style, state, onRetry) {
+    FailureDataState(style, state, onFail, onRetry) {
         Box(modifier = Modifier.size(24.dp)) {
             CircleProgress(style, "Resubscribing to group spinner")
         }
@@ -374,10 +394,11 @@ internal fun ResubscribingState(
 internal fun FailureState(
     style: GroupSubscriptionStyle,
     state: GroupSubscriptionSheetState,
+    onFail: (VKIDGroupSubscriptionFail) -> Unit,
     onRetry: () -> Unit,
 ) {
     GroupSubscriptionAnalytics.ErrorShown()
-    FailureDataState(style, state, onRetry) {
+    FailureDataState(style, state, onFail, onRetry) {
         Text(
             text = stringResource(R.string.vkid_group_subscription_fail_primary),
             modifier = Modifier,
@@ -397,6 +418,7 @@ internal fun FailureState(
 private fun FailureDataState(
     style: GroupSubscriptionStyle,
     state: GroupSubscriptionSheetState,
+    onFail: (VKIDGroupSubscriptionFail) -> Unit,
     onRetry: () -> Unit,
     retryButtonContent: @Composable () -> Unit,
 ) {
@@ -441,15 +463,18 @@ private fun FailureDataState(
         SecondaryButton(style, testTag = "group_subscription_cancel", text = stringResource(R.string.vkid_group_subscription_fail_secondary)) {
             state.hide()
             GroupSubscriptionAnalytics.cancelClick()
+            onFail(VKIDGroupSubscriptionFail.Cancel())
         }
     }
 }
 
+@Suppress("LongParameterList")
 @Composable
 private fun DataState(
     style: GroupSubscriptionStyle,
     state: GroupSubscriptionSheetState,
     data: GroupSubscriptionSheetStatusData,
+    onFail: (VKIDGroupSubscriptionFail) -> Unit,
     onSubscribeButtonClick: () -> Unit,
     subscribeButtonContent: @Composable () -> Unit
 ) {
@@ -457,13 +482,13 @@ private fun DataState(
         modifier = Modifier.padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        DataStateHeader(state, data)
+        DataStateHeader(onFail, state, data)
         Spacer(modifier = Modifier.height(12.dp))
         DataStateLabels(style, data)
         Spacer(modifier = Modifier.height(8.dp))
         DataStateSubscribers(style, data)
         Spacer(Modifier.height(20.dp))
-        DataStateButtons(style, onSubscribeButtonClick, state, subscribeButtonContent)
+        DataStateButtons(style, onSubscribeButtonClick, state, onFail, subscribeButtonContent)
     }
 }
 
@@ -472,6 +497,7 @@ private fun ColumnScope.DataStateButtons(
     style: GroupSubscriptionStyle,
     onSubscribeButtonClick: () -> Unit,
     state: GroupSubscriptionSheetState,
+    onFail: (VKIDGroupSubscriptionFail) -> Unit,
     subscribeButtonContent: @Composable () -> Unit
 ) {
     PrimaryButton(style, testTag = "group_subscription_subscribe", onClick = onSubscribeButtonClick) {
@@ -481,6 +507,7 @@ private fun ColumnScope.DataStateButtons(
     SecondaryButton(style, testTag = "group_subscription_later", text = stringResource(R.string.vkid_group_subscription_secondary)) {
         GroupSubscriptionAnalytics.nextTimeClick()
         state.hide()
+        onFail(VKIDGroupSubscriptionFail.Cancel())
     }
 }
 
@@ -606,6 +633,7 @@ private fun ColumnScope.DataStateLabels(
 
 @Composable
 private fun ColumnScope.DataStateHeader(
+    onFail: (VKIDGroupSubscriptionFail) -> Unit,
     state: GroupSubscriptionSheetState,
     data: GroupSubscriptionSheetStatusData
 ) {
@@ -614,6 +642,7 @@ private fun ColumnScope.DataStateHeader(
         CloseIcon {
             GroupSubscriptionAnalytics.close()
             state.hide()
+            onFail(VKIDGroupSubscriptionFail.Close())
         }
     }
     Box(modifier = Modifier.size(76.dp), contentAlignment = Alignment.TopStart) {
@@ -704,6 +733,7 @@ private fun DataStatePreview() {
             friendsCount = 12,
             isGroupVerified = true,
         ),
+        {},
         {},
     ) {
         Text("button text")

@@ -39,6 +39,7 @@ private fun LoadedStatePreview() {
         ),
         state = rememberGroupSubscriptionSheetState(),
         status = GroupSubscriptionSheetStatus.Loaded(DATA),
+        onFail = {},
     ) { }
 }
 
@@ -50,6 +51,7 @@ private fun LoadedDarkStatePreview() {
         style = GroupSubscriptionStyle.Dark(),
         state = rememberGroupSubscriptionSheetState(),
         status = GroupSubscriptionSheetStatus.Loaded(DATA),
+        onFail = {},
     ) { }
 }
 
@@ -65,6 +67,7 @@ private fun SubscribingStatePreview() {
         ),
         state = rememberGroupSubscriptionSheetState(),
         status = GroupSubscriptionSheetStatus.Subscribing(DATA),
+        onFail = {},
     )
 }
 
@@ -76,6 +79,7 @@ private fun SubscribingDarkStatePreview() {
         style = GroupSubscriptionStyle.Dark(),
         state = rememberGroupSubscriptionSheetState(),
         status = GroupSubscriptionSheetStatus.Subscribing(DATA),
+        onFail = {},
     )
 }
 
@@ -91,6 +95,7 @@ private fun ResubscribingStatePreview() {
         ),
         state = rememberGroupSubscriptionSheetState(),
         onRetry = {},
+        onFail = {},
     )
 }
 
@@ -102,6 +107,7 @@ private fun ResubscribingDarkStatePreview() {
         style = GroupSubscriptionStyle.Dark(),
         state = rememberGroupSubscriptionSheetState(),
         onRetry = {},
+        onFail = {},
     )
 }
 
@@ -117,6 +123,7 @@ private fun FailureStatePreview() {
         ),
         state = rememberGroupSubscriptionSheetState(),
         onRetry = {},
+        onFail = {},
     )
 }
 
@@ -128,5 +135,6 @@ private fun FailureDarkStatePreview() {
         style = GroupSubscriptionStyle.Dark(),
         state = rememberGroupSubscriptionSheetState(),
         onRetry = {},
+        onFail = {},
     )
 }

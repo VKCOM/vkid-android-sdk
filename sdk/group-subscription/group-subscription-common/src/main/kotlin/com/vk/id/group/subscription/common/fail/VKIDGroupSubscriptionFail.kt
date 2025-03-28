@@ -72,4 +72,52 @@ public sealed class VKIDGroupSubscriptionFail(
             return result
         }
     }
+
+    /**
+     * Represents flow cancellation by closing the sheet.
+     */
+    public class Close : VKIDGroupSubscriptionFail("User clicked on the close button") {
+
+        /** @suppress */
+        override fun equals(other: Any?): Boolean {
+            return other is Close && description == other.description
+        }
+
+        /** @suppress */
+        override fun hashCode(): Int {
+            return description.hashCode()
+        }
+    }
+
+    /**
+     * Represents flow cancellation by clicking on the cancel button.
+     */
+    public class Cancel : VKIDGroupSubscriptionFail("User clicked on the cancel button") {
+
+        /** @suppress */
+        override fun equals(other: Any?): Boolean {
+            return other is Cancel && description == other.description
+        }
+
+        /** @suppress */
+        override fun hashCode(): Int {
+            return description.hashCode()
+        }
+    }
+
+    /**
+     * Represents flow cancellation by sheet dismission.
+     */
+    public class Dismiss : VKIDGroupSubscriptionFail("User dismissed the sheet") {
+
+        /** @suppress */
+        override fun equals(other: Any?): Boolean {
+            return other is Dismiss && description == other.description
+        }
+
+        /** @suppress */
+        override fun hashCode(): Int {
+            return description.hashCode()
+        }
+    }
 }
