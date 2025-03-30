@@ -99,7 +99,7 @@ fun onCreate() {
 
 ```kotlin
 private val vkAuthCallback = object : VKIDAuthCallback {
-    override fun onSuccess(accessToken: AccessToken) {     
+    override fun onAuth(accessToken: AccessToken) {     
         val token = accessToken.token
         //...
     }
