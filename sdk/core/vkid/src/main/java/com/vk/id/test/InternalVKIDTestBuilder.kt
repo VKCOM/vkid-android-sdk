@@ -10,7 +10,7 @@ import com.vk.id.internal.store.InternalVKIDPrefsStore
 import com.vk.id.network.groupsubscription.InternalVKIDGroupSubscriptionApiContract
 import com.vk.id.network.groupsubscription.data.InternalVKIDGroupByIdData
 import com.vk.id.network.groupsubscription.data.InternalVKIDGroupMembersData
-import com.vk.id.storage.InternalVKIDEncryptedSharedPreferencesStorage
+import com.vk.id.storage.InternalVKIDPreferencesStorage
 import java.util.concurrent.atomic.AtomicInteger
 
 @InternalVKIDApi
@@ -19,7 +19,7 @@ public class InternalVKIDTestBuilder(
 ) {
     private var deviceIdStorage: InternalVKIDDeviceIdProvider.DeviceIdStorage? = null
     private var prefsStore: InternalVKIDPrefsStore? = null
-    private var encryptedSharedPreferencesStorage: InternalVKIDEncryptedSharedPreferencesStorage? = null
+    private var preferencesStorage: InternalVKIDPreferencesStorage? = null
     private var getTokenResponse = Result
         .failure<InternalVKIDTokenPayloadResponse>(UnsupportedOperationException("Not supported"))
     private var refreshTokenResponse = Result
@@ -152,8 +152,8 @@ public class InternalVKIDTestBuilder(
         this.prefsStore = store
     }
 
-    public fun encryptedSharedPreferencesStorage(storage: InternalVKIDEncryptedSharedPreferencesStorage?): InternalVKIDTestBuilder = apply {
-        this.encryptedSharedPreferencesStorage = storage
+    public fun preferencesStorage(storage: InternalVKIDPreferencesStorage?): InternalVKIDTestBuilder = apply {
+        this.preferencesStorage = storage
     }
 
     public fun isServiceAccountResponse(response: Result<Boolean>): InternalVKIDTestBuilder = apply {
@@ -186,7 +186,7 @@ public class InternalVKIDTestBuilder(
             groupSubscriptionApiContract = mockGroupSubscriptionApi,
             deviceIdStorage = deviceIdStorage,
             prefsStore = prefsStore,
-            encryptedSharedPreferencesStorage = encryptedSharedPreferencesStorage,
+            encryptedSharedPreferencesStorage = preferencesStorage,
             packageManager = packageManager,
             activityStarter = activityStarter,
         )

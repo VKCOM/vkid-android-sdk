@@ -45,7 +45,7 @@ import com.vk.id.refresh.VKIDTokenRefresher
 import com.vk.id.refreshuser.VKIDGetUserCallback
 import com.vk.id.refreshuser.VKIDGetUserParams
 import com.vk.id.refreshuser.VKIDUserRefresher
-import com.vk.id.storage.InternalVKIDEncryptedSharedPreferencesStorage
+import com.vk.id.storage.InternalVKIDPreferencesStorage
 import com.vk.id.storage.InternalVKIDTokenStorage
 import com.vk.id.test.InternalVKIDImmediateApi
 import com.vk.id.test.InternalVKIDOverrideApi
@@ -96,7 +96,7 @@ public class VKID {
             groupSubscriptionApiContract: InternalVKIDGroupSubscriptionApiContract,
             deviceIdStorage: InternalVKIDDeviceIdProvider.DeviceIdStorage?,
             prefsStore: InternalVKIDPrefsStore?,
-            encryptedSharedPreferencesStorage: InternalVKIDEncryptedSharedPreferencesStorage?,
+            encryptedSharedPreferencesStorage: InternalVKIDPreferencesStorage?,
             packageManager: InternalVKIDPackageManager?,
             activityStarter: InternalVKIDActivityStarter?,
         ): Unit = init(
@@ -131,6 +131,12 @@ public class VKID {
                             name: String,
                             vararg params: VKIDAnalytics.EventParam
                         ) = Unit
+                    }
+                    override val encryptedSharedPreferencesStorage: Lazy<InternalVKIDPreferencesStorage> = lazy {
+                        object : InternalVKIDPreferencesStorage {
+                            override fun set(key: String, value: String?) = Unit
+                            override fun getString(key: String): String? = null
+                        }
                     }
                 })
             )

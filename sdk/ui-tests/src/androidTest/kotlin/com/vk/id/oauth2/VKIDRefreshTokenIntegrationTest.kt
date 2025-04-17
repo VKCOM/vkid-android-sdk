@@ -21,7 +21,7 @@ import com.vk.id.internal.store.InternalVKIDPrefsStore
 import com.vk.id.refresh.VKIDRefreshTokenCallback
 import com.vk.id.refresh.VKIDRefreshTokenFail
 import com.vk.id.refresh.VKIDRefreshTokenParams
-import com.vk.id.storage.InternalVKIDEncryptedSharedPreferencesStorage
+import com.vk.id.storage.InternalVKIDPreferencesStorage
 import com.vk.id.test.InternalVKIDTestBuilder
 import com.vk.id.test.InternalVKIDTokenPayloadResponse
 import com.vk.id.test.InternalVKIDUserInfoPayloadResponse
@@ -127,11 +127,11 @@ internal class VKIDRefreshTokenIntegrationTest : BaseUiTest() {
     fun refreshTokenSuccess() = run {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
         val prefsStore = mockk<InternalVKIDPrefsStore>()
-        val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
+        val encryptedStorage = mockk<InternalVKIDPreferencesStorage>()
         InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
-            .encryptedSharedPreferencesStorage(encryptedStorage)
+            .preferencesStorage(encryptedStorage)
             .getUserInfoResponse(Result.success(USER_INFO_RESPONSE))
             .refreshTokenResponse(Result.success(REFRESH_TOKEN_RESPONSE))
             .build()
@@ -161,11 +161,11 @@ internal class VKIDRefreshTokenIntegrationTest : BaseUiTest() {
     fun notAuthenticatedFail() = run {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
         val prefsStore = mockk<InternalVKIDPrefsStore>()
-        val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
+        val encryptedStorage = mockk<InternalVKIDPreferencesStorage>()
         InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
-            .encryptedSharedPreferencesStorage(encryptedStorage)
+            .preferencesStorage(encryptedStorage)
             .build()
         every { encryptedStorage.getString(REFRESH_TOKEN_V1_KEY) } returns null
         every { encryptedStorage.getString(REFRESH_TOKEN_V2_KEY) } returns null
@@ -190,11 +190,11 @@ internal class VKIDRefreshTokenIntegrationTest : BaseUiTest() {
     fun wrongStateFail() = run {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
         val prefsStore = mockk<InternalVKIDPrefsStore>()
-        val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
+        val encryptedStorage = mockk<InternalVKIDPreferencesStorage>()
         InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
-            .encryptedSharedPreferencesStorage(encryptedStorage)
+            .preferencesStorage(encryptedStorage)
             .refreshTokenResponse(Result.success(REFRESH_TOKEN_RESPONSE.copy(state = "wrong state")))
             .build()
         every { encryptedStorage.getString(REFRESH_TOKEN_V2_KEY) } returns REFRESH_TOKEN_CURRENT_JSON
@@ -220,11 +220,11 @@ internal class VKIDRefreshTokenIntegrationTest : BaseUiTest() {
     fun refreshTokenApiFail() = run {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
         val prefsStore = mockk<InternalVKIDPrefsStore>()
-        val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
+        val encryptedStorage = mockk<InternalVKIDPreferencesStorage>()
         InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
-            .encryptedSharedPreferencesStorage(encryptedStorage)
+            .preferencesStorage(encryptedStorage)
             .refreshTokenResponse(Result.success(InternalVKIDTokenPayloadResponse(error = "some error")))
             .build()
         every { encryptedStorage.getString(REFRESH_TOKEN_V2_KEY) } returns REFRESH_TOKEN_CURRENT_JSON
@@ -250,11 +250,11 @@ internal class VKIDRefreshTokenIntegrationTest : BaseUiTest() {
     fun userDataApiFail() = run {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
         val prefsStore = mockk<InternalVKIDPrefsStore>()
-        val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
+        val encryptedStorage = mockk<InternalVKIDPreferencesStorage>()
         InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
-            .encryptedSharedPreferencesStorage(encryptedStorage)
+            .preferencesStorage(encryptedStorage)
             .getUserInfoResponse(Result.success(InternalVKIDUserInfoPayloadResponse(error = "some error")))
             .refreshTokenResponse(Result.success(REFRESH_TOKEN_RESPONSE))
             .build()

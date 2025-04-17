@@ -17,7 +17,7 @@ import com.vk.id.internal.auth.device.InternalVKIDDeviceIdProvider
 import com.vk.id.internal.store.InternalVKIDPrefsStore
 import com.vk.id.logout.VKIDLogoutCallback
 import com.vk.id.logout.VKIDLogoutFail
-import com.vk.id.storage.InternalVKIDEncryptedSharedPreferencesStorage
+import com.vk.id.storage.InternalVKIDPreferencesStorage
 import com.vk.id.test.InternalVKIDLogoutPayloadResponse
 import com.vk.id.test.InternalVKIDTestBuilder
 import io.kotest.matchers.nulls.shouldBeNull
@@ -73,11 +73,11 @@ internal class VKIDLogoutIntegrationTest : BaseUiTest() {
     fun logoutSuccess() = run {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
         val prefsStore = mockk<InternalVKIDPrefsStore>()
-        val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
+        val encryptedStorage = mockk<InternalVKIDPreferencesStorage>()
         InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
-            .encryptedSharedPreferencesStorage(encryptedStorage)
+            .preferencesStorage(encryptedStorage)
             .logoutResponse(Result.success(InternalVKIDLogoutPayloadResponse()))
             .build()
         every { encryptedStorage.getString(ACCESS_TOKEN_KEY) } returns ACCESS_TOKEN_JSON
@@ -106,11 +106,11 @@ internal class VKIDLogoutIntegrationTest : BaseUiTest() {
     fun notAuthenticatedFail() = run {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
         val prefsStore = mockk<InternalVKIDPrefsStore>()
-        val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
+        val encryptedStorage = mockk<InternalVKIDPreferencesStorage>()
         InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
-            .encryptedSharedPreferencesStorage(encryptedStorage)
+            .preferencesStorage(encryptedStorage)
             .build()
         every { encryptedStorage.getString(ACCESS_TOKEN_KEY) } returns null
         every { encryptedStorage.set(REFRESH_TOKEN_V1_KEY, null) } just runs
@@ -138,11 +138,11 @@ internal class VKIDLogoutIntegrationTest : BaseUiTest() {
     fun apiCalFail() = run {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
         val prefsStore = mockk<InternalVKIDPrefsStore>()
-        val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
+        val encryptedStorage = mockk<InternalVKIDPreferencesStorage>()
         InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
-            .encryptedSharedPreferencesStorage(encryptedStorage)
+            .preferencesStorage(encryptedStorage)
             .logoutResponse(Result.success(InternalVKIDLogoutPayloadResponse(error = "some error")))
             .build()
         every { encryptedStorage.getString(ACCESS_TOKEN_KEY) } returns ACCESS_TOKEN_JSON
@@ -171,11 +171,11 @@ internal class VKIDLogoutIntegrationTest : BaseUiTest() {
     fun logoutSuccessAfterInvalidToken() = run {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
         val prefsStore = mockk<InternalVKIDPrefsStore>()
-        val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
+        val encryptedStorage = mockk<InternalVKIDPreferencesStorage>()
         InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
-            .encryptedSharedPreferencesStorage(encryptedStorage)
+            .preferencesStorage(encryptedStorage)
             .logoutResponse(Result.success(InternalVKIDLogoutPayloadResponse(error = "invalid_token")))
             .build()
         every { encryptedStorage.getString(ACCESS_TOKEN_KEY) } returns ACCESS_TOKEN_JSON

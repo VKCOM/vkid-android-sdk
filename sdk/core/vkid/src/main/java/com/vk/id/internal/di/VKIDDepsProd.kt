@@ -50,6 +50,7 @@ import com.vk.id.network.groupsubscription.InternalVKIDGroupSubscriptionApiServi
 import com.vk.id.refresh.VKIDTokenRefresher
 import com.vk.id.refreshuser.VKIDUserRefresher
 import com.vk.id.storage.InternalVKIDEncryptedSharedPreferencesStorage
+import com.vk.id.storage.InternalVKIDPreferencesStorage
 import com.vk.id.storage.InternalVKIDTokenStorage
 
 internal open class VKIDDepsProd(
@@ -200,7 +201,7 @@ internal open class VKIDDepsProd(
         )
     }
 
-    override val encryptedSharedPreferencesStorage: Lazy<InternalVKIDEncryptedSharedPreferencesStorage> = lazy {
+    override val encryptedSharedPreferencesStorage: Lazy<InternalVKIDPreferencesStorage> = lazy {
         InternalVKIDEncryptedSharedPreferencesStorage(appContext)
     }
 
