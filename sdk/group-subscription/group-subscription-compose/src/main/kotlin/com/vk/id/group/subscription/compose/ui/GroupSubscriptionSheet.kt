@@ -269,7 +269,7 @@ public fun GroupSubscriptionSheet(
                     when (val actualStatus = status.value) {
                         is GroupSubscriptionSheetStatus.Init -> Unit
                         is GroupSubscriptionSheetStatus.Loaded -> LoadedState(onFail, style, state, actualStatus) {
-                            GroupSubscriptionAnalytics.subscribeToGroupClick()
+                            GroupSubscriptionAnalytics.subscribeToGroupClick(VKID.instance.accessToken?.token)
                             subscribeToGroup(
                                 status,
                                 actualStatus.data,
@@ -283,7 +283,7 @@ public fun GroupSubscriptionSheet(
 
                         is GroupSubscriptionSheetStatus.Subscribing -> SubscribingState(style, state, actualStatus, onFail)
                         is GroupSubscriptionSheetStatus.Failure -> FailureState(style, state, onFail) {
-                            GroupSubscriptionAnalytics.retryClick()
+                            GroupSubscriptionAnalytics.retryClick(VKID.instance.accessToken?.token)
                             subscribeToGroup(
                                 status,
                                 actualStatus.data,
@@ -346,7 +346,7 @@ internal fun LoadedState(
     status: GroupSubscriptionSheetStatus.Loaded,
     onSubscribeButtonClick: () -> Unit,
 ) {
-    GroupSubscriptionAnalytics.SheetShown()
+    GroupSubscriptionAnalytics.SheetShown(VKID.instance.accessToken?.token)
     DataState(style, state, status.data, onFail, onSubscribeButtonClick) {
         Text(
             text = stringResource(R.string.vkid_group_subscription_primary),
@@ -397,7 +397,7 @@ internal fun FailureState(
     onFail: (VKIDGroupSubscriptionFail) -> Unit,
     onRetry: () -> Unit,
 ) {
-    GroupSubscriptionAnalytics.ErrorShown()
+    GroupSubscriptionAnalytics.ErrorShown(VKID.instance.accessToken?.token)
     FailureDataState(style, state, onFail, onRetry) {
         Text(
             text = stringResource(R.string.vkid_group_subscription_fail_primary),
@@ -462,7 +462,7 @@ private fun FailureDataState(
         Spacer(Modifier.height(12.dp))
         SecondaryButton(style, testTag = "group_subscription_cancel", text = stringResource(R.string.vkid_group_subscription_fail_secondary)) {
             state.hide()
-            GroupSubscriptionAnalytics.cancelClick()
+            GroupSubscriptionAnalytics.cancelClick(VKID.instance.accessToken?.token)
             onFail(VKIDGroupSubscriptionFail.Cancel())
         }
     }
@@ -505,7 +505,7 @@ private fun ColumnScope.DataStateButtons(
     }
     Spacer(Modifier.height(12.dp))
     SecondaryButton(style, testTag = "group_subscription_later", text = stringResource(R.string.vkid_group_subscription_secondary)) {
-        GroupSubscriptionAnalytics.nextTimeClick()
+        GroupSubscriptionAnalytics.nextTimeClick(VKID.instance.accessToken?.token)
         state.hide()
         onFail(VKIDGroupSubscriptionFail.Cancel())
     }
@@ -640,7 +640,7 @@ private fun ColumnScope.DataStateHeader(
     Row(verticalAlignment = Alignment.CenterVertically) {
         Spacer(Modifier.weight(1f))
         CloseIcon {
-            GroupSubscriptionAnalytics.close()
+            GroupSubscriptionAnalytics.close(VKID.instance.accessToken?.token)
             state.hide()
             onFail(VKIDGroupSubscriptionFail.Close())
         }
@@ -701,7 +701,7 @@ private fun rememberGroupSubscriptionSheetStateInternal(): GroupSubscriptionShee
     var previousValue by remember { mutableStateOf(SheetValue.Hidden) }
     val materialSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true, confirmValueChange = {
         if (it == SheetValue.Hidden && it != previousValue) {
-            GroupSubscriptionAnalytics.close()
+            GroupSubscriptionAnalytics.close(VKID.instance.accessToken?.token)
         }
         previousValue = it
         true
