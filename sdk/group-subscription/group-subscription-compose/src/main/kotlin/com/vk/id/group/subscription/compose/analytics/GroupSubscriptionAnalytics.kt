@@ -24,38 +24,38 @@ internal object GroupSubscriptionAnalytics {
     internal val groupId = AtomicReference<String?>(null)
 
     @Composable
-    internal fun SheetShown() {
+    internal fun SheetShown(accessToken: String?) {
         SheetScreenShown {
-            track("community_follow_modal_window_show")
+            track("community_follow_modal_window_show", accessToken = accessToken)
         }
     }
 
-    internal fun subscribeToGroupClick() = track("community_follow_click")
+    internal fun subscribeToGroupClick(accessToken: String?) = track("community_follow_click", accessToken = accessToken)
 
-    internal fun nextTimeClick() = track("community_follow_next_time_click")
+    internal fun nextTimeClick(accessToken: String?) = track("community_follow_next_time_click", accessToken = accessToken)
 
-    internal fun close() {
+    internal fun close(accessToken: String?) {
         if (isErrorState.get()) {
-            track("community_follow_error_close")
+            track("community_follow_error_close", accessToken = accessToken)
         } else {
-            track("community_follow_close")
+            track("community_follow_close", accessToken = accessToken)
         }
     }
 
     @Composable
-    internal fun ErrorShown() {
+    internal fun ErrorShown(accessToken: String?) {
         SheetScreenShown {
-            track("community_follow_error_show")
+            track("community_follow_error_show", accessToken = accessToken)
         }
     }
 
-    internal fun retryClick() = track("community_follow_error_retry_click")
+    internal fun retryClick(accessToken: String?) = track("community_follow_error_retry_click", accessToken = accessToken)
 
-    internal fun cancelClick() = track("community_follow_error_cancel_click")
+    internal fun cancelClick(accessToken: String?) = track("community_follow_error_cancel_click", accessToken = accessToken)
 
     internal fun successShown(accessToken: String?) = track("community_follow_success", accessToken = accessToken)
 
-    private fun track(eventName: String, accessToken: String? = null) {
+    private fun track(eventName: String, accessToken: String?) {
         VKIDAnalytics.trackEvent(
             accessToken = accessToken,
             eventName,

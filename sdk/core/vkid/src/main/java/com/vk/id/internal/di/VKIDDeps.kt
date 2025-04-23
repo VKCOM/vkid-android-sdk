@@ -23,7 +23,7 @@ import com.vk.id.network.InternalVKIDApiContract
 import com.vk.id.network.groupsubscription.InternalVKIDGroupSubscriptionApiContract
 import com.vk.id.refresh.VKIDTokenRefresher
 import com.vk.id.refreshuser.VKIDUserRefresher
-import com.vk.id.storage.InternalVKIDEncryptedSharedPreferencesStorage
+import com.vk.id.storage.InternalVKIDPreferencesStorage
 import com.vk.id.storage.InternalVKIDTokenStorage
 
 internal interface VKIDDeps {
@@ -44,7 +44,7 @@ internal interface VKIDDeps {
     val tokenStorage: InternalVKIDTokenStorage
     val deviceIdStorage: Lazy<InternalVKIDDeviceIdProvider.DeviceIdStorage>
     val prefsStore: Lazy<InternalVKIDPrefsStore>
-    val encryptedSharedPreferencesStorage: Lazy<InternalVKIDEncryptedSharedPreferencesStorage>
+    val encryptedSharedPreferencesStorage: Lazy<InternalVKIDPreferencesStorage>
     val statTracker: VKIDAnalytics.Tracker
     val vkidPackageManager: InternalVKIDPackageManager
     val activityStarter: InternalVKIDActivityStarter

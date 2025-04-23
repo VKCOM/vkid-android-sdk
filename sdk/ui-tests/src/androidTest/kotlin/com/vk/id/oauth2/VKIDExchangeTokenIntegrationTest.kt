@@ -21,7 +21,7 @@ import com.vk.id.exchangetoken.VKIDExchangeTokenFail
 import com.vk.id.exchangetoken.VKIDExchangeTokenParams
 import com.vk.id.internal.auth.device.InternalVKIDDeviceIdProvider
 import com.vk.id.internal.store.InternalVKIDPrefsStore
-import com.vk.id.storage.InternalVKIDEncryptedSharedPreferencesStorage
+import com.vk.id.storage.InternalVKIDPreferencesStorage
 import com.vk.id.test.InternalVKIDCodePayloadResponse
 import com.vk.id.test.InternalVKIDTestBuilder
 import com.vk.id.test.InternalVKIDTokenPayloadResponse
@@ -130,11 +130,11 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
     fun exchangeTokenSuccess() = run {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
         val prefsStore = mockk<InternalVKIDPrefsStore>()
-        val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
+        val encryptedStorage = mockk<InternalVKIDPreferencesStorage>()
         InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
-            .encryptedSharedPreferencesStorage(encryptedStorage)
+            .preferencesStorage(encryptedStorage)
             .getUserInfoResponse(Result.success(USER_INFO_RESPONSE))
             .exchangeTokenResponse(Result.success(EXCHANGE_TOKEN_RESPONSE))
             .getTokenResponse(Result.success(GET_TOKEN_RESPONSE))
@@ -171,11 +171,11 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
     fun apiCallFail() = run {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
         val prefsStore = mockk<InternalVKIDPrefsStore>()
-        val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
+        val encryptedStorage = mockk<InternalVKIDPreferencesStorage>()
         InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
-            .encryptedSharedPreferencesStorage(encryptedStorage)
+            .preferencesStorage(encryptedStorage)
             .exchangeTokenResponse(Result.success(InternalVKIDCodePayloadResponse(error = "some error")))
             .build()
         every { prefsStore.clear() } just runs
@@ -200,11 +200,11 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
     fun getTokenApiCallFail() = run {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
         val prefsStore = mockk<InternalVKIDPrefsStore>()
-        val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
+        val encryptedStorage = mockk<InternalVKIDPreferencesStorage>()
         InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
-            .encryptedSharedPreferencesStorage(encryptedStorage)
+            .preferencesStorage(encryptedStorage)
             .exchangeTokenResponse(Result.success(EXCHANGE_TOKEN_RESPONSE))
             .getTokenResponse(Result.success(GET_TOKEN_RESPONSE.copy(error = "some error")))
             .exchangeTokenResponse(Result.success(EXCHANGE_TOKEN_RESPONSE))
@@ -238,11 +238,11 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
     fun getTokenStateFail() = run {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
         val prefsStore = mockk<InternalVKIDPrefsStore>()
-        val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
+        val encryptedStorage = mockk<InternalVKIDPreferencesStorage>()
         InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
-            .encryptedSharedPreferencesStorage(encryptedStorage)
+            .preferencesStorage(encryptedStorage)
             .exchangeTokenResponse(Result.success(EXCHANGE_TOKEN_RESPONSE))
             .getTokenResponse(Result.success(GET_TOKEN_RESPONSE.copy(state = "wrong state")))
             .build()
@@ -275,11 +275,11 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
     fun userDataApiCallFail() = run {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
         val prefsStore = mockk<InternalVKIDPrefsStore>()
-        val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
+        val encryptedStorage = mockk<InternalVKIDPreferencesStorage>()
         InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
-            .encryptedSharedPreferencesStorage(encryptedStorage)
+            .preferencesStorage(encryptedStorage)
             .getUserInfoResponse(Result.success(InternalVKIDUserInfoPayloadResponse(error = "some error")))
             .exchangeTokenResponse(Result.success(EXCHANGE_TOKEN_RESPONSE))
             .getTokenResponse(Result.success(GET_TOKEN_RESPONSE))
@@ -313,11 +313,11 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
     fun wrongStateFail() = run {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
         val prefsStore = mockk<InternalVKIDPrefsStore>()
-        val encryptedStorage = mockk<InternalVKIDEncryptedSharedPreferencesStorage>()
+        val encryptedStorage = mockk<InternalVKIDPreferencesStorage>()
         InternalVKIDTestBuilder(InstrumentationRegistry.getInstrumentation().context)
             .deviceIdStorage(deviceIdStorage)
             .prefsStore(prefsStore)
-            .encryptedSharedPreferencesStorage(encryptedStorage)
+            .preferencesStorage(encryptedStorage)
             .exchangeTokenResponse(Result.success(EXCHANGE_TOKEN_RESPONSE.copy(state = "wrong state")))
             .build()
         every { prefsStore.clear() } just runs

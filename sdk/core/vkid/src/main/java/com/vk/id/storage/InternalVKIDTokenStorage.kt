@@ -10,7 +10,7 @@ import com.vk.id.common.InternalVKIDApi
 
 @InternalVKIDApi
 public class InternalVKIDTokenStorage(
-    private val preferences: InternalVKIDEncryptedSharedPreferencesStorage
+    private val preferences: InternalVKIDPreferencesStorage
 ) {
     private val gson = Gson()
     internal var accessToken: AccessToken?
