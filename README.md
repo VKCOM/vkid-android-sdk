@@ -66,7 +66,7 @@ implementation("com.vk.id:vkid:${sdkVersion}")
 ```kotlin
 android {
     //...
-    defeaultConfig {
+    defaultConfig {
         addManifestPlaceholders(
             mapOf(
                 "VKIDClientID" to "1233445", // ID вашего приложения (app_id).
