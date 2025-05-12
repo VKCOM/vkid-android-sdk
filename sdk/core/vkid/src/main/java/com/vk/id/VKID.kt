@@ -12,6 +12,7 @@ import com.vk.id.analytics.VKIDAnalytics
 import com.vk.id.analytics.stat.StatTracker
 import com.vk.id.auth.VKIDAuthCallback
 import com.vk.id.auth.VKIDAuthParams
+import com.vk.id.captcha.api.VKCaptcha
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.exchangetoken.VKIDExchangeTokenCallback
 import com.vk.id.exchangetoken.VKIDExchangeTokenParams
@@ -273,6 +274,7 @@ public class VKID {
                 "vkid_sdk_init",
                 VKIDAnalytics.EventParam("wrapper_sdk_type", strValue = if (deps.isFlutter) "flutter" else "none")
             )
+            VKCaptcha.init(deps.appContext)
         }
     }
 

@@ -29,9 +29,9 @@ public class OkHttpClientProvider(
         .connectTimeout(OKHTTP_TIMEOUT_SECONDS, TimeUnit.SECONDS)
         .addInterceptor(CaptchaHandlingInterceptor())
         .apply { additionalInterceptors.forEach(::addInterceptor) }
-        .addInterceptor(loggingInterceptor())
         .addInterceptor(UserAgentInterceptor(UserAgentProvider(context)))
         .apply { InternalVKIDAdditionalInterceptors.getInterceptor()?.let(::addNetworkInterceptor) }
+        .addInterceptor(loggingInterceptor())
         .build()
 
     @VisibleForTesting

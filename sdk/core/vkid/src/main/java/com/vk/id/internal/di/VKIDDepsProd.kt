@@ -56,7 +56,7 @@ import com.vk.id.tracking.tracer.TrackingDeps
 import okhttp3.Interceptor
 
 internal open class VKIDDepsProd(
-    private val appContext: Context,
+    override val appContext: Context,
     override val isFlutter: Boolean,
     captchaRedirectUri: String? = null,
     forceError14: Boolean = false,

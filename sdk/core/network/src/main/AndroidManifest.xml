@@ -3,10 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application>
+        <!--suppress AndroidDomInspection -->
         <provider
             android:name="com.vk.id.captcha.init.SdkInitContentProvider"
-            android:authorities="com.vk.id.sample"
-            android:exported="false"
-            tools:replace="authorities" />
+            tools:node="remove" />
     </application>
 </manifest>
