@@ -2,6 +2,7 @@
 
 package com.vk.id.internal.di
 
+import android.content.Context
 import com.vk.id.AuthOptionsCreator
 import com.vk.id.AuthResultHandler
 import com.vk.id.analytics.VKIDAnalytics
@@ -49,4 +50,5 @@ internal interface VKIDDeps {
     val vkidPackageManager: InternalVKIDPackageManager
     val activityStarter: InternalVKIDActivityStarter
     val isFlutter: Boolean
+    val appContext: Context
 }

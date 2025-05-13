@@ -1,6 +1,5 @@
 package com.vk.id.network
 
-import android.content.Context
 import com.vk.id.common.InternalVKIDApi
 import okhttp3.Call
 import okhttp3.FormBody
@@ -12,10 +11,8 @@ import org.json.JSONArray
 
 @InternalVKIDApi
 public class InternalVKIDRealApi(
-    context: Context
+    private val client: OkHttpClient
 ) : InternalVKIDApiContract {
-
-    private val client: OkHttpClient = OkHttpClientProvider(context).provide()
 
     override fun getToken(
         code: String,

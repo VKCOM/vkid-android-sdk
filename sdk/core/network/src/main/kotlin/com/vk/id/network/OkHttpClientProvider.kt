@@ -5,30 +5,37 @@ package com.vk.id.network
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import androidx.annotation.VisibleForTesting
+import com.vk.id.captcha.okhttp.api.CaptchaHandlingInterceptor
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.logger.internalVKIDCreateLoggerForClass
 import com.vk.id.network.useragent.UserAgentInterceptor
 import com.vk.id.network.useragent.UserAgentProvider
 import okhttp3.CertificatePinner
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.io.BufferedInputStream
 import java.util.concurrent.TimeUnit
 
-internal class OkHttpClientProvider(
+@InternalVKIDApi
+public class OkHttpClientProvider(
     private val context: Context
 ) {
-    fun provide() = provideBuilderWithSslPinning()
+    public fun provide(
+        additionalInterceptors: List<Interceptor>
+    ): OkHttpClient = provideBuilderWithSslPinning()
         .readTimeout(OKHTTP_TIMEOUT_SECONDS, TimeUnit.SECONDS)
         .writeTimeout(OKHTTP_TIMEOUT_SECONDS, TimeUnit.SECONDS)
         .connectTimeout(OKHTTP_TIMEOUT_SECONDS, TimeUnit.SECONDS)
-        .addInterceptor(loggingInterceptor())
+        .addInterceptor(CaptchaHandlingInterceptor())
+        .apply { additionalInterceptors.forEach(::addInterceptor) }
         .addInterceptor(UserAgentInterceptor(UserAgentProvider(context)))
         .apply { InternalVKIDAdditionalInterceptors.getInterceptor()?.let(::addNetworkInterceptor) }
+        .addInterceptor(loggingInterceptor())
         .build()
 
     @VisibleForTesting
-    fun provideBuilderWithSslPinning(): OkHttpClient.Builder {
+    internal fun provideBuilderWithSslPinning(): OkHttpClient.Builder {
         val client = OkHttpClient.Builder()
         if (!isDebuggable()) {
             client.addVKPins()

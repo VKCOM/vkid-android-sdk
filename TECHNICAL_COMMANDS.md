@@ -26,3 +26,5 @@
 Обновляет baseline prfofile-ы. Перед открытием пра нужно его запустить
 - `./scripts/renovate/renovate.sh`
 Обновляет зависимости renovate-ом, требует запущенного докера
+- `./gradlew alldependencies --write-lock`
+Обновляет локи версий зависимостей
