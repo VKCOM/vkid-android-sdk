@@ -47,15 +47,61 @@ VKIDClientID=Ваш ID приложения
 
 ## Установка
 
-Для начала работы добавьте репозиторий:
+Для начала работы добавьте репозитории:
 
 ```kotlin
-maven {
-    url("https://artifactory-external.vkpartner.ru/artifactory/vkid-sdk-android/")
+pluginManagement {
+    repositories {
+        ...
+        maven(url = "https://artifactory-external.vkpartner.ru/artifactory/vkid-sdk-android/")
+        maven(url = "https://artifactory-external.vkpartner.ru/artifactory/maven/")
+    }
+}
+dependencyResolutionManagement {
+    repositories {
+        ...
+        maven {
+            url = URI("https://artifactory-external.vkpartner.ru/artifactory/vkid-sdk-android/")
+        }
+        maven {
+            url = URI("https://artifactory-external.vkpartner.ru/artifactory/maven/")
+        }
+    }
 }
 ```
 
-Подключите библиотеку:
+Настройте плагин для плейсхолдеров:
+
+```kotlin
+// Корневой build.gradle.kts
+// Подключение плагина для Manifest Placeholders.
+plugins {
+    ...
+    id("vkid.manifest.placeholders") version "1.1.0" apply true
+}
+// Добавление значений в Manifest Placeholders.
+vkidManifestPlaceholders {
+    // Добавьте плейсхолдеры сокращенным способом. Например, vkidRedirectHost будет "vk.com", а vkidRedirectScheme будет "vk$clientId".
+    init(
+        clientId = clientId,
+        clientSecret = clientSecret,
+    )
+    // Или укажите значения явно через properties, если не хотите использовать плейсхолдеры.
+    vkidRedirectHost = "vk.com", // Обычно vk.com.
+    vkidRedirectScheme = "vk1233445", // Строго в формате vk{ID приложения}.
+    vkidClientId = clientId,
+    vkidClientSecret = clientSecret
+}
+```
+
+```kotlin
+// build.gradle.kts app модулей
+plugins {
+    id("vkid.manifest.placeholders")
+}
+```
+
+И подключите библиотеку:
 
 ```kotlin
 implementation("com.vk.id:vkid:${sdkVersion}")
@@ -66,13 +112,13 @@ implementation("com.vk.id:vkid:${sdkVersion}")
 ```kotlin
 android {
     //...
-    defeaultConfig {
+    defaultConfig {
         addManifestPlaceholders(
             mapOf(
                 "VKIDClientID" to "1233445", // ID вашего приложения (app_id).
                 "VKIDClientSecret" to "000000000000", // Ваш защищенный ключ (client_secret).
                 "VKIDRedirectHost" to "vk.com", // Обычно используется vk.com.
-                "VKIDRedirectScheme" to "vk1233445", // Обычно используется vk{ID приложения}.
+                "VKIDRedirectScheme" to "vk1233445", // Должно быть vk{ID приложения}.
             )
         )
     }
@@ -99,7 +145,7 @@ fun onCreate() {
 
 ```kotlin
 private val vkAuthCallback = object : VKIDAuthCallback {
-    override fun onSuccess(accessToken: AccessToken) {     
+    override fun onAuth(accessToken: AccessToken) {     
         val token = accessToken.token
         //...
     }
