@@ -23,6 +23,7 @@ tracer {
 dependencies {
     implementation(projects.common)
     implementation(projects.trackingCore)
+    implementation(libs.kotlinx.coroutines.core)
     implementation(libs.tracer.lite.crash.reporting)
     implementation(libs.tracer.lite.performance.metrics)
     testImplementation(libs.mockk)

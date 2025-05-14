@@ -2,6 +2,10 @@
 
 > **Note**\
 > Описание основных изменений в релизах VK ID SDK. Наш SDK следует [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+## 2.4.0 (14-05-2025)
+
+### Added
++ Добавили поддержку Captcha. Теперь она обрабатывается в запросах, которые делает VK ID SDK, по умолчанию. Также упрощена интеграция обработки Captcha, если вы используете Access token для своих запросов в api.vk.com. Подробнее об этом читайте в [документации](!!ru/vkid/latest/vk-id/connection/start-integration/android/install.mdx#Podderzhka-Captcha).
 ## 2.3.2 (19-03-2025)
 
 ### Changed

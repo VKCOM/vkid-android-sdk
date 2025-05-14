@@ -130,7 +130,6 @@ internal class VKIDTest : BehaviorSpec({
         val authParams = VKIDAuthParams { oAuth = OAuth.VK }
         val authOptions = AuthOptions(
             appId = "appId",
-            clientSecret = "client secret",
             codeChallenge = "code challenge",
             codeChallengeMethod = "code challenge method",
             redirectUriBrowser = "redirect uri browser",
