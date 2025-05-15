@@ -29,6 +29,8 @@ import com.vk.id.internal.auth.app.TrustedProvidersCache
 import com.vk.id.internal.auth.device.DeviceIdPrefs
 import com.vk.id.internal.auth.device.InternalVKIDDeviceIdProvider
 import com.vk.id.internal.auth.pkce.PkceGeneratorSHA256
+import com.vk.id.internal.captcha.ForceError14Interceptor
+import com.vk.id.internal.captcha.HitmanChallengeInterceptor
 import com.vk.id.internal.concurrent.CoroutinesDispatchersProd
 import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
 import com.vk.id.internal.context.AndroidPackageManager
@@ -43,6 +45,7 @@ import com.vk.id.internal.user.UserDataFetcher
 import com.vk.id.logout.VKIDLoggerOut
 import com.vk.id.network.InternalVKIDApiContract
 import com.vk.id.network.InternalVKIDRealApi
+import com.vk.id.network.OkHttpClientProvider
 import com.vk.id.refresh.VKIDTokenRefresher
 import com.vk.id.refreshuser.VKIDUserRefresher
 import com.vk.id.storage.InternalVKIDEncryptedSharedPreferencesStorage
@@ -50,10 +53,14 @@ import com.vk.id.storage.TokenStorage
 import com.vk.id.tracking.core.CrashReporter
 import com.vk.id.tracking.core.PerformanceTracker
 import com.vk.id.tracking.tracer.TrackingDeps
+import okhttp3.Interceptor
 
 internal open class VKIDDepsProd(
-    private val appContext: Context,
+    override val appContext: Context,
     override val isFlutter: Boolean,
+    captchaRedirectUri: String? = null,
+    forceError14: Boolean = false,
+    forceHitmanChallenge: Boolean = false,
 ) : VKIDDeps {
 
     private val serviceCredentials: Lazy<ServiceCredentials> = lazy {
@@ -93,8 +100,17 @@ internal open class VKIDDepsProd(
     override val vkidPackageManager: InternalVKIDPackageManager = AndroidPackageManager(appContext.packageManager)
     override val activityStarter: InternalVKIDActivityStarter = DefaultActivityStarter(appContext)
 
+    private val additionalInterceptors: List<Interceptor> = listOfNotNull(
+        HitmanChallengeInterceptor().takeIf { forceHitmanChallenge },
+        ForceError14Interceptor(captchaRedirectUri).takeIf { forceError14 },
+    )
+
+    private val httpClient by lazy {
+        OkHttpClientProvider(appContext).provide(additionalInterceptors)
+    }
+
     override val api: Lazy<InternalVKIDApiContract> = lazy {
-        InternalVKIDRealApi(context = appContext)
+        InternalVKIDRealApi(httpClient)
     }
     private val apiService = lazy { VKIDApiService(api.value) }
 
