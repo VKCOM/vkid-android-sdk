@@ -2,6 +2,8 @@
 
 package com.vk.id
 
+import android.content.Context
+import android.os.Looper
 import com.vk.id.analytics.VKIDAnalytics
 import com.vk.id.analytics.stat.StatTracker
 import com.vk.id.auth.VKIDAuthParams
@@ -37,6 +39,7 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -59,6 +62,9 @@ internal class VKIDTest : BehaviorSpec({
     var isFlutter = false
     val crashReporter = mockk<CrashReporter>()
     val performanceTracker = mockk<PerformanceTracker>()
+    val appContext = mockk<Context>()
+    val context = mockk<Context>()
+    every { context.applicationContext } returns appContext
     every { crashReporter.report(any()) } just runs
     every { crashReporter.runReportingCrashes<Unit>(any(), any()) } answers {
         secondArg<() -> Unit>()()
@@ -66,8 +72,14 @@ internal class VKIDTest : BehaviorSpec({
     coEvery { crashReporter.runReportingCrashesSuspend<Any>(any(), any()) } coAnswers {
         secondArg<suspend () -> Any>()()
     }
+    mockkStatic(Looper::class)
+    val looper = mockk<Looper> {
+        every { thread } returns Thread.currentThread()
+    }
+    every { Looper.getMainLooper() } returns looper
     val trackingTracker = mockk<VKIDAnalytics.Tracker>(relaxed = true)
     val deps = object : VKIDDeps {
+        override val appContext: Context = context
         override val authProvidersChooser: Lazy<AuthProvidersChooser> = lazy { authProvidersChooser }
         override val authOptionsCreator: AuthOptionsCreator = authOptionsCreator
         override val authCallbacksHolder: AuthCallbacksHolder = authCallbacksHolder
