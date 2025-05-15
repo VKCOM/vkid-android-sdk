@@ -27,6 +27,7 @@ dependencyResolutionManagement {
                 }
             }
         }
+        maven { setUrl("https://artifactory-external.vkpartner.ru/artifactory/vk-id-captcha/android/") }
         maven { setUrl("https://artifactory-external.vkpartner.ru/artifactory/maven/") }
     }
 }
