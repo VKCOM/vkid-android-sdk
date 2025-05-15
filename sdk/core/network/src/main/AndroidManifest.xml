@@ -1,2 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application>
+        <!--suppress AndroidDomInspection -->
+        <provider
+            android:name="com.vk.id.captcha.init.SdkInitContentProvider"
+            tools:node="remove" />
+    </application>
+</manifest>

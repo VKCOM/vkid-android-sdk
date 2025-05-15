@@ -1,23 +1,23 @@
-package com.vk.id.sample.xml.sctrictmode
+package com.vk.id.sample.xml.prefs.sctrictmode
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.StrictMode
-import androidx.preference.PreferenceManager
 import com.vk.id.sample.xml.R
+import com.vk.id.sample.xml.prefs.BooleanPrefsHandle
 
 public object StrictModeHandler {
 
-    private const val KEY_IS_STRICT_MODE_ENABLED = "KEY_IS_STRICT_MODE_ENABLED"
+    private val handle = BooleanPrefsHandle("KEY_IS_STRICT_MODE_ENABLED")
 
     public fun isStrictModeEnabled(context: Context): Boolean {
         val defaultValueFromLocalProperties = context.resources.getBoolean(R.bool.default_strict_mode_enabled)
-        return getPrefs(context).getBoolean(KEY_IS_STRICT_MODE_ENABLED, defaultValueFromLocalProperties)
+        return handle.get(context, defaultValueFromLocalProperties)
     }
 
     @SuppressLint("ApplySharedPref")
     public fun setStrictModeEnabled(context: Context, isEnabled: Boolean) {
-        getPrefs(context).edit().putBoolean(KEY_IS_STRICT_MODE_ENABLED, isEnabled).commit()
+        return handle.set(context, isEnabled)
     }
 
     internal fun enableStrictMode() {
@@ -36,6 +36,4 @@ public object StrictModeHandler {
                 .build()
         )
     }
-
-    private fun getPrefs(context: Context) = PreferenceManager.getDefaultSharedPreferences(context)
 }

@@ -12,6 +12,7 @@ import com.vk.id.analytics.VKIDAnalytics
 import com.vk.id.analytics.stat.StatTracker
 import com.vk.id.auth.VKIDAuthCallback
 import com.vk.id.auth.VKIDAuthParams
+import com.vk.id.captcha.api.VKCaptcha
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.exchangetoken.VKIDExchangeTokenCallback
 import com.vk.id.exchangetoken.VKIDExchangeTokenParams
@@ -86,10 +87,32 @@ public class VKID {
          *
          * @param context The context of the application.
          */
-        public fun init(context: Context): Unit = init(context, isFlutter = false)
+        public fun init(context: Context): Unit = init(
+            context = context,
+            isFlutter = false,
+            captchaRedirectUri = null,
+            forceError14 = false,
+            forceHitmanChallenge = false,
+        )
 
         @InternalVKIDApi
-        public fun init(context: Context, isFlutter: Boolean): Unit = init(VKID(VKIDDepsProd(context, isFlutter)))
+        public fun init(
+            context: Context,
+            isFlutter: Boolean,
+            captchaRedirectUri: String?,
+            forceError14: Boolean,
+            forceHitmanChallenge: Boolean,
+        ): Unit = init(
+            VKID(
+                VKIDDepsProd(
+                    appContext = context,
+                    isFlutter = isFlutter,
+                    captchaRedirectUri = captchaRedirectUri,
+                    forceError14 = forceError14,
+                    forceHitmanChallenge = forceHitmanChallenge,
+                )
+            )
+        )
 
         @Suppress("LongParameterList")
         internal fun init(
@@ -251,6 +274,7 @@ public class VKID {
                 "vkid_sdk_init",
                 VKIDAnalytics.EventParam("wrapper_sdk_type", strValue = if (deps.isFlutter) "flutter" else "none")
             )
+            VKCaptcha.init(deps.appContext)
         }
     }
 

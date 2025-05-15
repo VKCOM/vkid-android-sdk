@@ -5,6 +5,7 @@ package com.vk.id.tracking.tracer
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.tracking.core.AnalyticsTracking
 import com.vk.id.tracking.core.CrashReporter
+import kotlinx.coroutines.CancellationException
 import ru.ok.tracer.lite.TracerLite
 import ru.ok.tracer.lite.crash.report.TracerCrashReportLite
 
@@ -57,6 +58,8 @@ internal class TracerCrashReporter(
     ): T {
         try {
             return action()
+        } catch (t: CancellationException) {
+            throw t
         } catch (@Suppress("TooGenericExceptionCaught") t: Throwable) {
             report(t)
             return errorValueProvider(t)

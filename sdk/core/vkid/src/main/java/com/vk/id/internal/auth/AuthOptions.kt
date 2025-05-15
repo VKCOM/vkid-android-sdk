@@ -7,7 +7,6 @@ import com.vk.id.auth.VKIDAuthParams
 
 internal data class AuthOptions(
     val appId: String,
-    val clientSecret: String,
     val codeChallenge: String,
     val codeChallengeMethod: String,
     val redirectUriCodeFlow: String,
