@@ -1,4 +1,4 @@
-@file:OptIn(InternalVKIDApi::class)
+@file:OptIn(InternalVKIDApi::class, ExperimentalMaterial3Api::class)
 
 package com.vk.id.group.subscription.compose.ui
 
@@ -74,10 +74,11 @@ import com.vk.id.group.subscription.common.style.GroupSubscriptionStyle
 import com.vk.id.group.subscription.compose.R
 import com.vk.id.group.subscription.compose.analytics.GroupSubscriptionAnalytics
 import com.vk.id.group.subscription.compose.close.CloseIcon
-import com.vk.id.group.subscription.compose.interactor.InternalVKIDGroupSubscriptionInteractor
+import com.vk.id.group.subscription.compose.interactor.GroupSubscriptionInteractor
 import com.vk.id.group.subscription.compose.interactor.ServiceAccountException
 import com.vk.id.group.subscription.compose.progress.CircleProgress
 import com.vk.id.group.subscription.compose.snackbar.GroupSubscriptionSnackbar
+import com.vk.id.group.subscription.compose.storage.GroupSubscriptionPrefsStorage
 import com.vk.id.group.subscription.compose.util.PrimaryButton
 import com.vk.id.group.subscription.compose.util.SecondaryButton
 import com.vk.id.group.subscription.compose.util.TightWrapText
@@ -153,7 +154,6 @@ public fun GroupSubscriptionSnackbarHost(
  *
  * @since 2.5.0
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Suppress("LongMethod", "CyclomaticComplexMethod")
 public fun GroupSubscriptionSheet(
@@ -166,6 +166,16 @@ public fun GroupSubscriptionSheet(
     snackbarHostState: SnackbarHostState? = null,
     style: GroupSubscriptionStyle = GroupSubscriptionStyle.Light(),
 ) {
+    val interactor = remember(groupId) {
+        GroupSubscriptionInteractor(
+            apiService = VKID.instance.groupSubscriptionApiService,
+            tokenStorage = VKID.instance.tokenStorage,
+            groupId = groupId,
+            externalAccessTokenProvider = accessTokenProvider,
+            storage = GroupSubscriptionPrefsStorage(VKID.instance.prefsStorage),
+            limit = VKID.instance.groupSubscriptionLimit,
+        )
+    }
     GroupSubscriptionAnalytics.style.set(style)
     GroupSubscriptionAnalytics.groupId.set(groupId)
     val actualSnackbarHostState = snackbarHostState ?: remember { SnackbarHostState() }
@@ -201,14 +211,6 @@ public fun GroupSubscriptionSheet(
         coroutineScope,
         state,
     )
-    val interactor = remember(groupId) {
-        InternalVKIDGroupSubscriptionInteractor(
-            apiService = VKID.instance.groupSubscriptionApiService,
-            tokenStorage = VKID.instance.tokenStorage,
-            groupId = groupId,
-            externalAccessTokenProvider = accessTokenProvider,
-        )
-    }
     remember(groupId) {
         state.showSheet = {
             if (it) {
@@ -274,7 +276,7 @@ public fun GroupSubscriptionSheet(
                         .set(status.value is GroupSubscriptionSheetStatus.Failure || status.value is GroupSubscriptionSheetStatus.Resubscribing)
                     when (val actualStatus = status.value) {
                         is GroupSubscriptionSheetStatus.Init -> Unit
-                        is GroupSubscriptionSheetStatus.Loaded -> LoadedState(onFail, style, state, actualStatus) {
+                        is GroupSubscriptionSheetStatus.Loaded -> LoadedState({ interactor.saveDisplay() }, onFail, style, state, actualStatus) {
                             GroupSubscriptionAnalytics.subscribeToGroupClick(VKID.instance.accessToken?.token)
                             subscribeToGroup(
                                 status,
@@ -328,7 +330,7 @@ private fun subscribeToGroup(
     data: GroupSubscriptionSheetStatusData,
     state: GroupSubscriptionSheetState,
     coroutineScope: CoroutineScope,
-    interactor: InternalVKIDGroupSubscriptionInteractor,
+    interactor: GroupSubscriptionInteractor,
     onSuccess: () -> Unit,
     progressStatus: GroupSubscriptionSheetStatus
 ) {
@@ -345,13 +347,23 @@ private fun subscribeToGroup(
 }
 
 @Composable
+@Suppress("LongParameterList")
 internal fun LoadedState(
+    saveDisplay: suspend () -> Unit,
     onFail: (VKIDGroupSubscriptionFail) -> Unit,
     style: GroupSubscriptionStyle,
     state: GroupSubscriptionSheetState,
     status: GroupSubscriptionSheetStatus.Loaded,
     onSubscribeButtonClick: () -> Unit,
 ) {
+    var once by rememberSaveable { mutableStateOf(true) }
+    val rememberedSaveDisplay by rememberUpdatedState(saveDisplay)
+    LaunchedEffect(Unit) {
+        if (once) {
+            rememberedSaveDisplay()
+            once = false
+        }
+    }
     GroupSubscriptionAnalytics.SheetShown(VKID.instance.accessToken?.token)
     DataState(style, state, status.data, onFail, onSubscribeButtonClick) {
         Text(

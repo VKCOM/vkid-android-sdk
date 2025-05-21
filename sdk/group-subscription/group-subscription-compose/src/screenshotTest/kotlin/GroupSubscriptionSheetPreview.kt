@@ -32,6 +32,7 @@ private val DATA = GroupSubscriptionSheetStatusData(
 private fun LoadedStatePreview() {
     VKID.initForScreenshotTests(LocalContext.current)
     LoadedState(
+        saveDisplay = {},
         style = GroupSubscriptionStyle.Light(
             cornersStyle = GroupSubscriptionSheetCornersStyle.Rounded,
             buttonsCornersStyle = GroupSubscriptionButtonsCornersStyle.Custom(4f),
@@ -48,6 +49,7 @@ private fun LoadedStatePreview() {
 private fun LoadedDarkStatePreview() {
     VKID.initForScreenshotTests(LocalContext.current)
     LoadedState(
+        saveDisplay = {},
         style = GroupSubscriptionStyle.Dark(),
         state = rememberGroupSubscriptionSheetState(),
         status = GroupSubscriptionSheetStatus.Loaded(DATA),
