@@ -3,6 +3,7 @@ package com.vk.id.test
 import android.content.Context
 import com.vk.id.VKID
 import com.vk.id.common.InternalVKIDApi
+import com.vk.id.groupsubscription.GroupSubscriptionLimit
 import com.vk.id.internal.auth.device.InternalVKIDDeviceIdProvider
 import com.vk.id.internal.context.InternalVKIDActivityStarter
 import com.vk.id.internal.context.InternalVKIDPackageManager
@@ -39,6 +40,7 @@ public class InternalVKIDTestBuilder(
     private var getMembersResponses =
         listOf(Result.failure<InternalVKIDGroupMembersData>(UnsupportedOperationException("Not mocked")))
     private var subscribeToGroupResponses = listOf(Result.failure<Unit>(UnsupportedOperationException("Not mocked")))
+    private var groupSubscriptionLimit: GroupSubscriptionLimit? = null
     private val mockGroupSubscriptionApi = object : InternalVKIDGroupSubscriptionApiContract {
         override suspend fun isServiceAccount(accessToken: String): Boolean {
             return isServiceAccountResponse.getOrThrow()
@@ -179,6 +181,10 @@ public class InternalVKIDTestBuilder(
         subscribeToGroupResponses = responses
     }
 
+    public fun groupSubscriptionLimit(limit: GroupSubscriptionLimit): InternalVKIDTestBuilder = apply {
+        groupSubscriptionLimit = limit
+    }
+
     public fun build() {
         VKID.init(
             context = context,
@@ -189,6 +195,7 @@ public class InternalVKIDTestBuilder(
             encryptedSharedPreferencesStorage = preferencesStorage,
             packageManager = packageManager,
             activityStarter = activityStarter,
+            groupSubscriptionLimit = groupSubscriptionLimit,
         )
     }
 }

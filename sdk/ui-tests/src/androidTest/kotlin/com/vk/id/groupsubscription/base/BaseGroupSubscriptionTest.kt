@@ -17,6 +17,7 @@ import com.vk.id.common.mockapi.getGroupSuccess
 import com.vk.id.common.mockapi.getMembersSuccess
 import com.vk.id.common.mockprovider.pm.MockPmOnlyBrowser
 import com.vk.id.group.subscription.common.fail.VKIDGroupSubscriptionFail
+import com.vk.id.groupsubscription.GroupSubscriptionLimit
 import com.vk.id.groupsubscription.screen.GroupSubscriptionErrorScreen
 import com.vk.id.groupsubscription.screen.GroupSubscriptionLoadedScreen
 import com.vk.id.groupsubscription.screen.GroupSubscriptionSnackbarScreen
@@ -41,6 +42,43 @@ public abstract class BaseGroupSubscriptionTest : BaseUiTest() {
 
     @get:Rule
     public val composeTestRule: AutoTestActivityRule = createAndroidComposeRule()
+
+    public open fun limitReached() {
+        var isSuccess = false
+        var fail: VKIDGroupSubscriptionFail? = null
+        before {
+            vkidBuilder()
+                .isServiceAccountResponse(Result.success(false))
+                .getGroupSuccess()
+                .getMembersSuccess()
+                .subscribeToGroupResponse(Result.success(Unit))
+                .groupSubscriptionLimit(GroupSubscriptionLimit(maxSubscriptionsToShow = 0, periodInDays = 30))
+                .build()
+            VKID.instance.mockAuthorized()
+            clearDisplays()
+            setContent(
+                onSuccess = { isSuccess = true },
+                onFail = { fail = it },
+            )
+        }.after {
+        }.run {
+            step("Шторка не видна") {
+                onLoadedScreen {
+                    sheet.assertIsNotDisplayed()
+                }
+            }
+            step("Не приходит колбек об успехе") {
+                flakySafely {
+                    isSuccess.shouldBeFalse()
+                }
+            }
+            step("Приходит ошибка") {
+                flakySafely {
+                    fail.shouldBeInstanceOf<VKIDGroupSubscriptionFail.ClientLimitReached>()
+                }
+            }
+        }
+    }
 
     public open fun isServiceAccountFail() {
         var isSuccess = false
@@ -221,8 +259,10 @@ public abstract class BaseGroupSubscriptionTest : BaseUiTest() {
                 .getGroupSuccess()
                 .getMembersSuccess()
                 .subscribeToGroupResponse(Result.success(Unit))
+                .groupSubscriptionLimit(GroupSubscriptionLimit(maxSubscriptionsToShow = 1, periodInDays = 30))
                 .build()
             VKID.instance.mockAuthorized()
+            clearDisplays()
             setContent(
                 onSuccess = { isSuccess = true },
                 onFail = { fail = it },
@@ -554,4 +594,8 @@ public abstract class BaseGroupSubscriptionTest : BaseUiTest() {
     private fun vkidBuilder(): InternalVKIDTestBuilder = InternalVKIDTestBuilder(composeTestRule.activity)
         .overridePackageManager(MockPmOnlyBrowser())
         .overrideActivityStarter(MockProviderActivityStarter(composeTestRule.activity))
+
+    private fun clearDisplays() {
+        VKID.instance.prefsStorage.set("GROUP_SUBSCRIPTION_DISPLAYS_0", null)
+    }
 }
