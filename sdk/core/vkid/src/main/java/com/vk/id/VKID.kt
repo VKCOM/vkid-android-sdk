@@ -325,9 +325,11 @@ public class VKID {
                     |CI build: ${BuildConfig.CI_BUILD_NUMBER} ${BuildConfig.CI_BUILD_TYPE}
                 """.trimMargin()
             )
+            val limit = deps.groupSubscriptionLimit?.let { "${it.maxSubscriptionsToShow};${it.periodInDays}" }
             VKIDAnalytics.trackEvent(
-                "vkid_sdk_init",
-                VKIDAnalytics.EventParam("wrapper_sdk_type", strValue = if (deps.isFlutter) "flutter" else "none")
+                name = "vkid_sdk_init",
+                VKIDAnalytics.EventParam("wrapper_sdk_type", strValue = if (deps.isFlutter) "flutter" else "none"),
+                VKIDAnalytics.EventParam("limit_settings", strValue = limit),
             )
             VKCaptcha.init(deps.appContext)
         }
