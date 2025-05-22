@@ -144,4 +144,24 @@ public sealed class VKIDGroupSubscriptionFail(
             return description.hashCode()
         }
     }
+
+    /**
+     * Represents the case when user reached the limit of displays that you've set in VKID.init
+     *
+     * @since 2.5.0
+     */
+    public class ClientLimitReached : VKIDGroupSubscriptionFail(
+        description = "User reached the limit of group subscription displays that you've set on the client side"
+    ) {
+
+        /** @suppress */
+        override fun equals(other: Any?): Boolean {
+            return other is ClientLimitReached && description == other.description
+        }
+
+        /** @suppress */
+        override fun hashCode(): Int {
+            return description.hashCode()
+        }
+    }
 }

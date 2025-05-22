@@ -44,7 +44,7 @@ internal class GroupSubscriptionInteractor(
 
     internal suspend fun loadGroup(): InternalVKIDGroupData {
         when {
-            !shouldShowGroupSubscription() -> throw LimitReachedException()
+            !shouldShowGroupSubscription() -> throw ClientLimitReachedException()
             !apiService.isServiceAccount(accessToken) -> return getGroup()
             else -> throw ServiceAccountException()
         }
