@@ -16,7 +16,14 @@ internal class StatEventJson(
     val json: JSONObject
 
     private companion object {
-        private val specialParams = listOf("screen_current", "screen_to", "error", "wrapper_sdk_type", "app_id")
+        private val specialParams = listOf(
+            "screen_current",
+            "screen_to",
+            "error",
+            "wrapper_sdk_type",
+            "app_id",
+            "external_device_id",
+        )
         private val techEvents = setOf("vkid_sdk_init")
     }
 

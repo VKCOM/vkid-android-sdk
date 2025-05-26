@@ -2,6 +2,7 @@
 
 package com.vk.id.analytics.stat
 
+import android.content.Context
 import com.vk.id.analytics.BuildConfig
 import com.vk.id.analytics.VKIDAnalytics
 import com.vk.id.common.InternalVKIDApi
@@ -9,6 +10,7 @@ import com.vk.id.logger.internalVKIDCreateLoggerForClass
 import com.vk.id.network.InternalVKIDApiContract
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -28,9 +30,11 @@ public class StatTracker(
     private val clientId: String,
     private val clientSecret: String,
     private val api: Lazy<InternalVKIDApiContract>,
-    dispatcher: CoroutineDispatcher
+    dispatcher: CoroutineDispatcher,
+    context: Context,
 ) : VKIDAnalytics.Tracker {
 
+    private val storage = AnalyticsStorage(context)
     private val trackerScope = CoroutineScope(dispatcher + SupervisorJob())
     private val logger = internalVKIDCreateLoggerForClass()
     private val anonymousBatchEvents = LinkedBlockingQueue<JSONObject>()
@@ -48,29 +52,32 @@ public class StatTracker(
     }
 
     override fun trackEvent(accessToken: String?, name: String, vararg params: VKIDAnalytics.EventParam) {
-        val eventJson = StatEventJson(name, params, eventCounter.eventId, eventCounter.prevEventId)
-        eventCounter.increment()
-        (if (accessToken == null) anonymousBatchEvents else personalizedBatchEvents).add(eventJson.json)
-        trackerScope.launch {
-            delay(1.seconds)
-            sendEvents(
-                accessToken = "",
-                batchEvents = anonymousBatchEvents,
-                apiMethod = { _, clientId, clientSecret, sakVersion, events ->
-                    api.value.sendStatEventsAnonymously(
-                        clientId = clientId,
-                        clientSecret = clientSecret,
-                        sakVersion = sakVersion,
-                        events = events,
-                    )
-                },
-            )
-            if (accessToken != null) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val eventJson = StatEventJson(name, params, eventCounter.eventId, eventCounter.prevEventId)
+            eventCounter.increment()
+            (if (accessToken == null) anonymousBatchEvents else personalizedBatchEvents).add(eventJson.json)
+            trackerScope.launch {
+                delay(1.seconds)
                 sendEvents(
-                    accessToken = accessToken,
-                    batchEvents = personalizedBatchEvents,
-                    apiMethod = api.value::sendStatEvents,
+                    accessToken = "",
+                    batchEvents = anonymousBatchEvents,
+                    apiMethod = { _, clientId, clientSecret, sakVersion, events, externalDeviceId ->
+                        api.value.sendStatEventsAnonymously(
+                            clientId = clientId,
+                            clientSecret = clientSecret,
+                            sakVersion = sakVersion,
+                            events = events,
+                            externalDeviceId = externalDeviceId,
+                        )
+                    },
                 )
+                if (accessToken != null) {
+                    sendEvents(
+                        accessToken = accessToken,
+                        batchEvents = personalizedBatchEvents,
+                        apiMethod = api.value::sendStatEvents,
+                    )
+                }
             }
         }
     }
@@ -83,7 +90,8 @@ public class StatTracker(
             clientId: String,
             clientSecret: String,
             versionName: String,
-            eventsJson: JSONArray
+            eventsJson: JSONArray,
+            externalDeviceId: String,
         ) -> Call
     ) {
         val events = mutableListOf<JSONObject>()
@@ -96,7 +104,8 @@ public class StatTracker(
                     clientId,
                     clientSecret,
                     BuildConfig.VKID_VERSION_NAME,
-                    eventsJson
+                    eventsJson,
+                    storage.externalDeviceId,
                 ).execute()
                 logger.debug("Send events to stat '$eventsJson': ${response.code}")
                 response.body?.string()

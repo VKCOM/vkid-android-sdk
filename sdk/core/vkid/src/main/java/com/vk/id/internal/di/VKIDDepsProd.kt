@@ -270,7 +270,7 @@ internal open class VKIDDepsProd(
 
     override val statTracker: VKIDAnalytics.Tracker
         get() = with(serviceCredentials.value) {
-            StatTracker(clientID, clientSecret, api, dispatchers.io)
+            StatTracker(clientID, clientSecret, api, dispatchers.io, appContext)
         }
     override val trackingTracker: VKIDAnalytics.Tracker
         get() = object : VKIDAnalytics.Tracker {
