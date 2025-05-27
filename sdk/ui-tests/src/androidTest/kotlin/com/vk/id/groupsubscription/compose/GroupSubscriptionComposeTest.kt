@@ -19,6 +19,13 @@ import org.junit.Test
 public class GroupSubscriptionComposeTest : BaseGroupSubscriptionTest() {
 
     @Test
+    @AllureId("2413534")
+    @DisplayName("Получение ошибки серверных лимитов Compose")
+    override fun remoteLimitReached() {
+        super.remoteLimitReached()
+    }
+
+    @Test
     @AllureId("2412805")
     @DisplayName("Получение ошибки клиентских лимитов Compose")
     override fun limitReached() {

@@ -16,6 +16,13 @@ import org.junit.Test
 public class GroupSubscriptionXmlTest : BaseGroupSubscriptionTest() {
 
     @Test
+    @AllureId("2413533")
+    @DisplayName("Получение ошибки серверных лимитов XML")
+    override fun remoteLimitReached() {
+        super.remoteLimitReached()
+    }
+
+    @Test
     @AllureId("2412804")
     @DisplayName("Получение ошибки клиентских лимитов XML")
     override fun limitReached() {

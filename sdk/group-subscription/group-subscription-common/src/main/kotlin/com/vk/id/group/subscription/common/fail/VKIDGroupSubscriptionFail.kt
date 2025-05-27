@@ -164,4 +164,25 @@ public sealed class VKIDGroupSubscriptionFail(
             return description.hashCode()
         }
     }
+
+    /**
+     * Represents the case when user reached the limit of displays that is controlled remotely.
+     * This happens when you haven't payed for enough subscriptions.
+     *
+     * @since 2.5.0
+     */
+    public class RemoteLimitReached : VKIDGroupSubscriptionFail(
+        description = "User reached the limit of group subscription displays that is controlled remotely"
+    ) {
+
+        /** @suppress */
+        override fun equals(other: Any?): Boolean {
+            return other is RemoteLimitReached && description == other.description
+        }
+
+        /** @suppress */
+        override fun hashCode(): Int {
+            return description.hashCode()
+        }
+    }
 }

@@ -15,6 +15,16 @@ public class InternalVKIDGroupSubscriptionApiService(
     private val api: InternalVKIDGroupSubscriptionApi,
 ) : InternalVKIDGroupSubscriptionApiContract {
 
+    override suspend fun shouldShowSubscription(
+        accessToken: String,
+    ): Boolean {
+        return withContext(Dispatchers.IO) {
+            val response = api.getShouldShowSubscription(accessToken).execute()
+            val body = JSONObject(requireNotNull(response.body).string())
+            body.getJSONObject("response").getBoolean("show")
+        }
+    }
+
     override suspend fun isServiceAccount(
         accessToken: String,
     ): Boolean {

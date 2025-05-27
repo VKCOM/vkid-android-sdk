@@ -12,6 +12,15 @@ import okhttp3.OkHttpClient
 public class InternalVKIDGroupSubscriptionApi(
     private val client: OkHttpClient,
 ) {
+
+    public fun getShouldShowSubscription(
+        accessToken: String,
+    ): Call = client.createRequest(
+        host = HOST_VK_ID,
+        path = PATH_SHOULD_SHOW_SUBSCRIPTION,
+        requestBody = bodyBuilder(accessToken).build()
+    )
+
     public fun getProfileShortInfo(
         accessToken: String,
     ): Call = client.createRequest(
@@ -66,10 +75,12 @@ public class InternalVKIDGroupSubscriptionApi(
 
     private companion object {
         private const val HOST_VK_API = "https://api.vk.com"
+        private const val HOST_VK_ID = "https://id.vk.com"
         private const val PATH_ACCOUNT_PROFILE_SHORT_INFO = "method/account.getProfileShortInfo"
         private const val PATH_GROUPS_GET_BY_ID = "method/groups.getById"
         private const val PATH_GROUPS_GET_MEMBERS = "method/groups.getMembers"
         private const val PATH_GROUPS_JOIN = "method/groups.join"
+        private const val PATH_SHOULD_SHOW_SUBSCRIPTION = "vkid_sdk_is_show_subscription"
 
         private const val FIELD_ACCESS_TOKEN = "access_token"
         private const val FIELD_GROUP_ID = "group_id"

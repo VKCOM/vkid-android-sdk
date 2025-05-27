@@ -76,6 +76,7 @@ import com.vk.id.group.subscription.compose.analytics.GroupSubscriptionAnalytics
 import com.vk.id.group.subscription.compose.close.CloseIcon
 import com.vk.id.group.subscription.compose.interactor.ClientLimitReachedException
 import com.vk.id.group.subscription.compose.interactor.GroupSubscriptionInteractor
+import com.vk.id.group.subscription.compose.interactor.RemoteLimitReachedException
 import com.vk.id.group.subscription.compose.interactor.ServiceAccountException
 import com.vk.id.group.subscription.compose.progress.CircleProgress
 import com.vk.id.group.subscription.compose.snackbar.GroupSubscriptionSnackbar
@@ -243,6 +244,10 @@ public fun GroupSubscriptionSheet(
                     } catch (@Suppress("SwallowedException") e: ClientLimitReachedException) {
                         state.hide()
                         rememberedOnFail(VKIDGroupSubscriptionFail.ClientLimitReached())
+                        showBottomSheet = false
+                    } catch (@Suppress("SwallowedException") e: RemoteLimitReachedException) {
+                        state.hide()
+                        rememberedOnFail(VKIDGroupSubscriptionFail.RemoteLimitReached())
                         showBottomSheet = false
                     } catch (@Suppress("TooGenericExceptionCaught") t: Throwable) {
                         state.hide()
