@@ -53,6 +53,8 @@ import kotlin.time.Duration.Companion.seconds
  * Composable function which creates a state for [OneTapBottomSheet] and can be used as `state` parameter.
  *
  * It provides [OneTapBottomSheetState] which can, for example, trigger hiding and showing the bottom sheet.
+ *
+ * @since 0.0.1
  */
 @Composable
 public fun rememberOneTapBottomSheetState(): OneTapBottomSheetState {
@@ -84,6 +86,8 @@ public fun rememberOneTapBottomSheetState(): OneTapBottomSheetState {
  * In case this parameter is set to false the user data won't be fetched and user will have to confirm authorization on click.
  * Note: this parameter doesn't support changes in runtime.
  * Note: This parameter will hide "change account" button because in this case OneTap will have the same behaviour.
+ *
+ * @since 0.0.1
  */
 @Composable
 public fun OneTapBottomSheet(
@@ -147,6 +151,8 @@ public fun OneTapBottomSheet(
  * - null: not shown automatically
  * - 0: shown automatically immediately
  * - 1000: show automatically after 1 second
+ *
+ * @since 2.3.1
  */
 @OptIn(InternalVKIDApi::class)
 @Composable
@@ -393,6 +399,8 @@ private fun rememberOneTapBottomSheetStateInternal(): OneTapBottomSheetState {
 
 /**
  * Manages the state of the One Tap Bottom Sheet. Should be created with [rememberOneTapBottomSheetState]
+ *
+ * @since 1.0.0
  */
 @Stable
 public class OneTapBottomSheetState
@@ -404,6 +412,8 @@ internal constructor(
 
     /**
      * Shows the bottom sheet.
+     *
+     * @since 1.0.0
      */
     public fun show() {
         showSheet(true)
@@ -411,6 +421,8 @@ internal constructor(
 
     /**
      * Hides the bottom sheet.
+     *
+     * @since 1.0.0
      */
     public fun hide() {
         showSheet(false)
@@ -418,6 +430,8 @@ internal constructor(
 
     /**
      * Returns the visibility state of the bottom sheet.
+     *
+     * @since 1.0.0
      */
     public val isVisible: Boolean
         get() {

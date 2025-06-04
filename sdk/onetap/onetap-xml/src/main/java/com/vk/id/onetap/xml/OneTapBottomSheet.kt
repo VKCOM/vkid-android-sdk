@@ -28,6 +28,8 @@ import com.vk.id.onetap.compose.onetap.sheet.rememberOneTapBottomSheetState
  * You should [setCallbacks] on init view to get token after successful auth.
  *
  * To show or hide bottom sheet call [show] and [hide] methods.
+ *
+ * @since 0.0.1
  */
 public class OneTapBottomSheet @JvmOverloads constructor(
     context: Context,
@@ -40,6 +42,8 @@ public class OneTapBottomSheet @JvmOverloads constructor(
     /**
      * Adds support multibranding auth. By default this widget is not displayed.
      * This property represents a set of [OneTapOAuth] to be displayed.
+     *
+     * @since 1.2.0
      */
     public var oAuths: Set<OneTapOAuth> = emptySet()
         set(value) {
@@ -50,6 +54,8 @@ public class OneTapBottomSheet @JvmOverloads constructor(
 
     /**
      * Optional params to be passed to auth. See [VKIDAuthUiParams.Builder] for more info.
+     *
+     * @since 2.0.0-alpha
      */
     public var authParams: VKIDAuthUiParams = VKIDAuthUiParams { }
         set(value) {
@@ -71,6 +77,8 @@ public class OneTapBottomSheet @JvmOverloads constructor(
      * In case this parameter is set to false the user data won't be fetched and user will have to confirm authorization on click.
      * Note: this parameter doesn't support changes in runtime and must be initialized when the view is constructed.
      * Note: This parameter will hide "change account" button because in this case OneTap will have the same behaviour.
+     *
+     * @since 2.0.0-alpha03
      */
     public var fastAuthEnabled: Boolean = true
 
@@ -80,6 +88,8 @@ public class OneTapBottomSheet @JvmOverloads constructor(
      * - null: not shown automatically
      * - 0: shown automatically immediately
      * - 1000: show automatically after 1 second
+     *
+     * @since 2.3.1
      */
     public var autoShowDelayMillis: Long? = null
         set(value) {
@@ -134,6 +144,8 @@ public class OneTapBottomSheet @JvmOverloads constructor(
      * @param onAuthCode A callback to be invoked upon successful first step of auth - receiving auth code
      * which can later be exchanged to access token.
      * @param onFail A callback to be invoked upon an error during auth.
+     *
+     * @since 0.0.1
      */
     public fun setCallbacks(
         onAuth: (oAuth: OneTapOAuth?, accessToken: AccessToken) -> Unit,
@@ -147,6 +159,8 @@ public class OneTapBottomSheet @JvmOverloads constructor(
 
     /**
      * Expand bottom sheet with animation
+     *
+     * @since 0.0.1
      */
     public fun show() {
         state?.show()
@@ -154,6 +168,8 @@ public class OneTapBottomSheet @JvmOverloads constructor(
 
     /**
      * Hide bottom sheet with animation
+     *
+     * @since 0.0.1
      */
     public fun hide() {
         state?.hide()
@@ -161,6 +177,8 @@ public class OneTapBottomSheet @JvmOverloads constructor(
 
     /**
      * Whether the bottom sheet is visible.
+     *
+     * @since 0.0.1
      */
     public fun isVisible(): Boolean = state?.isVisible ?: false
 }

@@ -22,6 +22,8 @@ import com.vk.id.onetap.common.mutlibranding.style.toOAuthListWidgetStyle
  * @param elevationStyle elevation of the button.
  * @param vkidButtonStyle style for the button.
  * @param alternateAccountButtonStyle style for the alternate account button.
+ *
+ * @since 1.0.0
  */
 @Immutable
 public sealed class OneTapStyle(
@@ -57,6 +59,8 @@ public sealed class OneTapStyle(
      * @param cornersStyle corner radius style.
      * @param sizeStyle denotes the size of the widget.
      * @param elevationStyle elevation of the button.
+     *
+     * @since 1.0.0
      */
     public class Light(
         cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
@@ -76,6 +80,8 @@ public sealed class OneTapStyle(
      * @param cornersStyle corner radius style.
      * @param sizeStyle denotes the size of the widget.
      * @param elevationStyle elevation of the button.
+     *
+     * @since 1.0.0
      */
     public class Dark(
         cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
@@ -95,6 +101,8 @@ public sealed class OneTapStyle(
      * @param cornersStyle corner radius style.
      * @param sizeStyle denotes the size of the widget.
      * @param elevationStyle elevation of the button.
+     *
+     * @since 2.3.1
      */
     public class SecondaryLight(
         cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
@@ -114,6 +122,8 @@ public sealed class OneTapStyle(
      * @param cornersStyle corner radius style.
      * @param sizeStyle denotes the size of the widget.
      * @param elevationStyle elevation of the button.
+     *
+     * @since 2.3.1
      */
     public class SecondaryDark(
         cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
@@ -133,6 +143,8 @@ public sealed class OneTapStyle(
      * @param cornersStyle corner radius style.
      * @param sizeStyle denotes the size of the widget.
      * @param elevationStyle elevation of the button.
+     *
+     * @since 1.0.0
      */
     @Deprecated(
         "This style will be removed in future releases. Please, use SecondaryLight instead.",
@@ -156,6 +168,8 @@ public sealed class OneTapStyle(
      * @param cornersStyle corner radius style.
      * @param sizeStyle denotes the size of the widget.
      * @param elevationStyle elevation of the button.
+     *
+     * @since 1.0.0
      */
     @Deprecated(
         "This style will be removed in future releases. Please, use SecondaryDark instead.",
@@ -179,6 +193,8 @@ public sealed class OneTapStyle(
      * @param cornersStyle corner radius style.
      * @param sizeStyle denotes the size of the widget.
      * @param elevationStyle elevation of the button.
+     *
+     * @since 1.0.0
      */
     public class Icon(
         cornersStyle: OneTapButtonCornersStyle = OneTapButtonCornersStyle.Default,
@@ -202,6 +218,8 @@ public sealed class OneTapStyle(
          * @param cornersStyle corner radius style.
          * @param sizeStyle denotes the size of the widget.
          * @param elevationStyle elevation of the button.
+         *
+         * @since 1.3.0
          */
         public fun system(
             context: Context,
@@ -222,6 +240,8 @@ public sealed class OneTapStyle(
          * @param cornersStyle corner radius style.
          * @param sizeStyle denotes the size of the widget.
          * @param elevationStyle elevation of the button.
+         *
+         * @since 2.3.1
          */
         public fun secondarySystem(
             context: Context,
@@ -242,6 +262,8 @@ public sealed class OneTapStyle(
          * @param cornersStyle corner radius style.
          * @param sizeStyle denotes the size of the widget.
          * @param elevationStyle elevation of the button.
+         *
+         * @since 1.3.0
          */
         @Deprecated(
             "This style will be removed in future releases. Please, use secondarySystem instead.",

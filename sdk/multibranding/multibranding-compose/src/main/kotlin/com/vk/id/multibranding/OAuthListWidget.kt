@@ -63,6 +63,8 @@ import kotlinx.coroutines.launch
  * @param onFail A callback to be invoked upon an error during auth.
  * @param oAuths A set of [OAuth]s the should be displayed to the user.
  * @param authParams Optional params to be passed to auth. See [VKIDAuthUiParams.Builder] for more info.
+ *
+ * @since 1.0.0
  */
 @Composable
 public fun OAuthListWidget(
