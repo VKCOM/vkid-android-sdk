@@ -264,11 +264,14 @@ private fun TypedArray.getCornerRadius(context: Context) = getDimension(
     context.dpToPixels(OAuthListWidgetCornersStyle.Default.radiusDp)
 )
 
+@Suppress("MagicNumber")
 private fun TypedArray.getStyleConstructor(
     context: Context
 ) = when (getInt(R.styleable.vkid_OAuthListWidget_vkid_OAuthListStyle, 0)) {
     1 -> OAuthListWidgetStyle::Dark
     2 -> OAuthListWidgetStyle::Light
+    4 -> OAuthListWidgetStyle::Dark
+    5 -> OAuthListWidgetStyle::Light
     else -> { cornersStyle: OAuthListWidgetCornersStyle, sizeStyle: OAuthListWidgetSizeStyle ->
         OAuthListWidgetStyle.system(context, cornersStyle, sizeStyle)
     }

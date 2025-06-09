@@ -113,6 +113,20 @@ public class OneTapBottomSheet @JvmOverloads constructor(
         }
     private var onGroupSubscriptionStyleChange: (GroupSubscriptionStyle) -> Unit = {}
 
+    /**
+     * Delay in millis after which sheet will be automatically shown.
+     * Examples:
+     * - null: not shown automatically
+     * - 0: shown automatically immediately
+     * - 1000: show automatically after 1 second
+     */
+    public var autoShowDelayMillis: Long? = null
+        set(value) {
+            field = value
+            onAutoShowDelayMillisChange(value)
+        }
+    private var onAutoShowDelayMillisChange: (Long?) -> Unit = {}
+
     init {
         val params = parseOneTapBottomSheetAttrs(context, attrs)
         this.oAuths = params.oAuths
@@ -120,6 +134,7 @@ public class OneTapBottomSheet @JvmOverloads constructor(
         this.fastAuthEnabled = params.fastAuthEnabled
         this.groupId = params.groupId
         this.groupSubscriptionStyle = params.groupSubscriptionStyle
+        this.autoShowDelayMillis = params.autoShowDelayMillis
         composeView.setContent {
             Content(params)
         }
@@ -139,6 +154,8 @@ public class OneTapBottomSheet @JvmOverloads constructor(
         onSnackbarHostChange = { snackbarHost = it }
         var groupSubscriptionStyle by remember { mutableStateOf(groupSubscriptionStyle) }
         onGroupSubscriptionStyleChange = { groupSubscriptionStyle = it }
+        var autoShowDelayMillis by remember { mutableStateOf(autoShowDelayMillis) }
+        onAutoShowDelayMillisChange = { autoShowDelayMillis = it }
         if (groupId != null) {
             OneTapBottomSheet(
                 state = rememberOneTapBottomSheetState().also {
@@ -159,6 +176,7 @@ public class OneTapBottomSheet @JvmOverloads constructor(
                 onFailSubscribingToGroup = { onFailSubscribingToGroup(it) },
                 groupSubscriptionSnackbarHostState = snackbarHost?.snackbarHostState,
                 groupSubscriptionStyle = groupSubscriptionStyle,
+                autoShowSheetDelayMillis = autoShowDelayMillis,
             )
         } else {
             OneTapBottomSheet(
@@ -175,6 +193,7 @@ public class OneTapBottomSheet @JvmOverloads constructor(
                 oAuths = oAuths,
                 authParams = authParams,
                 fastAuthEnabled = fastAuthEnabled,
+                autoShowSheetDelayMillis = autoShowDelayMillis,
             )
         }
     }

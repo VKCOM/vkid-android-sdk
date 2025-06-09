@@ -46,6 +46,7 @@ public final class com/vk/id/onetap/xml/OneTapBottomSheet : android/widget/Frame
 	public fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;I)V
 	public synthetic fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getAuthParams ()Lcom/vk/id/auth/VKIDAuthUiParams;
+	public final fun getAutoShowDelayMillis ()Ljava/lang/Long;
 	public final fun getFastAuthEnabled ()Z
 	public final fun getGroupId ()Ljava/lang/String;
 	public final fun getGroupSubscriptionStyle ()Lcom/vk/id/group/subscription/common/style/GroupSubscriptionStyle;
@@ -54,6 +55,7 @@ public final class com/vk/id/onetap/xml/OneTapBottomSheet : android/widget/Frame
 	public final fun hide ()V
 	public final fun isVisible ()Z
 	public final fun setAuthParams (Lcom/vk/id/auth/VKIDAuthUiParams;)V
+	public final fun setAutoShowDelayMillis (Ljava/lang/Long;)V
 	public final fun setCallbacks (Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;)V
 	public static synthetic fun setCallbacks$default (Lcom/vk/id/onetap/xml/OneTapBottomSheet;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)V
 	public final fun setFastAuthEnabled (Z)V

@@ -25,10 +25,14 @@ import com.vk.id.refresh.VKIDTokenRefresher
 import com.vk.id.refreshuser.VKIDUserRefresher
 import com.vk.id.storage.InternalVKIDPreferencesStorage
 import com.vk.id.storage.InternalVKIDTokenStorage
+import com.vk.id.tracking.core.CrashReporter
+import com.vk.id.tracking.core.PerformanceTracker
 
 internal interface VKIDDeps {
     val context: Context
     val serviceCredentials: Lazy<ServiceCredentials>
+    val crashReporter: CrashReporter
+    val performanceTracker: PerformanceTracker
     val authCallbacksHolder: AuthCallbacksHolder
     val authOptionsCreator: AuthOptionsCreator
     val authProvidersChooser: Lazy<AuthProvidersChooser>
@@ -46,8 +50,10 @@ internal interface VKIDDeps {
     val prefsStore: Lazy<InternalVKIDPrefsStore>
     val encryptedSharedPreferencesStorage: Lazy<InternalVKIDPreferencesStorage>
     val statTracker: VKIDAnalytics.Tracker
+    val trackingTracker: VKIDAnalytics.Tracker
     val vkidPackageManager: InternalVKIDPackageManager
     val activityStarter: InternalVKIDActivityStarter
     val isFlutter: Boolean
+    val appContext: Context
     val groupSubscriptionApiService: Lazy<InternalVKIDGroupSubscriptionApiContract>
 }

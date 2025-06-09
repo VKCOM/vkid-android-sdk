@@ -70,6 +70,7 @@ internal fun OneTapBottomSheetScreen() {
     val selectedOAuths = rememberSaveable { mutableStateOf(setOf(OneTapOAuth.OK, OneTapOAuth.MAIL)) }
     val shouldUseXml = remember { mutableStateOf(false) }
     var scopes by remember { mutableStateOf("") }
+    var autoShowDelayMillis by remember { mutableStateOf<Long?>(null) }
     var state by remember { mutableStateOf("") }
     var codeChallenge by remember { mutableStateOf("") }
     var styleConstructors by remember { mutableStateOf<Map<String, KCallable<OneTapBottomSheetStyle>>>(emptyMap()) }
@@ -177,6 +178,17 @@ internal fun OneTapBottomSheetScreen() {
                 shape = RectangleShape,
             )
             Spacer(modifier = Modifier.height(16.dp))
+            var autoShowDelayMillisPending by remember { mutableStateOf<Long?>(null) }
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = autoShowDelayMillisPending?.toString().orEmpty(),
+                onValueChange = { autoShowDelayMillisPending = it.toLongOrNull() },
+                label = { Text("Auto show delay (millis)") },
+            )
+            Button("Apply auto show delay") {
+                autoShowDelayMillis = autoShowDelayMillisPending
+            }
+            Spacer(modifier = Modifier.height(16.dp))
         }
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -213,6 +225,7 @@ internal fun OneTapBottomSheetScreen() {
                         this.authParams = authParams
                         this.groupId = "1".takeIf { groupSubscription.value }
                         this.snackbarHost = host
+                        this.autoShowDelayMillis = autoShowDelayMillis
                         this.setGroupSubscriptionCallbacks(
                             onSuccess = { showToast(context, "Subscribed") },
                             onFail = { showToast(context, "Fail: ${it.description}") },
@@ -245,6 +258,7 @@ internal fun OneTapBottomSheetScreen() {
                             subscribeToGroupId = "1",
                             onSuccessSubscribingToGroup = { showToast(context, "Subscribed") },
                             onFailSubscribingToGroup = { showToast(context, "Fail: ${it.description}") },
+                            autoShowSheetDelayMillis = autoShowDelayMillis,
                         )
                     } else {
                         OneTapBottomSheet(
@@ -259,6 +273,7 @@ internal fun OneTapBottomSheetScreen() {
                             oAuths = selectedOAuths.value,
                             authParams = authParams,
                             fastAuthEnabled = fastAuthEnabled,
+                            autoShowSheetDelayMillis = autoShowDelayMillis,
                         )
                     }
                 }

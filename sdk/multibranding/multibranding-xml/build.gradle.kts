@@ -15,4 +15,6 @@ dependencies {
     api(projects.groupSubscriptionXml)
     implementation(projects.multibrandingCompose)
     implementation(libs.androidx.compose.ui)
+    api(libs.captcha.okhttp)
+    api(libs.captcha.core)
 }

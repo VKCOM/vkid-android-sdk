@@ -1,4 +1,3 @@
-@file:Suppress("TooManyFunctions")
 @file:OptIn(InternalVKIDApi::class)
 
 package com.vk.id.onetap.xml
@@ -97,6 +96,7 @@ internal class OneTapBottomSheetAttributeSettings(
     val oAuths: Set<OneTapOAuth>,
     val scopes: Set<String>,
     val fastAuthEnabled: Boolean,
+    val autoShowDelayMillis: Long?,
     val groupId: String?,
     val groupSubscriptionStyle: GroupSubscriptionStyle,
 )
@@ -141,6 +141,9 @@ internal fun parseOneTapBottomSheetAttrs(
                             ),
                             groupSubscriptionTypedArray.vkidInternalGetGroupSubscriptionButtonSize(),
                         ),
+                        autoShowDelayMillis = sheetTypedArray.getInt(R.styleable.vkid_OneTap_vkid_autoShowDelayMillis, -1)
+                            .takeIf { it >= 0 }
+                            ?.toLong(),
                     )
                 } finally {
                     sheetTypedArray.close()
@@ -167,7 +170,7 @@ private fun TypedArray.getOneTapButtonsElevation(context: Context) = getDimensio
     context.dpToPixels(OneTapButtonElevationStyle.Default.elevationDp)
 )
 
-@Suppress("MagicNumber")
+@Suppress("MagicNumber", "DEPRECATION")
 private fun TypedArray.getOneTapStyleConstructor(
     context: Context
 ) = when (getInt(R.styleable.vkid_OneTap_vkid_onetapStyle, 0)) {
@@ -192,11 +195,21 @@ private fun TypedArray.getOneTapStyleConstructor(
             elevationStyle = elevationStyle
         )
     }
+    7 -> OneTapStyle::SecondaryLight
+    8 -> OneTapStyle::SecondaryDark
+    9 -> { cornersStyle: OneTapButtonCornersStyle, sizeStyle: OneTapButtonSizeStyle, elevationStyle: OneTapButtonElevationStyle ->
+        OneTapStyle.secondarySystem(
+            context = context,
+            cornersStyle = cornersStyle,
+            sizeStyle = sizeStyle,
+            elevationStyle = elevationStyle
+        )
+    }
 
     else -> OneTapStyle::Light
 }
 
-@Suppress("MagicNumber")
+@Suppress("MagicNumber", "DEPRECATION")
 private fun TypedArray.getSheetStyleConstructor(
     context: Context
 ) = when (getInt(R.styleable.vkid_OneTap_vkid_bottomSheetStyle, 0)) {

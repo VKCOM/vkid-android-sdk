@@ -16,9 +16,9 @@ public sealed class OneTapSheetCornersStyle(
     public val radiusDp: Float
 ) {
     /**
-     * Default corner style with a 12 dp radius.
+     * Default corner style with a 24 dp radius.
      */
-    public object Default : OneTapSheetCornersStyle(ROUNDED_RADIUS_DP)
+    public object Default : OneTapSheetCornersStyle(DEFAULT_RADIUS_DP)
 
     /**
      * Style with no rounding (square corners).
@@ -37,6 +37,7 @@ public sealed class OneTapSheetCornersStyle(
 
     private companion object {
         private const val ROUNDED_RADIUS_DP = 12f
+        private const val DEFAULT_RADIUS_DP = 24f
         private const val NONE_RADIUS_DP = 0f
     }
 }

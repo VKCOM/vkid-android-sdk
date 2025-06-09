@@ -2,6 +2,34 @@
 
 > **Note**\
 > Описание основных изменений в релизах VK ID SDK. Наш SDK следует [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+## 2.4.0 (14-05-2025)
+
+### Added
++ Добавили поддержку Captcha. Теперь она обрабатывается в запросах, которые делает VK ID SDK, по умолчанию. Также упрощена интеграция обработки Captcha, если вы используете Access token для своих запросов в api.vk.com. Подробнее об этом читайте в [документации](!!ru/vkid/latest/vk-id/connection/start-integration/android/install.mdx#Podderzhka-Captcha).
+## 2.3.2 (19-03-2025)
+
+### Changed
++ Обновлён текст в виджете «Mail», когда он используется как единственный дополнительный способ входа. Теперь в кнопке авторизации с помощью Mail используется текст «Войти с Mail».
++ Локаль, которая позволяет настроить язык для текстов, теперь применяется к авторизации в WebView.
+
+### Fixed
++ Ранее при отсутствии установленного Chrome Browser авторизация в приложении VK могла не открываться. Исправлено. Теперь авторизация работает корректно.
+
+## 2.3.0-alpha02 (27.02.2025)
+
+### Changed
+- Понизили версию Compose bom до 2024.05.00
+
+## 2.3.1 (19-02-2025)
+
+### Added
++ Добавили возможность настроить язык для текстов UI-компонентов с помощью локали. Подробнее читайте в [документации](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/connection/start-integration/android/install). 
++ Добавили возможность автоподнятия шторки авторизации. Для интеграции воспользуйтесь [документацией](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/connection/elements/onetap-drawer/floating-onetap-android#Avtopodnyatie-shtorki-Compose) 
++ Добавили сбор крашей и статистики с помощью AppTracer. Если вам нужно отключить эту функциональность, воспользуйтесь [документацией]( https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/connection/start-integration/android/install). 
+
+### Changed
++ Сделали небольшой редизайн в SDK: теперь шторка авторизации выглядит более акцентно, а прозрачные виджеты имеют белый фон. Также классы XXXStyle.TransparentYYY теперь deprecated, но продолжают работать. Пожалуйста, обновите стили, если вы их использовали (XXXStyle.TransparentYYY → XXXStyle.SecondaryYYY), чтобы соответствовать гайдлайнам по дизайну VK.
+
 ## 2.3.0-alpha (29-01-2025)
 
 ### Added

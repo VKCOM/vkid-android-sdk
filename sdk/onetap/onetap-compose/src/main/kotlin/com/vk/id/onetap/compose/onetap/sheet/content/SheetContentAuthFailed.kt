@@ -40,18 +40,16 @@ import com.vk.id.onetap.compose.onetap.style.clip
 
 @Composable
 internal fun SheetContentAuthFailed(
-    serviceName: String,
     style: OneTapBottomSheetStyle,
     dismissSheet: () -> Unit,
     repeatClicked: () -> Unit,
 ) {
     OneTapBottomSheetAnalytics.BottomSheetErrorShown()
     SheetContentBox(
-        serviceName,
         style,
         dismissSheet,
     ) {
-        Spacer(modifier = Modifier.height(48.dp))
+        Spacer(modifier = Modifier.height(34.dp))
         Image(
             painter = painterResource(R.drawable.vkid_sheet_content_error),
             contentDescription = null,
@@ -61,15 +59,14 @@ internal fun SheetContentAuthFailed(
             modifier = Modifier.padding(top = 12.dp),
             style = TextStyle(
                 color = colorResource(style.contentTextColor),
-                fontSize = 16.sp,
+                fontSize = 15.sp,
                 fontWeight = FontWeight.W400,
-                letterSpacing = 0.1.sp,
+                letterSpacing = 0.15.sp,
                 lineHeight = 20.sp
             )
-
         )
         RepeatButton(style.oneTapStyle.alternateAccountButtonStyle, repeatClicked)
-        Spacer(modifier = Modifier.height(48.dp))
+        Spacer(modifier = Modifier.height(46.dp))
     }
 }
 
@@ -78,7 +75,7 @@ private fun RepeatButton(style: InternalVKIDAlternateAccountButtonStyle, repeatC
     // todo alternate and this button to uikit
     Box(
         modifier = Modifier
-            .padding(top = 16.dp)
+            .padding(top = 12.dp)
             .border(style.borderStyle, style.cornersStyle)
             .clip(style.cornersStyle)
             .clipToBounds()
@@ -94,13 +91,14 @@ private fun RepeatButton(style: InternalVKIDAlternateAccountButtonStyle, repeatC
         contentAlignment = Alignment.Center
     ) {
         BasicText(
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 6.5.dp, bottom = 7.5.dp),
+            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 7.5.dp, bottom = 8.5.dp),
             text = stringResource(R.string.vkid_sheet_state_auth_failed_retry),
             style = TextStyle(
                 color = style.textStyle.asColorResource(),
                 fontSize = style.sizeStyle.asFontSize(),
                 fontWeight = FontWeight.Medium,
                 textAlign = TextAlign.Center,
+                lineHeight = 20.sp,
             )
         )
     }
@@ -110,7 +108,6 @@ private fun RepeatButton(style: InternalVKIDAlternateAccountButtonStyle, repeatC
 @Composable
 private fun OneTapBottomSheetProgressPreview() {
     SheetContentAuthFailed(
-        "<Название сервиса>",
         OneTapBottomSheetStyle.Light(),
         dismissSheet = {},
         repeatClicked = {},

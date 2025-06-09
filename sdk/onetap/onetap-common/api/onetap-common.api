@@ -29,6 +29,8 @@ public abstract class com/vk/id/onetap/common/OneTapStyle {
 }
 
 public final class com/vk/id/onetap/common/OneTapStyle$Companion {
+	public final fun secondarySystem (Landroid/content/Context;Lcom/vk/id/onetap/common/button/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonSizeStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonElevationStyle;)Lcom/vk/id/onetap/common/OneTapStyle;
+	public static synthetic fun secondarySystem$default (Lcom/vk/id/onetap/common/OneTapStyle$Companion;Landroid/content/Context;Lcom/vk/id/onetap/common/button/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonSizeStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonElevationStyle;ILjava/lang/Object;)Lcom/vk/id/onetap/common/OneTapStyle;
 	public final fun system (Landroid/content/Context;Lcom/vk/id/onetap/common/button/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonSizeStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonElevationStyle;)Lcom/vk/id/onetap/common/OneTapStyle;
 	public static synthetic fun system$default (Lcom/vk/id/onetap/common/OneTapStyle$Companion;Landroid/content/Context;Lcom/vk/id/onetap/common/button/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonSizeStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonElevationStyle;ILjava/lang/Object;)Lcom/vk/id/onetap/common/OneTapStyle;
 	public final fun transparentSystem (Landroid/content/Context;Lcom/vk/id/onetap/common/button/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonSizeStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonElevationStyle;)Lcom/vk/id/onetap/common/OneTapStyle;
@@ -53,6 +55,18 @@ public final class com/vk/id/onetap/common/OneTapStyle$Light : com/vk/id/onetap/
 	public synthetic fun <init> (Lcom/vk/id/onetap/common/button/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonSizeStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonElevationStyle;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 }
 
+public final class com/vk/id/onetap/common/OneTapStyle$SecondaryDark : com/vk/id/onetap/common/OneTapStyle {
+	public fun <init> ()V
+	public fun <init> (Lcom/vk/id/onetap/common/button/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonSizeStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonElevationStyle;)V
+	public synthetic fun <init> (Lcom/vk/id/onetap/common/button/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonSizeStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonElevationStyle;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public final class com/vk/id/onetap/common/OneTapStyle$SecondaryLight : com/vk/id/onetap/common/OneTapStyle {
+	public fun <init> ()V
+	public fun <init> (Lcom/vk/id/onetap/common/button/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonSizeStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonElevationStyle;)V
+	public synthetic fun <init> (Lcom/vk/id/onetap/common/button/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonSizeStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonElevationStyle;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
 public final class com/vk/id/onetap/common/OneTapStyle$TransparentDark : com/vk/id/onetap/common/OneTapStyle {
 	public fun <init> ()V
 	public fun <init> (Lcom/vk/id/onetap/common/button/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonSizeStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonElevationStyle;)V
@@ -60,30 +74,6 @@ public final class com/vk/id/onetap/common/OneTapStyle$TransparentDark : com/vk/
 }
 
 public final class com/vk/id/onetap/common/OneTapStyle$TransparentLight : com/vk/id/onetap/common/OneTapStyle {
-	public fun <init> ()V
-	public fun <init> (Lcom/vk/id/onetap/common/button/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonSizeStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonElevationStyle;)V
-	public synthetic fun <init> (Lcom/vk/id/onetap/common/button/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonSizeStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonElevationStyle;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-}
-
-public final class com/vk/id/onetap/common/auth/style/InternalVKIDButtonStyle$Dark : com/vk/id/onetap/common/auth/style/InternalVKIDButtonStyle {
-	public fun <init> ()V
-	public fun <init> (Lcom/vk/id/onetap/common/button/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonSizeStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonElevationStyle;)V
-	public synthetic fun <init> (Lcom/vk/id/onetap/common/button/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonSizeStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonElevationStyle;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-}
-
-public final class com/vk/id/onetap/common/auth/style/InternalVKIDButtonStyle$Light : com/vk/id/onetap/common/auth/style/InternalVKIDButtonStyle {
-	public fun <init> ()V
-	public fun <init> (Lcom/vk/id/onetap/common/button/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonSizeStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonElevationStyle;)V
-	public synthetic fun <init> (Lcom/vk/id/onetap/common/button/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonSizeStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonElevationStyle;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-}
-
-public final class com/vk/id/onetap/common/auth/style/InternalVKIDButtonStyle$TransparentDark : com/vk/id/onetap/common/auth/style/InternalVKIDButtonStyle {
-	public fun <init> ()V
-	public fun <init> (Lcom/vk/id/onetap/common/button/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonSizeStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonElevationStyle;)V
-	public synthetic fun <init> (Lcom/vk/id/onetap/common/button/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonSizeStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonElevationStyle;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-}
-
-public final class com/vk/id/onetap/common/auth/style/InternalVKIDButtonStyle$TransparentLight : com/vk/id/onetap/common/auth/style/InternalVKIDButtonStyle {
 	public fun <init> ()V
 	public fun <init> (Lcom/vk/id/onetap/common/button/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonSizeStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonElevationStyle;)V
 	public synthetic fun <init> (Lcom/vk/id/onetap/common/button/style/OneTapButtonCornersStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonSizeStyle;Lcom/vk/id/onetap/common/button/style/OneTapButtonElevationStyle;ILkotlin/jvm/internal/DefaultConstructorMarker;)V

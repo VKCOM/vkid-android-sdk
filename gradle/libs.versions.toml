@@ -46,6 +46,9 @@ vkSdkVersion = "4.1.0"
 firebaseCommonKtx = "21.0.0"
 screenshot = "0.0.1-alpha06"
 kover = "0.8.3"
+material3Android = "1.3.0"
+tracer = "1.0.0-beta.1"
+captcha = "0.0.4"
 
 [libraries]
 allure-kotlin-junit4 = { group = "io.qameta.allure", name = "allure-kotlin-junit4", version.ref = "allure" }
@@ -98,9 +101,13 @@ mockk-android = { group = "io.mockk", name = "mockk-android", version.ref = "moc
 okhttp3-okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okHttpVersion" }
 okhttp3-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okHttpVersion" }
 soloader = { group = "com.facebook.soloader", name = "soloader", version.ref = "soLoader" }
+tracer-lite-crash-reporting = { group = "ru.ok.tracer", name = "tracer-lite-crash-report", version.ref = "tracer" }
+tracer-lite-performance-metrics = { group = "ru.ok.tracer", name = "tracer-lite-performance-metrics", version.ref = "tracer" }
 vk-userid = { group = "com.vk", name = "android-sdk-id", version.ref = "vkUserIdVersion" }
 vk-sdk-core = { group = "com.vk", name = "android-sdk-core", version.ref = "vkSdkVersion" }
 vk-sdk-api = { group = "com.vk", name = "android-sdk-api", version.ref = "vkSdkVersion" }
+captcha-core = { group = "com.vk.id.captcha", name = "vkid-captcha", version.ref = "captcha" }
+captcha-okhttp = { group = "com.vk.id.captcha", name = "okhttp-interceptors", version.ref = "captcha" }
 
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
@@ -139,3 +146,4 @@ baselineprofile = { id = "androidx.baselineprofile", version.ref = "baselineprof
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 screenshot = { id = "com.android.compose.screenshot", version.ref = "screenshot" }
 kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
+tracer = { id = "ru.ok.tracer", version.ref = "tracer" }

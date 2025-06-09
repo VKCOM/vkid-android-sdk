@@ -11,6 +11,8 @@ android {
 
 dependencies {
     api(projects.vkid)
+    implementation(projects.common)
+    implementation(projects.trackingCore)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.vk.sdk.core)
 }

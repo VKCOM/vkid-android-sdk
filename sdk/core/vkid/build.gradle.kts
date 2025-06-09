@@ -24,6 +24,8 @@ dependencies {
     implementation(projects.analytics)
     implementation(projects.network)
     implementation(projects.logger)
+    implementation(projects.trackingCore)
+    implementation(projects.trackingTracer)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.annotation)
@@ -32,6 +34,8 @@ dependencies {
     implementation(libs.androidx.preference)
     implementation(libs.androidx.preference.ktx)
     implementation(libs.androidx.security.crypto)
+    api(libs.captcha.okhttp)
+    api(libs.captcha.core)
     implementation(libs.gson)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.core)
@@ -39,4 +43,5 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.kotest.core)
     testImplementation(libs.kotest.assertions)
+    testImplementation(kotlin("reflect"))
 }

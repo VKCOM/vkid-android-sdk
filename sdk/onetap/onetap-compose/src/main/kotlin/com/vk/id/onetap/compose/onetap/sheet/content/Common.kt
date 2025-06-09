@@ -110,6 +110,7 @@ internal fun startAlternateAuth(
     )
 }
 
+@Suppress("DEPRECATION")
 internal fun OneTapBottomSheetStyle.toProviderTheme(): VKIDAuthParams.Theme = when (this) {
     is OneTapBottomSheetStyle.Dark,
     is OneTapBottomSheetStyle.TransparentDark -> VKIDAuthParams.Theme.Dark

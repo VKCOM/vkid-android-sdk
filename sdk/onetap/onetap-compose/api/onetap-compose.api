@@ -31,8 +31,8 @@ public final class com/vk/id/onetap/compose/onetap/OneTapTitleScenario : java/la
 }
 
 public final class com/vk/id/onetap/compose/onetap/sheet/OneTapBottomSheetKt {
-	public static final fun OneTapBottomSheet (Landroidx/compose/ui/Modifier;Lcom/vk/id/onetap/compose/onetap/sheet/OneTapBottomSheetState;Ljava/lang/String;Lcom/vk/id/onetap/compose/onetap/sheet/OneTapScenario;ZLkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Ljava/util/Set;Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapBottomSheetStyle;Lcom/vk/id/auth/VKIDAuthUiParams;ZLandroidx/compose/runtime/Composer;III)V
-	public static final fun OneTapBottomSheet (Landroidx/compose/ui/Modifier;Lcom/vk/id/onetap/compose/onetap/sheet/OneTapBottomSheetState;Ljava/lang/String;Lcom/vk/id/onetap/compose/onetap/sheet/OneTapScenario;ZLkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Ljava/util/Set;Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapBottomSheetStyle;Lcom/vk/id/auth/VKIDAuthUiParams;ZLjava/lang/String;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Landroidx/compose/material3/SnackbarHostState;Lcom/vk/id/group/subscription/common/style/GroupSubscriptionStyle;Landroidx/compose/runtime/Composer;III)V
+	public static final fun OneTapBottomSheet (Landroidx/compose/ui/Modifier;Lcom/vk/id/onetap/compose/onetap/sheet/OneTapBottomSheetState;Ljava/lang/String;Lcom/vk/id/onetap/compose/onetap/sheet/OneTapScenario;ZLkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Ljava/util/Set;Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapBottomSheetStyle;Lcom/vk/id/auth/VKIDAuthUiParams;ZLjava/lang/Long;Landroidx/compose/runtime/Composer;III)V
+	public static final fun OneTapBottomSheet (Landroidx/compose/ui/Modifier;Lcom/vk/id/onetap/compose/onetap/sheet/OneTapBottomSheetState;Ljava/lang/String;Lcom/vk/id/onetap/compose/onetap/sheet/OneTapScenario;ZLkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Ljava/util/Set;Lcom/vk/id/onetap/compose/onetap/sheet/style/OneTapBottomSheetStyle;Lcom/vk/id/auth/VKIDAuthUiParams;ZLjava/lang/String;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Landroidx/compose/material3/SnackbarHostState;Lcom/vk/id/group/subscription/common/style/GroupSubscriptionStyle;Ljava/lang/Long;Landroidx/compose/runtime/Composer;III)V
 	public static final fun rememberOneTapBottomSheetState (Landroidx/compose/runtime/Composer;I)Lcom/vk/id/onetap/compose/onetap/sheet/OneTapBottomSheetState;
 }
 
@@ -55,11 +55,20 @@ public final class com/vk/id/onetap/compose/onetap/sheet/OneTapScenario : java/l
 	public static fun values ()[Lcom/vk/id/onetap/compose/onetap/sheet/OneTapScenario;
 }
 
-public final class com/vk/id/onetap/compose/onetap/sheet/content/ComposableSingletons$SheetContentBoxKt {
-	public static final field INSTANCE Lcom/vk/id/onetap/compose/onetap/sheet/content/ComposableSingletons$SheetContentBoxKt;
+public final class com/vk/id/onetap/compose/onetap/sheet/content/ComposableSingletons$SheetContentAuthInProgressKt {
+	public static final field INSTANCE Lcom/vk/id/onetap/compose/onetap/sheet/content/ComposableSingletons$SheetContentAuthInProgressKt;
 	public static field lambda-1 Lkotlin/jvm/functions/Function3;
 	public fun <init> ()V
 	public final fun getLambda-1$onetap_compose_release ()Lkotlin/jvm/functions/Function3;
+}
+
+public final class com/vk/id/onetap/compose/onetap/sheet/content/ComposableSingletons$SheetContentBoxKt {
+	public static final field INSTANCE Lcom/vk/id/onetap/compose/onetap/sheet/content/ComposableSingletons$SheetContentBoxKt;
+	public static field lambda-1 Lkotlin/jvm/functions/Function3;
+	public static field lambda-2 Lkotlin/jvm/functions/Function3;
+	public fun <init> ()V
+	public final fun getLambda-1$onetap_compose_release ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda-2$onetap_compose_release ()Lkotlin/jvm/functions/Function3;
 }
 
 public final class com/vk/id/onetap/compose/onetap/sheet/content/OneTapBottomSheetAuthStatus$AuthFailedVKID$Creator : android/os/Parcelable$Creator {

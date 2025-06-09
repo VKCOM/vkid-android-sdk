@@ -1,4 +1,5 @@
 @file:OptIn(InternalVKIDApi::class)
+@file:Suppress("TooManyFunctions")
 
 package com.vk.id.sample.app.screen.utils
 
@@ -69,8 +70,10 @@ import com.vk.id.sample.app.screen.UseToken
 import com.vk.id.sample.app.uikit.expandablecard.ExpandableCard
 import com.vk.id.sample.app.uikit.selector.CheckboxSelector
 import com.vk.id.sample.app.uikit.selector.DropdownSelector
-import com.vk.id.sample.xml.flutter.IsFlutterHandler
-import com.vk.id.sample.xml.sctrictmode.StrictModeHandler
+import com.vk.id.sample.xml.VKIDInitializer
+import com.vk.id.sample.xml.prefs.captcha.CaptchaHandler
+import com.vk.id.sample.xml.prefs.flutter.IsFlutterHandler
+import com.vk.id.sample.xml.prefs.sctrictmode.StrictModeHandler
 import com.vk.id.sample.xml.uikit.common.copyToClipboard
 import com.vk.id.sample.xml.uikit.common.onVKIDAuthSuccess
 import com.vk.id.sample.xml.uikit.common.showToast
@@ -81,6 +84,7 @@ import okhttp3.FormBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONObject
+import java.util.Locale
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 
@@ -107,6 +111,10 @@ internal fun UtilsScreen(navController: NavController) {
             GetPublicInfoUtil()
             Spacer(modifier = Modifier.height(8.dp))
             CurrentTokenUtil()
+            Spacer(modifier = Modifier.height(8.dp))
+            LocaleUtil()
+            Spacer(modifier = Modifier.height(8.dp))
+            CaptchaUtil()
             Spacer(modifier = Modifier.height(8.dp))
             RevokeUtil()
             Spacer(modifier = Modifier.height(8.dp))
@@ -567,6 +575,84 @@ private fun CurrentTokenUtil() {
         } ?: Text(
             modifier = Modifier.defaultMinSize(minHeight = 40.dp),
             text = "You are not authorized"
+        )
+    }
+}
+
+@Composable
+private fun LocaleUtil() {
+    ExpandableCard(title = "Locale", contentAlignment = Alignment.CenterHorizontally) {
+        var selectedLocale by remember { mutableStateOf(VKID.instance.internalVKIDLocale.get()) }
+        DropdownSelector(
+            values = mapOf(
+                "system" to null,
+                "en" to Locale("en"),
+                "de" to Locale("de"),
+                "es" to Locale("es"),
+                "fr" to Locale("fr"),
+                "pl" to Locale("pl"),
+                "ru" to Locale("ru"),
+                "tr" to Locale("tr"),
+                "uk" to Locale("uk"),
+            ),
+            selectedValue = selectedLocale?.language ?: "system",
+            onValueSelected = {
+                selectedLocale = it
+                VKID.instance.setLocale(it)
+            },
+            label = { Text("locale") },
+        )
+    }
+}
+
+@Composable
+private fun CaptchaUtil() {
+    ExpandableCard(title = "Captcha", contentAlignment = Alignment.CenterHorizontally) {
+        val coroutineScope = rememberCoroutineScope()
+        val context = LocalContext.current
+        var redirectUri by remember { mutableStateOf("") }
+        var forceError14 by remember { mutableStateOf(false) }
+        var forceHitmanChallenge by remember { mutableStateOf(false) }
+        LaunchedEffect(Unit) {
+            launch(Dispatchers.IO) {
+                redirectUri = CaptchaHandler.redirectUri.orEmpty()
+                forceError14 = CaptchaHandler.forceError14
+                forceHitmanChallenge = CaptchaHandler.forceHitmanChallenge
+            }
+        }
+        TextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = redirectUri,
+            onValueChange = {
+                redirectUri = it
+                coroutineScope.launch(Dispatchers.IO) {
+                    CaptchaHandler.redirectUri = it
+                    VKIDInitializer.init(context)
+                }
+            },
+            label = { Text("Redirect uri") },
+        )
+        CheckboxSelector(
+            title = "Error 14",
+            isChecked = forceError14,
+            onCheckedChange = {
+                forceError14 = it
+                coroutineScope.launch(Dispatchers.IO) {
+                    CaptchaHandler.forceError14 = it
+                    VKIDInitializer.init(context)
+                }
+            }
+        )
+        CheckboxSelector(
+            title = "Hitman challenge",
+            isChecked = forceHitmanChallenge,
+            onCheckedChange = {
+                forceHitmanChallenge = it
+                coroutineScope.launch(Dispatchers.IO) {
+                    CaptchaHandler.forceHitmanChallenge = it
+                    VKIDInitializer.init(context)
+                }
+            }
         )
     }
 }

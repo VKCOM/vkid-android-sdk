@@ -56,7 +56,6 @@ internal class AuthOptionsCreator(
 
         return AuthOptions(
             appId = credentials.clientID,
-            clientSecret = credentials.clientSecret,
             codeChallenge = codeChallenge,
             codeChallengeMethod = "sha256",
             redirectUriBrowser = redirectUriBrowser.toString(),

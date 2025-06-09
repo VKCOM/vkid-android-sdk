@@ -121,7 +121,8 @@ internal fun OneTapScreen() {
     }
 
     val useDarkTheme = selectedStyle is OneTapStyle.Dark ||
-        selectedStyle is OneTapStyle.TransparentDark
+        selectedStyle is OneTapStyle.TransparentDark ||
+        selectedStyle is OneTapStyle.SecondaryDark
 
     var scenario by remember { mutableStateOf(OneTapTitleScenario.SignIn) }
     AppTheme(

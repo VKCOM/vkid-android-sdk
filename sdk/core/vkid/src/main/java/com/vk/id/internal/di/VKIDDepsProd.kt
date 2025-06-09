@@ -29,6 +29,8 @@ import com.vk.id.internal.auth.app.TrustedProvidersCache
 import com.vk.id.internal.auth.device.DeviceIdPrefs
 import com.vk.id.internal.auth.device.InternalVKIDDeviceIdProvider
 import com.vk.id.internal.auth.pkce.PkceGeneratorSHA256
+import com.vk.id.internal.captcha.ForceError14Interceptor
+import com.vk.id.internal.captcha.HitmanChallengeInterceptor
 import com.vk.id.internal.concurrent.CoroutinesDispatchersProd
 import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
 import com.vk.id.internal.context.AndroidPackageManager
@@ -52,10 +54,17 @@ import com.vk.id.refreshuser.VKIDUserRefresher
 import com.vk.id.storage.InternalVKIDEncryptedSharedPreferencesStorage
 import com.vk.id.storage.InternalVKIDPreferencesStorage
 import com.vk.id.storage.InternalVKIDTokenStorage
+import com.vk.id.tracking.core.CrashReporter
+import com.vk.id.tracking.core.PerformanceTracker
+import com.vk.id.tracking.tracer.TrackingDeps
+import okhttp3.Interceptor
 
 internal open class VKIDDepsProd(
-    private val appContext: Context,
+    override val appContext: Context,
     override val isFlutter: Boolean,
+    captchaRedirectUri: String? = null,
+    forceError14: Boolean = false,
+    forceHitmanChallenge: Boolean = false,
 ) : VKIDDeps {
 
     override val context: Context = appContext
@@ -71,6 +80,10 @@ internal open class VKIDDepsProd(
 
         ServiceCredentials(clientID, clientSecret, redirectUri)
     }
+
+    private val trackingDeps by lazy { TrackingDeps(appContext, serviceCredentials.value.clientID) }
+    override val crashReporter: CrashReporter by lazy { trackingDeps.crashReporter }
+    override val performanceTracker: PerformanceTracker by lazy { trackingDeps.performanceTracker }
 
     @SuppressLint("WrongConstant")
     private fun getActivityInfo(componentName: ComponentName): ActivityInfo {
@@ -93,7 +106,15 @@ internal open class VKIDDepsProd(
     override val vkidPackageManager: InternalVKIDPackageManager = AndroidPackageManager(appContext.packageManager)
     override val activityStarter: InternalVKIDActivityStarter = DefaultActivityStarter(appContext)
 
-    private val okHttpClient by lazy { OkHttpClientProvider(appContext).provide() }
+    private val additionalInterceptors: List<Interceptor> = listOfNotNull(
+        HitmanChallengeInterceptor().takeIf { forceHitmanChallenge },
+        ForceError14Interceptor(captchaRedirectUri).takeIf { forceError14 },
+    )
+
+    private val okHttpClient by lazy {
+        OkHttpClientProvider(appContext).provide(additionalInterceptors)
+    }
+
     override val api: Lazy<InternalVKIDApiContract> = lazy {
         InternalVKIDRealApi(client = okHttpClient)
     }
@@ -248,6 +269,12 @@ internal open class VKIDDepsProd(
     override val statTracker: VKIDAnalytics.Tracker
         get() = with(serviceCredentials.value) {
             StatTracker(clientID, clientSecret, api, dispatchers.io)
+        }
+    override val trackingTracker: VKIDAnalytics.Tracker
+        get() = object : VKIDAnalytics.Tracker {
+            override fun trackEvent(accessToken: String?, name: String, vararg params: VKIDAnalytics.EventParam) {
+                trackingDeps.analyticsTracking.log(name + " " + params.joinToString())
+            }
         }
 
     private val groupSubscriptionApi: InternalVKIDGroupSubscriptionApi by lazy {
