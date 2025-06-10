@@ -29,6 +29,8 @@ import com.vk.id.multibranding.common.style.OAuthListWidgetStyle
 
 /**
  * Multibranding widget that supports auth with multiple [OAuth]s.
+ *
+ * @since 1.0.0
  */
 public class OAuthListWidget @JvmOverloads constructor(
     context: Context,
@@ -38,7 +40,11 @@ public class OAuthListWidget @JvmOverloads constructor(
 
     private val composeView = ComposeView(context)
 
-    /** Styling widget configuration. */
+    /**
+     * Styling widget configuration.
+     *
+     * @since 1.0.0
+     */
     public var style: OAuthListWidgetStyle = OAuthListWidgetStyle.Light()
         set(value) {
             field = value
@@ -46,7 +52,11 @@ public class OAuthListWidget @JvmOverloads constructor(
         }
     private var onStyleChange: (OAuthListWidgetStyle) -> Unit = {}
 
-    /** A set of [OAuth]s the should be displayed to the user. */
+    /**
+     * A set of [OAuth]s the should be displayed to the user.
+     *
+     * @since 1.0.0
+     */
     public var oAuths: Set<OAuth> = OAuth.entries.toSet()
         set(value) {
             field = value
@@ -56,6 +66,8 @@ public class OAuthListWidget @JvmOverloads constructor(
 
     /**
      * Optional params to be passed to auth. See [VKIDAuthUiParams.Builder] for more info.
+     *
+     * @since 2.0.0-alpha
      */
     public var authParams: VKIDAuthUiParams = VKIDAuthUiParams { }
         set(value) {
@@ -107,6 +119,8 @@ public class OAuthListWidget @JvmOverloads constructor(
      * This will happen if you passed auth parameters and implement their validation yourself.
      * In that case we can't exchange auth code for access token and you should do this yourself.
      * @param onFail A callback to be invoked upon an error during auth.
+     *
+     * @since 1.0.0
      */
     public fun setCallbacks(
         onAuth: (oAuth: OAuth, accessToken: AccessToken) -> Unit,

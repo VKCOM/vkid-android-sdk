@@ -21,6 +21,8 @@ import com.vk.id.onetap.compose.R
 
 /**
  * Base class for defining the style of the One Tap Bottom Sheet.
+ *
+ * @since 0.0.1
  */
 @Immutable
 @Suppress("LongParameterList")
@@ -37,6 +39,8 @@ public sealed class OneTapBottomSheetStyle @InternalVKIDApi constructor(
 ) {
     /**
      * Represents the light style theme for the One Tap Bottom Sheet.
+     *
+     * @since 0.0.1
      */
     public class Light(
         cornersStyle: OneTapSheetCornersStyle = OneTapSheetCornersStyle.Default,
@@ -53,6 +57,8 @@ public sealed class OneTapBottomSheetStyle @InternalVKIDApi constructor(
 
     /**
      * Represents the dark style theme for the One Tap Bottom Sheet.
+     *
+     * @since 0.0.1
      */
     public class Dark(
         cornersStyle: OneTapSheetCornersStyle = OneTapSheetCornersStyle.Default,
@@ -69,6 +75,8 @@ public sealed class OneTapBottomSheetStyle @InternalVKIDApi constructor(
 
     /**
      * Represents the transparent light style theme for the One Tap Bottom Sheet.
+     *
+     * @since 0.0.1
      */
     @Deprecated(
         "This style will be removed in future releases. Please, use Light instead.",
@@ -89,6 +97,8 @@ public sealed class OneTapBottomSheetStyle @InternalVKIDApi constructor(
 
     /**
      * Represents the transparent dark style theme for the One Tap Bottom Sheet.
+     *
+     * @since 0.0.1
      */
     @Deprecated(
         "This style will be removed in future releases. Please, use Dark instead.",
@@ -112,6 +122,8 @@ public sealed class OneTapBottomSheetStyle @InternalVKIDApi constructor(
         /**
          * Create a style for the OneTap Bottomsheet that
          * varies between [Light] and [Dark] based on system settings.
+         *
+         * @since 1.3.0
          */
         public fun system(
             context: Context,
@@ -129,6 +141,8 @@ public sealed class OneTapBottomSheetStyle @InternalVKIDApi constructor(
         /**
          * Create a transparent style for the OneTap Bottomsheet that
          * varies between [TransparentLight] and [TransparentDark] depending on the system settings.
+         *
+         * @since 1.3.0
          */
         @Deprecated(
             "This style will be removed in future releases. Please, use system instead.",
@@ -153,6 +167,8 @@ public sealed class OneTapBottomSheetStyle @InternalVKIDApi constructor(
  * Remembers [OneTapBottomSheetStyle].
  *
  * @param initialValue The starting value that should be used for style.
+ *
+ * @since 0.0.1
  */
 @Composable
 public fun rememberOneTapBottomSheetStyle(initialValue: OneTapBottomSheetStyle): MutableState<OneTapBottomSheetStyle> {

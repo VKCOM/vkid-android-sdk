@@ -64,6 +64,8 @@ import com.vk.id.util.InternalVKIDWithUpdatedLocale
  * @param fastAuthEnabled Whether to fetch user. Defaults to true.
  * In case this parameter is set to false the user data won't be fetched and user will have to confirm authorization on click.
  * Note that this parameter doesn't support changes in runtime.
+ *
+ * @since 1.0.0
  */
 @Composable
 @Suppress("LongMethod", "CyclomaticComplexMethod")
@@ -117,6 +119,8 @@ public fun OneTap(
  * In case this parameter is set to false the user data won't be fetched and user will have to confirm authorization on click.
  * Note that this parameter doesn't support changes in runtime.
  * @param scenario Scenario for which the OneTap is used. Changes title accordingly.
+ *
+ * @since 2.1.0
  */
 @Composable
 @Suppress("LongMethod", "CyclomaticComplexMethod")

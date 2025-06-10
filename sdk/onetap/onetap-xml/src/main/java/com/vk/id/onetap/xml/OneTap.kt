@@ -27,6 +27,8 @@ import com.vk.id.onetap.compose.onetap.OneTapTitleScenario
  * For more information how to integrate VK ID Authentication check docs https://id.vk.com/business/go/docs/ru/vkid/latest/vk-id/intro/plan
  *
  * You should [setCallbacks] on init view to get token after successful auth.
+ *
+ * @since 1.0.0
  */
 public class OneTap @JvmOverloads constructor(
     context: Context,
@@ -38,6 +40,8 @@ public class OneTap @JvmOverloads constructor(
 
     /**
      * The styling for the One Tap interface, default is [OneTapStyle.Light]
+     *
+     * @since 1.0.0
      */
     public var style: OneTapStyle = OneTapStyle.Light()
         set(value) {
@@ -49,6 +53,8 @@ public class OneTap @JvmOverloads constructor(
     /**
      * Flag to enable a button for signing into another account.
      * Note that if text doesn't fit the available width the view will be hidden regardless of the flag.
+     *
+     * @since 1.0.0
      */
     public var isSignInToAnotherAccountEnabled: Boolean = false
         set(value) {
@@ -59,6 +65,8 @@ public class OneTap @JvmOverloads constructor(
 
     /**
      * Optional params to be passed to auth. See [VKIDAuthUiParams.Builder] for more info.
+     *
+     * @since 2.0.0-alpha
      */
     public var authParams: VKIDAuthUiParams = VKIDAuthUiParams { }
         set(value) {
@@ -77,12 +85,16 @@ public class OneTap @JvmOverloads constructor(
      * In case this parameter is set to false the user data won't be fetched and user will have to confirm authorization on click.
      * Note: this parameter doesn't support changes in runtime and must be initialized when the view is constructed.
      * Note: This parameter will hide "change account" button because in this case OneTap will have the same behaviour.
+     *
+     * @since 2.0.0-alpha03
      */
     public var fastAuthEnabled: Boolean = true
 
     /**
      * Adds support multibranding auth. By default this widget is not displayed.
      * This property represents a set of [OneTapOAuth] to be displayed.
+     *
+     * @since 1.0.0
      */
     public var oAuths: Set<OneTapOAuth> = emptySet()
         set(value) {
@@ -93,6 +105,8 @@ public class OneTap @JvmOverloads constructor(
 
     /**
      * Scenario for which the OneTap is used. Changes title accordingly.
+     *
+     * @since 2.1.0
      */
     public var scenario: OneTapTitleScenario = OneTapTitleScenario.SignIn
         set(value) {
@@ -152,6 +166,8 @@ public class OneTap @JvmOverloads constructor(
      * This will happen if you passed auth parameters and implement their validation yourself.
      * In that case we can't exchange auth code for access token and you should do this yourself.
      * @param onFail A callback to be invoked upon an error during auth.
+     *
+     * @since 1.0.0
      */
     public fun setCallbacks(
         onAuth: (oAuth: OneTapOAuth?, accessToken: AccessToken) -> Unit,

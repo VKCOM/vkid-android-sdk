@@ -2,10 +2,14 @@ package com.vk.id.exchangetoken
 
 /**
  * Represents the failure cases for VK ID token exchange.
+ *
+ * @since 2.0.0-alpha
  */
 public sealed class VKIDExchangeTokenFail(
     /**
      * Text description of the failure.
+     *
+     * @since 2.0.0-alpha
      */
     public val description: String
 ) {
@@ -14,9 +18,16 @@ public sealed class VKIDExchangeTokenFail(
      *
      * @param description Description of the API call failure.
      * @param throwable The exception thrown during the API call.
+     *
+     * @since 2.0.0-alpha
      */
     public class FailedApiCall(
         description: String,
+        /**
+         * The exception thrown during the API call.
+         *
+         * @since 2.0.0-alpha
+         */
         public val throwable: Throwable
     ) : VKIDExchangeTokenFail(description) {
         /** @suppress */
@@ -41,6 +52,8 @@ public sealed class VKIDExchangeTokenFail(
      * Represents a failure due to an invalid OAuth state.
      *
      * @param description Description of the OAuth state failure.
+     *
+     * @since 2.0.0-alpha
      */
     public class FailedOAuthState(description: String) : VKIDExchangeTokenFail(description) {
         /** @suppress */

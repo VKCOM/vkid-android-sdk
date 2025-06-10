@@ -32,6 +32,8 @@ import java.util.concurrent.LinkedBlockingQueue
  *
  * @param refreshTokenParamsProvider Providers parameters for token refreshing.
  * This can be useful if you want to generate PKCE parameters yourself.
+ *
+ * @since 1.3.2
  */
 public fun <T> ApiCommand<T>.withVKIDToken(
     refreshTokenParamsProvider: () -> VKIDRefreshTokenParams = { VKIDRefreshTokenParams {} }
