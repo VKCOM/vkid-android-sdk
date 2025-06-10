@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="vkid_group_subscription_primary">Community abonnieren</string>
+    <string name="vkid_group_subscription_secondary">Nächstes Mal</string>
+    <plurals name="vkid_group_subscription_subscribers">
+        <item quantity="one">%1$s Abonnent</item>
+        <item quantity="other">%1$s Abonnenten</item>
+    </plurals>
+    <plurals name="vkid_group_subscription_friends">
+        <item quantity="one">%1$d Freund</item>
+        <item quantity="other">%1$d Freunde</item>
+    </plurals>
+    <string name="vkid_group_subscription_snackbar_label">Sie haben die Community abonniert</string>
+    <string name="vkid_group_subscription_fail_title">Das Abonnieren ist fehlgeschlagen</string>
+    <string name="vkid_group_subscription_fail_description">Versuchen Sie es noch einmal</string>
+    <string name="vkid_group_subscription_fail_primary">Erneut versuchen</string>
+    <string name="vkid_group_subscription_fail_secondary">Abbrechen</string>
+</resources>

@@ -46,10 +46,14 @@ import com.vk.id.logout.VKIDLoggerOut
 import com.vk.id.network.InternalVKIDApiContract
 import com.vk.id.network.InternalVKIDRealApi
 import com.vk.id.network.OkHttpClientProvider
+import com.vk.id.network.groupsubscription.InternalVKIDGroupSubscriptionApi
+import com.vk.id.network.groupsubscription.InternalVKIDGroupSubscriptionApiContract
+import com.vk.id.network.groupsubscription.InternalVKIDGroupSubscriptionApiService
 import com.vk.id.refresh.VKIDTokenRefresher
 import com.vk.id.refreshuser.VKIDUserRefresher
 import com.vk.id.storage.InternalVKIDEncryptedSharedPreferencesStorage
-import com.vk.id.storage.TokenStorage
+import com.vk.id.storage.InternalVKIDPreferencesStorage
+import com.vk.id.storage.InternalVKIDTokenStorage
 import com.vk.id.tracking.core.CrashReporter
 import com.vk.id.tracking.core.PerformanceTracker
 import com.vk.id.tracking.tracer.TrackingDeps
@@ -63,7 +67,9 @@ internal open class VKIDDepsProd(
     forceHitmanChallenge: Boolean = false,
 ) : VKIDDeps {
 
-    private val serviceCredentials: Lazy<ServiceCredentials> = lazy {
+    override val context: Context = appContext
+
+    override val serviceCredentials: Lazy<ServiceCredentials> = lazy {
         val componentName = ComponentName(appContext, AuthActivity::class.java)
         val ai = getActivityInfo(componentName)
         val clientID = ai.metaData.getIntOrThrow("VKIDClientID").toString()
@@ -105,12 +111,12 @@ internal open class VKIDDepsProd(
         ForceError14Interceptor(captchaRedirectUri).takeIf { forceError14 },
     )
 
-    private val httpClient by lazy {
+    private val okHttpClient by lazy {
         OkHttpClientProvider(appContext).provide(additionalInterceptors)
     }
 
     override val api: Lazy<InternalVKIDApiContract> = lazy {
-        InternalVKIDRealApi(httpClient)
+        InternalVKIDRealApi(client = okHttpClient)
     }
     private val apiService = lazy { VKIDApiService(api.value) }
 
@@ -216,11 +222,11 @@ internal open class VKIDDepsProd(
         )
     }
 
-    override val encryptedSharedPreferencesStorage: Lazy<InternalVKIDEncryptedSharedPreferencesStorage> = lazy {
+    override val encryptedSharedPreferencesStorage: Lazy<InternalVKIDPreferencesStorage> = lazy {
         InternalVKIDEncryptedSharedPreferencesStorage(appContext)
     }
 
-    override val tokenStorage by lazy { TokenStorage(encryptedSharedPreferencesStorage.value) }
+    override val tokenStorage by lazy { InternalVKIDTokenStorage(encryptedSharedPreferencesStorage.value) }
 
     private val userInfoFetcher: Lazy<VKIDUserInfoFetcher> = lazy {
         VKIDUserInfoFetcher(
@@ -266,10 +272,18 @@ internal open class VKIDDepsProd(
         }
     override val trackingTracker: VKIDAnalytics.Tracker
         get() = object : VKIDAnalytics.Tracker {
-            override fun trackEvent(name: String, vararg params: VKIDAnalytics.EventParam) {
+            override fun trackEvent(accessToken: String?, name: String, vararg params: VKIDAnalytics.EventParam) {
                 trackingDeps.analyticsTracking.log(name + " " + params.joinToString())
             }
         }
+
+    private val groupSubscriptionApi: InternalVKIDGroupSubscriptionApi by lazy {
+        InternalVKIDGroupSubscriptionApi(client = okHttpClient)
+    }
+
+    override val groupSubscriptionApiService: Lazy<InternalVKIDGroupSubscriptionApiContract> = lazy {
+        InternalVKIDGroupSubscriptionApiService(groupSubscriptionApi)
+    }
 }
 
 private const val MISSED_PLACEHOLDER_ERROR_MESSAGE =

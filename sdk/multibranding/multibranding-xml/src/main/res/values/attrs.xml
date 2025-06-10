@@ -7,6 +7,7 @@
             <enum name="system" value="3"/>
             <enum name="transparentDark" value="4"/>
             <enum name="transparentLight" value="5"/>
+            <enum name="transparentSystem" value="6"/>
         </attr>
         <attr name="vkid_oAuthListCornerRadius" format="dimension"/>
         <attr name="vkid_oAuthListSize" format="enum">

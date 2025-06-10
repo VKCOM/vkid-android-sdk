@@ -12,7 +12,8 @@ public class VKIDAnalytics private constructor() {
      */
     @InternalVKIDApi
     public interface Tracker {
-        public fun trackEvent(name: String, vararg params: EventParam)
+        public fun trackEvent(accessToken: String?, name: String, vararg params: EventParam)
+        public fun trackEvent(name: String, vararg params: EventParam): Unit = trackEvent(null, name, *params)
     }
 
     /** Parameter for event **/
@@ -21,7 +22,7 @@ public class VKIDAnalytics private constructor() {
     public data class EventParam(
         public val name: String,
         public val strValue: String? = null,
-        public val intValue: Int? = null
+        public val intValue: Int? = null,
     )
 
     @InternalVKIDApi
@@ -29,8 +30,8 @@ public class VKIDAnalytics private constructor() {
 
         /** Track event to all trackers, added with [addTracker] */
         @JvmStatic
-        override fun trackEvent(name: String, vararg params: EventParam) {
-            trackersArray.forEach { it.trackEvent(name, *params) }
+        override fun trackEvent(accessToken: String?, name: String, vararg params: EventParam) {
+            trackersArray.forEach { it.trackEvent(accessToken, name, *params,) }
         }
 
         /** Adds new tracker. If [tracker] was already added then nothing happens.*/

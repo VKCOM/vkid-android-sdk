@@ -1,12 +1,12 @@
 package com.vk.id.network
 
 import com.vk.id.common.InternalVKIDApi
+import com.vk.id.network.common.ApiConstants.API_VERSION_VALUE
+import com.vk.id.network.common.ApiConstants.FIELD_API_VERSION
+import com.vk.id.network.util.createRequest
 import okhttp3.Call
 import okhttp3.FormBody
-import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody
 import org.json.JSONArray
 
 @InternalVKIDApi
@@ -32,7 +32,7 @@ public class InternalVKIDRealApi(
             .add(FIELD_STATE, state)
             .build()
 
-        return createRequest(HOST_VK_ID, PATH_AUTH, formBody)
+        return client.createRequest(HOST_VK_ID, PATH_AUTH, formBody)
     }
 
     override fun getSilentAuthProviders(
@@ -45,7 +45,7 @@ public class InternalVKIDRealApi(
             .add(FIELD_CLIENT_SECRET, clientSecret)
             .build()
 
-        return createRequest(HOST_API, PATH_SILENT_AUTH_PROVIDERS, formBody)
+        return client.createRequest(HOST_API, PATH_SILENT_AUTH_PROVIDERS, formBody)
     }
 
     override fun refreshToken(
@@ -62,7 +62,7 @@ public class InternalVKIDRealApi(
             .add(FIELD_STATE, state)
             .build()
 
-        return createRequest(HOST_VK_ID, PATH_AUTH, formBody)
+        return client.createRequest(HOST_VK_ID, PATH_AUTH, formBody)
     }
 
     override fun getUser(
@@ -75,7 +75,7 @@ public class InternalVKIDRealApi(
             .add(FIELD_DEVICE_ID, deviceId)
             .build()
 
-        return createRequest(HOST_VK_ID, PATH_USER_INFO, formBody, query = mapOf(FIELD_CLIENT_ID to clientId))
+        return client.createRequest(HOST_VK_ID, PATH_USER_INFO, formBody, query = mapOf(FIELD_CLIENT_ID to clientId))
     }
 
     override fun exchangeToken(
@@ -96,7 +96,7 @@ public class InternalVKIDRealApi(
             .add(FIELD_CODE_CHALLENGE_METHOD, VALUE_CODE_CHALLENGE_METHOD)
             .build()
 
-        return createRequest(HOST_VK_ID, PATH_AUTH, formBody)
+        return client.createRequest(HOST_VK_ID, PATH_AUTH, formBody)
     }
 
     override fun logout(
@@ -110,7 +110,7 @@ public class InternalVKIDRealApi(
             .add(FIELD_DEVICE_ID, deviceId)
             .build()
 
-        return createRequest(HOST_VK_ID, PATH_LOGOUT, formBody)
+        return client.createRequest(HOST_VK_ID, PATH_LOGOUT, formBody)
     }
 
     override fun sendStatEventsAnonymously(
@@ -127,28 +127,26 @@ public class InternalVKIDRealApi(
             .add("events", events.toString())
             .build()
 
-        return createRequest(HOST_API, "method/statEvents.addVKIDAnonymously", formBody)
+        return client.createRequest(HOST_API, "method/statEvents.addVKIDAnonymously", formBody)
     }
 
-    private fun createRequest(
-        host: String,
-        path: String,
-        requestBody: RequestBody,
-        query: Map<String, String> = emptyMap(),
+    override fun sendStatEvents(
+        accessToken: String,
+        clientId: String,
+        clientSecret: String,
+        sakVersion: String,
+        events: JSONArray
     ): Call {
-        val url = host.toHttpUrl().newBuilder()
-            .apply {
-                query.forEach { (name, value) ->
-                    addQueryParameter(name, value)
-                }
-            }
-            .addPathSegments(path)
+        val formBody = FormBody.Builder()
+            .add(FIELD_ACCESS_TOKEN, accessToken)
+            .add(FIELD_API_VERSION, API_VERSION_VALUE)
+            .add(FIELD_CLIENT_ID, clientId)
+            .add(FIELD_CLIENT_SECRET, clientSecret)
+            .add("sak_version", sakVersion)
+            .add("events", events.toString())
             .build()
-        val request = Request.Builder()
-            .url(url)
-            .post(requestBody)
-            .build()
-        return client.newCall(request)
+
+        return client.createRequest(HOST_API, "method/statEvents.addVKID", formBody)
     }
 
     @InternalVKIDApi
@@ -176,8 +174,6 @@ public class InternalVKIDRealApi(
         private const val FIELD_ACCESS_TOKEN = "access_token"
         private const val FIELD_RESPONSE_TYPE = "response_type"
 
-        private const val FIELD_API_VERSION = "v"
-        private const val API_VERSION_VALUE = "5.220"
         private const val VALUE_AUTHORIZATION_CODE = "authorization_code"
         private const val VALUE_REFRESH_TOKEN = "refresh_token"
         private const val VALUE_CODE = "code"

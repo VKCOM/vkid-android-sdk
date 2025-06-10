@@ -2,8 +2,6 @@
 
 package com.vk.id.onetap.compose.onetap
 
-import android.content.Context
-import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.rememberUpdatedState
@@ -14,8 +12,8 @@ import androidx.lifecycle.LifecycleEventObserver
 import com.vk.id.VKID
 import com.vk.id.VKIDUser
 import com.vk.id.analytics.VKIDAnalytics
+import com.vk.id.analytics.param.vkidInternalLanguageParam
 import com.vk.id.analytics.stat.StatTracker
-import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.onetap.common.OneTapStyle
 import java.util.UUID
@@ -86,7 +84,7 @@ internal object OneTapAnalytics {
                                 textTypeParam(scenario),
                                 themeParam(style),
                                 styleParam(style),
-                                langParam(context)
+                                vkidInternalLanguageParam(context)
                             )
                         }
                     }
@@ -198,42 +196,6 @@ internal object OneTapAnalytics {
             OneTapTitleScenario.Participate -> "take_part"
         }
     )
-
-    @Suppress("MagicNumber")
-    private fun VKIDAuthParams.Locale.toAnalyticsParam(): VKIDAnalytics.EventParam {
-        val langCode = when (this) {
-            VKIDAuthParams.Locale.RUS -> 0
-            VKIDAuthParams.Locale.UKR -> 1
-            VKIDAuthParams.Locale.ENG -> 3
-            VKIDAuthParams.Locale.SPA -> 4
-            VKIDAuthParams.Locale.GERMAN -> 6
-            VKIDAuthParams.Locale.POL -> 15
-            VKIDAuthParams.Locale.FRA -> 16
-            VKIDAuthParams.Locale.TURKEY -> 82
-        }
-        return VKIDAnalytics.EventParam("language", strValue = langCode.toString())
-    }
-
-    internal fun langParam(context: Context): VKIDAnalytics.EventParam {
-        val systemLocale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            context.resources.configuration.locales.get(0)
-        } else {
-            @Suppress("DEPRECATION")
-            context.resources.configuration.locale
-        }
-        val vkidLocale = when (systemLocale.language) {
-            "ru" -> VKIDAuthParams.Locale.RUS
-            "uk" -> VKIDAuthParams.Locale.UKR
-            "en" -> VKIDAuthParams.Locale.ENG
-            "es" -> VKIDAuthParams.Locale.SPA
-            "de" -> VKIDAuthParams.Locale.GERMAN
-            "pl" -> VKIDAuthParams.Locale.POL
-            "fr" -> VKIDAuthParams.Locale.FRA
-            "tr" -> VKIDAuthParams.Locale.TURKEY
-            else -> VKIDAuthParams.Locale.ENG
-        }
-        return vkidLocale.toAnalyticsParam()
-    }
 
     internal fun alternateParam(signInAnotherAccountButton: Boolean): VKIDAnalytics.EventParam =
         VKIDAnalytics.EventParam(

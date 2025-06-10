@@ -4,7 +4,6 @@ package com.vk.id
 
 import android.content.Context
 import androidx.annotation.VisibleForTesting
-import androidx.lifecycle.AtomicReference
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.vk.id.analytics.LogcatTracker
@@ -22,6 +21,7 @@ import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthEventBridge
 import com.vk.id.internal.auth.AuthProvidersChooser
 import com.vk.id.internal.auth.AuthResult
+import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.auth.device.InternalVKIDDeviceIdProvider
 import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
 import com.vk.id.internal.context.InternalVKIDActivityStarter
@@ -39,14 +39,15 @@ import com.vk.id.logger.internalVKIDCreateLoggerForClass
 import com.vk.id.logout.VKIDLoggerOut
 import com.vk.id.logout.VKIDLogoutCallback
 import com.vk.id.logout.VKIDLogoutParams
+import com.vk.id.network.groupsubscription.InternalVKIDGroupSubscriptionApiContract
 import com.vk.id.refresh.VKIDRefreshTokenCallback
 import com.vk.id.refresh.VKIDRefreshTokenParams
 import com.vk.id.refresh.VKIDTokenRefresher
 import com.vk.id.refreshuser.VKIDGetUserCallback
 import com.vk.id.refreshuser.VKIDGetUserParams
 import com.vk.id.refreshuser.VKIDUserRefresher
-import com.vk.id.storage.InternalVKIDEncryptedSharedPreferencesStorage
-import com.vk.id.storage.TokenStorage
+import com.vk.id.storage.InternalVKIDPreferencesStorage
+import com.vk.id.storage.InternalVKIDTokenStorage
 import com.vk.id.test.InternalVKIDImmediateApi
 import com.vk.id.test.InternalVKIDOverrideApi
 import com.vk.id.test.TestSilentAuthInfoProvider
@@ -60,6 +61,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import java.util.Locale
+import java.util.concurrent.atomic.AtomicReference
 
 /**
  * VKID is the main entry point for integrating VK ID authentication into an Android application.
@@ -122,14 +124,17 @@ public class VKID {
         internal fun init(
             context: Context,
             mockApi: InternalVKIDOverrideApi,
+            groupSubscriptionApiContract: InternalVKIDGroupSubscriptionApiContract,
             deviceIdStorage: InternalVKIDDeviceIdProvider.DeviceIdStorage?,
             prefsStore: InternalVKIDPrefsStore?,
-            encryptedSharedPreferencesStorage: InternalVKIDEncryptedSharedPreferencesStorage?,
+            encryptedSharedPreferencesStorage: InternalVKIDPreferencesStorage?,
             packageManager: InternalVKIDPackageManager?,
             activityStarter: InternalVKIDActivityStarter?,
         ): Unit = init(
             VKID(object : VKIDDepsProd(context, isFlutter = false) {
                 override val api = lazy { InternalVKIDImmediateApi(mockApi) }
+                override val groupSubscriptionApiService: Lazy<InternalVKIDGroupSubscriptionApiContract> =
+                    lazy { groupSubscriptionApiContract }
                 override val vkSilentAuthInfoProvider = lazy { TestSilentAuthInfoProvider() }
                 override val deviceIdStorage = lazy { deviceIdStorage ?: super.deviceIdStorage.value }
                 override val prefsStore = lazy { prefsStore ?: super.prefsStore.value }
@@ -156,7 +161,11 @@ public class VKID {
                     ): T = action()
                 }
                 override val trackingTracker: VKIDAnalytics.Tracker = object : VKIDAnalytics.Tracker {
-                    override fun trackEvent(name: String, vararg params: VKIDAnalytics.EventParam) = Unit
+                    override fun trackEvent(
+                        accessToken: String?,
+                        name: String,
+                        vararg params: VKIDAnalytics.EventParam
+                    ) = Unit
                 }
             })
         )
@@ -165,8 +174,19 @@ public class VKID {
         public fun initForScreenshotTests(context: Context) {
             init(
                 VKID(object : VKIDDepsProd(context, isFlutter = false) {
+                    override val serviceCredentials: Lazy<ServiceCredentials> = lazy {
+                        ServiceCredentials(
+                            clientID = "",
+                            clientSecret = "",
+                            redirectUri = "",
+                        )
+                    }
                     override val statTracker: VKIDAnalytics.Tracker = object : VKIDAnalytics.Tracker {
-                        override fun trackEvent(name: String, vararg params: VKIDAnalytics.EventParam) = Unit
+                        override fun trackEvent(
+                            accessToken: String?,
+                            name: String,
+                            vararg params: VKIDAnalytics.EventParam
+                        ) = Unit
                     }
                     override val crashReporter: CrashReporter = object : CrashReporter {
                         override fun report(crash: Throwable) = Unit
@@ -187,7 +207,17 @@ public class VKID {
                         override suspend fun runTrackingSuspend(key: String, action: suspend () -> Unit) = action()
                     }
                     override val trackingTracker: VKIDAnalytics.Tracker = object : VKIDAnalytics.Tracker {
-                        override fun trackEvent(name: String, vararg params: VKIDAnalytics.EventParam) = Unit
+                        override fun trackEvent(
+                            accessToken: String?,
+                            name: String,
+                            vararg params: VKIDAnalytics.EventParam
+                        ) = Unit
+                    }
+                    override val encryptedSharedPreferencesStorage: Lazy<InternalVKIDPreferencesStorage> = lazy {
+                        object : InternalVKIDPreferencesStorage {
+                            override fun set(key: String, value: String?) = Unit
+                            override fun getString(key: String): String? = null
+                        }
                     }
                 })
             )
@@ -268,6 +298,9 @@ public class VKID {
         this.tokenStorage = deps.tokenStorage
         this.crashReporter = deps.crashReporter
         this.performanceTracker = deps.performanceTracker
+        this.groupSubscriptionApiServiceInternal = deps.groupSubscriptionApiService
+        this.clientIdProvider = { deps.serviceCredentials.value.clientID }
+        this.context = deps.context
 
         this.crashReporter.runReportingCrashes({}) {
             VKIDAnalytics.addTracker(deps.statTracker)
@@ -302,11 +335,26 @@ public class VKID {
     private val tokenExchanger: Lazy<VKIDTokenExchanger>
     private val userRefresher: Lazy<VKIDUserRefresher>
     private val loggerOut: Lazy<VKIDLoggerOut>
-    private val tokenStorage: TokenStorage
     internal val performanceTracker: PerformanceTracker
+    private val groupSubscriptionApiServiceInternal: Lazy<InternalVKIDGroupSubscriptionApiContract>
+
+    @InternalVKIDApi
+    public val tokenStorage: InternalVKIDTokenStorage
 
     @InternalVKIDApi
     public val crashReporter: CrashReporter
+
+    @InternalVKIDApi
+    public val groupSubscriptionApiService: InternalVKIDGroupSubscriptionApiContract
+        get() = groupSubscriptionApiServiceInternal.value
+
+    private val clientIdProvider: () -> String
+
+    @InternalVKIDApi
+    public val clientId: String get() = clientIdProvider()
+
+    @InternalVKIDApi
+    public val context: Context
 
     @InternalVKIDApi
     public val internalVKIDLocale: AtomicReference<Locale?> = AtomicReference(null)
@@ -375,10 +423,10 @@ public class VKID {
         callback: VKIDAuthCallback,
         params: VKIDAuthParams = VKIDAuthParams {}
     ) {
-        val actualParams = params.newBuilder {
-            locale = params.locale ?: VKIDAuthParams.Locale.fromLocale(internalVKIDLocale.get())
-        }
         this.crashReporter.runReportingCrashesSuspend({}) {
+            val actualParams = params.newBuilder {
+                locale = params.locale ?: VKIDAuthParams.Locale.fromLocale(internalVKIDLocale.get())
+            }
             requestMutex.lock()
             val performanceKey = "Authorize"
             performanceTracker.startTracking(performanceKey)
@@ -581,6 +629,21 @@ public class VKID {
      */
     public val accessToken: AccessToken?
         get() = this.crashReporter.runReportingCrashes({ null }) { tokenStorage.accessToken }
+
+    @InternalVKIDApi
+    public fun mockAuthorized() {
+        tokenStorage.accessToken = AccessToken(
+            token = "",
+            idToken = null,
+            userID = 0,
+            expireTime = 0,
+            userData = VKIDUser(
+                firstName = "",
+                lastName = "",
+            ),
+            scopes = null,
+        )
+    }
 
     /**
      * Returns current refresh token or null if auth wasn't passed.
