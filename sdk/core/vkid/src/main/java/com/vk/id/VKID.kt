@@ -16,6 +16,7 @@ import com.vk.id.common.InternalVKIDApi
 import com.vk.id.exchangetoken.VKIDExchangeTokenCallback
 import com.vk.id.exchangetoken.VKIDExchangeTokenParams
 import com.vk.id.exchangetoken.VKIDTokenExchanger
+import com.vk.id.groupsubscription.GroupSubscriptionLimit
 import com.vk.id.internal.analytics.CustomAuthAnalytics
 import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthEventBridge
@@ -90,24 +91,32 @@ public class VKID {
          * You must not call this method twice.
          *
          * @param context The context of the application.
+         * @param groupSubscriptionLimit Limit for group subscription feature.
          *
          * @since 2.4.0
          */
-        public fun init(context: Context): Unit = init(
+        @JvmOverloads
+        public fun init(
+            context: Context,
+            groupSubscriptionLimit: GroupSubscriptionLimit? = GroupSubscriptionLimit(),
+        ): Unit = init(
             context = context,
             isFlutter = false,
             captchaRedirectUri = null,
             forceError14 = false,
             forceHitmanChallenge = false,
+            groupSubscriptionLimit = groupSubscriptionLimit,
         )
 
         @InternalVKIDApi
+        @Suppress("LongParameterList")
         public fun init(
             context: Context,
             isFlutter: Boolean,
             captchaRedirectUri: String?,
             forceError14: Boolean,
             forceHitmanChallenge: Boolean,
+            groupSubscriptionLimit: GroupSubscriptionLimit?
         ): Unit = init(
             VKID(
                 VKIDDepsProd(
@@ -116,6 +125,7 @@ public class VKID {
                     captchaRedirectUri = captchaRedirectUri,
                     forceError14 = forceError14,
                     forceHitmanChallenge = forceHitmanChallenge,
+                    groupSubscriptionLimit = groupSubscriptionLimit,
                 )
             )
         )
@@ -131,7 +141,7 @@ public class VKID {
             packageManager: InternalVKIDPackageManager?,
             activityStarter: InternalVKIDActivityStarter?,
         ): Unit = init(
-            VKID(object : VKIDDepsProd(context, isFlutter = false) {
+            VKID(object : VKIDDepsProd(context, isFlutter = false, groupSubscriptionLimit = GroupSubscriptionLimit()) {
                 override val api = lazy { InternalVKIDImmediateApi(mockApi) }
                 override val groupSubscriptionApiService: Lazy<InternalVKIDGroupSubscriptionApiContract> =
                     lazy { groupSubscriptionApiContract }
@@ -173,7 +183,7 @@ public class VKID {
         @InternalVKIDApi
         public fun initForScreenshotTests(context: Context) {
             init(
-                VKID(object : VKIDDepsProd(context, isFlutter = false) {
+                VKID(object : VKIDDepsProd(context, isFlutter = false, groupSubscriptionLimit = GroupSubscriptionLimit()) {
                     override val serviceCredentials: Lazy<ServiceCredentials> = lazy {
                         ServiceCredentials(
                             clientID = "",
@@ -301,6 +311,8 @@ public class VKID {
         this.groupSubscriptionApiServiceInternal = deps.groupSubscriptionApiService
         this.clientIdProvider = { deps.serviceCredentials.value.clientID }
         this.context = deps.context
+        this.groupSubscriptionLimit = deps.groupSubscriptionLimit
+        this.prefsStorage = deps.encryptedSharedPreferencesStorage.value
 
         this.crashReporter.runReportingCrashes({}) {
             VKIDAnalytics.addTracker(deps.statTracker)
@@ -358,6 +370,12 @@ public class VKID {
 
     @InternalVKIDApi
     public val internalVKIDLocale: AtomicReference<Locale?> = AtomicReference(null)
+
+    @InternalVKIDApi
+    public val groupSubscriptionLimit: GroupSubscriptionLimit?
+
+    @InternalVKIDApi
+    public val prefsStorage: InternalVKIDPreferencesStorage
 
     /**
      * Sets the language for all ui components of the SDK.

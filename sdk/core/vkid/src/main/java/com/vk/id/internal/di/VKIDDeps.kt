@@ -8,6 +8,7 @@ import com.vk.id.AuthResultHandler
 import com.vk.id.analytics.VKIDAnalytics
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.exchangetoken.VKIDTokenExchanger
+import com.vk.id.groupsubscription.GroupSubscriptionLimit
 import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthProvidersChooser
 import com.vk.id.internal.auth.ServiceCredentials
@@ -56,4 +57,5 @@ internal interface VKIDDeps {
     val isFlutter: Boolean
     val appContext: Context
     val groupSubscriptionApiService: Lazy<InternalVKIDGroupSubscriptionApiContract>
+    val groupSubscriptionLimit: GroupSubscriptionLimit?
 }

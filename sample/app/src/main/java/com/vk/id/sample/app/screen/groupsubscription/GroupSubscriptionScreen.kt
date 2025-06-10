@@ -4,16 +4,20 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,19 +41,26 @@ import com.vk.id.sample.app.uikit.selector.SliderSelector
 import com.vk.id.sample.app.uikit.selector.styleConstructors
 import com.vk.id.sample.app.uikit.theme.AppTheme
 import com.vk.id.sample.app.util.carrying.carry
+import com.vk.id.sample.xml.groupsubscription.GroupSubscriptionLimitPrefs
 import com.vk.id.sample.xml.uikit.common.showToast
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.reflect.KCallable
 
 private const val MAX_RADIUS_DP = 100
 
 @Composable
-@Suppress("LongMethod")
+@Suppress("LongMethod", "MagicNumber")
 internal fun GroupSubscriptionScreen() {
     val context = LocalContext.current
     val state = rememberGroupSubscriptionSheetState()
-    val styleConstructor = remember { mutableStateOf(GroupSubscriptionStyle::system.carry(context)) }
+    val styleConstructor = remember { mutableStateOf<KCallable<GroupSubscriptionStyle>?>(null) }
+    LaunchedEffect(Unit) {
+        withContext(Dispatchers.IO) {
+            styleConstructor.value = GroupSubscriptionStyle::system.carry(context)
+        }
+    }
     var selectedStyle by remember { mutableStateOf(GroupSubscriptionStyle.system(context)) }
     val sheetCornersStylePercent = remember { mutableFloatStateOf(0f) }
     val buttonsCornersStylePercent = remember { mutableFloatStateOf(0f) }
@@ -57,9 +68,16 @@ internal fun GroupSubscriptionScreen() {
     val useDarkTheme = selectedStyle is GroupSubscriptionStyle.Dark
     var styleConstructors by remember { mutableStateOf<Map<String, KCallable<GroupSubscriptionStyle>>>(emptyMap()) }
     val shouldUseXml = remember { mutableStateOf(false) }
+    var limitEnabled by remember { mutableStateOf(true) }
+    var limitPeriod by remember { mutableIntStateOf(30) }
+    var limitValue by remember { mutableIntStateOf(2) }
+    val coroutineScope = rememberCoroutineScope()
     LaunchedEffect(Unit) {
         withContext(Dispatchers.IO) {
             styleConstructors = GroupSubscriptionStyle::class.styleConstructors(context)
+            limitEnabled = GroupSubscriptionLimitPrefs.getLimitEnabled(context)
+            limitPeriod = GroupSubscriptionLimitPrefs.getLimitPeriod(context)
+            limitValue = GroupSubscriptionLimitPrefs.getLimitValue(context)
         }
     }
     LaunchedEffect(
@@ -67,11 +85,13 @@ internal fun GroupSubscriptionScreen() {
         selectedSize.value to buttonsCornersStylePercent.floatValue
     ) {
         withContext(Dispatchers.IO) {
-            selectedStyle = styleConstructor.value.call(
-                GroupSubscriptionSheetCornersStyle.Custom(MAX_RADIUS_DP * sheetCornersStylePercent.floatValue),
-                GroupSubscriptionButtonsCornersStyle.Custom(MAX_RADIUS_DP * buttonsCornersStylePercent.floatValue),
-                selectedSize.value,
-            )
+            styleConstructor.value?.let {
+                selectedStyle = it.call(
+                    GroupSubscriptionSheetCornersStyle.Custom(MAX_RADIUS_DP * sheetCornersStylePercent.floatValue),
+                    GroupSubscriptionButtonsCornersStyle.Custom(MAX_RADIUS_DP * buttonsCornersStylePercent.floatValue),
+                    selectedSize.value,
+                )
+            }
         }
     }
     AppTheme(
@@ -116,6 +136,46 @@ internal fun GroupSubscriptionScreen() {
                     title = "Button corners",
                     selectedState = buttonsCornersStylePercent,
                     onStateChange = { buttonsCornersStylePercent.floatValue = it }
+                )
+                CheckboxSelector(
+                    title = "Limits enabled",
+                    isChecked = limitEnabled,
+                    onCheckedChange = {
+                        limitEnabled = it
+                        coroutineScope.launch {
+                            withContext(Dispatchers.IO) {
+                                GroupSubscriptionLimitPrefs.setLimitEnabled(context, it)
+                            }
+                        }
+                    }
+                )
+                TextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = limitPeriod.toString(),
+                    onValueChange = {
+                        val value = it.toIntOrNull() ?: 0
+                        limitPeriod = value
+                        coroutineScope.launch {
+                            withContext(Dispatchers.IO) {
+                                GroupSubscriptionLimitPrefs.setLimitPeriod(context, value)
+                            }
+                        }
+                    },
+                    label = { Text("Limit period (days)") },
+                )
+                TextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = limitValue.toString(),
+                    onValueChange = {
+                        val value = it.toIntOrNull() ?: 0
+                        limitValue = value
+                        coroutineScope.launch {
+                            withContext(Dispatchers.IO) {
+                                GroupSubscriptionLimitPrefs.setLimitValue(context, value)
+                            }
+                        }
+                    },
+                    label = { Text("Limit value") },
                 )
                 Button("Show") {
                     state.show()

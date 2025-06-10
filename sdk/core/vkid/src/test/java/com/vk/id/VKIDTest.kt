@@ -9,6 +9,7 @@ import com.vk.id.analytics.stat.StatTracker
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.exchangetoken.VKIDTokenExchanger
+import com.vk.id.groupsubscription.GroupSubscriptionLimit
 import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthEventBridge
 import com.vk.id.internal.auth.AuthOptions
@@ -83,6 +84,7 @@ internal class VKIDTest : BehaviorSpec({
     every { Looper.getMainLooper() } returns looper
     val trackingTracker = mockk<VKIDAnalytics.Tracker>(relaxed = true)
     val deps = object : VKIDDeps {
+        override val groupSubscriptionLimit: GroupSubscriptionLimit? = null
         override val context: Context = mockk()
         override val appContext: Context = context
         override val authProvidersChooser: Lazy<AuthProvidersChooser> = lazy { authProvidersChooser }

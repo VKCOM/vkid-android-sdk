@@ -18,6 +18,7 @@ import com.vk.id.analytics.stat.StatTracker
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.exchangetoken.VKIDTokenExchanger
 import com.vk.id.fetchuser.VKIDUserInfoFetcher
+import com.vk.id.groupsubscription.GroupSubscriptionLimit
 import com.vk.id.internal.api.VKIDApiService
 import com.vk.id.internal.auth.AuthActivity
 import com.vk.id.internal.auth.AuthCallbacksHolder
@@ -65,6 +66,7 @@ internal open class VKIDDepsProd(
     captchaRedirectUri: String? = null,
     forceError14: Boolean = false,
     forceHitmanChallenge: Boolean = false,
+    override val groupSubscriptionLimit: GroupSubscriptionLimit?,
 ) : VKIDDeps {
 
     override val context: Context = appContext
