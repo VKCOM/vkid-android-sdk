@@ -6,6 +6,8 @@ import androidx.compose.runtime.Stable
 
 /**
  * Manages the state of the Group Subscription Bottom Sheet. Should be created with [rememberOneTapBottomSheetStateInternal]
+ *
+ * @since 2.5.0
  */
 @Stable
 public class GroupSubscriptionSheetState
@@ -17,6 +19,8 @@ internal constructor(
 
     /**
      * Shows the bottom sheet.
+     *
+     * @since 2.5.0
      */
     public fun show() {
         showSheet(true)
@@ -24,6 +28,8 @@ internal constructor(
 
     /**
      * Hides the bottom sheet.
+     *
+     * @since 2.5.0
      */
     public fun hide() {
         showSheet(false)
@@ -31,6 +37,8 @@ internal constructor(
 
     /**
      * Returns the visibility state of the group subscription bottom sheet.
+     *
+     * @since 2.5.0
      */
     public val isVisible: Boolean
         get() {

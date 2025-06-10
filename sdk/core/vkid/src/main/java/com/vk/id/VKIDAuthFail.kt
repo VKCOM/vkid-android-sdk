@@ -2,10 +2,14 @@ package com.vk.id
 
 /**
  * Represents the failure cases for VK ID authentication.
+ *
+ * @since 1.0.0
  */
 public sealed class VKIDAuthFail(
     /**
      * Text description of the failure.
+     *
+     * @since 1.0.0
      */
     public val description: String
 ) {
@@ -13,6 +17,8 @@ public sealed class VKIDAuthFail(
      * Authentication process was canceled.
      *
      * @param description Description of the cancellation.
+     *
+     * @since 1.0.0
      */
     public class Canceled(
         description: String
@@ -32,10 +38,16 @@ public sealed class VKIDAuthFail(
      * Represents a failure due to an VK ID API call error.
      *
      * @param description Description of the API call failure.
-     * @param throwable The exception thrown during the API call.
+     *
+     * @since 1.0.0
      */
     public class FailedApiCall(
         description: String,
+        /**
+         * The exception thrown during the API call.
+         *
+         * @since 1.0.0
+         */
         public val throwable: Throwable
     ) : VKIDAuthFail(description) {
         /** @suppress */
@@ -55,6 +67,8 @@ public sealed class VKIDAuthFail(
      * Represents a failure in the OAuth authentication process.
      *
      * @param description Description of the OAuth failure.
+     *
+     * @since 1.0.0
      */
     public class FailedOAuth(description: String) : VKIDAuthFail(description)
 
@@ -62,6 +76,8 @@ public sealed class VKIDAuthFail(
      * Represents a failure due to an invalid OAuth state.
      *
      * @param description Description of the OAuth state failure.
+     *
+     * @since 1.0.0
      */
     public class FailedOAuthState(description: String) : VKIDAuthFail(description) {
         /** @suppress */
@@ -79,10 +95,16 @@ public sealed class VKIDAuthFail(
      * Represents a failure due to an issue with the redirect activity.
      *
      * @param description Description of the redirect activity failure.
-     * @param throwable Optional exception thrown during the redirect activity process.
+     *
+     * @since 1.0.0
      */
     public class FailedRedirectActivity(
         description: String,
+        /**
+         * Optional exception thrown during the redirect activity process.
+         *
+         * @since 1.0.0
+         */
         public val throwable: Throwable?
     ) : VKIDAuthFail(description) {
         /** @suppress */
@@ -102,10 +124,16 @@ public sealed class VKIDAuthFail(
      * Represents a failure due to the absence of a suitable browser.
      *
      * @param description Description of the failure due to no available browser.
-     * @param throwable Optional exception related to the absence of the browser.
+     *
+     * @since 1.0.0
      */
     public class NoBrowserAvailable(
         description: String,
+        /**
+         * Optional exception related to the absence of the browser.
+         *
+         * @since 1.0.0
+         */
         public val throwable: Throwable?
     ) : VKIDAuthFail(description) {
         /** @suppress */

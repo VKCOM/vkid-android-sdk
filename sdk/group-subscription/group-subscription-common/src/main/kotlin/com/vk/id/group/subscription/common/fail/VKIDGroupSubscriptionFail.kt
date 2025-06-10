@@ -4,13 +4,22 @@ package com.vk.id.group.subscription.common.fail
  * Represents the failure cases for Group Subscription flow.
  *
  * @param description The fail description. Can be used for identifying the error. Should not be displayed to users.
+ *
+ * @since 2.5.0
  */
 public sealed class VKIDGroupSubscriptionFail(
+    /**
+     * The fail description. Can be used for identifying the error. Should not be displayed to users.
+     *
+     * @since 2.5.0
+     */
     public val description: String
 ) {
 
     /**
      * Represents the case when you passed access token from service account to the flow.
+     *
+     * @since 2.5.0
      */
     public class ServiceAccount : VKIDGroupSubscriptionFail(
         description = "User can't subscribe to group with service account"
@@ -29,6 +38,8 @@ public sealed class VKIDGroupSubscriptionFail(
 
     /**
      * Represents an error when user is already a member of the group.
+     *
+     * @since 2.5.0
      */
     public class AlreadyGroupMember : VKIDGroupSubscriptionFail(
         description = "User can't subscribe to group he's already a member of"
@@ -49,8 +60,15 @@ public sealed class VKIDGroupSubscriptionFail(
      * Represents uncategorized errors, check [description] for more info.
      *
      * @param throwable The cause of the fail.
+     *
+     * @since 2.5.0
      */
     public class Other(
+        /**
+         * The cause of the fail.
+         *
+         * @since 2.5.0
+         */
         public val throwable: Throwable
     ) : VKIDGroupSubscriptionFail(
         description = throwable.message.orEmpty()
@@ -75,6 +93,8 @@ public sealed class VKIDGroupSubscriptionFail(
 
     /**
      * Represents flow cancellation by closing the sheet.
+     *
+     * @since 2.5.0
      */
     public class Close : VKIDGroupSubscriptionFail("User clicked on the close button") {
 
@@ -91,6 +111,8 @@ public sealed class VKIDGroupSubscriptionFail(
 
     /**
      * Represents flow cancellation by clicking on the cancel button.
+     *
+     * @since 2.5.0
      */
     public class Cancel : VKIDGroupSubscriptionFail("User clicked on the cancel button") {
 
@@ -107,6 +129,8 @@ public sealed class VKIDGroupSubscriptionFail(
 
     /**
      * Represents flow cancellation by sheet dismission.
+     *
+     * @since 2.5.0
      */
     public class Dismiss : VKIDGroupSubscriptionFail("User dismissed the sheet") {
 

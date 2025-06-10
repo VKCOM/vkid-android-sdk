@@ -72,6 +72,8 @@ import kotlinx.coroutines.launch
  * @param onFail A callback to be invoked upon an error during auth.
  * @param oAuths A set of [OAuth]s the should be displayed to the user.
  * @param authParams Optional params to be passed to auth. See [VKIDAuthUiParams.Builder] for more info.
+ *
+ * @since 1.0.0
  */
 @Composable
 public fun OAuthListWidget(
@@ -114,6 +116,8 @@ public fun OAuthListWidget(
  * @param groupSubscriptionSnackbarHostState The host state for snackbars.
  * Use along with [GroupSubscriptionSnackbarHost] and pass the same state as there.
  * @param groupSubscriptionStyle The widget style, can change appearance.
+ *
+ * @since 2.5.0
  */
 @Composable
 public fun OAuthListWidget(

@@ -95,6 +95,8 @@ import kotlinx.coroutines.launch
  * Composable function which creates a state for [GroupSubscriptionSheet] and can be used as `state` parameter.
  *
  * It provides [GroupSubscriptionSheetState] which can, for example, trigger hiding and showing the bottom sheet.
+ *
+ * @since 2.5.0
  */
 @Composable
 public fun rememberGroupSubscriptionSheetState(): GroupSubscriptionSheetState {
@@ -109,6 +111,8 @@ public fun rememberGroupSubscriptionSheetState(): GroupSubscriptionSheetState {
  *
  * @param snackbarHostState The host state for snackbars. You need to pass this value to the widget as well in the corresponding parameter.
  * @param style The style of the widget, will be used for styling snackbars. You need to pass the same value as the one use pass to the widget.
+ *
+ * @since 2.5.0
  */
 @Composable
 public fun GroupSubscriptionSnackbarHost(
@@ -146,6 +150,8 @@ public fun GroupSubscriptionSnackbarHost(
  * @param snackbarHostState The host state, should be the same as [GroupSubscriptionSnackbarHost].
  * NOTE: In case you pass null, the host will be put in the place you put this Composable.
  * @param style The widget style, can change appearance.
+ *
+ * @since 2.5.0
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

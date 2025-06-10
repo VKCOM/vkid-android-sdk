@@ -66,6 +66,8 @@ import java.util.concurrent.atomic.AtomicReference
 /**
  * VKID is the main entry point for integrating VK ID authentication into an Android application.
  * Check readme for more information about integration steps https://github.com/VKCOM/vkid-android-sdk#readme
+ *
+ * @since 0.0.1
  */
 @Suppress("TooManyFunctions")
 public class VKID {
@@ -88,6 +90,8 @@ public class VKID {
          * You must not call this method twice.
          *
          * @param context The context of the application.
+         *
+         * @since 2.4.0
          */
         public fun init(context: Context): Unit = init(
             context = context,
@@ -222,6 +226,8 @@ public class VKID {
         /**
          * Returns a VKID Instance.
          * You must call [init] before accessing this property.
+         *
+         * @since 2.0.0-alpha
          */
         public val instance: VKID
             get() = _instance ?: synchronized(this) { _instance } ?: error("VKID is not initialized")
@@ -231,6 +237,8 @@ public class VKID {
          * Set this property to change the logging implementation.
          *
          * @property logEngine Instance of [LogEngine] to be used for logging.
+         *
+         * @since 0.0.1
          */
         @Suppress("MemberVisibilityCanBePrivate")
         public var logEngine: LogEngine = InternalVKIDAndroidLogcatLogEngine()
@@ -247,6 +255,8 @@ public class VKID {
          * When set to false, disables logging.
          *
          * @property logsEnabled Boolean flag to enable or disable logging.
+         *
+         * @since 0.0.1
          */
         public var logsEnabled: Boolean = false
             set(value) {
@@ -352,6 +362,8 @@ public class VKID {
     /**
      * Sets the language for all ui components of the SDK.
      * @param locale The locale which will be used for all ui components. Null means that the default locale will be used.
+     *
+     * @since 2.3.1
      */
     public fun setLocale(locale: Locale?) {
         internalVKIDLocale.set(locale)
@@ -375,6 +387,8 @@ public class VKID {
      *     }
      * )
      * ```
+     *
+     * @since 0.0.1
      */
     public fun authorize(
         lifecycleOwner: LifecycleOwner,
@@ -402,6 +416,8 @@ public class VKID {
      *     }
      * )
      * ```
+     *
+     * @since 0.0.1
      */
     public suspend fun authorize(
         callback: VKIDAuthCallback,
@@ -456,6 +472,8 @@ public class VKID {
      * @param lifecycleOwner The [LifecycleOwner] in which the authorization process should be handled.
      * @param callback [VKIDRefreshTokenCallback] to handle the result of the token refreshing.
      * @param params Optional parameters.
+     *
+     * @since 2.0.0-alpha
      */
     public fun refreshToken(
         lifecycleOwner: LifecycleOwner,
@@ -470,6 +488,8 @@ public class VKID {
      *
      * @param callback [VKIDRefreshTokenCallback] to handle the result of the token refreshing.
      * @param params Optional parameters.
+     *
+     * @since 2.0.0-alpha
      */
     public suspend fun refreshToken(
         callback: VKIDRefreshTokenCallback,
@@ -491,6 +511,8 @@ public class VKID {
      * @param v1Token The token to exchange.
      * @param callback [VKIDExchangeTokenCallback] to handle the result of the token exchange.
      * @param params Optional parameters.
+     *
+     * @since 2.0.0-alpha
      */
     public fun exchangeTokenToV2(
         lifecycleOwner: LifecycleOwner,
@@ -507,6 +529,8 @@ public class VKID {
      * @param v1Token The token to exchange.
      * @param callback [VKIDExchangeTokenCallback] to handle the result of the token exchange.
      * @param params Optional parameters.
+     *
+     * @since 2.0.0-alpha
      */
     public suspend fun exchangeTokenToV2(
         v1Token: String,
@@ -528,6 +552,8 @@ public class VKID {
      * @param lifecycleOwner The [LifecycleOwner] in which the user data refreshing should be handled.
      * @param callback [VKIDGetUserCallback] to handle the result of the user data refreshing.
      * @param params Optional parameters.
+     *
+     * @since 2.0.0-alpha
      */
     public fun getUserData(
         lifecycleOwner: LifecycleOwner,
@@ -542,6 +568,8 @@ public class VKID {
      *
      * @param callback [VKIDGetUserCallback] to handle the result of the user data refreshing.
      * @param params Optional parameters.
+     *
+     * @since 2.0.0-alpha
      */
     public suspend fun getUserData(
         callback: VKIDGetUserCallback,
@@ -562,6 +590,8 @@ public class VKID {
      * @param lifecycleOwner The [LifecycleOwner] in which the logging out should be handled.
      * @param callback [VKIDLogoutCallback] to handle the result of logging out.
      * @param params Optional parameters.
+     *
+     * @since 2.0.0-alpha
      */
     public fun logout(
         callback: VKIDLogoutCallback,
@@ -576,6 +606,8 @@ public class VKID {
      *
      * @param callback [VKIDLogoutCallback] to handle the result of logging out.
      * @param params Optional parameters.
+     *
+     * @since 2.0.0-alpha
      */
     public suspend fun logout(
         callback: VKIDLogoutCallback,
@@ -592,6 +624,8 @@ public class VKID {
 
     /**
      * Returns current access token or null if auth wasn't passed.
+     *
+     * @since 1.3.2
      */
     public val accessToken: AccessToken?
         get() = this.crashReporter.runReportingCrashes({ null }) { tokenStorage.accessToken }
@@ -613,6 +647,8 @@ public class VKID {
 
     /**
      * Returns current refresh token or null if auth wasn't passed.
+     *
+     * @since 2.0.0-alpha02
      */
     public val refreshToken: RefreshToken?
         get() = this.crashReporter.runReportingCrashes({ null }) { tokenStorage.refreshToken }
@@ -621,6 +657,8 @@ public class VKID {
      * Fetches the user data.
      *
      * @return A Result object containing the fetched [VKIDUser] or an error.
+     *
+     * @since 0.0.1
      */
     public suspend fun fetchUserData(): Result<VKIDUser?> {
         return this.crashReporter.runReportingCrashesSuspend({ Result.failure(it) }) {

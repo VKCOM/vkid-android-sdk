@@ -24,6 +24,8 @@ import com.vk.id.group.subscription.compose.ui.rememberGroupSubscriptionSheetSta
  * A bottomsheet that provides Group Subscription functionality.
  *
  * You should [setCallbacks] on initialized view to get flow result.
+ *
+ * @since 2.5.0
  */
 public class GroupSubscriptionSheet @JvmOverloads constructor(
     context: Context,
@@ -42,11 +44,15 @@ public class GroupSubscriptionSheet @JvmOverloads constructor(
      * NOTE: The token must have "groups" scope, otherwise you'll get an error.
      * NOTE: The token won't be automatically refreshed, in case it's outdated you'll get an error.
      * NOTE: In case you will pass null, the last token you received with the SDK will be used.
+     *
+     * @since 2.5.0
      */
     public var accessTokenProvider: (() -> String)? = null
 
     /**
      * The id of the group the user will be subscribed to.
+     *
+     * @since 2.5.0
      */
     public var groupId: String? = null
         set(value) {
@@ -63,6 +69,8 @@ public class GroupSubscriptionSheet @JvmOverloads constructor(
 
     /**
      * The host for snackbars. Pass the view after placing it on screen.
+     *
+     * @since 2.5.0
      */
     public var snackbarHost: GroupSubscriptionSnackbarHost? = null
         set(value) {
@@ -73,6 +81,8 @@ public class GroupSubscriptionSheet @JvmOverloads constructor(
 
     /**
      * The widget style, can change appearance.
+     *
+     * @since 2.5.0
      */
     public var style: GroupSubscriptionStyle = GroupSubscriptionStyle.Light()
         set(value) {
@@ -132,6 +142,8 @@ public class GroupSubscriptionSheet @JvmOverloads constructor(
      *
      * @param onSuccess Will be called upon successful subscription.
      * @param onFail Will be called upon any unsuccessful flow completion along with an description of the specific encountered error.
+     *
+     * @since 2.5.0
      */
     public fun setCallbacks(
         onSuccess: () -> Unit,
@@ -143,6 +155,8 @@ public class GroupSubscriptionSheet @JvmOverloads constructor(
 
     /**
      * Show the bottom sheet.
+     *
+     * @since 2.5.0
      */
     public fun show() {
         state?.show() ?: error("View is not initialized")
@@ -150,6 +164,8 @@ public class GroupSubscriptionSheet @JvmOverloads constructor(
 
     /**
      * Hides the bottom sheet.
+     *
+     * @since 2.5.0
      */
     public fun hide() {
         state?.hide() ?: error("View is not initialized")

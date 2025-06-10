@@ -12,10 +12,27 @@ import com.vk.id.common.util.internalVkIdIsDarkTheme
  * @param cornersStyle The style for sheet corners.
  * @param buttonsCornersStyle The style for button corners.
  * @param buttonsSizeStyle The style for button size.
+ *
+ * @since 2.5.0
  */
 public sealed class GroupSubscriptionStyle @InternalVKIDApi constructor(
+    /**
+     * The style for sheet corners.
+     *
+     * @since 2.5.0
+     */
     public val cornersStyle: GroupSubscriptionSheetCornersStyle = GroupSubscriptionSheetCornersStyle.Default,
+    /**
+     * The style for button corners.
+     *
+     * @since 2.5.0
+     */
     public val buttonsCornersStyle: GroupSubscriptionButtonsCornersStyle = GroupSubscriptionButtonsCornersStyle.Default,
+    /**
+     * The style for button size.
+     *
+     * @since 2.5.0
+     */
     public val buttonsSizeStyle: GroupSubscriptionButtonsSizeStyle = GroupSubscriptionButtonsSizeStyle.DEFAULT,
 ) {
     @InternalVKIDApi public val isLight: Boolean = this is Light
@@ -26,6 +43,8 @@ public sealed class GroupSubscriptionStyle @InternalVKIDApi constructor(
      * @param cornersStyle The style for sheet corners.
      * @param buttonsCornersStyle The style for button corners.
      * @param buttonsSizeStyle The style for button size.
+     *
+     * @since 2.5.0
      */
     public class Light(
         cornersStyle: GroupSubscriptionSheetCornersStyle = GroupSubscriptionSheetCornersStyle.Default,
@@ -43,6 +62,8 @@ public sealed class GroupSubscriptionStyle @InternalVKIDApi constructor(
      * @param cornersStyle The style for sheet corners.
      * @param buttonsCornersStyle The style for button corners.
      * @param buttonsSizeStyle The style for button size.
+     *
+     * @since 2.5.0
      */
     public class Dark(
         cornersStyle: GroupSubscriptionSheetCornersStyle = GroupSubscriptionSheetCornersStyle.Default,
@@ -64,6 +85,8 @@ public sealed class GroupSubscriptionStyle @InternalVKIDApi constructor(
          * @param cornersStyle The style for sheet corners.
          * @param buttonsCornersStyle The style for button corners.
          * @param buttonsSizeStyle The style for button size.
+         *
+         * @since 2.5.0
          */
         public fun system(
             context: Context,

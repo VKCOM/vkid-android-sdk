@@ -2,10 +2,14 @@ package com.vk.id.refresh
 
 /**
  * Represents the failure cases for VK ID token refreshing.
+ *
+ * @since 2.0.0-alpha
  */
 public sealed class VKIDRefreshTokenFail(
     /**
      * Text description of the failure.
+     *
+     * @since 2.0.0-alpha
      */
     public val description: String
 ) {
@@ -13,6 +17,8 @@ public sealed class VKIDRefreshTokenFail(
      * Represents a failure due to an invalid OAuth state.
      *
      * @param description Description of the OAuth state failure.
+     *
+     * @since 2.0.0-alpha
      */
     public class FailedOAuthState(description: String) : VKIDRefreshTokenFail(description) {
         /** @suppress */
@@ -31,9 +37,16 @@ public sealed class VKIDRefreshTokenFail(
      *
      * @param description Description of the API call failure.
      * @param throwable The exception thrown during the API call.
+     *
+     * @since 2.0.0-alpha
      */
     public class FailedApiCall(
         description: String,
+        /**
+         * The exception thrown during the API call.
+         *
+         * @since 2.0.0-alpha
+         */
         public val throwable: Throwable
     ) : VKIDRefreshTokenFail(description) {
         /** @suppress */
@@ -58,6 +71,8 @@ public sealed class VKIDRefreshTokenFail(
      * Represents a failure due to an expiration of refresh token.
      *
      * @param description Description of the token refreshing failure.
+     *
+     * @since 2.0.0-alpha
      */
     public class RefreshTokenExpired(
         description: String
@@ -77,6 +92,8 @@ public sealed class VKIDRefreshTokenFail(
      * Represents a failure due to lack of auth before token refreshing.
      *
      * @param description Description of the failure.
+     *
+     * @since 2.0.0-alpha
      */
     public class NotAuthenticated(
         description: String

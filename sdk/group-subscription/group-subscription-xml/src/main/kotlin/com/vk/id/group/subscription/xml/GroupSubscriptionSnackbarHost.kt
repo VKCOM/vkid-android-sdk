@@ -22,6 +22,8 @@ import com.vk.id.group.subscription.compose.ui.GroupSubscriptionSnackbarHost
  * The host for Group Subscription snackbars.
  *
  * Must be placed where you want snackbars to appear, respecting screen insets.
+ *
+ * @since 2.5.0
  */
 public class GroupSubscriptionSnackbarHost @JvmOverloads constructor(
     context: Context,
@@ -38,6 +40,8 @@ public class GroupSubscriptionSnackbarHost @JvmOverloads constructor(
      * The widget style, can change appearance.
      *
      * Should be the same as for [GroupSubscriptionSheet].
+     *
+     * @since 2.5.0
      */
     public var style: GroupSubscriptionStyle = GroupSubscriptionStyle.Light()
         set(value) {
