@@ -42,12 +42,49 @@ public abstract class BaseGroupSubscriptionTest : BaseUiTest() {
 
     @get:Rule
     public val composeTestRule: AutoTestActivityRule = createAndroidComposeRule()
+    public open fun remoteLimitReached() {
+        var isSuccess = false
+        var fail: VKIDGroupSubscriptionFail? = null
+        before {
+            vkidBuilder()
+                .shouldShowSubscriptionResponse(Result.success(false))
+                .isServiceAccountResponse(Result.success(true))
+                .getGroupSuccess()
+                .getMembersSuccess()
+                .groupSubscriptionLimit(GroupSubscriptionLimit(maxSubscriptionsToShow = 1, periodInDays = 30))
+                .build()
+            VKID.instance.mockAuthorized()
+            clearDisplays()
+            setContent(
+                onSuccess = { isSuccess = true },
+                onFail = { fail = it },
+            )
+        }.after {
+        }.run {
+            step("Шторка не видна") {
+                onLoadedScreen {
+                    sheet.assertIsNotDisplayed()
+                }
+            }
+            step("Не приходит колбек об успехе") {
+                flakySafely {
+                    isSuccess.shouldBeFalse()
+                }
+            }
+            step("Приходит ошибка") {
+                flakySafely {
+                    fail.shouldBeInstanceOf<VKIDGroupSubscriptionFail.RemoteLimitReached>()
+                }
+            }
+        }
+    }
 
     public open fun limitReached() {
         var isSuccess = false
         var fail: VKIDGroupSubscriptionFail? = null
         before {
             vkidBuilder()
+                .shouldShowSubscriptionResponse(Result.success(true))
                 .isServiceAccountResponse(Result.success(false))
                 .getGroupSuccess()
                 .getMembersSuccess()
@@ -119,6 +156,7 @@ public abstract class BaseGroupSubscriptionTest : BaseUiTest() {
         var fail: VKIDGroupSubscriptionFail? = null
         before {
             vkidBuilder()
+                .shouldShowSubscriptionResponse(Result.success(true))
                 .isServiceAccountResponse(Result.success(true))
                 .getGroupSuccess()
                 .getMembersSuccess()
@@ -153,6 +191,7 @@ public abstract class BaseGroupSubscriptionTest : BaseUiTest() {
         var fail: VKIDGroupSubscriptionFail? = null
         before {
             vkidBuilder()
+                .shouldShowSubscriptionResponse(Result.success(true))
                 .isServiceAccountResponse(Result.success(false))
                 .getGroupResponse(Result.failure(InternalVKIDAlreadyGroupMemberException()))
                 .getMembersSuccess()
@@ -187,6 +226,7 @@ public abstract class BaseGroupSubscriptionTest : BaseUiTest() {
         var fail: VKIDGroupSubscriptionFail? = null
         before {
             vkidBuilder()
+                .shouldShowSubscriptionResponse(Result.success(true))
                 .isServiceAccountResponse(Result.success(false))
                 .getGroupResponse(Result.failure(IOException("Mock api error")))
                 .getMembersSuccess()
@@ -221,6 +261,7 @@ public abstract class BaseGroupSubscriptionTest : BaseUiTest() {
         var fail: VKIDGroupSubscriptionFail? = null
         before {
             vkidBuilder()
+                .shouldShowSubscriptionResponse(Result.success(true))
                 .isServiceAccountResponse(Result.success(false))
                 .getGroupSuccess()
                 .getMembersResponses(Result.failure(IOException("Mock api error")), Result.failure(IOException("Mock api error")))
@@ -255,6 +296,7 @@ public abstract class BaseGroupSubscriptionTest : BaseUiTest() {
         var fail: VKIDGroupSubscriptionFail? = null
         before {
             vkidBuilder()
+                .shouldShowSubscriptionResponse(Result.success(true))
                 .isServiceAccountResponse(Result.success(false))
                 .getGroupSuccess()
                 .getMembersSuccess()
@@ -309,6 +351,7 @@ public abstract class BaseGroupSubscriptionTest : BaseUiTest() {
         var fail: VKIDGroupSubscriptionFail? = null
         before {
             vkidBuilder()
+                .shouldShowSubscriptionResponse(Result.success(true))
                 .isServiceAccountResponse(Result.success(false))
                 .getGroupSuccess()
                 .getMembersSuccess()
@@ -356,6 +399,7 @@ public abstract class BaseGroupSubscriptionTest : BaseUiTest() {
         var fail: VKIDGroupSubscriptionFail? = null
         before {
             vkidBuilder()
+                .shouldShowSubscriptionResponse(Result.success(true))
                 .isServiceAccountResponse(Result.success(false))
                 .getGroupSuccess()
                 .getMembersSuccess()
@@ -403,6 +447,7 @@ public abstract class BaseGroupSubscriptionTest : BaseUiTest() {
         var fail: VKIDGroupSubscriptionFail? = null
         before {
             vkidBuilder()
+                .shouldShowSubscriptionResponse(Result.success(true))
                 .isServiceAccountResponse(Result.success(false))
                 .getGroupSuccess()
                 .getMembersSuccess()
@@ -453,6 +498,7 @@ public abstract class BaseGroupSubscriptionTest : BaseUiTest() {
         var fail: VKIDGroupSubscriptionFail? = null
         before {
             vkidBuilder()
+                .shouldShowSubscriptionResponse(Result.success(true))
                 .isServiceAccountResponse(Result.success(false))
                 .getGroupSuccess()
                 .getMembersSuccess()
@@ -512,6 +558,7 @@ public abstract class BaseGroupSubscriptionTest : BaseUiTest() {
         var fail: VKIDGroupSubscriptionFail? = null
         before {
             vkidBuilder()
+                .shouldShowSubscriptionResponse(Result.success(true))
                 .isServiceAccountResponse(Result.success(false))
                 .getGroupSuccess()
                 .getMembersSuccess()

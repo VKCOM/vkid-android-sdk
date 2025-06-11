@@ -35,6 +35,7 @@ public class InternalVKIDTestBuilder(
     private var packageManager: InternalVKIDPackageManager? = null
     private var activityStarter: InternalVKIDActivityStarter? = null
 
+    private var shouldShowSubscriptionResponse = Result.failure<Boolean>(UnsupportedOperationException("Not mocked"))
     private var isServiceAccountResponse = Result.failure<Boolean>(UnsupportedOperationException("Not mocked"))
     private var getGroupResponse = Result.failure<InternalVKIDGroupByIdData>(UnsupportedOperationException("Not mocked"))
     private var getMembersResponses =
@@ -42,6 +43,10 @@ public class InternalVKIDTestBuilder(
     private var subscribeToGroupResponses = listOf(Result.failure<Unit>(UnsupportedOperationException("Not mocked")))
     private var groupSubscriptionLimit: GroupSubscriptionLimit? = null
     private val mockGroupSubscriptionApi = object : InternalVKIDGroupSubscriptionApiContract {
+        override suspend fun shouldShowSubscription(accessToken: String): Boolean {
+            return shouldShowSubscriptionResponse.getOrThrow()
+        }
+
         override suspend fun isServiceAccount(accessToken: String): Boolean {
             return isServiceAccountResponse.getOrThrow()
         }
@@ -156,6 +161,10 @@ public class InternalVKIDTestBuilder(
 
     public fun preferencesStorage(storage: InternalVKIDPreferencesStorage?): InternalVKIDTestBuilder = apply {
         this.preferencesStorage = storage
+    }
+
+    public fun shouldShowSubscriptionResponse(response: Result<Boolean>): InternalVKIDTestBuilder = apply {
+        shouldShowSubscriptionResponse = response
     }
 
     public fun isServiceAccountResponse(response: Result<Boolean>): InternalVKIDTestBuilder = apply {

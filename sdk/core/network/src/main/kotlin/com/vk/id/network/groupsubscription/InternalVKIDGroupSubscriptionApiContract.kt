@@ -7,6 +7,10 @@ import com.vk.id.network.groupsubscription.data.InternalVKIDGroupMembersData
 @InternalVKIDApi
 public interface InternalVKIDGroupSubscriptionApiContract {
 
+    public suspend fun shouldShowSubscription(
+        accessToken: String
+    ): Boolean
+
     public suspend fun isServiceAccount(
         accessToken: String,
     ): Boolean

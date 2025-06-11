@@ -42,9 +42,11 @@ internal class GroupSubscriptionInteractor(
         }
     }
 
+    @Suppress("ThrowsCount")
     internal suspend fun loadGroup(): InternalVKIDGroupData {
         when {
-            !shouldShowGroupSubscription() -> throw ClientLimitReachedException()
+            !passesLocalLimits() -> throw ClientLimitReachedException()
+            !passesRemoteLimits() -> throw RemoteLimitReachedException()
             !apiService.isServiceAccount(accessToken) -> return getGroup()
             else -> throw ServiceAccountException()
         }
@@ -54,7 +56,11 @@ internal class GroupSubscriptionInteractor(
         apiService.subscribeToGroup(accessToken = accessToken, groupId = groupId)
     }
 
-    private suspend fun shouldShowGroupSubscription(): Boolean {
+    private suspend fun passesRemoteLimits(): Boolean {
+        return apiService.shouldShowSubscription(accessToken)
+    }
+
+    private suspend fun passesLocalLimits(): Boolean {
         return withContext(Dispatchers.IO) {
             if (limit == null) return@withContext true
             val limitStart = Calendar.getInstance()
