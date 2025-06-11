@@ -193,6 +193,7 @@ com.google.testing.platform:core:0.0.9-alpha02=_internal-unified-test-platform-c
 com.google.testing.platform:launcher:0.0.9-alpha02=_internal-unified-test-platform-android-test-plugin-host-additional-test-output,_internal-unified-test-platform-android-test-plugin-host-device-info,_internal-unified-test-platform-android-test-plugin-host-logcat,_internal-unified-test-platform-android-test-plugin-host-retention,_internal-unified-test-platform-launcher
 com.squareup.moshi:moshi:1.13.0=benchmarkReleaseRuntimeClasspath,nonMinifiedReleaseRuntimeClasspath
 com.squareup.okhttp3:logging-interceptor:4.12.0=benchmarkReleaseTestedApks,nonMinifiedReleaseTestedApks
+com.squareup.okhttp3:okhttp-tls:4.12.0=benchmarkReleaseTestedApks,nonMinifiedReleaseTestedApks
 com.squareup.okhttp3:okhttp:4.12.0=benchmarkReleaseTestedApks,nonMinifiedReleaseTestedApks
 com.squareup.okio:okio-jvm:3.7.0=benchmarkReleaseCompileClasspath,benchmarkReleaseRuntimeClasspath,nonMinifiedReleaseCompileClasspath,nonMinifiedReleaseRuntimeClasspath
 com.squareup.okio:okio-jvm:3.8.0=benchmarkReleaseTestedApks,nonMinifiedReleaseTestedApks
