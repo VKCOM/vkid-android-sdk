@@ -140,8 +140,9 @@ public class VKID {
             encryptedSharedPreferencesStorage: InternalVKIDPreferencesStorage?,
             packageManager: InternalVKIDPackageManager?,
             activityStarter: InternalVKIDActivityStarter?,
+            groupSubscriptionLimit: GroupSubscriptionLimit?,
         ): Unit = init(
-            VKID(object : VKIDDepsProd(context, isFlutter = false, groupSubscriptionLimit = GroupSubscriptionLimit()) {
+            VKID(object : VKIDDepsProd(context, isFlutter = false, groupSubscriptionLimit = groupSubscriptionLimit) {
                 override val api = lazy { InternalVKIDImmediateApi(mockApi) }
                 override val groupSubscriptionApiService: Lazy<InternalVKIDGroupSubscriptionApiContract> =
                     lazy { groupSubscriptionApiContract }
