@@ -118,6 +118,7 @@ public class InternalVKIDRealApi(
         clientSecret: String,
         sakVersion: String,
         events: JSONArray,
+        externalDeviceId: String,
     ): Call {
         val formBody = FormBody.Builder()
             .add(FIELD_API_VERSION, API_VERSION_VALUE)
@@ -127,7 +128,12 @@ public class InternalVKIDRealApi(
             .add("events", events.toString())
             .build()
 
-        return client.createRequest(HOST_API, "method/statEvents.addVKIDAnonymously", formBody)
+        return client.createRequest(
+            HOST_API,
+            "method/statEvents.addVKIDAnonymously",
+            formBody,
+            query = mapOf("external_device_id" to externalDeviceId),
+        )
     }
 
     override fun sendStatEvents(
@@ -135,7 +141,8 @@ public class InternalVKIDRealApi(
         clientId: String,
         clientSecret: String,
         sakVersion: String,
-        events: JSONArray
+        events: JSONArray,
+        externalDeviceId: String,
     ): Call {
         val formBody = FormBody.Builder()
             .add(FIELD_ACCESS_TOKEN, accessToken)
@@ -146,7 +153,12 @@ public class InternalVKIDRealApi(
             .add("events", events.toString())
             .build()
 
-        return client.createRequest(HOST_API, "method/statEvents.addVKID", formBody)
+        return client.createRequest(
+            HOST_API,
+            "method/statEvents.addVKID",
+            formBody,
+            query = mapOf("external_device_id" to externalDeviceId),
+        )
     }
 
     @InternalVKIDApi
