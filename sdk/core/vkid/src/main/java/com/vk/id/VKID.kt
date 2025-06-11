@@ -4,7 +4,6 @@ package com.vk.id
 
 import android.content.Context
 import androidx.annotation.VisibleForTesting
-import androidx.lifecycle.AtomicReference
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.vk.id.analytics.LogcatTracker
@@ -17,11 +16,13 @@ import com.vk.id.common.InternalVKIDApi
 import com.vk.id.exchangetoken.VKIDExchangeTokenCallback
 import com.vk.id.exchangetoken.VKIDExchangeTokenParams
 import com.vk.id.exchangetoken.VKIDTokenExchanger
+import com.vk.id.groupsubscription.GroupSubscriptionLimit
 import com.vk.id.internal.analytics.CustomAuthAnalytics
 import com.vk.id.internal.auth.AuthCallbacksHolder
 import com.vk.id.internal.auth.AuthEventBridge
 import com.vk.id.internal.auth.AuthProvidersChooser
 import com.vk.id.internal.auth.AuthResult
+import com.vk.id.internal.auth.ServiceCredentials
 import com.vk.id.internal.auth.device.InternalVKIDDeviceIdProvider
 import com.vk.id.internal.concurrent.VKIDCoroutinesDispatchers
 import com.vk.id.internal.context.InternalVKIDActivityStarter
@@ -39,14 +40,15 @@ import com.vk.id.logger.internalVKIDCreateLoggerForClass
 import com.vk.id.logout.VKIDLoggerOut
 import com.vk.id.logout.VKIDLogoutCallback
 import com.vk.id.logout.VKIDLogoutParams
+import com.vk.id.network.groupsubscription.InternalVKIDGroupSubscriptionApiContract
 import com.vk.id.refresh.VKIDRefreshTokenCallback
 import com.vk.id.refresh.VKIDRefreshTokenParams
 import com.vk.id.refresh.VKIDTokenRefresher
 import com.vk.id.refreshuser.VKIDGetUserCallback
 import com.vk.id.refreshuser.VKIDGetUserParams
 import com.vk.id.refreshuser.VKIDUserRefresher
-import com.vk.id.storage.InternalVKIDEncryptedSharedPreferencesStorage
-import com.vk.id.storage.TokenStorage
+import com.vk.id.storage.InternalVKIDPreferencesStorage
+import com.vk.id.storage.InternalVKIDTokenStorage
 import com.vk.id.test.InternalVKIDImmediateApi
 import com.vk.id.test.InternalVKIDOverrideApi
 import com.vk.id.test.TestSilentAuthInfoProvider
@@ -60,10 +62,13 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import java.util.Locale
+import java.util.concurrent.atomic.AtomicReference
 
 /**
  * VKID is the main entry point for integrating VK ID authentication into an Android application.
  * Check readme for more information about integration steps https://github.com/VKCOM/vkid-android-sdk#readme
+ *
+ * @since 0.0.1
  */
 @Suppress("TooManyFunctions")
 public class VKID {
@@ -86,22 +91,32 @@ public class VKID {
          * You must not call this method twice.
          *
          * @param context The context of the application.
+         * @param groupSubscriptionLimit Limit for group subscription feature.
+         *
+         * @since 2.4.0
          */
-        public fun init(context: Context): Unit = init(
+        @JvmOverloads
+        public fun init(
+            context: Context,
+            groupSubscriptionLimit: GroupSubscriptionLimit? = GroupSubscriptionLimit(),
+        ): Unit = init(
             context = context,
             isFlutter = false,
             captchaRedirectUri = null,
             forceError14 = false,
             forceHitmanChallenge = false,
+            groupSubscriptionLimit = groupSubscriptionLimit,
         )
 
         @InternalVKIDApi
+        @Suppress("LongParameterList")
         public fun init(
             context: Context,
             isFlutter: Boolean,
             captchaRedirectUri: String?,
             forceError14: Boolean,
             forceHitmanChallenge: Boolean,
+            groupSubscriptionLimit: GroupSubscriptionLimit?
         ): Unit = init(
             VKID(
                 VKIDDepsProd(
@@ -110,6 +125,7 @@ public class VKID {
                     captchaRedirectUri = captchaRedirectUri,
                     forceError14 = forceError14,
                     forceHitmanChallenge = forceHitmanChallenge,
+                    groupSubscriptionLimit = groupSubscriptionLimit,
                 )
             )
         )
@@ -118,14 +134,18 @@ public class VKID {
         internal fun init(
             context: Context,
             mockApi: InternalVKIDOverrideApi,
+            groupSubscriptionApiContract: InternalVKIDGroupSubscriptionApiContract,
             deviceIdStorage: InternalVKIDDeviceIdProvider.DeviceIdStorage?,
             prefsStore: InternalVKIDPrefsStore?,
-            encryptedSharedPreferencesStorage: InternalVKIDEncryptedSharedPreferencesStorage?,
+            encryptedSharedPreferencesStorage: InternalVKIDPreferencesStorage?,
             packageManager: InternalVKIDPackageManager?,
             activityStarter: InternalVKIDActivityStarter?,
+            groupSubscriptionLimit: GroupSubscriptionLimit?,
         ): Unit = init(
-            VKID(object : VKIDDepsProd(context, isFlutter = false) {
+            VKID(object : VKIDDepsProd(context, isFlutter = false, groupSubscriptionLimit = groupSubscriptionLimit) {
                 override val api = lazy { InternalVKIDImmediateApi(mockApi) }
+                override val groupSubscriptionApiService: Lazy<InternalVKIDGroupSubscriptionApiContract> =
+                    lazy { groupSubscriptionApiContract }
                 override val vkSilentAuthInfoProvider = lazy { TestSilentAuthInfoProvider() }
                 override val deviceIdStorage = lazy { deviceIdStorage ?: super.deviceIdStorage.value }
                 override val prefsStore = lazy { prefsStore ?: super.prefsStore.value }
@@ -152,7 +172,11 @@ public class VKID {
                     ): T = action()
                 }
                 override val trackingTracker: VKIDAnalytics.Tracker = object : VKIDAnalytics.Tracker {
-                    override fun trackEvent(name: String, vararg params: VKIDAnalytics.EventParam) = Unit
+                    override fun trackEvent(
+                        accessToken: String?,
+                        name: String,
+                        vararg params: VKIDAnalytics.EventParam
+                    ) = Unit
                 }
             })
         )
@@ -160,9 +184,20 @@ public class VKID {
         @InternalVKIDApi
         public fun initForScreenshotTests(context: Context) {
             init(
-                VKID(object : VKIDDepsProd(context, isFlutter = false) {
+                VKID(object : VKIDDepsProd(context, isFlutter = false, groupSubscriptionLimit = GroupSubscriptionLimit()) {
+                    override val serviceCredentials: Lazy<ServiceCredentials> = lazy {
+                        ServiceCredentials(
+                            clientID = "",
+                            clientSecret = "",
+                            redirectUri = "",
+                        )
+                    }
                     override val statTracker: VKIDAnalytics.Tracker = object : VKIDAnalytics.Tracker {
-                        override fun trackEvent(name: String, vararg params: VKIDAnalytics.EventParam) = Unit
+                        override fun trackEvent(
+                            accessToken: String?,
+                            name: String,
+                            vararg params: VKIDAnalytics.EventParam
+                        ) = Unit
                     }
                     override val crashReporter: CrashReporter = object : CrashReporter {
                         override fun report(crash: Throwable) = Unit
@@ -183,7 +218,17 @@ public class VKID {
                         override suspend fun runTrackingSuspend(key: String, action: suspend () -> Unit) = action()
                     }
                     override val trackingTracker: VKIDAnalytics.Tracker = object : VKIDAnalytics.Tracker {
-                        override fun trackEvent(name: String, vararg params: VKIDAnalytics.EventParam) = Unit
+                        override fun trackEvent(
+                            accessToken: String?,
+                            name: String,
+                            vararg params: VKIDAnalytics.EventParam
+                        ) = Unit
+                    }
+                    override val encryptedSharedPreferencesStorage: Lazy<InternalVKIDPreferencesStorage> = lazy {
+                        object : InternalVKIDPreferencesStorage {
+                            override fun set(key: String, value: String?) = Unit
+                            override fun getString(key: String): String? = null
+                        }
                     }
                 })
             )
@@ -192,6 +237,8 @@ public class VKID {
         /**
          * Returns a VKID Instance.
          * You must call [init] before accessing this property.
+         *
+         * @since 2.0.0-alpha
          */
         public val instance: VKID
             get() = _instance ?: synchronized(this) { _instance } ?: error("VKID is not initialized")
@@ -201,6 +248,8 @@ public class VKID {
          * Set this property to change the logging implementation.
          *
          * @property logEngine Instance of [LogEngine] to be used for logging.
+         *
+         * @since 0.0.1
          */
         @Suppress("MemberVisibilityCanBePrivate")
         public var logEngine: LogEngine = InternalVKIDAndroidLogcatLogEngine()
@@ -217,6 +266,8 @@ public class VKID {
          * When set to false, disables logging.
          *
          * @property logsEnabled Boolean flag to enable or disable logging.
+         *
+         * @since 0.0.1
          */
         public var logsEnabled: Boolean = false
             set(value) {
@@ -258,6 +309,11 @@ public class VKID {
         this.tokenStorage = deps.tokenStorage
         this.crashReporter = deps.crashReporter
         this.performanceTracker = deps.performanceTracker
+        this.groupSubscriptionApiServiceInternal = deps.groupSubscriptionApiService
+        this.clientIdProvider = { deps.serviceCredentials.value.clientID }
+        this.context = deps.context
+        this.groupSubscriptionLimit = deps.groupSubscriptionLimit
+        this.prefsStorage = deps.encryptedSharedPreferencesStorage.value
 
         this.crashReporter.runReportingCrashes({}) {
             VKIDAnalytics.addTracker(deps.statTracker)
@@ -270,9 +326,11 @@ public class VKID {
                     |CI build: ${BuildConfig.CI_BUILD_NUMBER} ${BuildConfig.CI_BUILD_TYPE}
                 """.trimMargin()
             )
+            val limit = deps.groupSubscriptionLimit?.let { "${it.maxSubscriptionsToShow};${it.periodInDays}" }
             VKIDAnalytics.trackEvent(
-                "vkid_sdk_init",
-                VKIDAnalytics.EventParam("wrapper_sdk_type", strValue = if (deps.isFlutter) "flutter" else "none")
+                name = "vkid_sdk_init",
+                VKIDAnalytics.EventParam("wrapper_sdk_type", strValue = if (deps.isFlutter) "flutter" else "none"),
+                VKIDAnalytics.EventParam("limit_settings", strValue = limit),
             )
             VKCaptcha.init(deps.appContext)
         }
@@ -292,18 +350,41 @@ public class VKID {
     private val tokenExchanger: Lazy<VKIDTokenExchanger>
     private val userRefresher: Lazy<VKIDUserRefresher>
     private val loggerOut: Lazy<VKIDLoggerOut>
-    private val tokenStorage: TokenStorage
     internal val performanceTracker: PerformanceTracker
+    private val groupSubscriptionApiServiceInternal: Lazy<InternalVKIDGroupSubscriptionApiContract>
+
+    @InternalVKIDApi
+    public val tokenStorage: InternalVKIDTokenStorage
 
     @InternalVKIDApi
     public val crashReporter: CrashReporter
 
     @InternalVKIDApi
+    public val groupSubscriptionApiService: InternalVKIDGroupSubscriptionApiContract
+        get() = groupSubscriptionApiServiceInternal.value
+
+    private val clientIdProvider: () -> String
+
+    @InternalVKIDApi
+    public val clientId: String get() = clientIdProvider()
+
+    @InternalVKIDApi
+    public val context: Context
+
+    @InternalVKIDApi
     public val internalVKIDLocale: AtomicReference<Locale?> = AtomicReference(null)
+
+    @InternalVKIDApi
+    public val groupSubscriptionLimit: GroupSubscriptionLimit?
+
+    @InternalVKIDApi
+    public val prefsStorage: InternalVKIDPreferencesStorage
 
     /**
      * Sets the language for all ui components of the SDK.
      * @param locale The locale which will be used for all ui components. Null means that the default locale will be used.
+     *
+     * @since 2.3.1
      */
     public fun setLocale(locale: Locale?) {
         internalVKIDLocale.set(locale)
@@ -327,6 +408,8 @@ public class VKID {
      *     }
      * )
      * ```
+     *
+     * @since 0.0.1
      */
     public fun authorize(
         lifecycleOwner: LifecycleOwner,
@@ -354,15 +437,17 @@ public class VKID {
      *     }
      * )
      * ```
+     *
+     * @since 0.0.1
      */
     public suspend fun authorize(
         callback: VKIDAuthCallback,
         params: VKIDAuthParams = VKIDAuthParams {}
     ) {
-        val actualParams = params.newBuilder {
-            locale = params.locale ?: VKIDAuthParams.Locale.fromLocale(internalVKIDLocale.get())
-        }
         this.crashReporter.runReportingCrashesSuspend({}) {
+            val actualParams = params.newBuilder {
+                locale = params.locale ?: VKIDAuthParams.Locale.fromLocale(internalVKIDLocale.get())
+            }
             requestMutex.lock()
             val performanceKey = "Authorize"
             performanceTracker.startTracking(performanceKey)
@@ -408,6 +493,8 @@ public class VKID {
      * @param lifecycleOwner The [LifecycleOwner] in which the authorization process should be handled.
      * @param callback [VKIDRefreshTokenCallback] to handle the result of the token refreshing.
      * @param params Optional parameters.
+     *
+     * @since 2.0.0-alpha
      */
     public fun refreshToken(
         lifecycleOwner: LifecycleOwner,
@@ -422,6 +509,8 @@ public class VKID {
      *
      * @param callback [VKIDRefreshTokenCallback] to handle the result of the token refreshing.
      * @param params Optional parameters.
+     *
+     * @since 2.0.0-alpha
      */
     public suspend fun refreshToken(
         callback: VKIDRefreshTokenCallback,
@@ -443,6 +532,8 @@ public class VKID {
      * @param v1Token The token to exchange.
      * @param callback [VKIDExchangeTokenCallback] to handle the result of the token exchange.
      * @param params Optional parameters.
+     *
+     * @since 2.0.0-alpha
      */
     public fun exchangeTokenToV2(
         lifecycleOwner: LifecycleOwner,
@@ -459,6 +550,8 @@ public class VKID {
      * @param v1Token The token to exchange.
      * @param callback [VKIDExchangeTokenCallback] to handle the result of the token exchange.
      * @param params Optional parameters.
+     *
+     * @since 2.0.0-alpha
      */
     public suspend fun exchangeTokenToV2(
         v1Token: String,
@@ -480,6 +573,8 @@ public class VKID {
      * @param lifecycleOwner The [LifecycleOwner] in which the user data refreshing should be handled.
      * @param callback [VKIDGetUserCallback] to handle the result of the user data refreshing.
      * @param params Optional parameters.
+     *
+     * @since 2.0.0-alpha
      */
     public fun getUserData(
         lifecycleOwner: LifecycleOwner,
@@ -494,6 +589,8 @@ public class VKID {
      *
      * @param callback [VKIDGetUserCallback] to handle the result of the user data refreshing.
      * @param params Optional parameters.
+     *
+     * @since 2.0.0-alpha
      */
     public suspend fun getUserData(
         callback: VKIDGetUserCallback,
@@ -514,6 +611,8 @@ public class VKID {
      * @param lifecycleOwner The [LifecycleOwner] in which the logging out should be handled.
      * @param callback [VKIDLogoutCallback] to handle the result of logging out.
      * @param params Optional parameters.
+     *
+     * @since 2.0.0-alpha
      */
     public fun logout(
         callback: VKIDLogoutCallback,
@@ -528,6 +627,8 @@ public class VKID {
      *
      * @param callback [VKIDLogoutCallback] to handle the result of logging out.
      * @param params Optional parameters.
+     *
+     * @since 2.0.0-alpha
      */
     public suspend fun logout(
         callback: VKIDLogoutCallback,
@@ -544,12 +645,31 @@ public class VKID {
 
     /**
      * Returns current access token or null if auth wasn't passed.
+     *
+     * @since 1.3.2
      */
     public val accessToken: AccessToken?
         get() = this.crashReporter.runReportingCrashes({ null }) { tokenStorage.accessToken }
 
+    @InternalVKIDApi
+    public fun mockAuthorized() {
+        tokenStorage.accessToken = AccessToken(
+            token = "",
+            idToken = null,
+            userID = 0,
+            expireTime = 0,
+            userData = VKIDUser(
+                firstName = "",
+                lastName = "",
+            ),
+            scopes = null,
+        )
+    }
+
     /**
      * Returns current refresh token or null if auth wasn't passed.
+     *
+     * @since 2.0.0-alpha02
      */
     public val refreshToken: RefreshToken?
         get() = this.crashReporter.runReportingCrashes({ null }) { tokenStorage.refreshToken }
@@ -558,6 +678,8 @@ public class VKID {
      * Fetches the user data.
      *
      * @return A Result object containing the fetched [VKIDUser] or an error.
+     *
+     * @since 0.0.1
      */
     public suspend fun fetchUserData(): Result<VKIDUser?> {
         return this.crashReporter.runReportingCrashesSuspend({ Result.failure(it) }) {

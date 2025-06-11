@@ -16,14 +16,21 @@ internal class StatEventJson(
     val json: JSONObject
 
     private companion object {
-        private val specialParams = listOf("screen_current", "screen_to", "error", "wrapper_sdk_type")
+        private val specialParams = listOf(
+            "screen_current",
+            "screen_to",
+            "error",
+            "wrapper_sdk_type",
+            "app_id",
+            "external_device_id",
+        )
         private val techEvents = setOf("vkid_sdk_init")
     }
 
     init {
         var screen = "nowhere"
         val filteredParams = mutableListOf<VKIDAnalytics.EventParam>()
-        val topLevelParams = mutableMapOf<String, String>()
+        val topLevelParams = mutableMapOf<String, Any>()
         for (p in params) {
             when (p.name) {
                 "screen" -> {
@@ -31,7 +38,7 @@ internal class StatEventJson(
                 }
 
                 in specialParams -> {
-                    topLevelParams[p.name] = p.strValue ?: p.intValue?.toString() ?: ""
+                    topLevelParams[p.name] = p.strValue ?: p.intValue ?: ""
                 }
 
                 else -> {
@@ -41,7 +48,7 @@ internal class StatEventJson(
         }
         val typeAction = actionForEvent(name)
         val eventJson = if (name in techEvents) {
-            techEventJson(name, topLevelParams)
+            techEventJson(name, filteredParams, topLevelParams)
         } else {
             eventJson(name, filteredParams, topLevelParams)
         }
@@ -108,8 +115,31 @@ internal class StatEventJson(
             )
         }
 
-    private fun eventJson(eventName: String, eventParams: List<VKIDAnalytics.EventParam>, topLevelParams: Map<String, String>) = JSONObject().apply {
+    private fun eventJson(
+        eventName: String,
+        eventParams: List<VKIDAnalytics.EventParam>,
+        topLevelParams: Map<String, Any>,
+    ) = JSONObject().apply {
         put("event_type", eventName)
+        putFields(eventParams)
+        for (p in topLevelParams) {
+            put(p.key, p.value)
+        }
+    }
+
+    private fun techEventJson(
+        eventName: String,
+        eventParams: List<VKIDAnalytics.EventParam>,
+        topLevelParams: Map<String, Any>,
+    ) = JSONObject().apply {
+        put("step", eventName)
+        putFields(eventParams)
+        for (p in topLevelParams) {
+            put(p.key, p.value)
+        }
+    }
+
+    private fun JSONObject.putFields(eventParams: List<VKIDAnalytics.EventParam>) {
         put(
             "fields",
             JSONArray().apply {
@@ -127,16 +157,6 @@ internal class StatEventJson(
                 }
             }
         )
-        for (p in topLevelParams) {
-            put(p.key, p.value)
-        }
-    }
-
-    private fun techEventJson(eventName: String, topLevelParams: Map<String, String>) = JSONObject().apply {
-        put("step", eventName)
-        for (p in topLevelParams) {
-            put(p.key, p.value)
-        }
     }
 
     private fun actionForEvent(name: String): String =

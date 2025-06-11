@@ -1,16 +1,24 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.storage
 
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
+import androidx.core.content.edit
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.vk.id.common.InternalVKIDApi
 
 @InternalVKIDApi
-public class InternalVKIDEncryptedSharedPreferencesStorage public constructor(
+public interface InternalVKIDPreferencesStorage {
+    public fun set(key: String, value: String?)
+    public fun getString(key: String): String?
+}
+
+internal class InternalVKIDEncryptedSharedPreferencesStorage public constructor(
     context: Context
-) {
+) : InternalVKIDPreferencesStorage {
 
     private companion object {
         const val FILE_NAME = "vkid_encrypted_shared_prefs"
@@ -28,9 +36,11 @@ public class InternalVKIDEncryptedSharedPreferencesStorage public constructor(
         }
     }
 
-    public fun set(key: String, value: String?): Unit = sharedPreferences.edit().putString(key, value).apply()
+    override fun set(key: String, value: String?) {
+        sharedPreferences.edit(commit = true) { putString(key, value) }
+    }
 
-    public fun getString(key: String): String? = sharedPreferences.getString(key, null)
+    override fun getString(key: String): String? = sharedPreferences.getString(key, null)
 
     private fun createSharedPreferences(context: Context) = EncryptedSharedPreferences.create(
         context,

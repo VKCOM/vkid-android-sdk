@@ -8,6 +8,7 @@ import com.vk.id.sample.xml.R
 import com.vk.id.sample.xml.uikit.common.forEachView
 import com.vk.id.sample.xml.uikit.common.getOneTapFailCallback
 import com.vk.id.sample.xml.uikit.common.getOneTapSuccessCallback
+import com.vk.id.sample.xml.uikit.common.showToast
 
 public class OneTapStylingXmlLayoutActivity : AppCompatActivity() {
 
@@ -18,6 +19,11 @@ public class OneTapStylingXmlLayoutActivity : AppCompatActivity() {
             widget.setCallbacks(
                 onAuth = getOneTapSuccessCallback(this) {},
                 onFail = getOneTapFailCallback(this),
+            )
+            widget.snackbarHost = findViewById(R.id.group_subscription_snackbar_host)
+            widget.setGroupSubscriptionCallbacks(
+                onSuccess = { showToast(this, "Subscribed") },
+                onFail = { showToast(this, "Fail: ${it.description}") },
             )
         }
     }

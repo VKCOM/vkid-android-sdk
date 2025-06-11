@@ -96,5 +96,15 @@ internal class InternalVKIDImmediateApi(
         clientSecret: String,
         sakVersion: String,
         events: JSONArray,
+        externalDeviceId: String,
+    ) = VKIDMockCall(Result.success(InternalVKIDSilentAuthProvidersResponse(emptyList())))
+
+    override fun sendStatEvents(
+        accessToken: String,
+        clientId: String,
+        clientSecret: String,
+        sakVersion: String,
+        events: JSONArray,
+        externalDeviceId: String,
     ) = VKIDMockCall(Result.success(InternalVKIDSilentAuthProvidersResponse(emptyList())))
 }

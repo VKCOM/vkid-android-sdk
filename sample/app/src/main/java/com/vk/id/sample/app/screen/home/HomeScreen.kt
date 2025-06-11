@@ -99,6 +99,12 @@ internal fun HomeScreen(
         Button("OneTapBottomSheet (xml layout)") {
             navController.navigate("onetap-bottom-sheet-xml")
         }
+        Button("Group subscription (code)") {
+            navController.navigate("group-subscription-compose")
+        }
+        Button("Group subscription (xml layout)") {
+            navController.navigate("group-subscription-xml")
+        }
         Spacer(modifier = Modifier.weight(1f))
         Box(modifier = Modifier.fillMaxWidth()) {
             BuildInfo(

@@ -25,6 +25,7 @@ class VKIDDokkaPlugin : Plugin<Project> {
         addDokkaPlugin()
         val dokkaPlugin = configurations.getByName("dokkaPlugin")
         dependencies {
+            dokkaPlugin("com.vk.id:dokka-since-validator:1.0-SNAPSHOT")
             dokkaPlugin("com.vk.id:dokka-skip:1.0-SNAPSHOT")
         }
         tasks.withType<DokkaTaskPartial>().configureEach {

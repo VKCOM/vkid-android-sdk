@@ -12,12 +12,12 @@ import androidx.lifecycle.LifecycleEventObserver
 import com.vk.id.VKID
 import com.vk.id.VKIDUser
 import com.vk.id.analytics.VKIDAnalytics
+import com.vk.id.analytics.param.vkidInternalLanguageParam
 import com.vk.id.analytics.stat.StatTracker
 import com.vk.id.auth.VKIDAuthParams
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.onetap.compose.onetap.OneTapAnalytics
 import com.vk.id.onetap.compose.onetap.OneTapAnalytics.SCREEN_PARAM_NAME
-import com.vk.id.onetap.compose.onetap.OneTapAnalytics.langParam
 import com.vk.id.onetap.compose.onetap.OneTapAnalytics.track
 import java.util.UUID
 
@@ -34,7 +34,7 @@ internal object OneTapBottomSheetAnalytics {
                 VKIDAnalytics.EventParam("screen_to", "floating_one_tap"),
                 theme.toAnalyticsParam(),
                 scenario.toAnalyticsParam(),
-                langParam(context)
+                vkidInternalLanguageParam(context),
             )
         }
     }

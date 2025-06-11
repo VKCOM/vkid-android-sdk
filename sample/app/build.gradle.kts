@@ -43,6 +43,7 @@ android {
 dependencies {
     implementation(projects.sampleXml)
     implementation(projects.sampleOldsdk)
+    implementation(projects.groupSubscriptionCompose)
     implementation(projects.multibrandingCompose)
     implementation(projects.multibrandingXml)
     implementation(projects.onetapCompose)

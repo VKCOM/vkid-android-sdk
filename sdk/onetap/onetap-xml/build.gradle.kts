@@ -12,6 +12,7 @@ android {
 dependencies {
     api(projects.vkid)
     api(projects.onetapCommon)
+    api(projects.groupSubscriptionXml)
     implementation(projects.onetapCompose)
     implementation(libs.androidx.compose.ui)
     api(libs.captcha.okhttp)

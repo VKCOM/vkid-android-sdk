@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="vkid_group_subscription_primary">Subskrybuj społeczność</string>
+    <string name="vkid_group_subscription_secondary">Innym razem</string>
+    <plurals name="vkid_group_subscription_subscribers">
+        <item quantity="one">%1$s subskrybent</item>
+        <item quantity="few">%1$s subskrybenci</item>
+        <item quantity="many">%1$s subskrybentów</item>
+        <item quantity="other">%1$s subskrybentów</item>
+    </plurals>
+    <plurals name="vkid_group_subscription_friends">
+        <item quantity="one">%1$d znajomy</item>
+        <item quantity="few">%1$d znajomi</item>
+        <item quantity="many">%1$d znajomych</item>
+        <item quantity="other">%1$d znajomych</item>
+    </plurals>
+    <string name="vkid_group_subscription_snackbar_label">Subskrybujesz społeczność</string>
+    <string name="vkid_group_subscription_fail_title">Nie udało się zasubskrybować</string>
+    <string name="vkid_group_subscription_fail_description">Spróbuj jeszcze raz</string>
+    <string name="vkid_group_subscription_fail_primary">Powtórz próbę</string>
+    <string name="vkid_group_subscription_fail_secondary">Anuluj</string>
+</resources>

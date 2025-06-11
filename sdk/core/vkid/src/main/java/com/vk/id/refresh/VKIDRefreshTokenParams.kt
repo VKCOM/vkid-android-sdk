@@ -8,6 +8,8 @@ import com.vk.id.common.InternalVKIDApi
  * Create [VKIDRefreshTokenParams].
  *
  * @param initializer params' initialization.
+ *
+ * @since 2.0.0-alpha
  */
 public inline fun VKIDRefreshTokenParams(
     initializer: VKIDRefreshTokenParams.Builder.() -> Unit,
@@ -17,6 +19,8 @@ public inline fun VKIDRefreshTokenParams(
 
 /**
  * Encapsulated parameters for logout.
+ *
+ * @since 2.0.0-alpha
  */
 public class VKIDRefreshTokenParams private constructor(
     internal val state: String?,
@@ -24,11 +28,15 @@ public class VKIDRefreshTokenParams private constructor(
 ) {
     /**
      * A builder for [VKIDRefreshTokenParams].
+     *
+     * @since 2.0.0-alpha
      */
     public class Builder {
 
         /**
          * An optional state to be passed to token refreshing.
+         *
+         * @since 2.0.0-alpha
          */
         public var state: String? = null
 
@@ -40,6 +48,8 @@ public class VKIDRefreshTokenParams private constructor(
 
         /**
          * Constructs [VKIDRefreshTokenParams] with provided values.
+         *
+         * @since 2.0.0-alpha
          */
         public fun build(): VKIDRefreshTokenParams = VKIDRefreshTokenParams(
             state = state,
