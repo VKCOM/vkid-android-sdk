@@ -117,19 +117,34 @@ internal class VKIDTest : BehaviorSpec({
             get() = lazy { mockk() }
     }
     val sdkInitEvent = "vkid_sdk_init"
+    val flutterParam = VKIDAnalytics.EventParam("wrapper_sdk_type", strValue = "flutter")
+    val limitParam = VKIDAnalytics.EventParam("limit_settings", strValue = null)
 
     Given("VKID for flutter SDK") {
         val scheduler = testCoroutineScheduler
         val testDispatcher = StandardTestDispatcher(scheduler)
-        val flutterParam = VKIDAnalytics.EventParam("wrapper_sdk_type", strValue = "flutter")
         every { dispatchers.io } returns testDispatcher
         isFlutter = true
         VKID(deps)
 
         When("VKID initialized") {
             Then("Analytics vkid_sdk_init event is sent") {
-                verify { statTracker.trackEvent(null, sdkInitEvent, flutterParam) }
-                verify { trackingTracker.trackEvent(null, sdkInitEvent, flutterParam) }
+                verify {
+                    statTracker.trackEvent(
+                        null,
+                        sdkInitEvent,
+                        flutterParam,
+                        limitParam,
+                    )
+                }
+                verify {
+                    trackingTracker.trackEvent(
+                        null,
+                        sdkInitEvent,
+                        flutterParam,
+                        limitParam,
+                    )
+                }
             }
         }
     }
@@ -137,92 +152,91 @@ internal class VKIDTest : BehaviorSpec({
     Given("Auth with VK is called") {
         val scheduler = testCoroutineScheduler
         val testDispatcher = StandardTestDispatcher(scheduler)
-        val flutterParam = VKIDAnalytics.EventParam("wrapper_sdk_type", strValue = "none")
         every { dispatchers.io } returns testDispatcher
         isFlutter = false
         val vkid = VKID(deps)
 
         When("VKID initialized") {
             Then("Analytics vkid_sdk_init event is sent") {
-                verify { statTracker.trackEvent(null, sdkInitEvent, flutterParam) }
-                verify { trackingTracker.trackEvent(null, sdkInitEvent, flutterParam) }
-            }
-        }
-
-        val authParams = VKIDAuthParams { oAuth = OAuth.VK }
-        val authOptions = AuthOptions(
-            appId = "appId",
-            codeChallenge = "code challenge",
-            codeChallengeMethod = "code challenge method",
-            redirectUriBrowser = "redirect uri browser",
-            redirectUriCodeFlow = "redirect uri provider",
-            state = "state",
-            locale = "locale",
-            theme = "theme",
-            webAuthPhoneScreen = false,
-            oAuth = null,
-            prompt = "",
-            scopes = emptySet(),
-            statsInfo = "",
-            sdkVersion = "1"
-        )
-        coEvery { authProvidersChooser.chooseBest(authParams) } returns authProvider
-        every { authOptionsCreator.create(authParams, any()) } returns authOptions
-        every { authProvider.auth(authOptions) } just runs
-        every { authCallbacksHolder.add(any()) } just runs
-        every { performanceTracker.startTracking("Authorize") } just runs
-        every { performanceTracker.endTracking("Authorize") } just runs
-        coEvery { authResultHandler.handle(any(), any()) } just runs
-        runTest(scheduler) {
-            vkid.authorize(callback = mockk(), params = authParams)
-        }
-
-        When("Auth result is delivered") {
-            runTest(scheduler) {
-                AuthEventBridge.listener?.onAuthResult(
-                    AuthResult.Success(
-                        oauth = null,
-                        "device id"
-                    )
-                )
+                verify { statTracker.trackEvent(null, sdkInitEvent, flutterParam, limitParam) }
+                verify { trackingTracker.trackEvent(null, sdkInitEvent, flutterParam, limitParam) }
             }
 
-            Then("Starts measuring authorize performance") {
-                verify { performanceTracker.startTracking("Authorize") }
-            }
-
-            Then("Auth result is handled") {
-                coVerify { authResultHandler.handle(any(), any()) }
-            }
-
-            Then("Auth callback is added") {
-                verify { authCallbacksHolder.add(any()) }
-            }
-
-            Then("Auth provider is selected") {
-                coVerify { authProvider.auth(authOptions) }
-            }
-
-            Then("Ends measuring authorize performance") {
-                verify { performanceTracker.endTracking("Authorize") }
-            }
-        }
-        When("Fetch user data is called") {
-            val user = VKIDUser(
-                firstName = "first name",
-                lastName = "last name",
-                phone = "phone",
-                photo50 = "photo 50",
-                photo100 = "photo 100",
-                photo200 = "photo 200",
+            val authParams = VKIDAuthParams { oAuth = OAuth.VK }
+            val authOptions = AuthOptions(
+                appId = "appId",
+                codeChallenge = "code challenge",
+                codeChallengeMethod = "code challenge method",
+                redirectUriBrowser = "redirect uri browser",
+                redirectUriCodeFlow = "redirect uri provider",
+                state = "state",
+                locale = "locale",
+                theme = "theme",
+                webAuthPhoneScreen = false,
+                oAuth = null,
+                prompt = "",
+                scopes = emptySet(),
+                statsInfo = "",
+                sdkVersion = "1"
             )
-            coEvery { userDataFetcher.fetchUserData() } returns user
-            val result = vkid.fetchUserData()
-            Then("User data fetcher is accessed") {
-                coVerify { userDataFetcher.fetchUserData() }
+            coEvery { authProvidersChooser.chooseBest(authParams) } returns authProvider
+            every { authOptionsCreator.create(authParams, any()) } returns authOptions
+            every { authProvider.auth(authOptions) } just runs
+            every { authCallbacksHolder.add(any()) } just runs
+            every { performanceTracker.startTracking("Authorize") } just runs
+            every { performanceTracker.endTracking("Authorize") } just runs
+            coEvery { authResultHandler.handle(any(), any()) } just runs
+            runTest(scheduler) {
+                vkid.authorize(callback = mockk(), params = authParams)
             }
-            Then("User is returned") {
-                result shouldBe Result.success(user)
+
+            When("Auth result is delivered") {
+                runTest(scheduler) {
+                    AuthEventBridge.listener?.onAuthResult(
+                        AuthResult.Success(
+                            oauth = null,
+                            "device id"
+                        )
+                    )
+                }
+
+                Then("Starts measuring authorize performance") {
+                    verify { performanceTracker.startTracking("Authorize") }
+                }
+
+                Then("Auth result is handled") {
+                    coVerify { authResultHandler.handle(any(), any()) }
+                }
+
+                Then("Auth callback is added") {
+                    verify { authCallbacksHolder.add(any()) }
+                }
+
+                Then("Auth provider is selected") {
+                    coVerify { authProvider.auth(authOptions) }
+                }
+
+                Then("Ends measuring authorize performance") {
+                    verify { performanceTracker.endTracking("Authorize") }
+                }
+            }
+            When("Fetch user data is called") {
+                val user = VKIDUser(
+                    firstName = "first name",
+                    lastName = "last name",
+                    phone = "phone",
+                    photo50 = "photo 50",
+                    photo100 = "photo 100",
+                    photo200 = "photo 200",
+                )
+                coEvery { userDataFetcher.fetchUserData() } returns user
+                val result = vkid.fetchUserData()
+                Then("User data fetcher is accessed") {
+                    coVerify { userDataFetcher.fetchUserData() }
+                }
+                Then("User is returned") {
+                    result shouldBe Result.success(user)
+                }
             }
         }
     }

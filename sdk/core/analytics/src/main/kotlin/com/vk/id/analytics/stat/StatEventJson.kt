@@ -41,7 +41,7 @@ internal class StatEventJson(
         }
         val typeAction = actionForEvent(name)
         val eventJson = if (name in techEvents) {
-            techEventJson(name, topLevelParams)
+            techEventJson(name, filteredParams, topLevelParams)
         } else {
             eventJson(name, filteredParams, topLevelParams)
         }
@@ -108,8 +108,31 @@ internal class StatEventJson(
             )
         }
 
-    private fun eventJson(eventName: String, eventParams: List<VKIDAnalytics.EventParam>, topLevelParams: Map<String, Any>) = JSONObject().apply {
+    private fun eventJson(
+        eventName: String,
+        eventParams: List<VKIDAnalytics.EventParam>,
+        topLevelParams: Map<String, Any>,
+    ) = JSONObject().apply {
         put("event_type", eventName)
+        putFields(eventParams)
+        for (p in topLevelParams) {
+            put(p.key, p.value)
+        }
+    }
+
+    private fun techEventJson(
+        eventName: String,
+        eventParams: List<VKIDAnalytics.EventParam>,
+        topLevelParams: Map<String, Any>,
+    ) = JSONObject().apply {
+        put("step", eventName)
+        putFields(eventParams)
+        for (p in topLevelParams) {
+            put(p.key, p.value)
+        }
+    }
+
+    private fun JSONObject.putFields(eventParams: List<VKIDAnalytics.EventParam>) {
         put(
             "fields",
             JSONArray().apply {
@@ -127,16 +150,6 @@ internal class StatEventJson(
                 }
             }
         )
-        for (p in topLevelParams) {
-            put(p.key, p.value)
-        }
-    }
-
-    private fun techEventJson(eventName: String, topLevelParams: Map<String, Any>) = JSONObject().apply {
-        put("step", eventName)
-        for (p in topLevelParams) {
-            put(p.key, p.value)
-        }
     }
 
     private fun actionForEvent(name: String): String =
