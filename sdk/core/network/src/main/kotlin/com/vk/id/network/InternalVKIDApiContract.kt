@@ -53,6 +53,17 @@ public interface InternalVKIDApiContract {
         clientId: String,
         clientSecret: String,
         sakVersion: String,
-        events: JSONArray
+        events: JSONArray,
+        externalDeviceId: String,
+    ): Call
+
+    @Suppress("LongParameterList")
+    public fun sendStatEvents(
+        accessToken: String,
+        clientId: String,
+        clientSecret: String,
+        sakVersion: String,
+        events: JSONArray,
+        externalDeviceId: String,
     ): Call
 }

@@ -2,6 +2,7 @@ package com.vk.id.common
 
 /**
  * This annotation marks APIs that you should not use under any circumstances.
+ * @since 0.0.2-alpha
  */
 @RequiresOptIn(
     level = RequiresOptIn.Level.ERROR,

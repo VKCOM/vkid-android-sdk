@@ -8,6 +8,14 @@ import android.util.AttributeSet
 import android.util.DisplayMetrics
 import android.util.TypedValue
 import com.vk.id.common.InternalVKIDApi
+import com.vk.id.group.subscription.common.style.GroupSubscriptionButtonsCornersStyle
+import com.vk.id.group.subscription.common.style.GroupSubscriptionSheetCornersStyle
+import com.vk.id.group.subscription.common.style.GroupSubscriptionStyle
+import com.vk.id.group.subscription.xml.vkidInternalGetGroupId
+import com.vk.id.group.subscription.xml.vkidInternalGetGroupSubscriptionButtonCornerRadius
+import com.vk.id.group.subscription.xml.vkidInternalGetGroupSubscriptionButtonSize
+import com.vk.id.group.subscription.xml.vkidInternalGetGroupSubscriptionCornerRadius
+import com.vk.id.group.subscription.xml.vkidInternalGetGroupSubscriptionStyleConstructor
 import com.vk.id.onetap.common.OneTapOAuth
 import com.vk.id.onetap.common.OneTapStyle
 import com.vk.id.onetap.common.button.style.OneTapButtonCornersStyle
@@ -24,25 +32,46 @@ internal fun parseOneTapAttrs(
 ): OneTapParsedAttrs {
     context.theme.obtainStyledAttributes(
         attrs,
-        R.styleable.vkid_OneTap,
+        com.vk.id.group.subscription.xml.R.styleable.vkid_GroupSubscription,
         0,
         0
-    ).apply {
+    ).also { groupSubscriptionTypedArray ->
         try {
-            return OneTapParsedAttrs(
-                style = getOneTapStyleConstructor(context)(
-                    OneTapButtonCornersStyle.Custom(context.pixelsToDp(getButtonsCornerRadius(context))),
-                    getOneTapButtonsSize(),
-                    OneTapButtonElevationStyle.Custom(context.pixelsToDp(getOneTapButtonsElevation(context)))
-                ),
-                isSignInToAnotherAccountEnabled = getSignInToAnotherAccountButtonEnabled(),
-                oAuths = getOAuths(),
-                scopes = getScopes(),
-                fastAuthEnabled = getFastAuthEnabled(),
-                scenario = getOneTapScenario()
-            )
+            context.theme.obtainStyledAttributes(
+                attrs,
+                R.styleable.vkid_OneTap,
+                0,
+                0
+            ).also { oneTapTypedArray ->
+                try {
+                    return OneTapParsedAttrs(
+                        style = oneTapTypedArray.getOneTapStyleConstructor(context)(
+                            OneTapButtonCornersStyle.Custom(context.pixelsToDp(oneTapTypedArray.getButtonsCornerRadius(context))),
+                            oneTapTypedArray.getOneTapButtonsSize(),
+                            OneTapButtonElevationStyle.Custom(context.pixelsToDp(oneTapTypedArray.getOneTapButtonsElevation(context)))
+                        ),
+                        isSignInToAnotherAccountEnabled = oneTapTypedArray.getSignInToAnotherAccountButtonEnabled(),
+                        oAuths = oneTapTypedArray.getOAuths(),
+                        scopes = oneTapTypedArray.getScopes(),
+                        fastAuthEnabled = oneTapTypedArray.getFastAuthEnabled(),
+                        scenario = oneTapTypedArray.getOneTapScenario(),
+                        groupId = groupSubscriptionTypedArray.vkidInternalGetGroupId(),
+                        groupSubscriptionStyle = groupSubscriptionTypedArray.vkidInternalGetGroupSubscriptionStyleConstructor(context)(
+                            GroupSubscriptionSheetCornersStyle.Custom(
+                                context.pixelsToDp(groupSubscriptionTypedArray.vkidInternalGetGroupSubscriptionCornerRadius(context))
+                            ),
+                            GroupSubscriptionButtonsCornersStyle.Custom(
+                                context.pixelsToDp(groupSubscriptionTypedArray.vkidInternalGetGroupSubscriptionButtonCornerRadius(context))
+                            ),
+                            groupSubscriptionTypedArray.vkidInternalGetGroupSubscriptionButtonSize(),
+                        ),
+                    )
+                } finally {
+                    oneTapTypedArray.close()
+                }
+            }
         } finally {
-            recycle()
+            groupSubscriptionTypedArray.close()
         }
     }
 }
@@ -54,6 +83,8 @@ internal data class OneTapParsedAttrs(
     val scopes: Set<String>,
     val fastAuthEnabled: Boolean,
     val scenario: OneTapTitleScenario,
+    val groupId: String?,
+    val groupSubscriptionStyle: GroupSubscriptionStyle,
 )
 
 @Suppress("LongParameterList")
@@ -66,6 +97,8 @@ internal class OneTapBottomSheetAttributeSettings(
     val scopes: Set<String>,
     val fastAuthEnabled: Boolean,
     val autoShowDelayMillis: Long?,
+    val groupId: String?,
+    val groupSubscriptionStyle: GroupSubscriptionStyle,
 )
 
 internal fun parseOneTapBottomSheetAttrs(
@@ -74,29 +107,50 @@ internal fun parseOneTapBottomSheetAttrs(
 ): OneTapBottomSheetAttributeSettings {
     context.theme.obtainStyledAttributes(
         attrs,
-        R.styleable.vkid_OneTap,
+        com.vk.id.group.subscription.xml.R.styleable.vkid_GroupSubscription,
         0,
         0
-    ).apply {
+    ).also { groupSubscriptionTypedArray ->
         try {
-            return OneTapBottomSheetAttributeSettings(
-                style = getSheetStyleConstructor(context)(
-                    OneTapSheetCornersStyle.Custom(context.pixelsToDp(getSheetCornerRadius(context))),
-                    OneTapButtonCornersStyle.Custom(context.pixelsToDp(getButtonsCornerRadius(context))),
-                    getOneTapButtonsSize(),
-                ),
-                serviceName = getSheetServiceName(),
-                scenario = getSheetScenario(),
-                autoHideOnSuccess = getSheetAutoHideOnSuccess(),
-                oAuths = getOAuths(),
-                scopes = getScopes(),
-                fastAuthEnabled = getFastAuthEnabled(),
-                autoShowDelayMillis = getInt(R.styleable.vkid_OneTap_vkid_autoShowDelayMillis, -1)
-                    .takeIf { it >= 0 }
-                    ?.toLong(),
-            )
+            context.theme.obtainStyledAttributes(
+                attrs,
+                R.styleable.vkid_OneTap,
+                0,
+                0
+            ).also { sheetTypedArray ->
+                try {
+                    return OneTapBottomSheetAttributeSettings(
+                        style = sheetTypedArray.getSheetStyleConstructor(context)(
+                            OneTapSheetCornersStyle.Custom(context.pixelsToDp(sheetTypedArray.getSheetCornerRadius(context))),
+                            OneTapButtonCornersStyle.Custom(context.pixelsToDp(sheetTypedArray.getButtonsCornerRadius(context))),
+                            sheetTypedArray.getOneTapButtonsSize(),
+                        ),
+                        serviceName = sheetTypedArray.getSheetServiceName(),
+                        scenario = sheetTypedArray.getSheetScenario(),
+                        autoHideOnSuccess = sheetTypedArray.getSheetAutoHideOnSuccess(),
+                        oAuths = sheetTypedArray.getOAuths(),
+                        scopes = sheetTypedArray.getScopes(),
+                        fastAuthEnabled = sheetTypedArray.getFastAuthEnabled(),
+                        groupId = groupSubscriptionTypedArray.vkidInternalGetGroupId(),
+                        groupSubscriptionStyle = groupSubscriptionTypedArray.vkidInternalGetGroupSubscriptionStyleConstructor(context)(
+                            GroupSubscriptionSheetCornersStyle.Custom(
+                                context.pixelsToDp(groupSubscriptionTypedArray.vkidInternalGetGroupSubscriptionCornerRadius(context))
+                            ),
+                            GroupSubscriptionButtonsCornersStyle.Custom(
+                                context.pixelsToDp(groupSubscriptionTypedArray.vkidInternalGetGroupSubscriptionButtonCornerRadius(context))
+                            ),
+                            groupSubscriptionTypedArray.vkidInternalGetGroupSubscriptionButtonSize(),
+                        ),
+                        autoShowDelayMillis = sheetTypedArray.getInt(R.styleable.vkid_OneTap_vkid_autoShowDelayMillis, -1)
+                            .takeIf { it >= 0 }
+                            ?.toLong(),
+                    )
+                } finally {
+                    sheetTypedArray.close()
+                }
+            }
         } finally {
-            recycle()
+            groupSubscriptionTypedArray.close()
         }
     }
 }

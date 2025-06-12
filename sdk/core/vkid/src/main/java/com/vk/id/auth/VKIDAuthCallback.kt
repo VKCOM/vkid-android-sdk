@@ -5,6 +5,8 @@ import com.vk.id.VKIDAuthFail
 
 /**
  * Callback interface for handling the authentication result.
+ *
+ * @since 2.0.0-alpha
  */
 public interface VKIDAuthCallback {
 
@@ -14,6 +16,8 @@ public interface VKIDAuthCallback {
      * You will receive auth code in [onAuthCode] and can exchange it to the access token yourself.
      *
      * @param accessToken access token and other useful data.
+     *
+     * @since 2.0.0-alpha
      */
     public fun onAuth(accessToken: AccessToken)
 
@@ -24,6 +28,8 @@ public interface VKIDAuthCallback {
      * @param isCompletion true if [onAuth] won't be called.
      * This will happen if you passed auth parameters and implement their validation yourself.
      * In that case we can't exchange auth code for access token and you should do this yourself.
+     *
+     * @since 2.0.0-alpha
      */
     public fun onAuthCode(data: AuthCodeData, isCompletion: Boolean): Unit = Unit
 
@@ -31,6 +37,8 @@ public interface VKIDAuthCallback {
      * Called upon any failure during auth.
      *
      * @param fail Information about a failure.
+     *
+     * @since 2.0.0-alpha
      */
     public fun onFail(fail: VKIDAuthFail)
 }

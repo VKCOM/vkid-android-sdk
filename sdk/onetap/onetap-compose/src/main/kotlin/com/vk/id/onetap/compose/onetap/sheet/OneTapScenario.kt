@@ -8,35 +8,49 @@ import com.vk.id.onetap.compose.onetap.OneTapTitleScenario
 
 /**
  * Enumerates various scenarios for the One Tap authentication process.
+ *
+ * @since 1.0.0
  */
 public enum class OneTapScenario {
     /**
      * Standard scenario for entering a service.
+     *
+     * @since 1.0.0
      */
     EnterService,
 
     /**
      * Scenario for event registration.
+     *
+     * @since 1.0.0
      */
     RegistrationForTheEvent,
 
     /**
      * Scenario for application-related authentication.
+     *
+     * @since 1.0.0
      */
     Application,
 
     /**
      * Scenario for ordering within a service.
+     *
+     * @since 1.0.0
      */
     OrderInService,
 
     /**
      * Scenario for general order-related authentication.
+     *
+     * @since 1.0.0
      */
     Order,
 
     /**
      * Scenario for general entering into an account.
+     *
+     * @since 1.0.0
      */
     EnterToAccount
 }
