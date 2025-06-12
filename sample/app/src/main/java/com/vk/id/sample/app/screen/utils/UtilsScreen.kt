@@ -14,6 +14,7 @@ import android.content.pm.PackageManager.ComponentInfoFlags
 import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
@@ -24,6 +25,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -51,6 +53,9 @@ import com.vk.id.common.InternalVKIDApi
 import com.vk.id.exchangetoken.VKIDExchangeTokenCallback
 import com.vk.id.exchangetoken.VKIDExchangeTokenFail
 import com.vk.id.exchangetoken.VKIDExchangeTokenParams
+import com.vk.id.group.subscription.compose.ui.GroupSubscriptionSheet
+import com.vk.id.group.subscription.compose.ui.GroupSubscriptionSnackbarHost
+import com.vk.id.group.subscription.compose.ui.rememberGroupSubscriptionSheetState
 import com.vk.id.logout.VKIDLogoutCallback
 import com.vk.id.logout.VKIDLogoutFail
 import com.vk.id.refresh.VKIDRefreshTokenCallback
@@ -85,52 +90,59 @@ import java.util.concurrent.TimeUnit
 
 @Composable
 internal fun UtilsScreen(navController: NavController) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(horizontal = 16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Spacer(modifier = Modifier.height(8.dp))
-        AuthUtil()
-        Spacer(modifier = Modifier.height(8.dp))
-        RefreshTokenUtil()
-        Spacer(modifier = Modifier.height(8.dp))
-        ExchangeTokenUtil()
-        Spacer(modifier = Modifier.height(8.dp))
-        RefreshUserUtil()
-        Spacer(modifier = Modifier.height(8.dp))
-        GetPublicInfoUtil()
-        Spacer(modifier = Modifier.height(8.dp))
-        CurrentTokenUtil()
-        Spacer(modifier = Modifier.height(8.dp))
-        LocaleUtil()
-        Spacer(modifier = Modifier.height(8.dp))
-        CaptchaUtil()
-        Spacer(modifier = Modifier.height(8.dp))
-        RevokeUtil()
-        Spacer(modifier = Modifier.height(8.dp))
-        LogoutUtil()
-        Spacer(modifier = Modifier.height(8.dp))
-        OldSdkSample(navController)
-        Spacer(modifier = Modifier.height(8.dp))
-        StrictModeUtil()
-        Spacer(modifier = Modifier.height(8.dp))
-        IsFlutterUtil()
-        Spacer(modifier = Modifier.height(8.dp))
+    val snackbarHostState = SnackbarHostState()
+    Box {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Spacer(modifier = Modifier.height(8.dp))
+            AuthUtil(snackbarHostState)
+            Spacer(modifier = Modifier.height(8.dp))
+            RefreshTokenUtil()
+            Spacer(modifier = Modifier.height(8.dp))
+            ExchangeTokenUtil()
+            Spacer(modifier = Modifier.height(8.dp))
+            RefreshUserUtil()
+            Spacer(modifier = Modifier.height(8.dp))
+            GetPublicInfoUtil()
+            Spacer(modifier = Modifier.height(8.dp))
+            CurrentTokenUtil()
+            Spacer(modifier = Modifier.height(8.dp))
+            LocaleUtil()
+            Spacer(modifier = Modifier.height(8.dp))
+            CaptchaUtil()
+            Spacer(modifier = Modifier.height(8.dp))
+            RevokeUtil()
+            Spacer(modifier = Modifier.height(8.dp))
+            LogoutUtil()
+            Spacer(modifier = Modifier.height(8.dp))
+            OldSdkSample(navController)
+            Spacer(modifier = Modifier.height(8.dp))
+            StrictModeUtil()
+            Spacer(modifier = Modifier.height(8.dp))
+            IsFlutterUtil()
+            Spacer(modifier = Modifier.height(8.dp))
+        }
+        GroupSubscriptionSnackbarHost(snackbarHostState = snackbarHostState)
     }
 }
 
 @Suppress("LongMethod")
 @Composable
-private fun AuthUtil() {
+private fun AuthUtil(
+    snackbarHostState: SnackbarHostState
+) {
     ExpandableCard(title = "Auth") {
         val context = LocalContext.current
         val coroutineScope = rememberCoroutineScope()
         var currentToken: AccessToken? by remember { mutableStateOf(null) }
         var currentAuthCode: AuthCodeData? by remember { mutableStateOf(null) }
         var scopes by remember { mutableStateOf("") }
+        var groupId by remember { mutableStateOf("") }
         TextField(
             modifier = Modifier.fillMaxWidth(),
             value = scopes,
@@ -158,6 +170,13 @@ private fun AuthUtil() {
             onValueSelected = { prompt = it },
             label = { Text("prompt") },
         )
+        TextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = groupId,
+            onValueChange = { groupId = it },
+            label = { Text("Group subscription id") },
+        )
+        val groupSubscriptionSheetState = rememberGroupSubscriptionSheetState()
         Button("Auth") {
             coroutineScope.launch {
                 VKID.instance.authorize(
@@ -165,6 +184,9 @@ private fun AuthUtil() {
                         override fun onAuth(accessToken: AccessToken) {
                             currentToken = accessToken
                             onVKIDAuthSuccess(context, null, accessToken)
+                            if (groupId.isNotBlank()) {
+                                groupSubscriptionSheetState.show()
+                            }
                         }
 
                         override fun onAuthCode(data: AuthCodeData, isCompletion: Boolean) {
@@ -179,7 +201,7 @@ private fun AuthUtil() {
                         }
                     },
                     params = VKIDAuthParams {
-                        this.scopes = scopes.split(' ', ',').toSet()
+                        this.scopes = scopes.split(' ', ',').toSet() + (if (groupId.isNotBlank()) setOf("groups") else emptySet())
                         this.prompt = prompt
                         if (prompt != Prompt.BLANK) this.useOAuthProviderIfPossible = false
                         this.state = state.takeIf { it.isNotBlank() }
@@ -188,6 +210,14 @@ private fun AuthUtil() {
                 )
             }
         }
+        GroupSubscriptionSheet(
+            modifier = Modifier,
+            state = groupSubscriptionSheetState,
+            groupId = groupId,
+            onSuccess = { showToast(context, "Success") },
+            onFail = { showToast(context, "Fail: ${it.description}") },
+            snackbarHostState = snackbarHostState,
+        )
         currentAuthCode?.let { data ->
             var codeVerifier: String by remember { mutableStateOf("") }
             TextField(

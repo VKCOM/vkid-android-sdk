@@ -20,6 +20,7 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "build-logic"
+include(":dokka-since-validator")
 include(":dokka-skip")
 include(":metrics")
 include(":placeholders")

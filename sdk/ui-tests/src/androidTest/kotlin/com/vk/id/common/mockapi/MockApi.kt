@@ -4,11 +4,14 @@ package com.vk.id.common.mockapi
 
 import com.vk.id.VKIDUser
 import com.vk.id.common.InternalVKIDApi
+import com.vk.id.network.groupsubscription.data.InternalVKIDGroupByIdData
+import com.vk.id.network.groupsubscription.data.InternalVKIDGroupMembersData
 import com.vk.id.test.InternalVKIDLogoutPayloadResponse
 import com.vk.id.test.InternalVKIDTestBuilder
 import com.vk.id.test.InternalVKIDTokenPayloadResponse
 import com.vk.id.test.InternalVKIDUserInfoPayloadResponse
 import com.vk.id.test.InternalVKIDUserPayloadResponse
+import java.io.IOException
 
 public object MockApi {
     public const val ACCESS_TOKEN: String = "access token"
@@ -81,3 +84,34 @@ public fun InternalVKIDTestBuilder.mockApiSuccess(): InternalVKIDTestBuilder = t
             )
         )
     )
+
+public fun InternalVKIDTestBuilder.getGroupFail(): InternalVKIDTestBuilder = getGroupResponse(
+    Result.failure(IOException("Fake api error"))
+)
+
+public fun InternalVKIDTestBuilder.getGroupSuccess(): InternalVKIDTestBuilder = getGroupResponse(
+    Result.success(
+        InternalVKIDGroupByIdData(
+            groupId = "1",
+            name = "",
+            imageUrl = "",
+            description = "",
+            isVerified = true,
+        )
+    )
+)
+
+public fun InternalVKIDTestBuilder.getMembersSuccess(): InternalVKIDTestBuilder = getMembersResponses(
+    response1 = Result.success(
+        InternalVKIDGroupMembersData(
+            count = 1,
+            members = listOf()
+        )
+    ),
+    response2 = Result.success(
+        InternalVKIDGroupMembersData(
+            count = 1,
+            members = listOf()
+        )
+    )
+)

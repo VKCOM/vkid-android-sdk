@@ -15,6 +15,8 @@ import com.vk.id.common.util.internalVkIdIsDarkTheme
  * @param borderStyle border style.
  * @param textStyle style of the text displayed of the widget.
  * @param sizeStyle denotes the size of the widget.
+ *
+ * @since 1.0.0
  */
 @Immutable
 public sealed class OAuthListWidgetStyle(
@@ -29,6 +31,8 @@ public sealed class OAuthListWidgetStyle(
      *
      * @param cornersStyle corner radius style.
      * @param sizeStyle denotes the size of the widget.
+     *
+     * @since 1.0.0
      */
     public class Dark(
         cornersStyle: OAuthListWidgetCornersStyle = OAuthListWidgetCornersStyle.Default,
@@ -46,6 +50,10 @@ public sealed class OAuthListWidgetStyle(
      *
      * @param cornersStyle corner radius style.
      * @param sizeStyle denotes the size of the widget.
+     *
+     *
+     * @since 1.0.0
+     * @since 1.0.0
      */
     public class Light(
         cornersStyle: OAuthListWidgetCornersStyle = OAuthListWidgetCornersStyle.Default,
@@ -65,6 +73,8 @@ public sealed class OAuthListWidgetStyle(
          * The return value is either [Dark] or [Light]
          *
          * @param context Context which can be used to retrieve dark theme status.
+         *
+         * @since 1.3.0
          */
         public fun system(
             context: Context,

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="vkid_group_subscription_primary">Підписатися на спільноту</string>
+    <string name="vkid_group_subscription_secondary">Іншим разом</string>
+    <plurals name="vkid_group_subscription_subscribers">
+        <item quantity="one">%1$s підписник</item>
+        <item quantity="few">%1$s підписники</item>
+        <item quantity="many">%1$s підписників</item>
+        <item quantity="other">%1$s підписників</item>
+    </plurals>
+    <plurals name="vkid_group_subscription_friends">
+        <item quantity="one">%1$d друг</item>
+        <item quantity="few">%1$d друга</item>
+        <item quantity="many">%1$d друзів</item>
+        <item quantity="other">%1$d друзів</item>
+    </plurals>
+    <string name="vkid_group_subscription_snackbar_label">Ви підписані на спільноту</string>
+    <string name="vkid_group_subscription_fail_title">Не вдалося підписатися</string>
+    <string name="vkid_group_subscription_fail_description">Спробуйте ще раз</string>
+    <string name="vkid_group_subscription_fail_primary">Повторити спробу</string>
+    <string name="vkid_group_subscription_fail_secondary">Скасувати</string>
+</resources>

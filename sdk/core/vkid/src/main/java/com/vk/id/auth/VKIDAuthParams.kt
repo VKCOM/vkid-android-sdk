@@ -14,6 +14,8 @@ import com.vk.id.common.InternalVKIDApi
  * Create [VKIDAuthParams].
  *
  * @param initializer params' initialization.
+ *
+ * @since 0.0.1
  */
 public inline fun VKIDAuthParams(initializer: VKIDAuthParams.Builder.() -> Unit): VKIDAuthParams {
     return VKIDAuthParams.Builder().apply(initializer).build()
@@ -22,66 +24,116 @@ public inline fun VKIDAuthParams(initializer: VKIDAuthParams.Builder.() -> Unit)
 /**
  * VKIDAuthParams encapsulates parameters for VK ID authentication.
  *
- * @property locale The [Locale] setting for the authentication UI. Optional.
- * @property theme The [Theme] setting for the authentication UI (Light or Dark). Optional.
- * @property useOAuthProviderIfPossible Flag to use OAuth provider installed on device if possible. Defaults to true.
- * @property oAuth The [OAuth] provider to be used for authentication. Optional.
- * @property extraParams Key-value pairs of extra params that client want to send to auth provider. Optional.
+ * @since 0.0.1
  */
 @Suppress("LongParameterList")
 public class VKIDAuthParams private constructor(
+    /**
+     * The [Locale] setting for the authentication UI. Optional.
+     */
     internal val locale: Locale?,
+    /**
+     * The [Theme] setting for the authentication UI (Light or Dark). Optional.
+     */
     internal val theme: Theme?,
+    /**
+     * Flag to use OAuth provider installed on device if possible. Defaults to true.
+     */
     internal val useOAuthProviderIfPossible: Boolean,
+    /**
+     * The [OAuth] provider to be used for authentication. Optional.
+     */
     internal val oAuth: OAuth?,
+    /**
+     * A [Prompt] parameter to be passed to /authorize.
+     * Note: Changing it only works for auth view browser (not auth provider). Add [useOAuthProviderIfPossible] = false for this to work.
+     */
     internal val prompt: Prompt,
+    /**
+     * An optional state to be passed to auth.
+     */
     internal val state: String?,
+    /**
+     * An optional code challenge to be passed to auth.
+     * See https://datatracker.ietf.org/doc/html/rfc7636#section-4.2 for more information.
+     */
     internal val codeChallenge: String?,
+    /**
+     * A required parameter with a list of requested scopes for the access token.
+     * You have to specify a subset a scopes that you request for your app in Self Service.
+     * If you keep the scopes empty, only the default scope will be requested from user.
+     * You can view the list of available scopes here: https://dev.vk.com/ru/reference/access-rights.
+     * The user will see a screen where he may grant some of this scopes during authorization process.
+     */
     internal val scopes: Set<String>,
+    /**
+     * Key-value pairs of extra params that client want to send to auth provider. Optional.
+     */
     internal val extraParams: Map<String, String>? = null,
+    /**
+     * Marks internal launch of auth.
+     */
     internal val internalUse: Boolean = false
 ) {
     /**
      * Represents a locale that user prefers during authorization.
+     *
+     * @since 0.0.1
      */
     public enum class Locale {
         /**
          * Russian locale.
+         *
+         * @since 0.0.1
          */
         RUS,
 
         /**
          * Ukrainian locale.
+         *
+         * @since 0.0.1
          */
         UKR,
 
         /**
          * English locale.
+         *
+         * @since 0.0.1
          */
         ENG,
 
         /**
          * Spanish locale.
+         *
+         * @since 0.0.1
          */
         SPA,
 
         /**
          * German locale.
+         *
+         * @since 0.0.1
          */
         GERMAN,
 
         /**
          * Polish locale.
+         *
+         * @since 0.0.1
          */
         POL,
 
         /**
          * French locale.
+         *
+         * @since 0.0.1
          */
         FRA,
 
         /**
          * Turkish locale.
+         *
+         * @since 0.0.1
          */
         TURKEY;
 
@@ -89,6 +141,8 @@ public class VKIDAuthParams private constructor(
         public companion object {
             /**
              * Returns the current system locale.
+             *
+             * @since 0.0.1
              */
             internal fun systemLocale(context: Context): Locale? {
                 val systemLocale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -119,15 +173,21 @@ public class VKIDAuthParams private constructor(
 
     /**
      * Represents a theme that should be used to display data during authorization.
+     *
+     * @since 0.0.1
      */
     public enum class Theme {
         /**
          * Represents light theme.
+         *
+         * @since 0.0.1
          */
         Light,
 
         /**
          * Represents dark theme.
+         *
+         * @since 0.0.1
          */
         Dark;
 
@@ -143,43 +203,59 @@ public class VKIDAuthParams private constructor(
 
     /**
      * Builder for [VKIDAuthParams].
+     *
+     * @since 0.0.1
      */
     @Suppress("MemberVisibilityCanBePrivate")
     public class Builder {
         /**
          * Locale that should be used during authorization.
+         *
+         * @since 0.0.1
          */
         public var locale: Locale? = null
 
         /**
          * Theme that should be used during authorization.
+         *
+         * @since 0.0.1
          */
         public var theme: Theme? = null
 
         /**
          * Whether to use existing auth provider.
+         *
+         * @since 1.0.0
          */
         public var useOAuthProviderIfPossible: Boolean = true
 
         /**
          * An [OAuth] that should be used for authorization.
+         *
+         * @since 1.0.0
          */
         public var oAuth: OAuth? = null
 
         /**
          * A [Prompt] parameter to be passed to /authorize.
          * Note: Changing it only works for auth view browser (not auth provider). Add [useOAuthProviderIfPossible] = false for this to work.
+         *
+         * @since 2.0.0-alpha
          */
         public var prompt: Prompt = Prompt.BLANK
 
         /**
          * An optional state to be passed to auth.
+         *
+         * @since 2.0.0-alpha
          */
         public var state: String? = null
 
         /**
          * An optional code challenge to be passed to auth.
          * See https://datatracker.ietf.org/doc/html/rfc7636#section-4.2 for more information.
+         *
+         * @since 2.0.0-alpha
          */
         public var codeChallenge: String? = null
 
@@ -189,6 +265,8 @@ public class VKIDAuthParams private constructor(
          * If you keep the scopes empty, only the default scope will be requested from user.
          * You can view the list of available scopes here: https://dev.vk.com/ru/reference/access-rights.
          * The user will see a screen where he may grant some of this scopes during authorization process.
+         *
+         * @since 2.0.0-alpha
          */
         public var scopes: Set<String> = emptySet()
 
@@ -206,6 +284,8 @@ public class VKIDAuthParams private constructor(
 
         /**
          * Constructs [VKIDAuthParams] object with provided values.
+         *
+         * @since 0.0.1
          */
         @OptIn(InternalVKIDApi::class)
         public fun build(): VKIDAuthParams = VKIDAuthParams(

@@ -7,75 +7,105 @@ import com.vk.id.onetap.common.icon.style.InternalVKIconSizeStyle
 
 /**
  * OneTap's button size style.
+ *
+ * @since 1.0.0
  */
 public enum class OneTapButtonSizeStyle {
     /**
      * The recommended style.
+     *
+     * @since 1.0.0
      */
     DEFAULT,
 
     /**
      * Represents a button with 32dp height.
+     *
+     * @since 1.0.0
      */
     SMALL_32,
 
     /**
      * Represents a button with 34dp height.
+     *
+     * @since 1.0.0
      */
     SMALL_34,
 
     /**
      * Represents a button with 36dp height.
+     *
+     * @since 1.0.0
      */
     SMALL_36,
 
     /**
      * Represents a button with 38dp height.
+     *
+     * @since 1.0.0
      */
     SMALL_38,
 
     /**
      * Represents a button with 40dp height.
+     *
+     * @since 1.0.0
      */
     MEDIUM_40,
 
     /**
      * Represents a button with 42dp height.
+     *
+     * @since 1.0.0
      */
     MEDIUM_42,
 
     /**
      * Represents a button with 44dp height.
+     *
+     * @since 1.0.0
      */
     MEDIUM_44,
 
     /**
      * Represents a button with 46dp height.
+     *
+     * @since 1.0.0
      */
     MEDIUM_46,
 
     /**
      * Represents a button with 48dp height.
+     *
+     * @since 1.0.0
      */
     LARGE_48,
 
     /**
      * Represents a button with 50dp height.
+     *
+     * @since 1.0.0
      */
     LARGE_50,
 
     /**
      * Represents a button with 52dp height.
+     *
+     * @since 1.0.0
      */
     LARGE_52,
 
     /**
      * Represents a button with 54dp height.
+     *
+     * @since 1.0.0
      */
     LARGE_54,
 
     /**
      * Represents a button with 56dp height.
+     *
+     * @since 1.0.0
      */
     LARGE_56,
 }

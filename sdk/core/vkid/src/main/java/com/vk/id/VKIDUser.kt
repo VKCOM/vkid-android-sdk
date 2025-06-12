@@ -8,24 +8,53 @@ import kotlinx.parcelize.Parcelize
 /**
  * Represents a user in the VK ID.
  *
- * @property firstName The first name of the user.
- * @property lastName The last name of the user.
- * @property phone The phone number of the user, nullable.
- * @property photo50 URL to the user's 50px photo, nullable.
- * @property photo100 URL to the user's 100px photo, nullable.
- * @property photo200 URL to the user's 200px photo, nullable.
- * @property email The email of the user, nullable.
+ * @since 0.0.1
  */
 @Suppress("LongParameterList")
 @Parcelize
 @Immutable
 public class VKIDUser(
+    /**
+     * The first name of the user.
+     *
+     * @since 0.0.1
+     */
     public val firstName: String,
+    /**
+     * The last name of the user.
+     *
+     * @since 0.0.1
+     */
     public val lastName: String,
+    /**
+     * The phone number of the user, nullable.
+     *
+     * @since 0.0.1
+     */
     public val phone: String? = null,
+    /**
+     * URL to the user's 50px photo, nullable.
+     *
+     * @since 0.0.1
+     */
     public val photo50: String? = null,
+    /**
+     * URL to the user's 100px photo, nullable.
+     *
+     * @since 0.0.1
+     */
     public val photo100: String? = null,
+    /**
+     * URL to the user's 200px photo, nullable.
+     *
+     * @since 0.0.1
+     */
     public val photo200: String? = null,
+    /**
+     * The email of the user, nullable.
+     *
+     * @since 1.0.0
+     */
     public val email: String? = null
 ) : Parcelable {
 

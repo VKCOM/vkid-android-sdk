@@ -3,11 +3,20 @@ package com.vk.id.auth
 /**
  * The data with result of the first step of auth.
  *
- * @property code Auth code.
- * @property deviceId Device id to be passed to /auth when exchanging [code] for token.
+ * @since 2.0.0-alpha
  */
 public class AuthCodeData @JvmOverloads constructor(
+    /**
+     * Auth code.
+     *
+     * @since 2.0.0-alpha
+     */
     public val code: String,
+    /**
+     * Device id to be passed to /auth when exchanging [code] for token.
+     *
+     * @since 2.0.1
+     */
     public val deviceId: String = "",
 ) {
     /** @suppress */

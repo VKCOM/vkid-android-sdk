@@ -13,6 +13,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.groupSubscriptionXml)
     implementation(projects.multibrandingXml)
     implementation(projects.onetapXml)
     implementation(projects.network)
