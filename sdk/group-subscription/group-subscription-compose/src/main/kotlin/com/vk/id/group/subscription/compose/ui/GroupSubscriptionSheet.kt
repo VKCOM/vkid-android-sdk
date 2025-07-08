@@ -33,7 +33,6 @@ import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -69,6 +68,7 @@ import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
 import com.vk.id.VKID
 import com.vk.id.common.InternalVKIDApi
+import com.vk.id.common.util.internalVKIDRememberModalBottomSheetState
 import com.vk.id.group.subscription.common.fail.VKIDGroupSubscriptionFail
 import com.vk.id.group.subscription.common.style.GroupSubscriptionStyle
 import com.vk.id.group.subscription.compose.R
@@ -731,13 +731,20 @@ private fun processSheetShow(
 @Composable
 private fun rememberGroupSubscriptionSheetStateInternal(): GroupSubscriptionSheetState {
     var previousValue by remember { mutableStateOf(SheetValue.Hidden) }
-    val materialSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true, confirmValueChange = {
-        if (it == SheetValue.Hidden && it != previousValue) {
-            GroupSubscriptionAnalytics.close(VKID.instance.accessToken?.token)
-        }
-        previousValue = it
-        true
-    })
+
+    val materialSheetState = internalVKIDRememberModalBottomSheetState(
+        skipPartiallyExpanded = true,
+        skipHiddenState = false,
+        confirmValueChange = { value ->
+            if (value == SheetValue.Hidden && value != previousValue) {
+                GroupSubscriptionAnalytics.close(VKID.instance.accessToken?.token)
+            }
+            previousValue = value
+            true
+        },
+        density = LocalDensity.current,
+    )
+
     return remember(materialSheetState) {
         GroupSubscriptionSheetState(
             materialSheetState = materialSheetState

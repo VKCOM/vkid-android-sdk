@@ -8,7 +8,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -22,6 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import com.vk.id.AccessToken
@@ -32,6 +32,7 @@ import com.vk.id.auth.Prompt
 import com.vk.id.auth.VKIDAuthCallback
 import com.vk.id.auth.VKIDAuthUiParams
 import com.vk.id.common.InternalVKIDApi
+import com.vk.id.common.util.internalVKIDRememberModalBottomSheetState
 import com.vk.id.group.subscription.common.fail.VKIDGroupSubscriptionFail
 import com.vk.id.group.subscription.common.style.GroupSubscriptionStyle
 import com.vk.id.group.subscription.compose.ui.GroupSubscriptionSheet
@@ -500,8 +501,11 @@ private fun processSheetShow(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun rememberOneTapBottomSheetStateInternal(): OneTapBottomSheetState {
-    val materialSheetState = rememberModalBottomSheetState(
+    val materialSheetState = internalVKIDRememberModalBottomSheetState(
         skipPartiallyExpanded = true,
+        skipHiddenState = false,
+        confirmValueChange = { true },
+        density = LocalDensity.current,
     )
     return remember(materialSheetState) {
         OneTapBottomSheetState(
