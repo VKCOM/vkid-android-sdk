@@ -21,7 +21,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import com.vk.id.AccessToken
@@ -502,10 +501,10 @@ private fun processSheetShow(
 @Composable
 private fun rememberOneTapBottomSheetStateInternal(): OneTapBottomSheetState {
     val materialSheetState = internalVKIDRememberModalBottomSheetState(
-        skipPartiallyExpanded = true,
-        skipHiddenState = false,
-        confirmValueChange = { true },
-        density = LocalDensity.current,
+//        skipPartiallyExpanded = true,
+//        skipHiddenState = false,
+//        confirmValueChange = { true },
+//        density = LocalDensity.current,
     )
     return remember(materialSheetState) {
         OneTapBottomSheetState(

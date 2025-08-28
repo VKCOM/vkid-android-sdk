@@ -64,6 +64,7 @@ dependencies {
     implementation(libs.androidx.profileinstaller)
     baselineProfile(projects.baselineProfile)
     debugImplementation(libs.androidx.compose.ui.tooling)
+    implementation("androidx.compose.material3:material3-android:1.3.2")
 
     val DEPEND_ON_VK_SDK: String by project
     if (DEPEND_ON_VK_SDK == "true") {

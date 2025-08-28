@@ -1,6 +1,7 @@
 package com.vk.id.group.subscription.compose.util
 
 import android.graphics.Bitmap
+import android.graphics.Bitmap.createBitmap
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.PorterDuff
@@ -25,7 +26,7 @@ internal class UserImageTransformation(
 
         val minSize = minOf(input.width, input.height)
         val radius = minSize / 2f
-        val output = Bitmap.createBitmap(minSize, minSize, input.config)
+        val output = Bitmap.createBitmap(minSize, minSize, input.config ?: error("Null config"))
         output.applyCanvas {
             drawCircle(radius, radius, radius, paint)
             paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)

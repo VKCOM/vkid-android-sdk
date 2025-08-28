@@ -24,6 +24,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.lifecycle.compose)
     implementation(libs.androidx.material3.android)
+    implementation(libs.androidx.material.ripple)
     api(libs.captcha.okhttp)
     api(libs.captcha.core)
     debugImplementation(libs.androidx.compose.ui.tooling)

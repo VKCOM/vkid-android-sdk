@@ -50,7 +50,7 @@ constructor(
     override fun matches(descriptor: BrowserDescriptor): Boolean {
         return mPackageName == descriptor.packageName &&
             mUsingCustomTab == descriptor.useCustomTab &&
-            mVersionRange.matches(descriptor.version) &&
+            mVersionRange.matches(descriptor.version.orEmpty()) &&
             mSignatureHashes == descriptor.signatureHashes
     }
 

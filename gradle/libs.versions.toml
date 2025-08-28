@@ -8,7 +8,7 @@ androidxAppcompat = "1.7.0"
 androidxAnnotation = "1.8.2"
 androidxBrowser = "1.8.0"
 androidxCollection = "1.4.3"
-androidxComposeBom = "2024.05.00"
+androidxComposeBom = "2025.08.00"
 androidxConstraintLayout = "2.1.4"
 androidxCore = "1.13.1"
 androidxCoreSplashscreen = "1.0.1"
@@ -132,7 +132,8 @@ kotlin-binaryCompatibilityValidator = { group = "org.jetbrains.kotlinx", name = 
 firebase-common-ktx = { group = "com.google.firebase", name = "firebase-common-ktx", version.ref = "firebaseCommonKtx" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
-androidx-material3-android = { group = "androidx.compose.material3", name = "material3-android" }
+androidx-material3-android = { group = "androidx.compose.material3", name = "material3-android", version.ref = "material3Android" }
+androidx-material-ripple = "androidx.compose.material:material-ripple:1.7.0"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }

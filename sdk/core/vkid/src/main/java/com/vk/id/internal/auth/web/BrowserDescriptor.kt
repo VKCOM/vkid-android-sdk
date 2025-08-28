@@ -53,7 +53,7 @@ constructor(
     /**
      * The version string of the browser app.
      */
-    val version: String,
+    val version: String?,
     /**
      * Whether it is intended that the browser will be used via a custom tab.
      */
@@ -135,9 +135,9 @@ constructor(
          * Generates a set of SHA-512, Base64 url-safe encoded signature hashes from the provided
          * array of signatures.
          */
-        fun generateSignatureHashes(signatures: Array<Signature>): Set<String> {
+        fun generateSignatureHashes(signatures: Array<out Signature>?): Set<String> {
             val signatureHashes: MutableSet<String> = HashSet()
-            for (signature in signatures) {
+            for (signature in signatures ?: emptyArray()) {
                 signatureHashes.add(generateSignatureHash(signature))
             }
             return signatureHashes

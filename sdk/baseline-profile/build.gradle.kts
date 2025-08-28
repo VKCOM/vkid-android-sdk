@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.vk.id.baselineprofile"
-    compileSdk = 34
+    compileSdk = 35
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11

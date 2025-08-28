@@ -95,7 +95,7 @@ internal abstract class IPCClientBaseProvider<T> {
         return appContext.packageManager
             .getPackageInfo(appContext.packageName, PackageManager.GET_SIGNATURES)
             .signatures
-            .firstOrNull()
+            ?.firstOrNull()
     }
 
     @OptIn(InternalVKIDApi::class)
