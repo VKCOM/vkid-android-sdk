@@ -9,6 +9,7 @@ import com.vk.id.common.InternalVKIDApi
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @InternalVKIDApi
+// TODO: You can provide Saver and all other necessary classes from outside of the library and fix backward compatibility error in material3-android
 public fun internalVKIDRememberModalBottomSheetState(
 //    skipPartiallyExpanded: Boolean = true,
 //    confirmValueChange: (SheetValue) -> Boolean,
