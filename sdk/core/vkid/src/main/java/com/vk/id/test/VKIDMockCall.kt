@@ -32,7 +32,7 @@ internal class VKIDMockCall<T>(
         } ?: (null to 500)
         return Response.Builder()
             .body(body)
-            .request(Request.Builder().url("https://vk.com").build())
+            .request(Request.Builder().url("https://vk.ru").build())
             .protocol(Protocol.HTTP_2)
             .message("")
             .code(code)

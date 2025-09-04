@@ -74,8 +74,8 @@ public class InternalVKIDGroupSubscriptionApi(
         .add(FIELD_ACCESS_TOKEN, accessToken)
 
     private companion object {
-        private const val HOST_VK_API = "https://api.vk.com"
-        private const val HOST_VK_ID = "https://id.vk.com"
+        private const val HOST_VK_API = "https://api.vk.ru"
+        private const val HOST_VK_ID = "https://id.vk.ru"
         private const val PATH_ACCOUNT_PROFILE_SHORT_INFO = "method/account.getProfileShortInfo"
         private const val PATH_GROUPS_GET_BY_ID = "method/groups.getById"
         private const val PATH_GROUPS_GET_MEMBERS = "method/groups.getMembers"
