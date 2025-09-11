@@ -27,7 +27,7 @@ import com.vk.id.onetap.compose.onetap.OneTapTitleScenario
 
 /**
  * OneTap is a view that provides VKID One Tap login interface.
- * For more information how to integrate VK ID Authentication check docs https://id.vk.com/business/go/docs/ru/vkid/latest/vk-id/intro/plan
+ * For more information how to integrate VK ID Authentication check docs https://id.vk.ru/business/go/docs/ru/vkid/latest/vk-id/intro/plan
  *
  * You should [setCallbacks] on init view to get token after successful auth.
  *

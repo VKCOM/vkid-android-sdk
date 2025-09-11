@@ -36,7 +36,7 @@ internal class SslPinningTest : BehaviorSpec({
             .readTimeout(300, TimeUnit.SECONDS)
             .writeTimeout(300, TimeUnit.SECONDS)
             .connectTimeout(300, TimeUnit.SECONDS)
-        val request = Request.Builder().url("https://api.vk.com/method/utils.getServerTime").build()
+        val request = Request.Builder().url("https://api.vk.ru/method/utils.getServerTime").build()
         if (!charlesEnabled) {
             When("Request is made without proxy") {
                 val client = builder.build()

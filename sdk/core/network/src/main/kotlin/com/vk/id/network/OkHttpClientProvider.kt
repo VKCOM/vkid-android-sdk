@@ -114,7 +114,7 @@ EYVMxjh8zNbFuoc7fzvvrFILLe7ifvEIUqSVIC/AzplM/Jxw7buXFeGP1qVCBEHq
     }
 
     private companion object {
-        private const val HOST_NAME_API = "*.vk.com"
+        private const val HOST_NAME_API = "*.vk.ru"
         private const val OKHTTP_TIMEOUT_SECONDS = 60L
     }
 }

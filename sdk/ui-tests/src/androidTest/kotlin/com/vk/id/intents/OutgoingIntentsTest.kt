@@ -110,7 +110,7 @@ public class OutgoingIntentsTest : BaseUiTest() {
                     IntentMatchers.hasPackage(MockChrome.PACKAGE_NAME),
                     IntentMatchers.hasData(
                         matchIntentUri(
-                            uriPrefix = "https://id.vk.com/authorize",
+                            uriPrefix = "https://id.vk.ru/authorize",
                         )
                     )
                 )
@@ -129,7 +129,7 @@ public class OutgoingIntentsTest : BaseUiTest() {
                             IntentMatchers.hasPackage(MockChrome.PACKAGE_NAME),
                             IntentMatchers.hasData(
                                 matchIntentUri(
-                                    "https://id.vk.com/authorize",
+                                    "https://id.vk.ru/authorize",
                                     clientId = serviceCredentials?.clientID,
                                     responseType = "code",
                                     redirectUri = serviceCredentials?.redirectUri
@@ -167,7 +167,7 @@ public class OutgoingIntentsTest : BaseUiTest() {
         }.run {
             step("Отправлен корректный intent в провайдер") {
                 flakySafely {
-                    // com.vkontakte.android://vkcexternalauth-codeflow?app_id=51925238&response_type=code&redirect_uri=vk51925238%3A%2F%2Fvk.com%2Fblank.html%3Foauth2_params%3DeyJzY29wZSI6IiIsInN0YXRzX2luZm8iOnsiZmxvd19zb3VyY2UiOiJmcm9tX2N1c3RvbV9hdXRoIiwic2Vzc2lvbl9pZCI6IjMyMTVlYjNjLWVmMmQtNDFjNS1iMTg1LTM2YjcwYzViMGI4ZCJ9fQ%253D%253D&code_challenge_method=sha256&code_challenge=BceBr0GI_PHEjOiw9R15-ziH-ypPn-s6cNk-wx41tMY&state=Il2HH1UmwMGWut5WXuAYKuMMPz5p53WH&uuid=Il2HH1UmwMGWut5WXuAYKuMMPz5p53WH&lang_id=3&scheme=space_gray
+                    // com.vkontakte.android://vkcexternalauth-codeflow?app_id=51925238&response_type=code&redirect_uri=vk51925238%3A%2F%2Fvk.ru%2Fblank.html%3Foauth2_params%3DeyJzY29wZSI6IiIsInN0YXRzX2luZm8iOnsiZmxvd19zb3VyY2UiOiJmcm9tX2N1c3RvbV9hdXRoIiwic2Vzc2lvbl9pZCI6IjMyMTVlYjNjLWVmMmQtNDFjNS1iMTg1LTM2YjcwYzViMGI4ZCJ9fQ%253D%253D&code_challenge_method=sha256&code_challenge=BceBr0GI_PHEjOiw9R15-ziH-ypPn-s6cNk-wx41tMY&state=Il2HH1UmwMGWut5WXuAYKuMMPz5p53WH&uuid=Il2HH1UmwMGWut5WXuAYKuMMPz5p53WH&lang_id=3&scheme=space_gray
                     Intents.intended(
                         allOf(
                             IntentMatchers.hasAction(Intent.ACTION_VIEW),
