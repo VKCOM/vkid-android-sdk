@@ -91,7 +91,11 @@ internal open class VKIDDepsProd(
     private fun getActivityInfo(componentName: ComponentName): ActivityInfo {
         val flags = PackageManager.GET_META_DATA or PackageManager.GET_ACTIVITIES
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            appContext.packageManager.getActivityInfo(componentName, ComponentInfoFlags.of(flags.toLong()))
+            try {
+                appContext.packageManager.getActivityInfo(componentName, ComponentInfoFlags.of(flags.toLong()))
+            } catch (@Suppress("TooGenericExceptionCaught", "SwallowedException") t: Throwable) {
+                appContext.packageManager.getActivityInfo(componentName, flags)
+            }
         } else {
             appContext.packageManager.getActivityInfo(componentName, flags)
         }
