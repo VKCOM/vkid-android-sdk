@@ -42,6 +42,7 @@ public class VKIDAuthParams private constructor(
     internal val useOAuthProviderIfPossible: Boolean,
     /**
      * The [OAuth] provider to be used for authentication. Optional.
+     * Note: If you specify this provider auth will happen in WebView
      */
     internal val oAuth: OAuth?,
     /**
