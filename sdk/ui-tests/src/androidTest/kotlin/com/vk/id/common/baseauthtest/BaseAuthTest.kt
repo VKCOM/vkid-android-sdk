@@ -668,7 +668,7 @@ public abstract class BaseAuthTest(
     @OptIn(ExperimentalEncodingApi::class)
     protected open fun checkProviderReceivedUri(providerReceivedUri: Uri?) {
         providerReceivedUri?.shouldHaveScheme("https")
-        providerReceivedUri?.shouldHaveHost("id.vk.com")
+        providerReceivedUri?.shouldHaveHost("id.vk.ru")
         providerReceivedUri?.shouldHavePath("/authorize")
         providerReceivedUri?.shouldHaveParameter("client_id", serviceCredentials.clientID)
         providerReceivedUri?.shouldHaveParameter("response_type", "code")

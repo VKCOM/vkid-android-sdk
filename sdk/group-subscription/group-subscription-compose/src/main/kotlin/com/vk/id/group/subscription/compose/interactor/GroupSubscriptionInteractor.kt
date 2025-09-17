@@ -35,10 +35,12 @@ internal class GroupSubscriptionInteractor(
         get() = externalAccessTokenProvider?.invoke() ?: tokenStorage.currentAccessToken?.token ?: throw NotAuthorizedException()
 
     internal suspend fun saveDisplay() {
-        return withContext(Dispatchers.IO) {
-            val userId = VKID.instance.accessToken?.userID ?: return@withContext
-            val newDisplays = storage.getDisplays(userId) + Date()
-            storage.saveDisplays(userId, newDisplays)
+        return VKID.instance.crashReporter.runReportingCrashesSuspend({}) {
+            withContext(Dispatchers.IO) {
+                val userId = VKID.instance.accessToken?.userID ?: return@withContext
+                val newDisplays = storage.getDisplays(userId) + Date()
+                storage.saveDisplays(userId, newDisplays)
+            }
         }
     }
 

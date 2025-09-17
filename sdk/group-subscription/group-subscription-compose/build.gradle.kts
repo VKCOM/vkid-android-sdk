@@ -17,6 +17,7 @@ dependencies {
     api(projects.groupSubscriptionCommon)
     api(projects.analytics)
     implementation(projects.network)
+    implementation(projects.trackingCore)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.ui.tooling.preview)
