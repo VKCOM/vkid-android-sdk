@@ -49,7 +49,7 @@ public class VKIDAuthUiParams private constructor(
 
         /**
          * A required parameter with a list of requested scopes for the access token.
-         * You can view the list of available scopes here: https://dev.vk.com/ru/reference/access-rights.
+         * You can view the list of available scopes here: https://dev.vk.ru/ru/reference/access-rights.
          * The user will see a screen where he may grant some of this scopes during authorization process.
          *
          * @since 2.0.0-alpha

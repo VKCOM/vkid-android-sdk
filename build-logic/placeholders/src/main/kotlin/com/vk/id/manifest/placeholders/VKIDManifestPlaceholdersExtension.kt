@@ -18,7 +18,7 @@ public open class VKIDManifestPlaceholdersExtension {
 
     /**
      * Generates placeholders based on the client id and client secret.
-     * Client id and client secret will be taken as is, redirect host will be equal to "vk.com" and redirect scheme will be "vk" + client id
+     * Client id and client secret will be taken as is, redirect host will be equal to "vk.ru" and redirect scheme will be "vk" + client id
      *
      * @param clientId A client id
      * @param clientSecret A client secret
@@ -27,7 +27,7 @@ public open class VKIDManifestPlaceholdersExtension {
         clientId: String,
         clientSecret: String
     ) {
-        vkidRedirectHost = "vk.com"
+        vkidRedirectHost = "vk.ru"
         vkidRedirectScheme = "vk$clientId"
         vkidClientId = clientId
         vkidClientSecret = clientSecret

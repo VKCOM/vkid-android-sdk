@@ -51,7 +51,7 @@ import com.vk.id.util.InternalVKIDWithUpdatedLocale
 
 /**
  * Composable function to display a VKID One Tap login interface with multibranding.
- * For more information how to integrate VK ID Authentication check docs https://id.vk.com/business/go/docs/ru/vkid/latest/vk-id/intro/plan
+ * For more information how to integrate VK ID Authentication check docs https://id.vk.ru/business/go/docs/ru/vkid/latest/vk-id/intro/plan
  *
  * @param modifier Modifier for this composable.
  * @param style The styling for the One Tap interface, default is [OneTapStyle.Light]
@@ -105,7 +105,7 @@ public fun OneTap(
 
 /**
  * Composable function to display a VKID One Tap login interface with multibranding.
- * For more information how to integrate VK ID Authentication check docs https://id.vk.com/business/go/docs/ru/vkid/latest/vk-id/intro/plan
+ * For more information how to integrate VK ID Authentication check docs https://id.vk.ru/business/go/docs/ru/vkid/latest/vk-id/intro/plan
  *
  * This version integrates Group Subscription flow. The flow will be shown right after successful auth.
  * NOTE: The "groups" scope will be added automatically to the set of requested scopes.
@@ -195,7 +195,7 @@ public fun OneTap(
 
 /**
  * Composable function to display a VKID One Tap login interface with multibranding.
- * For more information how to integrate VK ID Authentication check docs https://id.vk.com/business/go/docs/ru/vkid/latest/vk-id/intro/plan
+ * For more information how to integrate VK ID Authentication check docs https://id.vk.ru/business/go/docs/ru/vkid/latest/vk-id/intro/plan
  *
  * @param modifier Modifier for this composable.
  * @param style The styling for the One Tap interface, default is [OneTapStyle.Light]
