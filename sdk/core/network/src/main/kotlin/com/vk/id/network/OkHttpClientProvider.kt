@@ -17,6 +17,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.tls.HandshakeCertificates
 import okhttp3.tls.decodeCertificatePem
 import java.io.BufferedInputStream
+import java.lang.NullPointerException
 import java.util.concurrent.TimeUnit
 
 @InternalVKIDApi
@@ -74,7 +75,13 @@ EYVMxjh8zNbFuoc7fzvvrFILLe7ifvEIUqSVIC/AzplM/Jxw7buXFeGP1qVCBEHq
 
         val certificates: HandshakeCertificates = HandshakeCertificates.Builder()
             .addTrustedCertificate(certificate)
-            .addPlatformTrustedCertificates()
+            .apply {
+                try {
+                    addPlatformTrustedCertificates()
+                } catch (_: NullPointerException) {
+                    // ignore, not platform certificates
+                }
+            }
             .build()
 
         return sslSocketFactory(certificates.sslSocketFactory(), certificates.trustManager)
