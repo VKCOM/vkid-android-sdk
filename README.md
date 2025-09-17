@@ -38,10 +38,10 @@ VKIDClientID=Ваш ID приложения
 ## Предварительно
 
 Что такое VK ID и как интегрировать его в приложение
-читайте [в статье "Начало работы"](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/connection/android/install).
+читайте [в статье "Начало работы"](https://id.vk.ru/about/business/go/docs/ru/vkid/latest/vk-id/connection/android/install).
 
 Чтобы подключить VK ID SDK, сначала получите ID приложения (app_id) и защищенный ключ (client_secret). Для этого создайте приложение
-в [кабинете подключения VK ID](https://id.vk.com/business/go).
+в [кабинете подключения VK ID](https://id.vk.ru/business/go).
 
 Документация API SDK доступна [на Github](https://vkcom.github.io/vkid-android-sdk/).
 
@@ -81,13 +81,13 @@ plugins {
 }
 // Добавление значений в Manifest Placeholders.
 vkidManifestPlaceholders {
-    // Добавьте плейсхолдеры сокращенным способом. Например, vkidRedirectHost будет "vk.com", а vkidRedirectScheme будет "vk$clientId".
+    // Добавьте плейсхолдеры сокращенным способом. Например, vkidRedirectHost будет "vk.ru", а vkidRedirectScheme будет "vk$clientId".
     init(
         clientId = clientId,
         clientSecret = clientSecret,
     )
     // Или укажите значения явно через properties, если не хотите использовать плейсхолдеры.
-    vkidRedirectHost = "vk.com", // Обычно vk.com.
+    vkidRedirectHost = "vk.ru", // Обычно vk.ru.
     vkidRedirectScheme = "vk1233445", // Строго в формате vk{ID приложения}.
     vkidClientId = clientId,
     vkidClientSecret = clientSecret
@@ -117,7 +117,7 @@ android {
             mapOf(
                 "VKIDClientID" to "1233445", // ID вашего приложения (app_id).
                 "VKIDClientSecret" to "000000000000", // Ваш защищенный ключ (client_secret).
-                "VKIDRedirectHost" to "vk.com", // Обычно используется vk.com.
+                "VKIDRedirectHost" to "vk.ru", // Обычно используется vk.ru.
                 "VKIDRedirectScheme" to "vk1233445", // Должно быть vk{ID приложения}.
             )
         )
@@ -227,12 +227,12 @@ VKID.instance.refreshToken(
 
 ## Документация
 
-- [Что такое VK ID](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/intro/start-page)
-- [Создание приложения](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/connection/create-application)
-- [Требования к дизайну](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/connection/guidelines/design-rules-oauth)
-- [Кнопка OneTap](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/connection/elements/onetap-button/onetap-android)
-- [Шторка авторизации](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/connection/elements/onetap-drawer/floating-onetap-android)
-- [Виджет 3в1](https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/connection/elements/widget-3-1/three-in-one-android)
+- [Что такое VK ID](https://id.vk.ru/about/business/go/docs/ru/vkid/latest/vk-id/intro/start-page)
+- [Создание приложения](https://id.vk.ru/about/business/go/docs/ru/vkid/latest/vk-id/connection/create-application)
+- [Требования к дизайну](https://id.vk.ru/about/business/go/docs/ru/vkid/latest/vk-id/connection/guidelines/design-rules-oauth)
+- [Кнопка OneTap](https://id.vk.ru/about/business/go/docs/ru/vkid/latest/vk-id/connection/elements/onetap-button/onetap-android)
+- [Шторка авторизации](https://id.vk.ru/about/business/go/docs/ru/vkid/latest/vk-id/connection/elements/onetap-drawer/floating-onetap-android)
+- [Виджет 3в1](https://id.vk.ru/about/business/go/docs/ru/vkid/latest/vk-id/connection/elements/widget-3-1/three-in-one-android)
 
 ## Локальная сборка
 

@@ -27,5 +27,5 @@ git fetch public
 git reset --soft public/${PUBLIC_TARGET_BRANCH}
 git add .
 git commit -m "Release v${SDK_VERSION}"
-git commit --amend --author="VK ID <devsupport.vk.com>" --no-edit
+git commit --amend --author="VK ID <devsupport.vk.ru>" --no-edit
 git push public HEAD:public

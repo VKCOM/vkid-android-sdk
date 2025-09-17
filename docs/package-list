@@ -64,6 +64,7 @@ module:vkid
 com.vk.id
 com.vk.id.auth
 com.vk.id.exchangetoken
+com.vk.id.groupsubscription
 com.vk.id.internal.auth.device
 com.vk.id.internal.context
 com.vk.id.internal.store

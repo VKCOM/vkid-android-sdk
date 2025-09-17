@@ -197,14 +197,16 @@ public fun GroupSubscriptionSheet(
     }
     var wasVisible by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) {
-        snapshotFlow { state.isVisible }.distinctUntilChanged().collect { isVisible ->
-            if (isVisible) {
-                isSuccess = false
+        VKID.instance.crashReporter.runReportingCrashesSuspend({}) {
+            snapshotFlow { state.isVisible }.distinctUntilChanged().collect { isVisible ->
+                if (isVisible) {
+                    isSuccess = false
+                }
+                if (!isVisible && wasVisible && !isSuccess) {
+                    rememberedOnFail(VKIDGroupSubscriptionFail.Dismiss())
+                }
+                wasVisible = isVisible
             }
-            if (!isVisible && wasVisible && !isSuccess) {
-                rememberedOnFail(VKIDGroupSubscriptionFail.Dismiss())
-            }
-            wasVisible = isVisible
         }
     }
     processSheetShow(
@@ -215,48 +217,50 @@ public fun GroupSubscriptionSheet(
     )
     remember(groupId) {
         state.showSheet = {
-            if (it) {
-                status.value = GroupSubscriptionSheetStatus.Init
-                coroutineScope.launch {
-                    try {
-                        with(interactor.loadGroup()) {
-                            status.value = GroupSubscriptionSheetStatus.Loaded(
-                                GroupSubscriptionSheetStatusData(
-                                    groupImageUrl = imageUrl,
-                                    groupName = name,
-                                    groupDescription = description,
-                                    userImageUrls = userImageUrls,
-                                    friendsCount = friendsCount,
-                                    subscriberCount = subscriberCount,
-                                    isGroupVerified = isVerified,
+            VKID.instance.crashReporter.runReportingCrashes({}) {
+                if (it) {
+                    status.value = GroupSubscriptionSheetStatus.Init
+                    coroutineScope.launch {
+                        try {
+                            with(interactor.loadGroup()) {
+                                status.value = GroupSubscriptionSheetStatus.Loaded(
+                                    GroupSubscriptionSheetStatusData(
+                                        groupImageUrl = imageUrl,
+                                        groupName = name,
+                                        groupDescription = description,
+                                        userImageUrls = userImageUrls,
+                                        friendsCount = friendsCount,
+                                        subscriberCount = subscriberCount,
+                                        isGroupVerified = isVerified,
+                                    )
                                 )
-                            )
-                            showBottomSheet = true
+                                showBottomSheet = true
+                            }
+                        } catch (@Suppress("SwallowedException") e: InternalVKIDAlreadyGroupMemberException) {
+                            state.hide()
+                            rememberedOnFail(VKIDGroupSubscriptionFail.AlreadyGroupMember())
+                            showBottomSheet = false
+                        } catch (@Suppress("SwallowedException") e: ServiceAccountException) {
+                            state.hide()
+                            rememberedOnFail(VKIDGroupSubscriptionFail.ServiceAccount())
+                            showBottomSheet = false
+                        } catch (@Suppress("SwallowedException") e: ClientLimitReachedException) {
+                            state.hide()
+                            rememberedOnFail(VKIDGroupSubscriptionFail.ClientLimitReached())
+                            showBottomSheet = false
+                        } catch (@Suppress("SwallowedException") e: RemoteLimitReachedException) {
+                            state.hide()
+                            rememberedOnFail(VKIDGroupSubscriptionFail.RemoteLimitReached())
+                            showBottomSheet = false
+                        } catch (@Suppress("TooGenericExceptionCaught") t: Throwable) {
+                            state.hide()
+                            rememberedOnFail(VKIDGroupSubscriptionFail.Other(throwable = t))
+                            showBottomSheet = false
                         }
-                    } catch (@Suppress("SwallowedException") e: InternalVKIDAlreadyGroupMemberException) {
-                        state.hide()
-                        rememberedOnFail(VKIDGroupSubscriptionFail.AlreadyGroupMember())
-                        showBottomSheet = false
-                    } catch (@Suppress("SwallowedException") e: ServiceAccountException) {
-                        state.hide()
-                        rememberedOnFail(VKIDGroupSubscriptionFail.ServiceAccount())
-                        showBottomSheet = false
-                    } catch (@Suppress("SwallowedException") e: ClientLimitReachedException) {
-                        state.hide()
-                        rememberedOnFail(VKIDGroupSubscriptionFail.ClientLimitReached())
-                        showBottomSheet = false
-                    } catch (@Suppress("SwallowedException") e: RemoteLimitReachedException) {
-                        state.hide()
-                        rememberedOnFail(VKIDGroupSubscriptionFail.RemoteLimitReached())
-                        showBottomSheet = false
-                    } catch (@Suppress("TooGenericExceptionCaught") t: Throwable) {
-                        state.hide()
-                        rememberedOnFail(VKIDGroupSubscriptionFail.Other(throwable = t))
-                        showBottomSheet = false
                     }
+                } else {
+                    showBottomSheet = false
                 }
-            } else {
-                showBottomSheet = false
             }
         }
         1 // Ignore result, just make sync LaunchedEffect(Unit)
