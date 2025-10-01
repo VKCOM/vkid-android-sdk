@@ -44,7 +44,7 @@ replaceGradleProperty "s/SUBSTITUTE_SAMPLE_PROJECTS_WITH_MODULES=false/SUBSTITUT
 if [ "$MODE" -eq 0 ]; then
     replaceGradleProperty "s/DEPEND_ON_VK_SDK=false/DEPEND_ON_VK_SDK=true/"
 fi
-./gradlew allDependencies --write-locks
+./gradlew allDependencies --write-locks > /dev/null
 ./gradlew :sample-app:assembleDebug
 if [ "$MODE" -ne 2 ]; then
     bumpVersionInVersionFile "$NEW_VERSION" "$CURRENT_VERSION"
@@ -53,4 +53,4 @@ fi
 if [ "$MODE" -eq 0 ]; then
     replaceGradleProperty "s/DEPEND_ON_VK_SDK=true/DEPEND_ON_VK_SDK=false/"
 fi
-./gradlew allDependencies --write-locks
+./gradlew allDependencies --write-locks > /dev/null
