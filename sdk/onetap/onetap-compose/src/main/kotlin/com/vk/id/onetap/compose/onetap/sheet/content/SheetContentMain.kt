@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
@@ -56,12 +55,169 @@ import com.vk.id.onetap.compose.onetap.sheet.style.OneTapBottomSheetStyle
 import com.vk.id.onetap.compose.onetap.sheet.style.background
 import com.vk.id.onetap.compose.onetap.sheet.style.clip
 import com.vk.id.onetap.compose.onetap.sheet.vkidButtonTextProvider
+import com.vk.id.onetap.compose.util.MeasureUnconstrainedViewHeight
 import com.vk.id.onetap.compose.util.MeasureUnconstrainedViewWidth
 import kotlinx.coroutines.CoroutineScope
 
 @Suppress("LongParameterList", "NonSkippableComposable", "LongMethod")
 @Composable
 internal fun SheetContentMain(
+    onAuth: (OneTapOAuth?, AccessToken) -> Unit,
+    onAuthCode: (AuthCodeData, Boolean) -> Unit,
+    onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit,
+    oAuths: Set<OneTapOAuth>,
+    serviceName: String,
+    scenario: OneTapScenario,
+    style: OneTapBottomSheetStyle,
+    dismissSheet: () -> Unit,
+    onAuthStatusChange: (OneTapBottomSheetAuthStatus) -> Unit,
+    authParams: VKIDAuthUiParams,
+    coroutineScope: CoroutineScope,
+    fastAuthEnabled: Boolean,
+    signInAnotherAccountButtonEnabled: Boolean,
+) {
+    when (LocalConfiguration.current.orientation) {
+        Configuration.ORIENTATION_LANDSCAPE -> {
+            LandscapeSheet(
+                onAuth = onAuth,
+                onAuthCode = onAuthCode,
+                onFail = onFail,
+                oAuths = oAuths,
+                serviceName = serviceName,
+                scenario = scenario,
+                style = style,
+                dismissSheet = dismissSheet,
+                onAuthStatusChange = onAuthStatusChange,
+                authParams = authParams,
+                coroutineScope = coroutineScope,
+                fastAuthEnabled = fastAuthEnabled,
+                signInAnotherAccountButtonEnabled = signInAnotherAccountButtonEnabled,
+            )
+        }
+
+        else -> {
+            VerticalSheet(
+                onAuth = onAuth,
+                onAuthCode = onAuthCode,
+                onFail = onFail,
+                oAuths = oAuths,
+                serviceName = serviceName,
+                scenario = scenario,
+                style = style,
+                dismissSheet = dismissSheet,
+                onAuthStatusChange = onAuthStatusChange,
+                authParams = authParams,
+                coroutineScope = coroutineScope,
+                fastAuthEnabled = fastAuthEnabled,
+                signInAnotherAccountButtonEnabled = signInAnotherAccountButtonEnabled,
+            )
+        }
+    }
+}
+
+@Suppress("LongParameterList")
+@Composable
+private fun LandscapeSheet(
+    onAuth: (OneTapOAuth?, AccessToken) -> Unit,
+    onAuthCode: (AuthCodeData, Boolean) -> Unit,
+    onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit,
+    oAuths: Set<OneTapOAuth>,
+    serviceName: String,
+    scenario: OneTapScenario,
+    style: OneTapBottomSheetStyle,
+    dismissSheet: () -> Unit,
+    onAuthStatusChange: (OneTapBottomSheetAuthStatus) -> Unit,
+    authParams: VKIDAuthUiParams,
+    coroutineScope: CoroutineScope,
+    fastAuthEnabled: Boolean,
+    signInAnotherAccountButtonEnabled: Boolean,
+) {
+    @SuppressLint("UnusedBoxWithConstraintsScope")
+    BoxWithConstraints {
+        val maxSheetHeight = maxHeight
+        Box(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .safeContentPadding()
+                .wrapContentHeight()
+                .wrapContentWidth()
+                .clip(style.cornersStyle)
+                .background(style.backgroundStyle),
+            contentAlignment = Alignment.TopEnd,
+        ) {
+            CloseIcon(dismissSheet)
+            @Composable
+            fun SheetRightColumn(modifier: Modifier) {
+                Column(
+                    modifier
+                        .padding(top = 20.dp, bottom = 20.dp, end = 20.dp)
+                ) {
+                    OneTapBottomSheetAnalytics.OneTapBottomSheetShown(style.toProviderTheme(), scenario)
+                    val resources = LocalContext.current.resources
+                    val title = remember(scenario) {
+                        scenario.scenarioTitle(serviceName = serviceName, resources = resources)
+                    }
+                    ContentTitle(Modifier.padding(end = 24.dp, start = 24.dp), title, style, isVertical = true)
+                    Spacer(Modifier.height(8.dp))
+                    ContentDescription(stringResource(id = R.string.vkid_scenario_common_description), style, isVertical = true)
+                    Spacer(Modifier.height(16.dp))
+                    OneTapButton(
+                        measureInProgress = false,
+                        largeText = true,
+                        onAuth = onAuth,
+                        onAuthCode = onAuthCode,
+                        onFail = onFail,
+                        oAuths = oAuths,
+                        scenario = scenario,
+                        style = style,
+                        onAuthStatusChange = onAuthStatusChange,
+                        authParams = authParams,
+                        coroutineScope = coroutineScope,
+                        fastAuthEnabled = fastAuthEnabled,
+                        signInAnotherAccountButtonEnabled = signInAnotherAccountButtonEnabled,
+                    )
+                }
+            }
+
+            val verticalPadding = 37.dp
+            val maxHeight = maxSheetHeight - verticalPadding * 2
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                VKIDImage(
+                    modifier = Modifier
+                        .width(206.dp)
+                        .padding(vertical = verticalPadding)
+                        .padding(start = 20.dp, end = 22.dp)
+                        .aspectRatio(1.0f),
+                    style = style,
+                )
+                MeasureUnconstrainedViewHeight(viewToMeasure = {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        VKIDImage(
+                            modifier = Modifier
+                                .width(156.dp)
+                                .padding(vertical = verticalPadding)
+                                .padding(start = 20.dp, end = 22.dp)
+                                .aspectRatio(1.0f),
+                            style = style,
+                        )
+                        SheetRightColumn(Modifier.width(254.dp))
+                    }
+                }) { largeTextHeight ->
+                    val columnWidth = if (largeTextHeight > maxHeight) 350.dp else 254.dp
+                    SheetRightColumn(Modifier.width(columnWidth))
+                }
+            }
+        }
+    }
+}
+
+@Suppress("LongParameterList")
+@Composable
+private fun VerticalSheet(
     onAuth: (OneTapOAuth?, AccessToken) -> Unit,
     onAuthCode: (AuthCodeData, Boolean) -> Unit,
     onFail: (OneTapOAuth?, VKIDAuthFail) -> Unit,
@@ -97,87 +253,39 @@ internal fun SheetContentMain(
             signInAnotherAccountButtonEnabled = signInAnotherAccountButtonEnabled,
         )
     }
-    when (LocalConfiguration.current.orientation) {
-        Configuration.ORIENTATION_LANDSCAPE -> {
-            Box(
+    SheetContentBox(
+        style = style,
+        rowContent = {
+            Spacer(modifier = Modifier.width(52.dp))
+            Spacer(modifier = Modifier.weight(1f))
+            VKIDImage(
                 modifier = Modifier
-                    .verticalScroll(rememberScrollState())
-                    .safeContentPadding()
-                    .wrapContentHeight()
-                    .wrapContentWidth()
-                    .widthIn(max = 560.dp)
-                    .clip(style.cornersStyle)
-                    .background(style.backgroundStyle),
-                contentAlignment = Alignment.TopEnd,
-            ) {
-                CloseIcon(dismissSheet)
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    VKIDImage(
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(vertical = 37.dp)
-                            .padding(start = 20.dp, end = 22.dp)
-                            .aspectRatio(1.0f),
-                        style = style,
-                    )
-                    Column(
-                        Modifier
-                            .width(274.dp)
-                            .padding(top = 20.dp, bottom = 20.dp, end = 20.dp)
-                    ) {
-                        OneTapBottomSheetAnalytics.OneTapBottomSheetShown(style.toProviderTheme(), scenario)
-                        val resources = LocalContext.current.resources
-                        val title = remember(scenario) {
-                            scenario.scenarioTitle(serviceName = serviceName, resources = resources)
-                        }
-                        ContentTitle(Modifier.padding(end = 24.dp, start = 24.dp), title, style)
-                        Spacer(Modifier.height(8.dp))
-                        ContentDescription(stringResource(id = R.string.vkid_scenario_common_description), style)
-                        Spacer(Modifier.height(16.dp))
-                        OneTapButton(measureInProgress = true, largeText = true)
-                    }
-                }
-            }
-        }
-
-        else -> {
-            SheetContentBox(
+                    .padding(top = 24.dp)
+                    .size(120.dp),
                 style = style,
-                rowContent = {
-                    Spacer(modifier = Modifier.width(52.dp))
-                    Spacer(modifier = Modifier.weight(1f))
-                    VKIDImage(
-                        modifier = Modifier
-                            .padding(top = 24.dp)
-                            .size(120.dp),
-                        style = style,
-                    )
-                    Spacer(modifier = Modifier.weight(1f))
-                    CloseIcon(dismissSheet)
-                }
-            ) {
-                OneTapBottomSheetAnalytics.OneTapBottomSheetShown(style.toProviderTheme(), scenario)
-                val resources = LocalContext.current.resources
-                Column(
-                    Modifier.padding(top = 16.dp, bottom = 24.dp)
-                ) {
-                    val title = remember(scenario) {
-                        scenario.scenarioTitle(serviceName = serviceName, resources = resources)
-                    }
-                    ContentTitle(Modifier, title, style)
-                    Spacer(Modifier.height(12.dp))
-                    ContentDescription(stringResource(id = R.string.vkid_scenario_common_description), style)
-                }
-                @SuppressLint("UnusedBoxWithConstraintsScope")
-                BoxWithConstraints {
-                    MeasureUnconstrainedViewWidth(viewToMeasure = {
-                        OneTapButton(measureInProgress = true, largeText = true)
-                    }) { largeTextWidth ->
-                        OneTapButton(measureInProgress = false, largeText = largeTextWidth <= maxWidth)
-                    }
-                }
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            CloseIcon(dismissSheet)
+        }
+    ) {
+        OneTapBottomSheetAnalytics.OneTapBottomSheetShown(style.toProviderTheme(), scenario)
+        val resources = LocalContext.current.resources
+        Column(
+            Modifier.padding(top = 16.dp, bottom = 24.dp)
+        ) {
+            val title = remember(scenario) {
+                scenario.scenarioTitle(serviceName = serviceName, resources = resources)
+            }
+            ContentTitle(Modifier, title, style, isVertical = false)
+            Spacer(Modifier.height(12.dp))
+            ContentDescription(stringResource(id = R.string.vkid_scenario_common_description), style, isVertical = false)
+        }
+        @SuppressLint("UnusedBoxWithConstraintsScope")
+        BoxWithConstraints {
+            MeasureUnconstrainedViewWidth(viewToMeasure = {
+                OneTapButton(measureInProgress = true, largeText = true)
+            }) { largeTextWidth ->
+                OneTapButton(measureInProgress = false, largeText = largeTextWidth <= maxWidth)
             }
         }
     }
@@ -287,31 +395,40 @@ private fun OneTapButton(
 }
 
 @Composable
-private fun ContentTitle(modifier: Modifier, text: String, style: OneTapBottomSheetStyle) {
+private fun ContentTitle(
+    modifier: Modifier,
+    text: String,
+    style: OneTapBottomSheetStyle,
+    isVertical: Boolean,
+) {
     BasicText(
         modifier = modifier.fillMaxWidth(),
         text = text,
         style = TextStyle(
             color = colorResource(id = style.contentTitleTextColor),
             textAlign = TextAlign.Center,
-            fontSize = 23.sp,
+            fontSize = if (isVertical) 17.sp else 23.sp,
             fontWeight = FontWeight.W600,
-            lineHeight = 28.sp,
+            lineHeight = if (isVertical) 22.sp else 28.sp,
         )
     )
 }
 
 @Composable
-private fun ContentDescription(text: String, style: OneTapBottomSheetStyle) {
+private fun ContentDescription(
+    text: String,
+    style: OneTapBottomSheetStyle,
+    isVertical: Boolean,
+) {
     BasicText(
         modifier = Modifier.fillMaxWidth(),
         text = text,
         style = TextStyle(
             color = colorResource(id = style.contentTextColor),
             textAlign = TextAlign.Center,
-            fontSize = 16.sp,
+            fontSize = if (isVertical) 13.sp else 16.sp,
             fontWeight = FontWeight.W400,
-            lineHeight = 20.sp,
+            lineHeight = if (isVertical) 16.sp else 20.sp,
             letterSpacing = 0.1.sp
         )
     )
