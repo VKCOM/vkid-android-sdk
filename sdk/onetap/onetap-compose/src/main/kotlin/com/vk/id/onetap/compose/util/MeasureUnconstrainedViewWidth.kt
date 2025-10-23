@@ -21,3 +21,20 @@ internal fun MeasureUnconstrainedViewWidth(
         }
     }
 }
+
+@Composable
+internal fun MeasureUnconstrainedViewHeight(
+    viewToMeasure: @Composable () -> Unit,
+    content: @Composable (measuredHeight: Dp) -> Unit,
+) {
+    SubcomposeLayout { constraints ->
+        val measuredHeight = subcompose("viewToMeasure", viewToMeasure)[0].measure(Constraints()).height.toDp()
+        val measurable = subcompose("content") { content(measuredHeight) }
+        if (measurable.isNotEmpty()) {
+            val contentPlaceable = measurable[0].measure(constraints)
+            layout(contentPlaceable.width, contentPlaceable.height) { contentPlaceable.place(0, 0) }
+        } else {
+            layout(0, 0) {}
+        }
+    }
+}
