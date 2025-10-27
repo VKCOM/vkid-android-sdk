@@ -85,7 +85,7 @@ healthMetrics {
     gitlab(
         host = { localProperties.getProperty("healthmetrics.gitlab.host") },
         token = { localProperties.getProperty("healthmetrics.gitlab.token") },
-        projectId = { "2796" },
+        projectId = { "46859" },
     )
     firestore(rootProject.file("build-logic/metrics/service-credentials.json"))
     codeCoverage {
