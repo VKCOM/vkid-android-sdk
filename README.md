@@ -66,6 +66,9 @@ dependencyResolutionManagement {
         maven {
             url = URI("https://artifactory-external.vkpartner.ru/artifactory/maven/")
         }
+        maven {
+            url = URI("https://artifactory-external.vkpartner.ru/artifactory/vk-id-captcha/android/")
+        }
     }
 }
 ```
@@ -87,9 +90,9 @@ vkidManifestPlaceholders {
         clientSecret = clientSecret,
     )
     // Или укажите значения явно через properties, если не хотите использовать плейсхолдеры.
-    vkidRedirectHost = "vk.ru", // Обычно vk.ru.
-    vkidRedirectScheme = "vk1233445", // Строго в формате vk{ID приложения}.
-    vkidClientId = clientId,
+    vkidRedirectHost = "vk.ru" // Обычно vk.ru.
+    vkidRedirectScheme = "vk1233445" // Строго в формате vk{ID приложения}.
+    vkidClientId = clientId
     vkidClientSecret = clientSecret
 }
 ```

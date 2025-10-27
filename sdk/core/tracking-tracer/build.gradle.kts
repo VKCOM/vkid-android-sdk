@@ -15,8 +15,8 @@ tracer {
     create("defaultConfig") {
         val localProperties = Properties().apply { load(rootProject.file("local.properties").inputStream()) }
         // See the "Settings" section
-        pluginToken = localProperties.getProperty("tracer.plugin.token")
-        appToken = localProperties.getProperty("tracer.app.token")
+        pluginToken = localProperties.getProperty("tracer.plugin.token") ?: ""
+        appToken = localProperties.getProperty("tracer.app.token") ?: ""
     }
 }
 

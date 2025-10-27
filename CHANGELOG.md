@@ -2,6 +2,11 @@
 
 > **Note**\
 > Описание основных изменений в релизах VK ID SDK. Наш SDK следует [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+## 2.6.0 (24-10-2025)
+
+### Added
++ Добавлена поддержка горизонтальной ориентации для OneTapBottomSheet.
+
 ## 2.5.1 (12-09-2025)
 
 ### Changed
