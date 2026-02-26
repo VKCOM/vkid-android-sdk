@@ -7,7 +7,7 @@ class AndroidApplicationComposeConventionPlugin : Plugin<Project> {
         with(target) {
             with(pluginManager) {
                 apply("vkid.android.application")
-                apply("vkid.detekt.compose")
+                apply("vkid.tools.android.detekt.compose")
             }
             configureAndroidCompose()
         }

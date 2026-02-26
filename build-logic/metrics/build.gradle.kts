@@ -2,8 +2,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     `kotlin-dsl`
-    id("vkid.detekt")
-    id("vkid.android.plugin.publish")
+    id("vkid.tools.android.detekt")
+    id("vkid.tools.android.publish.plugin")
 }
 
 // Configure the build-logic plugins to target JDK 17

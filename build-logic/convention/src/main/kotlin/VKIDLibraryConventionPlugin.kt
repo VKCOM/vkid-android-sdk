@@ -18,7 +18,7 @@ class VKIDLibraryConventionPlugin : Plugin<Project> {
             with(pluginManager) {
                 apply("com.android.library")
                 apply("org.jetbrains.kotlin.android")
-                apply("vkid.detekt")
+                apply("vkid.tools.android.detekt")
                 apply(libs.findPlugin("kover").get().get().pluginId)
             }
 

@@ -15,11 +15,19 @@ public class TrackingDeps(
     public val crashReporter: CrashReporter = object : CrashReporter {
         override fun report(crash: Throwable) = Unit
         override fun <T> runReportingCrashes(errorValueProvider: (error: Throwable) -> T, action: () -> T): T {
-            return action()
+            return try {
+                action()
+            } catch (t: Throwable) {
+                errorValueProvider(t)
+            }
         }
 
         override suspend fun <T> runReportingCrashesSuspend(errorValueProvider: suspend (error: Throwable) -> T, action: suspend () -> T): T {
-            return action()
+            return try {
+                action()
+            } catch (t: Throwable) {
+                errorValueProvider(t)
+            }
         }
     }
     public val performanceTracker: PerformanceTracker = object : PerformanceTracker {

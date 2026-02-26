@@ -15,6 +15,7 @@ public interface InternalVKIDCall<out T> {
     /**
      * Function to cancel [InternalVKIDCall]
      */
+    @InternalVKIDApi
     public fun cancel()
 }
 

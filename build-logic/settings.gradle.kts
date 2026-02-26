@@ -1,7 +1,7 @@
 pluginManagement {
-    includeBuild("detekt")
     includeBuild("convention")
     repositories {
+        maven(url = "https://artifactory-external.vkpartner.ru/artifactory/vkid-sdk-android/")
         google()
         mavenCentral()
         gradlePluginPortal()
@@ -20,7 +20,5 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "build-logic"
-include(":dokka-since-validator")
-include(":dokka-skip")
 include(":metrics")
 include(":placeholders")

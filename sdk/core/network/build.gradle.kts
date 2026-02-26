@@ -1,9 +1,9 @@
 plugins {
     id("vkid.android.library")
-    id("vkid.android.publish")
+    id("vkid.tools.android.publish.library")
     id("vkid.binaryCompatibilityValidator")
-    id("vkid.android.baseline.profile")
-    id("vkid.dokka")
+    id("vkid.tools.android.baseline-profile")
+    id("vkid.tools.android.dokka-core")
 }
 
 android {

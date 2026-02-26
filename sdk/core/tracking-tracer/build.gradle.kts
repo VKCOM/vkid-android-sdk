@@ -2,7 +2,7 @@ import java.util.Properties
 
 plugins {
     id("vkid.android.library")
-    id("vkid.android.publish")
+    id("vkid.tools.android.publish.library")
     id("vkid.binaryCompatibilityValidator")
     alias(libs.plugins.tracer)
 }
