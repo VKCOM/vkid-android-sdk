@@ -1,6 +1,5 @@
 pluginManagement {
     includeBuild("build-logic")
-    includeBuild("build-logic/detekt")
     includeBuild("build-logic/convention")
     repositories {
         maven(url = "https://artifactory-external.vkpartner.ru/artifactory/vkid-sdk-android/")
@@ -15,12 +14,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        if (gradle.startParameter.taskNames.map { it.lowercase() }.any { it.contains("dokka") }) {
-            mavenLocal()
-        }
+        maven(url = "https://artifactory-external.vkpartner.ru/artifactory/vkid-sdk-android/")
         val SUBSTITUTE_SAMPLE_PROJECTS_WITH_MODULES: String by settings
         if (SUBSTITUTE_SAMPLE_PROJECTS_WITH_MODULES == "true") {
-            maven(url = "https://artifactory-external.vkpartner.ru/artifactory/vkid-sdk-android/")
             mavenLocal {
                 content {
                     includeGroup("com.vk.id")

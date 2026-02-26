@@ -1,7 +1,7 @@
 plugins {
     id("vkid.android.library.compose")
-    id("vkid.android.publish")
-    id("vkid.dokka")
+    id("vkid.tools.android.publish.library")
+    id("vkid.tools.android.dokka-core")
     id("vkid.binaryCompatibilityValidator")
     id("vkid.screenshotTesting")
 }

@@ -12,7 +12,10 @@ public class VKIDAnalytics private constructor() {
      */
     @InternalVKIDApi
     public interface Tracker {
+        @InternalVKIDApi
         public fun trackEvent(accessToken: String?, name: String, vararg params: EventParam)
+
+        @InternalVKIDApi
         public fun trackEvent(name: String, vararg params: EventParam): Unit = trackEvent(null, name, *params)
     }
 
@@ -30,12 +33,14 @@ public class VKIDAnalytics private constructor() {
 
         /** Track event to all trackers, added with [addTracker] */
         @JvmStatic
+        @InternalVKIDApi
         override fun trackEvent(accessToken: String?, name: String, vararg params: EventParam) {
             trackersArray.forEach { it.trackEvent(accessToken, name, *params,) }
         }
 
         /** Adds new tracker. If [tracker] was already added then nothing happens.*/
         @JvmStatic
+        @InternalVKIDApi
         public fun addTracker(tracker: Tracker) {
             if (trackers.contains(tracker)) {
                 return
@@ -49,6 +54,7 @@ public class VKIDAnalytics private constructor() {
 
         /** Remove an added tracker. */
         @JvmStatic
+        @InternalVKIDApi
         public fun removeTracker(tracker: Tracker) {
             synchronized(trackers) {
                 trackers.remove(tracker)

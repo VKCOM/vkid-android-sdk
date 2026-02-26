@@ -8,7 +8,9 @@ import com.vk.id.common.InternalVKIDApi
  */
 @InternalVKIDApi
 public class LogcatTracker(private val tag: String = "VKID Analytics") : VKIDAnalytics.Tracker {
+
     /** Log event to logcat with format 'event name' { param1name: param1value, ... } **/
+    @InternalVKIDApi
     override fun trackEvent(accessToken: String?, name: String, vararg params: VKIDAnalytics.EventParam) {
         var paramsString = "{ "
         var first = true

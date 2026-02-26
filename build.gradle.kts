@@ -19,11 +19,16 @@ plugins {
     alias(libs.plugins.baselineprofile) apply false
     id("vkid.android.project-substitution") apply true
     id("vkid.health.metrics") version "1.0.0-alpha03" apply true
-    id("vkid.detekt") apply false
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.kover) apply true
     alias(libs.plugins.screenshot) apply false
     id("vkid.manifest.placeholders") version "1.1.0" apply true
+    id("vkid.tools.android.dokka-core") version "0.0.4" apply true
+    id("vkid.tools.android.baseline-profile") version "0.0.2" apply false
+    id("vkid.tools.android.detekt") version "0.0.2" apply true
+    id("vkid.tools.android.detekt.compose") version "0.0.2" apply true
+    id("vkid.tools.android.publish.library") version "0.0.6" apply false
+    id("vkid.tools.android.publish.plugin") version "0.0.6" apply false
 }
 
 //subprojects {
@@ -33,6 +38,11 @@ plugins {
 //        }
 //    }
 //}
+
+vkidDetekt {
+    detektConfigPath = "${rootProject.projectDir.absolutePath}/build-logic/detekt/config/detekt.yml"
+    detektComposeConfigPath = "${rootProject.projectDir.absolutePath}/build-logic/detekt/config/detekt-compose.yml"
+}
 
 dependencies {
     subprojects
@@ -50,22 +60,21 @@ registerGeneralTask("assembleDebug")
 registerGeneralTask("assembleRelease")
 
 private fun registerGeneralTask(name: String, configuration: Task.() -> Unit = {}) {
-    tasks.register(name) {
-        subprojects
-            .asSequence()
-            .filter { it.name != projects.baselineProfile.name }
-            .filter { it.name != projects.detektRules.name }
-            .map { ":${it.name}:$name" }
-            .forEach { dependsOn(it) }
-        configuration()
-    }
+    val task = tasks.findByName(name) ?: tasks.create(name)
+    subprojects
+        .asSequence()
+        .filter { it.name != projects.baselineProfile.name }
+        .filter { it.name != projects.detektRules.name }
+        .map { ":${it.name}:$name" }
+        .forEach { task.dependsOn(it) }
+    task.configuration()
 }
 
 vkidManifestPlaceholders {
     if (!shouldInjectManifestPlaceholders()) return@vkidManifestPlaceholders
     fun error() = logger.error(
         "Warning! Build will not work!\nCreate the 'secrets.properties' file in the 'sample/app' folder and add your 'VKIDClientID' and 'VKIDClientSecret' to it." +
-            "\nFor more information, refer to the 'README.md' file."
+                "\nFor more information, refer to the 'README.md' file."
     )
 
     val properties = Properties()
@@ -118,6 +127,11 @@ healthMetrics {
     publicApiChanges()
 }
 
+vkidDokkaCore {
+    enableSkip = true
+    enableSinceValidation = true
+}
+
 /**
  * The project should sync without placeholders
  */
@@ -127,10 +141,10 @@ private fun Project.shouldInjectManifestPlaceholders() = gradle
     .map { it.lowercase() }
     .any {
         it.contains("assemble")
-            || it.endsWith("test")
-            || it.contains("lint")
-            || it.contains("dokka")
-            || it.contains("generatebaselineprofile")
-            || it.contains("updatedebugscreenshottest")
-            || it.contains("healthmetrics")
+                || it.endsWith("test")
+                || it.contains("lint")
+                || it.contains("dokka")
+                || it.contains("generatebaselineprofile")
+                || it.contains("updatedebugscreenshottest")
+                || it.contains("healthmetrics")
     }

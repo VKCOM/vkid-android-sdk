@@ -50,37 +50,17 @@ gradlePlugin {
             id = "vkid.android.tests"
             implementationClass = "AndroidTestsConventionPlugin"
         }
-        register("vkidPublish") {
-            id = "vkid.android.publish"
-            implementationClass = "VKIDPublishConventionPlugin"
-        }
-        register("vkidPluginPublish") {
-            id = "vkid.android.plugin.publish"
-            implementationClass = "VKIDPluginPublishConventionPlugin"
-        }
         register("vkidDependencyLock") {
             id = "vkid.android.dependency.lock"
             implementationClass = "DependencyLockPlugin"
             description = """Helper to create lockfiles for all modules with one command. 
                 |Usage: `./gradlew allDependencies --write-locks`""".trimMargin()
         }
-        register("vkidBaselineProfile") {
-            id = "vkid.android.baseline.profile"
-            implementationClass = "BaselineProfilePlugin"
-            description = """Helper to create baseline profile for all modules with one command. 
-                |Usage: `./gradlew generateBaselineProfiles`""".trimMargin()
-        }
         register("vkidProjectSubstitution") {
             id = "vkid.android.project-substitution"
             implementationClass = "ProjectSubstitutionPlugin"
             description = """A plugin that replaces sample project dependencies with module dependencies. 
                 |Usage: Add `SUBSTITUTE_SAMPLE_PROJECTS_WITH_MODULES=true` to root gradle.properties""".trimMargin()
-        }
-        register("vkidDokka") {
-            id = "vkid.dokka"
-            implementationClass = "VKIDDokkaPlugin"
-            description = """A plugin that configures dokka for documentation generation. 
-                |Usage: ./gradlew dokkaHtmlMultiModule""".trimMargin()
         }
         register("vkidBinaryCompatibilityValidator") {
             id = "vkid.binaryCompatibilityValidator"

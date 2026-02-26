@@ -22,6 +22,7 @@ PUBLIC_TARGET_BRANCH="public"
 SDK_VERSION="$(fetchCurrentVersion)"
 git branch -D public
 git checkout -b public
+git remote remove public || true
 git remote add public ${PUBLIC_REPO_URL}
 git fetch public
 git reset --soft public/${PUBLIC_TARGET_BRANCH}
