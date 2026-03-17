@@ -19,91 +19,91 @@ import org.junit.Test
 public class GroupSubscriptionComposeTest : BaseGroupSubscriptionTest() {
 
     @Test
-    @AllureId("2413534")
+    @AllureId("1342482")
     @DisplayName("Получение ошибки серверных лимитов Compose")
     override fun remoteLimitReached() {
         super.remoteLimitReached()
     }
 
     @Test
-    @AllureId("2412805")
+    @AllureId("1342622")
     @DisplayName("Получение ошибки клиентских лимитов Compose")
     override fun limitReached() {
         super.limitReached()
     }
 
     @Test
-    @AllureId("2386902")
+    @AllureId("1344621")
     @DisplayName("Ошибка при получении статуса сервисного аккаунта Compose")
     override fun isServiceAccountFail() {
         super.isServiceAccountFail()
     }
 
     @Test
-    @AllureId("2386904")
+    @AllureId("1344634")
     @DisplayName("Открытие шторки для сервисного аккаунта Compose")
     override fun isServiceAccount() {
         super.isServiceAccount()
     }
 
     @Test
-    @AllureId("2386912")
+    @AllureId("1344672")
     @DisplayName("Получение ошибки что пользователь уже в группе Compose")
     override fun alreadyAGroupMember() {
         super.alreadyAGroupMember()
     }
 
     @Test
-    @AllureId("2386897")
+    @AllureId("1344572")
     @DisplayName("Ошибка при получении данных о группе Compose")
     override fun getGroupError() {
         super.getGroupError()
     }
 
     @Test
-    @AllureId("2386893")
+    @AllureId("1344594")
     @DisplayName("Ошибка при получении данных о членах группы Compose")
     override fun getMembersError() {
         super.getMembersError()
     }
 
     @Test
-    @AllureId("2386901")
+    @AllureId("1344580")
     @DisplayName("Успешная подписка на сообщество Compose")
     override fun groupSubscriptionSuccess() {
         super.groupSubscriptionSuccess()
     }
 
     @Test
-    @AllureId("2386905")
+    @AllureId("1344616")
     @DisplayName("Закрытие подписки на сообщество Compose")
     override fun groupSubscriptionClose() {
         super.groupSubscriptionClose()
     }
 
     @Test
-    @AllureId("2386898")
+    @AllureId("1344608")
     @DisplayName("Нажатие на в другой раз Compose")
     override fun groupSubscriptionLater() {
         super.groupSubscriptionLater()
     }
 
     @Test
-    @AllureId("2386909")
+    @AllureId("1344589")
     @DisplayName("Отмена после ошибки подписки на сообщество Compose")
     override fun groupSubscriptionFailCancel() {
         super.groupSubscriptionFailCancel()
     }
 
     @Test
-    @AllureId("2386908")
+    @AllureId("1344666")
     @DisplayName("Успешный повтор пописки на сообщество Compose")
     override fun groupSubscriptionRetrySuccess() {
         super.groupSubscriptionRetrySuccess()
     }
 
     @Test
-    @AllureId("2386899")
+    @AllureId("1344679")
     @DisplayName("Ошибка при повторе пописки на сообщество Compose")
     override fun groupSubscriptionRetryFail() {
         super.groupSubscriptionRetryFail()

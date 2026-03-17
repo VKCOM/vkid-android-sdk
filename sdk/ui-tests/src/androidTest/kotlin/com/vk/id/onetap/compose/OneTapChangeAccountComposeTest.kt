@@ -18,77 +18,77 @@ import org.junit.Test
 public class OneTapChangeAccountComposeTest : ChangeAccountTest() {
 
     @Test
-    @AllureId("2289802")
+    @AllureId("1348794")
     @DisplayName("Успешное получение токена в Compose OneTap смене аккаунта")
     override fun tokenIsReceived() {
         super.tokenIsReceived()
     }
 
     @Test
-    @AllureId("2302959")
+    @AllureId("1348751")
     @DisplayName("Успешное получение токена после логаута в Compose OneTap")
     override fun tokenIsReceivedAfterFailedLogout() {
         super.tokenIsReceivedAfterFailedLogout()
     }
 
     @Test
-    @AllureId("2289870")
+    @AllureId("1348815")
     @DisplayName("Получение ошибочного редиректа в Activity в Compose OneTap смене аккаунта")
     override fun failedRedirectActivityIsReceived() {
         super.failedRedirectActivityIsReceived()
     }
 
     @Test
-    @AllureId("2289581")
+    @AllureId("1349078")
     @DisplayName("Получение ошибки отсутсвия браузера в Compose OneTap смене аккаунта")
     override fun noBrowserAvailableIsReceived() {
         super.noBrowserAvailableIsReceived()
     }
 
     @Test
-    @AllureId("2289646")
+    @AllureId("1348967")
     @DisplayName("Получение ошибки апи в Compose OneTap смене аккаунта")
     override fun failedApiCallIsReceived() {
         super.failedApiCallIsReceived()
     }
 
     @Test
-    @AllureId("2289858")
+    @AllureId("1348804")
     @DisplayName("Получение ошибки отмены авторизации в Compose OneTap смене аккаунта")
     override fun cancellationIsReceived() {
         super.cancellationIsReceived()
     }
 
     @Test
-    @AllureId("2289594")
+    @AllureId("1349063")
     @DisplayName("Получение ошибки отсутствия данных oauth в Compose OneTap смене аккаунта")
     override fun failedOAuthIsReceived() {
         super.failedOAuthIsReceived()
     }
 
     @Test
-    @AllureId("2289981")
+    @AllureId("1349276")
     @DisplayName("Получение ошибки отсутствия deviceId в Compose OneTap смене аккаунта")
     override fun invalidDeviceIdIsReceived() {
         super.invalidDeviceIdIsReceived()
     }
 
     @Test
-    @AllureId("2289713")
+    @AllureId("1348943")
     @DisplayName("Получение ошибки неверного state в Compose OneTap смене аккаунта")
     override fun invalidStateIsReceived() {
         super.invalidStateIsReceived()
     }
 
     @Test
-    @AllureId("2303018")
+    @AllureId("1349148")
     @DisplayName("Успешное получение кода при схеме с бекендом в XML OneTap Мультибрендинге")
     override fun authCodeIsReceived() {
         super.authCodeIsReceived()
     }
 
     @Test
-    @AllureId("2302988")
+    @AllureId("1348683")
     @DisplayName("Получение ошибки загрузки пользовательских данных в Compose OneTap")
     override fun failedUserCallIsReceived() {
         super.failedUserCallIsReceived()

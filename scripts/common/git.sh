@@ -1,5 +1,15 @@
 #!/bin/bash
 
+fixGitOwnership() {
+    if [ -d ".git" ]; then
+        git config --global safe.directory "$(pwd)" 2>/dev/null || true
+        git config --global user.email "devsupport@corp.vk.com"
+        git config --global user.name "CI Agent"
+    fi
+}
+
+fixGitOwnership
+
 # A set of common scripts for working with Git
 
 assertWorkdirIsClean() {

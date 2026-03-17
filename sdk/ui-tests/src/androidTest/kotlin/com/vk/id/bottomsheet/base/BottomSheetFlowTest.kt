@@ -38,7 +38,7 @@ import java.util.UUID
 
 @Platform(Platform.ANDROID_AUTO)
 @Product(Product.VKID_SDK)
-@Project(Project.VKID_SDK)
+@Project(Project.ESDK)
 @Owner(Owners.MAKSIM_SPIRIDONOV)
 @Priority(Priority.CRITICAL)
 @Suppress("LongMethod")

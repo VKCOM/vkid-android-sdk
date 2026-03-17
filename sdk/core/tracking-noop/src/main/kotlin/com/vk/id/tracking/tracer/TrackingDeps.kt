@@ -17,7 +17,7 @@ public class TrackingDeps(
         override fun <T> runReportingCrashes(errorValueProvider: (error: Throwable) -> T, action: () -> T): T {
             return try {
                 action()
-            } catch (t: Throwable) {
+            } catch (@Suppress("TooGenericExceptionCaught") t: Throwable) {
                 errorValueProvider(t)
             }
         }
@@ -25,7 +25,7 @@ public class TrackingDeps(
         override suspend fun <T> runReportingCrashesSuspend(errorValueProvider: suspend (error: Throwable) -> T, action: suspend () -> T): T {
             return try {
                 action()
-            } catch (t: Throwable) {
+            } catch (@Suppress("TooGenericExceptionCaught") t: Throwable) {
                 errorValueProvider(t)
             }
         }

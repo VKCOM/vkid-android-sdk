@@ -116,7 +116,7 @@ private val ACCESS_TOKEN = AccessToken(
 
 @Platform(Platform.ANDROID_AUTO)
 @Product(Product.VKID_SDK)
-@Project(Project.VKID_SDK)
+@Project(Project.ESDK)
 @Owner(Owners.DANIIL_KLIMCHUK)
 @Feature(TestFeature.OAUTH_2_1)
 @RunWith(AndroidJUnit4::class)
@@ -125,7 +125,7 @@ private val ACCESS_TOKEN = AccessToken(
 internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
 
     @Test
-    @AllureId("2303042")
+    @AllureId("1349060")
     @DisplayName("Успешный обмен v1 токена на v2")
     fun exchangeTokenSuccess() = run {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
@@ -166,7 +166,7 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
     }
 
     @Test
-    @AllureId("2303041")
+    @AllureId("1349053")
     @DisplayName("Ошибка апи при обмене v1 токена на v2")
     fun apiCallFail() = run {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
@@ -195,7 +195,7 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
     }
 
     @Test
-    @AllureId("2303129")
+    @AllureId("1348982")
     @DisplayName("Ошибка получения токена при обмене v1 токена на v2")
     fun getTokenApiCallFail() = run {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
@@ -233,7 +233,7 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
     }
 
     @Test
-    @AllureId("2303128")
+    @AllureId("1348990")
     @DisplayName("Ошибка стейта получения токена при обмене v1 токена на v2")
     fun getTokenStateFail() = run {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
@@ -270,7 +270,7 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
     }
 
     @Test
-    @AllureId("2303043")
+    @AllureId("1349067")
     @DisplayName("Ошибка получения пользовательских данных при обмене v1 токена на v2")
     fun userDataApiCallFail() = run {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
@@ -308,7 +308,7 @@ internal class VKIDExchangeTokenIntegrationTest : BaseUiTest() {
     }
 
     @Test
-    @AllureId("2303040")
+    @AllureId("1349074")
     @DisplayName("Ошибка неверного state при обмене v1 токена на v2")
     fun wrongStateFail() = run {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()

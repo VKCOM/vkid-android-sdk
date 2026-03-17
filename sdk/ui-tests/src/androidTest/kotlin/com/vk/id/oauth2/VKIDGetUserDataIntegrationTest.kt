@@ -104,7 +104,7 @@ private val USER = VKIDUser(
 
 @Platform(Platform.ANDROID_AUTO)
 @Product(Product.VKID_SDK)
-@Project(Project.VKID_SDK)
+@Project(Project.ESDK)
 @Owner(Owners.DANIIL_KLIMCHUK)
 @Feature(TestFeature.OAUTH_2_1)
 @RunWith(AndroidJUnit4::class)
@@ -113,7 +113,7 @@ private val USER = VKIDUser(
 internal class VKIDGetUserDataIntegrationTest : BaseUiTest() {
 
     @Test
-    @AllureId("2303048")
+    @AllureId("1349027")
     @DisplayName("Успешное получение пользовательских данных")
     fun getUserSuccess() = run {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
@@ -144,7 +144,7 @@ internal class VKIDGetUserDataIntegrationTest : BaseUiTest() {
     }
 
     @Test
-    @AllureId("2303046")
+    @AllureId("1349040")
     @DisplayName("Успешное получение пользовательских данных после рефреша токена")
     fun getUserWithRefreshSuccess() = run {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
@@ -182,7 +182,7 @@ internal class VKIDGetUserDataIntegrationTest : BaseUiTest() {
     }
 
     @Test
-    @AllureId("2303049")
+    @AllureId("1349047")
     @DisplayName("Ошибка получения пользовательских данных из-за ошибки рефреша токена")
     fun getUserWithRefreshFail() = run {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
@@ -214,7 +214,7 @@ internal class VKIDGetUserDataIntegrationTest : BaseUiTest() {
     }
 
     @Test
-    @AllureId("2303050")
+    @AllureId("1349034")
     @DisplayName("Ошибка получения пользовательских данных из-за ошибки апи")
     fun apiCallFail() = run {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
@@ -243,7 +243,7 @@ internal class VKIDGetUserDataIntegrationTest : BaseUiTest() {
     }
 
     @Test
-    @AllureId("2303047")
+    @AllureId("1349021")
     @DisplayName("Ошибка получения пользовательских данных из-за отсутствия авторизации")
     fun notAuthorizedFail() = run {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()

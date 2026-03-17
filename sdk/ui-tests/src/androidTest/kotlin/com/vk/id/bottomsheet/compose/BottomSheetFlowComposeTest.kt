@@ -22,42 +22,42 @@ import org.junit.Test
 public class BottomSheetFlowComposeTest : BottomSheetFlowTest() {
 
     @Test
-    @AllureId("2315339")
+    @AllureId("1347594")
     @DisplayName("Успешная авторизация после ретрая в Compose BottomSheet")
     override fun authSuccessAfterRetry() {
         super.authSuccessAfterRetry()
     }
 
     @Test
-    @AllureId("2315344")
+    @AllureId("1347550")
     @DisplayName("Успешная смена аккаунта после ретрая в Compose BottomSheet")
     override fun changeAccountSuccessAfterRetry() {
         super.changeAccountSuccessAfterRetry()
     }
 
     @Test
-    @AllureId("2315335")
+    @AllureId("1347623")
     @DisplayName("Ошибка авторизации после ретрая в Compose BottomSheet")
     override fun authFailAfterRetry() {
         super.authFailAfterRetry()
     }
 
     @Test
-    @AllureId("2315342")
+    @AllureId("1347572")
     @DisplayName("Ошибка смены аккаунта после ретрая в Compose BottomSheet")
     override fun changeAccountFailAfterRetry() {
         super.changeAccountFailAfterRetry()
     }
 
     @Test
-    @AllureId("2315337")
+    @AllureId("1347607")
     @DisplayName("Шторка не скрывается после авторизации в Compose BottomSheet")
     override fun sheetNotHiddenAfterAuth() {
         super.sheetNotHiddenAfterAuth()
     }
 
     @Test
-    @AllureId("2315343")
+    @AllureId("1347567")
     @DisplayName("Автоскрытие шторки в Compose BottomSheet")
     override fun sheetAuthHide() {
         super.sheetAuthHide()

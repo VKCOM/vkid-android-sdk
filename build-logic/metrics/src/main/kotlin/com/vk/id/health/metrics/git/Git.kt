@@ -3,9 +3,13 @@ package com.vk.id.health.metrics.git
 import com.vk.id.health.metrics.utils.execute
 
 internal object Git {
-    val currentCommitHash get() = execute("git rev-parse --verify HEAD").first()
+    val currentCommitHash get(): String {
+        ensureGitSafeDirectory()
+        return execute("git rev-parse --verify HEAD").first()
+    }
 
     fun getRootCommitHash(sourceBranch: String, targetBranch: String): String {
+        ensureGitSafeDirectory()
         executeGitFetch(sourceBranch)
         executeGitFetch(targetBranch)
         val mergeBase = execute("git merge-base $sourceBranch $targetBranch").first()
@@ -22,6 +26,15 @@ internal object Git {
             ) {
                 throw t
             }
+        }
+    }
+
+    // На CI может стрелять ошибка fatal: detected dubious ownership in repository at
+    private fun ensureGitSafeDirectory() {
+        try {
+            execute("git config --global --add safe.directory ${System.getProperty("user.dir")}")
+        } catch (_: Exception) {
+            // Игнорируем ошибки, так как директория может уже быть в списке
         }
     }
 }

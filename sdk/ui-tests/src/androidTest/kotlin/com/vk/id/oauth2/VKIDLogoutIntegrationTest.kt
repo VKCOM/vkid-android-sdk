@@ -59,7 +59,7 @@ private const val ID_TOKEN_KEY = "ID_TOKEN_KEY"
 
 @Platform(Platform.ANDROID_AUTO)
 @Product(Product.VKID_SDK)
-@Project(Project.VKID_SDK)
+@Project(Project.ESDK)
 @Owner(Owners.DANIIL_KLIMCHUK)
 @Feature(TestFeature.OAUTH_2_1)
 @RunWith(AndroidJUnit4::class)
@@ -68,7 +68,7 @@ private const val ID_TOKEN_KEY = "ID_TOKEN_KEY"
 internal class VKIDLogoutIntegrationTest : BaseUiTest() {
 
     @Test
-    @AllureId("2303051")
+    @AllureId("1348996")
     @DisplayName("Успешный логаут")
     fun logoutSuccess() = run {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
@@ -101,7 +101,7 @@ internal class VKIDLogoutIntegrationTest : BaseUiTest() {
     }
 
     @Test
-    @AllureId("2303054")
+    @AllureId("1349014")
     @DisplayName("Ошибка логаута из-за отсутствия авторизации")
     fun notAuthenticatedFail() = run {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
@@ -133,7 +133,7 @@ internal class VKIDLogoutIntegrationTest : BaseUiTest() {
     }
 
     @Test
-    @AllureId("2303053")
+    @AllureId("1349009")
     @DisplayName("Ошибка при логауте из-за ошибки апи запроса")
     fun apiCalFail() = run {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
@@ -166,7 +166,7 @@ internal class VKIDLogoutIntegrationTest : BaseUiTest() {
     }
 
     @Test
-    @AllureId("2303052")
+    @AllureId("1349002")
     @DisplayName("Успешный логаут из-за просроченного токена")
     fun logoutSuccessAfterInvalidToken() = run {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()

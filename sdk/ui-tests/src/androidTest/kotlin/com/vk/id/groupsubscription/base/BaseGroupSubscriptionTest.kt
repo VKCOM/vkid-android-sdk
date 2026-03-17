@@ -34,7 +34,7 @@ import java.io.IOException
 
 @Platform(Platform.ANDROID_AUTO)
 @Product(Product.VKID_SDK)
-@Project(Project.VKID_SDK)
+@Project(Project.ESDK)
 @Owner(Owners.DANIIL_KLIMCHUK)
 @Priority(Priority.CRITICAL)
 @Suppress("LongMethod")

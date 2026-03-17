@@ -16,91 +16,91 @@ import org.junit.Test
 public class GroupSubscriptionXmlTest : BaseGroupSubscriptionTest() {
 
     @Test
-    @AllureId("2413533")
+    @AllureId("1342474")
     @DisplayName("Получение ошибки серверных лимитов XML")
     override fun remoteLimitReached() {
         super.remoteLimitReached()
     }
 
     @Test
-    @AllureId("2412804")
+    @AllureId("1342630")
     @DisplayName("Получение ошибки клиентских лимитов XML")
     override fun limitReached() {
         super.limitReached()
     }
 
     @Test
-    @AllureId("2386913")
+    @AllureId("1344584")
     @DisplayName("Ошибка при получении статуса сервисного аккаунта XML")
     override fun isServiceAccountFail() {
         super.isServiceAccountFail()
     }
 
     @Test
-    @AllureId("2386894")
+    @AllureId("1344603")
     @DisplayName("Открытие шторки для сервисного аккаунта XML")
     override fun isServiceAccount() {
         super.isServiceAccount()
     }
 
     @Test
-    @AllureId("2386911")
+    @AllureId("1344656")
     @DisplayName("Получение ошибки что пользователь уже в группе XML")
     override fun alreadyAGroupMember() {
         super.alreadyAGroupMember()
     }
 
     @Test
-    @AllureId("2386903")
+    @AllureId("1344639")
     @DisplayName("Ошибка при получении данных о группе XML")
     override fun getGroupError() {
         super.getGroupError()
     }
 
     @Test
-    @AllureId("2386906")
+    @AllureId("1344599")
     @DisplayName("Ошибка при получении данных о членах группы XML")
     override fun getMembersError() {
         super.getMembersError()
     }
 
     @Test
-    @AllureId("2386914")
+    @AllureId("1344646")
     @DisplayName("Успешная подписка на сообщество XML")
     override fun groupSubscriptionSuccess() {
         super.groupSubscriptionSuccess()
     }
 
     @Test
-    @AllureId("2386910")
+    @AllureId("1344625")
     @DisplayName("Закрытие подписки на сообщество XML")
     override fun groupSubscriptionClose() {
         super.groupSubscriptionClose()
     }
 
     @Test
-    @AllureId("2386896")
+    @AllureId("1344629")
     @DisplayName("Нажатие на в другой раз XML")
     override fun groupSubscriptionLater() {
         super.groupSubscriptionLater()
     }
 
     @Test
-    @AllureId("2386895")
+    @AllureId("1344650")
     @DisplayName("Отмена после ошибки подписки на сообщество XML")
     override fun groupSubscriptionFailCancel() {
         super.groupSubscriptionFailCancel()
     }
 
     @Test
-    @AllureId("2386900")
+    @AllureId("1344661")
     @DisplayName("Успешный повтор пописки на сообщество XML")
     override fun groupSubscriptionRetrySuccess() {
         super.groupSubscriptionRetrySuccess()
     }
 
     @Test
-    @AllureId("2386907")
+    @AllureId("1344613")
     @DisplayName("Ошибка при повторе пописки на сообщество XML")
     override fun groupSubscriptionRetryFail() {
         super.groupSubscriptionRetryFail()
