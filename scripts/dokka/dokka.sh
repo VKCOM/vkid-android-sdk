@@ -4,6 +4,11 @@
 #
 # Usage: ./dokka.sh
 
+# Fix Git ownership issue for CI/CD environment
+if [ -d ".git" ]; then
+    git config --global safe.directory "$(pwd)" 2>/dev/null || true
+fi
+
 importCommon() {
     source "$(git rev-parse --show-toplevel)/scripts/common/git.sh"
 }
@@ -35,6 +40,6 @@ else
         echo "Dokka has nothing to add"
         exit 0
     fi
-    commitCurrent "VKIDSDK-0: Update documentation"
-    git push origin HEAD
+#    commitCurrent "VKIDSDK-0: Update documentation"
+#    git push origin HEAD
 fi

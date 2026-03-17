@@ -20,77 +20,77 @@ import org.junit.Test
 public class BottomSheetOneTapXmlTest : OneTapTest() {
 
     @Test
-    @AllureId("2289769")
+    @AllureId("1349351")
     @DisplayName("Успешное получение токена в XML BottomSheet")
     override fun tokenIsReceived() {
         super.tokenIsReceived()
     }
 
     @Test
-    @AllureId("2303026")
+    @AllureId("1349116")
     @DisplayName("Успешное получение токена после логаута в Compose OneTap")
     override fun tokenIsReceivedAfterFailedLogout() {
         super.tokenIsReceivedAfterFailedLogout()
     }
 
     @Test
-    @AllureId("2289575")
+    @AllureId("1349046")
     @DisplayName("Получение ошибочного редиректа в Activity в XML BottomSheet")
     override fun failedRedirectActivityIsReceived() {
         super.failedRedirectActivityIsReceived()
     }
 
     @Test
-    @AllureId("2289641")
+    @AllureId("1349001")
     @DisplayName("Получение ошибки отсутсвия браузера в XML BottomSheet")
     override fun noBrowserAvailableIsReceived() {
         super.noBrowserAvailableIsReceived()
     }
 
     @Test
-    @AllureId("2289779")
+    @AllureId("1349344")
     @DisplayName("Получение ошибки апи в XML BottomSheet")
     override fun failedApiCallIsReceived() {
         super.failedApiCallIsReceived()
     }
 
     @Test
-    @AllureId("2289630")
+    @AllureId("1348994")
     @DisplayName("Получение ошибки отмены авторизации в XML BottomSheet")
     override fun cancellationIsReceived() {
         super.cancellationIsReceived()
     }
 
     @Test
-    @AllureId("2289643")
+    @AllureId("1349020")
     @DisplayName("Получение ошибки отсутствия данных oauth в XML BottomSheet")
     override fun failedOAuthIsReceived() {
         super.failedOAuthIsReceived()
     }
 
     @Test
-    @AllureId("2289677")
+    @AllureId("1348905")
     @DisplayName("Получение ошибки отсутствия deviceId в XML BottomSheet")
     override fun invalidDeviceIdIsReceived() {
         super.invalidDeviceIdIsReceived()
     }
 
     @Test
-    @AllureId("2289655")
+    @AllureId("1349013")
     @DisplayName("Получение ошибки неверного state в XML BottomSheet")
     override fun invalidStateIsReceived() {
         super.invalidStateIsReceived()
     }
 
     @Test
-    @AllureId("2303012")
+    @AllureId("1349217")
     @DisplayName("Успешное получение кода при схеме с бекендом в XML OneTap Мультибрендинге")
     override fun authCodeIsReceived() {
         super.authCodeIsReceived()
     }
 
     @Test
-    @AllureId("2302962")
+    @AllureId("1348716")
     @DisplayName("Получение ошибки загрузки пользовательских данных в Compose OneTap")
     override fun failedUserCallIsReceived() {
         super.failedUserCallIsReceived()

@@ -113,7 +113,7 @@ private val ACCESS_TOKEN = AccessToken(
 
 @Platform(Platform.ANDROID_AUTO)
 @Product(Product.VKID_SDK)
-@Project(Project.VKID_SDK)
+@Project(Project.ESDK)
 @Owner(Owners.DANIIL_KLIMCHUK)
 @Feature(TestFeature.OAUTH_2_1)
 @RunWith(AndroidJUnit4::class)
@@ -122,7 +122,7 @@ private val ACCESS_TOKEN = AccessToken(
 internal class VKIDRefreshTokenIntegrationTest : BaseUiTest() {
 
     @Test
-    @AllureId("2303037")
+    @AllureId("1349080")
     @DisplayName("Успешный рефреш токена")
     fun refreshTokenSuccess() = run {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
@@ -156,7 +156,7 @@ internal class VKIDRefreshTokenIntegrationTest : BaseUiTest() {
     }
 
     @Test
-    @AllureId("2303038")
+    @AllureId("1349088")
     @DisplayName("Ошибка отсутствия авторизации при рефреше токена")
     fun notAuthenticatedFail() = run {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
@@ -185,7 +185,7 @@ internal class VKIDRefreshTokenIntegrationTest : BaseUiTest() {
     }
 
     @Test
-    @AllureId("2303036")
+    @AllureId("1349110")
     @DisplayName("Получение ошибки неверного state при рефреше токена")
     fun wrongStateFail() = run {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
@@ -215,7 +215,7 @@ internal class VKIDRefreshTokenIntegrationTest : BaseUiTest() {
     }
 
     @Test
-    @AllureId("2303039")
+    @AllureId("1349095")
     @DisplayName("Получение ошибки от апи при рефреше токена")
     fun refreshTokenApiFail() = run {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()
@@ -245,7 +245,7 @@ internal class VKIDRefreshTokenIntegrationTest : BaseUiTest() {
     }
 
     @Test
-    @AllureId("2303035")
+    @AllureId("1349102")
     @DisplayName("Получение ошибки получения пользовательских данных при рефреше токена")
     fun userDataApiFail() = run {
         val deviceIdStorage = mockk<InternalVKIDDeviceIdProvider.DeviceIdStorage>()

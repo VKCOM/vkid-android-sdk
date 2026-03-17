@@ -17,6 +17,12 @@
 
 set -e
 
+fixGitOwnership() {
+    if [ -d ".git" ]; then
+        git config --global safe.directory "$(pwd)" 2>/dev/null || true
+    fi
+}
+
 importCommon() {
     source "$(git rev-parse --show-toplevel)/scripts/common/versions.sh"
 }
@@ -32,6 +38,8 @@ replaceGradleProperty() {
 }
 
 MODE=$1
+
+fixGitOwnership
 
 importCommon
 CURRENT_VERSION="$(fetchCurrentVersion)"

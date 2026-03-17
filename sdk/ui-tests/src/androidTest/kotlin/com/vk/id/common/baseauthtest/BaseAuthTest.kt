@@ -52,7 +52,7 @@ import kotlin.io.encoding.ExperimentalEncodingApi
 
 @Platform(Platform.ANDROID_AUTO)
 @Product(Product.VKID_SDK)
-@Project(Project.VKID_SDK)
+@Project(Project.ESDK)
 @Owner(Owners.DANIIL_KLIMCHUK)
 @Suppress("TooManyFunctions", "LargeClass")
 @Priority(Priority.CRITICAL)

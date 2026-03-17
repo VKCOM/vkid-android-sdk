@@ -13,6 +13,8 @@ public final class com/vk/id/tracking/tracer/TracerLibraryManifest : ru/ok/trace
 	public fun <init> ()V
 	public fun appToken ()Ljava/lang/String;
 	public fun buildUuid ()Ljava/lang/String;
+	public fun environment ()Ljava/lang/String;
+	public fun isDisabled ()Z
 	public fun namespace ()Ljava/lang/String;
 	public fun versionName ()Ljava/lang/String;
 }

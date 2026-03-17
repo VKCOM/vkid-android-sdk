@@ -50,7 +50,7 @@ import org.junit.Test
 
 @Platform(Platform.ANDROID_AUTO)
 @Product(Product.VKID_SDK)
-@Project(Project.VKID_SDK)
+@Project(Project.ESDK)
 @Owner(Owners.SERGEY_GOLOVIN)
 @Feature(TestFeature.OAUTH_2_1)
 @Priority(Priority.CRITICAL)
@@ -68,7 +68,7 @@ public class OutgoingIntentsTest : BaseUiTest() {
     }
 
     @Test
-    @AllureId("2361814")
+    @AllureId("1345429")
     @DisplayName("Авторизация без провайдеров и установленных браузеров")
     public fun noProviderNoBrowserAvailable() {
         var receivedFail: VKIDAuthFail? = null
@@ -98,7 +98,7 @@ public class OutgoingIntentsTest : BaseUiTest() {
     }
 
     @Test
-    @AllureId("2361815")
+    @AllureId("1345425")
     @DisplayName("Авторизация без провайдеров, но с установленным браузером")
     public fun noProviderOnlyBrowserAvailable() {
         before {
@@ -143,7 +143,7 @@ public class OutgoingIntentsTest : BaseUiTest() {
     }
 
     @Test
-    @AllureId("2361816")
+    @AllureId("1345420")
     @DisplayName("Авторизация с установленным VK провайдером")
     public fun providerAvailableVK() {
         before {

@@ -21,42 +21,42 @@ import org.junit.Test
 public class BottomSheetFlowXmlTest : BottomSheetFlowTest() {
 
     @Test
-    @AllureId("2315336")
+    @AllureId("1347615")
     @DisplayName("Успешная авторизация после ретрая в XML BottomSheet")
     override fun authSuccessAfterRetry() {
         super.authSuccessAfterRetry()
     }
 
     @Test
-    @AllureId("2315340")
+    @AllureId("1347587")
     @DisplayName("Успешная смена аккаунта после ретрая в XML BottomSheet")
     override fun changeAccountSuccessAfterRetry() {
         super.changeAccountSuccessAfterRetry()
     }
 
     @Test
-    @AllureId("2315346")
+    @AllureId("1347542")
     @DisplayName("Ошибка авторизации после ретрая в XML BottomSheet")
     override fun authFailAfterRetry() {
         super.authFailAfterRetry()
     }
 
     @Test
-    @AllureId("2315341")
+    @AllureId("1347582")
     @DisplayName("Ошибка смены аккаунта после ретрая в XML BottomSheet")
     override fun changeAccountFailAfterRetry() {
         super.changeAccountFailAfterRetry()
     }
 
     @Test
-    @AllureId("2315347")
+    @AllureId("1347535")
     @DisplayName("Шторка не скрывается после авторизации в XML BottomSheet")
     override fun sheetNotHiddenAfterAuth() {
         super.sheetNotHiddenAfterAuth()
     }
 
     @Test
-    @AllureId("2315345")
+    @AllureId("1347557")
     @DisplayName("Автоскрытие шторки в XML BottomSheet")
     override fun sheetAuthHide() {
         super.sheetAuthHide()

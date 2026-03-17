@@ -21,77 +21,77 @@ public class OneTapMultibrandingXmlTest(
 ) : MultibrandingTest(oAuth, skipTest = oAuth == OAuth.VK) {
 
     @Test
-    @AllureId("2290718")
+    @AllureId("1349201")
     @DisplayName("Успешное получение токена в XML OneTap Мультибрендинге")
     override fun tokenIsReceived() {
         super.tokenIsReceived()
     }
 
     @Test
-    @AllureId("2303019")
+    @AllureId("1349166")
     @DisplayName("Успешное получение токена после логаута в Compose OneTap")
     override fun tokenIsReceivedAfterFailedLogout() {
         super.tokenIsReceivedAfterFailedLogout()
     }
 
     @Test
-    @AllureId("2290691")
+    @AllureId("1349232")
     @DisplayName("Получение ошибочного редиректа в Activity в XML OneTap Мультибрендинге")
     override fun failedRedirectActivityIsReceived() {
         super.failedRedirectActivityIsReceived()
     }
 
     @Test
-    @AllureId("2290764")
+    @AllureId("1349055")
     @DisplayName("Получение ошибки отсутсвия браузера в XML OneTap Мультибрендинге")
     override fun noBrowserAvailableIsReceived() {
         super.noBrowserAvailableIsReceived()
     }
 
     @Test
-    @AllureId("2290701")
+    @AllureId("1349206")
     @DisplayName("Получение ошибки апи в XML OneTap Мультибрендинге")
     override fun failedApiCallIsReceived() {
         super.failedApiCallIsReceived()
     }
 
     @Test
-    @AllureId("2290684")
+    @AllureId("1349262")
     @DisplayName("Получение ошибки отмены авторизации в XML OneTap Мультибрендинге")
     override fun cancellationIsReceived() {
         super.cancellationIsReceived()
     }
 
     @Test
-    @AllureId("2290750")
+    @AllureId("1349247")
     @DisplayName("Получение ошибки отсутствия данных oauth в XML OneTap Мультибрендинге")
     override fun failedOAuthIsReceived() {
         super.failedOAuthIsReceived()
     }
 
     @Test
-    @AllureId("2290765")
+    @AllureId("1349037")
     @DisplayName("Получение ошибки отсутствия deviceId в XML OneTap Мультибрендинге")
     override fun invalidDeviceIdIsReceived() {
         super.invalidDeviceIdIsReceived()
     }
 
     @Test
-    @AllureId("2290805")
+    @AllureId("1349019")
     @DisplayName("Получение ошибки неверного state в XML OneTap Мультибрендинге")
     override fun invalidStateIsReceived() {
         super.invalidStateIsReceived()
     }
 
     @Test
-    @AllureId("2303021")
+    @AllureId("1349153")
     @DisplayName("Успешное получение кода при схеме с бекендом в XML OneTap Мультибрендинге")
     override fun authCodeIsReceived() {
         super.authCodeIsReceived()
     }
 
     @Test
-    @AllureId("2302949")
+    @AllureId("1348763")
     @DisplayName("Получение ошибки загрузки пользовательских данных в Compose OneTap")
     override fun failedUserCallIsReceived() {
         super.failedUserCallIsReceived()
