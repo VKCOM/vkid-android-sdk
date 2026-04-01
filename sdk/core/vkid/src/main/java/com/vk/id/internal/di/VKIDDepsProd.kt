@@ -44,12 +44,13 @@ import com.vk.id.internal.state.StateGenerator
 import com.vk.id.internal.store.InternalVKIDPrefsStore
 import com.vk.id.internal.user.UserDataFetcher
 import com.vk.id.logout.VKIDLoggerOut
+import com.vk.id.network.HttpClientProvider
 import com.vk.id.network.InternalVKIDApiContract
 import com.vk.id.network.InternalVKIDRealApi
-import com.vk.id.network.OkHttpClientProvider
 import com.vk.id.network.groupsubscription.InternalVKIDGroupSubscriptionApi
 import com.vk.id.network.groupsubscription.InternalVKIDGroupSubscriptionApiContract
 import com.vk.id.network.groupsubscription.InternalVKIDGroupSubscriptionApiService
+import com.vk.id.network.http.Interceptor
 import com.vk.id.refresh.VKIDTokenRefresher
 import com.vk.id.refreshuser.VKIDUserRefresher
 import com.vk.id.storage.InternalVKIDEncryptedSharedPreferencesStorage
@@ -58,7 +59,6 @@ import com.vk.id.storage.InternalVKIDTokenStorage
 import com.vk.id.tracking.core.CrashReporter
 import com.vk.id.tracking.core.PerformanceTracker
 import com.vk.id.tracking.tracer.TrackingDeps
-import okhttp3.Interceptor
 
 internal open class VKIDDepsProd(
     override val appContext: Context,
@@ -67,6 +67,7 @@ internal open class VKIDDepsProd(
     forceError14: Boolean = false,
     forceHitmanChallenge: Boolean = false,
     override val groupSubscriptionLimit: GroupSubscriptionLimit?,
+    protected val apiOverride: InternalVKIDApiContract? = null,
 ) : VKIDDeps {
 
     override val context: Context = appContext
@@ -117,18 +118,26 @@ internal open class VKIDDepsProd(
         ForceError14Interceptor(captchaRedirectUri).takeIf { forceError14 },
     )
 
-    private val okHttpClient by lazy {
-        OkHttpClientProvider(appContext).provide(additionalInterceptors)
+    private val httpClient by lazy {
+        HttpClientProvider(appContext).provide(additionalInterceptors)
     }
 
     override val api: Lazy<InternalVKIDApiContract> = lazy {
-        InternalVKIDRealApi(client = okHttpClient)
+        apiOverride ?: InternalVKIDRealApi(client = httpClient)
     }
-    private val apiService = lazy { VKIDApiService(api.value) }
 
-    private val trustedProvidersCache = lazy {
+    private val apiService: Lazy<VKIDApiService> = lazy {
+        VKIDApiService(api.value)
+    }
+
+    private val trustedProvidersCache: Lazy<TrustedProvidersCache> = lazy {
         val creds = serviceCredentials.value
-        TrustedProvidersCache(apiService, creds.clientID, creds.clientSecret, dispatchers)
+        TrustedProvidersCache(
+            apiService,
+            creds.clientID,
+            creds.clientSecret,
+            dispatchers
+        )
     }
 
     override val vkSilentAuthInfoProvider: Lazy<SilentAuthInfoProvider> = lazy {
@@ -150,11 +159,7 @@ internal open class VKIDDepsProd(
     override val authProvidersChooser: Lazy<AuthProvidersChooser> = lazy {
         AuthProvidersChooserDefault(
             vkidPackageManager,
-            SilentAuthServicesProvider(
-                vkidPackageManager,
-                appContext.packageName,
-                trustedProvidersCache.value
-            ),
+            silentAuthServicesProvider.value,
             activityStarter
         )
     }
@@ -284,7 +289,7 @@ internal open class VKIDDepsProd(
         }
 
     private val groupSubscriptionApi: InternalVKIDGroupSubscriptionApi by lazy {
-        InternalVKIDGroupSubscriptionApi(client = okHttpClient)
+        InternalVKIDGroupSubscriptionApi(client = httpClient)
     }
 
     override val groupSubscriptionApiService: Lazy<InternalVKIDGroupSubscriptionApiContract> = lazy {

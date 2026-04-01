@@ -129,7 +129,7 @@ internal class VKIDUserRefresherTest : BehaviorSpec({
             every { tokenStorage.accessToken } returns ACCESS_TOKEN
             val call = mockk<InternalVKIDCall<VKIDUserInfoPayload>>()
             val exception = Exception("message")
-            every { call.execute() } returns Result.failure(exception)
+            coEvery { call.execute() } returns Result.failure(exception)
             coEvery {
                 api.getUserInfo(
                     accessToken = ACCESS_TOKEN_VALUE,
@@ -150,7 +150,7 @@ internal class VKIDUserRefresherTest : BehaviorSpec({
             every { tokenStorage.accessToken } returns ACCESS_TOKEN
             val call = mockk<InternalVKIDCall<VKIDUserInfoPayload>>()
             val exception = VKIDInvalidTokenException()
-            every { call.execute() } returns Result.failure(exception)
+            coEvery { call.execute() } returns Result.failure(exception)
             coEvery {
                 api.getUserInfo(
                     accessToken = ACCESS_TOKEN_VALUE,
@@ -175,7 +175,7 @@ internal class VKIDUserRefresherTest : BehaviorSpec({
             every { tokenStorage.accessToken } returns ACCESS_TOKEN
             val call = mockk<InternalVKIDCall<VKIDUserInfoPayload>>()
             val exception = VKIDInvalidTokenException()
-            every { call.execute() } returns Result.failure(exception)
+            coEvery { call.execute() } returns Result.failure(exception)
             coEvery {
                 api.getUserInfo(
                     accessToken = ACCESS_TOKEN_VALUE,
@@ -199,7 +199,7 @@ internal class VKIDUserRefresherTest : BehaviorSpec({
             every { tokenStorage.accessToken } returns ACCESS_TOKEN
             every { tokenStorage.accessToken = ACCESS_TOKEN_WITH_NEW_USER } just runs
             val call = mockk<InternalVKIDCall<VKIDUserInfoPayload>>()
-            every { call.execute() } returns Result.success(USER_INFO_PAYLOAD)
+            coEvery { call.execute() } returns Result.success(USER_INFO_PAYLOAD)
             coEvery {
                 api.getUserInfo(
                     accessToken = ACCESS_TOKEN_VALUE,

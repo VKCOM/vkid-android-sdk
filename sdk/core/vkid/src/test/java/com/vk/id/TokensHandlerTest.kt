@@ -19,7 +19,7 @@ import io.mockk.runs
 import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 
 private const val ACCESS_TOKEN_VALUE = "access token"
@@ -75,7 +75,7 @@ internal class TokensHandlerTest : BehaviorSpec({
         val tokenStorage = mockk<InternalVKIDTokenStorage>()
         val scheduler = testCoroutineScheduler
         val dispatchers = mockk<VKIDCoroutinesDispatchers>()
-        val testDispatcher = StandardTestDispatcher(scheduler)
+        val testDispatcher = UnconfinedTestDispatcher(scheduler)
         every { dispatchers.io } returns testDispatcher
         val handler = TokensHandler(
             userInfoFetcher = userInfoFetcher,

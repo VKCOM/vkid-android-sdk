@@ -6,6 +6,9 @@ import android.content.Context
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import com.vk.id.VKID.Companion.init
+import com.vk.id.VKID.Companion.logEngine
+import com.vk.id.VKID.Companion.logsEnabled
 import com.vk.id.analytics.LogcatTracker
 import com.vk.id.analytics.VKIDAnalytics
 import com.vk.id.analytics.stat.StatTracker
@@ -40,6 +43,7 @@ import com.vk.id.logger.internalVKIDCreateLoggerForClass
 import com.vk.id.logout.VKIDLoggerOut
 import com.vk.id.logout.VKIDLogoutCallback
 import com.vk.id.logout.VKIDLogoutParams
+import com.vk.id.network.InternalVKIDApiContract
 import com.vk.id.network.groupsubscription.InternalVKIDGroupSubscriptionApiContract
 import com.vk.id.refresh.VKIDRefreshTokenCallback
 import com.vk.id.refresh.VKIDRefreshTokenParams
@@ -49,8 +53,6 @@ import com.vk.id.refreshuser.VKIDGetUserParams
 import com.vk.id.refreshuser.VKIDUserRefresher
 import com.vk.id.storage.InternalVKIDPreferencesStorage
 import com.vk.id.storage.InternalVKIDTokenStorage
-import com.vk.id.test.InternalVKIDImmediateApi
-import com.vk.id.test.InternalVKIDOverrideApi
 import com.vk.id.test.TestSilentAuthInfoProvider
 import com.vk.id.tracking.core.CrashReporter
 import com.vk.id.tracking.core.PerformanceTracker
@@ -133,7 +135,7 @@ public class VKID {
         @Suppress("LongParameterList")
         internal fun init(
             context: Context,
-            mockApi: InternalVKIDOverrideApi,
+            apiOverride: InternalVKIDApiContract?,
             groupSubscriptionApiContract: InternalVKIDGroupSubscriptionApiContract,
             deviceIdStorage: InternalVKIDDeviceIdProvider.DeviceIdStorage?,
             prefsStore: InternalVKIDPrefsStore?,
@@ -143,7 +145,9 @@ public class VKID {
             groupSubscriptionLimit: GroupSubscriptionLimit?,
         ): Unit = init(
             VKID(object : VKIDDepsProd(context, isFlutter = false, groupSubscriptionLimit = groupSubscriptionLimit) {
-                override val api = lazy { InternalVKIDImmediateApi(mockApi) }
+                override val api: Lazy<InternalVKIDApiContract> = lazy {
+                    apiOverride ?: super.api.value
+                }
                 override val groupSubscriptionApiService: Lazy<InternalVKIDGroupSubscriptionApiContract> =
                     lazy { groupSubscriptionApiContract }
                 override val vkSilentAuthInfoProvider = lazy { TestSilentAuthInfoProvider() }

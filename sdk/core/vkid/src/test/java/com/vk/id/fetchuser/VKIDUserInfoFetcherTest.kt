@@ -77,7 +77,7 @@ internal class VKIDUserInfoFetcherTest : BehaviorSpec({
         When("Api returns an error") {
             val call = mockk<InternalVKIDCall<VKIDUserInfoPayload>>()
             val exception = Exception()
-            every { call.execute() } returns Result.failure(exception)
+            coEvery { call.execute() } returns Result.failure(exception)
             coEvery {
                 api.getUserInfo(
                     accessToken = ACCESS_TOKEN,
@@ -102,7 +102,7 @@ internal class VKIDUserInfoFetcherTest : BehaviorSpec({
         }
         When("Api returns user") {
             val call = mockk<InternalVKIDCall<VKIDUserInfoPayload>>()
-            every { call.execute() } returns Result.success(USER_INFO_PAYLOAD)
+            coEvery { call.execute() } returns Result.success(USER_INFO_PAYLOAD)
             coEvery {
                 api.getUserInfo(
                     accessToken = ACCESS_TOKEN,

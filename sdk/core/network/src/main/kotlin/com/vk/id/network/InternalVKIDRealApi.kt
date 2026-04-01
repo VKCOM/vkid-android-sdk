@@ -3,15 +3,15 @@ package com.vk.id.network
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.network.common.ApiConstants.API_VERSION_VALUE
 import com.vk.id.network.common.ApiConstants.FIELD_API_VERSION
+import com.vk.id.network.http.FormBody
+import com.vk.id.network.http.HttpClient
+import com.vk.id.network.http.HttpResponse
 import com.vk.id.network.util.createRequest
-import okhttp3.Call
-import okhttp3.FormBody
-import okhttp3.OkHttpClient
 import org.json.JSONArray
 
 @InternalVKIDApi
 public class InternalVKIDRealApi(
-    private val client: OkHttpClient
+    private val client: HttpClient,
 ) : InternalVKIDApiContract {
 
     override fun getToken(
@@ -21,7 +21,7 @@ public class InternalVKIDRealApi(
         deviceId: String,
         redirectUri: String,
         state: String,
-    ): Call {
+    ): InternalVKIDCall<HttpResponse> {
         val formBody = FormBody.Builder()
             .add(FIELD_GRANT_TYPE, VALUE_AUTHORIZATION_CODE)
             .add(FIELD_CODE, code)
@@ -38,7 +38,7 @@ public class InternalVKIDRealApi(
     override fun getSilentAuthProviders(
         clientId: String,
         clientSecret: String
-    ): Call {
+    ): InternalVKIDCall<HttpResponse> {
         val formBody = FormBody.Builder()
             .add(FIELD_API_VERSION, API_VERSION_VALUE)
             .add(FIELD_CLIENT_ID, clientId)
@@ -52,8 +52,8 @@ public class InternalVKIDRealApi(
         refreshToken: String,
         clientId: String,
         deviceId: String,
-        state: String
-    ): Call {
+        state: String,
+    ): InternalVKIDCall<HttpResponse> {
         val formBody = FormBody.Builder()
             .add(FIELD_GRANT_TYPE, VALUE_REFRESH_TOKEN)
             .add(FIELD_REFRESH_TOKEN, refreshToken)
@@ -69,13 +69,18 @@ public class InternalVKIDRealApi(
         accessToken: String,
         clientId: String,
         deviceId: String,
-    ): Call {
+    ): InternalVKIDCall<HttpResponse> {
         val formBody = FormBody.Builder()
             .add(FIELD_ACCESS_TOKEN, accessToken)
             .add(FIELD_DEVICE_ID, deviceId)
             .build()
 
-        return client.createRequest(HOST_VK_ID, PATH_USER_INFO, formBody, query = mapOf(FIELD_CLIENT_ID to clientId))
+        return client.createRequest(
+            HOST_VK_ID,
+            PATH_USER_INFO,
+            formBody,
+            query = mapOf(FIELD_CLIENT_ID to clientId)
+        )
     }
 
     override fun exchangeToken(
@@ -84,7 +89,7 @@ public class InternalVKIDRealApi(
         deviceId: String,
         state: String,
         codeChallenge: String,
-    ): Call {
+    ): InternalVKIDCall<HttpResponse> {
         val formBody = FormBody.Builder()
             .add(FIELD_RESPONSE_TYPE, VALUE_CODE)
             .add(FIELD_GRANT_TYPE, VALUE_ACCESS_TOKEN)
@@ -102,8 +107,8 @@ public class InternalVKIDRealApi(
     override fun logout(
         accessToken: String,
         clientId: String,
-        deviceId: String
-    ): Call {
+        deviceId: String,
+    ): InternalVKIDCall<HttpResponse> {
         val formBody = FormBody.Builder()
             .add(FIELD_ACCESS_TOKEN, accessToken)
             .add(FIELD_CLIENT_ID, clientId)
@@ -119,7 +124,7 @@ public class InternalVKIDRealApi(
         sakVersion: String,
         events: JSONArray,
         externalDeviceId: String,
-    ): Call {
+    ): InternalVKIDCall<HttpResponse> {
         val formBody = FormBody.Builder()
             .add(FIELD_API_VERSION, API_VERSION_VALUE)
             .add(FIELD_CLIENT_ID, clientId)
@@ -143,7 +148,7 @@ public class InternalVKIDRealApi(
         sakVersion: String,
         events: JSONArray,
         externalDeviceId: String,
-    ): Call {
+    ): InternalVKIDCall<HttpResponse> {
         val formBody = FormBody.Builder()
             .add(FIELD_ACCESS_TOKEN, accessToken)
             .add(FIELD_API_VERSION, API_VERSION_VALUE)

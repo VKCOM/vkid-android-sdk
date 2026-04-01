@@ -1,40 +1,58 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.network
 
 import androidx.annotation.WorkerThread
 import com.vk.id.common.InternalVKIDApi
-import okhttp3.Call
-import okhttp3.Response
-import org.json.JSONException
-import java.io.IOException
+import com.vk.id.network.http.HttpResponse
 
+// Call interface that provides deferred execution, cancellation, and state tracking
+// similar to OkHttp Call. Execution is deferred until execute() is called.
 @InternalVKIDApi
 public interface InternalVKIDCall<out T> {
+    /**
+     * Executes HTTP request and returns response.
+     * This method is suspended and will block until request completes or is cancelled.
+     */
+    @InternalVKIDApi
     @WorkerThread
-    public fun execute(): Result<T>
+    public suspend fun execute(): Result<T>
 
     /**
-     * Function to cancel [InternalVKIDCall]
+     * Cancelss ongoing HTTP request.
+     * If the request has not started yet, it will not be executed.
+     * If the request is in progress, the underlying HttpURLConnection will be disconnected.
      */
     @InternalVKIDApi
     public fun cancel()
+
+    public fun isCanceled(): Boolean
+
+    public fun isExecuted(): Boolean
 }
 
 @InternalVKIDApi
-public fun <T> Call.internalVKIDWrapToVKIDCall(
-    responseMapping: (response: Response) -> Result<T>,
+public fun <T> InternalVKIDCall<HttpResponse>.internalVKIDWrapToVKIDCall(
+    responseMapping: HttpResponse.() -> T
 ): InternalVKIDCall<T> {
-    return object : InternalVKIDCall<T> {
-        override fun execute(): Result<T> {
-            return try {
-                val response = this@internalVKIDWrapToVKIDCall.execute()
-                responseMapping(response)
-            } catch (ioe: IOException) {
-                Result.failure(ioe)
-            } catch (je: JSONException) {
-                Result.failure(je)
-            }
-        }
+    return VKIDCallWrapper(delegate = this, responseMapping = responseMapping)
+}
 
-        override fun cancel() = this@internalVKIDWrapToVKIDCall.cancel()
+private class VKIDCallWrapper<T>(
+    private val delegate: InternalVKIDCall<HttpResponse>,
+    private val responseMapping: HttpResponse.() -> T
+) : InternalVKIDCall<T> {
+    override suspend fun execute(): Result<T> {
+        return delegate.execute().mapCatching { success: HttpResponse ->
+            success.responseMapping()
+        }
     }
+
+    override fun cancel() {
+        delegate.cancel()
+    }
+
+    override fun isExecuted(): Boolean = delegate.isExecuted()
+
+    override fun isCanceled(): Boolean = delegate.isCanceled()
 }

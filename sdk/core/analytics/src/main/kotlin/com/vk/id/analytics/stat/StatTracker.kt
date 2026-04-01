@@ -8,17 +8,17 @@ import com.vk.id.analytics.VKIDAnalytics
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.logger.internalVKIDCreateLoggerForClass
 import com.vk.id.network.InternalVKIDApiContract
+import com.vk.id.network.InternalVKIDCall
+import com.vk.id.network.http.HttpResponse
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import okhttp3.Call
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
-import java.io.IOException
 import java.util.concurrent.LinkedBlockingQueue
 import kotlin.time.Duration.Companion.seconds
 
@@ -82,7 +82,7 @@ public class StatTracker(
         }
     }
 
-    private fun sendEvents(
+    private suspend fun sendEvents(
         accessToken: String,
         batchEvents: LinkedBlockingQueue<JSONObject>,
         apiMethod: (
@@ -92,27 +92,21 @@ public class StatTracker(
             versionName: String,
             eventsJson: JSONArray,
             externalDeviceId: String,
-        ) -> Call
+        ) -> InternalVKIDCall<HttpResponse>
     ) {
         val events = mutableListOf<JSONObject>()
         batchEvents.drainTo(events)
         if (events.isNotEmpty()) {
             val eventsJson = JSONArray(events)
-            val response = try {
-                val response = apiMethod(
-                    accessToken,
-                    clientId,
-                    clientSecret,
-                    BuildConfig.VKID_VERSION_NAME,
-                    eventsJson,
-                    storage.externalDeviceId,
-                ).execute()
-                logger.debug("Send events to stat '$eventsJson': ${response.code}")
-                response.body?.string()
-            } catch (ioe: IOException) {
-                logger.error("Network exception while sending events $eventsJson", ioe)
-                null
-            }
+            val result = apiMethod(
+                accessToken,
+                clientId,
+                clientSecret,
+                BuildConfig.VKID_VERSION_NAME,
+                eventsJson,
+                storage.externalDeviceId,
+            ).execute()
+            val response = result.getOrNull()?.body
             response?.let {
                 try {
                     if (JSONObject(it).has("error")) {

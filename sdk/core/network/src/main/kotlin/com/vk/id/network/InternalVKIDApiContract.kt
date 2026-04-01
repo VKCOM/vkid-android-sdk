@@ -1,7 +1,7 @@
 package com.vk.id.network
 
 import com.vk.id.common.InternalVKIDApi
-import okhttp3.Call
+import com.vk.id.network.http.HttpResponse
 import org.json.JSONArray
 
 @InternalVKIDApi
@@ -15,25 +15,25 @@ public interface InternalVKIDApiContract {
         deviceId: String,
         redirectUri: String,
         state: String,
-    ): Call
+    ): InternalVKIDCall<HttpResponse>
 
     public fun getSilentAuthProviders(
         clientId: String,
         clientSecret: String,
-    ): Call
+    ): InternalVKIDCall<HttpResponse>
 
     public fun refreshToken(
         refreshToken: String,
         clientId: String,
         deviceId: String,
         state: String,
-    ): Call
+    ): InternalVKIDCall<HttpResponse>
 
     public fun getUser(
         accessToken: String,
         clientId: String,
         deviceId: String,
-    ): Call
+    ): InternalVKIDCall<HttpResponse>
 
     public fun exchangeToken(
         v1Token: String,
@@ -41,13 +41,13 @@ public interface InternalVKIDApiContract {
         deviceId: String,
         state: String,
         codeChallenge: String,
-    ): Call
+    ): InternalVKIDCall<HttpResponse>
 
     public fun logout(
         accessToken: String,
         clientId: String,
         deviceId: String,
-    ): Call
+    ): InternalVKIDCall<HttpResponse>
 
     public fun sendStatEventsAnonymously(
         clientId: String,
@@ -55,7 +55,7 @@ public interface InternalVKIDApiContract {
         sakVersion: String,
         events: JSONArray,
         externalDeviceId: String,
-    ): Call
+    ): InternalVKIDCall<HttpResponse>
 
     @Suppress("LongParameterList")
     public fun sendStatEvents(
@@ -65,5 +65,5 @@ public interface InternalVKIDApiContract {
         sakVersion: String,
         events: JSONArray,
         externalDeviceId: String,
-    ): Call
+    ): InternalVKIDCall<HttpResponse>
 }

@@ -26,7 +26,6 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.lifecycle.compose)
-    api(libs.captcha.okhttp)
     api(libs.captcha.core)
     implementation(libs.coil)
     implementation(libs.coil.compose)

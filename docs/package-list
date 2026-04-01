@@ -10,6 +10,7 @@ $dokka.location:com.vk.id.internal.store////PointingToDeclaration/vkid/com.vk.i
 $dokka.location:com.vk.id.network.groupsubscription.data////PointingToDeclaration/network/com.vk.id.network.groupsubscription.data.html
 $dokka.location:com.vk.id.network.groupsubscription.exception////PointingToDeclaration/network/com.vk.id.network.groupsubscription.exception.html
 $dokka.location:com.vk.id.network.groupsubscription////PointingToDeclaration/network/com.vk.id.network.groupsubscription.html
+$dokka.location:com.vk.id.network.http////PointingToDeclaration/network/com.vk.id.network.http.html
 $dokka.location:com.vk.id.network////PointingToDeclaration/network/com.vk.id.network.html
 $dokka.location:com.vk.id.onetap.common.alternate.style////PointingToDeclaration/onetap-common/com.vk.id.onetap.common.alternate.style.html
 $dokka.location:com.vk.id.onetap.common.auth.style////PointingToDeclaration/onetap-common/com.vk.id.onetap.common.auth.style.html
@@ -45,6 +46,7 @@ com.vk.id.network
 com.vk.id.network.groupsubscription
 com.vk.id.network.groupsubscription.data
 com.vk.id.network.groupsubscription.exception
+com.vk.id.network.http
 module:onetap-common
 com.vk.id.onetap.common
 com.vk.id.onetap.common.alternate.style

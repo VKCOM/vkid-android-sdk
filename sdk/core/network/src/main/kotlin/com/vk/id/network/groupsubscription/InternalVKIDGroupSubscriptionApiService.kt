@@ -20,7 +20,7 @@ public class InternalVKIDGroupSubscriptionApiService(
     ): Boolean {
         return withContext(Dispatchers.IO) {
             val response = api.getShouldShowSubscription(accessToken).execute()
-            val body = JSONObject(requireNotNull(response.body).string())
+            val body = JSONObject(requireNotNull(response.getOrThrow().body))
             body.getJSONObject("response").getBoolean("show")
         }
     }
@@ -30,7 +30,7 @@ public class InternalVKIDGroupSubscriptionApiService(
     ): Boolean {
         return withContext(Dispatchers.IO) {
             val response = api.getProfileShortInfo(accessToken).execute()
-            val body = JSONObject(requireNotNull(response.body).string())
+            val body = JSONObject(requireNotNull(response.getOrThrow().body))
             if (body.isNull("error")) {
                 body.getJSONObject("response").getBoolean("is_service_account")
             } else {
@@ -45,7 +45,7 @@ public class InternalVKIDGroupSubscriptionApiService(
     ): InternalVKIDGroupByIdData {
         return withContext(Dispatchers.IO) {
             val response = api.getGroup(accessToken = accessToken, groupId = groupId).execute()
-            val body = JSONObject(requireNotNull(response.body).string())
+            val body = JSONObject(requireNotNull(response.getOrThrow().body))
             if (body.isNull("error")) {
                 with(body.getJSONObject("response").getJSONArray("groups").get(0) as JSONObject) {
                     if (getInt("is_member") == 1) throw InternalVKIDAlreadyGroupMemberException()
@@ -69,8 +69,9 @@ public class InternalVKIDGroupSubscriptionApiService(
         justFriends: Boolean
     ): InternalVKIDGroupMembersData {
         return withContext(Dispatchers.IO) {
-            val response = api.getMembers(accessToken = accessToken, groupId = groupId, justFriends = justFriends).execute()
-            val body = JSONObject(requireNotNull(response.body).string())
+            val response =
+                api.getMembers(accessToken = accessToken, groupId = groupId, justFriends = justFriends).execute()
+            val body = JSONObject(requireNotNull(response.getOrThrow().body))
             if (body.isNull("error")) {
                 val bodyResponse = body.getJSONObject("response")
                 val items = bodyResponse.getJSONArray("items")
@@ -96,7 +97,7 @@ public class InternalVKIDGroupSubscriptionApiService(
     ) {
         withContext(Dispatchers.IO) {
             val response = api.subscribeToGroup(accessToken = accessToken, groupId = groupId).execute()
-            val body = JSONObject(requireNotNull(response.body).string())
+            val body = JSONObject(requireNotNull(response.getOrThrow().body))
             if (!body.has("response") || body.getInt("response") != 1) {
                 throw IOException(body.getString("error"))
             }

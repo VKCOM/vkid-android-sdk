@@ -15,7 +15,6 @@ dependencies {
     api(projects.groupSubscriptionXml)
     implementation(projects.onetapCompose)
     implementation(libs.androidx.compose.ui)
-    api(libs.captcha.okhttp)
     api(libs.captcha.core)
     implementation(libs.coil)
 }
