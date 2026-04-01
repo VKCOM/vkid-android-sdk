@@ -6,7 +6,6 @@ import android.os.Build
 import android.view.WindowManager
 import androidx.core.content.pm.PackageInfoCompat
 import com.vk.id.network.BuildConfig
-import okio.Buffer
 import java.util.Locale
 
 internal class UserAgentProvider(private val context: Context) {
@@ -52,23 +51,17 @@ internal class UserAgentProvider(private val context: Context) {
 
     @Suppress("MagicNumber")
     private fun toHumanReadableAscii(string: String): String {
+        val result = StringBuilder()
         var i = 0
         while (i < string.length) {
-            var c = string.codePointAt(i)
-            if (c in 0x20..0x7e) {
-                i += Character.charCount(c)
-                continue
+            val codePoint = string.codePointAt(i)
+            if (codePoint in 0x20..0x7e) {
+                result.appendCodePoint(codePoint)
+            } else {
+                result.append('?')
             }
-
-            val buffer = Buffer()
-            buffer.writeUtf8(string, 0, i)
-            while (i < string.length) {
-                c = string.codePointAt(i)
-                buffer.writeUtf8CodePoint(if (c in 0x20..0x7e) c else '?'.code)
-                i += Character.charCount(c)
-            }
-            return buffer.readUtf8()
+            i += Character.charCount(codePoint)
         }
-        return string
+        return result.toString()
     }
 }

@@ -2,6 +2,10 @@
 
 > **Note**\
 > Описание основных изменений в релизах VK ID SDK. Наш SDK следует [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+## 2.7.0 (31-03-2026)
+### Changed
++ Удалена зависимость от библиотеки `com.squareup.okhttp3`. Обратите внимание, что зависимость всё ещё требуется при использовании `com.vk:vk-sdk-support` и `com.vk:android-sdk-core`.
+
 ## 2.6.2 (16-03-2026)
 ### Changed
 Обновлен AppTracer до версии 1.2.2

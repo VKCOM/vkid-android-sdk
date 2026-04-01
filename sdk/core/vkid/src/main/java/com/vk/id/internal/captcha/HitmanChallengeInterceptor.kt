@@ -1,25 +1,32 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.internal.captcha
 
-import okhttp3.Interceptor
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.Protocol
-import okhttp3.Response
-import okhttp3.ResponseBody.Companion.toResponseBody
+import com.vk.id.common.InternalVKIDApi
+import com.vk.id.network.http.HttpResponse
+import com.vk.id.network.http.Interceptor
 
 internal class HitmanChallengeInterceptor : Interceptor {
-    override fun intercept(chain: Interceptor.Chain): Response {
-        return if (chain.request().header("X-Challenge-Solution").isNullOrBlank()) {
-            Response.Builder()
-                .code(@Suppress("MagicNumber") 200)
-                .request(chain.request())
-                .protocol(Protocol.HTTP_2)
-                .message("OK")
-                .body("".toResponseBody("application/json; charset=utf-8".toMediaTypeOrNull()))
-                .header("X-Challenge", "required")
-                .header("X-Challenge-Url", "/challenge.html")
-                .build()
+
+    override suspend fun intercept(chain: Interceptor.Chain): HttpResponse {
+        val request = chain.request()
+        val challengeSolution = request.headers["X-Challenge-Solution"]
+
+        return if (challengeSolution.isNullOrBlank()) {
+            HttpResponse(
+                request = request,
+                code = @Suppress("MagicNumber") 200,
+                message = "OK",
+                body = "",
+                headers = mapOf(
+                    "Content-Type" to "application/json; charset=utf-8",
+                    "X-Challenge" to "required",
+                    "X-Challenge-Url" to "/challenge.html"
+                ),
+                isRequestSuccessful = true
+            )
         } else {
-            chain.proceed(chain.request())
+            chain.proceed(request)
         }
     }
 }

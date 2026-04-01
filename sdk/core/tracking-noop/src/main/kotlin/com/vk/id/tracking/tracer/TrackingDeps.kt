@@ -6,7 +6,7 @@ import com.vk.id.tracking.core.AnalyticsTracking
 import com.vk.id.tracking.core.CrashReporter
 import com.vk.id.tracking.core.PerformanceTracker
 
-@Suppress("UNUSED_PARAMETER")
+@Suppress("UNUSED_PARAMETER", "TooGenericExceptionCaught")
 @InternalVKIDApi
 public class TrackingDeps(
     context: Context,

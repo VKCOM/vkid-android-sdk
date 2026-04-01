@@ -10,10 +10,9 @@ import com.vk.id.internal.auth.VKIDTokenPayload
 import com.vk.id.internal.auth.app.VkAuthSilentAuthProvider
 import com.vk.id.network.InternalVKIDApiContract
 import com.vk.id.network.InternalVKIDCall
+import com.vk.id.network.http.HttpResponse
 import com.vk.id.network.internalVKIDWrapToVKIDCall
-import okhttp3.Call
 import org.json.JSONArray
-import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
 
@@ -37,7 +36,7 @@ internal class VKIDApiService(
             deviceId = deviceId,
             redirectUri = redirectUri,
             state = state,
-        ).wrapTokenToVKIDCall()
+        ).internalVKIDWrapToVKIDCall { parseTokenPayload() }
     }
 
     fun getUserInfo(
@@ -50,22 +49,21 @@ internal class VKIDApiService(
             clientId = clientId,
             deviceId = deviceId,
         ).internalVKIDWrapToVKIDCall {
-            val body = JSONObject(requireNotNull(it.body).string())
+            val body = JSONObject(body)
             when {
                 body.isNull("error") -> {
                     val user = body.getJSONObject("user")
-                    Result.success(
-                        VKIDUserInfoPayload(
-                            firstName = user.optString("first_name"),
-                            lastName = user.optString("last_name"),
-                            phone = user.optString("phone"),
-                            avatar = user.optString("avatar"),
-                            email = user.optString("email"),
-                        )
+                    VKIDUserInfoPayload(
+                        firstName = user.optString("first_name"),
+                        lastName = user.optString("last_name"),
+                        phone = user.optString("phone"),
+                        avatar = user.optString("avatar"),
+                        email = user.optString("email"),
                     )
                 }
-                body.getString("error") == "invalid_token" -> Result.failure(VKIDInvalidTokenException())
-                else -> Result.failure(IOException())
+
+                body.getString("error") == "invalid_token" -> throw VKIDInvalidTokenException()
+                else -> throw IOException()
             }
         }
     }
@@ -78,12 +76,10 @@ internal class VKIDApiService(
             clientId = clientId,
             clientSecret = clientSecret
         ).internalVKIDWrapToVKIDCall {
-            Result.success(
-                JSONObject(requireNotNull(it.body).string())
-                    .getJSONArray("response")
-                    .parseList(VkAuthSilentAuthProvider.Companion::parse)
-                    ?: emptyList()
-            )
+            JSONObject(body)
+                .getJSONArray("response")
+                .parseList(VkAuthSilentAuthProvider.Companion::parse)
+                ?: emptyList()
         }
     }
 
@@ -98,7 +94,7 @@ internal class VKIDApiService(
             clientId = clientId,
             deviceId = deviceId,
             state = state,
-        ).wrapTokenToVKIDCall()
+        ).internalVKIDWrapToVKIDCall { parseTokenPayload() }
     }
 
     @Suppress("ThrowsCount")
@@ -116,24 +112,18 @@ internal class VKIDApiService(
             state = state,
             codeChallenge = codeChallenge,
         ).internalVKIDWrapToVKIDCall {
-            if (it.body == null) throw IOException("Empty body ${it.code} $it")
-            val body = requireNotNull(it.body).string()
+            if (!isSuccessful) {
+                throw IOException("Api error: $code $body")
+            }
             val jsonObject = JSONObject(body)
             if (jsonObject.has("error")) {
-                throw IOException("Api error: ${it.code} $body")
+                throw IOException("Api error: $code $body")
             }
-            try {
-                Result.success(
-                    VKIDCodePayload(
-                        code = jsonObject.getString("code"),
-                        state = jsonObject.optString("state"),
-                        deviceId = jsonObject.optString("device_id"),
-                    )
-                )
-            } catch (@Suppress("SwallowedException") e: JSONException) {
-                val error = e.message
-                throw JSONException("$error: ${it.code} $body")
-            }
+            VKIDCodePayload(
+                code = jsonObject.getString("code"),
+                state = jsonObject.optString("state"),
+                deviceId = jsonObject.optString("device_id"),
+            )
         }
     }
 
@@ -147,11 +137,11 @@ internal class VKIDApiService(
             clientId = clientId,
             deviceId = deviceId,
         ).internalVKIDWrapToVKIDCall {
-            val body = JSONObject(requireNotNull(it.body).string())
+            val body = JSONObject(body)
             when {
-                body.isNull("error") -> Result.success(Unit)
-                body.getString("error") == "invalid_token" -> Result.failure(VKIDInvalidTokenException())
-                else -> Result.failure(IOException())
+                body.isNull("error") -> Unit
+                body.getString("error") == "invalid_token" -> throw VKIDInvalidTokenException()
+                else -> throw IOException()
             }
         }
     }
@@ -163,30 +153,22 @@ internal class VKIDApiService(
     }
 
     @Suppress("ThrowsCount")
-    private fun Call.wrapTokenToVKIDCall(): InternalVKIDCall<VKIDTokenPayload> {
-        return internalVKIDWrapToVKIDCall {
-            if (it.body == null) throw IOException("Empty body ${it.code} $it")
-            val body = requireNotNull(it.body).string()
-            val jsonObject = JSONObject(body)
-            if (jsonObject.has("error")) {
-                throw IOException("Api error: ${it.code} $body")
-            }
-            try {
-                Result.success(
-                    VKIDTokenPayload(
-                        accessToken = jsonObject.getString("access_token"),
-                        refreshToken = jsonObject.getString("refresh_token"),
-                        idToken = jsonObject.optString("id_token"),
-                        userId = jsonObject.getLong("user_id"),
-                        expiresIn = jsonObject.optLong("expires_in"),
-                        state = jsonObject.optString("state"),
-                        scope = jsonObject.getString("scope"),
-                    )
-                )
-            } catch (@Suppress("SwallowedException") e: JSONException) {
-                val error = e.message
-                throw JSONException("$error: ${it.code} $body")
-            }
+    private fun HttpResponse.parseTokenPayload(): VKIDTokenPayload {
+        if (!isSuccessful) {
+            throw IOException("Api error: $code $body")
         }
+        val jsonObject = JSONObject(body)
+        if (jsonObject.has("error")) {
+            throw IOException("Api error: $code $jsonObject")
+        }
+        return VKIDTokenPayload(
+            accessToken = jsonObject.getString("access_token"),
+            refreshToken = jsonObject.getString("refresh_token"),
+            idToken = jsonObject.optString("id_token"),
+            userId = jsonObject.getLong("user_id"),
+            expiresIn = jsonObject.optLong("expires_in"),
+            state = jsonObject.optString("state"),
+            scope = jsonObject.getString("scope"),
+        )
     }
 }

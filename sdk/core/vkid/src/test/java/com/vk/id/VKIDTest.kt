@@ -46,7 +46,7 @@ import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 
 @OptIn(ExperimentalStdlibApi::class, ExperimentalCoroutinesApi::class)
@@ -122,7 +122,7 @@ internal class VKIDTest : BehaviorSpec({
 
     Given("VKID for flutter SDK") {
         val scheduler = testCoroutineScheduler
-        val testDispatcher = StandardTestDispatcher(scheduler)
+        val testDispatcher = UnconfinedTestDispatcher(scheduler)
         every { dispatchers.io } returns testDispatcher
         isFlutter = true
         VKID(deps)
@@ -151,7 +151,7 @@ internal class VKIDTest : BehaviorSpec({
 
     Given("Auth with VK is called") {
         val scheduler = testCoroutineScheduler
-        val testDispatcher = StandardTestDispatcher(scheduler)
+        val testDispatcher = UnconfinedTestDispatcher(scheduler)
         every { dispatchers.io } returns testDispatcher
         isFlutter = false
         val vkid = VKID(deps)

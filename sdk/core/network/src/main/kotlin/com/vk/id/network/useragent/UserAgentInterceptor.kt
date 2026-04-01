@@ -1,13 +1,16 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.network.useragent
 
-import okhttp3.Interceptor
-import okhttp3.Response
+import com.vk.id.common.InternalVKIDApi
+import com.vk.id.network.http.HttpResponse
+import com.vk.id.network.http.Interceptor
 
 internal class UserAgentInterceptor(
     private val userAgentProvider: UserAgentProvider
 ) : Interceptor {
 
-    override fun intercept(chain: Interceptor.Chain): Response {
+    override suspend fun intercept(chain: Interceptor.Chain): HttpResponse {
         val originalRequest = chain.request()
         val requestWithUserAgent = originalRequest.newBuilder()
             .header("User-Agent", userAgentProvider.userAgent)

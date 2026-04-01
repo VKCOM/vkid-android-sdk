@@ -26,7 +26,7 @@ import io.mockk.runs
 import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 
 private const val CLIENT_ID = "client id"
@@ -93,7 +93,7 @@ internal class VKIDTokenRefresherTest : BehaviorSpec({
         val tokensHandler = mockk<TokensHandler>()
         val dispatchers = mockk<VKIDCoroutinesDispatchers>()
         val scheduler = testCoroutineScheduler
-        val testDispatcher = StandardTestDispatcher(scheduler)
+        val testDispatcher = UnconfinedTestDispatcher(scheduler)
         every { dispatchers.io } returns testDispatcher
         val prefsStore = mockk<InternalVKIDPrefsStore>()
         val tokenStorage = mockk<InternalVKIDTokenStorage>()
@@ -125,7 +125,7 @@ internal class VKIDTokenRefresherTest : BehaviorSpec({
             every { tokenStorage.refreshToken } returns REFRESH_TOKEN
             val call = mockk<InternalVKIDCall<VKIDTokenPayload>>()
             val exception = Exception("message")
-            every { call.execute() } returns Result.failure(exception)
+            coEvery { call.execute() } returns Result.failure(exception)
             every {
                 api.refreshToken(
                     refreshToken = REFRESH_TOKEN_VALUE,
@@ -156,7 +156,7 @@ internal class VKIDTokenRefresherTest : BehaviorSpec({
         When("Api call returns the wrong state") {
             every { tokenStorage.refreshToken } returns REFRESH_TOKEN
             val call = mockk<InternalVKIDCall<VKIDTokenPayload>>()
-            every { call.execute() } returns Result.success(TOKEN_PAYLOAD.copy(state = "wrong state"))
+            coEvery { call.execute() } returns Result.success(TOKEN_PAYLOAD.copy(state = "wrong state"))
             every {
                 api.refreshToken(
                     refreshToken = REFRESH_TOKEN_VALUE,
@@ -182,7 +182,7 @@ internal class VKIDTokenRefresherTest : BehaviorSpec({
         When("Token handler fails with api call error") {
             every { tokenStorage.refreshToken } returns REFRESH_TOKEN
             val call = mockk<InternalVKIDCall<VKIDTokenPayload>>()
-            every { call.execute() } returns Result.success(TOKEN_PAYLOAD)
+            coEvery { call.execute() } returns Result.success(TOKEN_PAYLOAD)
             every {
                 api.refreshToken(
                     refreshToken = REFRESH_TOKEN_VALUE,
@@ -220,7 +220,7 @@ internal class VKIDTokenRefresherTest : BehaviorSpec({
         When("Token handling succeeds") {
             every { tokenStorage.refreshToken } returns REFRESH_TOKEN
             val call = mockk<InternalVKIDCall<VKIDTokenPayload>>()
-            every { call.execute() } returns Result.success(TOKEN_PAYLOAD)
+            coEvery { call.execute() } returns Result.success(TOKEN_PAYLOAD)
             every {
                 api.refreshToken(
                     refreshToken = REFRESH_TOKEN_VALUE,

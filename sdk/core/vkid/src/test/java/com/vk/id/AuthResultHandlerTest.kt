@@ -254,7 +254,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             every { serviceCredentials.clientSecret } returns CLIENT_SECRET
             every { serviceCredentials.redirectUri } returns REDIRECT_URI
             every { api.getToken(CODE, CODE_VERIFIER, CLIENT_ID, DEVICE_ID, REDIRECT_URI, STATE) } returns call
-            every { call.execute() } returns Result.failure(error)
+            coEvery { call.execute() } returns Result.failure(error)
             every { tokenStorage.accessToken } returns null
             runTest(scheduler) {
                 handler.handle(authResult, onFailCallback)
@@ -307,7 +307,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             every { serviceCredentials.clientSecret } returns CLIENT_SECRET
             every { serviceCredentials.redirectUri } returns REDIRECT_URI
             every { api.getToken(CODE, CODE_VERIFIER, CLIENT_ID, DEVICE_ID, REDIRECT_URI, STATE) } returns call
-            every { call.execute() } returns Result.success(payload)
+            coEvery { call.execute() } returns Result.success(payload)
             And("Doesn't have previous account") {
                 every { tokenStorage.accessToken } returns null
 
@@ -356,7 +356,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             every { serviceCredentials.clientSecret } returns CLIENT_SECRET
             every { serviceCredentials.redirectUri } returns REDIRECT_URI
             every { api.getToken(CODE, CODE_VERIFIER, CLIENT_ID, DEVICE_ID, REDIRECT_URI, STATE) } returns call
-            every { call.execute() } returns Result.success(payload)
+            coEvery { call.execute() } returns Result.success(payload)
             And("Has previous account and logout succeds") {
                 every { tokenStorage.accessToken } returns ACCESS_TOKEN
 
@@ -416,7 +416,7 @@ internal class AuthResultHandlerTest : BehaviorSpec({
             every { serviceCredentials.clientSecret } returns CLIENT_SECRET
             every { serviceCredentials.redirectUri } returns REDIRECT_URI
             every { api.getToken(CODE, CODE_VERIFIER, CLIENT_ID, DEVICE_ID, REDIRECT_URI, STATE) } returns call
-            every { call.execute() } returns Result.success(payload)
+            coEvery { call.execute() } returns Result.success(payload)
             And("Has previous account and logout fails") {
                 every { tokenStorage.accessToken } returns ACCESS_TOKEN
 

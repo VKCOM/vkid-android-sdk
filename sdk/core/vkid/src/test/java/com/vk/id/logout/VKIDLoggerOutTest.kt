@@ -126,7 +126,7 @@ internal class VKIDLoggerOutTest : BehaviorSpec({
                 every { tokenStorage.accessToken } returns ACCESS_TOKEN
                 val call = mockk<InternalVKIDCall<Unit>>()
                 val exception = Exception("message")
-                every { call.execute() } returns Result.failure(exception)
+                coEvery { call.execute() } returns Result.failure(exception)
                 coEvery {
                     api.logout(
                         accessToken = ACCESS_TOKEN_VALUE,
@@ -150,7 +150,7 @@ internal class VKIDLoggerOutTest : BehaviorSpec({
                 val accessToken = ACCESS_TOKEN_VALUE
                 val call = mockk<InternalVKIDCall<Unit>>()
                 val exception = Exception("message")
-                every { call.execute() } returns Result.failure(exception)
+                coEvery { call.execute() } returns Result.failure(exception)
                 coEvery {
                     api.logout(
                         accessToken = ACCESS_TOKEN_VALUE,
@@ -178,7 +178,7 @@ internal class VKIDLoggerOutTest : BehaviorSpec({
                 every { tokenStorage.clear() } just runs
                 val call = mockk<InternalVKIDCall<Unit>>()
                 val exception = VKIDInvalidTokenException()
-                every { call.execute() } returns Result.failure(exception)
+                coEvery { call.execute() } returns Result.failure(exception)
                 coEvery {
                     api.logout(
                         accessToken = ACCESS_TOKEN_VALUE,
@@ -211,7 +211,7 @@ internal class VKIDLoggerOutTest : BehaviorSpec({
                 val accessToken = ACCESS_TOKEN_VALUE
                 val call = mockk<InternalVKIDCall<Unit>>()
                 val exception = VKIDInvalidTokenException()
-                every { call.execute() } returns Result.failure(exception)
+                coEvery { call.execute() } returns Result.failure(exception)
                 coEvery {
                     api.logout(
                         accessToken = ACCESS_TOKEN_VALUE,
@@ -245,7 +245,7 @@ internal class VKIDLoggerOutTest : BehaviorSpec({
                 every { tokenStorage.accessToken } returns ACCESS_TOKEN
                 every { tokenStorage.clear() } just runs
                 val call = mockk<InternalVKIDCall<Unit>>()
-                every { call.execute() } returns Result.success(Unit)
+                coEvery { call.execute() } returns Result.success(Unit)
                 coEvery {
                     api.logout(
                         accessToken = ACCESS_TOKEN_VALUE,
@@ -270,7 +270,7 @@ internal class VKIDLoggerOutTest : BehaviorSpec({
                 val clearTokenStorage = false
                 val accessToken = ACCESS_TOKEN_VALUE
                 val call = mockk<InternalVKIDCall<Unit>>()
-                every { call.execute() } returns Result.success(Unit)
+                coEvery { call.execute() } returns Result.success(Unit)
                 coEvery {
                     api.logout(
                         accessToken = ACCESS_TOKEN_VALUE,

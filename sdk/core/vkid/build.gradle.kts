@@ -34,7 +34,6 @@ dependencies {
     implementation(libs.androidx.preference)
     implementation(libs.androidx.preference.ktx)
     implementation(libs.androidx.security.crypto)
-    api(libs.captcha.okhttp)
     api(libs.captcha.core)
     implementation(libs.gson)
     implementation(libs.kotlinx.coroutines.android)

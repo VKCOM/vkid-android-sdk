@@ -68,48 +68,6 @@ public class InternalVKIDTestBuilder(
         }
     }
 
-    private var mockApi: InternalVKIDOverrideApi = object : InternalVKIDOverrideApi {
-        override fun refreshToken(
-            refreshToken: String,
-            clientId: String,
-            deviceId: String,
-            state: String,
-        ) = refreshTokenResponse
-
-        override fun exchangeToken(
-            v1Token: String,
-            clientId: String,
-            deviceId: String,
-            state: String,
-            codeChallenge: String,
-        ) = exchangeTokenResponse
-
-        override fun getToken(
-            code: String,
-            codeVerifier: String,
-            clientId: String,
-            deviceId: String,
-            redirectUri: String,
-            state: String,
-        ) = getTokenResponse
-
-        private val userInfoResponseIndex = AtomicInteger(0)
-
-        override fun getUserInfo(
-            accessToken: String,
-            clientId: String,
-            deviceId: String,
-        ) = getUserInfoResponses[userInfoResponseIndex.getAndIncrement()]
-
-        override fun logout(
-            accessToken: String,
-            clientId: String,
-            deviceId: String,
-        ) = logoutResponse
-
-        override fun getSilentAuthProviders(clientId: String, clientSecret: String) = getSilentAuthProvidersResponse
-    }
-
     public fun refreshTokenResponse(response: Result<InternalVKIDTokenPayloadResponse>): InternalVKIDTestBuilder = apply {
         this.refreshTokenResponse = response
     }
@@ -132,6 +90,7 @@ public class InternalVKIDTestBuilder(
     }
 
     private fun getUserInfoResponses(responses: List<Result<InternalVKIDUserInfoPayloadResponse>>): InternalVKIDTestBuilder = apply {
+        userInfoResponseIndex.set(0)
         this.getUserInfoResponses = responses
     }
 
@@ -194,10 +153,42 @@ public class InternalVKIDTestBuilder(
         groupSubscriptionLimit = limit
     }
 
+    @InternalVKIDApi
+    internal val mockApi: InternalVKIDMockApi by lazy {
+        InternalVKIDMockApi(this)
+    }
+
+    @InternalVKIDApi
+    public val getTokenResponseValue: InternalVKIDTokenPayloadResponse
+        get() = getTokenResponse.getOrNull() ?: InternalVKIDTokenPayloadResponse()
+
+    @InternalVKIDApi
+    public val refreshTokenResponseValue: InternalVKIDTokenPayloadResponse
+        get() = refreshTokenResponse.getOrNull() ?: InternalVKIDTokenPayloadResponse()
+
+    @InternalVKIDApi
+    public val exchangeTokenResponseValue: InternalVKIDCodePayloadResponse
+        get() = exchangeTokenResponse.getOrNull() ?: InternalVKIDCodePayloadResponse()
+
+    @InternalVKIDApi
+    public val logoutResponseValue: InternalVKIDLogoutPayloadResponse
+        get() = logoutResponse.getOrNull() ?: InternalVKIDLogoutPayloadResponse()
+
+    @InternalVKIDApi
+    public val getSilentAuthProvidersResponseValue: InternalVKIDSilentAuthProvidersResponse
+        get() = getSilentAuthProvidersResponse.getOrNull()
+            ?: InternalVKIDSilentAuthProvidersResponse(emptyList())
+
+    private val userInfoResponseIndex = AtomicInteger(0)
+
+    @InternalVKIDApi
+    public val getUserInfoResponsesValue: Result<InternalVKIDUserInfoPayloadResponse>
+        get() = getUserInfoResponses.getOrElse(userInfoResponseIndex.getAndIncrement()) { getUserInfoResponses.first() }
+
     public fun build() {
         VKID.init(
             context = context,
-            mockApi = mockApi,
+            apiOverride = mockApi,
             groupSubscriptionApiContract = mockGroupSubscriptionApi,
             deviceIdStorage = deviceIdStorage,
             prefsStore = prefsStore,

@@ -1,10 +1,10 @@
+@file:OptIn(InternalVKIDApi::class)
+
 package com.vk.id.internal.captcha
 
-import okhttp3.Interceptor
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.Protocol
-import okhttp3.Response
-import okhttp3.ResponseBody.Companion.toResponseBody
+import com.vk.id.common.InternalVKIDApi
+import com.vk.id.network.http.HttpResponse
+import com.vk.id.network.http.Interceptor
 import java.util.concurrent.atomic.AtomicBoolean
 
 internal class ForceError14Interceptor(
@@ -13,16 +13,14 @@ internal class ForceError14Interceptor(
 
     private val once = AtomicBoolean(true)
 
-    override fun intercept(chain: Interceptor.Chain): Response {
+    override suspend fun intercept(chain: Interceptor.Chain): HttpResponse {
         if (!once.getAndSet(false)) {
             return chain.proceed(chain.request())
         }
-        return Response.Builder()
-            .request(chain.request())
-            .protocol(Protocol.HTTP_2)
-            .message("OK")
-            .body(
-                """
+
+        val request = chain.request()
+
+        val fakeResponseBody = """
                             {
                                 "error": {
                                     "error_code": 14,
@@ -41,9 +39,15 @@ internal class ForceError14Interceptor(
                                     "uiux_changes": true
                                 }
                             }
-                """.trimIndent().toResponseBody("application/json; charset=utf-8".toMediaTypeOrNull())
-            )
-            .code(@Suppress("MagicNumber") 200)
-            .build()
+        """.trimIndent()
+
+        return HttpResponse(
+            request = request,
+            code = @Suppress("MagicNumber") 200,
+            message = "OK",
+            body = fakeResponseBody,
+            headers = mapOf("Content-Type" to "application/json; charset=utf-8"),
+            isRequestSuccessful = true
+        )
     }
 }
