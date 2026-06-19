@@ -14,7 +14,7 @@ importCommon() {
 }
 
 runDokka() {
-    ./gradlew dokkaHtmlMultiModule
+    ./gradlew :dokka:dokkaGenerateHtml
 }
 
 RELEASE_VERSION=$1

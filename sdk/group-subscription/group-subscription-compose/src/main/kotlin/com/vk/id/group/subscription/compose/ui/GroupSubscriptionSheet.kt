@@ -698,7 +698,7 @@ private fun ColumnScope.DataStateHeader(
 }
 
 /**
- * Manages the state of the One Tap Bottom Sheet. Should be created with [rememberOneTapBottomSheetState]
+ * Manages the state of the One Tap Bottom Sheet. Should be created with `rememberOneTapBottomSheetState`
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

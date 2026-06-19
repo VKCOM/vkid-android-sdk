@@ -1,10 +1,9 @@
+import com.vk.id.health.metrics.apichange.publicApiChanges
+import com.vk.id.health.metrics.apksize.apkSize
 import com.vk.id.health.metrics.buildspeed.buildSpeed
+import com.vk.id.health.metrics.codecoverage.codeCoverage
 import com.vk.id.health.metrics.gitlab.gitlab
 import com.vk.id.health.metrics.storage.firestore
-import com.vk.id.health.metrics.apksize.apkSize
-import com.vk.id.health.metrics.apichange.publicApiChanges
-import com.vk.id.health.metrics.codecoverage.codeCoverage
-import org.jetbrains.kotlin.konan.util.substitute
 import java.util.Properties
 
 plugins {
@@ -23,7 +22,7 @@ plugins {
     alias(libs.plugins.kover) apply true
     alias(libs.plugins.screenshot) apply false
     id("vkid.manifest.placeholders") version "1.1.0" apply true
-    id("vkid.tools.android.dokka-core") version "0.0.4" apply true
+    id("vkid.tools.android.dokka-core") version "0.0.11" apply true
     id("vkid.tools.android.baseline-profile") version "0.0.2" apply false
     id("vkid.tools.android.detekt") version "0.0.2" apply true
     id("vkid.tools.android.detekt.compose") version "0.0.2" apply true

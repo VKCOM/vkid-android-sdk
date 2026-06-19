@@ -1,0 +1,32 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+com.fasterxml.jackson.core:jackson-annotations:2.15.3=dokkaHtmlGeneratorRuntimeResolver~internal,dokkaHtmlPublicationPluginResolver~internal
+com.fasterxml.jackson.core:jackson-core:2.15.3=dokkaHtmlGeneratorRuntimeResolver~internal,dokkaHtmlPublicationPluginResolver~internal
+com.fasterxml.jackson.core:jackson-databind:2.15.3=dokkaHtmlGeneratorRuntimeResolver~internal,dokkaHtmlPublicationPluginResolver~internal
+com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.15.3=dokkaHtmlGeneratorRuntimeResolver~internal
+com.fasterxml.jackson.module:jackson-module-kotlin:2.15.3=dokkaHtmlGeneratorRuntimeResolver~internal,dokkaHtmlPublicationPluginResolver~internal
+com.fasterxml.jackson:jackson-bom:2.15.3=dokkaHtmlGeneratorRuntimeResolver~internal,dokkaHtmlPublicationPluginResolver~internal
+com.fasterxml.woodstox:woodstox-core:6.5.1=dokkaHtmlGeneratorRuntimeResolver~internal
+org.codehaus.woodstox:stax2-api:4.2.1=dokkaHtmlGeneratorRuntimeResolver~internal
+org.freemarker:freemarker:2.3.32=dokkaHtmlGeneratorRuntimeResolver~internal,dokkaHtmlPublicationPluginResolver~internal
+org.jetbrains.dokka:all-modules-page-plugin:2.1.0=dokkaHtmlPublicationPluginResolver~internal
+org.jetbrains.dokka:analysis-kotlin-symbols:2.1.0=dokkaHtmlGeneratorRuntimeResolver~internal
+org.jetbrains.dokka:analysis-markdown:2.1.0=dokkaHtmlGeneratorRuntimeResolver~internal,dokkaHtmlPublicationPluginResolver~internal
+org.jetbrains.dokka:dokka-base:2.1.0=dokkaHtmlGeneratorRuntimeResolver~internal,dokkaHtmlPluginIntransitiveResolver~internal,dokkaHtmlPublicationPluginResolver~internal
+org.jetbrains.dokka:dokka-core:2.1.0=dokkaHtmlGeneratorRuntimeResolver~internal
+org.jetbrains.dokka:templating-plugin:2.1.0=dokkaHtmlGeneratorRuntimeResolver~internal,dokkaHtmlPluginIntransitiveResolver~internal,dokkaHtmlPublicationPluginResolver~internal
+org.jetbrains.kotlin:kotlin-reflect:2.0.21=dokkaHtmlGeneratorRuntimeResolver~internal,dokkaHtmlPublicationPluginResolver~internal
+org.jetbrains.kotlin:kotlin-stdlib-common:2.0.21=dokkaHtmlGeneratorRuntimeResolver~internal,dokkaHtmlPublicationPluginResolver~internal
+org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.20=dokkaHtmlGeneratorRuntimeResolver~internal,dokkaHtmlPublicationPluginResolver~internal
+org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.20=dokkaHtmlGeneratorRuntimeResolver~internal,dokkaHtmlPublicationPluginResolver~internal
+org.jetbrains.kotlin:kotlin-stdlib:2.0.21=dokkaHtmlGeneratorRuntimeResolver~internal,dokkaHtmlPublicationPluginResolver~internal
+org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.7.3=dokkaHtmlGeneratorRuntimeResolver~internal,dokkaHtmlPublicationPluginResolver~internal
+org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.7.3=dokkaHtmlGeneratorRuntimeResolver~internal,dokkaHtmlPublicationPluginResolver~internal
+org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3=dokkaHtmlGeneratorRuntimeResolver~internal,dokkaHtmlPublicationPluginResolver~internal
+org.jetbrains.kotlinx:kotlinx-html-jvm:0.9.1=dokkaHtmlGeneratorRuntimeResolver~internal,dokkaHtmlPublicationPluginResolver~internal
+org.jetbrains:annotations:23.0.0=dokkaHtmlGeneratorRuntimeResolver~internal,dokkaHtmlPublicationPluginResolver~internal
+org.jetbrains:markdown-jvm:0.7.3=dokkaHtmlGeneratorRuntimeResolver~internal,dokkaHtmlPublicationPluginResolver~internal
+org.jetbrains:markdown:0.7.3=dokkaHtmlGeneratorRuntimeResolver~internal,dokkaHtmlPublicationPluginResolver~internal
+org.jsoup:jsoup:1.16.1=dokkaHtmlGeneratorRuntimeResolver~internal,dokkaHtmlPublicationPluginResolver~internal
+empty=dokkaHtmlModuleOutputDirectoriesResolver~internal

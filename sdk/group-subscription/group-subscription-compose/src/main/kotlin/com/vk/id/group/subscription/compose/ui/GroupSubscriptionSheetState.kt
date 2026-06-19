@@ -5,7 +5,7 @@ import androidx.compose.material3.SheetState
 import androidx.compose.runtime.Stable
 
 /**
- * Manages the state of the Group Subscription Bottom Sheet. Should be created with [rememberOneTapBottomSheetStateInternal]
+ * Manages the state of the Group Subscription Bottom Sheet. Should be created with `rememberOneTapBottomSheetStateInternal`
  *
  * @since 2.5.0
  */

@@ -20,13 +20,13 @@
 Запускает проверку screenshot тестов.
 - `./scripts/git/validate_git_history TARGET_BRANCH SOURCE_BRANCH`
 Проверяет названия веток и историю коммитов на соответсвтие нашему формату. Нужно запускать перед открытием пра.
-- `./gradlew :build-logic:dokka-skip:publishToMavenLocal & ./gradlew dokkaHtmlMultiModule`
+- `./gradlew :build-logic:dokka-skip:publishToMavenLocal & ./gradlew dokkaGenerateHtml`
 Запускает генерацию документации. Обязательно запускать перед открытием пра.
 - `./gradlew generateBaselineProfiles`
 Обновляет baseline prfofile-ы. Перед открытием пра нужно его запустить.
 - `./scripts/renovate/renovate.sh`
 Обновляет зависимости renovate-ом, требует запущенного докера.
-- `./gradlew dokkaHtmlMultiModule`
+- `./gradlew dokkaGenerateHtml`
 Проверяет, что для всего публичного API написана документация.
 - `./gradlew allDependencies --write-locks`
   Перезапись lock файлов при изменении зависимостей

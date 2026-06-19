@@ -80,5 +80,6 @@ include(":tracking-noop")
 project(":tracking-noop").projectDir = File("sdk/core/tracking-noop")
 include(":vk-sdk-support")
 project(":vk-sdk-support").projectDir = File("sdk/core/vk-sdk-support")
+include(":dokka")
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
