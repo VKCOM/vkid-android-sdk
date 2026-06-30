@@ -64,8 +64,8 @@ internal class FormBodyTest : BehaviorSpec({
 
             Then("should URL-encode special characters") {
                 val content = formBody.content()
-                val expectedEmail = URLEncoder.encode("test@example.com", StandardCharsets.UTF_8.toString())
-                val expectedMessage = URLEncoder.encode("Hello World!", StandardCharsets.UTF_8.toString())
+                val expectedEmail = URLEncoder.encode("test@example.com", StandardCharsets.UTF_8.name())
+                val expectedMessage = URLEncoder.encode("Hello World!", StandardCharsets.UTF_8.name())
                 content shouldBe "email=$expectedEmail&message=$expectedMessage"
             }
         }
@@ -176,7 +176,7 @@ internal class FormBodyTest : BehaviorSpec({
 
             Then("should properly encode special symbols") {
                 val content = formBody.content()
-                val expected = URLEncoder.encode("!@#$%^&*()", StandardCharsets.UTF_8.toString())
+                val expected = URLEncoder.encode("!@#$%^&*()", StandardCharsets.UTF_8.name())
                 content shouldBe "symbols=$expected"
             }
         }
@@ -188,7 +188,7 @@ internal class FormBodyTest : BehaviorSpec({
 
             Then("should properly encode unicode") {
                 val content = formBody.content()
-                val expected = URLEncoder.encode("Привет мир", StandardCharsets.UTF_8.toString())
+                val expected = URLEncoder.encode("Привет мир", StandardCharsets.UTF_8.name())
                 content shouldBe "text=$expected"
             }
         }
