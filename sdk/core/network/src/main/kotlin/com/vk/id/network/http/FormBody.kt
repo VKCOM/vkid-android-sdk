@@ -122,7 +122,7 @@ public class FormBody private constructor(
          * @return the URL-encoded string
          */
         private fun urlEncode(value: String): String {
-            return URLEncoder.encode(value, StandardCharsets.UTF_8.toString())
+            return URLEncoder.encode(value, StandardCharsets.UTF_8.name())
         }
     }
 }
