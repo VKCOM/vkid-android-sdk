@@ -6,9 +6,11 @@ plugins {
 
 android {
     namespace = "com.vk.id.sample.app"
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.vk.id.sample"
+        targetSdk = 37
         versionCode = generateVersionCode()
         versionName = properties["VERSION_NAME"] as? String ?: "NO_VERSION"
 

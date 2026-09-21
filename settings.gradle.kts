@@ -2,11 +2,10 @@ pluginManagement {
     includeBuild("build-logic")
     includeBuild("build-logic/convention")
     repositories {
-        maven(url = "https://artifactory-external.vkpartner.ru/artifactory/vkid-sdk-android/")
         google()
         mavenCentral()
         gradlePluginPortal()
-        maven { setUrl("https://artifactory-external.vkpartner.ru/artifactory/maven/") }
+        maven { setUrl("https://nexus-external.vkteam.ru/repository/maven/") }
     }
 }
 dependencyResolutionManagement {
@@ -14,7 +13,6 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven(url = "https://artifactory-external.vkpartner.ru/artifactory/vkid-sdk-android/")
         val SUBSTITUTE_SAMPLE_PROJECTS_WITH_MODULES: String by settings
         if (SUBSTITUTE_SAMPLE_PROJECTS_WITH_MODULES == "true") {
             mavenLocal {
@@ -23,8 +21,7 @@ dependencyResolutionManagement {
                 }
             }
         }
-        maven { setUrl("https://artifactory-external.vkpartner.ru/artifactory/vk-id-captcha/android/") }
-        maven { setUrl("https://artifactory-external.vkpartner.ru/artifactory/maven/") }
+        maven { setUrl("https://nexus-external.vkteam.ru/repository/maven/") }
     }
 }
 rootProject.name = "VKIDSDK"

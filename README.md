@@ -6,8 +6,8 @@
     <a href="LICENSE">
       <img src="https://img.shields.io/npm/l/@vkid/sdk?maxAge=3600">
     </a>
-    <a href="https://artifactory-external.vkpartner.ru/ui/native/vkid-sdk-android/com/vk/id/">
-        <img src="https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Fartifactory-external.vkpartner.ru%2Fartifactory%2Fvkid-sdk-android%2Fcom%2Fvk%2Fid%2Fvkid%2Fmaven-metadata.xml"/>
+    <a href="https://nexus-external.vkteam.ru/service/rest/repository/browse/vkid-sdk-android/com/vk/id/">
+        <img src="https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Fnexus-external.vkteam.ru%2Frepository%2Fvkid-sdk-android%2Fcom%2Fvk%2Fid%2Fvkid%2Fmaven-metadata.xml"/>
     </a>
   </p>
   <p align="center">
@@ -53,21 +53,14 @@ VKIDClientID=Ваш ID приложения
 pluginManagement {
     repositories {
         ...
-        maven(url = "https://artifactory-external.vkpartner.ru/artifactory/vkid-sdk-android/")
-        maven(url = "https://artifactory-external.vkpartner.ru/artifactory/maven/")
+        maven(url = "https://nexus-external.vkteam.ru/repository/maven/")
     }
 }
 dependencyResolutionManagement {
     repositories {
         ...
         maven {
-            url = URI("https://artifactory-external.vkpartner.ru/artifactory/vkid-sdk-android/")
-        }
-        maven {
-            url = URI("https://artifactory-external.vkpartner.ru/artifactory/maven/")
-        }
-        maven {
-            url = URI("https://artifactory-external.vkpartner.ru/artifactory/vk-id-captcha/android/")
+            url = URI("https://nexus-external.vkteam.ru/repository/maven/")
         }
     }
 }
@@ -127,6 +120,69 @@ android {
     }
 }
 ```
+<details>
+<summary>Проект без Kotlin DSL</summary>
+
+Если проект использует Groovy DSL (`*.gradle`), Kotlin DSL для интеграции не нужен. Добавьте репозитории в `settings.gradle`:
+
+```groovy
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+        maven { url = uri('https://nexus-external.vkteam.ru/repository/maven/') }
+    }
+}
+
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url = uri('https://nexus-external.vkteam.ru/repository/maven/') }
+    }
+}
+```
+
+В корневом `build.gradle` подключите плагин и укажите данные приложения:
+
+```groovy
+plugins {
+    id 'vkid.manifest.placeholders' version '1.1.0' apply true
+}
+
+vkidManifestPlaceholders {
+    init('1233445', '000000000000')
+    // client_id и client_secret вашего приложения VK ID.
+    // Плагин автоматически задаст VKIDRedirectHost = vk.ru
+    // и VKIDRedirectScheme = vk1233445.
+}
+```
+
+В `app/build.gradle` примените плагин и подключите SDK:
+
+```groovy
+plugins {
+    id 'com.android.application'
+    id 'vkid.manifest.placeholders'
+}
+
+dependencies {
+    implementation "com.vk.id:vkid:${sdkVersion}"
+}
+```
+
+Вместо блока `vkidManifestPlaceholders` секреты можно хранить в корневом `local.properties`:
+
+```properties
+VKIDClientID=1233445
+VKIDClientSecret=000000000000
+VKIDRedirectHost=vk.ru
+VKIDRedirectScheme=vk1233445
+```
+
+Плагин перенесёт эти значения в manifest placeholders приложения.
+</details>
 
 ## Интеграция
 

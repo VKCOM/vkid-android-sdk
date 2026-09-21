@@ -16,6 +16,7 @@ dependencies {
     implementation(libs.androidx.annotation)
     implementation(libs.androidx.core.ktx)
     implementation(libs.captcha.core)
+    implementation(libs.androidx.preference)
 
     testImplementation(libs.mockk)
     testImplementation(libs.kotest.core)
