@@ -3,6 +3,8 @@ package com.vk.id.network
 import com.vk.id.common.InternalVKIDApi
 import com.vk.id.network.common.ApiConstants.API_VERSION_VALUE
 import com.vk.id.network.common.ApiConstants.FIELD_API_VERSION
+import com.vk.id.network.common.ApiConstants.VK_API_BASE_URL
+import com.vk.id.network.common.ApiConstants.VK_ID_BASE_URL
 import com.vk.id.network.http.FormBody
 import com.vk.id.network.http.HttpClient
 import com.vk.id.network.http.HttpResponse
@@ -32,7 +34,7 @@ public class InternalVKIDRealApi(
             .add(FIELD_STATE, state)
             .build()
 
-        return client.createRequest(HOST_VK_ID, PATH_AUTH, formBody)
+        return client.createRequest(VK_ID_BASE_URL, PATH_AUTH, formBody)
     }
 
     override fun getSilentAuthProviders(
@@ -45,7 +47,7 @@ public class InternalVKIDRealApi(
             .add(FIELD_CLIENT_SECRET, clientSecret)
             .build()
 
-        return client.createRequest(HOST_API, PATH_SILENT_AUTH_PROVIDERS, formBody)
+        return client.createRequest(VK_API_BASE_URL, PATH_SILENT_AUTH_PROVIDERS, formBody)
     }
 
     override fun refreshToken(
@@ -62,7 +64,7 @@ public class InternalVKIDRealApi(
             .add(FIELD_STATE, state)
             .build()
 
-        return client.createRequest(HOST_VK_ID, PATH_AUTH, formBody)
+        return client.createRequest(VK_ID_BASE_URL, PATH_AUTH, formBody)
     }
 
     override fun getUser(
@@ -76,7 +78,7 @@ public class InternalVKIDRealApi(
             .build()
 
         return client.createRequest(
-            HOST_VK_ID,
+            VK_ID_BASE_URL,
             PATH_USER_INFO,
             formBody,
             query = mapOf(FIELD_CLIENT_ID to clientId)
@@ -101,7 +103,7 @@ public class InternalVKIDRealApi(
             .add(FIELD_CODE_CHALLENGE_METHOD, VALUE_CODE_CHALLENGE_METHOD)
             .build()
 
-        return client.createRequest(HOST_VK_ID, PATH_AUTH, formBody)
+        return client.createRequest(VK_ID_BASE_URL, PATH_AUTH, formBody)
     }
 
     override fun logout(
@@ -115,7 +117,7 @@ public class InternalVKIDRealApi(
             .add(FIELD_DEVICE_ID, deviceId)
             .build()
 
-        return client.createRequest(HOST_VK_ID, PATH_LOGOUT, formBody)
+        return client.createRequest(VK_ID_BASE_URL, PATH_LOGOUT, formBody)
     }
 
     override fun sendStatEventsAnonymously(
@@ -134,7 +136,7 @@ public class InternalVKIDRealApi(
             .build()
 
         return client.createRequest(
-            HOST_API,
+            VK_API_BASE_URL,
             "method/statEvents.addVKIDAnonymously",
             formBody,
             query = mapOf("external_device_id" to externalDeviceId),
@@ -159,7 +161,7 @@ public class InternalVKIDRealApi(
             .build()
 
         return client.createRequest(
-            HOST_API,
+            VK_API_BASE_URL,
             "method/statEvents.addVKID",
             formBody,
             query = mapOf("external_device_id" to externalDeviceId),
@@ -168,10 +170,6 @@ public class InternalVKIDRealApi(
 
     @InternalVKIDApi
     public companion object {
-
-        private const val HOST_API = "https://api.vk.ru"
-        private const val HOST_VK_ID = "https://id.vk.ru"
-
         private const val PATH_SILENT_AUTH_PROVIDERS = "method/auth.getSilentAuthProviders"
         private const val PATH_AUTH = "oauth2/auth"
         private const val PATH_USER_INFO = "oauth2/user_info"

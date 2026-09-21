@@ -1,7 +1,9 @@
 package com.vk.id.network
 
 import android.content.Context
+import androidx.preference.PreferenceManager
 import com.vk.id.common.InternalVKIDApi
+import com.vk.id.network.http.ApiDomainFallbackInterceptor
 import com.vk.id.network.http.HttpClient
 import com.vk.id.network.http.Interceptor
 import com.vk.id.network.http.LoggingInterceptor
@@ -33,6 +35,7 @@ public class HttpClientProvider(private val context: Context) {
             UserAgentInterceptor(UserAgentProvider(context)),
             LoggingInterceptor("HttpClient"),
             RetryInterceptor(),
+            ApiDomainFallbackInterceptor(PreferenceManager.getDefaultSharedPreferences(context)),
             Error14HandlingInterceptor(),
             HitmanChallengeHandlingInterceptor()
         )

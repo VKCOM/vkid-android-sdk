@@ -1,7 +1,7 @@
 pluginManagement {
     includeBuild("convention")
     repositories {
-        maven(url = "https://artifactory-external.vkpartner.ru/artifactory/vkid-sdk-android/")
+        maven { setUrl("https://nexus-external.vkteam.ru/repository/maven/") }
         google()
         mavenCentral()
         gradlePluginPortal()

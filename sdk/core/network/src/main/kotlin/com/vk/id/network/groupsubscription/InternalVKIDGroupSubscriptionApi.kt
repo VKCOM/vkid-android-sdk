@@ -4,6 +4,8 @@ import com.vk.id.common.InternalVKIDApi
 import com.vk.id.network.InternalVKIDCall
 import com.vk.id.network.common.ApiConstants.API_VERSION_VALUE
 import com.vk.id.network.common.ApiConstants.FIELD_API_VERSION
+import com.vk.id.network.common.ApiConstants.VK_API_BASE_URL
+import com.vk.id.network.common.ApiConstants.VK_ID_BASE_URL
 import com.vk.id.network.http.FormBody
 import com.vk.id.network.http.HttpClient
 import com.vk.id.network.http.HttpResponse
@@ -17,7 +19,7 @@ public class InternalVKIDGroupSubscriptionApi(
     public fun getShouldShowSubscription(
         accessToken: String,
     ): InternalVKIDCall<HttpResponse> = client.createRequest(
-        host = HOST_VK_ID,
+        host = VK_ID_BASE_URL,
         path = PATH_SHOULD_SHOW_SUBSCRIPTION,
         requestBody = bodyBuilder(accessToken).build()
     )
@@ -25,7 +27,7 @@ public class InternalVKIDGroupSubscriptionApi(
     public fun getProfileShortInfo(
         accessToken: String,
     ): InternalVKIDCall<HttpResponse> = client.createRequest(
-        host = HOST_VK_API,
+        host = VK_API_BASE_URL,
         path = PATH_ACCOUNT_PROFILE_SHORT_INFO,
         requestBody = bodyBuilder(accessToken).build()
     )
@@ -34,7 +36,7 @@ public class InternalVKIDGroupSubscriptionApi(
         accessToken: String,
         groupId: String,
     ): InternalVKIDCall<HttpResponse> = client.createRequest(
-        host = HOST_VK_API,
+        host = VK_API_BASE_URL,
         path = PATH_GROUPS_GET_BY_ID,
         requestBody = bodyBuilder(accessToken)
             .add("group_ids", groupId)
@@ -47,7 +49,7 @@ public class InternalVKIDGroupSubscriptionApi(
         groupId: String,
         justFriends: Boolean,
     ): InternalVKIDCall<HttpResponse> = client.createRequest(
-        host = HOST_VK_API,
+        host = VK_API_BASE_URL,
         path = PATH_GROUPS_GET_MEMBERS,
         requestBody = bodyBuilder(accessToken)
             .add(FIELD_GROUP_ID, groupId)
@@ -62,7 +64,7 @@ public class InternalVKIDGroupSubscriptionApi(
         accessToken: String,
         groupId: String,
     ): InternalVKIDCall<HttpResponse> = client.createRequest(
-        host = HOST_VK_API,
+        host = VK_API_BASE_URL,
         path = PATH_GROUPS_JOIN,
         requestBody = bodyBuilder(accessToken)
             .add(FIELD_GROUP_ID, groupId)
@@ -75,8 +77,6 @@ public class InternalVKIDGroupSubscriptionApi(
         .add(FIELD_ACCESS_TOKEN, accessToken)
 
     private companion object {
-        private const val HOST_VK_API = "https://api.vk.ru"
-        private const val HOST_VK_ID = "https://id.vk.ru"
         private const val PATH_ACCOUNT_PROFILE_SHORT_INFO = "method/account.getProfileShortInfo"
         private const val PATH_GROUPS_GET_BY_ID = "method/groups.getById"
         private const val PATH_GROUPS_GET_MEMBERS = "method/groups.getMembers"
